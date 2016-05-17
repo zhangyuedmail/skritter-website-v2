@@ -20,6 +20,11 @@ module.exports = GelatoApplication.extend({
   initialize: function() {
     this.config = Config;
 
+    /**
+     * String to auto-populate signup form with
+     * @type {String}
+     */
+    this.couponCode = null;
     this.checkAndSetReferralInfo();
 
     Raygun.init(
@@ -53,7 +58,6 @@ module.exports = GelatoApplication.extend({
     if (this.isDevelopment()) {
       window.onerror = this.handleError;
     }
-
   },
 
   /**
@@ -78,17 +82,26 @@ module.exports = GelatoApplication.extend({
 
   /**
    * Checks if the URL contains a siteref param, and if it does, sets its value
-   * as the siteRef instance varaible on the application object.
+   * as the siteRef instance varaible on the application object. Processes and
+   * stores a coupon code from the URL. If it is a part of an affiliate referral,
+   * it stores the coupon for later use as a part of the referral.
+   * If it is just a coupon URL parameter by itself, the coupon only stays as an
+   * instance variable for the lifetime of the session.
    * @method checkAndSetReferralInfo
    */
   checkAndSetReferralInfo: function() {
     var siteRef = Functions.getParameterByName('siteref');
+    var couponCode = Functions.getParameterByName('coupon');
+
     if (siteRef) {
       var expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
       this.setSetting('siteRef', {
         referer: siteRef,
-        expiration: expiration
+        expiration: expiration,
+        couponCode: couponCode
       });
+    } else if (couponCode) {
+      this.couponCode = couponCode;
     }
   },
 
@@ -103,6 +116,30 @@ module.exports = GelatoApplication.extend({
     }
 
     return this.get('apiRoot') + this.get('apiDomain') + '/api/v' + this.get('apiVersion') + '/';
+  },
+
+  /**
+   * Gets a stored coupon code passed in through a URL. Coupon codes part
+   * of a referral take precedence.
+   * @returns {String} the coupon code, if it exists
+   */
+  getStoredCouponCode: function() {
+    var ref = (this.getSetting('siteRef') || {});
+    var expiration = ref['expiration'];
+    var couponCode = ref['couponCode'];
+
+    // check for a coupon code as part of an affiliate referral
+    if (couponCode && expiration) {
+      expiration = moment(expiration, Config.dateFormatApp);
+
+      // if the referral is still valid, use that coupon code
+      if (expiration.diff(moment().startOf('day'), 'days') > 0) {
+        return couponCode;
+      }
+    }
+
+    // otherwise return any non-affiliate-related coupon code we might have
+    return this.couponCode;
   },
 
   /**

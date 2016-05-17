@@ -24,6 +24,7 @@ module.exports = GelatoPage.extend({
     this.subscribing = false;
     this.user = new User();
     this.userReferral = app.getUserReferral();
+    this.couponCode = app.getStoredCouponCode();
 
     mixpanel.track('Viewed signup page');
   },
@@ -100,6 +101,12 @@ module.exports = GelatoPage.extend({
       this.$('#signup-card-number').val('4242424242424242');
       this.$('#card-year-select').val(new Date().getFullYear() + 1);
     }
+
+
+    if (this.couponCode) {
+      this.setCouponCode(this.couponCode);
+    }
+
     return this;
   },
 
@@ -266,6 +273,18 @@ module.exports = GelatoPage.extend({
     this.navbar.remove();
     this.footer.remove();
     return GelatoPage.prototype.remove.call(this);
+  },
+
+  /**
+   * Given a coupon code,
+   * @param {String} couponCode the code to set the input to
+   */
+  setCouponCode: function(couponCode) {
+    this.$('.credit').addClass('hide');
+    this.$('.coupon').removeClass('hide');
+    this.$('#signup-coupon').val(this.couponCode);
+    this.$('#method-credit').prop('checked', false);
+    this.$('#method-coupon').prop('checked', true);
   },
 
   /**
