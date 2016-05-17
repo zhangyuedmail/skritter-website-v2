@@ -85,6 +85,7 @@ bootstrap-navbar[data-name='default'] {
   .version {
     margin-left: 10px;
     font-weight: normal;
+    position: relative;
   }
 
   .point {
@@ -94,9 +95,9 @@ bootstrap-navbar[data-name='default'] {
   .beta {
     color: $grade3;
     font-size: 12px;
-    position: relative;
-    left: 1px;
-    top: 6px;
+    position: absolute;
+    left: 20px;
+    top: -10px;
   }
 
   #button-beacon {
