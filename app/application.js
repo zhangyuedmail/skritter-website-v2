@@ -70,6 +70,7 @@ module.exports = GelatoApplication.extend({
     language: undefined,
     lastItemChanged: 0,
     locale: 'en',
+    nodeApiRoot: 'https://api-dot-write-way.appspot.com',
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
     version: '{!application-version!}'
@@ -449,5 +450,6 @@ module.exports = GelatoApplication.extend({
         app.router.start();
       }, 500);
     });
+
   }
 });
