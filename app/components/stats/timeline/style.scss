@@ -73,7 +73,7 @@ gelato-component[data-name='stats-timeline'] {
   }
 
 
-  gelato-component[data-name='stats-items-learned-circle'] {
+  gelato-component[data-name='stats-items-learned'] {
     background: $white2;
     padding: 15px 0;
     border-right: 1px solid $white5;
@@ -170,6 +170,10 @@ gelato-component[data-name='stats-timeline'] {
 
     .border-right {
       border-right: none;
+    }
+
+    .days-studied-container {
+      margin-left: 0px;
     }
   }
 }

@@ -6,7 +6,10 @@ gelato-component[data-name='stats-heatmap'] {
   }
 
   .heatmap {
-    height: 150px;
+    height: 160px;
+    margin-top: -20px;
+    margin-bottom: 10px;
+
     rect {
       shape-rendering: auto;
     }

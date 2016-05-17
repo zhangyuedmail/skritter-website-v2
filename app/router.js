@@ -72,6 +72,7 @@ module.exports = Router.extend({
       this.navigateHome();
     }
   },
+
   /**
    * TODO: remove this after application level dialogs implemented
    *
@@ -89,6 +90,7 @@ module.exports = Router.extend({
     $('.modal-backdrop').remove();
     return Router.prototype.go.call(this, path, options);
   },
+
   /**
    * @method handleRoute
    */
@@ -119,6 +121,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateAccountBillingHistory
    */
@@ -130,6 +133,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateAccountBillingSubscription
    */
@@ -141,6 +145,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateAccountSettingsGeneral
    */
@@ -152,6 +157,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateAccountSettingsStudy
    */
@@ -163,6 +169,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateAccountSetup
    */
@@ -174,7 +181,8 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
-  /**
+
+   /**
    * @method navigateAdmin
    */
   navigateAdmin: function() {
@@ -185,6 +193,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateCreateVocablist
    */
@@ -195,12 +204,14 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateContact
    */
   navigateContact: function() {
     this.go('pages/contact');
   },
+
   /**
    * @method navigateDashboard
    */
@@ -212,6 +223,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateDemo
    * @param {String} [lang]
@@ -224,6 +236,7 @@ module.exports = Router.extend({
       this.go('pages/demo');
     }
   },
+
   /**
    * @method navigateFeatures
    */
@@ -231,6 +244,7 @@ module.exports = Router.extend({
     this.navigate('features');
     this.go('pages/features');
   },
+
   /**
    * @method navigateHome
    */
@@ -238,18 +252,21 @@ module.exports = Router.extend({
     this.navigate('home');
     this.go('pages/home');
   },
+
   /**
    * @method navigateInstitutions
    */
   navigateInstitutions: function() {
     this.go('pages/institutions');
   },
+
   /**
    * @method navigateLegal
    */
   navigateLegal: function() {
     this.go('pages/legal');
   },
+
   /**
    * @method navigateLogin
    */
@@ -261,6 +278,7 @@ module.exports = Router.extend({
       this.go('pages/login');
     }
   },
+
   /**
    * @method navigateNotFound
    */
@@ -268,6 +286,7 @@ module.exports = Router.extend({
     this.navigate('not-found');
     this.go('pages/not-found');
   },
+
   /**
    * @method navigatePasswordReset
    */
@@ -279,6 +298,7 @@ module.exports = Router.extend({
       this.go('pages/password-reset');
     }
   },
+
   /**
    * @method navigateScratchpad
    * @param {String} writing
@@ -287,6 +307,7 @@ module.exports = Router.extend({
   navigateScratchpad: function(writing, part) {
     this.go('pages/scratchpad', {part: part, writing: writing});
   },
+
   /**
    * @method navigateSignup
    * @param {String} [plan]
@@ -299,6 +320,7 @@ module.exports = Router.extend({
       this.navigateDashboard();
     }
   },
+
   /**
    * @method navigateStats
    */
@@ -309,6 +331,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateStudy
    * @param {String} [listId]
@@ -329,12 +352,14 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateTest
    */
   navigateTest: function() {
     this.go('pages/test');
   },
+
   /**
    * @method navigateVocab
    * @param {String} [vocabId]
@@ -346,6 +371,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateVocablist
    * @param {String} listId
@@ -362,6 +388,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateVocablistsBrowse
    */
@@ -372,6 +399,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateVocablistsChinesepod
    */
@@ -382,6 +410,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateVocablistsCreate
    */
@@ -392,6 +421,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateVocablistsMine
    */
@@ -402,6 +432,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateVocablistsPublished
    */
@@ -412,6 +443,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateVocablistsQueue
    */
@@ -422,6 +454,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateWordsAll
    */
@@ -432,6 +465,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateWordsBanned
    */
@@ -442,6 +476,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateWordsMnemonics
    */
@@ -452,6 +487,7 @@ module.exports = Router.extend({
       this.navigateLogin();
     }
   },
+
   /**
    * @method navigateWordsStarred
    */
@@ -460,6 +496,22 @@ module.exports = Router.extend({
       this.go('pages/words/starred');
     } else {
       this.navigateLogin();
+    }
+  },
+
+  /**
+   * Route that
+   * @param {String} userId the id of the existing user that referred the new user
+   */
+  navigateUserReferral: function(userId) {
+    var signedIn = app.user.isLoggedIn();
+    app.setUserReferral(userId, signedIn);
+
+    if (signedIn) {
+      this.navigateDashboard();
+      app.processUserReferral();
+    } else {
+      this.navigateSignup();
     }
   }
 });

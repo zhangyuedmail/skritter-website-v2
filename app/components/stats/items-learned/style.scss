@@ -1,6 +1,6 @@
 @import "../../../styles/_variables";
 
-gelato-component[data-name='stats-items-learned-circle'] {
+gelato-component[data-name='stats-items-learned'] {
   .chart-overlay-wrapper {
     position: absolute;
     top: 25px;
@@ -24,6 +24,10 @@ gelato-component[data-name='stats-items-learned-circle'] {
     letter-spacing: .5px;
   }
 
+  .circle {
+    position: relative;
+  }
+
   .num-items-learned {
     font-size: 36px;
     margin-top: 32px;
@@ -32,11 +36,6 @@ gelato-component[data-name='stats-items-learned-circle'] {
   #items-learned {
     height: 200px;
   }
-
-  .circle {
-    position: relative;
-  }
-
   .num-hero {
     font-size: 38px;
   }
@@ -72,24 +71,18 @@ gelato-component[data-name='stats-items-learned-circle'] {
     height: 16px;
     width: 16px;
     display: inline-block;
+    position: absolute;
+    top: 21px;
   }
 
   .chars-learned-bg {
     background: $lime5;
-<<<<<<< HEAD
-    float: right;
-=======
     right: 0px;
->>>>>>> origin/stats-page
   }
 
   .words-learned-bg {
     background: $green5;
-<<<<<<< HEAD
-    float: left;
-=======
     left: 0px;
->>>>>>> origin/stats-page
   }
 
   .center {
