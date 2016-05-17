@@ -14,7 +14,8 @@ module.exports = {
 
   "navbar": {
     "backToOldSkritter": "Back to old skritter.com",
-    "backToOldSkritterAlt": "New Skritter too spicy? Return to the original flavor."
+    "backToOldSkritterAlt": "New Skritter too spicy? Return to the original flavor.",
+    "betaTitle": "Μια τέτοια μεγάλη βήτα!"
   },
 
   "pages": {
