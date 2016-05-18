@@ -174,4 +174,22 @@ gelato-page[data-name='home'] {
     }
   }
 
+  .ios-store-link {
+    text-align: right;
+  }
+
+  .android-store-link {
+    text-align: left;
+  }
+
+  @media (max-width: 768px) {
+    .motto-text {
+      text-shadow: 1px 1px 5px #222;
+    }
+
+    .ios-store-link, .android-store-link {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+  }
 }
