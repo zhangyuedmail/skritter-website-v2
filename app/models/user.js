@@ -32,7 +32,8 @@ module.exports = SkritterModel.extend({
     studyKana: false,
     teachingMode: true,
     timezone: 'America/New_York',
-    volume: 1
+    volume: 1,
+    wordDictionary: null
   },
   /**
    * @property urlRoot
@@ -159,17 +160,6 @@ module.exports = SkritterModel.extend({
     }
     async.series(
       [
-        function(callback) {
-          self.fetch({
-            error: function(error) {
-              callback(error);
-            },
-            success: function() {
-              self.cache();
-              callback();
-            }
-          });
-        },
         function(callback) {
           self.openDatabase(callback);
         },
@@ -328,7 +318,7 @@ module.exports = SkritterModel.extend({
         ScreenLoader.post('Fetching item batch #' + index);
         $.ajax({
           method: 'GET',
-          url: 'https://api-dot-write-way.appspot.com/v1/items',
+          url: app.get('nodeApiRoot') + '/v1/items',
           data: {
             cursor: cursor,
             lang: app.getLanguage(),

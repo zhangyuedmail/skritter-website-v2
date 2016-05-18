@@ -11,7 +11,12 @@ bootstrap-navbar(data-name='default')
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand(href="/") Skritter
+        a.navbar-brand(href="/" title=app.user.isLoggedIn() ? "#{app.locale('navbar.betaTitle')}" : "")
+          span.skritter-logo Skritter
+          if app.user.isLoggedIn()
+            span.version 2
+              span.point .0
+              span.beta βeta
 
       #navbar-collapse.collapse.navbar-collapse
 
@@ -30,7 +35,7 @@ bootstrap-navbar(data-name='default')
 
           ul.nav.navbar-nav.navbar-right
             li
-              a(href="http://www.skritter.com/home") Back to skritter.com
+              a(href="http://www.skritter.com/home" title="#{app.locale('navbar.backToOldSkritterAlt')}")= app.locale('navbar.backToOldSkritter')
             li.dropdown
               a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
                 span= user.get('name')
@@ -79,7 +84,7 @@ bootstrap-navbar(data-name='default')
 
           ul.nav.navbar-nav.navbar-right
             li
-              a(href="http://www.skritter.com/home") Back to skritter.com
+              a(href="http://www.skritter.com/home")= app.locale('navbar.backToOldSkritter')
             if user.isLoggedIn()
               li(class=currentSection === 'dashboard' ? 'active' : '')
                 a(href="/dashboard") Dashboard

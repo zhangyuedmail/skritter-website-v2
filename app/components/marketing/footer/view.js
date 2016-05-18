@@ -5,6 +5,14 @@ var GelatoComponent = require('gelato/component');
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
+  initialize: function(options) {
+    options = options || {};
+    
+    if (options.theme) {
+      this.className = options.theme;
+    }
+  },
+
   /**
    * @property template
    * @type {Function}
@@ -16,6 +24,11 @@ module.exports = GelatoComponent.extend({
    */
   render: function() {
     this.renderTemplate();
+
+    if (this.className) {
+      this.$('gelato-component').addClass(this.className);
+    }
+
     return this;
   }
 });

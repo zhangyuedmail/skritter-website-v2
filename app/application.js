@@ -20,6 +20,11 @@ module.exports = GelatoApplication.extend({
   initialize: function() {
     this.config = Config;
 
+    /**
+     * String to auto-populate signup form with
+     * @type {String}
+     */
+    this.couponCode = null;
     this.checkAndSetReferralInfo();
 
     Raygun.init(
@@ -53,8 +58,8 @@ module.exports = GelatoApplication.extend({
     if (this.isDevelopment()) {
       window.onerror = this.handleError;
     }
-
   },
+
   /**
    * @property defaults
    * @type {Object}
@@ -69,6 +74,7 @@ module.exports = GelatoApplication.extend({
     language: undefined,
     lastItemChanged: 0,
     locale: 'en',
+    nodeApiRoot: 'https://api-dot-write-way.appspot.com',
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
     version: '{!application-version!}'
@@ -76,17 +82,26 @@ module.exports = GelatoApplication.extend({
 
   /**
    * Checks if the URL contains a siteref param, and if it does, sets its value
-   * as the siteRef instance varaible on the application object.
+   * as the siteRef instance varaible on the application object. Processes and
+   * stores a coupon code from the URL. If it is a part of an affiliate referral,
+   * it stores the coupon for later use as a part of the referral.
+   * If it is just a coupon URL parameter by itself, the coupon only stays as an
+   * instance variable for the lifetime of the session.
    * @method checkAndSetReferralInfo
    */
   checkAndSetReferralInfo: function() {
     var siteRef = Functions.getParameterByName('siteref');
+    var couponCode = Functions.getParameterByName('coupon');
+
     if (siteRef) {
       var expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
       this.setSetting('siteRef', {
         referer: siteRef,
-        expiration: expiration
+        expiration: expiration,
+        couponCode: couponCode
       });
+    } else if (couponCode) {
+      this.couponCode = couponCode;
     }
   },
 
@@ -104,12 +119,37 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
+   * Gets a stored coupon code passed in through a URL. Coupon codes part
+   * of a referral take precedence.
+   * @returns {String} the coupon code, if it exists
+   */
+  getStoredCouponCode: function() {
+    var ref = (this.getSetting('siteRef') || {});
+    var expiration = ref['expiration'];
+    var couponCode = ref['couponCode'];
+
+    // check for a coupon code as part of an affiliate referral
+    if (couponCode && expiration) {
+      expiration = moment(expiration, Config.dateFormatApp);
+
+      // if the referral is still valid, use that coupon code
+      if (expiration.diff(moment().startOf('day'), 'days') > 0) {
+        return couponCode;
+      }
+    }
+
+    // otherwise return any non-affiliate-related coupon code we might have
+    return this.couponCode;
+  },
+
+  /**
    * @method getLanguage
    * @returns {String}
    */
   getLanguage: function() {
     return this.get('language') || this.user.get('targetLang');
   },
+
   /**
    * @method getMixpanelKey
    * @returns {String}
@@ -158,6 +198,31 @@ module.exports = GelatoApplication.extend({
       return 'pk_test_5RIYZGe8XgeYfU9pgvkxK01r';
     }
   },
+
+  /**
+   * Gets a user referral id. If it finds one, confirms that it's still valid
+   * before returning it. If it's invalid/expired, this function removes
+   * the referral setting.
+   * @returns {String} The referrer id if found and valid, or null
+   */
+  getUserReferral: function() {
+    var referral = this.getSetting('referral');
+
+    if (!referral) {
+      return null;
+    }
+
+    var now = moment();
+    var expiration = moment(referral.expiration, Config.dateFormatApp);
+
+    if (expiration.diff(now, 'days') > 0) {
+      return referral.referrer;
+    }
+    this.removeSetting('referral');
+
+    return null;
+  },
+
   /**
    * @method handleError
    * @param {String} message
@@ -166,23 +231,14 @@ module.exports = GelatoApplication.extend({
    * @returns {Boolean}
    */
   handleError: function(message, url, line) {
-    $.notify(
-      {
-        title: 'Application Error',
-        message: message
-      },
-      {
-        type: 'pastel-danger',
-        animate: {
-          enter: 'animated fadeInDown',
-          exit: 'animated fadeOutUp'
-        },
-        delay: 5000,
-        icon_type: 'class'
-      }
-    );
+    app.notifyUser({
+      title: app.locale('common.errorApplication'),
+      message: message
+    });
+
     return false;
   },
+
   /**
    * @method isChinese
    * @returns {Boolean}
@@ -190,6 +246,7 @@ module.exports = GelatoApplication.extend({
   isChinese: function() {
     return this.getLanguage() === 'zh';
   },
+
   /**
    * @method isJapanese
    * @returns {Boolean}
@@ -197,6 +254,7 @@ module.exports = GelatoApplication.extend({
   isJapanese: function() {
     return this.getLanguage() === 'ja';
   },
+
   /**
    * @method loadHelpscout
    */
@@ -238,6 +296,7 @@ module.exports = GelatoApplication.extend({
     window.HSCW = HSCW;
     window.HS = HS;
   },
+
   /**
    * @method locale
    * @param {String} path
@@ -253,6 +312,103 @@ module.exports = GelatoApplication.extend({
     }
     return _.get(locale, path) || _.get(require('locale/en'), path);
   },
+
+  /**
+   *
+   * @param {Object} options
+   */
+  notifyUser: function(options) {
+    $.notify(
+      {
+        title: options.title,
+        message: options.message
+      },
+      {
+        type: options.type || 'pastel-danger',
+        animate: {
+          enter: options.animateEnter || 'animated fadeInDown',
+          exit: options.animateExit || 'animated fadeOutUp'
+        },
+        delay: options.delay || 5000,
+        icon_type: options.iconType || 'class'
+      }
+    );
+  },
+
+  /**
+   * Processes a stored user referral after an account is created.
+   * @param {Boolean} [suppressMessages] whether to hide any UI notifications
+   *                                      about the process triggered from
+   *                                      this method.
+   * @method processUserReferral
+   */
+  processUserReferral: function(suppressMessages) {
+    var referral = this.getSetting('referral');
+
+    if (!referral) {
+      return false;
+    }
+
+    var now = moment();
+    var expiration = moment(referral.expiration, Config.dateFormatApp);
+    var dfd = $.Deferred();
+    var self = this;
+
+    if (expiration.diff(now, 'days') > 0) {
+      $.ajax({
+        type: 'post',
+        url: this.getApiUrl() + 'referrals',
+        headers: {
+          'Authorization': 'bearer ' + this.user.session.get('access_token')
+        },
+        data: {
+          referrer: referral.referrer
+        }
+      })
+        .done(function (response) {
+          self.removeSetting('referral');
+          dfd.resolve(response);
+          if (!suppressMessages) {
+            self.notifyUser({
+              title: 'Referral successful',
+              message: app.locale('common.userReferralSuccessful'),
+              type: 'alert-pastel-info'
+            });
+          }
+        })
+        .fail(function(error) {
+          dfd.reject('common.errorUserReferralFailed');
+          // TODO
+        });
+    } else {
+      this.removeSetting('referral');
+      this.notifyUser({
+        message: this.locale('common.errorUserReferralExpired')
+      });
+      dfd.reject('common.errorUserReferralExpired');
+    }
+
+    return dfd;
+  },
+
+  /**
+   * Stores a user referral and optionally fires off the API request to process it
+   * @param {String} userId the user id of the referrer
+   * @param {Boolean} [processImmediately] whether to immediately fire off an API request
+   * @method setUserReferral
+   */
+  setUserReferral: function(userId, processImmediately) {
+    var expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
+    this.setSetting('referral', {
+      referrer: userId,
+      expiration: expiration
+    });
+
+    if (processImmediately) {
+      this.processUserReferral();
+    }
+  },
+
   /**
    * @method reset
    */
@@ -272,6 +428,7 @@ module.exports = GelatoApplication.extend({
       }
     );
   },
+
   /**
    * @method start
    */

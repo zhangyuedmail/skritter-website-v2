@@ -3,6 +3,7 @@ var DefaultNavbar = require('navbars/default/view');
 var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words/sidebar/view');
 var ProgressDialog = require('dialogs/progress/view');
+var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 var VocabActionMixin = require('mixins/vocab-action');
 
 /**
@@ -27,6 +28,7 @@ module.exports = GelatoPage.extend({
    * @type {Object}
    */
   events: {
+    'click .writing-td': 'handleClickWritingTd',
     'change input[type="checkbox"]': 'handleChangeCheckbox',
     'click #load-more-btn': 'handleClickLoadMoreButton',
     'click #unban-vocabs-btn': 'handleClickUnbanVocabsButton'
@@ -109,6 +111,20 @@ module.exports = GelatoPage.extend({
     this.beginVocabAction('unban', vocabs);
     this.renderTable();
     this.$('#unban-vocabs-btn').prop('disabled', true);
+  },
+  /**
+   * @method handleClickWritingTd
+   * @param {Event} event
+   */
+  handleClickWritingTd: function(event) {
+    event.preventDefault();
+    var row = $(event.target).parent('tr');
+    var vocabId = row.data('vocab-id');
+    if (vocabId) {
+      this.dialog = new VocabViewerDialog();
+      this.dialog.load(vocabId);
+      this.dialog.open();
+    }
   },
   /**
    * @method renderTable

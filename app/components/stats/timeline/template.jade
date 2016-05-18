@@ -1,0 +1,67 @@
+gelato-component(data-name='stats-timeline')
+
+  .content-block
+    .heading-block
+      .row
+        .col-md-4.granularity-selector-wrapper
+          select#granularity-selector.granularity-selector
+            option(value="hours") Hours studied
+            option(value="minutes" selected="selected") Minutes studied
+        .col-md-4#hours-studied-container
+          #time-studied.time-studied ..:..
+          .units-label
+            span#time-studied-units-label #{view.granularity === 'minutes' ? 'minutes' : 'hours'}
+            span &nbsp;studied
+        .col-md-4.date-range-wrapper
+          #date-range-picker.date-range-picker
+            span#start-date #{moment().subtract(6, 'days').format('MMM DD, YYYY')}
+            span &nbsp;-&nbsp;
+            span#end-date #{moment().format('MMM DD, YYYY')}
+            span.down-arrow &#x25BE;
+    .content
+      #time-studied-bar-graph-container
+      .items-leaned-days-studied-wrapper
+        .row
+          .col-md-6.middle-graph-wrapper-l
+            #items-learned-container.items-learned-container
+          .col-md-6.middle-graph-wrapper-r
+            #days-studied-container.days-studied-container
+      - var lineGraphColSize = app.isChinese() ? 3 : 4;
+      .rwdt-graphs-wrapper
+        .row.push-left.hidden-sm.hidden-xs
+          div(class="col-md-#{lineGraphColSize}")
+            .rwdt-label Writing
+          div(class="col-md-#{lineGraphColSize}")
+            .rwdt-label Definition
+          div(class="col-md-#{lineGraphColSize}")
+            .rwdt-label Reading
+          if app.isChinese()
+            div(class="col-md-#{lineGraphColSize}")
+              .rwdt-label Tone
+
+        .row.push-left
+          .vertical-label Characters
+          .col-md-12
+            .row
+              div(class="col-md-#{lineGraphColSize} border-right")
+                #line-char-writing-container.graph
+              div(class="col-md-#{lineGraphColSize} border-right")
+                #line-char-definition-container.graph
+              div(class="col-md-#{lineGraphColSize}")
+                #line-char-reading-container.graph
+              if app.isChinese()
+                div(class="col-md-#{lineGraphColSize} border-left")
+                  #line-char-tone-container.graph
+        .row.push-left.word-line-graphs-wrapper
+          .vertical-label Words
+          .col-md-12
+            .row
+              div(class="col-md-#{lineGraphColSize} border-right")
+                #line-word-writing-container.graph
+              div(class="col-md-#{lineGraphColSize} border-right")
+                #line-word-definition-container.graph
+              div(class="col-md-#{lineGraphColSize}")
+                #line-word-reading-container.graph
+              if app.isChinese()
+                div(class="col-md-#{lineGraphColSize} border-left")
+                  #line-word-tone-container.graph

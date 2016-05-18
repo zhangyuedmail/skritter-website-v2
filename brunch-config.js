@@ -11,9 +11,11 @@ exports.config = {
       },
       order: {
         before: [
-          'vendor/gelato-0.2.2.js',
-          'vendor/bootstrap-3.3.6.js',
+          'vendor/jquery-2.2.3.js',
+          'vendor/lodash-4.12.0.js',
+          'vendor/backbone-1.3.3.js',
           'vendor/async-1.5.2.js',
+          'vendor/bootstrap-3.3.6.js',
           'vendor/bootstrap.datetimepicker-4.15.37.js',
           'vendor/bootstrap.notify-3.1.5.js',
           'vendor/bootstrap.switch-3.3.2.js',
@@ -31,7 +33,8 @@ exports.config = {
           'vendor/moment.timezone-0.5.3.js',
           'vendor/raygun-2.3.0.js',
           'vendor/sinon-1.17.3.js',
-          'vendor/wanakana-1.3.7.js'
+          'vendor/wanakana-1.3.7.js',
+          'vendor/daterangepicker-2.1.19.js'
         ]
       }
     },

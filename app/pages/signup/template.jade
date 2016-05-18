@@ -31,6 +31,10 @@ gelato-page(data-name='signup')
             .col-sm-7
               input#signup-password2.form-control(type='password')
           .header Choose plan
+          if view.userReferral
+            .user-referral-top-info.alert.alert-success
+              b Add two weeks:
+              | &nbsp; Three-week free trial because of user referral!
           .form-group
             label.col-sm-5.control-label(for='signup-plan') Plan
             .col-sm-7
@@ -101,8 +105,7 @@ gelato-page(data-name='signup')
           #trial-notice
             strong
               | Your free trial will last until
-              - var expiration = moment().add(7, 'days').format('LL')
-              span.spl#trial-expire-date= expiration
+              span.spl#trial-expire-date #{view.getTrialExpirationDate()}
               | .
             span.spl You can cancel your subscription in your account page
               | at any time. We will notify you by email one day before you

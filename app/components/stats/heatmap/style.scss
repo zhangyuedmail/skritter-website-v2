@@ -1,0 +1,86 @@
+@import "../../../styles/_variables";
+
+gelato-component[data-name='stats-heatmap'] {
+  .title {
+    display: inline-block;
+  }
+
+  .heatmap {
+    height: 160px;
+    margin-top: -20px;
+    margin-bottom: 10px;
+
+    rect {
+      shape-rendering: auto;
+    }
+    .cal-heatmap-container {
+      margin: 25px auto;
+    }
+    .graph-label,
+    .graph-legend {
+      display: none;
+    }
+    .graph-rect {
+      cursor: inherit;
+      &:hover {
+        stroke: none;
+      }
+    }
+
+    .subdomain-text {
+      fill: $grey7;
+    }
+  }
+
+  .q1 {
+    background-color: #ededed;
+    fill: #ededed
+  }
+  .q2 {
+    background-color: #cedb9c;
+    fill: #9cc069
+  }
+  .q3 {
+    background-color: #b5cf6b;
+    fill: #669d45
+  }
+  .q4 {
+    background-color: #637939;
+    fill: #637939
+  }
+  .q5 {
+    background-color: #3b6427;
+    fill: #3b6427
+  }
+
+  .graph-legend {
+    float: right;
+    margin-top: 22px;
+  }
+
+  .legend-square {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 2px;
+  }
+
+  .units-label {
+    font-size: 16px;
+    color: $grey3;
+  }
+
+  .num-hero {
+    font-size: 38px;
+    color: $green5;
+  }
+
+  .data-section {
+    text-align: center;
+  }
+
+  .bad {
+    color: $gradeRed5;
+  }
+
+}

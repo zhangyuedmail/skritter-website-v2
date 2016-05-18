@@ -5,6 +5,11 @@ gelato-dialog[data-name='vocab-viewer'] {
   background-color: $white1;
   border-radius: 25px;
 
+  .modal-dialog {
+    max-width: 1000px;
+    width: 80%;
+  }
+
   .modal-body {
     padding: 0;
   }

@@ -236,14 +236,17 @@ gelato-page(data-name='account-billing-subscription')
                           | #{plan.fullName}
 
                 .form-group.form-group-lg.credit-card-form-group
+                  - var cardNumber = view.subscription.get('stripe').cardNumber;
                   label.control-label.col-sm-3 Card number
                   .col-sm-6
-                    input#card-number-input.form-control(value="4242424242424242")
+                    if cardNumber
+                      input#card-number-input.form-control(value="", placeholder='XXXX XXXX XXXX #{cardNumber}')
+                    else
+                      input#card-number-input.form-control(value="", placeholder='')
                     if subscribed === 'stripe'
                       .help-block
-                        - var cn = view.subscription.get('stripe').cardNumber;
                         | Currently using card
-                        strong.spl x#{cn}
+                        strong.spl x#{cardNumber}
                         | . Leave this field blank to keep the same card.
 
                 .form-group.form-group-lg.credit-card-form-group
