@@ -83,13 +83,7 @@ bootstrap-navbar(data-name='default')
               a(href="https://discourse.skritter.com/") Forum
 
           ul.nav.navbar-nav.navbar-right
-            li
-              a(href="http://www.skritter.com/home")= app.locale('navbar.backToOldSkritter')
-            if user.isLoggedIn()
-              li(class=currentSection === 'dashboard' ? 'active' : '')
-                a(href="/dashboard") Dashboard
-            else
-              li(class=currentSection === 'signup' ? 'active' : '')
-                a(href="/signup") Signup
-              li(class=currentSection === 'login' ? 'active' : '')
-                a(href="/login") Login
+            li(class=currentSection === 'signup' ? 'active' : '')
+              a(href="/signup") Signup
+            li(class=currentSection === 'login' ? 'active' : '')
+              a(href="/login") Login
