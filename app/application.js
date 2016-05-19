@@ -45,6 +45,10 @@ module.exports = GelatoApplication.extend({
     this.user = new User({id: this.getSetting('user') || 'application'});
 
     this.localBackend = this.fn.getParameterByName('thinkLocally');
+    this.localBackend = true;
+    if (this.localBackend) {
+      console.warn('NOTICE:', 'Using localhost backend');
+    }
 
     if (window.ga && this.isProduction()) {
       ga('create', 'UA-4642573-1', 'auto');
@@ -444,9 +448,15 @@ module.exports = GelatoApplication.extend({
     if (this.user.isLoggedIn()) {
       Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
       Raygun.withTags(this.user.getRaygunTags());
+      mixpanel.register({
+        client: '2.0',
+        display_name: this.user.get('name'),
+        platform: 'Website'
+      });
       mixpanel.identify(this.user.id);
     } else {
       Raygun.setUser('guest', true);
+      mixpanel.register({client: '2.0', platform: 'Website'});
     }
 
     //use async for cleaner loading code

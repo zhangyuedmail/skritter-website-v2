@@ -47,6 +47,14 @@ module.exports = SkritterModel.extend({
     app.setLocalStorage(this.id + '-user', this.toJSON());
   },
   /**
+   * @method getAccountAgeBy
+   * @param {String} [unit]
+   * @returns {Number}
+   */
+  getAccountAgeBy: function(unit) {
+    return moment().diff(this.get('created') * 1000, unit || 'days');
+  },
+  /**
    * @method getAllStudyParts
    * @returns {Array}
    */

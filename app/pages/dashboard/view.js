@@ -25,6 +25,7 @@ module.exports = GelatoPage.extend({
     this._views['footer'] = new MarketingFooter({
       theme: 'theme2'
     });
+    mixpanel.track('Viewed dashboard page');
   },
   /**
    * @property title

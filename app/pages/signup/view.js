@@ -25,7 +25,6 @@ module.exports = GelatoPage.extend({
     this.user = new User();
     this.userReferral = app.getUserReferral();
     this.couponCode = app.getStoredCouponCode();
-
     mixpanel.track('Viewed signup page');
   },
 
@@ -149,17 +148,7 @@ module.exports = GelatoPage.extend({
             },
             success: function(user) {
               app.removeSetting('siteRef');
-              mixpanel.alias(user.id);
-              mixpanel.track(
-                'Signup',
-                {
-                  method: formData.method,
-                  plan: formData.plan
-                },
-                function() {
-                  callback();
-                }
-              );
+              callback();
             }
           }
         )
@@ -172,7 +161,18 @@ module.exports = GelatoPage.extend({
             if (error) {
               callback(error);
             } else {
-              callback();
+              mixpanel.alias(self.user.id);
+              mixpanel.track(
+                'Signup',
+                {
+                  display_name: self.user.get('name'),
+                  method: formData.method,
+                  plan: formData.plan
+                },
+                function() {
+                  callback();
+                }
+              );
             }
           }
         )
