@@ -23,13 +23,6 @@ var Admin = GelatoPage.extend({
     this.loadSubscriptions();
   },
   /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'click #load-subscriptions': 'handleClickLoadSubscriptions'
-  },
-  /**
    * @property title
    * @type {String}
    */
