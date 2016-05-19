@@ -1,6 +1,4 @@
 var GelatoPage = require('gelato/page');
-var Navbar = require('navbars/default/view');
-
 /**
  * @class AccountSetup
  * @extends {GelatoPage}
@@ -12,7 +10,6 @@ module.exports = GelatoPage.extend({
    */
   initialize: function() {
     this.countries = require('data/country-codes');
-    this.navbar = new Navbar();
     this.timezones = require('data/country-timezones');
   },
   /**
@@ -45,13 +42,16 @@ module.exports = GelatoPage.extend({
    * @type {String}
    */
   title: 'Account Configure - Skritter',
+
+  showFooter: false,
+
   /**
    * @method render
    * @returns {Scratchpad}
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
+
     return this;
   },
   /**
@@ -119,7 +119,6 @@ module.exports = GelatoPage.extend({
    * @returns {Study}
    */
   remove: function() {
-    this.navbar.remove();
     return GelatoPage.prototype.remove.call(this);
   }
 });

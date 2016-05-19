@@ -1,6 +1,4 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
-var MarketingFooter = require('components/marketing/footer/view');
 
 /**
  * @class PasswordReset
@@ -12,11 +10,10 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    this.footer = new MarketingFooter();
-    this.navbar = new DefaultNavbar();
     this.choices = [];
     this.errorMessage = null;
   },
+
   /**
    * @property events
    * @type {Object}
@@ -25,26 +22,29 @@ module.exports = GelatoPage.extend({
     'keyup #input-field': 'handleKeyUpInputField',
     'click #button-reset': 'handleClickButtonReset'
   },
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @property title
    * @type {String}
    */
   title: 'Login - Skritter',
+
   /**
    * @method render
    * @returns {Login}
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
-    this.footer.setElement('#footer-container').render();
+    
     return this;
   },
+
   /**
    * @method handleClickButtonReset
    * @param {Event} event
@@ -53,6 +53,7 @@ module.exports = GelatoPage.extend({
     event.preventDefault();
     this.resetPassword();
   },
+
   /**
    * @method handleKeyUpInputField
    * @param {Event} event
@@ -63,6 +64,7 @@ module.exports = GelatoPage.extend({
       this.resetPassword();
     }
   },
+
   /**
    * @method resetPassword
    */
@@ -98,6 +100,7 @@ module.exports = GelatoPage.extend({
       }
     });
   },
+
   /**
    * @method remove
    * @returns {Login}

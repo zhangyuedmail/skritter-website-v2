@@ -1,7 +1,6 @@
 var GelatoPage = require('gelato/page');
 
 var AccountSidebar = require('components/account/sidebar/view');
-var DefaultNavbar = require('navbars/default/view');
 var Payments = require('collections/payments');
 
 /**
@@ -15,7 +14,6 @@ module.exports = GelatoPage.extend({
    */
   initialize: function() {
     this.limit = 20;
-    this.navbar = new DefaultNavbar();
     this.payments = new Payments();
     this.sidebar = new AccountSidebar();
     this.payments.comparator = function(payment) {
@@ -47,7 +45,6 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
     this.sidebar.setElement('#sidebar-container').render();
     return this;
   },
@@ -76,7 +73,6 @@ module.exports = GelatoPage.extend({
    * @returns {AccountBillingHistory}
    */
   remove: function() {
-    this.navbar.remove();
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
   }

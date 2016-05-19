@@ -1,9 +1,7 @@
 var GelatoPage = require('gelato/page');
-
 var Prompt = require('components/study/prompt/view');
 var Toolbar = require('components/study/toolbar/view');
 var Items = require('collections/items');
-var Navbar = require('navbars/default/view');
 
 /**
  * @class Study
@@ -17,7 +15,6 @@ module.exports = GelatoPage.extend({
   initialize: function() {
     ScreenLoader.show();
     this.item = null;
-    this.navbar = new Navbar();
     this.prompt = new Prompt();
     this.queue = [];
     this.schedule = new Items();
@@ -30,32 +27,36 @@ module.exports = GelatoPage.extend({
     window.onbeforeunload = this.handleWindowOnBeforeUnload.bind(this);
     this.loadSchedule();
   },
+
   /**
-   * @property events
-   * @type Object
+   * @property showFooter
+   * @type {Boolean}
    */
-  events: {},
+  showFooter: false,
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @property title
    * @type {String}
    */
   title: 'Study - Skritter',
+
   /**
    * @method render
    * @returns {Study}
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
     this.prompt.setElement('#study-prompt-container').render();
     this.toolbar.setElement('#study-toolbar-container').render();
     return this;
   },
+
   /**
    * @method handleWindowOnBeforeUnload
    */
@@ -65,6 +66,7 @@ module.exports = GelatoPage.extend({
     }
     return 'You have ' + this.schedule.reviews.length + ' unsaved reviews!';
   },
+
   /**
    * @method handlePromptNext
    * @param {PromptItems} promptItems
@@ -87,6 +89,7 @@ module.exports = GelatoPage.extend({
       this.next();
     }
   },
+
   /**
    * @method handlePromptPrevious
    * @param {PromptItems} promptItems
@@ -97,6 +100,7 @@ module.exports = GelatoPage.extend({
       this.previous();
     }
   },
+
   /**
    * @method handleScheduledLoad
    */
@@ -115,6 +119,7 @@ module.exports = GelatoPage.extend({
         self.populateQueue();
       });
   },
+
   /**
    * @method handleSchedulePopulate
    */
@@ -126,6 +131,7 @@ module.exports = GelatoPage.extend({
       this.next();
     }
   },
+
   /**
    * @method loadSchedule
    */
@@ -168,6 +174,7 @@ module.exports = GelatoPage.extend({
         self.schedule.trigger('error', error);
       });
   },
+
   /**
    * @method next
    */
@@ -183,6 +190,7 @@ module.exports = GelatoPage.extend({
       this.item = item;
     }
   },
+
   /**
    * @method populateQueue
    */
@@ -245,6 +253,7 @@ module.exports = GelatoPage.extend({
       }
     });
   },
+
   /**
    * @method previous
    */
@@ -257,12 +266,12 @@ module.exports = GelatoPage.extend({
       }
     }
   },
+
   /**
    * @method remove
    * @returns {Study}
    */
   remove: function() {
-    this.navbar.remove();
     this.prompt.remove();
     this.toolbar.remove();
     this.schedule.reviews.post();

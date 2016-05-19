@@ -2,7 +2,6 @@ var GelatoPage = require('gelato/page');
 
 var AccountSidebar = require('components/account/sidebar/view');
 var Coupon = require('models/coupon');
-var DefaultNavbar = require('navbars/default/view');
 var Subscription = require('models/subscription');
 var StripeLoader = require('utils/stripe-loader');
 
@@ -21,7 +20,6 @@ module.exports = GelatoPage.extend({
   initialize: function() {
     StripeLoader.load();
     this.coupon = new Coupon({code: ''});
-    this.navbar = new DefaultNavbar();
     this.sidebar = new AccountSidebar();
     this.subscription = new Subscription({id: app.user.id});
     this.listenTo(this.subscription, 'state', this.render);
@@ -68,7 +66,6 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
     this.sidebar.setElement('#sidebar-container').render();
     return this;
   },
@@ -449,7 +446,6 @@ module.exports = GelatoPage.extend({
    * @returns {AccountBillingSubscription}
    */
   remove: function() {
-    this.navbar.remove();
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
   },

@@ -1,6 +1,5 @@
 var GelatoPage = require('gelato/page');
 
-var DefaultNavbar = require('navbars/default/view');
 var ChinesePodSession = require('models/chinesepod-session');
 var ChinesePodLabels = require('collections/chinesepod-labels');
 var ChinesePodLessons = require('collections/chinesepod-lessons');
@@ -16,7 +15,6 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    this.navbar = new DefaultNavbar();
     this.sidebar = new VocablistSidebar();
     this.chinesepodSession = new ChinesePodSession();
     this.chinesepodLabels = new ChinesePodLabels();
@@ -33,6 +31,7 @@ module.exports = GelatoPage.extend({
     this.listenTo(this.chinesepodLabels, 'error', this.handleChinesePodError);
     this.listenTo(this.chinesepodLessons, 'error', this.handleChinesePodError);
   },
+
   /**
    * @property events
    * @type {Object}
@@ -44,35 +43,38 @@ module.exports = GelatoPage.extend({
     'change input[name="view-option"]': 'handleChangeViewOption',
     'click .lookup-link': 'handleClickLookupLink'
   },
+
   /**
    * @property title
    * @type {String}
    */
   title: 'ChinesePod - Skritter',
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @method render
    * @returns {VocablistsChinesepodPage}
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
     this.sidebar.setElement('#vocablist-sidebar-container').render();
     return this;
   },
+
   /**
    * @method remove
    * @returns {VocablistBrowse}
    */
   remove: function() {
-    this.navbar.remove();
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
   },
+
   /**
    * @method handleChinesepodSessionLoaded
    */
@@ -83,6 +85,7 @@ module.exports = GelatoPage.extend({
       this.chinesepodLessons.fetch();
     }
   },
+
   /**
    * @method handleSubmitLoginForm
    * @param {Event} event
@@ -107,6 +110,7 @@ module.exports = GelatoPage.extend({
     });
     this.render();
   },
+
   /**
    * @method handleClickLogoutChineseLink
    */
@@ -124,6 +128,7 @@ module.exports = GelatoPage.extend({
     this.searchString = $(e.target).val().toLowerCase();
     this.renderTable();
   }, 500),
+
   /**
    * @method handleChinesePodError
    * @param {Collection} collection
@@ -134,6 +139,7 @@ module.exports = GelatoPage.extend({
       collection.fetch();
     }
   },
+
   /**
    * @method renderTable
    */
@@ -143,6 +149,7 @@ module.exports = GelatoPage.extend({
     var rendering = $(this.template(context));
     this.$('table').replaceWith(rendering.find('table'));
   },
+
   /**
    * @method handleChangeViewOption
    */
@@ -150,6 +157,7 @@ module.exports = GelatoPage.extend({
     this.viewOption = $('input[name="view-option"]:checked').val();
     this.renderTable();
   },
+
   /**
    * @method handleClickLookupLink
    */

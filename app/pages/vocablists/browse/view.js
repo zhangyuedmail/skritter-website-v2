@@ -1,6 +1,4 @@
 var GelatoPage = require('gelato/page');
-
-var DefaultNavbar = require('navbars/default/view');
 var Table = require('components/vocablists/browse-table/view');
 var Sidebar = require('components/vocablists/sidebar/view');
 
@@ -14,10 +12,10 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    this.navbar = new DefaultNavbar();
     this.sidebar = new Sidebar();
     this.table = new Table();
   },
+  
   /**
    * @property events
    * @type {Object}
@@ -28,27 +26,31 @@ module.exports = GelatoPage.extend({
     'click #list-option': 'handleClickListOption',
     'click #grid-option': 'handleClickGridOption'
   },
+  
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+  
   /**
    * @property title
    * @type {String}
    */
   title: 'Browse - Skritter',
+  
   /**
    * @method render
    * @returns {VocablistBrowse}
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
     this.sidebar.setElement('#vocablist-sidebar-container').render();
     this.table.setElement('#vocablist-container').render();
+    
     return this;
   },
+  
   /**
    * @method handleChangeCheckbox
    */
@@ -62,6 +64,7 @@ module.exports = GelatoPage.extend({
      this.table.render();
      **/
   },
+  
   /**
    * @method onClickListOption
    * @param {Event} event
@@ -72,6 +75,7 @@ module.exports = GelatoPage.extend({
     this.$('#list-option').addClass('chosen');
     this.$('#grid-option').removeClass('chosen');
   },
+  
   /**
    * @method onClickGridOption
    * @param {Event} event
@@ -82,6 +86,7 @@ module.exports = GelatoPage.extend({
     this.$('#list-option').removeClass('chosen');
     this.$('#grid-option').addClass('chosen');
   },
+  
   /**
    * @method handleKeypressListSearchInput
    * @param {Event} event
@@ -89,12 +94,12 @@ module.exports = GelatoPage.extend({
   handleKeypressListSearchInput: function(event) {
     this.table.setFilterString(event.target.value);
   },
+  
   /**
    * @method remove
    * @returns {VocablistBrowse}
    */
   remove: function() {
-    this.navbar.remove();
     this.sidebar.remove();
     this.table.remove();
     return GelatoPage.prototype.remove.call(this);

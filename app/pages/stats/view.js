@@ -1,5 +1,4 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
 var StatsSummaryComponent = require('components/stats/summary/view');
 var StatsTimelineComponent = require('components/stats/timeline/view');
 var ProgressStats = require('collections/progress-stats');
@@ -22,7 +21,6 @@ module.exports = GelatoPage.extend({
     this.statsCollection.fetchRange(lastMonth, today);
 
     this._views = {};
-    this._views['navbar'] = new DefaultNavbar();
     this._views['summary'] = new StatsSummaryComponent({
       collection: this.statsCollection
     });
@@ -55,7 +53,6 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this._views['navbar'].setElement('#navbar-container').render();
     this._views['summary'].setElement('#stats-summary-container').render();
     this._views['timeline'].setElement('#stats-timeline-container').render();
 

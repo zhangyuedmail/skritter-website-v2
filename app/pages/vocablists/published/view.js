@@ -1,6 +1,5 @@
 var GelatoPage = require('gelato/page');
 
-var DefaultNavbar = require('navbars/default/view');
 var Table = require('components/vocablists/published-table/view');
 var Sidebar = require('components/vocablists/sidebar/view');
 
@@ -17,7 +16,6 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    this.navbar = new DefaultNavbar();
     this.sidebar = new Sidebar();
     this.table = new Table();
   },
@@ -50,9 +48,9 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
     this.sidebar.setElement('#vocablist-sidebar-container').render();
     this.table.setElement('#vocablist-container').render();
+
     return this;
   },
 
@@ -82,9 +80,9 @@ module.exports = GelatoPage.extend({
    * @returns {VocablistBrowse}
    */
   remove: function() {
-    this.navbar.remove();
     this.sidebar.remove();
     this.table.remove();
+    
     return GelatoPage.prototype.remove.call(this);
   },
 

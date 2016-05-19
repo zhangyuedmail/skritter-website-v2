@@ -1,7 +1,5 @@
 var GelatoPage = require('gelato/page');
 var AdminPayments = require('collections/admin-payments');
-var DefaultNavbar = require('navbars/default/view');
-var MarketingFooter = require('components/marketing/footer/view');
 var config = require('config');
 
 /**
@@ -14,8 +12,6 @@ var Admin = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    this.footer = new MarketingFooter();
-    this.navbar = new DefaultNavbar();
     this.payments = new AdminPayments();
     this.dateStart = moment().subtract(5, 'days');
     this.dateEnd = moment();
@@ -38,8 +34,6 @@ var Admin = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.footer.setElement('#footer-container').render();
-    this.navbar.setElement('#navbar-container').render();
     this.$('#date-range-picker').daterangepicker(
       {
         startDate: this.dateStart,
@@ -58,8 +52,6 @@ var Admin = GelatoPage.extend({
    * @returns {Admin}
    */
   remove: function() {
-    this.navbar.remove();
-    this.footer.remove();
     return GelatoPage.prototype.remove.call(this);
   },
   /**
