@@ -325,7 +325,13 @@ module.exports = GelatoPage.extend({
         data: data,
         context: this,
         success: function(response) {
-          mixpanel.track('Subscribe', {method: 'credit', plan: data.plan});
+          mixpanel.track(
+            'Subscribe',
+            {
+              'Method': 'credit',
+              'Plan': data.plan
+            }
+          );
           this.subscription.set(response.Subscription);
           this.render();
         }

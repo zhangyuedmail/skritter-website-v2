@@ -64,7 +64,7 @@ module.exports = GelatoPage.extend({
       function(lang, callback) {
         ScreenLoader.show();
         ScreenLoader.post('Loading demo word');
-        mixpanel.track('Started demo', {lang: lang});
+        mixpanel.track('Started demo', {'Language': lang});
         self.vocabs.fetch({
           data: {
             include_decomps: true,

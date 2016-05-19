@@ -448,14 +448,18 @@ module.exports = GelatoApplication.extend({
       Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
       Raygun.withTags(this.user.getRaygunTags());
       mixpanel.register({
-        client: '2.0',
-        display_name: this.user.get('name'),
-        platform: 'Website'
+        'Client': 'Website',
+        'Client Version': '2.0',
+        'Display Name': this.user.get('name'),
+        'Language Code': app.getLanguage()
       });
       mixpanel.identify(this.user.id);
     } else {
       Raygun.setUser('guest', true);
-      mixpanel.register({client: '2.0', platform: 'Website'});
+      mixpanel.register({
+        'Client': 'Website',
+        'Client Version': '2.0'
+      });
     }
 
     //use async for cleaner loading code
