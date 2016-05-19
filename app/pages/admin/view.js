@@ -75,7 +75,6 @@ var Admin = GelatoPage.extend({
    * @params {String} end
    */
   handleChangeDate: function(start, end) {
-    console.log(start, end);
     this.dateEnd = end;
     this.dateStart = start;
     this.loadSubscriptions();
