@@ -45,7 +45,6 @@ module.exports = GelatoApplication.extend({
     this.user = new User({id: this.getSetting('user') || 'application'});
 
     this.localBackend = this.fn.getParameterByName('thinkLocally');
-    this.localBackend = true;
     if (this.localBackend) {
       console.warn('NOTICE:', 'Using localhost backend');
     }
