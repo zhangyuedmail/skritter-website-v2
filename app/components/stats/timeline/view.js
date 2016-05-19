@@ -142,10 +142,13 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
 
     this.$('#date-range-picker').daterangepicker({
-      startDate: moment().subtract(6, 'days').format('MM/DD/YYYY'),
-      endDate: moment().format('MM/DD/YYYY'),
-      maxDate: moment().format('MM/DD/YYYY'),
+      startDate: moment(this.range.start, app.config.dateFormatApp),
+      endDate: moment(this.range.end, app.config.dateFormatApp),
+      maxDate: moment(),
       minDate: moment(app.user.get('created') * 1000),
+      locale: {
+        format: app.config.dateFormatApp
+      },
       opens: "left"
     });
 
