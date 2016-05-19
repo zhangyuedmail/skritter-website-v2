@@ -1,4 +1,6 @@
 var GelatoView = require('./view');
+var DefaultNavbar = require('navbars/default/view');
+var MarketingFooter = require('components/marketing/footer/view');
 
 /**
  * @class GelatoPage
@@ -15,6 +17,31 @@ var GelatoPage = GelatoView.extend({
    * @type {Function|String}
    */
   title: null,
+
+  /**
+   * A footer with additional links and resources
+   * @type {MarketingFooter}
+   */
+  footer: new MarketingFooter(),
+
+  /**
+   * A navigation bar
+   * @type {DefaultNavbar}
+   */
+  navbar: new DefaultNavbar(),
+
+  /**
+   * Whether to show the footer on the page
+   * @type {Boolean}
+   */
+  showFooter: true,
+
+  /**
+   * Whether to show the navbar on the page
+   * @type {Boolean}
+   */
+  showNavbar: true,
+
   /**
    * @method renderTemplate
    * @param {Object} [context]
