@@ -5,4 +5,14 @@ gelato-page[data-name='admin'] {
   background: $background-primary;
   padding-top: 75px;
 
+  #date-range-picker {
+    display: inline-block;
+    width: 200px;
+  }
+
+  #sub-title {
+    display: inline-block;
+    margin-right: 30px;
+  }
+
 }
