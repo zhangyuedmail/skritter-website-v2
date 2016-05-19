@@ -56,6 +56,9 @@ var GelatoPage = GelatoView.extend({
    * @returns {GelatoPage}
    */
   remove: function() {
+    this.footer.remove();
+    this.navbar.remove();
+    
     return GelatoView.prototype.remove.call(this);
   }
 });

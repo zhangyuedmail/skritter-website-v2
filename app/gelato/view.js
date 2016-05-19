@@ -140,7 +140,9 @@ var GelatoView = Backbone.View.extend({
     this.$el.html(this.$view);
 
     if (this.showNavbar) {
-      this.$view.prepend(this.navbar.render().el);
+      // why is this.navbar.el null??
+      // GelatoView for navbar vs GelatoComponent for footer?
+      this.$view.prepend(this.navbar.render().$view);
     }
 
     if (this.showFooter) {
