@@ -11,6 +11,12 @@ module.exports = GelatoComponent.extend({
   id: 'footer-container',
 
   /**
+   * CSS class for the element
+   * @default
+   */
+  className: 'footer-container',
+
+  /**
    * Initializes a new footer
    * @param {Object} [options] a map of options for the view
    * @param {String} [options.theme] a CSS class to apply to the footer
