@@ -7,11 +7,13 @@ var MarketingFooter = require('components/marketing/footer/view');
  * @extends {GelatoView}
  */
 var GelatoPage = GelatoView.extend({
+
   /**
    * @property el
    * @type {String}
    */
   el: 'gelato-application',
+
   /**
    * @property title
    * @type {Function|String}
@@ -49,7 +51,20 @@ var GelatoPage = GelatoView.extend({
    */
   renderTemplate: function(context) {
     document.title = _.result(this, 'title', app.get('title'));
-    return GelatoView.prototype.renderTemplate.call(this, context);
+
+    GelatoView.prototype.renderTemplate.call(this, context);
+
+    if (this.showNavbar) {
+      // why is this.navbar.el null??
+      // GelatoView for navbar vs GelatoComponent for footer?
+      this.$view.prepend(this.navbar.render().el);
+    }
+
+    if (this.showFooter) {
+      this.$view.append(this.footer.render().el);
+    }
+
+    return this;
   },
   /**
    * @method remove
@@ -58,7 +73,7 @@ var GelatoPage = GelatoView.extend({
   remove: function() {
     this.footer.remove();
     this.navbar.remove();
-    
+
     return GelatoView.prototype.remove.call(this);
   }
 });

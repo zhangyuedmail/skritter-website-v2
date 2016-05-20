@@ -138,17 +138,6 @@ var GelatoView = Backbone.View.extend({
   renderTemplate: function(context) {
     this.$view = Backbone.$(this.parseTemplate(this.template, context));
     this.$el.html(this.$view);
-
-    if (this.showNavbar) {
-      // why is this.navbar.el null??
-      // GelatoView for navbar vs GelatoComponent for footer?
-      this.$view.prepend(this.navbar.render().$view);
-    }
-
-    if (this.showFooter) {
-      this.$view.append(this.footer.render().el);
-    }
-
     this.$('a[href]').on('click', this.handleClickHref);
     Backbone.$(window).on('resize.View', (function(event) {
       clearTimeout(this._resize);
