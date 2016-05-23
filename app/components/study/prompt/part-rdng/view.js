@@ -12,39 +12,47 @@ module.exports = GelatoComponent.extend({
    */
   initialize: function(options) {
     this.prompt = options.prompt;
-    this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
+
+    // only support pinyin for first go around. Nihongo ga kite imasu!
+    this.showReadingPrompt = app.isDevelopment() && app.isChinese();
+
+    if (this.showReadingPrompt) {
+      this.prompt.canvas.$el.hide();
+    } else {
+      this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
+    }
+
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
   },
+
   /**
    * @property el
    * @type {String}
    */
   el: '#review-container',
+
   /**
    * @property events
    * @type Object
    */
-  events: {},
+  events: {
+    'keypress #reading-prompt': 'handleReadingPromptKeypress'
+  },
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
-  /**
-   * @method render
-   * @returns {StudyPromptPartRdng}
-   */
-  render: function() {
-    this.renderTemplate();
-    return this;
-  },
+
   /**
    * @method render
    * @returns {StudyPromptPartDefn}
    */
   render: function() {
     this.renderTemplate();
+
     this.prompt.review = this.prompt.reviews.current();
     this.prompt.canvas.grid = false;
     this.prompt.canvas.reset();
@@ -54,13 +62,34 @@ module.exports = GelatoComponent.extend({
     this.prompt.toolbarAction.buttonErase = false;
     this.prompt.toolbarAction.buttonShow = false;
     this.prompt.toolbarAction.buttonTeach = false;
+
     if (this.prompt.review.isComplete()) {
       this.renderComplete();
     } else {
       this.renderIncomplete();
     }
+
     return this;
   },
+
+  /**
+   * Called when attempting to advance to the next prompt via the enter key
+   */
+  completeReading: function() {
+    var vocabReading = this.prompt.review.vocab.get('reading');
+    var userReading = this.$('#reading-prompt').val();
+
+    if (userReading === vocabReading) {
+      this.prompt.review.set('complete', true);
+      this.render();
+    } else {
+      this.prompt.review.set('score', 1);
+      this.prompt.review.set('complete', true);
+      this.render();
+      this.$('#user-answer').text(userReading).removeClass('hidden');
+    }
+  },
+
   /**
    * @method renderComplete
    * @returns {StudyPromptPartRune}
@@ -85,8 +114,10 @@ module.exports = GelatoComponent.extend({
       this.prompt.reviews.vocab.play();
     }
     this.renderTemplate();
+
     return this;
   },
+
   /**
    * @method renderIncomplete
    * @returns {StudyPromptPartRune}
@@ -105,25 +136,45 @@ module.exports = GelatoComponent.extend({
     this.prompt.vocabSentence.render();
     this.prompt.vocabStyle.render();
     this.prompt.vocabWriting.render();
+
     this.renderTemplate();
+
     return this;
   },
+
   /**
    * @method handlePromptCanvasClick
    */
-  handlePromptCanvasClick: function() {
+  handlePromptCanvasClick: function(e) {
     if (this.prompt.review.isComplete()) {
       this.prompt.next();
     } else {
       this.prompt.review.set('complete', true);
       this.render();
     }
-  }, /**
+  },
+
+  /**
    * @method handlePromptToolbarActionCorrect
    */
   handlePromptToolbarActionCorrect: function() {
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.toolbarAction.render();
+  },
+
+  /**
+   * Given keyboard input, keeps track of the internal actual value and
+   * converts the display value to the appropriate alphabet/syllabary
+   * (pinyin or kana)
+   * @param {jQuery.Event} event a keypress event
+   * @todo: mess with shortcuts.js to get event priority working e.g. pressing 'z' or 'x'
+   */
+  handleReadingPromptKeypress: function(event) {
+    if (app.isChinese()) {
+      // TODO: analyze pinyin
+    } else {
+      // TODO: analyze kana
+    }
   }
 });

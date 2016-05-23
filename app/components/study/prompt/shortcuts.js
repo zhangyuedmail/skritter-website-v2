@@ -157,6 +157,13 @@ StudyPromptShortcuts.prototype._handleNavigateReveal = function() {
         this.prompt.part.completeTone();
       }
       break;
+    case 'rdng':
+      if (this.prompt.review.isComplete()) {
+        this._handleNavigateNext();
+      } else {
+        this.prompt.part.completeReading();
+      }
+      break;
     default:
       if (this.prompt.review.isComplete()) {
         this.prompt.next();
