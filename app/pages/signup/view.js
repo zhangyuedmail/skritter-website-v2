@@ -158,9 +158,9 @@ module.exports = GelatoPage.extend({
               mixpanel.track(
                 'Signup',
                 {
-                  display_name: self.user.get('name'),
-                  method: formData.method,
-                  plan: formData.plan
+                  'Display Name': self.user.get('name'),
+                  'Method': formData.method,
+                  'Plan': formData.plan
                 },
                 function() {
                   callback();

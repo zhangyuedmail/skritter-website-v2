@@ -458,7 +458,9 @@ module.exports = GelatoApplication.extend({
       Raygun.setUser('guest', true);
       mixpanel.register({
         'Client': 'Website',
-        'Client Version': '2.0'
+        'Client Version': '2.0',
+        'Display Name': null,
+        'Language Code': null
       });
     }
 
