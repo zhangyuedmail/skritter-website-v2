@@ -16,9 +16,9 @@ module.exports = GelatoComponent.extend({
     // only support pinyin for first go around. Nihongo ga kite imasu!
     this.showReadingPrompt = app.isDevelopment() && app.isChinese();
 
-    if (this.showReadingPrompt) {
-      this.prompt.canvas.$el.hide();
-    } else {
+    this.registerShortcuts = !this.showReadingPrompt;
+
+    if (!this.showReadingPrompt) {
       this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
     }
 
@@ -79,7 +79,7 @@ module.exports = GelatoComponent.extend({
     var vocabReading = this.prompt.review.vocab.get('reading');
     var userReading = this.$('#reading-prompt').val();
 
-    if (userReading === vocabReading) {
+    if (userReading === vocabReading || !this.showReadingPrompt) {
       this.prompt.review.set('complete', true);
       this.render();
     } else {
@@ -110,9 +110,11 @@ module.exports = GelatoComponent.extend({
     this.prompt.vocabSentence.render();
     this.prompt.vocabStyle.render();
     this.prompt.vocabWriting.render();
+
     if (app.user.isAudioEnabled()) {
       this.prompt.reviews.vocab.play();
     }
+
     this.renderTemplate();
 
     return this;
@@ -138,6 +140,10 @@ module.exports = GelatoComponent.extend({
     this.prompt.vocabWriting.render();
 
     this.renderTemplate();
+
+    if (this.showReadingPrompt) {
+      this.prompt.shortcuts.unregisterAll();
+    }
 
     return this;
   },
@@ -168,9 +174,35 @@ module.exports = GelatoComponent.extend({
    * converts the display value to the appropriate alphabet/syllabary
    * (pinyin or kana)
    * @param {jQuery.Event} event a keypress event
-   * @todo: mess with shortcuts.js to get event priority working e.g. pressing 'z' or 'x'
    */
   handleReadingPromptKeypress: function(event) {
+
+    // if enter pressed
+    if (event.keyCode === 13) {
+      this._processPromptSubmit();
+    } else {
+      this._processPromptInput();
+    }
+  },
+
+  /**
+   *
+   * @private
+   */
+  _processPromptSubmit: function() {
+    if (this.prompt.review.isComplete()) {
+      this.prompt.review.stop();
+      this.prompt.next();
+    } else {
+      this.completeReading();
+    }
+  },
+
+  /**
+   *
+   * @private
+   */
+  _processPromptInput: function() {
     if (app.isChinese()) {
       // TODO: analyze pinyin
     } else {
