@@ -18,10 +18,6 @@ module.exports = GelatoComponent.extend({
 
     this.registerShortcuts = !this.showReadingPrompt;
 
-    if (!this.showReadingPrompt) {
-      this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
-    }
-
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
   },
@@ -37,7 +33,8 @@ module.exports = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'keypress #reading-prompt': 'handleReadingPromptKeypress'
+    'keypress #reading-prompt': 'handleReadingPromptKeypress',
+    'click gelato-component': 'handlePromptCanvasClick'
   },
 
   /**
@@ -79,7 +76,7 @@ module.exports = GelatoComponent.extend({
     var vocabReading = this.prompt.review.vocab.get('reading');
     var userReading = this.$('#reading-prompt').val();
 
-    if (userReading === vocabReading || !this.showReadingPrompt) {
+    if (!this.showReadingPrompt || this.isCorrect(userReading, vocabReading)) {
       this.prompt.review.set('complete', true);
       this.render();
     } else {
@@ -155,6 +152,13 @@ module.exports = GelatoComponent.extend({
     if (this.prompt.review.isComplete()) {
       this.prompt.next();
     } else {
+
+      // don't advance prompt on incomplete reviews with the text input
+      if (this.showReadingPrompt) {
+        return;
+      }
+
+      // but do advance if there's nothing to type in
       this.prompt.review.set('complete', true);
       this.render();
     }
@@ -183,6 +187,18 @@ module.exports = GelatoComponent.extend({
     } else {
       this._processPromptInput();
     }
+  },
+
+  /**
+   * Parses a vocabReading and comparse a userReading to see if it's in the list of approved answers.
+   * @param {String} userReading the user's attempted response to a reading prompt
+   * @param {String} vocabReading a list of readings, separated by a comma and a space
+   * @returns {Boolean} whether the user's reading was found in the parsed list of vocab readings
+   */
+  isCorrect: function(userReading, vocabReading) {
+    vocabReading = vocabReading.split(', ');
+
+    return vocabReading.indexOf(userReading) > -1;
   },
 
   /**
