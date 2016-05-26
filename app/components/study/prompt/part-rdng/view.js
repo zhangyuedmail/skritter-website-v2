@@ -13,6 +13,8 @@ module.exports = GelatoComponent.extend({
   initialize: function(options) {
     this.prompt = options.prompt;
 
+    this.userReading = '';
+
     // only support pinyin for first go around. Nihongo ga kite imasu!
     this.showReadingPrompt = app.isDevelopment() && app.isChinese();
 
@@ -33,7 +35,7 @@ module.exports = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'keypress #reading-prompt': 'handleReadingPromptKeypress',
+    'keyup #reading-prompt': 'handleReadingPromptKeypress',
     'click gelato-component': 'handlePromptCanvasClick'
   },
 
@@ -78,13 +80,23 @@ module.exports = GelatoComponent.extend({
 
     if (!this.showReadingPrompt || this.isCorrect(userReading, vocabReading)) {
       this.prompt.review.set('complete', true);
+
+      // TODO: need to set this better
+      this.userReading = userReading;
       this.render();
     } else {
       this.prompt.review.set('score', 1);
       this.prompt.review.set('complete', true);
       this.render();
-      this.$('#user-answer').text(userReading).removeClass('hidden');
     }
+
+    if (this.showReadingPrompt) {
+      this.$('.answer').addClass("grade-" + this.prompt.review.get('score'))
+    }
+
+    // TODO: this will cause problems if user submits an answer,
+    // then goes back and wants to change it
+    this.prompt.shortcuts.registerAll();
   },
 
   /**
@@ -140,6 +152,7 @@ module.exports = GelatoComponent.extend({
 
     if (this.showReadingPrompt) {
       this.prompt.shortcuts.unregisterAll();
+      this.$('#reading-prompt').focus();
     }
 
     return this;
@@ -220,9 +233,45 @@ module.exports = GelatoComponent.extend({
    */
   _processPromptInput: function() {
     if (app.isChinese()) {
-      // TODO: analyze pinyin
+      this._parsePinyinInput();
     } else {
       // TODO: analyze kana
+    }
+  },
+
+  _parsePinyinInput: function(input) {
+
+    // TODO: all of this
+
+    var input = input || this.$('#reading-prompt').val();
+    var toneNumInput = /[1-5]/;
+    var toneSubscript = /[₁-₅]/;
+
+    return;
+
+    // nothing good lies below here
+
+    if (toneNumInput.test(input)) {
+      input = input.split(toneSubscript);
+
+      input.map(function(part) {
+        if (false) {
+
+        }
+      });
+
+      // single char so far
+      if (input.length === 1) {
+        input = input.split(toneNumInput);
+
+      } else {
+        // TODO...
+      }
+    }
+
+    var lastWord = input[input.length - 1];
+    if (input.length > 1) {
+      // TODO
     }
   }
 });
