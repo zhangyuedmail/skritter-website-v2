@@ -39,7 +39,11 @@ module.exports = GelatoComponent.extend({
    * @returns {Object}
    */
   getValue: function() {
-    return {text: this.$('textarea').val()}
+    return {
+      creator: app.user.id,
+      public: false,
+      text: this.$('textarea').val()
+    };
   },
   /**
    * @method handleClickShowMnemonic
