@@ -55,7 +55,6 @@ var Dialog = GelatoDialog.extend({
     }
     this.vocab.save();
     this.trigger('confirm');
-    this.close()
   }
 });
 

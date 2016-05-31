@@ -91,6 +91,7 @@ module.exports = GelatoComponent.extend({
     });
     this.dialog.once('confirm', function() {
       self.prompt.next(true);
+      self.dialog.close();
     });
     this.dialog.open();
   },
