@@ -88,7 +88,7 @@ module.exports = SkritterModel.extend({
           added += currentIndex;
           passed = true;
         }
-        if (sectionsSkipping.indexOf(section.id) > -1) {
+        if (_.includes(sectionsSkipping, section.id)) {
           continue;
         }
         if (!passed) {
@@ -175,6 +175,13 @@ module.exports = SkritterModel.extend({
     ]);
   },
   /**
+   * @method isFinished
+   * @returns {Boolean}
+   */
+  isFinished: function() {
+    return this.get('studyingMode') === 'finished';
+  },
+  /**
    * @method isJapanese
    * @returns {Boolean}
    */
@@ -193,5 +200,42 @@ module.exports = SkritterModel.extend({
       this.get('user') === app.user.id,
       (this.get('sections') || []).length
     ]);
+  },
+  /**
+   * @method resetPosition
+   * @param {Function} callback
+   * @returns {Vocablist}
+   */
+  resetPosition: function(callback) {
+    this.fetch({
+      error: function(error) {
+        _.isFunction(callback) && callback(error);
+      },
+      success: function(model) {
+        if (model.get('sections')) {
+          $.ajax({
+            url: app.getApiUrl() + 'vocablists/' + model.id,
+            headers: app.user.session.getHeaders(),
+            type: 'PUT',
+            data: {
+              currentIndex: 0,
+              currentSection: model.get('sections')[0].id,
+              id: model.id,
+              studyingMode: model.isFinished() ? 'reviewing' : model.get('studyingMode')
+            },
+            error: function(error) {
+              _.isFunction(callback) && callback(error);
+            },
+            success: function(data) {
+              model.set(data.VocabList);
+              _.isFunction(callback) && callback();
+            }
+          });
+        } else {
+          _.isFunction(callback) && callback();
+        }
+      }
+    });
+    return this;
   }
 });

@@ -36,7 +36,7 @@ module.exports = SkritterCollection.extend({
    * @method getAdding
    */
   getAdding: function() {
-    return this.filter(function(vocablist) {
+    return _.filter(function(vocablist) {
       return vocablist.get('studyingMode') === 'adding';
     });
   },
@@ -44,8 +44,25 @@ module.exports = SkritterCollection.extend({
    * @method getAdding
    */
   getReviewing: function() {
-    return this.filter(function(vocablist) {
+    return _.filter(function(vocablist) {
       return _.includes(['reviewing', 'finished'], vocablist.get('studyingMode'))
     });
+  },
+  /**
+   * @method resetAllPositions
+   * @param {Function} [callback]
+   * @returns {Vocablists}
+   */
+  resetAllPositions: function(callback) {
+    async.each(
+      this.models,
+      function(model, callback) {
+        model.resetPosition(callback);
+      },
+      function() {
+        _.isFunction(callback) && callback();
+      }
+    );
+    return this;
   }
 });
