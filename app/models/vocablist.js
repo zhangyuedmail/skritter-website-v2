@@ -210,7 +210,8 @@ module.exports = SkritterModel.extend({
         _.isFunction(callback) && callback(error);
       },
       success: function(model) {
-        if (model.isEditable() && model.get('sections')) {
+        var sections = model.get('sections');
+        if (model.isEditable() && sections && sections.length) {
           $.ajax({
             url: app.getApiUrl() + 'vocablists/' + model.id,
             headers: app.user.session.getHeaders(),

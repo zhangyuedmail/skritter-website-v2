@@ -67,6 +67,8 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickSaveButton
    */
   handleClickSaveButton: function() {
+    var self = this;
+    var sections = this.vocablist.get('sections');
     var getVals = function(el) {
       return $(el).val();
     };
@@ -98,7 +100,21 @@ module.exports = BootstrapDialog.extend({
       attributes.autoSectionMovement = autoSectionMovementEl.is(':not(:checked)');
     }
 
-    this.vocablist.set(attributes).save();
-    this.close();
+    if (sections && sections.length) {
+      attributes.currentIndex = 0;
+      attributes.currentSection = sections[0].id;
+    }
+
+    this.vocablist.set(attributes).save(
+      null,
+      {
+        error: function() {
+          self.close();
+        },
+        success: function() {
+          self.close();
+        }
+      }
+    );
   }
 });
