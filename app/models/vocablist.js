@@ -1,7 +1,5 @@
 var SkritterModel = require('base/skritter-model');
 
-var Vocab = require('models/vocab');
-
 /**
  * @class Vocablist
  * @extends {SkritterModel}
@@ -212,7 +210,7 @@ module.exports = SkritterModel.extend({
         _.isFunction(callback) && callback(error);
       },
       success: function(model) {
-        if (model.get('sections')) {
+        if (model.isEditable() && model.get('sections')) {
           $.ajax({
             url: app.getApiUrl() + 'vocablists/' + model.id,
             headers: app.user.session.getHeaders(),
@@ -220,8 +218,7 @@ module.exports = SkritterModel.extend({
             data: {
               currentIndex: 0,
               currentSection: model.get('sections')[0].id,
-              id: model.id,
-              studyingMode: model.isFinished() ? 'reviewing' : model.get('studyingMode')
+              id: model.id
             },
             error: function(error) {
               _.isFunction(callback) && callback(error);
