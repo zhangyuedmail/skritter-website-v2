@@ -1,5 +1,6 @@
 var GelatoPage = require('gelato/page');
 var AccountSidebar = require('components/account/sidebar/view');
+var ResetVocablistPositionDialog = require('dialogs1/reset-vocablist-position/view');
 
 /**
  * @class AccountSettingsStudy
@@ -88,6 +89,11 @@ module.exports = GelatoPage.extend({
         studyRareWritings: this.$('#field-study-rare-writings').is(':checked'),
         studyAllListWritings: this.$('#field-study-all-list-writings').is(':checked')
       });
+    }
+    if (app.user.hasChanged('addSimplified') || app.user.hasChanged('addTraditional')) {
+      this.dialog = new ResetVocablistPositionDialog();
+      this.dialog.render();
+      this.dialog.open();
     }
     app.user.save();
   },

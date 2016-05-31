@@ -38,7 +38,6 @@ module.exports = GelatoDialog.extend({
    */
   handleClickButtonCancel: function(event) {
     event.preventDefault();
-    console.log('fucker');
     this.close();
   },
   /**
