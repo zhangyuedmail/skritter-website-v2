@@ -97,7 +97,8 @@ module.exports = GelatoComponent.extend({
         method: 'POST',
         headers: app.user.headers(),
         success: function(response) {
-          app.router.navigate('/vocablist/view/' + response.VocabList.id, {trigger: true});
+          app.router.navigate('/vocablists/view/' + response.VocabList.id, {trigger: true});
+          confirmDialog.close();
         }
       });
     });
@@ -158,7 +159,7 @@ module.exports = GelatoComponent.extend({
         method: 'POST',
         headers: app.user.headers(),
         success: function() {
-          document.location.reload()
+          document.location.reload();
         }
       });
     });
