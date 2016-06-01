@@ -42,7 +42,7 @@ var Vocab = SkritterModel.extend({
    * @returns {Vocab}
    */
   banAll: function() {
-    this.set('bannedParts', []);
+    this.set('bannedParts', ['defn', 'rdng', 'rune', 'tone']);
     return this;
   },
   /**
