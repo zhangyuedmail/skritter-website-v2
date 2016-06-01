@@ -16,13 +16,13 @@ module.exports = GelatoComponent.extend({
     this.userReading = '';
 
     // only support pinyin for first go around. Nihongo ga kite imasu!
-    this.showReadingPrompt = app.isDevelopment() && app.isChinese();
+    this.showReadingPrompt = false; //app.isDevelopment() && app.isChinese();
 
     this.registerShortcuts = !this.showReadingPrompt;
 
-    if (!this.showReadingPrompt) {
-      this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
-    }
+    // if (!this.showReadingPrompt) {
+    //   this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
+    // }
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
   },
