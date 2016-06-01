@@ -50,6 +50,7 @@ module.exports = Router.extend({
     'vocablists/browse': 'navigateVocablistsBrowse',
     'vocablists/chinesepod': 'navigateVocablistsChinesepod',
     'vocablists/create': 'navigateVocablistsCreate',
+    'vocablists/deleted': 'navigateVocablistsDeleted',
     'vocablists/my-lists': 'navigateVocablistsMine',
     'vocablists/published': 'navigateVocablistsPublished',
     'vocablists/queue': 'navigateVocablistsQueue',
@@ -406,6 +407,17 @@ module.exports = Router.extend({
   navigateVocablistsChinesepod: function() {
     if (app.user.isLoggedIn()) {
       this.go('pages/vocablists/chinesepod');
+    } else {
+      this.navigateLogin();
+    }
+  },
+
+  /**
+   * @method navigateVocablistsDeleted
+   */
+  navigateVocablistsDeleted: function() {
+    if (app.user.isLoggedIn()) {
+      this.go('pages/vocablists/deleted');
     } else {
       this.navigateLogin();
     }
