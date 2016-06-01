@@ -1,20 +1,10 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
-var MarketingFooter = require('components/marketing/footer/view');
 
 /**
  * @class About
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-  /**
-   * Initializes a new About Us Page
-   * @constructor
-   */
-  initialize: function() {
-    this.footer = new MarketingFooter();
-    this.navbar = new DefaultNavbar();
-  },
 
   /**
    * HTML Title text
@@ -37,8 +27,6 @@ module.exports = GelatoPage.extend({
     if (app.user.isLoggedIn()) {
       this.$('#field-email').val(app.user.get('email'));
     }
-    this.footer.setElement('#footer-container').render();
-    this.navbar.setElement('#navbar-container').render();
 
     return this;
   },
@@ -48,9 +36,6 @@ module.exports = GelatoPage.extend({
    * @returns {About}
    */
   remove: function() {
-    this.navbar.remove();
-    this.footer.remove();
-
     return GelatoPage.prototype.remove.call(this);
   }
 });

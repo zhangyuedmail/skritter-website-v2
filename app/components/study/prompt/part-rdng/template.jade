@@ -1,4 +1,4 @@
-gelato-component(data-name="study-prompt-part-rdng")
+gelato-component(data-name="study-prompt-part-rdng" class=view.showReadingPrompt ? 'noclick' : '')
   - var prompt = view.prompt;
 
   if prompt.reviews.part === 'rdng' && prompt.reviews
@@ -11,6 +11,9 @@ gelato-component(data-name="study-prompt-part-rdng")
 
     .writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
       span= prompt.reviews.vocab.get('writing')
+
+    .reading-prompt(class=view.showReadingPrompt ? '' : 'invisible')
+      input#reading-prompt.reading-prompt-input(value="#{view.userReading}")
 
     .answer(class=prompt.reviews.isComplete() ? '' : 'invisible')
       - var writing = prompt.reviews.vocab.get('writing');

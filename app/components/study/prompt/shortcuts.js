@@ -103,6 +103,12 @@ StudyPromptShortcuts.prototype._handleGradingKeyup = function(value) {
  * @private
  */
 StudyPromptShortcuts.prototype._handleGradingToggle = function() {
+
+  // because num lock
+  if (arguments[0].code === 'Numpad2') {
+    return;
+  }
+
   if (this.prompt.review.isComplete()) {
     this.prompt.review.set('score', this.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
@@ -149,6 +155,13 @@ StudyPromptShortcuts.prototype._handleNavigateReveal = function() {
         this._handleNavigateNext();
       } else {
         this.prompt.part.completeTone();
+      }
+      break;
+    case 'rdng':
+      if (this.prompt.review.isComplete()) {
+        this._handleNavigateNext();
+      } else {
+        this.prompt.part.completeReading();
       }
       break;
     default:
@@ -312,6 +325,30 @@ StudyPromptShortcuts.prototype._registerGrading = function() {
       'on_keydown': _.bind(this._handleGradingKeydown, this, 4),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 4),
       'prevent_repeat': true
+    },
+    {
+      'keys': 'num_1',
+      'on_keydown': _.bind(this._handleGradingKeydown, this, 1),
+      'on_keyup': _.bind(this._handleGradingKeyup, this, 1),
+      'prevent_repeat': true
+    },
+    {
+      'keys': 'num_2',
+      'on_keydown': _.bind(this._handleGradingKeydown, this, 2),
+      'on_keyup': _.bind(this._handleGradingKeyup, this, 2),
+      'prevent_repeat': true
+    },
+    {
+      'keys': 'num_3',
+      'on_keydown': _.bind(this._handleGradingKeydown, this, 3),
+      'on_keyup': _.bind(this._handleGradingKeyup, this, 3),
+      'prevent_repeat': true
+    },
+    {
+      'keys': 'num_4',
+      'on_keydown': _.bind(this._handleGradingKeydown, this, 4),
+      'on_keyup': _.bind(this._handleGradingKeyup, this, 4),
+      'prevent_repeat': true
     }
   ]);
 };
@@ -398,6 +435,31 @@ StudyPromptShortcuts.prototype._registerTone = function() {
     },
     {
       'keys': '0',
+      'on_keydown': _.bind(this._handleToneKeydown, this, 5),
+      'prevent_repeat': true
+    },
+    {
+      'keys': 'num_1',
+      'on_keydown': _.bind(this._handleToneKeydown, this, 1),
+      'prevent_repeat': true
+    },
+    {
+      'keys': 'num_2',
+      'on_keydown': _.bind(this._handleToneKeydown, this, 2),
+      'prevent_repeat': true
+    },
+    {
+      'keys': 'num_3',
+      'on_keydown': _.bind(this._handleToneKeydown, this, 3),
+      'prevent_repeat': true
+    },
+    {
+      'keys': 'num_4',
+      'on_keydown': _.bind(this._handleToneKeydown, this, 4),
+      'prevent_repeat': true
+    },
+    {
+      'keys': 'num_5',
       'on_keydown': _.bind(this._handleToneKeydown, this, 5),
       'prevent_repeat': true
     }

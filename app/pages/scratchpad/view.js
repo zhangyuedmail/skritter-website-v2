@@ -1,7 +1,6 @@
 var GelatoPage = require('gelato/page');
 var Vocabs = require('collections/vocabs');
 var Prompt = require('components/study/prompt/view');
-var Navbar = require('navbars/default/view');
 
 /**
  * @class Scratchpad
@@ -15,7 +14,6 @@ module.exports = GelatoPage.extend({
    */
   initialize: function(options) {
     ScreenLoader.show();
-    this.navbar = new Navbar();
     this.part = options.part;
     this.prompt = new Prompt();
     this.vocabs = new Vocabs();
@@ -23,29 +21,33 @@ module.exports = GelatoPage.extend({
     this.writing = options.writing;
     this.load();
   },
+
   /**
-   * @property events
-   * @type Object
+   * @property showFooter
+   * @type {Boolean}
    */
-  events: {},
+  showFooter: false,
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @property title
    * @type {String}
    */
   title: 'Scratchpad - Skritter',
+
   /**
    * @method render
    * @returns {Scratchpad}
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
     this.prompt.setElement('#study-prompt-container').render();
+
     return this;
   },
   /**
@@ -101,12 +103,12 @@ module.exports = GelatoPage.extend({
       }
     }, this));
   },
+
   /**
    * @method remove
    * @returns {Study}
    */
   remove: function() {
-    this.navbar.remove();
     this.prompt.remove();
     return GelatoPage.prototype.remove.call(this);
   }

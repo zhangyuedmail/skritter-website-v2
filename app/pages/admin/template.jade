@@ -1,36 +1,36 @@
 gelato-page(data-name='admin')
-  - var payments = view.payments.getTotalByDate();
-
-  #navbar-container
+  - var payments = view.payments;
 
   section.container
-    .row
-      .col-xs-12
-        .content-block
+    .content-block
+      .row
+        .col-xs-12
+          #sub-title.lead Subscriptions
+          input#date-range-picker(type='text')
 
-          p.lead Subscriptions
+      if payments.state === 'fetching' || payments.length
+        .row
+          .col-xs-12
 
-          if view.payments.state === 'standby'
-            table.table.table-striped
-              thead
-                tr
-                  th Date
-                  th Apple
-                  th Google
-                  th Paypal
-                  th Stripe
-                  th Total
-              tbody
-                for entry, date in payments
+            if view.payments.state === 'standby'
+              table.table.table-striped
+                thead
                   tr
-                    td= date
-                    td= entry.newApple + ' / ' + entry.returningApple
-                    td= entry.newGoogle + ' / ' + entry.returningGoogle
-                    td= entry.newPaypal + '/' + entry.returningPaypal
-                    td= entry.newStripe + '/' + entry.returningStripe
-                    td= entry.newTotal + '/' + entry.returningTotal
-          else
-            .text-center
-              i.fa.fa-5x.fa-spinner.fa-pulse
-
-  #footer-container
+                    th Date
+                    th Apple
+                    th Google
+                    th Paypal
+                    th Stripe
+                    th Total
+                tbody
+                  for entry, date in payments.getTotalByDate()
+                    tr
+                      td= date
+                      td= entry.newApple + '/' + entry.returningApple
+                      td= entry.newGoogle + '/' + entry.returningGoogle
+                      td= entry.newPaypal + '/' + entry.returningPaypal
+                      td= entry.newStripe + '/' + entry.returningStripe
+                      td= entry.newTotal + '/' + entry.returningTotal
+            else
+              .text-center
+                i.fa.fa-3x.fa-spinner.fa-pulse

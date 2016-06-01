@@ -49,12 +49,10 @@ module.exports = GelatoComponent.extend({
     this.prompt.editing = false;
     this.prompt.vocabDefinition.editing = false;
     this.prompt.vocabMnemonic.editing = false;
-    this.prompt.shortcuts.registerAll();
-    this.prompt.review.set('showMnemonic', true);
-    this.prompt.reviews.vocab.set({
-      customDefinition: this.prompt.vocabDefinition.getValue(),
-      mnemonic: this.prompt.vocabMnemonic.getValue()
-    });
+    if (this.prompt.part.registerShortcuts) {
+      this.prompt.shortcuts.registerAll();
+    }
+    this.prompt.review.set('showMnemonic', false);
     this.prompt.vocabDefinition.render();
     this.prompt.vocabMnemonic.render();
     return this;
@@ -93,6 +91,7 @@ module.exports = GelatoComponent.extend({
     });
     this.dialog.once('confirm', function() {
       self.prompt.next(true);
+      self.dialog.close();
     });
     this.dialog.open();
   },
@@ -103,6 +102,8 @@ module.exports = GelatoComponent.extend({
   handleClickButtonVocabEdit: function(event) {
     event.preventDefault();
     if (this.prompt.editing) {
+      this.prompt.reviews.vocab.set('customDefinition', this.prompt.vocabDefinition.getValue());
+      this.prompt.reviews.vocab.set('mnemonic', this.prompt.vocabMnemonic.getValue());
       this.disableEditing();
       this.prompt.reviews.vocab.save();
     } else {

@@ -1,7 +1,6 @@
 var GelatoPage = require('gelato/page');
-
 var AccountSidebar = require('components/account/sidebar/view');
-var DefaultNavbar = require('navbars/default/view');
+var ResetVocablistPositionDialog = require('dialogs1/reset-vocablist-position/view');
 
 /**
  * @class AccountSettingsStudy
@@ -13,7 +12,6 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    this.navbar = new DefaultNavbar();
     this.sidebar = new AccountSidebar();
     this.sourceLanguages = require('data/source-languages');
     this.listenTo(app.user, 'state', this.render);
@@ -43,7 +41,6 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
     this.sidebar.setElement('#sidebar-container').render();
     return this;
   },
@@ -93,6 +90,11 @@ module.exports = GelatoPage.extend({
         studyAllListWritings: this.$('#field-study-all-list-writings').is(':checked')
       });
     }
+    if (app.user.hasChanged('addSimplified') || app.user.hasChanged('addTraditional')) {
+      this.dialog = new ResetVocablistPositionDialog();
+      this.dialog.render();
+      this.dialog.open();
+    }
     app.user.save();
   },
   /**
@@ -100,7 +102,6 @@ module.exports = GelatoPage.extend({
    * @returns {AccountSettingsStudy}
    */
   remove: function() {
-    this.navbar.remove();
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
   }

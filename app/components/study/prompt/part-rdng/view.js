@@ -12,39 +12,49 @@ module.exports = GelatoComponent.extend({
    */
   initialize: function(options) {
     this.prompt = options.prompt;
-    this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
+
+    this.userReading = '';
+
+    // only support pinyin for first go around. Nihongo ga kite imasu!
+    this.showReadingPrompt = app.isDevelopment() && app.isChinese();
+
+    this.registerShortcuts = !this.showReadingPrompt;
+
+    if (!this.showReadingPrompt) {
+      this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
+    }
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
   },
+
   /**
    * @property el
    * @type {String}
    */
   el: '#review-container',
+
   /**
    * @property events
    * @type Object
    */
-  events: {},
+  events: {
+    'keyup #reading-prompt': 'handleReadingPromptKeypress',
+    'click gelato-component': 'handlePromptCanvasClick'
+  },
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
-  /**
-   * @method render
-   * @returns {StudyPromptPartRdng}
-   */
-  render: function() {
-    this.renderTemplate();
-    return this;
-  },
+
   /**
    * @method render
    * @returns {StudyPromptPartDefn}
    */
   render: function() {
     this.renderTemplate();
+
     this.prompt.review = this.prompt.reviews.current();
     this.prompt.canvas.grid = false;
     this.prompt.canvas.reset();
@@ -54,13 +64,44 @@ module.exports = GelatoComponent.extend({
     this.prompt.toolbarAction.buttonErase = false;
     this.prompt.toolbarAction.buttonShow = false;
     this.prompt.toolbarAction.buttonTeach = false;
+
     if (this.prompt.review.isComplete()) {
       this.renderComplete();
     } else {
       this.renderIncomplete();
     }
+
     return this;
   },
+
+  /**
+   * Called when attempting to advance to the next prompt via the enter key
+   */
+  completeReading: function() {
+    var vocabReading = this.prompt.review.vocab.get('reading');
+    var userReading = this.$('#reading-prompt').val();
+
+    if (!this.showReadingPrompt || this.isCorrect(userReading, vocabReading)) {
+      this.prompt.review.set('complete', true);
+
+      // TODO: need to set this better
+      this.userReading = userReading;
+      this.render();
+    } else {
+      this.prompt.review.set('score', 1);
+      this.prompt.review.set('complete', true);
+      this.render();
+    }
+
+    if (this.showReadingPrompt) {
+      this.$('.answer').addClass("grade-" + this.prompt.review.get('score'))
+    }
+
+    // TODO: this will cause problems if user submits an answer,
+    // then goes back and wants to change it
+    this.prompt.shortcuts.registerAll();
+  },
+
   /**
    * @method renderComplete
    * @returns {StudyPromptPartRune}
@@ -81,12 +122,16 @@ module.exports = GelatoComponent.extend({
     this.prompt.vocabSentence.render();
     this.prompt.vocabStyle.render();
     this.prompt.vocabWriting.render();
+
     if (app.user.isAudioEnabled()) {
       this.prompt.reviews.vocab.play();
     }
+
     this.renderTemplate();
+
     return this;
   },
+
   /**
    * @method renderIncomplete
    * @returns {StudyPromptPartRune}
@@ -105,25 +150,132 @@ module.exports = GelatoComponent.extend({
     this.prompt.vocabSentence.render();
     this.prompt.vocabStyle.render();
     this.prompt.vocabWriting.render();
+
     this.renderTemplate();
+
+    if (this.showReadingPrompt) {
+      this.prompt.shortcuts.unregisterAll();
+      this.$('#reading-prompt').focus();
+    }
+
     return this;
   },
+
   /**
    * @method handlePromptCanvasClick
    */
-  handlePromptCanvasClick: function() {
+  handlePromptCanvasClick: function(e) {
+    console.log('testing');
     if (this.prompt.review.isComplete()) {
       this.prompt.next();
     } else {
+
+      // don't advance prompt on incomplete reviews with the text input
+      if (this.showReadingPrompt) {
+        return;
+      }
+
+      // but do advance if there's nothing to type in
       this.prompt.review.set('complete', true);
       this.render();
     }
-  }, /**
+  },
+
+  /**
    * @method handlePromptToolbarActionCorrect
    */
   handlePromptToolbarActionCorrect: function() {
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.toolbarAction.render();
+  },
+
+  /**
+   * Given keyboard input, keeps track of the internal actual value and
+   * converts the display value to the appropriate alphabet/syllabary
+   * (pinyin or kana)
+   * @param {jQuery.Event} event a keypress event
+   */
+  handleReadingPromptKeypress: function(event) {
+
+    // if enter pressed
+    if (event.keyCode === 13) {
+      this._processPromptSubmit();
+    } else {
+      this._processPromptInput();
+    }
+  },
+
+  /**
+   * Parses a vocabReading and comparse a userReading to see if it's in the list of approved answers.
+   * @param {String} userReading the user's attempted response to a reading prompt
+   * @param {String} vocabReading a list of readings, separated by a comma and a space
+   * @returns {Boolean} whether the user's reading was found in the parsed list of vocab readings
+   */
+  isCorrect: function(userReading, vocabReading) {
+    vocabReading = vocabReading.split(', ');
+
+    return vocabReading.indexOf(userReading) > -1;
+  },
+
+  /**
+   *
+   * @private
+   */
+  _processPromptSubmit: function() {
+    if (this.prompt.review.isComplete()) {
+      this.prompt.review.stop();
+      this.prompt.next();
+    } else {
+      this.completeReading();
+    }
+  },
+
+  /**
+   *
+   * @private
+   */
+  _processPromptInput: function() {
+    if (app.isChinese()) {
+      this._parsePinyinInput();
+    } else {
+      // TODO: analyze kana
+    }
+  },
+
+  _parsePinyinInput: function(input) {
+
+    // TODO: all of this
+
+    var input = input || this.$('#reading-prompt').val();
+    var toneNumInput = /[1-5]/;
+    var toneSubscript = /[₁-₅]/;
+
+    return;
+
+    // nothing good lies below here
+
+    if (toneNumInput.test(input)) {
+      input = input.split(toneSubscript);
+
+      input.map(function(part) {
+        if (false) {
+
+        }
+      });
+
+      // single char so far
+      if (input.length === 1) {
+        input = input.split(toneNumInput);
+
+      } else {
+        // TODO...
+      }
+    }
+
+    var lastWord = input[input.length - 1];
+    if (input.length > 1) {
+      // TODO
+    }
   }
 });

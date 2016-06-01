@@ -1,5 +1,4 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
 var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words/sidebar/view');
 var ProgressDialog = require('dialogs/progress/view');
@@ -15,10 +14,10 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    this.navbar = new DefaultNavbar();
     this.sidebar = new WordsSidebar();
     this.starredVocabs = new Vocabs();
     this.limit = 20;
+
     this.listenTo(this.starredVocabs, 'sync', this.renderTable);
     this.fetchStarredVocabs();
   },
@@ -31,12 +30,13 @@ module.exports = GelatoPage.extend({
     'click #remove-all-stars-link': 'fetchAllStarredVocabsThenRemoveThem',
     'click .star-td a': 'handleClickStarLink'
   },
+
   /**
    * @method remove
    */
   remove: function() {
-    this.navbar.remove();
     this.sidebar.remove();
+
     return GelatoPage.prototype.remove.call(this);
   },
   /**
@@ -45,20 +45,23 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
     this.sidebar.setElement('#words-sidebar-container').render();
+
     return this;
   },
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @property title
    * @type {String}
    */
   title: 'Starred Words - Skritter',
+
   /**
    * @method fetchAllStarredVocabsThenRemoveThem
    */
@@ -93,6 +96,7 @@ module.exports = GelatoPage.extend({
 
     }
   },
+
   /**
    * @method fetchItems
    * @param {string} [cursor]
@@ -108,12 +112,14 @@ module.exports = GelatoPage.extend({
       sort: false
     });
   },
+
   /**
    * @method handleClickLoadMoreButton
    */
   handleClickLoadMoreButton: function() {
     this.fetchStarredVocabs(this.starredVocabs.cursor);
   },
+
   /**
    * @method handleClickStarLink
    * @param {Event} event
@@ -130,6 +136,7 @@ module.exports = GelatoPage.extend({
       {method: 'PUT', patch: true}
     );
   },
+
   /**
    * @method removeAllStars
    */
@@ -138,6 +145,7 @@ module.exports = GelatoPage.extend({
     this.starredVocabs.reset();
     this.renderTable();
   },
+
   /**
    * @method renderTable
    */

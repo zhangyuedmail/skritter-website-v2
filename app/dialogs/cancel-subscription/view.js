@@ -66,7 +66,14 @@ module.exports = BootstrapDialog.extend({
       this.requestUnsubscribe(),
       this.requestUpdateReceiveNewsletter(),
       this.requestSaveCancelReason()
-    ).done(app.reload);
+    ).done(function() {
+      if (app.user.getAccountAgeBy('days') > 7) {
+        mixpanel.track('Unsubscribe', {'Trial': false});
+      } else {
+        mixpanel.track('Unsubscribe', {'Trial': true});
+      }
+      app.reload();
+    });
   },
   /**
    * @method renderSectionContent
@@ -118,7 +125,7 @@ module.exports = BootstrapDialog.extend({
     var cancellation = new Cancellation({
       'reason': $('input[name="reason"]:checked').val(),
       'message': $('#notes-textarea').val()
-    })
+    });
     return cancellation.save();
   }
 });

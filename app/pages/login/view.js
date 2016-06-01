@@ -1,7 +1,4 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
-var MarketingFooter = require('components/marketing/footer/view');
-
 /**
  * @class Login
  * @extends {GelatoPage}
@@ -12,30 +9,31 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    this.footer = new MarketingFooter();
-    this.navbar = new DefaultNavbar();
     mixpanel.track('Viewed login page');
   },
+  
   /**
    * @property title
    * @type {String}
    */
   title: 'Login - Skritter',
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @method render
    * @returns {Login}
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
-    this.footer.setElement('#footer-container').render();
+
     return this;
   },
+
   /**
    * @property events
    * @type {Object}
@@ -45,6 +43,7 @@ module.exports = GelatoPage.extend({
     'click #button-login': 'handleClickLoginButton',
     'click #button-skeleton': 'handleClickSkeleton'
   },
+
   /**
    * @method getFormData
    * @returns {Object}
@@ -55,6 +54,7 @@ module.exports = GelatoPage.extend({
       username: this.$('#login-username').val()
     }
   },
+
   /**
    * @method handleClickLoginButton
    * @param {Event} event
@@ -63,6 +63,7 @@ module.exports = GelatoPage.extend({
     event.preventDefault();
     this.login();
   },
+
   /**
    * @method handleKeyUpLoginPassword
    * @param {Event} event
@@ -73,6 +74,7 @@ module.exports = GelatoPage.extend({
       this.login();
     }
   },
+
   /**
    * @method handleClickSkeleton
    * @param {Event} event
@@ -92,6 +94,7 @@ module.exports = GelatoPage.extend({
     }
     this.login();
   },
+
   /**
    * @method login
    */
@@ -117,6 +120,7 @@ module.exports = GelatoPage.extend({
       }
     );
   },
+
   /**
    * @method remove
    * @returns {Login}

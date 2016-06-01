@@ -8,11 +8,13 @@ var GelatoView = Backbone.View.extend({
    * @type {jQuery}
    */
   $view: null,
+
   /**
    * @property template
    * @type {Function}
    */
   template: null,
+
   /**
    * @param {String} [selector]
    * @returns {GelatoView}
@@ -21,6 +23,7 @@ var GelatoView = Backbone.View.extend({
     this.$((selector ? selector + ' ' : '') + ':input').prop('disabled', true);
     return this;
   },
+
   /**
    * @param {String} [selector]
    * @returns {GelatoView}
@@ -29,6 +32,7 @@ var GelatoView = Backbone.View.extend({
     this.$((selector ? selector + ' ' : '') + ':input').prop('disabled', false);
     return this;
   },
+
   /**
    * @method getHeight
    * @returns {Number}
@@ -36,6 +40,7 @@ var GelatoView = Backbone.View.extend({
   getHeight: function() {
     return this.$view.height();
   },
+
   /**
    * @method getWidth
    * @returns {Number}
@@ -43,6 +48,7 @@ var GelatoView = Backbone.View.extend({
   getWidth: function() {
     return this.$view.width();
   },
+
   /**
    * @method handleClickHref
    * @param {Event} event
@@ -63,6 +69,7 @@ var GelatoView = Backbone.View.extend({
       });
     }
   },
+
   /**
    * @method getContext
    * @param {Object} [context]
@@ -76,6 +83,7 @@ var GelatoView = Backbone.View.extend({
     globals = Backbone.$.extend(true, globals, context || {});
     return globals;
   },
+
   /**
    * @method hide
    * @returns {GelatoView}
@@ -84,6 +92,7 @@ var GelatoView = Backbone.View.extend({
     this.$view.hide(arguments.length ? arguments : 0);
     return this;
   },
+
   /**
    * @method parseTemplate
    * @param {Function} template
@@ -96,6 +105,7 @@ var GelatoView = Backbone.View.extend({
     }
     return template;
   },
+
   /**
    * @method remove
    * @returns {GelatoView}
@@ -108,6 +118,7 @@ var GelatoView = Backbone.View.extend({
     Backbone.$(window).off('resize.View');
     return this;
   },
+
   /**
    * @method render
    * @returns {GelatoView}
@@ -116,7 +127,10 @@ var GelatoView = Backbone.View.extend({
     this.renderTemplate();
     return this;
   },
+
   /**
+   * Renders a view's template with the provided context and optionally adds
+   * a header and a footer.
    * @method renderTemplate
    * @param {Object} [context]
    * @returns {GelatoView}
@@ -132,8 +146,10 @@ var GelatoView = Backbone.View.extend({
         this.trigger('resize', event);
       }).bind(this), 200);
     }).bind(this));
+    this.delegateEvents();
     return this;
   },
+
   /**
    * @method show
    * @returns {GelatoView}

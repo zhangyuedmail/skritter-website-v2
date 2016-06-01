@@ -1,8 +1,5 @@
 var GelatoPage = require('gelato/page');
-
-var MarketingFooter = require('components/marketing/footer/view');
 var User = require('models/user');
-var DefaultNavbar = require('navbars/default/view');
 
 /**
  * A page that allows a user to create account for Skritter by entering
@@ -18,14 +15,11 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function(options) {
-    this.footer = new MarketingFooter();
-    this.navbar = new DefaultNavbar();
     this.plan = options.plan;
     this.subscribing = false;
     this.user = new User();
     this.userReferral = app.getUserReferral();
     this.couponCode = app.getStoredCouponCode();
-
     mixpanel.track('Viewed signup page');
   },
 
@@ -91,8 +85,7 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.footer.setElement('#footer-container').render();
-    this.navbar.setElement('#navbar-container').render();
+
     if (app.isDevelopment()) {
       this.$('#signup-username').val('tester1');
       this.$('#signup-email').val('josh@skritter.com');
@@ -101,7 +94,6 @@ module.exports = GelatoPage.extend({
       this.$('#signup-card-number').val('4242424242424242');
       this.$('#card-year-select').val(new Date().getFullYear() + 1);
     }
-
 
     if (this.couponCode) {
       this.setCouponCode(this.couponCode);
@@ -149,17 +141,7 @@ module.exports = GelatoPage.extend({
             },
             success: function(user) {
               app.removeSetting('siteRef');
-              mixpanel.alias(user.id);
-              mixpanel.track(
-                'Signup',
-                {
-                  method: formData.method,
-                  plan: formData.plan
-                },
-                function() {
-                  callback();
-                }
-              );
+              callback();
             }
           }
         )
@@ -172,7 +154,18 @@ module.exports = GelatoPage.extend({
             if (error) {
               callback(error);
             } else {
-              callback();
+              mixpanel.alias(self.user.id);
+              mixpanel.track(
+                'Signup',
+                {
+                  'Display Name': self.user.get('name'),
+                  'Method': formData.method,
+                  'Plan': formData.plan
+                },
+                function() {
+                  callback();
+                }
+              );
             }
           }
         )
@@ -270,8 +263,6 @@ module.exports = GelatoPage.extend({
    * @returns {Signup}
    */
   remove: function() {
-    this.navbar.remove();
-    this.footer.remove();
     return GelatoPage.prototype.remove.call(this);
   },
 

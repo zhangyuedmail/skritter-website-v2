@@ -355,6 +355,13 @@ module.exports = GelatoComponent.extend({
     this.prompt.review.character.reset();
     this.render();
   },
+
+  /**
+   * Whether the keyboard shortcuts should be registered for this prompt
+   * @type {Boolean}
+   */
+  registerShortcuts: true,
+
   /**
    * @method showCharacter
    */

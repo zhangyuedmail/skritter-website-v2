@@ -52,6 +52,13 @@ module.exports = GelatoComponent.extend({
     }
     return this;
   },
+
+  /**
+   * Whether the keyboard shortcuts should be registered for this prompt
+   * @type {Boolean}
+   */
+  registerShortcuts: true,
+
   /**
    * @method renderComplete
    * @returns {StudyPromptPartRune}

@@ -1,9 +1,6 @@
 var GelatoPage = require('gelato/page');
-
 var Vocabs = require('collections/vocabs');
 var Prompt = require('components/study/prompt/view');
-var DefaultNavbar = require('navbars/default/view');
-
 var DemoCallToActionDialog = require('dialogs1/demo-call-to-action/view');
 var DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
 
@@ -20,7 +17,6 @@ module.exports = GelatoPage.extend({
   initialize: function(options) {
     this.dialog = null;
     this.lang = 'zh';
-    this.navbar = new DefaultNavbar();
     this.notify = null;
     this.prompt = new Prompt();
     this.promptItems = null;
@@ -50,7 +46,6 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
     this.prompt.setElement('#demo-prompt-container').render().hide();
     this.loadDemo();
     return this;
@@ -69,7 +64,7 @@ module.exports = GelatoPage.extend({
       function(lang, callback) {
         ScreenLoader.show();
         ScreenLoader.post('Loading demo word');
-        mixpanel.track('Started demo', {lang: lang});
+        mixpanel.track('Started demo', {'Language': lang});
         self.vocabs.fetch({
           data: {
             include_decomps: true,
@@ -174,7 +169,6 @@ module.exports = GelatoPage.extend({
    * @returns {Contact}
    */
   remove: function() {
-    this.navbar.remove();
     this.prompt.remove();
     return GelatoPage.prototype.remove.call(this);
   }

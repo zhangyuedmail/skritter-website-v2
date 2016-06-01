@@ -1,6 +1,5 @@
 var GelatoPage = require('gelato/page');
 
-var DefaultNavbar = require('navbars/default/view');
 var EditorRows = require('components/vocablists/row-editor/view');
 var Vocablist = require('models/vocablist');
 var VocablistSection = require('models/vocablist-section');
@@ -20,7 +19,6 @@ module.exports = GelatoPage.extend({
     this.vocablist = new Vocablist({id: options.vocablistId});
     this.vocablistSection = new VocablistSection({vocablistId: options.vocablistId, id: options.sectionId});
     this.editor = new EditorRows({vocablist: this.vocablist, vocablistSection: this.vocablistSection});
-    this.navbar = new DefaultNavbar();
     async.series([
       _.bind(function(callback) {
         this.vocablist.fetch({
@@ -57,6 +55,7 @@ module.exports = GelatoPage.extend({
       this.render();
     }, this));
   },
+  
   /**
    * @property events
    * @type {Object}
@@ -68,16 +67,19 @@ module.exports = GelatoPage.extend({
     'click #edit-section': 'handleClickEditSection',
     'click #save-changes': 'handleClickSaveChanges'
   },
+  
   /**
    * @property title
    * @type {String}
    */
   title: 'Vocablist - Skritter',
+  
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+  
   /**
    * @method render
    * @returns {VocablistsListSectionPage}
@@ -85,12 +87,12 @@ module.exports = GelatoPage.extend({
   render: function() {
     this.renderTemplate();
     this.editor.setElement('#editor-container').render();
-    this.navbar.setElement('#navbar-container').render();
     if (this.vocablist.has('name')) {
       document.title = this.vocablist.get('name') + ' - Vocablist - Skritter';
     }
     return this;
   },
+  
   /**
    * @method handleClickBackLink
    * @param {Event} event
@@ -114,6 +116,7 @@ module.exports = GelatoPage.extend({
       this.dialog.open();
     }
   },
+  
   /**
    * @method handleClickDiscardChanges
    * @param {Event} event
@@ -143,6 +146,7 @@ module.exports = GelatoPage.extend({
     );
     this.dialog.open();
   },
+  
   /**
    * @method handleClickEditSection
    * @param {Event} event
@@ -152,6 +156,7 @@ module.exports = GelatoPage.extend({
     this.editor.editing = !this.editor.editing;
     this.render();
   },
+  
   /**
    * @method handleClickSaveChanges
    * @param {Event} event
@@ -172,6 +177,7 @@ module.exports = GelatoPage.extend({
     );
     this.render();
   },
+  
   /**
    * @method handleKeydownAddInput
    * @param {Event} event
@@ -185,19 +191,20 @@ module.exports = GelatoPage.extend({
       $input.focus();
     }
   },
+  
   /**
    * @method handleVocablistState
    */
   handleVocablistState: function() {
     this.render();
   },
+  
   /**
    * @method remove
    * @returns {VocablistsListSectionPage}
    */
   remove: function() {
     this.editor.remove();
-    this.navbar.remove();
     return GelatoPage.prototype.remove.call(this);
   }
 });

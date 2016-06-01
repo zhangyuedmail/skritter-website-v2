@@ -1,5 +1,4 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
 var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words/sidebar/view');
 var ProgressDialog = require('dialogs/progress/view');
@@ -16,13 +15,13 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    this.navbar = new DefaultNavbar();
     this.sidebar = new WordsSidebar();
     this.bannedVocabs = new Vocabs();
     this.limit = 20;
     this.listenTo(this.bannedVocabs, 'sync', this.renderTable);
     this.fetchBannedVocabs();
   },
+  
   /**
    * @property events
    * @type {Object}
@@ -33,34 +32,39 @@ module.exports = GelatoPage.extend({
     'click #load-more-btn': 'handleClickLoadMoreButton',
     'click #unban-vocabs-btn': 'handleClickUnbanVocabsButton'
   },
+  
   /**
    * @method remove
    */
   remove: function() {
-    this.navbar.remove();
     this.sidebar.remove();
+    
     return GelatoPage.prototype.remove.call(this);
   },
+  
   /**
    * @method render
    * @returns {VocablistBrowse}
    */
   render: function() {
     this.renderTemplate();
-    this.navbar.setElement('#navbar-container').render();
     this.sidebar.setElement('#words-sidebar-container').render();
+    
     return this;
   },
+  
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+  
   /**
    * @property title
    * @type {String}
    */
   title: 'Starred Words - Skritter',
+  
   /**
    * @method fetchItems
    * @param {string} [cursor]
@@ -76,6 +80,7 @@ module.exports = GelatoPage.extend({
       sort: false
     });
   },
+  
   /**
    * @method handleChangeCheckbox
    * @param {Event} event
@@ -88,12 +93,14 @@ module.exports = GelatoPage.extend({
     var anyChecked = this.$('input[type="checkbox"]:checked').length;
     this.$('#unban-vocabs-btn').prop('disabled', !anyChecked);
   },
+  
   /**
    * @method handleClickLoadMoreButton
    */
   handleClickLoadMoreButton: function() {
     this.fetchBannedVocabs(this.bannedVocabs.cursor);
   },
+  
   /**
    * @method handleClickUnbanVocabsButton
    */
@@ -112,6 +119,7 @@ module.exports = GelatoPage.extend({
     this.renderTable();
     this.$('#unban-vocabs-btn').prop('disabled', true);
   },
+  
   /**
    * @method handleClickWritingTd
    * @param {Event} event
@@ -126,6 +134,7 @@ module.exports = GelatoPage.extend({
       this.dialog.open();
     }
   },
+  
   /**
    * @method renderTable
    */
