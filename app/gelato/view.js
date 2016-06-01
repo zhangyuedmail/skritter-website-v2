@@ -146,7 +146,7 @@ var GelatoView = Backbone.View.extend({
         this.trigger('resize', event);
       }).bind(this), 200);
     }).bind(this));
-
+    this.delegateEvents();
     return this;
   },
 
