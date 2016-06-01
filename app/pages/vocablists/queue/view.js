@@ -20,20 +20,23 @@ module.exports = GelatoPage.extend({
     this.reviewingTable = new ReviewingTable({vocablists: this.vocablists});
     this.sidebar = new Sidebar();
 
-    this.listenTo(this.vocablists, 'state:standby', function() {
-      if (this.vocablists.cursor) {
-        this.vocablists.fetch({
-          data: {
-            cursor: this.vocablists.cursor,
-            limit: 10,
-            sort: 'studying',
-            include_percent_done: 'true',
-            lang: app.getLanguage()
-          },
-          remove: false
-        });
+    this.listenTo(
+      this.vocablists, 'state:standby',
+      function() {
+        if (this.vocablists.cursor) {
+          this.vocablists.fetch({
+            data: {
+              cursor: this.vocablists.cursor,
+              limit: 10,
+              sort: 'studying',
+              include_percent_done: 'true',
+              lang: app.getLanguage()
+            },
+            remove: false
+          });
+        }
       }
-    });
+    );
 
     this.vocablists.fetch({
       data: {
@@ -78,7 +81,7 @@ module.exports = GelatoPage.extend({
     this.addingTable.remove();
     this.reviewingTable.remove();
     this.sidebar.remove();
-    
+
     return GelatoPage.prototype.remove.call(this);
   }
 });

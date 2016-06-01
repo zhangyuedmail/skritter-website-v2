@@ -36,17 +36,23 @@ module.exports = SkritterCollection.extend({
    * @method getAdding
    */
   getAdding: function() {
-    return _.filter(function(vocablist) {
-      return vocablist.get('studyingMode') === 'adding';
-    });
+    return _.filter(
+      this.models,
+      function(vocablist) {
+        return vocablist.get('studyingMode') === 'adding';
+      }
+    );
   },
   /**
    * @method getAdding
    */
   getReviewing: function() {
-    return _.filter(function(vocablist) {
-      return _.includes(['reviewing', 'finished'], vocablist.get('studyingMode'))
-    });
+    return _.filter(
+      this.models,
+      function(vocablist) {
+        return _.includes(['reviewing', 'finished'], vocablist.get('studyingMode'))
+      }
+    );
   },
   /**
    * @method resetAllPositions
