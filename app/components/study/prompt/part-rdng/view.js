@@ -20,6 +20,9 @@ module.exports = GelatoComponent.extend({
 
     this.registerShortcuts = !this.showReadingPrompt;
 
+    if (!this.showReadingPrompt) {
+      this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
+    }
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
   },
@@ -162,6 +165,7 @@ module.exports = GelatoComponent.extend({
    * @method handlePromptCanvasClick
    */
   handlePromptCanvasClick: function(e) {
+    console.log('testing');
     if (this.prompt.review.isComplete()) {
       this.prompt.next();
     } else {
