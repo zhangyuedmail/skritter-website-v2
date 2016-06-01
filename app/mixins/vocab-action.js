@@ -20,6 +20,7 @@ module.exports = {
     vocab.banAll();
     return {bannedParts: vocab.get('bannedParts')};
   },
+
   /**
    * Initializes the action object runAction uses to serially process words
    * @method beginVocabAction
@@ -46,17 +47,20 @@ module.exports = {
     };
     this.runVocabAction();
   },
+
   /**
    * @method deleteVocabMnemonicAction
    * @param {Vocab} vocab
    * @returns {Object|null} Vocab attrs to be saved, if any
    */
   deleteVocabMnemonicAction: function(vocab) {
-    if (!vocab.getMnemonicText()) {
+    var mnemonic = vocab.get('mnemonic') || {};
+    if (!mnemonic.text) {
       return null;
     }
     return {mnemonic: {text: ''}};
   },
+
   /**
    * @method removeStarVocabAction
    * @param {Vocab} vocab
@@ -68,6 +72,7 @@ module.exports = {
     }
     return {starred: false};
   },
+
   /**
    * @method runVocabAction
    */
@@ -99,6 +104,7 @@ module.exports = {
       this.runVocabAction();
     });
   },
+
   /**
    * @method finishVocabAction
    */
@@ -107,6 +113,7 @@ module.exports = {
     this.action = {};
     this.trigger('vocab-action-complete');
   },
+
   /**
    * @method unbanVocabAction
    * @param {Vocab} vocab
