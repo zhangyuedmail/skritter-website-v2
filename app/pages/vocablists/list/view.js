@@ -135,6 +135,9 @@ module.exports = GelatoPage.extend({
     this.editor.editing = false;
     this.updateVocablist();
     this.editor.updateVocablist();
+    if (this.vocablist.isFinished()) {
+      this.vocablist.set('studyingMode', 'adding');
+    }
     this.vocablist.save(null, {patch: true});
     this.render();
   },
