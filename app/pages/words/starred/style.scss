@@ -46,4 +46,12 @@ gelato-page[data-name='words-starred'] {
     max-width: 300px;
   }
 
+  .no-date {
+    color: $grey2;
+    margin-left: 30px;
+  }
+
+  .not-starred {
+    color: $grey3;
+  }
 }
