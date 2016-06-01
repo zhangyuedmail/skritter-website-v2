@@ -6,6 +6,9 @@ module.exports = {
   "title": "Skritter",
 
   "common": {
+    "areYouSure": "Are you sure?",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
     "errorApplication": "Application Error",
     "errorUserReferralExpired": "User referrals can only be used with new accounts.",
     "errorUserReferralFailed": "Error making user referral. Please try again.",
@@ -32,6 +35,7 @@ module.exports = {
 	  "friendlyText": "Thanks for contacting us! We do respond to everything. If you're interested in Skritter for your school, click here.",
 	  "submit": "Submit"
     },
+
     "home": {
 	  "motto1": "Chinese & Japanese",
 	  "motto2": "characters, made fun",
@@ -45,6 +49,12 @@ module.exports = {
 	  "bookText": "Start learning from hundreds of textbooks and users lists, or make your own.",
 	  "reviewHeader": "Efficient reviewing",
 	  "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn."
+    },
+
+    "starredWords": {
+      "title": "Starred Words - Skritter",
+      "confirmDeleteDialogTitle": "Are you sure you want to delete all your starred words?",
+      "confirmDeleteDialogBody": "All your words will be completely unstarred once you press confirm."
     }
   }
 
