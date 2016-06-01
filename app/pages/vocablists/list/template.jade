@@ -68,7 +68,7 @@ gelato-page(data-name='vocablists-list')
               if view.editing
                 textarea.list-description= vocablist.get('description')
               else
-                .list-description= vocablist.get('description')
+                .list-description !{vocablist.get('description')}
 
               hr
 
