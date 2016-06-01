@@ -182,6 +182,7 @@ module.exports = GelatoPage.extend({
     var item = this.queue.shift();
     if (item) {
       this.toolbar.render();
+      this.toolbar.updateDueCount();
       this.prompt.set(item.group ? item : item.getPromptItems());
       if (this.scheduleState === 'standby' && this.queue.length < 5) {
         this.scheduleState = 'populating';
