@@ -6,16 +6,20 @@ gelato-component[data-name='marketing-footer'] {
 
   .list {
     margin-bottom: 75px;
+
     a {
       display: block;
       color: #8c9196;
       font-family: $font-ubuntu;
       font-size: 14px;
       font-weight: 300;
+      margin-bottom: 3px;
+
       &:hover {
         color: $white1;
       }
     }
+
     i {
       color: #8c9196;
       cursor: pointer;
@@ -25,6 +29,7 @@ gelato-component[data-name='marketing-footer'] {
         color: $white1;
       }
     }
+
     .icon-link {
       display: inline-block;
     }
@@ -37,5 +42,20 @@ gelato-component[data-name='marketing-footer'] {
     font-weight: 400;
     margin-bottom: 25px;
     margin-top: 75px;
+  }
+
+  .v-spacer {
+    height: 20px;
+  }
+
+  .mixpanel-link {
+    margin-top: -55px;
+    position: relative;
+    display: block;
+  }
+
+  .h-spacer {
+    display: inline-block;
+    width: 12px;
   }
 }
