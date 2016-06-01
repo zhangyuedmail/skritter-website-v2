@@ -119,6 +119,7 @@ module.exports = GelatoComponent.extend({
       this.vocablist.save({disabled: true, studyingMode: 'not studying'}, {patch: true});
       this.listenToOnce(this.vocablist, 'state', function() {
         app.router.navigate('/vocablists/my-lists', {trigger: true});
+        confirmDialog.close();
       });
     });
     confirmDialog.render().open();
