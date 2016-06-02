@@ -17,20 +17,25 @@ gelato-page(data-name='admin')
                 thead
                   tr
                     th Date
-                    th Apple
-                    th Google
-                    th Paypal
-                    th Stripe
-                    th Total
+                    th(colspan=2) Apple
+                    th(colspan=2) Google
+                    th(colspan=2) Paypal
+                    th(colspan=2) Stripe
+                    th(colspan=2) Total
                 tbody
                   for entry, date in payments.getTotalByDate()
                     tr
                       td= date
-                      td= entry.newApple + '/' + entry.returningApple
-                      td= entry.newGoogle + '/' + entry.returningGoogle
-                      td= entry.newPaypal + '/' + entry.returningPaypal
-                      td= entry.newStripe + '/' + entry.returningStripe
-                      td= entry.newTotal + '/' + entry.returningTotal
+                      td= entry.newApple
+                      td= entry.returningApple
+                      td= entry.newGoogle
+                      td= entry.returningGoogle
+                      td= entry.newPaypal
+                      td= entry.returningPaypal
+                      td= entry.newStripe
+                      td= entry.returningStripe
+                      td= entry.newTotal
+                      td= entry.returningTotal
             else
               .text-center
                 i.fa.fa-3x.fa-spinner.fa-pulse
