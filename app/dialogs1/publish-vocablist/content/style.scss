@@ -1,0 +1,21 @@
+@import "../../../styles/_variables";
+
+gelato-component[data-name='publish-vocablist-content'] {
+  //text-align: center;
+  font-size: 16px;
+
+  label {
+    margin: 10px;
+    font-weight: normal;
+    cursor: pointer;
+  }
+
+  .is-textbook-wrapper {
+    margin: 20px 10px 0 0;
+    text-align: left;
+  }
+
+  .btn {
+    font-size: 16px;
+  }
+}

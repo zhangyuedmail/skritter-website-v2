@@ -1,6 +1,7 @@
 var GelatoComponent = require('gelato/component');
 
 var ConfirmDialog = require('dialogs/confirm/view');
+var PublishDialog = require('dialogs1/publish-vocablist/view');
 var VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
 var VocablistSectionsEditDialog = require('dialogs/vocablist-sections-edit/view');
 var ExportVocablistDialog = require('dialogs1/export-vocablist/view');
@@ -16,8 +17,14 @@ module.exports = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
+    this._views = this._views || {};
     this.vocablist = options.vocablist;
+
+    this._views['publishDialog'] = new PublishDialog();
+
+    this.listenTo(this._views['publishDialog'], 'publish', this.publishList);
   },
+
   /**
    * @property events
    * @type {Object}
@@ -32,18 +39,25 @@ module.exports = GelatoComponent.extend({
     'click #study-settings-link': 'handleClickStudySettingsLink',
     'click #image-upload-link': 'handleClickImageUploadLink'
   },
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @method render
    * @returns {VocablistsListSidebar}
    */
   render: function() {
     this.renderTemplate();
+
+    this._views['publishDialog'].render();
+
+    return this;
   },
+
   /**
    * @method handleChangeImageUploadInput
    * @param {Event} event
@@ -67,6 +81,7 @@ module.exports = GelatoComponent.extend({
       }
     });
   },
+
   /**
    * @method handleClickAddToQueue
    * @param {Event} event
@@ -78,6 +93,7 @@ module.exports = GelatoComponent.extend({
       this.render();
     }
   },
+
   /**
    * @method handleClickCopyLink
    * @param {Event} event
@@ -104,6 +120,7 @@ module.exports = GelatoComponent.extend({
     });
     confirmDialog.render().open();
   },
+
   /**
    * @method handleClickDeleteLink
    * @param {Event} event
@@ -125,6 +142,7 @@ module.exports = GelatoComponent.extend({
     });
     confirmDialog.render().open();
   },
+
   /**
    * @method handleClickExportLink
    * @param {Event} event
@@ -133,6 +151,7 @@ module.exports = GelatoComponent.extend({
     event.preventDefault();
     new ExportVocablistDialog({id: this.vocablist.id}).open();
   },
+
   /**
    * @method handleClickImageUploadLink
    * @param {Event} event
@@ -141,30 +160,28 @@ module.exports = GelatoComponent.extend({
     event.preventDefault();
     this.$('#image-upload-input').trigger('click');
   },
+
   /**
+   * Handles the functionality for when the user pushes a button to publish the vocablist.
    * @method handleClickPublishLink
    * @param {Event} event
    */
   handleClickPublishLink: function(event) {
-    var confirmDialog = new ConfirmDialog({
-      title: 'Confirm Publish',
-      body: 'Are you sure you want to publish this list? You cannot undo this.',
-      okText: 'Yes - Publish!',
-      onConfirm: 'show-spinner'
-    });
-    this.listenTo(confirmDialog, 'confirm', function() {
-      var publishUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/publish';
-      $.ajax({
-        url: publishUrl,
-        method: 'POST',
-        headers: app.user.headers(),
-        success: function() {
-          document.location.reload();
-        }
-      });
-    });
-    confirmDialog.render().open();
+    this._views['publishDialog'].open();
   },
+
+  /**
+   * Calls the steps necessary to publish a vocablist.
+   * @param {Object} formData options from the popup about the list to publish
+   * @param {Boolean} formData.isTextbook whether the list is for a textbook
+   */
+  publishList: function(formData) {
+    this.vocablist.set('isTextbook', formData.isTextbook);
+    this.vocablist.publish(function(success) {
+      document.location.reload();
+    });
+  },
+
   /**
    * @method handleClickStudySettingsLink
    * @param {Event} event
@@ -173,5 +190,13 @@ module.exports = GelatoComponent.extend({
     event.preventDefault();
     this.dialog = new VocablistSettingsDialog({vocablist: this.vocablist});
     this.dialog.render().open();
+  },
+
+  remove: function() {
+    for (var view in this._views) {
+      this._views[view].remove();
+    }
+
+    this.prototype.remove.call(this);
   }
 });

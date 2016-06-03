@@ -199,6 +199,30 @@ module.exports = SkritterModel.extend({
       (this.get('sections') || []).length
     ]);
   },
+
+  publish: function(callback) {
+    var publishUrl = app.getApiUrl() + _.result(this, 'url') + '/publish';
+
+    $.ajax({
+      url: publishUrl,
+      method: 'POST',
+      headers: app.user.headers(),
+      data: {
+        isTextbook: this.get('isTextbook')
+      },
+      success: function() {
+        if (_.isFunction(callback)) {
+          callback(true);
+        }
+      },
+      error: function(error) {
+        if (_.isFunction(callback)) {
+          callback(false, error);
+        }
+      }
+    });
+  },
+
   /**
    * @method resetPosition
    * @param {Function} callback

@@ -21,34 +21,44 @@ module.exports = {
     "betaTitle": "Μια τέτοια μεγάλη βήτα!"
   },
 
+  "dialogs": {
+    "publishVocablist": {
+      "title": "Confirm Publish",
+      "body": "Are you sure you want to publish this list? You cannot undo this.",
+      "publishAction": "Yes—Publish!",
+      "thisIsATextbook": "This is a textbook",
+      "textbookAdditionalInfo": "Published lists marked as textbooks must go through a review process by the Skritter team. Before you submit, please include information about the textbook in the description of the list such as the full title, author(s), ISBN, edition, and publication date."
+    }
+  },
+
   "pages": {
     "contact": {
       "title": "Contact Us",
-	  "email": "Email",
-	  "topic": "Topic",
-	  "message": "Message",
-	  "feedback": "Feedback",
-	  "question": "How to",
-	  "bugReport": "Bug Report",
-	  "featureSuggestion": "Feature Suggestion",
-	  "paymentIssue": "Payment Issue",
-	  "friendlyText": "Thanks for contacting us! We do respond to everything. If you're interested in Skritter for your school, click here.",
-	  "submit": "Submit"
+      "email": "Email",
+      "topic": "Topic",
+      "message": "Message",
+      "feedback": "Feedback",
+      "question": "How to",
+      "bugReport": "Bug Report",
+      "featureSuggestion": "Feature Suggestion",
+      "paymentIssue": "Payment Issue",
+      "friendlyText": "Thanks for contacting us! We do respond to everything. If you're interested in Skritter for your school, click here.",
+      "submit": "Submit"
     },
 
     "home": {
-	  "motto1": "Chinese & Japanese",
-	  "motto2": "characters, made fun",
-	  "headerText": "The best way to learn Chinese and Japanese",
-	  "planeHeader": "Characters on the go",
-	  "planeText": "Learn Chinese & Japanese characters anywhere, even in Antarctica.",
-	  "flashcardsHeader": "Smart flashcards",
-	  "flashcardsText": "Skritter gives you immediate stroke-level feedback and helps you review hard characters more often.",
+      "motto1": "Chinese & Japanese",
+      "motto2": "characters, made fun",
+      "headerText": "The best way to learn Chinese and Japanese",
+      "planeHeader": "Characters on the go",
+      "planeText": "Learn Chinese & Japanese characters anywhere, even in Antarctica.",
+      "flashcardsHeader": "Smart flashcards",
+      "flashcardsText": "Skritter gives you immediate stroke-level feedback and helps you review hard characters more often.",
       "freeTrial": "Start your 7-day free trial",
-	  "bookHeader": "Studying, your way",
-	  "bookText": "Start learning from hundreds of textbooks and users lists, or make your own.",
-	  "reviewHeader": "Efficient reviewing",
-	  "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn."
+      "bookHeader": "Studying, your way",
+      "bookText": "Start learning from hundreds of textbooks and users lists, or make your own.",
+      "reviewHeader": "Efficient reviewing",
+      "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn."
     },
 
     "starredWords": {
@@ -57,5 +67,4 @@ module.exports = {
       "confirmDeleteDialogBody": "All your words will be completely unstarred once you press confirm."
     }
   }
-
 };
