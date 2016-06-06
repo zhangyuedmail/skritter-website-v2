@@ -2,6 +2,7 @@ var SkritterModel = require('base/skritter-model');
 var Session = require('models/session');
 
 /**
+ * A model that represents a Skritter user.
  * @class User
  * @extends {SkritterModel}
  */
@@ -13,6 +14,7 @@ module.exports = SkritterModel.extend({
   initialize: function() {
     this.session = new Session(null, {user: this});
   },
+
   /**
    * @property defaults
    * @type {Object}
@@ -35,17 +37,20 @@ module.exports = SkritterModel.extend({
     volume: 1,
     wordDictionary: null
   },
+
   /**
    * @property urlRoot
    * @type {String}
    */
   urlRoot: 'users',
+
   /**
    * @method cache
    */
   cache: function() {
     app.setLocalStorage(this.id + '-user', this.toJSON());
   },
+
   /**
    * @method getAccountAgeBy
    * @param {String} [unit]
@@ -54,6 +59,7 @@ module.exports = SkritterModel.extend({
   getAccountAgeBy: function(unit) {
     return moment().diff(this.get('created') * 1000, unit || 'days');
   },
+
   /**
    * @method getAllStudyParts
    * @returns {Array}
@@ -61,6 +67,7 @@ module.exports = SkritterModel.extend({
   getAllStudyParts: function() {
     return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
   },
+
   /**
    * @method getAllStudyStyles
    * @returns {Array}
@@ -68,6 +75,7 @@ module.exports = SkritterModel.extend({
   getAllStudyStyles: function() {
     return app.isChinese() ? ['both', 'simp', 'trad'] : ['none'];
   },
+
   /**
    * @method getFilterParts
    * @returns {Array}
@@ -76,6 +84,7 @@ module.exports = SkritterModel.extend({
     var filteredParts = app.isChinese() ? this.get('filteredChineseParts') : this.get('filteredJapaneseParts');
     return _.intersection(this.getStudyParts(), filteredParts);
   },
+
   /**
    * @method getFilteredStyles
    * @returns {Array}
@@ -92,6 +101,7 @@ module.exports = SkritterModel.extend({
     }
     return styles;
   },
+
   /**
    * @method getLastItemUpdate
    * @returns {Number}
@@ -99,6 +109,7 @@ module.exports = SkritterModel.extend({
   getLastItemUpdate: function() {
     return app.isChinese() ? this.get('lastChineseItemUpdate') : this.get('lastJapaneseItemUpdate')
   },
+
   /**
    * @method getStudyParts
    * @returns {Array}
@@ -106,6 +117,7 @@ module.exports = SkritterModel.extend({
   getStudyParts: function() {
     return app.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
   },
+
   /**
    * @method getRaygunTags
    * @returns {Array}
@@ -125,6 +137,7 @@ module.exports = SkritterModel.extend({
     }
     return tags;
   },
+
   /**
    * @method isAddingPart
    * @param {String} part
@@ -133,6 +146,7 @@ module.exports = SkritterModel.extend({
   isAddingPart: function(part) {
     return _.includes(this.getStudyParts(), part);
   },
+
   /**
    * @method isAudioEnabled
    * @returns {Boolean}
@@ -140,6 +154,7 @@ module.exports = SkritterModel.extend({
   isAudioEnabled: function() {
     return this.get('volume') > 0;
   },
+
   /**
    * @method isLoggedIn
    * @returns {Boolean}
@@ -147,6 +162,7 @@ module.exports = SkritterModel.extend({
   isLoggedIn: function() {
     return this.session.has('user_id');
   },
+
   /**
    * @method isReviewingPart
    * @param {String} part
@@ -155,6 +171,7 @@ module.exports = SkritterModel.extend({
   isReviewingPart: function(part) {
     return _.includes(this.getFilteredParts(), part);
   },
+
   /**
    * @method load
    * @param {Function} callback
@@ -179,6 +196,7 @@ module.exports = SkritterModel.extend({
     );
     return this;
   },
+
   /**
    * @method login
    * @param {String} username
@@ -221,24 +239,30 @@ module.exports = SkritterModel.extend({
       }
     });
   },
+
   /**
+   * Logs out a user
    * @method logout
    */
   logout: function() {
     var self = this;
-    app.user.db.delete()
+
+    if (app.user.db) {
+      app.user.db.delete()
       .then(function() {
-        app.removeLocalStorage(self.id + '-session');
-        app.removeLocalStorage(self.id + '-user');
-        app.removeSetting('user');
-        app.removeSetting('siteRef');
-        app.reload();
+        self._removeUserLocalStorageData()
       })
       .catch(function(error) {
         console.error(error);
         app.reload();
       });
+    } else {
+      // catches weird states where maybe some user data is still left over
+      // but the login isn't valid
+      self._removeUserLocalStorageData();
+    }
   },
+
   /**
    * @method openDatabase
    * @param {Function} callback
@@ -277,6 +301,7 @@ module.exports = SkritterModel.extend({
       });
     return this;
   },
+
   /**
    * @method parse
    * @param {Object} response
@@ -285,6 +310,7 @@ module.exports = SkritterModel.extend({
   parse: function(response) {
     return response.User;
   },
+
   /**
    * @method setLastItemUpdate
    * @param {Number} value
@@ -298,6 +324,7 @@ module.exports = SkritterModel.extend({
     }
     return this;
   },
+
   /**
    * @method updateItems
    * @param {Function} callback
@@ -375,5 +402,18 @@ module.exports = SkritterModel.extend({
       }
     );
     return this;
-  }
+  },
+
+  /**
+   * Deletes local storage and app settings related to user login
+   * @method _removeUserLocalStorageData
+   * @private
+   */
+  _removeUserLocalStorageData: function() {
+    app.removeLocalStorage(self.id + '-session');
+    app.removeLocalStorage(self.id + '-user');
+    app.removeSetting('user');
+    app.removeSetting('siteRef');
+    app.reload();
+  },
 });

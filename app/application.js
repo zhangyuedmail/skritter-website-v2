@@ -485,8 +485,14 @@ module.exports = GelatoApplication.extend({
             function() {
               callback();
             },
-            function() {
-              callback();
+            function(error) {
+              // if the session token is invalid, log the user out.
+              // TODO: get referesh tokens working properly
+              if (error.responseJSON.statusCode === 400 && error.responseJSON.message.indexOf("No such refresh token") > -1) {
+                app.user.logout();
+              } else {
+                callback();
+              }
             }
           );
         }
