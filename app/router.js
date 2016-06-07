@@ -39,7 +39,8 @@ module.exports = Router.extend({
     'login': 'navigateLogin',
     'mail/unsubscribe': 'navigateMailUnsubscribe',
     'password-reset': 'navigatePasswordReset',
-    'refer/:userId': 'navigateUserReferral',
+    'refer': 'navigateUserReferralInfo',
+    'refer/:userId': 'navigateApplyUserReferral',
     'scratchpad/:writing(/:part)': 'navigateScratchpad',
     'signup(/:plan)': 'navigateSignup',
     'stats': 'navigateStats',
@@ -192,6 +193,22 @@ module.exports = Router.extend({
       this.go('pages/admin');
     } else {
       this.navigateLogin();
+    }
+  },
+
+  /**
+   * Route that applies a user referral to a user's account
+   * @param {String} userId the id of the existing user that referred the new user
+   */
+  navigateApplyUserReferral: function(userId) {
+    var signedIn = app.user.isLoggedIn();
+    app.setUserReferral(userId, signedIn);
+
+    if (signedIn) {
+      this.navigateDashboard();
+      app.processUserReferral();
+    } else {
+      this.navigateSignup();
     }
   },
 
@@ -512,18 +529,15 @@ module.exports = Router.extend({
   },
 
   /**
-   * Route that
-   * @param {String} userId the id of the existing user that referred the new user
+   * Shows a page about the user referral system and shows a logged-in user
+   * their unique link.
+   * @method navigateUserReferralInfo
    */
-  navigateUserReferral: function(userId) {
-    var signedIn = app.user.isLoggedIn();
-    app.setUserReferral(userId, signedIn);
-
-    if (signedIn) {
-      this.navigateDashboard();
-      app.processUserReferral();
+  navigateUserReferralInfo: function() {
+    if (app.user.isLoggedIn()) {
+      this.go('pages/user-referral');
     } else {
-      this.navigateSignup();
+      this.navigateLogin();
     }
   }
 });
