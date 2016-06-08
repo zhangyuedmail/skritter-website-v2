@@ -2,6 +2,7 @@ var GelatoPage = require('gelato/page');
 var Prompt = require('components/study/prompt/view');
 var Toolbar = require('components/study/toolbar/view');
 var Items = require('collections/items');
+var Recipes = require('components/common/recipes/view');
 
 /**
  * @class Study
@@ -14,17 +15,25 @@ module.exports = GelatoPage.extend({
    */
   initialize: function() {
     ScreenLoader.show();
+    this._views = this._views || {};
+
     this.item = null;
     this.prompt = new Prompt();
     this.queue = [];
     this.schedule = new Items();
     this.scheduleState = 'standby';
     this.toolbar = new Toolbar({page: this});
+
+    if (app.user.get('eccentric')) {
+      this._views['recipe'] = new Recipes();
+    }
+
     this.listenTo(this.schedule, 'populate', this.handleSchedulePopulate);
     this.listenTo(this.schedule, 'load', this.handleScheduledLoad);
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
     window.onbeforeunload = this.handleWindowOnBeforeUnload.bind(this);
+
     this.loadSchedule();
   },
 
@@ -54,6 +63,10 @@ module.exports = GelatoPage.extend({
     this.renderTemplate();
     this.prompt.setElement('#study-prompt-container').render();
     this.toolbar.setElement('#study-toolbar-container').render();
+
+    if (app.user.get('eccentric')) {
+      this._views['recipe'].setElement('#recipes-container').render();
+    }
     return this;
   },
 

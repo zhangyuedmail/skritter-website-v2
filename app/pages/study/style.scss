@@ -5,4 +5,9 @@ gelato-page[data-name='study'] {
   background: $background-primary;
   padding-top: 50px;
 
+  .recipes-container {
+    margin: 0 auto;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }

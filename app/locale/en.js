@@ -96,5 +96,24 @@ module.exports = {
       "confirmDeleteDialogTitle": "Are you sure you want to delete all your starred words?",
       "confirmDeleteDialogBody": "All your words will be completely unstarred once you press confirm."
     }
+  },
+
+  "recipes": {
+    "general": [
+      "I have the strength of a bear that has the strength of two bears. --Marco, Sealab 2021",
+      "What I did was I took nature's most perfect killing machine and needlessly turned it into a robot. --Quinn, Sealab 2021",
+      "In 1667, the Dutch snagged Manhattan for $24, then traded it to England for the South American country of Suriname. Nice.",
+      "The original name for the starship in Star Trek was \"Yorktown\", not \"Enterprise\".",
+      "To say nothing, especially when speaking, is half the art of diplomacy. --Will Durant",
+      "Manuscripts don't burn. --Mikhail Bulgakov"
+    ],
+
+    "ja": [
+      "ka ki ku ke ko..."
+    ],
+
+    "zh": [
+      "ma ma ma ma..."
+    ]
   }
 };
