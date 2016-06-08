@@ -12,6 +12,7 @@ module.exports = {
     "errorApplication": "Application Error",
     "errorUserReferralExpired": "User referrals can only be used with new accounts.",
     "errorUserReferralFailed": "Error making user referral. Please try again.",
+    "save": "Save",
     "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription."
   },
 
@@ -32,6 +33,35 @@ module.exports = {
   },
 
   "pages": {
+    "accountGeneral": {
+      "title": "General Settings - Skritter",
+      "pageTitle": "General Settings",
+      "aboutMeLabel": "About Me",
+      "aboutMeDescription": "Tell people about yourself",
+      "accountUpdated": "Account settings updated",
+      "avatarLabel": "Avatar",
+      "avatarDescription": "A profile picture",
+      "changeAvatar": "Change avatar",
+      "changePassword": "Change password",
+      "countryLabel": "Country",
+      "countryDescription": "The country you live in",
+      "displayNameLabel": "Display name",
+      "displayNameDescription": "The name that you and other users see",
+      "eccentricLabel": "Eccentric",
+      "eccentricDescription": "Adds extra spice to Skritter",
+      "emailLabel": "Email",
+      "emailDescription": "The email address associated with your account",
+      "passwordLabel": "Password",
+      "passwordDescription": "The password you use to login",
+      "privateLabel": "Private Account",
+      "privateDescription": "Excludes your account from leaderboard rankings",
+      "resetAllData": "Reset All Data",
+      "timezoneLabel": "Timezone",
+      "timezoneDescription": "The timezone where you are in",
+      "userIdLabel": "User ID",
+      "userIdDescription": "Unique system id for your account. Cannot be changed."
+    },
+
     "contact": {
       "title": "Contact Us",
       "email": "Email",
