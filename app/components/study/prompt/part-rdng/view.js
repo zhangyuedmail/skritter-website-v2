@@ -5,6 +5,8 @@ var GelatoComponent = require('gelato/component');
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
+  lastInput: '',
+
   /**
    * @method initialize
    * @param {Object} options
@@ -16,13 +18,10 @@ module.exports = GelatoComponent.extend({
     this.userReading = '';
 
     // only support pinyin for first go around. Nihongo ga kite imasu!
-    this.showReadingPrompt = false; //app.isDevelopment() && app.isChinese();
+    this.showReadingPrompt = false; // app.isDevelopment() && app.isChinese();
 
     this.registerShortcuts = !this.showReadingPrompt;
 
-    // if (!this.showReadingPrompt) {
-    //   this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
-    // }
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
   },
@@ -200,9 +199,11 @@ module.exports = GelatoComponent.extend({
 
     // if enter pressed
     if (event.keyCode === 13) {
+      event.preventDefault();
+      event.stopPropagation();
       this._processPromptSubmit();
     } else {
-      this._processPromptInput();
+      this._processPromptInput(event);
     }
   },
 
@@ -213,9 +214,20 @@ module.exports = GelatoComponent.extend({
    * @returns {Boolean} whether the user's reading was found in the parsed list of vocab readings
    */
   isCorrect: function(userReading, vocabReading) {
-    vocabReading = vocabReading.split(', ');
+    if (app.isChinese()) {
+      return this.isCorrectZH(userReading, vocabReading);
+    } else {
+      // TODO
+    }
+  },
 
-    return vocabReading.indexOf(userReading) > -1;
+  isCorrectZH: function(userReading, vocabReading) {
+    var finalAnswer = this._prepareFinalAnswer(userReading);
+    var vocabReadings = vocabReading.split(', ').map(function(r) {
+      return app.fn.pinyin.toTone(r);
+    });
+
+    return vocabReadings.indexOf(finalAnswer) > -1;
   },
 
   /**
@@ -232,50 +244,100 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
-   *
+   * Processes a non-enter keyboard input event to the reading prompt.
+   * Calls the appropriate converter for the language.
    * @private
    */
-  _processPromptInput: function() {
-    if (app.isChinese()) {
-      this._parsePinyinInput();
+  _processPromptInput: function(event) {
+    var newValue = '';
+    if (app.isChinese(event)) {
+      newValue = this._parsePinyinInput(null, event);
     } else {
       // TODO: analyze kana
     }
+
+    this.$('#reading-prompt').val(newValue);
   },
 
-  _parsePinyinInput: function(input) {
+  /**
+   *
+   * @param {String} input the text to process
+   * @param {jQuery.Event} event the original keypress event that changed the input
+   * @returns {String} the processed input string
+   * @private
+   */
+  _parsePinyinInput: function(input, event) {
+    input = input || this.$('#reading-prompt').val();
 
-    // TODO: all of this
+    var originalInput = input;
+    var output = '';
 
-    var input = input || this.$('#reading-prompt').val();
+    if (input.length > this.lastInput.length) {
+      output = this._processPinyinAddition(input, event);
+    } else {
+      output = this._processPinyinDeletion(input, event);
+    }
+
+    console.log("lastInput: ", this.lastInput, "original input: ", originalInput, "new input: ", output);
+    this.lastInput = output;
+
+    return output;
+  },
+
+  _processPinyinAddition: function(input, event) {
+    var processed = [];
+
+    // regex helpers
     var toneNumInput = /[1-5]/;
-    var toneSubscript = /[₁-₅]/;
 
-    return;
+    // needs positive lookahead to keep the number in when we split
+    var toneSubscript = /([₁-₅][1-5]?)/;
 
-    // nothing good lies below here
+    // used to detect if a user is attempting to change an existing tone
+    var changeToneNum = /[₁-₅][1-5]/;
 
-    if (toneNumInput.test(input)) {
-      input = input.split(toneSubscript);
+    var subMap = {
+      '1': '₁',
+      '2': '₂',
+      '3': '₃',
+      '4': '₄',
+      '5': '₅'
+    };
 
-      input.map(function(part) {
-        if (false) {
+    // input will be split into a format like ["gōng", "₁", "zuo4"]
+    input = input.split(toneSubscript);
 
-        }
-      });
+    // loop through each part and perform the necessary mutations
+    for (var i = 0; i < input.length; i++) {
+      var wordlike = input[i];
 
-      // single char so far
-      if (input.length === 1) {
-        input = input.split(toneNumInput);
+      var currTone = toneNumInput.exec(wordlike) || [];
+      var res = app.fn.pinyin.toTone(wordlike);
 
+      // if the conversion matched a pattern
+      if (res !== wordlike && currTone.length) {
+        processed.push(res + subMap[currTone[0]]);
       } else {
-        // TODO...
+        processed.push(wordlike);
       }
     }
 
-    var lastWord = input[input.length - 1];
-    if (input.length > 1) {
-      // TODO
+    return processed.join('');
+  },
+
+  _processPinyinDeletion: function(input, event) {
+    // TODO: remove tones, etc. when final is no longer valid
+
+    return input;
+  },
+
+  _prepareFinalAnswer: function(answer) {
+    if (app.isChinese()) {
+      // remove tone subscripts
+      return answer.split(/[₁-₅]/).join('').toLowerCase();
+    } else {
+      // TODO: ja
+      return answer;
     }
   }
 });
