@@ -244,12 +244,6 @@ module.exports = GelatoPage.extend({
     if (!this.subscribing) {
       this.subscribing = true;
       var formData = this.getFormData();
-      if (formData.password1 === '') {
-        return;
-      }
-      if (formData.password1 !== formData.password2) {
-        return;
-      }
       if (formData.method === 'credit') {
         this.subscribeCredit(formData);
       } else {
