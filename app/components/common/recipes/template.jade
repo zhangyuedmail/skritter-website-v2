@@ -1,2 +1,3 @@
 gelato-component(data-name='recipes')
-  #recipe.recipe= view.cookNewDish()
+  -var recipe = view.cookNewDish()
+  #recipe.recipe(title="#{recipe.source}")= recipe.quote

@@ -100,12 +100,12 @@ module.exports = {
 
   "recipes": {
     "general": [
-      "I have the strength of a bear that has the strength of two bears. --Marco, Sealab 2021",
-      "What I did was I took nature's most perfect killing machine and needlessly turned it into a robot. --Quinn, Sealab 2021",
-      "In 1667, the Dutch snagged Manhattan for $24, then traded it to England for the South American country of Suriname. Nice.",
-      "The original name for the starship in Star Trek was \"Yorktown\", not \"Enterprise\".",
-      "To say nothing, especially when speaking, is half the art of diplomacy. --Will Durant",
-      "Manuscripts don't burn. --Mikhail Bulgakov"
+      {"quote": "I have the strength of a bear that has the strength of two bears.", "source": "Marco, Sealab 2021"},
+      {"quote": "What I did was I took nature's most perfect killing machine and needlessly turned it into a robot.", "source": "Quinn, Sealab 2021"},
+      {"quote": "In 1667, the Dutch snagged Manhattan for $24, then traded it to England for the South American country of Suriname. Nice."},
+      {"quote": "The original name for the starship in Star Trek was \"Yorktown\", not \"Enterprise\"."},
+      {"quote": "To say nothing, especially when speaking, is half the art of diplomacy.", "source": "Will Durant"},
+      {"quote": "Manuscripts don't burn.", "source": "Mikhail Bulgakov"}
     ],
 
     "ja": [

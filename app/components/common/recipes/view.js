@@ -5,6 +5,9 @@ var GelatoComponent = require('gelato/component');
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
+  events: {
+    'click #recipe': 'cookNewDish'
+  },
 
   /**
    * The currently selected recipe
@@ -71,7 +74,8 @@ module.exports = GelatoComponent.extend({
     var newFavoriteDish = Math.floor(this.recipes.length * Math.random(Date.now()));
 
     this.currentRecipe = this.recipes[newFavoriteDish];
-    this.$('#recipe').text(this.currentRecipe);
+    this.$('#recipe').text(this.currentRecipe.quote);
+    this.$('#recipe').prop('title', this.currentRecipe.source);
 
     return this.currentRecipe;
   },
