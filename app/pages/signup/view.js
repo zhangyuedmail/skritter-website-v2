@@ -280,6 +280,7 @@ module.exports = GelatoPage.extend({
     var self = this;
 
     if (!this._validateUserData(formData)) {
+      this.subscribing = false;
       ScreenLoader.hide();
       return;
     }
@@ -309,6 +310,7 @@ module.exports = GelatoPage.extend({
     var self = this;
 
     if (!this._validateUserData(formData)) {
+      this.subscribing = false;
       ScreenLoader.hide();
       return;
     }
