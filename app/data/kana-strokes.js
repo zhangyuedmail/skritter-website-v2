@@ -2191,6 +2191,16 @@ var data = [
   },
   {
     "lang": "ja",
+    "rune": "ー",
+    "kana": true,
+    "strokes": [
+      [
+        [600, 0.23, 0.318, 1, 1, 0]
+      ]
+    ]
+  },
+  {
+    "lang": "ja",
     "rune": "☺",
     "kana": true,
     "strokes": [
