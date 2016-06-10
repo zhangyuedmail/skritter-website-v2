@@ -353,7 +353,7 @@ var Vocab = SkritterModel.extend({
         return true;
       }
     }
-    return _.includes(['~', '-', '～', 'ー', '.', '。', ',', '，', '、', '・'], this.get('writing'));
+    return _.includes(['~', '-', '～', '.', '。', ',', '，', '、', '・'], this.get('writing'));
   },
   /**
    * @method isJapanese
