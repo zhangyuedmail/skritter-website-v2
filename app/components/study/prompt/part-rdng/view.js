@@ -18,7 +18,7 @@ module.exports = GelatoComponent.extend({
     this.userReading = '';
 
     // only support pinyin for first go around. Nihongo ga kite imasu!
-    this.showReadingPrompt = false; // app.isDevelopment() && app.isChinese();
+    this.showReadingPrompt = app.isDevelopment() && app.isChinese();
 
     this.registerShortcuts = !this.showReadingPrompt;
 
@@ -270,12 +270,13 @@ module.exports = GelatoComponent.extend({
     input = input || this.$('#reading-prompt').val();
 
     var originalInput = input;
+    var toProcess = input;
     var output = '';
 
-    if (input.length > this.lastInput.length) {
-      output = this._processPinyinAddition(input, event);
+    if (toProcess.length > this.lastInput.length) {
+      output = this._processPinyinAddition(toProcess, event);
     } else {
-      output = this._processPinyinDeletion(input, event);
+      output = this._processPinyinDeletion(toProcess, event);
     }
 
     console.log("lastInput: ", this.lastInput, "original input: ", originalInput, "new input: ", output);
@@ -306,19 +307,44 @@ module.exports = GelatoComponent.extend({
 
     // input will be split into a format like ["gōng", "₁", "zuo4"]
     input = input.split(toneSubscript);
+    console.log('split input: ', input);
+    var wordlike;
+    var currTone;
+    var res;
 
     // loop through each part and perform the necessary mutations
     for (var i = 0; i < input.length; i++) {
-      var wordlike = input[i];
+      wordlike = input[i];
 
-      var currTone = toneNumInput.exec(wordlike) || [];
-      var res = app.fn.pinyin.toTone(wordlike);
+      currTone = toneNumInput.exec(wordlike) || [];
 
-      // if the conversion matched a pattern
-      if (res !== wordlike && currTone.length) {
+      res = app.fn.pinyin.toTone(wordlike.replace(/ü/g, 'v'));
+
+      // case 1: mutation for a new complete word that needs to be added e.g. gong1 -> gōng₁ if the conversion matched a pattern
+      if (res && res !== wordlike && currTone.length) {
         processed.push(res + subMap[currTone[0]]);
-      } else {
-        processed.push(wordlike);
+      }
+
+      // case 2: change the tone for an existing word's tone góng₂1 -> gōng₁
+      else if ((changeToneNum.exec(wordlike) || []).length) {
+
+        var toChange = input[i-1];
+        var newTone = wordlike[1];
+        res = app.fn.pinyin.removeToneMarks(toChange);
+
+        // need to replace 'ü' with 'v' before we run it through the converter again
+        res = app.fn.pinyin.toTone(res.replace(/ü/g, 'v') + newTone);
+
+        // remove previous, old version of the word e.g góng₂
+        processed.pop();
+
+        // push the new version of the word onto the stack e.g. gōng₁
+        processed.push(res + subMap[newTone]);
+      }
+
+      // fallthrough case: no mutations made
+      else {
+        processed.push(wordlike.replace(/v/g, 'ü'));
       }
     }
 
