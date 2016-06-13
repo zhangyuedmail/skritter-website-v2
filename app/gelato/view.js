@@ -16,6 +16,13 @@ var GelatoView = Backbone.View.extend({
   template: null,
 
   /**
+   * Dictionary that contains subviews this view manages
+   * @property _views
+   * @type {Object<String, Backbone.View>}
+   */
+  _views: {},
+
+  /**
    * @param {String} [selector]
    * @returns {GelatoView}
    */
@@ -107,15 +114,22 @@ var GelatoView = Backbone.View.extend({
   },
 
   /**
+   * Unsubscribes from events, calls remove on subviews, and removes DOM elements
    * @method remove
    * @returns {GelatoView}
    */
   remove: function() {
     this.stopListening();
     this.undelegateEvents();
+    
+    for (var view in this._views) {
+      this._views[view].remove();
+    }
+    
     this.$el.find('*').off();
     this.$el.empty();
     Backbone.$(window).off('resize.View');
+    
     return this;
   },
 
