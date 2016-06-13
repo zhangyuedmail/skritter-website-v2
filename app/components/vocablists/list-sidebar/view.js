@@ -17,7 +17,6 @@ module.exports = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
-    this._views = this._views || {};
     this.vocablist = options.vocablist;
 
     this._views['publishDialog'] = new PublishDialog();
@@ -190,13 +189,5 @@ module.exports = GelatoComponent.extend({
     event.preventDefault();
     this.dialog = new VocablistSettingsDialog({vocablist: this.vocablist});
     this.dialog.render().open();
-  },
-
-  remove: function() {
-    for (var view in this._views) {
-      this._views[view].remove();
-    }
-
-    this.prototype.remove.call(this);
   }
 });
