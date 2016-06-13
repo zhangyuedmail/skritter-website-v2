@@ -14,8 +14,6 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    this._views = {};
-
     this.sidebar = new WordsSidebar();
     this.starredVocabs = new Vocabs();
     this.limit = 20;

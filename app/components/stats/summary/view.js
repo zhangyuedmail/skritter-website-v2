@@ -15,7 +15,6 @@ module.exports = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
-    this._views = {};
     this._views['allTime'] = new StatsItemsLearnedComponent({
       collection: this.collection,
       title: 'All Time'

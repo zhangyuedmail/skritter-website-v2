@@ -21,7 +21,6 @@ module.exports = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
-    this._views = {};
 
     // TODO: get actual selectable range
     var userTZ = app.user.get('timezone');
@@ -174,6 +173,8 @@ module.exports = GelatoComponent.extend({
 
   remove: function() {
     this.$('#date-range-picker').off();
+    
+    GelatoComponent.prototype.remove.call(this);
   },
 
   /**

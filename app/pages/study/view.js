@@ -15,7 +15,6 @@ module.exports = GelatoPage.extend({
    */
   initialize: function() {
     ScreenLoader.show();
-    this._views = this._views || {};
 
     this.item = null;
     this.prompt = new Prompt();
@@ -290,6 +289,7 @@ module.exports = GelatoPage.extend({
     this.toolbar.remove();
     this.schedule.reviews.post();
     window.onbeforeunload = null;
+    
     return GelatoPage.prototype.remove.call(this);
   }
 });

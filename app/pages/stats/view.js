@@ -20,7 +20,6 @@ module.exports = GelatoPage.extend({
 
     this.statsCollection.fetchRange(lastMonth, today);
 
-    this._views = {};
     this._views['summary'] = new StatsSummaryComponent({
       collection: this.statsCollection
     });
@@ -57,17 +56,6 @@ module.exports = GelatoPage.extend({
     this._views['timeline'].setElement('#stats-timeline-container').render();
 
     return this;
-  },
-
-  /**
-   * @method remove
-   * @returns {Home}
-   */
-  remove: function() {
-    for (var view in this._views) {
-      this._views[view].remove();
-    }
-    return GelatoPage.prototype.remove.call(this);
   },
 
   /**
