@@ -3,6 +3,22 @@
  * @extends {Backbone.View}
  */
 var GelatoView = Backbone.View.extend({
+
+  /**
+   * Instantiates certain instance variables so they are setup correctly for inheritance
+   * @param {Object} [options]
+   */
+  constructor: function(options) {
+    /**
+     * Dictionary that contains subviews this view manages
+     * @property _views
+     * @type {Object<String, Backbone.View>}
+     */
+    this._views = {};
+
+    Backbone.View.prototype.constructor.apply(this, arguments);
+  },
+
   /**
    * @property $view
    * @type {jQuery}
@@ -14,13 +30,6 @@ var GelatoView = Backbone.View.extend({
    * @type {Function}
    */
   template: null,
-
-  /**
-   * Dictionary that contains subviews this view manages
-   * @property _views
-   * @type {Object<String, Backbone.View>}
-   */
-  _views: {},
 
   /**
    * @param {String} [selector]
@@ -121,15 +130,17 @@ var GelatoView = Backbone.View.extend({
   remove: function() {
     this.stopListening();
     this.undelegateEvents();
-    
+
     for (var view in this._views) {
-      this._views[view].remove();
+      if (this._views.hasOwnProperty(view)) {
+        this._views[view].remove();
+      }
     }
-    
+
     this.$el.find('*').off();
     this.$el.empty();
     Backbone.$(window).off('resize.View');
-    
+
     return this;
   },
 
