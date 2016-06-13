@@ -12,11 +12,13 @@ module.exports = SkritterCollection.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function(models, options) {
+    options = options || {};
+    
     this.cursor = null;
     this.sorted = null;
     this.reviews = new Reviews(null, {items: this});
-    this.vocabs = new Vocabs(null, {items: this});
+    this.vocabs = new Vocabs(options.vocabs || null, {items: this});
   },
   /**
    * @property model

@@ -97,17 +97,21 @@ module.exports = GelatoPage.extend({
    */
   fetchItemsForSearchVocabs: function() {
     var vocabs = this.vocabsToFetchItemsFor.slice(0, 5);
+
     if (!vocabs.length) {
       return;
     }
+
     this.stopListening(this.searchVocabItems);
-    this.searchVocabItems = new Items();
+    this.searchVocabItems = new Items(null, {
+      vocabs: vocabs
+    });
     this.searchVocabItems.fetch({
       data: {
         vocab_ids: _.map(vocabs, 'id').join('|')
       }
     });
-    this.searchVocabItems.vocabs = vocabs;
+
     this.listenToOnce(this.searchVocabItems, 'sync', this.fetchItemsForSearchVocabsSync);
   },
 
@@ -282,7 +286,7 @@ module.exports = GelatoPage.extend({
     });
     this.listenTo(this.searchVocabs, 'sync', this.fetchItemsForSearchVocabs);
   },
-  
+
   /**
    * @method renderTable
    */
