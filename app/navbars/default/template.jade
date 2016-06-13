@@ -51,10 +51,10 @@ bootstrap-navbar(data-name='default')
                 li
                   a(href="https://discourse.skritter.com/", target="_blank") Forum
                 li
-                  a(href="/refer", target="_blank") Get Free Skritter
+                  a(href="/refer") Get Free Skritter
                 li.divider(role="separator")
                 li
-                  a#button-logout(href="#") Logout
+                  a#button-logout(href="/logout") Logout
             li.dropdown.target-lang-dropdown
               a.dropdown-toggle.lang-select-icon-wrapper(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
                 - var lang = user.get('targetLang');

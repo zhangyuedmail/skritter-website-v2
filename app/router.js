@@ -37,6 +37,7 @@ module.exports = Router.extend({
     'institutions': 'navigateInstitutions',
     'legal': 'navigateLegal',
     'login': 'navigateLogin',
+    'logout': 'navigateLogout',
     'mail/unsubscribe': 'navigateMailUnsubscribe',
     'password-reset': 'navigatePasswordReset',
     'refer': 'navigateUserReferralInfo',
@@ -286,6 +287,7 @@ module.exports = Router.extend({
   },
 
   /**
+   * Shows a page for the user to login
    * @method navigateLogin
    */
   navigateLogin: function() {
@@ -294,6 +296,18 @@ module.exports = Router.extend({
     } else {
       this.navigate('login');
       this.go('pages/login');
+    }
+  },
+
+  /**
+   * Logs a user out if they're logged in, then shows the home page
+   * @method navigateLogout
+   */
+  navigateLogout: function() {
+    if (app.user.isLoggedIn()) {
+      app.user.logout();
+    } else {
+      this.navigateHome();
     }
   },
 

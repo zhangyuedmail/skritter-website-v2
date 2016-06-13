@@ -12,7 +12,6 @@ module.exports = NavbarComponent.extend({
    */
   events: {
     'click #button-beacon': 'handleClickButtonBeacon',
-    'click #button-logout': 'handleClickButtonLogout',
     'click #switch-targetLang': 'handleClickSwitchTargetLang',
     'click .item-dropdown': 'handleClickDropdown'
   },
@@ -74,19 +73,6 @@ module.exports = NavbarComponent.extend({
     if (window.HS) {
       HS.beacon.open();
     }
-  },
-
-  /**
-   * @method handleClickButtonLogout
-   * @param {Event} event
-   */
-  handleClickButtonLogout: function(event) {
-    event.preventDefault();
-    var dialog = new ConfirmLogoutDialog();
-    dialog.on('logout', function() {
-      app.user.logout();
-    });
-    dialog.open();
   },
 
   /**
