@@ -10,6 +10,21 @@ gelato-component[data-name='study-prompt'] {
   position: relative;
   width: 100%;
 
+  #overlay {
+    background-color: $white1;
+    border-radius: 25px;
+    display: none;
+    height: 100%;
+    padding-top: 200px;
+    position: absolute;
+    width: 100%;
+    z-index: 7000;
+    button {
+      display: block;
+      margin: 30px auto;
+    }
+  }
+
   #panel-left {
     background-color: $white1;
     border-bottom-left-radius: 25px;

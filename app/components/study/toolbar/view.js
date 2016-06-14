@@ -49,30 +49,7 @@ module.exports = GelatoComponent.extend({
    */
   handleClickAddItem: function(event) {
     event.preventDefault();
-    this.page.schedule.addItems(
-      {
-        lang: app.getLanguage(),
-        lists: this.page.vocablist ? this.page.vocablist.id : null
-      },
-      function(error, result) {
-        var added = result.numVocabsAdded;
-        $.notify(
-          {
-            title: 'Update',
-            message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.'
-          },
-          {
-            type: 'pastel-info',
-            animate: {
-              enter: 'animated fadeInDown',
-              exit: 'animated fadeOutUp'
-            },
-            delay: 5000,
-            icon_type: 'class'
-          }
-        );
-      }
-    );
+    this.page.addItem();
   },
   /**
    * @method handleClickStudySettings

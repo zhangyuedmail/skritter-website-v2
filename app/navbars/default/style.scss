@@ -10,6 +10,7 @@ bootstrap-navbar[data-name='default'] {
     background-color: #262b30;
     border-color: #262b30;
     box-shadow: 0 1px 10px rgba(38, 43, 48, .15);
+    z-index: 7000;
   }
 
   .navbar-header {
