@@ -38,11 +38,6 @@ module.exports = GelatoPage.extend({
     'click #add-item-button': 'handleClickAddItemButton'
   },
 
-  handleClickAddItemButton: function(event) {
-    event.preventDefault();
-    this.addItem();
-  },
-
   /**
    * @property showFooter
    * @type {Boolean}
@@ -76,7 +71,6 @@ module.exports = GelatoPage.extend({
 
   addItem: function() {
     var self = this;
-    var hadItems = this.schedule.length > 0;
     this.schedule.addItems(
       {
         lang: app.getLanguage(),
@@ -101,11 +95,14 @@ module.exports = GelatoPage.extend({
             }
           );
         }
-        if (hadItems) {
-          self.populateQueue();
-        }
+        self.populateQueue();
       }
     );
+  },
+
+  handleClickAddItemButton: function(event) {
+    event.preventDefault();
+    this.addItem();
   },
 
   /**
