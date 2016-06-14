@@ -37,6 +37,14 @@ module.exports = GelatoPage.extend({
   },
 
   /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click #add-item-button': 'handleClickAddItemButton'
+  },
+
+  /**
    * @property showFooter
    * @type {Boolean}
    */
@@ -67,6 +75,42 @@ module.exports = GelatoPage.extend({
       this._views['recipe'].setElement('#recipes-container').render();
     }
     return this;
+  },
+
+  addItem: function() {
+    var self = this;
+    this.schedule.addItems(
+      {
+        lang: app.getLanguage(),
+        lists: this.vocablist ? this.vocablist.id : null
+      },
+      function(error, result) {
+        if (!error) {
+          var added = result.numVocabsAdded;
+          $.notify(
+            {
+              title: 'Update',
+              message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.'
+            },
+            {
+              type: 'pastel-info',
+              animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+              },
+              delay: 5000,
+              icon_type: 'class'
+            }
+          );
+        }
+        self.populateQueue();
+      }
+    );
+  },
+
+  handleClickAddItemButton: function(event) {
+    event.preventDefault();
+    this.addItem();
   },
 
   /**
@@ -230,41 +274,47 @@ module.exports = GelatoPage.extend({
         break;
       }
     }
-    //fetch resource data for queue items
-    this.schedule.fetch({
-      data: {
-        ids: _.map(items, 'id').join('|'),
-        include_contained: true,
-        include_decomps: true,
-        include_heisigs: true,
-        include_sentences: true,
-        include_strokes: true,
-        include_vocabs: true
-      },
-      merge: false,
-      remove: false,
-      error: function(error) {
-        self.schedule.trigger('error', error);
-        self.scheduleState = 'standby';
-      },
-      success: function(items, result) {
-        var now = moment().unix();
-        var sortedItems = _.sortBy(result.Items, function(item) {
-          var readiness = 0;
-          if (!item.last) {
-            readiness = 9999;
-          } else {
-            readiness = (now - item.last) / (item.next - item.last);
+    if (items.length) {
+      //fetch resource data for queue items
+      this.schedule.fetch({
+        data: {
+          ids: _.map(items, 'id').join('|'),
+          include_contained: true,
+          include_decomps: true,
+          include_heisigs: true,
+          include_sentences: true,
+          include_strokes: true,
+          include_vocabs: true
+        },
+        merge: false,
+        remove: false,
+        error: function (error) {
+          self.schedule.trigger('error', error);
+          self.scheduleState = 'standby';
+        },
+        success: function (items, result) {
+          var now = moment().unix();
+          var sortedItems = _.sortBy(result.Items, function (item) {
+            var readiness = 0;
+            if (!item.last) {
+              readiness = 9999;
+            } else {
+              readiness = (now - item.last) / (item.next - item.last);
+            }
+            return -readiness;
+          });
+          for (var i = 0, length = sortedItems.length; i < length; i++) {
+            self.queue.push(self.schedule.get(sortedItems[i].id));
           }
-          return -readiness;
-        });
-        for (var i = 0, length = sortedItems.length; i < length; i++) {
-          self.queue.push(self.schedule.get(sortedItems[i].id));
+          self.prompt.$('#overlay').hide();
+          self.schedule.trigger('populate', self.queue);
+          self.scheduleState = 'standby';
         }
-        self.schedule.trigger('populate', self.queue);
-        self.scheduleState = 'standby';
-      }
-    });
+      });
+    } else {
+      this.prompt.$('#overlay').show();
+      ScreenLoader.hide();
+    }
   },
 
   /**
@@ -289,7 +339,7 @@ module.exports = GelatoPage.extend({
     this.toolbar.remove();
     this.schedule.reviews.post();
     window.onbeforeunload = null;
-    
+
     return GelatoPage.prototype.remove.call(this);
   }
 });
