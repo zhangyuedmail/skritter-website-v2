@@ -29,10 +29,10 @@ gelato-page(data-name='vocablists-list')
                   if vocablist.isEditable()
                     #editing-buttons
                       if editor.editing
+                        button#discard-changes.btn.btn-primary
+                          i.fa.fa-close &nbsp;#{app.locale('common.cancel')}&nbsp;
                         button#save-changes.btn.btn-success
-                          i.fa.fa-save &nbsp;Save&nbsp;
-                        button#discard-changes.btn.btn-danger
-                          i.fa.fa-close &nbsp;Discard&nbsp;
+                          i.fa.fa-save &nbsp;#{app.locale('common.save')}&nbsp;
                       else
                         button#edit-list.btn.btn-success
                           i.fa.fa-pencil &nbsp;Edit&nbsp;
