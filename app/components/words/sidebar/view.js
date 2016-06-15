@@ -10,6 +10,7 @@ module.exports = GelatoComponent.extend({
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @method render
    * @returns {WordsSideBar}
@@ -18,8 +19,10 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     this.$('[data-toggle="tooltip"]').tooltip();
     $.each(this.$('.options a'), function(i, el) {
-      if ($(el).attr('href') === document.location.pathname) {
-        $(el).addClass('active');
+      var $el = $(el);
+      if ($el.attr('href') === document.location.pathname ||
+        ($el.attr('href') === '/words/all' && document.location.pathname === '/words')) {
+        $el.addClass('active');
       }
     });
   }
