@@ -54,8 +54,7 @@ module.exports = GelatoComponent.extend({
     if (vocablist.get('studyingMode') !== 'not studying') {
       return;
     }
-    vocablist.set('studyingMode', 'adding');
-    vocablist.save();
+    vocablist.save({studyingMode: 'adding'}, {patch: true});
     this.render();
   },
   /**
