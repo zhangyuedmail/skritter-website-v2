@@ -37,7 +37,8 @@ module.exports = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'keyup #reading-prompt': 'handleReadingPromptKeypress',
+    'keydown #reading-prompt': 'handleReadingPromptKeydown',
+    'keyup #reading-prompt': 'handleReadingPromptKeyup',
     'click gelato-component': 'handlePromptCanvasClick'
   },
 
@@ -80,11 +81,11 @@ module.exports = GelatoComponent.extend({
     var vocabReading = this.prompt.review.vocab.get('reading');
     var userReading = this.$('#reading-prompt').val();
 
+    this.userReading = userReading;
+
     if (!this.showReadingPrompt || this.isCorrect(userReading, vocabReading)) {
       this.prompt.review.set('complete', true);
 
-      // TODO: need to set this better
-      this.userReading = userReading;
       this.render();
     } else {
       this.prompt.review.set('score', 1);
@@ -127,6 +128,7 @@ module.exports = GelatoComponent.extend({
     }
 
     this.renderTemplate();
+    this._applyGradeToPromptInput();
 
     return this;
   },
@@ -164,7 +166,12 @@ module.exports = GelatoComponent.extend({
    * @method handlePromptCanvasClick
    */
   handlePromptCanvasClick: function(e) {
-    console.log('testing');
+
+    // let's let the user click on the reading prompt, eh?
+    if (e.target.id === "reading-prompt") {
+      return;
+    }
+
     if (this.prompt.review.isComplete()) {
       this.prompt.next();
     } else {
@@ -190,18 +197,39 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
+   * Handles enter keypress to prevent weird input stuff and double events from firing
+   * @param {jQuery.Event} event the keyup event
+   */
+  handleReadingPromptKeydown: function(event) {
+    if (event.keyCode === 13) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      this._processPromptSubmit();
+    }
+  },
+
+  /**
    * Given keyboard input, keeps track of the internal actual value and
    * converts the display value to the appropriate alphabet/syllabary
    * (pinyin or kana)
    * @param {jQuery.Event} event a keypress event
    */
-  handleReadingPromptKeypress: function(event) {
+  handleReadingPromptKeyup: function(event) {
 
-    // if enter pressed
+    // left and right arrows
+    if (event.keyCode === 37 || event.keyCode === 39) {
+      if (!this.$('#reading-prompt').val()) {
+        // maybe bubble up and go to the previous prompt?
+      }
+
+      return;
+    }
+
+    // if enter pressed--this is handled before keyup
     if (event.keyCode === 13) {
       event.preventDefault();
       event.stopPropagation();
-      this._processPromptSubmit();
     } else {
       this._processPromptInput(event);
     }
@@ -228,6 +256,16 @@ module.exports = GelatoComponent.extend({
     });
 
     return vocabReadings.indexOf(finalAnswer) > -1;
+  },
+
+  _applyGradeToPromptInput: function() {
+    // TODO: a metric (not imperial) crapton of analysis on the userAnswer.
+    // Find out what they got wrong and let the user know. Learning!
+    if (this.prompt.review.isComplete() && this.showReadingPrompt) {
+      var grade = this.prompt.review.get('score');
+
+      this.$('#reading-prompt').addClass('prompt-grade-' + grade);
+    }
   },
 
   /**
