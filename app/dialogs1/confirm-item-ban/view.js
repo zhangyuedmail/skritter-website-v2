@@ -59,6 +59,7 @@ var Dialog = GelatoDialog.extend({
    */
   handleClickButtonBanPart: function(event) {
     event.preventDefault();
+    this.item.set('vocabIds', []);
     this.vocab.banPart(this.item.get('part'));
     this.vocab.save();
     this.trigger('confirm');

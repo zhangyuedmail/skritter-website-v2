@@ -121,7 +121,9 @@ module.exports = GelatoPage.extend({
    */
   handlePromptNext: function(promptItems) {
     var self = this;
-    if (this.item && promptItems) {
+    if (promptItems.skip) {
+      this.next();
+    } else {
       var review = promptItems.getReview();
       if (!this.schedule.reviews.get(review)) {
         this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
@@ -133,8 +135,6 @@ module.exports = GelatoPage.extend({
         self.item = null;
         self.next();
       });
-    } else {
-      this.next();
     }
   },
 
@@ -254,13 +254,21 @@ module.exports = GelatoPage.extend({
   next: function() {
     var item = this.queue.shift();
     if (item) {
-      this.toolbar.render();
-      this.prompt.set(item.group ? item : item.getPromptItems());
-      if (this.scheduleState === 'standby' && this.queue.length < 5) {
-        this.scheduleState = 'populating';
-        this.populateQueue();
+      if (item.isBanned()) {
+        this.item = null;
+        this.next();
+      } else {
+        this.toolbar.render();
+        this.prompt.set(item.group ? item : item.getPromptItems());
+        if (this.scheduleState === 'standby' && this.queue.length < 5) {
+          this.scheduleState = 'populating';
+          this.populateQueue();
+        }
+        this.item = item;
       }
-      this.item = item;
+    } else {
+      this.item = null;
+      this.prompt.$('#overlay').show();
     }
   },
 
