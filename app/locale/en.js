@@ -12,6 +12,12 @@ module.exports = {
     "errorApplication": "Application Error",
     "errorUserReferralExpired": "User referrals can only be used with new accounts.",
     "errorUserReferralFailed": "Error making user referral. Please try again.",
+    "parts": {
+      "defn": "definition",
+      "rdng": "reading",
+      "rune": "writing",
+      "tone": "tone"
+    },
     "save": "Save",
     "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription."
   },
