@@ -130,6 +130,10 @@ module.exports = GelatoPage.extend({
     if (app.isDevelopment()) {
       this.user.unset('avatar');
     }
+
+    // TODO: detect this? Default it earlier?
+    this.user.set('client', 'website');
+
     async.series([
       function(callback) {
         ScreenLoader.post('Creating new user');
