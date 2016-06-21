@@ -144,7 +144,10 @@ module.exports = GelatoComponent.extend({
   next: function(skip) {
     this.review.stop();
     if (skip || this.reviews.isLast()) {
-      this.trigger('next', skip ? null : this.reviews);
+      if (skip) {
+        this.reviews.skip = true;
+      }
+      this.trigger('next', this.reviews);
     } else {
       this.reviews.next();
       this.trigger('reviews:next', this.reviews);

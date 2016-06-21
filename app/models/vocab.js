@@ -9,11 +9,28 @@ var PromptItem = require('models/prompt-item');
  */
 var Vocab = SkritterModel.extend({
   /**
+   * @property idAttribute
+   * @type {String}
+   */
+  idAttribute: 'id',
+  /**
+   * @property urlRoot
+   * @type {String}
+   */
+  urlRoot: 'vocabs',
+  /**
    * @method initialize
    * @constructor
    */
   initialize: function() {
-    this.audio = this.has('audio') ? new Audio(this.get('audio').replace('http://', 'https://')) : null;
+    var audios = [];
+    _.forEach(
+      this.get('audios'),
+      function(data) {
+        audios.push(new Audio(data.mp3.replace('http://', 'https://')));
+      }
+    );
+    this.audios = audios;
   },
   /**
    * @method defaults
@@ -27,16 +44,6 @@ var Vocab = SkritterModel.extend({
       vocabIds: []
     };
   },
-  /**
-   * @property idAttribute
-   * @type {String}
-   */
-  idAttribute: 'id',
-  /**
-   * @property urlRoot
-   * @type {String}
-   */
-  urlRoot: 'vocabs',
   /**
    * @method banAll
    * @returns {Vocab}
@@ -386,13 +393,22 @@ var Vocab = SkritterModel.extend({
   },
   /**
    * @method play
-   * @returns {Audio}
    */
   play: function() {
-    if (this.audio && this.audio.paused) {
-      this.audio.play();
+    var readingObjects = this.getReadingObjects();
+    if (this.isChinese() && readingObjects.length === 1) {
+      async.eachSeries(
+        this.audios,
+        function(audio, callback) {
+          audio.onended = function() {
+            setTimeout(callback, 200);
+          };
+          audio.play();
+        }
+      );
+    } else {
+      this.audios[0].play();
     }
-    return this.audio;
   },
   /**
    * @method post

@@ -6,6 +6,20 @@ var GelatoDialog = require('base/gelato-dialog');
  */
 var Dialog = GelatoDialog.extend({
   /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click #button-ban-all': 'handleClickButtonBanAll',
+    'click #button-ban-part': 'handleClickButtonBanPart',
+    'click #button-cancel': 'handleClickButtonCancel'
+  },
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./template'),
+  /**
    * @method initialize
    * @param {Object} options
    */
@@ -13,19 +27,6 @@ var Dialog = GelatoDialog.extend({
     this.item = options.item;
     this.vocab = options.vocab;
   },
-  /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-confirm': 'handleClickButtonConfirm'
-  },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
   /**
    * @method render
    * @returns {ConfirmItemBanDialog}
@@ -43,16 +44,23 @@ var Dialog = GelatoDialog.extend({
     this.close();
   },
   /**
-   * @method handleClickButtonConfirm
+   * @method handleClickButtonBanAll
    * @param {Event} event
    */
-  handleClickButtonConfirm: function(event) {
+  handleClickButtonBanAll: function(event) {
     event.preventDefault();
-    if (this.item) {
-      this.vocab.banPart(this.item.get('part'));
-    } else {
-      this.vocab.banAll();
-    }
+    this.vocab.banAll();
+    this.vocab.save();
+    this.trigger('confirm');
+  },
+  /**
+   * @method handleClickButtonBanPart
+   * @param {Event} event
+   */
+  handleClickButtonBanPart: function(event) {
+    event.preventDefault();
+    this.item.set('vocabIds', []);
+    this.vocab.banPart(this.item.get('part'));
     this.vocab.save();
     this.trigger('confirm');
   }

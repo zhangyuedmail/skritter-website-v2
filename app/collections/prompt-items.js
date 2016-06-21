@@ -42,6 +42,11 @@ module.exports = GelatoCollection.extend({
    */
   position: 0,
   /**
+   * @property skip
+   * @type {Boolean}
+   */
+  skip: false,
+  /**
    * @property vocab
    * @type {Vocab}
    */
