@@ -68,6 +68,13 @@ var GelatoApplication = Backbone.Model.extend({
     return this.getWidth() > this.getHeight();
   },
   /**
+   * @method isMobile
+   * @returns {Boolean}
+   */
+  isMobile: function() {
+    return false;
+  },
+  /**
    * @method isPortrait
    * @returns {Boolean}
    */
