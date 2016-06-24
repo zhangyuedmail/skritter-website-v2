@@ -97,6 +97,12 @@ gelato-component(data-name='vocablists-list-sidebar')
                 span.glyphicon.glyphicon-download
                 span Export
 
+          if vocablist.isEditable()
+            a#quick-add-link
+              div.action
+                span.glyphicon.glyphicon-plus-sign
+                span Quick Add
+
           if vocablist.deletable()
             a#delete-link
               div.action

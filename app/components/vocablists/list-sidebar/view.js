@@ -5,6 +5,7 @@ var PublishDialog = require('dialogs1/publish-vocablist/view');
 var VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
 var VocablistSectionsEditDialog = require('dialogs/vocablist-sections-edit/view');
 var ExportVocablistDialog = require('dialogs1/export-vocablist/view');
+var AddVocabDialog = require('dialogs1/add-vocab/view');
 
 /**
  * @class VocablistsListSidebar
@@ -35,6 +36,7 @@ module.exports = GelatoComponent.extend({
     'click #delete-link': 'handleClickDeleteLink',
     'click #export-link': 'handleClickExportLink',
     'click #publish-link': 'handleClickPublishLink',
+    'click #quick-add-link': 'handleClickQuickAddLink',
     'click #study-settings-link': 'handleClickStudySettingsLink',
     'click #image-upload-link': 'handleClickImageUploadLink'
   },
@@ -167,6 +169,11 @@ module.exports = GelatoComponent.extend({
    */
   handleClickPublishLink: function(event) {
     this._views['publishDialog'].open();
+  },
+
+  handleClickQuickAddLink: function(event) {
+    event.preventDefault();
+    new AddVocabDialog().open();
   },
 
   /**
