@@ -25,7 +25,7 @@ var Vocab = SkritterModel.extend({
   initialize: function() {
     var audios = [];
     _.forEach(
-      this.get('audios'),
+      this.getUniqueAudios(),
       function(data) {
         audios.push(new Audio(data.mp3.replace('http://', 'https://')));
       }
@@ -308,6 +308,9 @@ var Vocab = SkritterModel.extend({
       return tones;
     }
     return [];
+  },
+  getUniqueAudios: function() {
+    return _.uniqBy(this.get('audios'), 'reading');
   },
   /**
    * @method getVariation
