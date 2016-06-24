@@ -455,6 +455,13 @@ module.exports = GelatoApplication.extend({
         'Language Code': app.getLanguage()
       });
       mixpanel.identify(this.user.id);
+
+      //lets start listening to global keyboard events
+      this.listener = new window.keypress.Listener();
+      this.listener.simple_combo("shift a", function() {
+        new AddVocabDialog().open();
+      });
+
     } else {
       Raygun.setUser('guest', true);
       mixpanel.register({
@@ -464,12 +471,6 @@ module.exports = GelatoApplication.extend({
         'Language Code': null
       });
     }
-
-    //lets start listening to global keyboard events
-    this.listener = new window.keypress.Listener();
-    this.listener.simple_combo("shift a", function() {
-      new AddVocabDialog().open();
-    });
 
     //use async for cleaner loading code
     async.series([
