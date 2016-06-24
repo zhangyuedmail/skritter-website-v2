@@ -5,11 +5,16 @@ var SkritterModel = require('base/skritter-model');
  * @extends {SkritterModel}
  */
 module.exports = SkritterModel.extend({
+  defaults: {
+    changeHistory: []
+  },
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'id',
+
   /**
    * @method parse
    * @returns {Object}
@@ -17,11 +22,13 @@ module.exports = SkritterModel.extend({
   parse: function(response) {
     return response.VocabList || response;
   },
+
   /**
    * @property urlRoot
    * @type {String}
    */
   urlRoot: 'vocablists',
+
   /**
    * @method deletable
    * @returns {Boolean}
@@ -34,6 +41,7 @@ module.exports = SkritterModel.extend({
       this.get('user') === app.user.id
     ]);
   },
+
   /**
    * @method copyable
    * @returns {Boolean}
@@ -44,6 +52,26 @@ module.exports = SkritterModel.extend({
       this.get('sort') !== 'chinesepod-lesson'
     ]);
   },
+
+  /**
+   * Gets an object with a list of changes to the list
+   * @param {Function} callback called when the change data has been fetched
+   */
+  getChangeHistory: function(callback) {
+    $.ajax({
+      method: 'GET',
+      url: app.getApiUrl() + 'vocablists/' + this.id + '/changes',
+      headers: app.user.session.getHeaders(),
+      error: function(error) {
+        console.log('error getting vocab change history', error);
+        callback();
+      },
+      success: function(result) {
+        callback();
+      }
+    });
+  },
+
   /**
    * @method getImageUrl
    * @returns {String}
@@ -51,6 +79,7 @@ module.exports = SkritterModel.extend({
   getImageUrl: function() {
     return app.getApiUrl() + 'vocablists/' + this.id + '/image';
   },
+
   /**
    * @method getPopularity
    * @returns {Number}
@@ -65,6 +94,7 @@ module.exports = SkritterModel.extend({
       return Math.pow(peopleStudying / 2000, 0.3)
     }
   },
+
   /**
    * @method getProgress
    * @returns {Object}
@@ -105,6 +135,7 @@ module.exports = SkritterModel.extend({
       return {percent: 0};
     }
   },
+
   /**
    * @method getRows
    * @returns {Array}
@@ -116,6 +147,7 @@ module.exports = SkritterModel.extend({
       .flatten()
       .value();
   },
+
   /**
    * @method getSectionById
    * @param {String} sectionId
@@ -124,6 +156,7 @@ module.exports = SkritterModel.extend({
   getSectionById: function(sectionId) {
     return _.find(this.get('sections'), {id: sectionId});
   },
+
   /**
    * @method getSectionVocabIds
    * @param {String} sectionId
@@ -138,6 +171,7 @@ module.exports = SkritterModel.extend({
     }
     return vocabIds;
   },
+
   /**
    * @method getWordCount
    * @returns {Number}
@@ -150,6 +184,7 @@ module.exports = SkritterModel.extend({
     }
     return count;
   },
+
   /**
    * @method isChinese
    * @returns {Boolean}
@@ -157,6 +192,7 @@ module.exports = SkritterModel.extend({
   isChinese: function() {
     return this.get('lang') === 'zh';
   },
+
   /**
    * @method isEditable
    * @returns {Boolean}
@@ -172,6 +208,7 @@ module.exports = SkritterModel.extend({
       ])
     ]);
   },
+
   /**
    * @method isFinished
    * @returns {Boolean}
@@ -179,6 +216,7 @@ module.exports = SkritterModel.extend({
   isFinished: function() {
     return this.get('studyingMode') === 'finished';
   },
+
   /**
    * @method isJapanese
    * @returns {Boolean}
@@ -186,6 +224,7 @@ module.exports = SkritterModel.extend({
   isJapanese: function() {
     return this.get('lang') === 'ja';
   },
+
   /**
    * @method publishable
    * @returns {Boolean}
@@ -200,6 +239,11 @@ module.exports = SkritterModel.extend({
     ]);
   },
 
+  /**
+   * Publishes a list so it can be publicly searched.
+   * @param {Function} callback
+   * @method publish
+   */
   publish: function(callback) {
     var publishUrl = app.getApiUrl() + _.result(this, 'url') + '/publish';
 
@@ -258,6 +302,7 @@ module.exports = SkritterModel.extend({
         }
       }
     });
+
     return this;
   }
 });

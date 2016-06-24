@@ -1,6 +1,9 @@
 gelato-component(data-name='vocablists-list-sidebar')
   - var sort = view.vocablist.get('sort');
   - var vocablist = view.vocablist;
+  - var isChinesePodLists = sort === 'chinesepod-label' || sort === 'chinesepod-lesson';
+  - var isMyLists = sort === 'custom' && vocablist.get('creator') === app.user.id;
+  - var isPublishedLists = sort === 'custom' && vocablist.get('creator') !== app.user.id;
 
   if vocablist.state === 'standby'
 
@@ -9,22 +12,22 @@ gelato-component(data-name='vocablists-list-sidebar')
         if sort === 'official'
           a.back-link(href="/vocablists/browse")
             span.glyphicon.glyphicon-chevron-left
-            span back to official lists
+            span= app.locale('pages.vocabLists.backToOfficial')
 
-        else if sort === 'custom' && vocablist.get('creator') === app.user.id
+        else if isMyLists
           a.back-link(href="/vocablists/my-lists")
             span.glyphicon.glyphicon-chevron-left
-            span back to my lists
+            span= app.locale('pages.vocabLists.backToMy')
 
-        else if sort === 'custom' && vocablist.get('creator') !== app.user.id
+        else if isPublishedLists
           a.back-link(href="/vocablists/published")
             span.glyphicon.glyphicon-chevron-left
-            span back to published lists
+            span= app.locale('pages.vocabLists.backToPublished')
 
-        else if sort === 'chinesepod-label' || sort === 'chinesepod-lesson'
+        else if isChinesePodLists
           a.back-link(href="/vocablists/chinesepod")
             span.glyphicon.glyphicon-chevron-left
-            span back to ChinesePod lists
+            span= app.locale('pages.vocabLists.backToCpod')
 
         else if sort
           // TODO: add links to other custom lists
@@ -43,28 +46,28 @@ gelato-component(data-name='vocablists-list-sidebar')
           #image-upload-prompt
             a#image-upload-link
               span.glyphicon.glyphicon-plus-sign
-              span.spl Change photo
+              span.spl= app.locale('common.changePhoto')
           input#image-upload-input.hide(type="file", accept="image/*")
 
       if !vocablist.get('disabled') && vocablist.state !== 'fetching'
 
         p
           if vocablist.state === 'saving'
-            button.btn.btn-fixed.btn-success(disabled=true) Saving changes
+            button.btn.btn-fixed.btn-success(disabled=true)= app.locale('common.saving')
 
           else if vocablist.get('studyingMode') === 'not studying'
-            button#add-to-queue.btn.btn-fixed.btn-success Add to queue
+            button#add-to-queue.btn.btn-fixed.btn-success= app.locale('pages.vocabLists.addToQueue')
 
           else
-            a.btn.btn-fixed.btn-primary(href='/study/' + vocablist.id) Study now
+            a.btn.btn-fixed.btn-primary(href='/study/' + vocablist.id)= app.locale('pages.vocabLists.studyNow')
 
         p.status-p
-          span.spr Status:
+          span.spr #{app.locale('pages.vocabLists.status')}:
           span= _.capitalize(vocablist.get('studyingMode'))
 
         if vocablist.get('studyingMode') !== 'not studying'
           - var progress = vocablist.getProgress();
-          - var title = progress.percent.toFixed(1)+'% complete';
+          - var title = progress.percent.toFixed(1)+'% ' + app.locale('pages.vocabLists.complete');
           if progress.total
             - title += ' ('+(progress.total - progress.added)+' left)';
           .progress(title=title, data-toggle="tooltip" data-placement="top")
@@ -77,49 +80,51 @@ gelato-component(data-name='vocablists-list-sidebar')
             div.action
               a#study-settings-link
                 span.glyphicon.glyphicon-cog
-                span Settings
+                span= app.locale('common.settings')
 
           if vocablist.publishable()
             a#publish-link
               div.action
                 span.glyphicon.glyphicon-share
-                span Publish
+                span= app.locale('pages.vocabLists.publish')
 
           if vocablist.copyable()
             a#copy-link
               div.action
                 span.glyphicon.glyphicon-duplicate
-                span Copy
+                span= app.locale('common.copy')
 
           if vocablist
             a#export-link
               div.action
                 span.glyphicon.glyphicon-download
-                span Export
+                span= app.locale('pages.vocabLists.export')
 
           if vocablist.isEditable()
             a#quick-add-link
               div.action
                 span.glyphicon.glyphicon-plus-sign
-                span Quick Add
+                span= app.locale('pages.vocabLists.quickAdd')
 
           if vocablist.deletable()
             a#delete-link
               div.action
                 span.glyphicon.glyphicon-trash
-                span Delete
+                span= app.locale('common.delete')
 
           if vocablist.get('sort') === 'chinesepod-label'
             a#update-link
               div.action
                 i.fa.fa-1x.fa-spinner.fa-pulse.hide
                 span.glyphicon.glyphicon-refresh
-                span Update
+                span= app.locale('common.update')
+
+          if vocablist && vocablist.get('published')
+            a#history-link
+              div.action
+                span.glyphicon.glyphicon-time
+                span= app.locale('pages.vocabLists.history')
 
           //div.action
           //  span.glyphicon.glyphicon-blackboard
           //  span Assign to group
-          //
-          //div.action
-          //  span.glyphicon.glyphicon-export
-          //  span Export

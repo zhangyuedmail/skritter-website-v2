@@ -9,6 +9,9 @@ module.exports = {
     "areYouSure": "Are you sure?",
     "confirm": "Confirm",
     "cancel": "Cancel",
+    "changePhoto": "Change Photo",
+    "copy": "Copy",
+    "delete": "Delete",
     "errorApplication": "Application Error",
     "errorUserReferralExpired": "User referrals can only be used with new accounts.",
     "errorUserReferralFailed": "Error making user referral. Please try again.",
@@ -19,6 +22,9 @@ module.exports = {
       "tone": "tone"
     },
     "save": "Save",
+    "saving": "Saving",
+    "settings": "Settings",
+    "update": "Update",
     "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription."
   },
 
@@ -101,6 +107,21 @@ module.exports = {
       "title": "Starred Words - Skritter",
       "confirmDeleteDialogTitle": "Are you sure you want to delete all your starred words?",
       "confirmDeleteDialogBody": "All your words will be completely unstarred once you press confirm."
+    },
+
+    "vocabLists": {
+      "addToQueue": "Add to queue",
+      "backToCpod": "back to ChinesePod lists",
+      "backToMy": "back to my lists",
+      "backToOfficial": "back to official lists",
+      "backToPublished": "back to published lists",
+      "complete": "complete",
+      "export": "Export",
+      "history": "History",
+      "publish": "Publish",
+      "quickAdd": "Quick Add",
+      "status": "Status",
+      "studyNow": "Study Now"
     }
   },
 
@@ -115,7 +136,7 @@ module.exports = {
       {"quote": "I'm pretty much a great speller.", "source": "Metalocalypse"},
       {"quote": "Dude, my car has anti-lock brakes. Yeah, it would pretty much win in a drag race."},
 
-      {"quote": "A witty saying proves nothing.", "source": "Voltaire"}, 
+      {"quote": "A witty saying proves nothing.", "source": "Voltaire"},
       {"quote": "It worked. You made one change. It doesn't work. It's probably the change you made.", "source": "edw519"},
       {"quote": "Two roads diverged in the woods. I took the one less traveled, and had to eat bugs until park rangers rescued me.", "source": "Jim Rosenberg"},
       {"quote": "Like all dreamers, I confused disenchantment with truth.", "source": "Jean-Paul Sartre"},
@@ -187,3 +208,4 @@ module.exports = {
     ]
   }
 };
+
