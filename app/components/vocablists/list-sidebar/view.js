@@ -1,30 +1,19 @@
 var GelatoComponent = require('gelato/component');
 
+var AddVocabDialog = require('dialogs1/add-vocab/view');
 var ConfirmDialog = require('dialogs/confirm/view');
-var PublishDialog = require('dialogs1/publish-vocablist/view');
+var ExportVocablistDialog = require('dialogs1/export-vocablist/view');
+var HistoryVocablistDialog = require('dialogs1/vocablist-history/view');
+var PublishDialog = require('dialogs1/publish-vocablist/content/view');
 var VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
 var VocablistSectionsEditDialog = require('dialogs/vocablist-sections-edit/view');
-var ExportVocablistDialog = require('dialogs1/export-vocablist/view');
-var AddVocabDialog = require('dialogs1/add-vocab/view');
+var ViewDialog = require('dialogs1/view-dialog/view');
 
 /**
  * @class VocablistsListSidebar
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
-  /**
-   * @method initialize
-   * @param {Object} options
-   * @constructor
-   */
-  initialize: function(options) {
-    this.vocablist = options.vocablist;
-
-    this._views['publishDialog'] = new PublishDialog();
-
-    this.listenTo(this._views['publishDialog'], 'publish', this.publishList);
-  },
-
   /**
    * @property events
    * @type {Object}
@@ -35,6 +24,7 @@ module.exports = GelatoComponent.extend({
     'click #copy-link': 'handleClickCopyLink',
     'click #delete-link': 'handleClickDeleteLink',
     'click #export-link': 'handleClickExportLink',
+    'click #history-link': 'handleClickHistoryLink',
     'click #publish-link': 'handleClickPublishLink',
     'click #quick-add-link': 'handleClickQuickAddLink',
     'click #study-settings-link': 'handleClickStudySettingsLink',
@@ -46,6 +36,28 @@ module.exports = GelatoComponent.extend({
    * @type {Function}
    */
   template: require('./template'),
+
+  /**
+   * @method initialize
+   * @param {Object} options
+   * @constructor
+   */
+  initialize: function(options) {
+    this.vocablist = options.vocablist;
+
+    this._views['publishDialog'] = new ViewDialog({
+      content: PublishDialog
+    });
+
+    this._views['historyDialog'] = new ViewDialog({
+      content: HistoryVocablistDialog,
+      contentOptions: {
+        vocablist: this.vocablist
+      }
+    });
+
+    this.listenTo(this._views['publishDialog'], 'publish', this.publishList);
+  },
 
   /**
    * @method render
@@ -151,6 +163,11 @@ module.exports = GelatoComponent.extend({
   handleClickExportLink: function(event) {
     event.preventDefault();
     new ExportVocablistDialog({id: this.vocablist.id}).open();
+  },
+
+  handleClickHistoryLink: function(event) {
+    event.preventDefault();
+    this._views['historyDialog'].open();
   },
 
   /**

@@ -58,6 +58,7 @@ module.exports = SkritterModel.extend({
    * @param {Function} callback called when the change data has been fetched
    */
   getChangeHistory: function(callback) {
+    var self = this;
     $.ajax({
       method: 'GET',
       url: app.getApiUrl() + 'vocablists/' + this.id + '/changes',
@@ -67,6 +68,7 @@ module.exports = SkritterModel.extend({
         callback();
       },
       success: function(result) {
+        self.set('changeHistory', result);
         callback();
       }
     });

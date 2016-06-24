@@ -41,6 +41,9 @@ module.exports = {
       "publishAction": "Yes—Publish!",
       "thisIsATextbook": "This is a textbook",
       "textbookAdditionalInfo": "Published lists marked as textbooks must go through a review process by the Skritter team. Before you submit, please include information about the textbook in the description of the list such as the full title, author(s), ISBN, edition, and publication date."
+    },
+    "vocablistHistory": {
+      "title": "Vocablist History"
     }
   },
 
