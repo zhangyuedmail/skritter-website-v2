@@ -68,7 +68,7 @@ module.exports = SkritterModel.extend({
         callback();
       },
       success: function(result) {
-        self.set('changeHistory', result);
+        self.set('changeHistory', result.VocabListChanges);
         callback();
       }
     });

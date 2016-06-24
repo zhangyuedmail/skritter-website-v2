@@ -2161,6 +2161,24 @@ var syllables = {
   "üà": "üa"
 };
 
+// var re1='(z)';	// Any Single Character 1
+//       var re2='(h)';	// Any Single Character 2
+//
+// var p = new RegExp(re1+re2,["i"]);
+// var m = p.exec(txt);
+
+
+
+function analyzePinyinAnswer(answer, correctAnswer) {
+  // regex uses a greedy algorithm, put larger initials first
+  var doubleInitials = /(zh)|(ch)|(sh)/;
+  var initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)/;
+
+  var initial = answer.substr(0,2);
+
+  return {};
+}
+
 /**
  * @method getData
  * @returns {Object}

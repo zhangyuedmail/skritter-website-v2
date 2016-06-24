@@ -115,9 +115,9 @@ module.exports = GelatoApplication.extend({
    * @returns {String} the base URL for the API
    */
   getApiUrl: function() {
-    if (!this.isProduction() && this.localBackend) {
+    // if (!this.isProduction() && this.localBackend) {
       return 'http://localhost:8080' + '/api/v' + this.get('apiVersion') + '/';
-    }
+    // }
 
     return this.get('apiRoot') + this.get('apiDomain') + '/api/v' + this.get('apiVersion') + '/';
   },
