@@ -22,16 +22,19 @@ gelato-component(data-name='add-vocab-content')
           for section in view.vocablist.get('sections')
             option(value=section.id)= section.name
 
-      if view.vocabs.length
+      if _.keys(view.groups).length
         label(for='vocab-result') Word
         select#vocab-result.form-control
-          for vocab in view.vocabs.models
-            option(value=vocab.id)
-              span= vocab.get('writing')
+          for group, key in view.groups
+            option(value=key)
+              span= group[0].get('writing')
+              if group[1]
+                span &nbsp;-&nbsp;
+                span= group[1].get('writing')
               span &nbsp;|&nbsp;
-              span= vocab.getReading()
+              span= group[0].getReading()
               span &nbsp;|&nbsp;
-              span!= vocab.getDefinition()
+              span!= group[0].getDefinition()
       else
         label(for='vocab-input') Word
         input#vocab-input(placeholder='nihao, ni3hao3, 你好, etc...').form-control

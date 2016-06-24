@@ -13,6 +13,7 @@ module.exports = GelatoComponent.extend({
    */
   initialize: function(options) {
     this.dialog = options.dialog;
+    this.groups = [];
     this.vocablist = null;
     this.vocabs = new Vocabs();
   },
@@ -57,10 +58,37 @@ module.exports = GelatoComponent.extend({
    */
   handleClickButtonAdd: function(event) {
     event.preventDefault();
+    var self = this;
     var formData = this.getFormData();
     var section = this.vocablist.getSectionById(formData.sectionId);
-    var vocab = this.vocabs.get(formData.vocabId);
-    //TODO: make this actually save something to a list
+    var group = this.groups[formData.vocabId];
+    var row = {};
+    if (group[0].isChinese()) {
+      row.vocabId = group[0].id;
+      if (group.length > 1) {
+        row.tradVocabId = group[1].id;
+      } else {
+        row.tradVocabId = group[0].id;
+      }
+    } else {
+      row.vocabId = group[0].id;
+      row.tradVocabId = group[0].id;
+      row.studyWriting = true;
+    }
+    section.rows.push(row);
+    $.ajax({
+      context: this,
+      url: app.getApiUrl() + 'vocablists/' + this.vocablist.id + '/sections/' + section.id,
+      type: 'PUT',
+      headers: app.user.session.getHeaders(),
+      data: JSON.stringify(section),
+      error: function(error) {
+        console.log(error);
+      },
+      success: function() {
+        self.dialog.close();
+      }
+    });
   },
   /**
    * @method handleClickButtonClear
@@ -129,6 +157,9 @@ module.exports = GelatoComponent.extend({
         }
       ],
       function() {
+        self.groups = self.vocabs.groupBy(function(vocab) {
+          return vocab.getBase();
+        });
         self.render();
       }
     );
