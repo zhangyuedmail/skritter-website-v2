@@ -1,4 +1,5 @@
 var GelatoApplication = require('gelato/application');
+var AddVocabDialog = require('dialogs1/add-vocab/view');
 var User = require('models/user');
 var Functions = require('functions');
 var Router = require('router');
@@ -463,6 +464,12 @@ module.exports = GelatoApplication.extend({
         'Language Code': null
       });
     }
+
+    //lets start listening to global keyboard events
+    this.listener = new window.keypress.Listener();
+    this.listener.simple_combo("shift a", function() {
+      new AddVocabDialog().open();
+    });
 
     //use async for cleaner loading code
     async.series([
