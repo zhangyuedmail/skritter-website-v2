@@ -1,5 +1,5 @@
 var GelatoComponent = require('gelato/component');
-
+var VocablistHistoryTableComponent = require('components/vocablists/history-table/view');
 /**
  * @class AddVocabContent
  * @extends {GelatoComponent}
@@ -18,7 +18,10 @@ module.exports = GelatoComponent.extend({
    */
   initialize: function(options) {
     this.dialog = options.dialog;
-    this.vocablist = options.vocablist;
+
+    this._views['historyTable'] = new VocablistHistoryTableComponent({
+      history: options.vocablist.history
+    });
   },
 
   /**
@@ -27,17 +30,13 @@ module.exports = GelatoComponent.extend({
    */
   render: function() {
     this.renderTemplate();
-
-    this.fetchListHistory();
+    this._views['historyTable'].setElement(this.$('#history-table-container'));
+    this.getHistory();
 
     return this;
   },
 
-  fetchListHistory: function() {
-    var self = this;
-    this.vocablist.getChangeHistory(function() {
-      console.log(self.vocablist.changeHistory);
-    });
+  getHistory: function() {
+    this._views['historyTable'].getHistory();
   }
-
 });

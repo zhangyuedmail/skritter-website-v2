@@ -6,7 +6,6 @@ var ExportVocablistDialog = require('dialogs1/export-vocablist/view');
 var HistoryVocablistDialog = require('dialogs1/vocablist-history/view');
 var PublishDialog = require('dialogs1/publish-vocablist/content/view');
 var VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
-var VocablistSectionsEditDialog = require('dialogs/vocablist-sections-edit/view');
 var ViewDialog = require('dialogs1/view-dialog/view');
 
 /**

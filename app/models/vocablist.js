@@ -1,19 +1,28 @@
 var SkritterModel = require('base/skritter-model');
+var VocablistHistoryCollection = require('collections/vocablist-history');
 
 /**
  * @class Vocablist
  * @extends {SkritterModel}
  */
 module.exports = SkritterModel.extend({
-  defaults: {
-    changeHistory: []
-  },
-
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'id',
+
+  /**
+   *
+   * @param models
+   * @param options
+   * @method initialize
+   */
+  initialize: function(models, options) {
+    this.history = new VocablistHistoryCollection(null, {
+      id: this.id
+    });
+  },
 
   /**
    * @method parse
@@ -51,27 +60,6 @@ module.exports = SkritterModel.extend({
       !this.get('disabled'),
       this.get('sort') !== 'chinesepod-lesson'
     ]);
-  },
-
-  /**
-   * Gets an object with a list of changes to the list
-   * @param {Function} callback called when the change data has been fetched
-   */
-  getChangeHistory: function(callback) {
-    var self = this;
-    $.ajax({
-      method: 'GET',
-      url: app.getApiUrl() + 'vocablists/' + this.id + '/changes',
-      headers: app.user.session.getHeaders(),
-      error: function(error) {
-        console.log('error getting vocab change history', error);
-        callback();
-      },
-      success: function(result) {
-        self.set('changeHistory', result.VocabListChanges);
-        callback();
-      }
-    });
   },
 
   /**
