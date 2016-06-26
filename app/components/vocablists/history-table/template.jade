@@ -8,8 +8,8 @@ gelato-component(data-name='vocablist-history-table')
       for history, i in view.history.models
         .row(class=i%2===0 ? 'even' : 'odd')
           .col-md-4= history.get('displayName')
-          .col-md-6 Did something!
-          .col-md-2= history.get('secondsAgo')
+          .col-md-6= history.getChanges()
+          .col-md-2= history.getChangedDate()
             | #{console.log(history)}
   else
     .row This list has no history yet.
