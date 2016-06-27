@@ -119,10 +119,10 @@ gelato-component[data-name='study-prompt'] {
         width: 12px;
       }
       &::-webkit-scrollbar-thumb {
-        background-color: $white5;
+        background-color: $grey1;
       }
       &::-webkit-scrollbar-track {
-        background-color: transparent;
+        background-color: ($white5 - #030303);
       }
     }
     #review-status-container {
