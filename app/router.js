@@ -37,9 +37,11 @@ module.exports = Router.extend({
     'institutions': 'navigateInstitutions',
     'legal': 'navigateLegal',
     'login': 'navigateLogin',
+    'logout': 'navigateLogout',
     'mail/unsubscribe': 'navigateMailUnsubscribe',
     'password-reset': 'navigatePasswordReset',
-    'refer/:userId': 'navigateUserReferral',
+    'refer': 'navigateUserReferralInfo',
+    'refer/:userId': 'navigateApplyUserReferral',
     'scratchpad/:writing(/:part)': 'navigateScratchpad',
     'signup(/:plan)': 'navigateSignup',
     'stats': 'navigateStats',
@@ -50,6 +52,7 @@ module.exports = Router.extend({
     'vocablists/browse': 'navigateVocablistsBrowse',
     'vocablists/chinesepod': 'navigateVocablistsChinesepod',
     'vocablists/create': 'navigateVocablistsCreate',
+    'vocablists/deleted': 'navigateVocablistsDeleted',
     'vocablists/my-lists': 'navigateVocablistsMine',
     'vocablists/published': 'navigateVocablistsPublished',
     'vocablists/queue': 'navigateVocablistsQueue',
@@ -195,6 +198,22 @@ module.exports = Router.extend({
   },
 
   /**
+   * Route that applies a user referral to a user's account
+   * @param {String} userId the id of the existing user that referred the new user
+   */
+  navigateApplyUserReferral: function(userId) {
+    var signedIn = app.user.isLoggedIn();
+    app.setUserReferral(userId, signedIn);
+
+    if (signedIn) {
+      this.navigateDashboard();
+      app.processUserReferral();
+    } else {
+      this.navigateSignup();
+    }
+  },
+
+  /**
    * @method navigateCreateVocablist
    */
   navigateCreateVocablist: function() {
@@ -268,6 +287,7 @@ module.exports = Router.extend({
   },
 
   /**
+   * Shows a page for the user to login
    * @method navigateLogin
    */
   navigateLogin: function() {
@@ -276,6 +296,18 @@ module.exports = Router.extend({
     } else {
       this.navigate('login');
       this.go('pages/login');
+    }
+  },
+
+  /**
+   * Logs a user out if they're logged in, then shows the home page
+   * @method navigateLogout
+   */
+  navigateLogout: function() {
+    if (app.user.isLoggedIn()) {
+      app.user.logout();
+    } else {
+      this.navigateHome();
     }
   },
 
@@ -412,6 +444,17 @@ module.exports = Router.extend({
   },
 
   /**
+   * @method navigateVocablistsDeleted
+   */
+  navigateVocablistsDeleted: function() {
+    if (app.user.isLoggedIn()) {
+      this.go('pages/vocablists/deleted');
+    } else {
+      this.navigateLogin();
+    }
+  },
+
+  /**
    * @method navigateVocablistsCreate
    */
   navigateVocablistsCreate: function() {
@@ -500,18 +543,15 @@ module.exports = Router.extend({
   },
 
   /**
-   * Route that
-   * @param {String} userId the id of the existing user that referred the new user
+   * Shows a page about the user referral system and shows a logged-in user
+   * their unique link.
+   * @method navigateUserReferralInfo
    */
-  navigateUserReferral: function(userId) {
-    var signedIn = app.user.isLoggedIn();
-    app.setUserReferral(userId, signedIn);
-
-    if (signedIn) {
-      this.navigateDashboard();
-      app.processUserReferral();
+  navigateUserReferralInfo: function() {
+    if (app.user.isLoggedIn()) {
+      this.go('pages/user-referral');
     } else {
-      this.navigateSignup();
+      this.navigateLogin();
     }
   }
 });

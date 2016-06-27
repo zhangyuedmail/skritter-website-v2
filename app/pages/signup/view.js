@@ -130,6 +130,10 @@ module.exports = GelatoPage.extend({
     if (app.isDevelopment()) {
       this.user.unset('avatar');
     }
+
+    // TODO: detect this? Default it earlier?
+    this.user.set('client', 'website');
+
     async.series([
       function(callback) {
         ScreenLoader.post('Creating new user');
@@ -244,12 +248,6 @@ module.exports = GelatoPage.extend({
     if (!this.subscribing) {
       this.subscribing = true;
       var formData = this.getFormData();
-      if (formData.password1 === '') {
-        return;
-      }
-      if (formData.password1 !== formData.password2) {
-        return;
-      }
       if (formData.method === 'credit') {
         this.subscribeCredit(formData);
       } else {
@@ -286,6 +284,7 @@ module.exports = GelatoPage.extend({
     var self = this;
 
     if (!this._validateUserData(formData)) {
+      this.subscribing = false;
       ScreenLoader.hide();
       return;
     }
@@ -315,6 +314,7 @@ module.exports = GelatoPage.extend({
     var self = this;
 
     if (!this._validateUserData(formData)) {
+      this.subscribing = false;
       ScreenLoader.hide();
       return;
     }

@@ -11,7 +11,8 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #button-close': 'handleClickClose',
-    'click #button-save': 'handleClickSave'
+    'click #button-save': 'handleClickSave',
+    'click .part-checkbox': 'handleClickVocabPart'
   },
   /**
    * @property template
@@ -80,5 +81,17 @@ module.exports = BootstrapDialog.extend({
     this.trigger('save', this.getSettings());
     this.$(':input').attr('disabled', true);
     //this.$('#button-save').html('<i class="fa fa-2x fa-spinner fa-pulse">');
+  },
+
+  /**
+   * Checks to prevent unchecking all study parts. User has to study something!
+   * @param {jQuery.Event} event the click event on the checkbox
+   */
+  handleClickVocabPart: function(event) {
+    var checked = this.$('.part-checkbox:checked');
+
+    if (checked.length === 0) {
+      $(event.target).prop('checked', true);
+    }
   }
 });

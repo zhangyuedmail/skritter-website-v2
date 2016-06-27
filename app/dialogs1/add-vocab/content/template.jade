@@ -1,0 +1,52 @@
+gelato-component(data-name='add-vocab-content')
+  - var dialog = view.dialog;
+
+  .modal-header
+    .pull-left
+      .modal-title Add Vocab
+    .pull-right
+      a(href='#', data-dismiss='modal')
+        i.fa.fa-times-circle-o
+
+  .modal-body
+    if dialog.vocablists.length
+
+      label(for='vocab-list') List
+      select#vocab-list.form-control
+        for vocablist in dialog.vocablists.models
+          option(value=vocablist.id, selected=vocablist.get('name') == 'Miscellaneous')= vocablist.get('name')
+
+      if view.vocablist
+        label(for='vocab-list-section') Section
+        select#vocab-list-section.form-control
+          for section in view.vocablist.get('sections')
+            option(value=section.id)= section.name
+
+      if _.keys(view.groups).length
+        label(for='vocab-result') Word
+        select#vocab-result.form-control
+          for group, key in view.groups
+            option(value=key)
+              span= group[0].get('writing')
+              if group[1]
+                span &nbsp;-&nbsp;
+                span= group[1].get('writing')
+              span &nbsp;|&nbsp;
+              span= group[0].getReading()
+              span &nbsp;|&nbsp;
+              span!= group[0].getDefinition()
+      else
+        label(for='vocab-input') Word
+        input#vocab-input(placeholder='nihao, ni3hao3, 你好, etc...').form-control
+
+    else
+      .text-center
+        i.fa.fa-3x.fa-spinner.fa-pulse
+
+  .modal-footer
+    if dialog.vocablists.length
+      if view.vocabs.length
+        button#button-add.btn.btn-success Add to List
+        button#button-clear.btn.btn-warning Clear Results
+      else
+        button#button-search.btn.btn-primary Search

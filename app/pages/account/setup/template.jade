@@ -44,9 +44,9 @@ gelato-page(data-name='account-setup')
             select#field-timezone.form-control
               for timezone, code in view.timezones[view.settings.country]
                 if timezone === user.get('timezone')
-                  option(value=timezone, selected="selected")= timezone
+                  option(value=timezone, selected="selected")= timezone.replace(/_/g, ' ')
                 else
-                  option(value=timezone)= timezone
+                  option(value=timezone)= timezone.replace(/_/g, ' ')
 
         .form-group
           .col-sm-12.text-center

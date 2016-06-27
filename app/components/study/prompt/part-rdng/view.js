@@ -5,6 +5,8 @@ var GelatoComponent = require('gelato/component');
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
+  lastInput: '',
+
   /**
    * @method initialize
    * @param {Object} options
@@ -20,9 +22,6 @@ module.exports = GelatoComponent.extend({
 
     this.registerShortcuts = !this.showReadingPrompt;
 
-    if (!this.showReadingPrompt) {
-      this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
-    }
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
   },
@@ -38,7 +37,8 @@ module.exports = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'keyup #reading-prompt': 'handleReadingPromptKeypress',
+    'keydown #reading-prompt': 'handleReadingPromptKeydown',
+    'keyup #reading-prompt': 'handleReadingPromptKeyup',
     'click gelato-component': 'handlePromptCanvasClick'
   },
 
@@ -81,11 +81,11 @@ module.exports = GelatoComponent.extend({
     var vocabReading = this.prompt.review.vocab.get('reading');
     var userReading = this.$('#reading-prompt').val();
 
+    this.userReading = userReading;
+
     if (!this.showReadingPrompt || this.isCorrect(userReading, vocabReading)) {
       this.prompt.review.set('complete', true);
 
-      // TODO: need to set this better
-      this.userReading = userReading;
       this.render();
     } else {
       this.prompt.review.set('score', 1);
@@ -128,6 +128,7 @@ module.exports = GelatoComponent.extend({
     }
 
     this.renderTemplate();
+    this._applyGradeToPromptInput();
 
     return this;
   },
@@ -165,7 +166,12 @@ module.exports = GelatoComponent.extend({
    * @method handlePromptCanvasClick
    */
   handlePromptCanvasClick: function(e) {
-    console.log('testing');
+
+    // let's let the user click on the reading prompt, eh?
+    if (e.target.id === "reading-prompt") {
+      return;
+    }
+
     if (this.prompt.review.isComplete()) {
       this.prompt.next();
     } else {
@@ -191,18 +197,41 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
+   * Handles enter keypress to prevent weird input stuff and double events from firing
+   * @param {jQuery.Event} event the keyup event
+   */
+  handleReadingPromptKeydown: function(event) {
+    if (event.keyCode === 13) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      this._processPromptSubmit();
+    }
+  },
+
+  /**
    * Given keyboard input, keeps track of the internal actual value and
    * converts the display value to the appropriate alphabet/syllabary
    * (pinyin or kana)
    * @param {jQuery.Event} event a keypress event
    */
-  handleReadingPromptKeypress: function(event) {
+  handleReadingPromptKeyup: function(event) {
 
-    // if enter pressed
+    // left and right arrows
+    if (event.keyCode === 37 || event.keyCode === 39) {
+      if (!this.$('#reading-prompt').val()) {
+        // maybe bubble up and go to the previous prompt?
+      }
+
+      return;
+    }
+
+    // if enter pressed--this is handled before keyup
     if (event.keyCode === 13) {
-      this._processPromptSubmit();
+      event.preventDefault();
+      event.stopPropagation();
     } else {
-      this._processPromptInput();
+      this._processPromptInput(event);
     }
   },
 
@@ -213,9 +242,30 @@ module.exports = GelatoComponent.extend({
    * @returns {Boolean} whether the user's reading was found in the parsed list of vocab readings
    */
   isCorrect: function(userReading, vocabReading) {
-    vocabReading = vocabReading.split(', ');
+    if (app.isChinese()) {
+      return this.isCorrectZH(userReading, vocabReading);
+    } else {
+      // TODO
+    }
+  },
 
-    return vocabReading.indexOf(userReading) > -1;
+  isCorrectZH: function(userReading, vocabReading) {
+    var finalAnswer = this._prepareFinalAnswer(userReading);
+    var vocabReadings = vocabReading.split(', ').map(function(r) {
+      return app.fn.pinyin.toTone(r);
+    });
+
+    return vocabReadings.indexOf(finalAnswer) > -1;
+  },
+
+  _applyGradeToPromptInput: function() {
+    // TODO: a metric (not imperial) crapton of analysis on the userAnswer.
+    // Find out what they got wrong and let the user know. Learning!
+    if (this.prompt.review.isComplete() && this.showReadingPrompt) {
+      var grade = this.prompt.review.get('score');
+
+      this.$('#reading-prompt').addClass('prompt-grade-' + grade);
+    }
   },
 
   /**
@@ -232,50 +282,126 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
-   *
+   * Processes a non-enter keyboard input event to the reading prompt.
+   * Calls the appropriate converter for the language.
    * @private
    */
-  _processPromptInput: function() {
-    if (app.isChinese()) {
-      this._parsePinyinInput();
+  _processPromptInput: function(event) {
+    var newValue = '';
+    if (app.isChinese(event)) {
+      newValue = this._parsePinyinInput(null, event);
     } else {
       // TODO: analyze kana
     }
+
+    this.$('#reading-prompt').val(newValue);
   },
 
-  _parsePinyinInput: function(input) {
+  /**
+   *
+   * @param {String} input the text to process
+   * @param {jQuery.Event} event the original keypress event that changed the input
+   * @returns {String} the processed input string
+   * @private
+   */
+  _parsePinyinInput: function(input, event) {
+    input = input || this.$('#reading-prompt').val();
 
-    // TODO: all of this
+    var originalInput = input;
+    var toProcess = input;
+    var output = '';
 
-    var input = input || this.$('#reading-prompt').val();
+    if (toProcess.length > this.lastInput.length) {
+      output = this._processPinyinAddition(toProcess, event);
+    } else {
+      output = this._processPinyinDeletion(toProcess, event);
+    }
+
+    console.log("lastInput: ", this.lastInput, "original input: ", originalInput, "new input: ", output);
+    this.lastInput = output;
+
+    return output;
+  },
+
+  _processPinyinAddition: function(input, event) {
+    var processed = [];
+
+    // regex helpers
     var toneNumInput = /[1-5]/;
-    var toneSubscript = /[₁-₅]/;
 
-    return;
+    // needs positive lookahead to keep the number in when we split
+    var toneSubscript = /([₁-₅][1-5]?)/;
 
-    // nothing good lies below here
+    // used to detect if a user is attempting to change an existing tone
+    var changeToneNum = /[₁-₅][1-5]/;
 
-    if (toneNumInput.test(input)) {
-      input = input.split(toneSubscript);
+    var subMap = {
+      '1': '₁',
+      '2': '₂',
+      '3': '₃',
+      '4': '₄',
+      '5': '₅'
+    };
 
-      input.map(function(part) {
-        if (false) {
+    // input will be split into a format like ["gōng", "₁", "zuo4"]
+    input = input.split(toneSubscript);
+    console.log('split input: ', input);
+    var wordlike;
+    var currTone;
+    var res;
 
-        }
-      });
+    // loop through each part and perform the necessary mutations
+    for (var i = 0; i < input.length; i++) {
+      wordlike = input[i];
 
-      // single char so far
-      if (input.length === 1) {
-        input = input.split(toneNumInput);
+      currTone = toneNumInput.exec(wordlike) || [];
 
-      } else {
-        // TODO...
+      res = app.fn.pinyin.toTone(wordlike.replace(/ü/g, 'v'));
+
+      // case 1: mutation for a new complete word that needs to be added e.g. gong1 -> gōng₁ if the conversion matched a pattern
+      if (res && res !== wordlike && currTone.length) {
+        processed.push(res + subMap[currTone[0]]);
+      }
+
+      // case 2: change the tone for an existing word's tone góng₂1 -> gōng₁
+      else if ((changeToneNum.exec(wordlike) || []).length) {
+
+        var toChange = input[i-1];
+        var newTone = wordlike[1];
+        res = app.fn.pinyin.removeToneMarks(toChange);
+
+        // need to replace 'ü' with 'v' before we run it through the converter again
+        res = app.fn.pinyin.toTone(res.replace(/ü/g, 'v') + newTone);
+
+        // remove previous, old version of the word e.g góng₂
+        processed.pop();
+
+        // push the new version of the word onto the stack e.g. gōng₁
+        processed.push(res + subMap[newTone]);
+      }
+
+      // fallthrough case: no mutations made
+      else {
+        processed.push(wordlike.replace(/v/g, 'ü'));
       }
     }
 
-    var lastWord = input[input.length - 1];
-    if (input.length > 1) {
-      // TODO
+    return processed.join('');
+  },
+
+  _processPinyinDeletion: function(input, event) {
+    // TODO: remove tones, etc. when final is no longer valid
+
+    return input;
+  },
+
+  _prepareFinalAnswer: function(answer) {
+    if (app.isChinese()) {
+      // remove tone subscripts
+      return answer.split(/[₁-₅]/).join('').toLowerCase();
+    } else {
+      // TODO: ja
+      return answer;
     }
   }
 });

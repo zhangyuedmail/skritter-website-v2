@@ -1,0 +1,102 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='user-referral-info'] {
+  background: $background-primary;
+  padding-top: 65px;
+
+  .big-icon {
+    font-size: 8em;
+    margin-bottom: 25px;
+    color: $green5;
+  }
+
+  .medium-icon {
+    font-size: 3em;
+    margin-bottom: 10px;
+    //color: $green5;
+  }
+
+  a {
+    font-size: 18px;
+  }
+  .step {
+    position: relative;
+  }
+
+  .step-description {
+    font-size: 18px;
+  }
+
+  .number {
+    background: $grey2;
+    color: $white;
+    padding: 11px 15.75px 9px;
+    position: absolute;
+    top: 0px;
+    left: 38px;
+    font-weight: 800;
+    font-size: 26px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius:  50%;
+  }
+
+  .content-block {
+    margin-bottom: 60px;
+  }
+
+  header {
+    font-family: "Ubuntu", "Arial Unicode MS", "Arial", sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 40px 0px 20px 0px;
+  }
+
+  .subhero, .hero {
+    color: $grey4;
+    font-family: $font-slab;
+    font-size: 36px;
+    font-weight: 400;
+    margin-bottom: 60px;
+    margin-top: 30px;
+  }
+
+  .subhero {
+    font-size: 28px;
+    margin-bottom: 45px;
+  }
+
+  .add-zi {
+    max-height: 112px;
+  }
+
+  .link-area {
+    background: $white3;
+    padding-bottom: 45px;
+  }
+
+  .explanation, .social-media-wrapper {
+    margin-bottom: 45px;
+  }
+
+  .user-link {
+    font-size: 24px;
+    width: 80%;
+    text-align: center;
+    background: none;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 2px solid $grey4;
+  }
+
+   @media (max-width: 1000px) {
+     .step {
+       margin-bottom: 60px;
+     }
+
+     .explanation {
+       margin-bottom: 0;
+     }
+   }
+}

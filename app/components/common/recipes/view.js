@@ -1,0 +1,95 @@
+var GelatoComponent = require('gelato/component');
+/**
+ * Cooks delicious, well-seasoned meals for the user
+ * @class Recipes
+ * @extends {GelatoComponent}
+ */
+module.exports = GelatoComponent.extend({
+  events: {
+    'click #recipe': 'cookNewDish'
+  },
+
+  /**
+   * The currently selected recipe
+   * @type {String}
+   */
+  currentRecipe: null,
+
+  /**
+   * Timer that switches out the current recipe after it's been on the menu for
+   * too long.
+   * @type {Number} id of the timer
+   */
+  timer: null,
+
+  /**
+   * Prepares the recipes according to the user's tastes.
+   * @method initialize
+   */
+  initialize: function() {
+    var recipes = app.locale('recipes');
+    recipes = [].concat(recipes['general'])
+      .concat(app.isChinese() ? recipes['zh'] : [])
+      .concat(app.isJapanese() ? recipes['ja'] : []);
+
+    this.recipes = recipes;
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./template'),
+
+  /**
+   * @method render
+   * @returns {Recipe}
+   */
+  render: function() {
+    this.renderTemplate();
+
+    this._startTimer();
+
+    return this;
+  },
+
+  /**
+   * @method remove
+   * @returns {Recipe}
+   */
+  remove: function() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    return GelatoComponent.prototype.remove.call(this);
+  },
+
+  /**
+   * Adds the secret spice to the user's dish
+   * @method cookNewDish
+   * @returns {String} a flavorful dish
+   */
+  cookNewDish: function() {
+    var newFavoriteDish = Math.floor(this.recipes.length * Math.random(Date.now()));
+
+    this.currentRecipe = this.recipes[newFavoriteDish];
+    this.$('#recipe').text(this.currentRecipe.quote);
+    this.$('#recipe').prop('title', this.currentRecipe.source);
+
+    return this.currentRecipe;
+  },
+
+  /**
+   * Starts a timer that will switch out the user's dish after it gets too cold.
+   * @private
+   */
+  _startTimer: function() {
+    var self = this;
+
+    // switch every two minutes
+    this.timer = setInterval(function() {
+      self.cookNewDish();
+    }, 120000);
+  }
+});

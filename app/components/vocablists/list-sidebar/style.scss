@@ -1,6 +1,10 @@
-@import "../../../../styles/_variables";
+@import "../../../styles/_variables";
 
 gelato-component[data-name='vocablists-list-sidebar'] {
+  #list-img {
+    min-width: 84px;
+    min-height: 84px;
+  }
 
   .sidebar-spacer {
     margin: 45px 2% 0;

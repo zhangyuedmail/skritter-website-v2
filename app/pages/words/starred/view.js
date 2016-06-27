@@ -3,7 +3,7 @@ var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words/sidebar/view');
 var ProgressDialog = require('dialogs/progress/view');
 var VocabActionMixin = require('mixins/vocab-action');
-
+var ConfirmDialog = require('dialogs1/confirm-generic/view');
 /**
  * @class StarredWords
  * @extends {GelatoPage}
@@ -18,9 +18,17 @@ module.exports = GelatoPage.extend({
     this.starredVocabs = new Vocabs();
     this.limit = 20;
 
+    this._views['confirmDialog'] = new ConfirmDialog({
+      title: app.locale('pages.starredWords.confirmDeleteDialogTitle'),
+      body: app.locale('pages.starredWords.confirmDeleteDialogBody')
+    });
+
+    this.listenTo(this._views['confirmDialog'], 'confirm', this.handleConfirmDeleteAllStarred);
     this.listenTo(this.starredVocabs, 'sync', this.renderTable);
+
     this.fetchStarredVocabs();
   },
+
   /**
    * @property events
    * @type {Object}
@@ -39,6 +47,7 @@ module.exports = GelatoPage.extend({
 
     return GelatoPage.prototype.remove.call(this);
   },
+
   /**
    * @method render
    * @returns {VocablistBrowse}
@@ -60,7 +69,7 @@ module.exports = GelatoPage.extend({
    * @property title
    * @type {String}
    */
-  title: 'Starred Words - Skritter',
+  title: app.locale('pages.starredWords.title'),
 
   /**
    * @method fetchAllStarredVocabsThenRemoveThem
@@ -91,9 +100,8 @@ module.exports = GelatoPage.extend({
         this.getAllVocabsDialog = null;
       }
       else {
-        this.removeAllStars();
+        this._views['confirmDialog'].open();
       }
-
     }
   },
 
@@ -141,7 +149,7 @@ module.exports = GelatoPage.extend({
    * @method removeAllStars
    */
   removeAllStars: function() {
-    this.beginVocabAction('remove-star', this.starredVocabs.clone());
+    this.beginVocabAction('remove-star', this.starredVocabs);
     this.starredVocabs.reset();
     this.renderTable();
   },
@@ -154,6 +162,17 @@ module.exports = GelatoPage.extend({
     context.view = this;
     var rendering = $(this.template(context));
     this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
+
+    this.$('#remove-all-stars-link').prop('disabled', !this.starredVocabs.length);
+  },
+
+  handleConfirmDeleteAllStarred: function() {
+    this._views['confirmDialog'].close();
+    var self = this;
+    setTimeout(function() {
+      self.removeAllStars();
+    }, 250);
+
   }
 });
 

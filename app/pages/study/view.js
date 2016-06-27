@@ -2,6 +2,7 @@ var GelatoPage = require('gelato/page');
 var Prompt = require('components/study/prompt/view');
 var Toolbar = require('components/study/toolbar/view');
 var Items = require('collections/items');
+var Recipes = require('components/common/recipes/view');
 
 /**
  * @class Study
@@ -14,18 +15,33 @@ module.exports = GelatoPage.extend({
    */
   initialize: function() {
     ScreenLoader.show();
+
     this.item = null;
     this.prompt = new Prompt();
     this.queue = [];
     this.schedule = new Items();
     this.scheduleState = 'standby';
     this.toolbar = new Toolbar({page: this});
+
+    if (app.user.get('eccentric')) {
+      this._views['recipe'] = new Recipes();
+    }
+
     this.listenTo(this.schedule, 'populate', this.handleSchedulePopulate);
     this.listenTo(this.schedule, 'load', this.handleScheduledLoad);
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
     window.onbeforeunload = this.handleWindowOnBeforeUnload.bind(this);
+
     this.loadSchedule();
+  },
+
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click #add-item-button': 'handleClickAddItemButton'
   },
 
   /**
@@ -54,7 +70,47 @@ module.exports = GelatoPage.extend({
     this.renderTemplate();
     this.prompt.setElement('#study-prompt-container').render();
     this.toolbar.setElement('#study-toolbar-container').render();
+
+    if (app.user.get('eccentric')) {
+      this._views['recipe'].setElement('#recipes-container').render();
+    }
     return this;
+  },
+
+  addItem: function() {
+    var self = this;
+    this.schedule.addItems(
+      {
+        lang: app.getLanguage(),
+        lists: this.vocablist ? this.vocablist.id : null
+      },
+      function(error, result) {
+        if (!error) {
+          var added = result.numVocabsAdded;
+          $.notify(
+            {
+              title: 'Update',
+              message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.'
+            },
+            {
+              type: 'pastel-info',
+              animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+              },
+              delay: 5000,
+              icon_type: 'class'
+            }
+          );
+        }
+        self.populateQueue();
+      }
+    );
+  },
+
+  handleClickAddItemButton: function(event) {
+    event.preventDefault();
+    this.addItem();
   },
 
   /**
@@ -73,7 +129,9 @@ module.exports = GelatoPage.extend({
    */
   handlePromptNext: function(promptItems) {
     var self = this;
-    if (this.item && promptItems) {
+    if (promptItems.skip) {
+      this.next();
+    } else {
       var review = promptItems.getReview();
       if (!this.schedule.reviews.get(review)) {
         this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
@@ -85,8 +143,6 @@ module.exports = GelatoPage.extend({
         self.item = null;
         self.next();
       });
-    } else {
-      this.next();
     }
   },
 
@@ -181,14 +237,21 @@ module.exports = GelatoPage.extend({
   next: function() {
     var item = this.queue.shift();
     if (item) {
-      this.toolbar.render();
-      this.toolbar.updateDueCount();
-      this.prompt.set(item.group ? item : item.getPromptItems());
-      if (this.scheduleState === 'standby' && this.queue.length < 5) {
-        this.scheduleState = 'populating';
-        this.populateQueue();
+      if (item.isBanned()) {
+        this.item = null;
+        this.next();
+      } else {
+        this.toolbar.render();
+        this.toolbar.updateDueCount();
+        this.prompt.set(item.group ? item : item.getPromptItems());
+        if (this.scheduleState === 'standby' && this.queue.length < 5) {
+          this.scheduleState = 'populating';
+          this.populateQueue();
+        }
+        this.item = item;
       }
-      this.item = item;
+    } else {
+      this.prompt.$('#overlay').show();
     }
   },
 
@@ -218,41 +281,47 @@ module.exports = GelatoPage.extend({
         break;
       }
     }
-    //fetch resource data for queue items
-    this.schedule.fetch({
-      data: {
-        ids: _.map(items, 'id').join('|'),
-        include_contained: true,
-        include_decomps: true,
-        include_heisigs: true,
-        include_sentences: true,
-        include_strokes: true,
-        include_vocabs: true
-      },
-      merge: false,
-      remove: false,
-      error: function(error) {
-        self.schedule.trigger('error', error);
-        self.scheduleState = 'standby';
-      },
-      success: function(items, result) {
-        var now = moment().unix();
-        var sortedItems = _.sortBy(result.Items, function(item) {
-          var readiness = 0;
-          if (!item.last) {
-            readiness = 9999;
-          } else {
-            readiness = (now - item.last) / (item.next - item.last);
+    if (items.length) {
+      //fetch resource data for queue items
+      this.schedule.fetch({
+        data: {
+          ids: _.map(items, 'id').join('|'),
+          include_contained: true,
+          include_decomps: true,
+          include_heisigs: true,
+          include_sentences: true,
+          include_strokes: true,
+          include_vocabs: true
+        },
+        merge: false,
+        remove: false,
+        error: function (error) {
+          self.schedule.trigger('error', error);
+          self.scheduleState = 'standby';
+        },
+        success: function (items, result) {
+          var now = moment().unix();
+          var sortedItems = _.sortBy(result.Items, function (item) {
+            var readiness = 0;
+            if (!item.last) {
+              readiness = 9999;
+            } else {
+              readiness = (now - item.last) / (item.next - item.last);
+            }
+            return -readiness;
+          });
+          for (var i = 0, length = sortedItems.length; i < length; i++) {
+            self.queue.push(self.schedule.get(sortedItems[i].id));
           }
-          return -readiness;
-        });
-        for (var i = 0, length = sortedItems.length; i < length; i++) {
-          self.queue.push(self.schedule.get(sortedItems[i].id));
+          self.prompt.$('#overlay').hide();
+          self.schedule.trigger('populate', self.queue);
+          self.scheduleState = 'standby';
         }
-        self.schedule.trigger('populate', self.queue);
-        self.scheduleState = 'standby';
-      }
-    });
+      });
+    } else {
+      this.prompt.$('#overlay').show();
+      ScreenLoader.hide();
+    }
   },
 
   /**
@@ -277,6 +346,7 @@ module.exports = GelatoPage.extend({
     this.toolbar.remove();
     this.schedule.reviews.post();
     window.onbeforeunload = null;
+
     return GelatoPage.prototype.remove.call(this);
   }
 });

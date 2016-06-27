@@ -6,7 +6,7 @@ gelato-dialog(data-name='confirm-item-ban')
 
         .modal-header
           .pull-left
-            .modal-title= 'Ban ' + view.vocab.get('writing') + ' from your studied?'
+            .modal-title= 'Ban ' + view.vocab.get('writing') + ' from your studies?'
           .pull-right
             a(href='#', data-dismiss='modal')
               i.fa.fa-times-circle-o
@@ -15,5 +15,10 @@ gelato-dialog(data-name='confirm-item-ban')
           p You can always unban items later from the banned words section of the words tab.
 
         .modal-footer
-          button#button-confirm.btn.btn-danger Ban
+          if view.item
+            button#button-ban-part.btn.btn-danger
+              span Ban
+              span.spl= app.locale('common.parts.' + view.item.get('part'))
+          button#button-ban-all.btn.btn-danger
+            span Ban all parts
           button#button-cancel.btn.btn-default Cancel

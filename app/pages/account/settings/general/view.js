@@ -36,7 +36,7 @@ module.exports = GelatoPage.extend({
    * @property title
    * @type {String}
    */
-  title: 'General Settings - Skritter',
+  title: app.locale('pages.accountGeneral.title'),
   /**
    * @property template
    * @type {Function}
@@ -83,6 +83,7 @@ module.exports = GelatoPage.extend({
       aboutMe: this.$('#field-about').val(),
       country: this.$('#field-country').find(':selected').val(),
       email: this.$('#field-email').val(),
+      eccentric: this.$('#field-eccentric').is(':checked'),
       name: this.$('#field-name').val(),
       private: this.$('#field-private').is(':checked'),
       timezone: this.$('#field-timezone :selected').val()

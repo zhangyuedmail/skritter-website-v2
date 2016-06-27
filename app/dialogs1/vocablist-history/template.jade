@@ -1,0 +1,13 @@
+gelato-component(data-name='vocablist-history')
+  - var dialog = view.dialog;
+
+  .modal-header
+    .pull-left
+      .modal-title= app.locale('dialogs.vocablistHistory.title')
+    .pull-right
+      a(href='#', data-dismiss='modal')
+        i.fa.fa-times-circle-o
+
+  .modal-body
+    #modal-content
+      #history-table-container

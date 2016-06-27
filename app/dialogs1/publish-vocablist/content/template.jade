@@ -1,0 +1,23 @@
+gelato-component(data-name='publish-vocablist-content')
+  - var dialog = view.dialog;
+
+  .modal-header
+    .pull-left
+      .modal-title= app.locale('dialogs.publishVocablist.title')
+    .pull-right
+      a(href='#', data-dismiss='modal')
+        i.fa.fa-times-circle-o
+
+  .modal-body
+    #form
+      .copy= app.locale('dialogs.publishVocablist.body')
+      .is-textbook-wrapper
+        input#is-textbook(type="checkbox" name="is-textbook")
+        label(for="is-textbook")= app.locale('dialogs.publishVocablist.thisIsATextbook')
+        #textbook-info.textbook-info.hidden= app.locale('dialogs.publishVocablist.textbookAdditionalInfo')
+
+    #working.text-center.hidden
+      i.fa.fa-3x.fa-spinner.fa-pulse
+
+  .modal-footer.text-center
+    button#button-publish.btn.btn-fixed.btn-success!= app.locale('dialogs.publishVocablist.publishAction')

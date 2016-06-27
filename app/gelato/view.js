@@ -3,6 +3,22 @@
  * @extends {Backbone.View}
  */
 var GelatoView = Backbone.View.extend({
+
+  /**
+   * Instantiates certain instance variables so they are setup correctly for inheritance
+   * @param {Object} [options]
+   */
+  constructor: function(options) {
+    /**
+     * Dictionary that contains subviews this view manages
+     * @property _views
+     * @type {Object<String, Backbone.View>}
+     */
+    this._views = {};
+
+    Backbone.View.prototype.constructor.apply(this, arguments);
+  },
+
   /**
    * @property $view
    * @type {jQuery}
@@ -54,7 +70,7 @@ var GelatoView = Backbone.View.extend({
    * @param {Event} event
    */
   handleClickHref: function(event) {
-    var target = Backbone.$(event.target);
+    var target = Backbone.$(event.currentTarget);
     var href = target.attr('href');
     if (window.app !== undefined &&
       window.app.router !== undefined &&
@@ -63,10 +79,13 @@ var GelatoView = Backbone.View.extend({
       href.indexOf('http://') !== 0 &&
       href.indexOf('https://') !== 0) {
       event.preventDefault();
-      window.app.router.navigate(href, {
-        replace: target.data('replace') || false,
-        trigger: target.data('trigger') || true
-      });
+      window.app.router.navigate(
+        href,
+        {
+          replace: target.data('replace') || false,
+          trigger: target.data('trigger') || true
+        }
+      );
     }
   },
 
@@ -107,15 +126,24 @@ var GelatoView = Backbone.View.extend({
   },
 
   /**
+   * Unsubscribes from events, calls remove on subviews, and removes DOM elements
    * @method remove
    * @returns {GelatoView}
    */
   remove: function() {
     this.stopListening();
     this.undelegateEvents();
+
+    for (var view in this._views) {
+      if (this._views.hasOwnProperty(view)) {
+        this._views[view].remove();
+      }
+    }
+
     this.$el.find('*').off();
     this.$el.empty();
     Backbone.$(window).off('resize.View');
+
     return this;
   },
 

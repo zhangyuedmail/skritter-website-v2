@@ -9,11 +9,28 @@ var PromptItem = require('models/prompt-item');
  */
 var Vocab = SkritterModel.extend({
   /**
+   * @property idAttribute
+   * @type {String}
+   */
+  idAttribute: 'id',
+  /**
+   * @property urlRoot
+   * @type {String}
+   */
+  urlRoot: 'vocabs',
+  /**
    * @method initialize
    * @constructor
    */
   initialize: function() {
-    this.audio = this.has('audio') ? new Audio(this.get('audio').replace('http://', 'https://')) : null;
+    var audios = [];
+    _.forEach(
+      this.getUniqueAudios(),
+      function(data) {
+        audios.push(new Audio(data.mp3.replace('http://', 'https://')));
+      }
+    );
+    this.audios = audios;
   },
   /**
    * @method defaults
@@ -28,21 +45,11 @@ var Vocab = SkritterModel.extend({
     };
   },
   /**
-   * @property idAttribute
-   * @type {String}
-   */
-  idAttribute: 'id',
-  /**
-   * @property urlRoot
-   * @type {String}
-   */
-  urlRoot: 'vocabs',
-  /**
    * @method banAll
    * @returns {Vocab}
    */
   banAll: function() {
-    this.set('bannedParts', []);
+    this.set('bannedParts', ['defn', 'rdng', 'rune', 'tone']);
     return this;
   },
   /**
@@ -302,6 +309,9 @@ var Vocab = SkritterModel.extend({
     }
     return [];
   },
+  getUniqueAudios: function() {
+    return _.uniqBy(this.get('audios'), 'reading');
+  },
   /**
    * @method getVariation
    * @returns {Number}
@@ -353,7 +363,7 @@ var Vocab = SkritterModel.extend({
         return true;
       }
     }
-    return _.includes(['~', '-', '～', 'ー', '.', '。', ',', '，', '、', '・'], this.get('writing'));
+    return _.includes(['~', '-', '～', '.', '。', ',', '，', '、', '・'], this.get('writing'));
   },
   /**
    * @method isJapanese
@@ -386,13 +396,22 @@ var Vocab = SkritterModel.extend({
   },
   /**
    * @method play
-   * @returns {Audio}
    */
   play: function() {
-    if (this.audio && this.audio.paused) {
-      this.audio.play();
+    var readingObjects = this.getReadingObjects();
+    if (this.isChinese() && readingObjects.length === 1) {
+      async.eachSeries(
+        this.audios,
+        function(audio, callback) {
+          audio.onended = function() {
+            setTimeout(callback, 200);
+          };
+          audio.play();
+        }
+      );
+    } else {
+      this.audios[0].play();
     }
-    return this.audio;
   },
   /**
    * @method post

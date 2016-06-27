@@ -88,7 +88,7 @@ module.exports = GelatoPage.extend({
     if (checkbox.attr('id') === 'all-checkbox') {
       this.$('input[type="checkbox"]').prop('checked', checkbox.prop('checked'));
     }
-    var anyChecked = this.$('input[type="checkbox"]:checked').length;
+    var anyChecked = this.mnemonicVocabs.length && this.$('input[type="checkbox"]:checked').length;
     this.$('#delete-mnemonics-btn').prop('disabled', !anyChecked);
   },
 

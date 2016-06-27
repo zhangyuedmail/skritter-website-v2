@@ -9,13 +9,13 @@ gelato-page(data-name='contact')
         #contact-message
       form.form-horizontal
         .form-group
-          label.col-sm-2.control-label(for='contact-email')= app.locale('pages.contact.email')
+          label.col-sm-2.control-label(for='field-email')= app.locale('pages.contact.email')
           .col-sm-10
-            input#contact-email.form-control(type='email')
+            input#field-email.form-control(type='email')
         .form-group
-          label.col-sm-2.control-label(for='contact-topic-select')= app.locale('pages.contact.topic')
+          label.col-sm-2.control-label(for='field-topic-select')= app.locale('pages.contact.topic')
           .col-sm-10
-            select#contact-topic-select.form-control
+            select#field-topic-select.form-control
               option(value='Feedback')= app.locale('pages.contact.feedback')
               option(value='How To')= app.locale('pages.contact.question')
               option(value='Bug')= app.locale('pages.contact.bugReport')

@@ -31,8 +31,19 @@ module.exports = GelatoPage.extend({
     if (app.user.isLoggedIn()) {
       this.$('#field-email').val(app.user.get('email'));
     }
-    
+
     return this;
+  },
+  /**
+   * @method getFormData
+   * @returns {Object}
+   */
+  getFormData: function() {
+    return {
+      email: this.$('#field-email').val(),
+      message: this.$('#field-message').val(),
+      subject: this.$('#field-topic').val()
+    };
   },
   /**
    * @method handleClickContactSubmit
@@ -40,16 +51,14 @@ module.exports = GelatoPage.extend({
    */
   handleClickContactSubmit: function(event) {
     event.preventDefault();
-    var email = this.$('#field-email').val();
-    var message = this.$('#field-message').val();
-    var subject = this.$('#field-topic').val();
-    if (!email) {
+    var formData = this.getFormData();
+    if (_.isEmpty(formData.email)) {
       this.$('#contact-message').removeClass();
       this.$('#contact-message').addClass('text-danger');
       this.$('#contact-message').text('Please enter a valid e-mail address.');
       return;
     }
-    if (!message) {
+    if (_.isEmpty(formData.message)) {
       this.$('#contact-message').removeClass();
       this.$('#contact-message').addClass('text-danger');
       this.$('#contact-message').text("Message field can't be blank.");
@@ -61,11 +70,7 @@ module.exports = GelatoPage.extend({
       headers: app.user.session.getHeaders(),
       context: this,
       type: 'POST',
-      data: JSON.stringify({
-        email: email,
-        message: message,
-        subject: subject
-      })
+      data: JSON.stringify(formData)
     }).done(function() {
       this.$('#contact-message').removeClass();
       this.$('#contact-message').addClass('text-success');

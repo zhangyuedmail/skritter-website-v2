@@ -1,0 +1,56 @@
+gelato-page(data-name='user-referral-info')
+
+  section.container
+    .row
+      .content-block
+        .text-center.hero Invite your friends to Skritter!
+        .content
+          .row.explanation
+            .col-md-4.text-center.step
+              .number 一
+              i.fa.fa-link.big-icon(aria-hidden="true")
+              .step-description
+                strong Share&nbsp;
+                |your referral link with your friends or
+                br
+                strong post&nbsp;
+                | it to social media.
+            .col-md-4.text-center.step
+              .number 二
+              i.fa.fa-calendar-plus-o.big-icon(aria-hidden="true")
+              .step-description For every friend that signs up, you both get
+                br
+                strong two weeks&nbsp;
+                | of extra time on Skritter for&nbsp;
+                strong free
+                |.
+            .col-md-4.text-center.step
+              .number 三
+              img.fa.big-icon.add-zi(src="/media/images/jia.png", alt="")
+              .step-description Your friend and you both learn lots of new words and characters!
+        .spacer
+        .row.link-area.text-center
+          .subhero Share your personal link with your friends
+          input#user-link.user-link(value="https://www.skritter.com/refer/#{app.user.id}", readonly)
+        .row.social-media-wrapper.text-center
+          .subhero Or post it to social media
+          .col-md-3
+          .col-md-2.social-media-link
+            .icon-link
+              a(href="http://www.facebook.com/sharer.php?u=https%3A//www.skritter.com/refer/#{app.user.id}", target="_blank")
+                i.fa.fa-facebook-square.social-media-icon.medium-icon
+            a(href="http://www.facebook.com/sharer.php?u=https%3A//www.skritter.com/refer/#{app.user.id}", target="_blank")
+              | Share on Facebook
+          .col-md-2.social-media-link
+            .icon-link
+              a(href="http://twitter.com/home?status=Want%20to%20sign%20up%20on%20Skritter%20and%20learn%20Chinese%20or%20Japanese%3F%20Use%20my%20referral%20link:%20https%3A//www.skritter.com/refer/#{app.user.id}", target="_blank")
+                i.fa.fa-twitter.social-media-icon.medium-icon
+            a(href="http://twitter.com/home?status=Want%20to%20sign%20up%20on%20Skritter%20and%20learn%20Chinese%20or%20Japanese%3F%20Use%20my%20referral%20link:%20https%3A//www.skritter.com/refer/#{app.user.id}", target="_blank")
+              | Share on Twitter
+          .col-md-2.social-media-link
+            .icon-link
+              a(href="https://plusone.google.com/_/+1/confirm?hl=en&url=20https%3A//www.skritter.com/refer/#{app.user.id}", target="_blank")
+                i.fa.fa-google-plus.social-media-icon.medium-icon
+            a(href="https://plusone.google.com/_/+1/confirm?hl=en&url=https%3A//www.skritter.com/refer/#{app.user.id}", target="_blank")
+              | Share on Google+
+          .col-md-3

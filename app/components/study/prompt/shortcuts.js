@@ -110,7 +110,7 @@ StudyPromptShortcuts.prototype._handleGradingToggle = function() {
   }
 
   if (this.prompt.review.isComplete()) {
-    this.prompt.review.set('score', this.review.get('score') === 1 ? 3 : 1);
+    this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.canvas.injectLayerColor(
       'character',
