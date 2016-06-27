@@ -46,6 +46,7 @@ gelato-component[data-name='study-prompt'] {
         cursor: pointer;
         position: relative;
         z-index: 5000;
+
         #canvas-container {
           height: 100%;
           left: 0;
@@ -53,7 +54,12 @@ gelato-component[data-name='study-prompt'] {
           top: 0;
           width: 100%;
           z-index: 5002;
+
+          &.rune {
+            cursor: url('#{$dir-assets}/images/0387-2.png') 11 10, auto;
+          }
         }
+
         #review-container {
           height: 100%;
           left: 0;
