@@ -5,22 +5,17 @@ var GelatoPage = require('gelato/page');
  */
 module.exports = GelatoPage.extend({
   /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    this.countries = require('data/country-codes');
-    this.timezones = require('data/country-timezones');
-  },
-  /**
    * @property events
    * @type Object
    */
   events: {
     'change #field-country': 'handleChangeFieldCountry',
     'change #field-language': 'handleChangeFieldLanguage',
-    'click #button-continue': 'handleClickButtonContinue'
+    'click #button-continue': 'handleClickButtonContinue',
+    'click .lang-option': 'handleClickLangOption',
+    'click .char-option': 'handleClickCharOption'
   },
+  
   /**
    * @property settings
    * @type {Object}
@@ -28,22 +23,34 @@ module.exports = GelatoPage.extend({
   settings: {
     addSimplified: true,
     addTraditional: false,
+    addBoth: false,
     country: 'US',
     targetLang: app.get('demoLang'),
     timezone: 'America/New_York'
   },
+  
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+  
   /**
    * @property title
    * @type {String}
    */
-  title: 'Account Configure - Skritter',
+  title: app.locale('pages.accountSetup.title'),
 
   showFooter: false,
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.countries = require('data/country-codes');
+    this.timezones = require('data/country-timezones');
+  },
 
   /**
    * @method render
@@ -54,6 +61,7 @@ module.exports = GelatoPage.extend({
 
     return this;
   },
+
   /**
    * @method handleChangeFieldCountry
    * @param {Event} event
@@ -63,6 +71,7 @@ module.exports = GelatoPage.extend({
     this.settings.country = this.$('#field-country :selected').val() || 'US';
     this.render();
   },
+
   /**
    * @method handleChangeFieldLanguage
    * @param {Event} event
@@ -72,6 +81,7 @@ module.exports = GelatoPage.extend({
     this.settings.targetLang = this.$('#field-language').val() || 'zh';
     this.render();
   },
+
   /**
    * @method handleClickButtonContinue
    * @param {Event} event
@@ -79,6 +89,15 @@ module.exports = GelatoPage.extend({
   handleClickButtonContinue: function(event) {
     var self = this;
     event.preventDefault();
+    var settings = this.getSettings();
+
+    var invalidSettings = this.validateSettings(settings);
+    if (invalidSettings) {
+      this.$('#error-message').text(invalidSettings.message).removeClass('hidden');
+      return;
+    }
+    this.$('#error-message').removeClass('hidden');
+
     ScreenLoader.show();
     ScreenLoader.post('Saving user settings');
     app.user.save(
@@ -96,29 +115,76 @@ module.exports = GelatoPage.extend({
     );
     this.render();
   },
+
+  handleClickCharOption: function(event) {
+    var id = event.currentTarget.id;
+    if (id === "traditional") {
+      this.settings.addTraditional = true;
+      this.settings.addBoth = false;
+      this.settings.addSimplified = false;
+    } else if (id === "both") {
+      this.settings.addBoth = true;
+      this.settings.addTraditional = false;
+      this.settings.addSimplified = false;
+    } else {
+      this.settings.addSimplified = true;
+      this.settings.addBoth = false;
+      this.settings.addTraditional = false;
+    }
+
+    this.render();
+  },
+
+  handleClickLangOption: function(event) {
+    event.preventDefault();
+    var id = (event.currentTarget.id || '-').split('-')[1];
+    this.settings.targetLang = id || 'zh';
+    this.render();
+  },
+
   /**
+   * Processes the UI selections into values that can be passed onto the User model.
    * @method getSettings
    * @returns {Object}
    */
   getSettings: function() {
     var settings = {};
-    var targetLang = this.$('#field-language').val();
+    var targetLang = this.settings.targetLang;
     if (targetLang === 'zh') {
-      settings.addSimplified = this.$('#field-styles [value="simplified"]').is(':checked');
-      settings.addTraditional = this.$('#field-styles [value="traditional"]').is(':checked');
+      settings.addSimplified = this.settings.addSimplified || this.settings.addBoth;
+      settings.addTraditional = this.settings.addTraditional || this.settings.addBoth;
       settings.reviewSimplified = true;
       settings.reviewTraditional = true;
     }
     settings.country = this.$('#field-country :selected').val();
     settings.targetLang = targetLang;
     settings.timezone = this.$('#field-timezone :selected').val();
+    
     return settings;
   },
+
   /**
    * @method remove
    * @returns {Study}
    */
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
+  },
+
+  /**
+   * Checks that the settings a user has chosen are valid to save
+   * @param {Object} settings form settings to validate
+   * @returns {Object} null if no error, object with a 'message' if there's a problem
+   */
+  validateSettings: function(settings) {
+    var error = {};
+
+    // user selected
+    if (settings.targetLang === 'zh' && !settings.addSimplified && !settings.addTraditional) {
+      error.message = app.locale('pages.accountSetup.errorNoCharacterTypeSelected');
+      return error;
+    }
+
+    return null;
   }
 });

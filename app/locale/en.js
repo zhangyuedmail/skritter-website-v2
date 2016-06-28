@@ -10,11 +10,13 @@ module.exports = {
     "confirm": "Confirm",
     "cancel": "Cancel",
     "changePhoto": "Change Photo",
+    "continue": "Continue",
     "copy": "Copy",
     "delete": "Delete",
     "errorApplication": "Application Error",
     "errorUserReferralExpired": "User referrals can only be used with new accounts.",
     "errorUserReferralFailed": "Error making user referral. Please try again.",
+    "ja": "Japanese",
     "parts": {
       "defn": "definition",
       "rdng": "reading",
@@ -25,7 +27,8 @@ module.exports = {
     "saving": "Saving",
     "settings": "Settings",
     "update": "Update",
-    "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription."
+    "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription.",
+    "zh": "Chinese"
   },
 
   "navbar": {
@@ -75,6 +78,23 @@ module.exports = {
       "timezoneDescription": "The timezone where you are in",
       "userIdLabel": "User ID",
       "userIdDescription": "Unique system id for your account. Cannot be changed."
+    },
+
+    "accountSetup": {
+      "title": "Account Configure - Skritter",
+      "bothChars": "Both!",
+      "bothCharsDescription": "You want to be a true Chinese master",
+      "charTypeLabel": "What style characters do you want to study?",
+      "countryLabel": "Country",
+      "errorNoCharacterTypeSelected": "You must select either simplified, traditional, or both character types to study.",
+      "languageLabel": "What language do you want to learn?",
+      "setupExplanation": "All these settings and more can be changed later, these are just to get you started.",
+      "setupYourAccount": "Let's setup your account!",
+      "simpChars": "Simplified Characters",
+      "simpCharsDescription": "Used in the People's Republic of China (PRC)",
+      "timezoneLabel": "Timezone",
+      "tradChars": "Traditional Characters",
+      "tradCharsDescription": "Used in Taiwan (RoC), Hong Kong, and Macau"
     },
 
     "contact": {

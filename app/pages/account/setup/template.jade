@@ -6,30 +6,37 @@ gelato-page(data-name='account-setup')
 
       form.form-horizontal
         .text-center
-          #error-message.danger
-          h3 Let's setup your account!
-          p Select your basic account settings below to get started.
+          #error-message.alert.alert-warning.hidden
+          h3= app.locale('pages.accountSetup.setupYourAccount')
+          p.pad-bottom= app.locale('pages.accountSetup.setupExplanation')
 
         .form-group
-          label.col-sm-3.control-label(for="field-language") Language
+          label.col-sm-3.control-label= app.locale('pages.accountSetup.languageLabel')
           .col-sm-9
-            select#field-language.form-control
-              option(value="zh", selected=(view.settings.targetLang === 'zh')) Chinese
-              option(value="ja", selected=(view.settings.targetLang === 'ja')) Japanese
+            #targetLang-zh.lang-option.clickable-option.pad-right(class=view.settings.targetLang === 'zh' ? 'selected' : '')
+              .option-icon 中文
+              .lang-name= app.locale('common.zh')
+            #targetLang-ja.lang-option.clickable-option(class=view.settings.targetLang === 'ja' ? 'selected' : '')
+              .option-icon 日本語
+              .lang-name= app.locale('common.ja')
 
         if (view.settings.targetLang === 'zh')
           .form-group
-            label.col-sm-3.control-label(for="field-styles") Styles
+            label.col-sm-3.control-label(for="field-styles")= app.locale('pages.accountSetup.charTypeLabel')
             .col-sm-9#field-styles
-              label.checkbox-inline
-                input(type="checkbox", name="styles", value="simplified", checked=view.settings.addSimplified)
-                | Simplified
-              label.checkbox-inline
-                input(type="checkbox", name="styles", value="traditional", checked=view.settings.addTraditional)
-                | Traditional
+              #simplified.char-option.clickable-option.pad-right(class=view.settings.addSimplified ? 'selected' : '')
+                .option-icon 简体字
+                .lang-name= app.locale('pages.accountSetup.simpChars')
+              #traditional.char-option.clickable-option.pad-right(class=view.settings.addTraditional ? 'selected' : '')
+                .option-icon 正體字
+                .lang-name= app.locale('pages.accountSetup.tradChars')
+              #both.char-option.clickable-option(class=view.settings.addBoth ? 'selected' : '')
+                .option-icon 两種
+                .lang-name= app.locale('pages.accountSetup.bothChars')
+                br
 
         .form-group
-          label.col-sm-3.control-label(for="field-country") Country
+          label.col-sm-3.control-label(for="field-country")= app.locale('pages.accountSetup.countryLabel')
           .col-sm-9
             select#field-country.form-control
               for name, code in view.countries
@@ -39,7 +46,7 @@ gelato-page(data-name='account-setup')
                   option(value=code)= name
 
         .form-group
-          label.col-sm-3.control-label(for="field-timezone") Timezone
+          label.col-sm-3.control-label(for="field-timezone")= app.locale('pages.accountSetup.timezoneLabel')
           .col-sm-9
             select#field-timezone.form-control
               for timezone, code in view.timezones[view.settings.country]
@@ -47,11 +54,12 @@ gelato-page(data-name='account-setup')
                   option(value=timezone, selected="selected")= timezone.replace(/_/g, ' ')
                 else
                   option(value=timezone)= timezone.replace(/_/g, ' ')
-
+        .form-group
+          span
         .form-group
           .col-sm-12.text-center
             if view.state === 'saving'
-              button.btn.btn-fixed.btn-primary(type="submit", disabled=true)
+              button.btn.btn-fixed.btn-success(type="submit", disabled=true)
                 i.fa.fa-2x.fa-spinner.fa-pulse
             else
-              button#button-continue.btn.btn-fixed.btn-primary(type="submit") Continue
+              button#button-continue.btn.btn-fixed.btn-success(type="submit")= app.locale('common.continue')
