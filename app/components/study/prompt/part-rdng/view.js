@@ -8,25 +8,6 @@ module.exports = GelatoComponent.extend({
   lastInput: '',
 
   /**
-   * @method initialize
-   * @param {Object} options
-   * @constructor
-   */
-  initialize: function(options) {
-    this.prompt = options.prompt;
-
-    this.userReading = '';
-
-    // only support pinyin for first go around. Nihongo ga kite imasu!
-    this.showReadingPrompt = app.isDevelopment() && app.isChinese();
-
-    this.registerShortcuts = !this.showReadingPrompt;
-
-    this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
-    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
-  },
-
-  /**
    * @property el
    * @type {String}
    */
@@ -47,6 +28,25 @@ module.exports = GelatoComponent.extend({
    * @type {Function}
    */
   template: require('./template'),
+
+  /**
+   * @method initialize
+   * @param {Object} options
+   * @constructor
+   */
+  initialize: function(options) {
+    this.prompt = options.prompt;
+
+    this.userReading = '';
+
+    // only support pinyin for first go around. Nihongo ga kite imasu!
+    this.showReadingPrompt = app.isDevelopment() && app.isChinese();
+
+    this.registerShortcuts = !this.showReadingPrompt;
+
+    this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
+    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
+  },
 
   /**
    * @method render
@@ -345,7 +345,7 @@ module.exports = GelatoComponent.extend({
 
     // input will be split into a format like ["gōng", "₁", "zuo4"]
     input = input.split(toneSubscript);
-    console.log('split input: ', input);
+    // console.log('split input: ', input);
     var wordlike;
     var currTone;
     var res;
@@ -379,6 +379,7 @@ module.exports = GelatoComponent.extend({
         // push the new version of the word onto the stack e.g. gōng₁
         processed.push(res + subMap[newTone]);
       }
+      // TODO: case 3: pinyin was valid word, user added a letter that isn't valid e.g. gōng₁ -> gōnwg₁
 
       // fallthrough case: no mutations made
       else {
@@ -390,9 +391,52 @@ module.exports = GelatoComponent.extend({
   },
 
   _processPinyinDeletion: function(input, event) {
-    // TODO: remove tones, etc. when final is no longer valid
+    var processed = [];
 
-    return input;
+    // regex helpers
+    var toneNumInput = /[1-5]/;
+
+    // needs positive lookahead to keep the number in when we split
+    var toneSubscript = /([₁-₅][1-5]?)/;
+
+
+    // used to detect if a user is attempting to change an existing tone
+    var isToneSubscript = /[₁-₅]/;
+
+    var subMap = {
+      '1': '₁',
+      '2': '₂',
+      '3': '₃',
+      '4': '₄',
+      '5': '₅'
+    };
+
+    // input will be split into a format like ["gōng", "₁", "zuo4"]
+    input = input.split(toneSubscript);
+    console.log('split input: ', input);
+    var wordlike;
+    var currTone;
+    var res;
+    var removedToneVowel;
+
+    for (var i = 0; i < input.length; i++) {
+      wordlike = input[i];
+      removedToneVowel = app.fn.pinyin.removeToneMarks(wordlike);
+
+      // case 1: user deleted number that was part of a word with a tone e.g. gōng -> gong
+      if (removedToneVowel !== wordlike &&
+          (i+1 >= input.length || (i+1 < input.length && !isToneSubscript.test(input[i+1])))) {
+        processed.push(removedToneVowel);
+      }
+
+      // fallthrough case: nothing to change or check
+      else {
+        processed.push(wordlike);
+      }
+    }
+
+
+    return processed.join('');
   },
 
   _prepareFinalAnswer: function(answer) {
