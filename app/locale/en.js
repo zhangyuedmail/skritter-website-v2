@@ -91,6 +91,11 @@ module.exports = {
       "submit": "Submit"
     },
 
+    "features": {
+      "handwritingTitle": "Handwriting Recognition",
+      "handwritingDescription": "With Skritter you write characters in your browser and get real-time grading."
+    },
+
     "home": {
       "motto1": "Chinese & Japanese",
       "motto2": "characters, made fun",
@@ -101,7 +106,7 @@ module.exports = {
       "flashcardsText": "Skritter gives you immediate stroke-level feedback and helps you review hard characters more often.",
       "freeTrial": "Start your 7-day free trial",
       "bookHeader": "Studying, your way",
-      "bookText": "Start learning from hundreds of textbooks and users lists, or make your own.",
+      "bookText": "Start learning from hundreds of textbooks and users' lists, or make your own.",
       "reviewHeader": "Efficient reviewing",
       "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn."
     },
