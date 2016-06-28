@@ -108,7 +108,8 @@ module.exports = {
       "bookHeader": "Studying, your way",
       "bookText": "Start learning from hundreds of textbooks and users' lists, or make your own.",
       "reviewHeader": "Efficient reviewing",
-      "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn."
+      "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn.",
+      "demoLink": "Try it out now"
     },
 
     "starredWords": {

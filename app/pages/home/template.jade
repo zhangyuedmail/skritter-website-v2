@@ -12,7 +12,7 @@ gelato-page(data-name='home')
           .carousel-header
             .motto-text= app.locale('pages.home.motto1')
             .motto-text= app.locale('pages.home.motto2')
-            a.btn.btn-lg.btn-danger.hidden-xs(href='/demo')= app.locale('pages.home.freeTrial')
+            a.btn.btn-lg.btn-danger.hidden-xs(href='/demo')= app.locale('pages.home.demoLink')
       //.item
         img(src="/media/images/home_hero2.png", alt="")
     //a.left.carousel-control(href="#hero-slider", role="button", data-ignore="true", data-slide="prev")
@@ -23,7 +23,7 @@ gelato-page(data-name='home')
   section#section-features.light
     .container
       .text-center.visible-xs
-        a.btn.btn-lg.btn-danger(href='/demo')= app.locale('pages.home.freeTrial')
+        a.btn.btn-lg.btn-danger(href='/demo')= app.locale('pages.home.demoLink')
       .header.text-center= app.locale('pages.home.headerText')
       .row
         .col-sm-6
