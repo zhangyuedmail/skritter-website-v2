@@ -112,6 +112,7 @@ module.exports = {
     },
 
     "features": {
+      "callToAction": "Try it out now",
       "handwritingTitle": "Handwriting Recognition",
       "handwritingDescription": "With Skritter you write characters in your browser and get real-time grading."
     },
