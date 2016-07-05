@@ -15,7 +15,7 @@ module.exports = GelatoPage.extend({
     'click .lang-option': 'handleClickLangOption',
     'click .char-option': 'handleClickCharOption'
   },
-  
+
   /**
    * @property settings
    * @type {Object}
@@ -28,13 +28,13 @@ module.exports = GelatoPage.extend({
     targetLang: app.get('demoLang'),
     timezone: 'America/New_York'
   },
-  
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
-  
+
   /**
    * @property title
    * @type {String}
@@ -100,9 +100,13 @@ module.exports = GelatoPage.extend({
 
     ScreenLoader.show();
     ScreenLoader.post('Saving user settings');
+
+    settings.id = app.user.id;
+
     app.user.save(
-      this.getSettings(),
+      settings,
       {
+        patch: true,
         error: function(user, error) {
           self.$('#error-message').text(error.responseJSON.message);
           ScreenLoader.hide();
@@ -159,7 +163,7 @@ module.exports = GelatoPage.extend({
     settings.country = this.$('#field-country :selected').val();
     settings.targetLang = targetLang;
     settings.timezone = this.$('#field-timezone :selected').val();
-    
+
     return settings;
   },
 
