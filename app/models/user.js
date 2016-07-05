@@ -24,6 +24,7 @@ module.exports = SkritterModel.extend({
     avatar: require('data/default-avatar'),
     allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     allJapaneseParts: ['defn', 'rdng', 'rune'],
+    dailyItemAddingLimit: 20,
     filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     filteredJapaneseParts: ['defn', 'rdng', 'rune'],
     hideDefinition: false,
