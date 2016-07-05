@@ -157,6 +157,14 @@ module.exports = SkritterModel.extend({
   },
 
   /**
+   * @method isItemAddingAllowed
+   * @returns {Boolean}
+   */
+  isItemAddingAllowed: function() {
+    return this.get('addFrequency') > 0;
+  },
+
+  /**
    * @method isLoggedIn
    * @returns {Boolean}
    */
