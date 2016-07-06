@@ -174,8 +174,7 @@ module.exports = GelatoPage.extend({
           }
         )
       },
-      this._processUserReferral,
-      this._sendWelcomeEmail
+      this._processUserReferral
     ], callback);
   },
 
@@ -431,32 +430,6 @@ module.exports = GelatoPage.extend({
     }
   },
 
-  /**
-   * Sends an email that welcomes the new user to Skritter.
-   * @param {Function} callback called when the process is complete
-   * @private
-   */
-  _sendWelcomeEmail: function(callback) {
-    if (app.isProduction()) {
-      ScreenLoader.post('Sending welcome email');
-      $.ajax({
-        method: 'GET',
-        url: 'https://api-dot-write-way.appspot.com/v1/email/welcome',
-        data: {
-          client: 'website',
-          token: app.user.session.get('access_token')
-        },
-        error: function(error) {
-          callback(error);
-        },
-        success: function() {
-          callback()
-        }
-      });
-    } else {
-      callback();
-    }
-  },
 
   /**
    * Validates submitted user form data to check if it conforms to submission
