@@ -111,6 +111,13 @@ module.exports = {
       "submit": "Submit"
     },
 
+    "dashboard": {
+      "title": "Dashboard - Skritter",
+      "allTime": "All Time",
+      "thisMonth": "This Month",
+      "lists": "Lists"
+    },
+
     "features": {
       "callToAction": "Try it out now",
       "handwritingTitle": "Handwriting Recognition",
