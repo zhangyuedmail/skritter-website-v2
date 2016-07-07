@@ -7,6 +7,12 @@ var Vocablists = require('collections/vocablists');
  */
 module.exports = GelatoComponent.extend({
   /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./template'),
+  
+  /**
    * @method initialize
    * @constructor
    */
@@ -22,17 +28,14 @@ module.exports = GelatoComponent.extend({
       }
     });
   },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+  
   /**
    * @method render
    * @returns {DashboardQueue}
    */
   render: function() {
     this.renderTemplate();
+    
     return this;
   }
 });
