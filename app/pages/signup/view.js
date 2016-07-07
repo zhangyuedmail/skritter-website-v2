@@ -70,11 +70,14 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function(options) {
+    _.bindAll(this, '_saveNewUser');
+
     this.plan = options.plan;
     this.subscribing = false;
     this.user = new User();
     this.userReferral = app.getUserReferral();
     this.couponCode = app.getStoredCouponCode();
+    
     mixpanel.track('Viewed signup page');
   },
 
@@ -477,7 +480,7 @@ module.exports = GelatoPage.extend({
         return false;
       }
 
-      if (cardNumber.length < 13 || cardNumber > 19 || !ccRegexp.test(cardNumber)) {
+      if (cardNumber.length < 13 || cardNumber.length > 19 || !ccRegexp.test(cardNumber)) {
         this.displayErrorMessage(app.locale('pages.signup.errorInvalidCCNumber'));
         return false;
       }
