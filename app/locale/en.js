@@ -140,6 +140,19 @@ module.exports = {
       "demoLink": "Try it out now"
     },
 
+    "signup": {
+      "title": "Signup - Skritter",
+      "errorCCExpired": "The credit card has expired.",
+      "errorInvalidCCNumber": "Invalid credit card number entered.",
+      "errorInvalidRecaptcha": "The reCAPTCHA must be answered correctly.",
+      "errorInvalidPasswordLength": "Password length must be 6 characters or longer.",
+      "errorInvalidPasswords": "Invalid password entered or passwords don\'t match",
+      "errorInvalidEmail": "Invalid email address entered.",
+      "errorNoCCNmber": "You must enter a credit card number.",
+      "errorNoUsername": "You must enter a username.",
+      "errorDuplicateUsername": "Another person has taken the username #{username}. Please choose another one."
+    },
+
     "starredWords": {
       "title": "Starred Words - Skritter",
       "confirmDeleteDialogTitle": "Are you sure you want to delete all your starred words?",
