@@ -46,7 +46,13 @@ module.exports = {
       "textbookAdditionalInfo": "Published lists marked as textbooks must go through a review process by the Skritter team. Before you submit, please include information about the textbook in the description of the list such as the full title, author(s), ISBN, edition, and publication date."
     },
     "vocablistHistory": {
-      "title": "Vocablist History"
+      "title": "Vocablist History",
+      "addedNewWords": "Added #{num} new words",
+      "addedSection": "Added #{section}",
+      "noHistory": "This list has no history yet.",
+      "removed": "Removed #{removed}",
+      "renamed": "Renamed #{oldName} to #{newName}",
+      "unknownChange": "Made a change to the list"
     }
   },
 
