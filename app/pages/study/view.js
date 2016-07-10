@@ -77,7 +77,13 @@ module.exports = GelatoPage.extend({
     return this;
   },
 
-  addItem: function() {
+  /**
+   * Adds an item to the study queue
+   * @method addItem
+   * @param {Boolean} silenceNoItems whether to suppress messages to the user
+   *                                 about the items added if nothing was added.
+   */
+  addItem: function(silenceNoItems) {
     var self = this;
     this.schedule.addItems(
       {
@@ -87,6 +93,32 @@ module.exports = GelatoPage.extend({
       function(error, result) {
         if (!error) {
           var added = result.numVocabsAdded;
+
+
+
+          if (added === 0) {
+            if (silenceNoItems) {
+              return;
+            }
+
+            $.notify(
+              {
+                title: 'Update',
+                message: 'No more words to add. <a href="/vocablists/browse">Add a new list</a>'
+              },
+              {
+                type: 'pastel-info',
+                animate: {
+                  enter: 'animated fadeInDown',
+                  exit: 'animated fadeOutUp'
+                },
+                delay: 5000,
+                icon_type: 'class'
+              }
+            );
+            return;
+          }
+
           $.notify(
             {
               title: 'Update',

@@ -129,7 +129,7 @@ module.exports = GelatoComponent.extend({
           }
         );
         if (app.user.isItemAddingAllowed() && count < 5) {
-          self.page.addItem();
+          self.page.addItem(true);
         }
         self.dueCount = count;
         self.render();
