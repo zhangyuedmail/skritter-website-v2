@@ -29,7 +29,7 @@ gelato-component(data-name='vocablists-browse-table')
                 span.glyphicon.glyphicon-plus-sign.text-success
                 span Add to queue
             else
-              span= _.capitalize(list.get('studyingMode'))
+              span= _.capitalize(list.getNormalizedStudyingMode())
 
   else if view._layout === 'grid'
     #grid
