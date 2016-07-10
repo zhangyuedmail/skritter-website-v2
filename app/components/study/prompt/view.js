@@ -33,13 +33,15 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method initialize
+   * @param {Object} options
    * @constructor
    */
-  initialize: function() {
+  initialize: function(options) {
     //properties
     this.$inputContainer = null;
     this.$panelLeft = null;
     this.$panelRight = null;
+    this.page = options.page;
     this.part = null;
     this.review = null;
     this.reviews = null;

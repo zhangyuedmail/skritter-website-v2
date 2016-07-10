@@ -17,7 +17,7 @@ module.exports = GelatoPage.extend({
     ScreenLoader.show();
 
     this.item = null;
-    this.prompt = new Prompt();
+    this.prompt = new Prompt({page: this});
     this.queue = [];
     this.schedule = new Items();
     this.scheduleState = 'standby';
