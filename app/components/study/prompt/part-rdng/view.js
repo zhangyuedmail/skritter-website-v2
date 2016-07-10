@@ -44,6 +44,9 @@ module.exports = GelatoComponent.extend({
 
     this.registerShortcuts = !this.showReadingPrompt;
 
+    // TODO: get from the user? The abstraction is built in if someday we want to support BoPoMoFo input..
+    this.zhInputType = 'pinyin';
+
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
   },
@@ -78,6 +81,7 @@ module.exports = GelatoComponent.extend({
    * Called when attempting to advance to the next prompt via the enter key
    */
   completeReading: function() {
+    this._processTextPreCorrection();
     var vocabReading = this.prompt.review.vocab.get('reading');
     var userReading = this.$('#reading-prompt').val();
 
@@ -250,10 +254,15 @@ module.exports = GelatoComponent.extend({
   },
 
   isCorrectZH: function(userReading, vocabReading) {
-    var finalAnswer = this._prepareFinalAnswer(userReading);
-    var vocabReadings = vocabReading.split(', ').map(function(r) {
-      return app.fn.pinyin.toTone(r);
-    });
+    var finalAnswer = '';
+    var vocabReadings = [];
+
+    if (this.zhInputType === 'pinyin') {
+      finalAnswer = this._prepareFinalAnswerPinyin(userReading);
+      vocabReadings = vocabReading.split(', ').map(function(r) {
+        return app.fn.pinyin.toTone(r).replace(' ... ', '');
+      });
+    }
 
     return vocabReadings.indexOf(finalAnswer) > -1;
   },
@@ -269,7 +278,7 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
-   *
+   * Handles what happens when the user submits the reading answer based on its completion.
    * @private
    */
   _processPromptSubmit: function() {
@@ -289,7 +298,9 @@ module.exports = GelatoComponent.extend({
   _processPromptInput: function(event) {
     var newValue = '';
     if (app.isChinese(event)) {
-      newValue = this._parsePinyinInput(null, event);
+      if (this.zhInputType === 'pinyin') {
+        newValue = this._parsePinyinInput(null, event);
+      }
     } else {
       // TODO: analyze kana
     }
@@ -298,7 +309,9 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
-   *
+   * Gets the value from the UI input and mutates it with the necessary
+   * modifications to turn it into the proper pinyin representation we want
+   * to show.
    * @param {String} input the text to process
    * @param {jQuery.Event} event the original keypress event that changed the input
    * @returns {String} the processed input string
@@ -328,8 +341,6 @@ module.exports = GelatoComponent.extend({
 
     // regex helpers
     var toneNumInput = /[1-5]/;
-
-    // needs positive lookahead to keep the number in when we split
     var toneSubscript = /([₁-₅][1-5]?)/;
 
     // used to detect if a user is attempting to change an existing tone
@@ -343,20 +354,31 @@ module.exports = GelatoComponent.extend({
       '5': '₅'
     };
 
+    var doubleInitials = /(zh)|(ch)|(sh)/;
+    var initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)/;
+
     // input will be split into a format like ["gōng", "₁", "zuo4"]
     input = input.split(toneSubscript);
     // console.log('split input: ', input);
     var wordlike;
+    var wordlikeMinusEnd;
+    var lastChar;
     var currTone;
     var res;
+    var resMinusEnd;
 
     // loop through each part and perform the necessary mutations
     for (var i = 0; i < input.length; i++) {
+
+      // setup our data
       wordlike = input[i];
+      wordlikeMinusEnd = wordlike.slice(0, -1);
+      lastChar = wordlike.slice(wordlike.length - 1, wordlike.length);
 
       currTone = toneNumInput.exec(wordlike) || [];
 
       res = app.fn.pinyin.toTone(wordlike.replace(/ü/g, 'v'));
+      resMinusEnd = app.fn.pinyin.toTone(wordlikeMinusEnd.replace(/ü/g, 'v') + '5');
 
       // case 1: mutation for a new complete word that needs to be added e.g. gong1 -> gōng₁ if the conversion matched a pattern
       if (res && res !== wordlike && currTone.length) {
@@ -379,6 +401,15 @@ module.exports = GelatoComponent.extend({
         // push the new version of the word onto the stack e.g. gōng₁
         processed.push(res + subMap[newTone]);
       }
+
+      // case 3: add pinyin neutral tone e.g. (typing 有的時候) yǒudes -> yǒude₅s
+      else if (wordlikeMinusEnd && resMinusEnd && resMinusEnd !== wordlikeMinusEnd + '5' && initials.test(lastChar)) {
+        processed.push(resMinusEnd + subMap['5']);
+
+        // push the unprocessed last character we chopped off
+        processed.push(lastChar);
+      }
+
       // TODO: case 3: pinyin was valid word, user added a letter that isn't valid e.g. gōng₁ -> gōnwg₁
 
       // fallthrough case: no mutations made
@@ -398,7 +429,6 @@ module.exports = GelatoComponent.extend({
 
     // needs positive lookahead to keep the number in when we split
     var toneSubscript = /([₁-₅][1-5]?)/;
-
 
     // used to detect if a user is attempting to change an existing tone
     var isToneSubscript = /[₁-₅]/;
@@ -439,13 +469,62 @@ module.exports = GelatoComponent.extend({
     return processed.join('');
   },
 
-  _prepareFinalAnswer: function(answer) {
+  /**
+   * Modifies the internal representation of the user's answer before
+   * submitting it to the correction process. Does not modify the UI,
+   * only deals with the value being sent to the corrector.
+   * @param {String} answer
+   * @returns {String} the modified user's answer
+   * @method _prepareFinalAnswerPinyin
+   * @private
+   */
+  _prepareFinalAnswerPinyin: function(answer) {
+    var modAnswer = answer;
+
+    // remove tone subscripts
+    modAnswer = modAnswer.split(/[₁-₅]/)
+      .join('')
+      .toLowerCase()
+      .replace(' ... ', '');
+
+    return modAnswer;
+  },
+
+  /**
+   * Analyzes and mutates the value of the reading prompt UI input as
+   * a preprocess before being sent through the correction process.
+   * Use this when you want to change the actual value of the input the user sees.
+   * For internal representation edits, use
+   * _prepareFinalAnswerPinyin/_prepareFinalAnswerJA instead.
+   * @method _processTextPreCorrection
+   * @private
+   */
+  _processTextPreCorrection: function() {
+    var text = this.$('#reading-prompt').val().toLowerCase();
+
     if (app.isChinese()) {
-      // remove tone subscripts
-      return answer.split(/[₁-₅]/).join('').toLowerCase();
-    } else {
-      // TODO: ja
-      return answer;
+      if (this.zhInputType === 'pinyin') {
+        text = this._processPinyinPreCorrection(text);
+      }
     }
+
+    this.$('#reading-prompt').val(text);
+  },
+
+  /**
+   * Analyzes and mutates the value of some pinyin input as
+   * a preprocess before being sent through the correction process.
+   * @param {String} input the answer to process
+   * @returns {String} the processed pinyin input
+   * @method _processPinyinPreCorrection
+   * @private
+   */
+  _processPinyinPreCorrection: function(input) {
+    var output = input;
+    if (/[a-z]/.test(input.substring(input.length - 1))) {
+      output = output + '₅';
+    }
+
+    return output;
   }
 });
