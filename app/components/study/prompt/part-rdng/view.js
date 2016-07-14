@@ -98,7 +98,7 @@ module.exports = GelatoComponent.extend({
     }
 
     if (this.showReadingPrompt) {
-      this.$('.answer').addClass("grade-" + this.prompt.review.get('score'))
+      this._applyGradeColoring();
     }
 
     // TODO: this will cause problems if user submits an answer,
@@ -134,6 +134,10 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     this._applyGradeToPromptInput();
 
+    if (this.showReadingPrompt) {
+      this.setReadingPromptFocus();
+    }
+
     return this;
   },
 
@@ -160,7 +164,7 @@ module.exports = GelatoComponent.extend({
 
     if (this.showReadingPrompt) {
       this.prompt.shortcuts.unregisterAll();
-      this.$('#reading-prompt').focus();
+      this.setReadingPromptFocus();
     }
 
     return this;
@@ -205,10 +209,10 @@ module.exports = GelatoComponent.extend({
    * @param {jQuery.Event} event the keyup event
    */
   handleReadingPromptKeydown: function(event) {
+    this.prompt.shortcuts.unregisterAll();
     if (event.keyCode === 13) {
       event.stopPropagation();
       event.preventDefault();
-
       this._processPromptSubmit();
     }
   },
@@ -267,14 +271,36 @@ module.exports = GelatoComponent.extend({
     return vocabReadings.indexOf(finalAnswer) > -1;
   },
 
+  setReadingPromptFocus: function() {
+    var input = this.$('#reading-prompt');
+    var rawInputEl = input[0];
+    var textLength = input.val().length;
+    input.focus();
+    if (rawInputEl.setSelectionRange) {
+      rawInputEl.setSelectionRange(textLength, textLength);
+    }
+  },
+
   _applyGradeToPromptInput: function() {
     // TODO: a metric (not imperial) crapton of analysis on the userAnswer.
     // Find out what they got wrong and let the user know. Learning!
     if (this.prompt.review.isComplete() && this.showReadingPrompt) {
       var grade = this.prompt.review.get('score');
 
-      this.$('#reading-prompt').addClass('prompt-grade-' + grade);
+      // this.$('#reading-prompt').addClass('prompt-grade-' + grade);
+      this._applyGradeColoring(grade);
     }
+  },
+
+  _applyGradeColoring: function(score) {
+    var $answer = this.$('.answer');
+    var $promptInput = this.$('#reading-prompt');
+
+    score = score || this.prompt.review.get('score');
+    $answer.removeClass('grade-1 grade-2 grade-3 grade-4');
+    $answer.addClass("grade-" + score);
+    $promptInput.removeClass('grade-1 grade-2 grade-3 grade-4');
+    $promptInput.addClass("prompt-grade-" + score);
   },
 
   /**
@@ -283,8 +309,14 @@ module.exports = GelatoComponent.extend({
    */
   _processPromptSubmit: function() {
     if (this.prompt.review.isComplete()) {
-      this.prompt.review.stop();
-      this.prompt.next();
+
+      // if it's already answered but the user changed their previous answer, regrade it
+      if (this.showReadingPrompt && this.$('#reading-prompt').val() !== this.userReading) {
+        this.completeReading();
+      } else {
+        this.prompt.review.stop();
+        this.prompt.next();
+      }
     } else {
       this.completeReading();
     }
@@ -522,6 +554,9 @@ module.exports = GelatoComponent.extend({
   _processPinyinPreCorrection: function(input) {
     var output = input;
     if (/[a-z]/.test(input.substring(input.length - 1))) {
+      // TODO: check that syllable is valid before appending a 5
+      var wordlike = input.slice(0, -1);
+      if (app.fn.pinyin.toTone(wordlike.replace(/ü/g, 'v') + '5'))
       output = output + '₅';
     }
 
