@@ -41,6 +41,9 @@ bootstrap-navbar[data-name='default'] {
       li > a {
         color: $grey7;
       }
+      .dropdown-menu {
+        z-index: 8000;
+      }
     }
     .open > a {
       &:hover {
