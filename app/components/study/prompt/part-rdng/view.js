@@ -398,6 +398,7 @@ module.exports = GelatoComponent.extend({
     var currTone;
     var res;
     var resMinusEnd;
+    var resPotentialNeutral;
 
     // loop through each part and perform the necessary mutations
     for (var i = 0; i < input.length; i++) {
@@ -411,6 +412,10 @@ module.exports = GelatoComponent.extend({
 
       res = app.fn.pinyin.toTone(wordlike.replace(/ü/g, 'v'));
       resMinusEnd = app.fn.pinyin.toTone(wordlikeMinusEnd.replace(/ü/g, 'v') + '5');
+
+      // check that the input (e.g. ren) could be a valid syllable
+      // rather than interpreting it as re5 + n (as an initial)
+      resPotentialNeutral = app.fn.pinyin.getData()[wordlike.replace(/ü/g, 'v') + '5'];
 
       // case 1: mutation for a new complete word that needs to be added e.g. gong1 -> gōng₁ if the conversion matched a pattern
       if (res && res !== wordlike && currTone.length) {
@@ -435,7 +440,8 @@ module.exports = GelatoComponent.extend({
       }
 
       // case 3: add pinyin neutral tone e.g. (typing 有的時候) yǒudes -> yǒude₅s
-      else if (wordlikeMinusEnd && resMinusEnd && resMinusEnd !== wordlikeMinusEnd + '5' && initials.test(lastChar)) {
+      else if (wordlikeMinusEnd && resMinusEnd && resMinusEnd !== wordlikeMinusEnd + '5' && initials.test(lastChar) &&
+        !resPotentialNeutral) {
         processed.push(resMinusEnd + subMap['5']);
 
         // push the unprocessed last character we chopped off
