@@ -465,7 +465,7 @@ module.exports = GelatoPage.extend({
       return false;
     }
 
-    if (!formData.recaptcha) {
+    if (!formData.recaptcha && !app.isDevelopment()) {
       this.displayErrorMessage(app.locale('pages.signup.errorInvalidRecaptcha'));
       return false;
     }
