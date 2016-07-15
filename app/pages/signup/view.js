@@ -77,8 +77,8 @@ module.exports = GelatoPage.extend({
     this.user = new User();
     this.userReferral = app.getUserReferral();
     this.couponCode = app.getStoredCouponCode();
-    
-    mixpanel.track('Viewed signup page');
+
+    app.mixpanel.track('Viewed signup page');
   },
 
   /**
@@ -147,7 +147,7 @@ module.exports = GelatoPage.extend({
               callback(error);
             } else {
               mixpanel.alias(self.user.id);
-              mixpanel.track(
+              app.mixpanel.track(
                 'Signup',
                 {
                   'Display Name': self.user.get('name'),

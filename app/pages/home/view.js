@@ -10,7 +10,7 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    mixpanel.track('Viewed home page');
+    app.mixpanel.track('Viewed home page');
   },
 
   events: {
@@ -46,7 +46,7 @@ module.exports = GelatoPage.extend({
    */
   handleClickLinkAppleStore: function(event) {
     event.preventDefault();
-    mixpanel.track('Clicked ios app button');
+    app.mixpanel.track('Clicked ios app button');
     window.open('https://itunes.apple.com/us/artist/inkren-llc/id402280587', '_blank');
   },
 
@@ -56,10 +56,10 @@ module.exports = GelatoPage.extend({
    */
   handleClickLinkGoogleStore: function(event) {
     event.preventDefault();
-    mixpanel.track('Clicked android app button');
+    app.mixpanel.track('Clicked android app button');
     window.open('https://play.google.com/store/apps/developer?id=Skritter', '_blank');
   },
-  
+
   /**
    * @method remove
    * @returns {Home}

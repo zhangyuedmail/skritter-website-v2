@@ -5,7 +5,7 @@ var DashboardQueue = require('components/dashboard/queue/view');
 var DashboardTotal = require('components/dashboard/total/view');
 
 /**
- * A page that shows a summary of the user's review count due, stats, and lists 
+ * A page that shows a summary of the user's review count due, stats, and lists
  * they're studying.
  * @class Dashboard
  * @extends {GelatoPage}
@@ -22,7 +22,7 @@ module.exports = GelatoPage.extend({
    * @type {Function}
    */
   template: require('./template'),
-  
+
   /**
    * @method initialize
    * @constructor
@@ -33,7 +33,7 @@ module.exports = GelatoPage.extend({
     this._views['total'] = new DashboardTotal();
     this._views['queue'] = new DashboardQueue();
 
-    mixpanel.track('Viewed dashboard page');
+    app.mixpanel.track('Viewed dashboard page');
   },
 
   /**
@@ -42,7 +42,7 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    
+
     this._views['goal'].setElement('#dashboard-goal-container').render();
     this._views['month'].setElement('#dashboard-month-container').render();
     this._views['total'].setElement('#dashboard-total-container').render();
