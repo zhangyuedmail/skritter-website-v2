@@ -362,7 +362,7 @@ module.exports = GelatoComponent.extend({
       output = this._processPinyinDeletion(toProcess, event);
     }
 
-    console.log("lastInput: ", this.lastInput, "original input: ", originalInput, "new input: ", output);
+    // console.log("lastInput: ", this.lastInput, "original input: ", originalInput, "new input: ", output);
     this.lastInput = output;
 
     return output;
@@ -384,6 +384,14 @@ module.exports = GelatoComponent.extend({
       '3': '₃',
       '4': '₄',
       '5': '₅'
+    };
+
+    var revSubMap = {
+      '₁': '1',
+      '₂': '2',
+      '₃': '3',
+      '₄': '4',
+      '₅': '5'
     };
 
     var doubleInitials = /(zh)|(ch)|(sh)/;
@@ -439,16 +447,27 @@ module.exports = GelatoComponent.extend({
         processed.push(res + subMap[newTone]);
       }
 
+      // case 3: if both the current wordlike and wordlikeMinusEnd are valid words
+      // e.g. liàng and liàn, always take the longer version
+      else if (i !== input.length - 1 && wordlike && revSubMap[input[i + 1]] &&
+        app.fn.pinyin.toTone(app.fn.pinyin.removeToneMarks(wordlike) + revSubMap[input[i + 1]]) ) {
+
+        processed.push(wordlike.replace(/v/g, 'ü'));
+      }
+
       // case 3: add pinyin neutral tone e.g. (typing 有的時候) yǒudes -> yǒude₅s
       else if (wordlikeMinusEnd && resMinusEnd && resMinusEnd !== wordlikeMinusEnd + '5' && initials.test(lastChar) &&
         !resPotentialNeutral) {
+
+
+
         processed.push(resMinusEnd + subMap['5']);
 
         // push the unprocessed last character we chopped off
         processed.push(lastChar);
       }
 
-      // TODO: case 3: pinyin was valid word, user added a letter that isn't valid e.g. gōng₁ -> gōnwg₁
+      // TODO: case n: pinyin was valid word, user added a letter that isn't valid e.g. gōng₁ -> gōnwg₁
 
       // fallthrough case: no mutations made
       else {
@@ -481,7 +500,6 @@ module.exports = GelatoComponent.extend({
 
     // input will be split into a format like ["gōng", "₁", "zuo4"]
     input = input.split(toneSubscript);
-    console.log('split input: ', input);
     var wordlike;
     var currTone;
     var res;
