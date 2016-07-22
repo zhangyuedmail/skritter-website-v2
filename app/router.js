@@ -315,7 +315,6 @@ module.exports = Router.extend({
    * @method navigateNotFound
    */
   navigateNotFound: function() {
-    this.navigate('not-found');
     this.go('pages/not-found');
   },
 
