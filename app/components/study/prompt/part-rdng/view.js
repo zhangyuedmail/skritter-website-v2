@@ -36,8 +36,9 @@ module.exports = GelatoComponent.extend({
    */
   initialize: function(options) {
     this.prompt = options.prompt;
+    this.prompt.review = this.prompt.reviews.current();
 
-    this.userReading = '';
+    this.userReading =  this.prompt.review.get('userReading') || '';
 
     // only support pinyin for first go around. Nihongo ga kite imasu!
     this.showReadingPrompt = app.isDevelopment() && app.isChinese();
@@ -58,7 +59,6 @@ module.exports = GelatoComponent.extend({
   render: function() {
     this.renderTemplate();
 
-    this.prompt.review = this.prompt.reviews.current();
     this.prompt.canvas.grid = false;
     this.prompt.canvas.reset();
     this.prompt.navigation.render();
@@ -87,9 +87,10 @@ module.exports = GelatoComponent.extend({
 
     this.userReading = userReading;
 
+    this.prompt.review.set('userReading', userReading);
     if (!this.showReadingPrompt || this.isCorrect(userReading, vocabReading)) {
       this.prompt.review.set('complete', true);
-
+      this.prompt.review.set('score', 3);
       this.render();
     } else {
       this.prompt.review.set('score', 1);
