@@ -72,7 +72,7 @@ module.exports = GelatoApplication.extend({
    */
   defaults: {
     apiDomain: location.hostname.indexOf('.cn') > -1 ? '.cn' : '.com',
-    apiRoot: 'https://beta.skritter',
+    apiRoot: 'https://legacy.skritter',
     apiVersion: 0,
     demoLang: 'zh',
     description: '{!application-description!}',
