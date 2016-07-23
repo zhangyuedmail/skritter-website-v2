@@ -8,14 +8,6 @@ var VocablistRemoveDialog = require('dialogs/vocablist-remove/view');
  */
 module.exports = GelatoComponent.extend({
   /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function(options) {
-    this.vocablists = options.vocablists;
-    this.listenTo(this.vocablists, 'state', this.render);
-  },
-  /**
    * @property events
    * @type {Object}
    */
@@ -24,19 +16,32 @@ module.exports = GelatoComponent.extend({
     'click .list-settings-span': 'handleClickListSettingsSpan',
     'click .remove-list-span': 'handleClickRemoveListSpan'
   },
+  
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+  
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function(options) {
+    this.vocablists = options.vocablists;
+    this.listenTo(this.vocablists, 'state', this.render);
+  },
+  
   /**
    * @method render
    * @returns {VocablistTable}
    */
   render: function() {
     this.renderTemplate();
+    
     return this;
   },
+  
   /**
    * @method handleClickStopAddingLink
    * @param {Event} event
@@ -48,6 +53,7 @@ module.exports = GelatoComponent.extend({
     list.save({'studyingMode': 'reviewing'}, {patch: true});
     this.render();
   },
+  
   /**
    * @method handleClickListSettingsSpan
    * @param {Event} event
@@ -59,6 +65,7 @@ module.exports = GelatoComponent.extend({
     this.dialog = new VocablistSettings({vocablist: list});
     this.dialog.render().open();
   },
+  
   /**
    * @method handleClickRemoveListSpan
    * @param {Event} event
