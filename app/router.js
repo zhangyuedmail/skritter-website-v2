@@ -32,6 +32,7 @@ module.exports = Router.extend({
     'contact': 'navigateContact',
     'dashboard': 'navigateDashboard',
     'demo': 'navigateDemo',
+    'discourse/login': 'navigateDiscourseLogin',
     'features': 'navigateFeatures',
     'home': 'navigateHome',
     'institutions': 'navigateInstitutions',
@@ -254,6 +255,14 @@ module.exports = Router.extend({
     } else {
       this.go('pages/demo');
     }
+  },
+
+  /**
+   * @method navigateDiscourseLogin
+   */
+  navigateDiscourseLogin: function() {
+    //TODO: redirect to legacy until support is added
+    location.href = location.href.toString().replace('https://www.', 'http://legacy.');
   },
 
   /**
