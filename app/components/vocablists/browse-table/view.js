@@ -5,7 +5,23 @@ var Vocablists = require('collections/vocablists');
  * @class VocablistBrowseTable
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+  module.exports = GelatoComponent.extend({
+    /**
+     * @property events
+     * @typeof {Object}
+     */
+    events: {
+      'click #title-sort': 'handleClickTitleSort',
+      'click #popularity-sort': 'handleClickPopularitySort',
+      'click .add-to-queue-link': 'handleClickAddToQueueLink'
+    },
+
+    /**
+     * @property template
+     * @type {Function}
+     */
+    template: require('./template'),
+
   /**
    * @method initialize
    * @constructor
@@ -30,20 +46,7 @@ module.exports = GelatoComponent.extend({
       }
     });
   },
-  /**
-   * @property events
-   * @typeof {Object}
-   */
-  events: {
-    'click #title-sort': 'handleClickTitleSort',
-    'click #popularity-sort': 'handleClickPopularitySort',
-    'click .add-to-queue-link': 'handleClickAddToQueueLink'
-  },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
    * @returns {VocablistTable}
@@ -55,6 +58,7 @@ module.exports = GelatoComponent.extend({
     this.delegateEvents();
     return this;
   },
+
   /**
    * @method handleClickTitleSort
    * @param {Event} event
@@ -64,6 +68,7 @@ module.exports = GelatoComponent.extend({
     this._sortType = 'title';
     this.render();
   },
+
   /**
    * @method handleClickPopularitySort
    * @param {Event} event
@@ -73,6 +78,7 @@ module.exports = GelatoComponent.extend({
     this._sortType = 'popularity';
     this.render();
   },
+
   /**
    * @method handleClickAddToQueueLink
    * @param {Event} event
@@ -87,6 +93,7 @@ module.exports = GelatoComponent.extend({
       this.render();
     }
   },
+
   /**
    * @method handleLoadImageError
    * @param {Event} event
@@ -94,6 +101,7 @@ module.exports = GelatoComponent.extend({
   handleLoadImageError: function(event) {
     $(event.target).remove();
   },
+
   /**
    * @method setFilterString
    * @param {String} value
@@ -102,6 +110,7 @@ module.exports = GelatoComponent.extend({
     this._filterString = value.toLowerCase();
     this.render();
   },
+
   /**
    * @method setLayout
    * @param {String} value
@@ -110,6 +119,7 @@ module.exports = GelatoComponent.extend({
     this._layout = value.toLowerCase();
     this.render();
   },
+
   /**
    * @method update
    * @returns {VocablistBrowseTable}
@@ -120,6 +130,7 @@ module.exports = GelatoComponent.extend({
     this.updateSort();
     return this;
   },
+
   /**
    * @method updateFilter
    */
@@ -128,14 +139,14 @@ module.exports = GelatoComponent.extend({
       if (this._filterString !== '') {
         var name = vocablist.get('name').toLowerCase();
         var shortName = vocablist.get('shortName').toLowerCase();
+
         if (_.includes(name, this._filterString)) {
           return true;
         }
-        if (_.includes(shortName, this._filterString)) {
-          return true;
-        }
-        return false
+
+        return _.includes(shortName, this._filterString);
       }
+
       if (this._filterType.length) {
         //TODO: support checkbox filters
         return false;
@@ -143,6 +154,7 @@ module.exports = GelatoComponent.extend({
       return true;
     }).bind(this));
   },
+    
   /**
    * @method updateSort
    */
