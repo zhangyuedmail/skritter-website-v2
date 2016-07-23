@@ -39,16 +39,20 @@ gelato-component(data-name='vocablists-browse-table')
             .grid-tile
               .tile-header.text-center.text-capitalize
                 a(href="/vocablists/view/" + list.id)= list.get('name')
+              span.img-center
               img(src=list.getImageUrl())
               .background
-                span.glyphicon.glyphicon-book
-              .footer.text-center
+              div.footer.text-center(class= list.get('studyingMode') === 'adding' ? (list.justAdded ? 'just-added' : 'adding') : '')
                 if list.get('studyingMode') === 'not studying'
                   span.add-to-queue-link(data-vocablist-id=list.id)
                     span.glyphicon.glyphicon-plus-sign.text-success
-                    span Add to queue
+                    span.add-to-queue Add to queue
                 else
-                  span= _.capitalize(list.get('studyingMode'))
+                  if list.justAdded
+                    span.glyphicon.glyphicon-ok-sign
+                    span Added
+                  else
+                    span= _.capitalize(list.getNormalizedStudyingMode())
           if i % 4 === 3
             .clearfix
         .clearfix
