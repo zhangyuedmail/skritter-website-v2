@@ -21,7 +21,11 @@ module.exports = {
       "defn": "definition",
       "rdng": "reading",
       "rune": "writing",
-      "tone": "tone"
+      "tone": "tone",
+      "defnCapital": "Definition",
+      "rdngCapital": "Reading",
+      "runeCapital": "Writing",
+      "toneCapital": "Tone"
     },
     "save": "Save",
     "saving": "Saving",
@@ -163,6 +167,14 @@ module.exports = {
       "title": "Starred Words - Skritter",
       "confirmDeleteDialogTitle": "Are you sure you want to delete all your starred words?",
       "confirmDeleteDialogBody": "All your words will be completely unstarred once you press confirm."
+    },
+
+    "stats": {
+      "added": "Added",
+      "forgot": "forgot",
+      "learned": "learned",
+      "reviews": "Reviews",
+      "retention": "Retention"
     },
 
     "vocabLists": {

@@ -101,10 +101,13 @@ module.exports = GelatoComponent.extend({
       tooltip: {
         formatter: function() {
           var partName = self.partName;
+          var date = self._getDateFromRangeOffset(this.key);
+          var verb = this.point.y >= 0 ? app.locale('pages.stats.learned') : app.locale('pages.stats.forgot');
+          var absY = Math.abs(this.point.y);
 
           // TODO: plural hack--get a proper string key for like defnPlural or something
-          partName = this.point.y !== 1 ? partName : partName.substring(0, partName.length - 1);
-          return self._getDateFromRangeOffset(this.key) + ' : learned <b>'+this.point.y+'</b> ' + partName;
+          partName = absY !== 1 ? partName : partName.substring(0, partName.length - 1);
+          return date + ' : ' + verb + ' <b>' + absY + '</b> ' + partName;
         }
       }
     });
@@ -175,14 +178,15 @@ module.exports = GelatoComponent.extend({
   getRangeData: function() {
     var chartData = [];
     var total = 0;
-    var length = this.collection.length > 6 ? 6 : this.collection.length - 1;
+    var collection = this.range ? this.collection.getStatsInRange(this.range.start, this.range.end) : this.collection.models;
+    var length = collection.length > 6 && !this.range ? 6 : collection.length - 1;
     var studied = 0;
     var remembered = 0;
     var retentionRate = 0;
     var stats = [];
 
     for (var i = length; i >= 0; i--) {
-      var stat = this.collection.at(i).get(this.type)[this.part];
+      var stat = collection[i].get(this.type)[this.part];
       stats.push(stat);
       chartData.push(stat.learned.day);
       total += stat.learned.day;
@@ -204,6 +208,10 @@ module.exports = GelatoComponent.extend({
   },
 
   _getAdded: function(stats) {
+    if (!stats.length) {
+      return 0;
+    }
+
     var start = stats[0];
     var end = stats[stats.length - 1];
 

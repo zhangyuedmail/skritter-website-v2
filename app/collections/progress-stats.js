@@ -365,26 +365,26 @@ module.exports = SkritterCollection.extend({
   },
 
 
-    /**
-     * @method getDailyItemsReviewed
-     * @returns {Number}
-     */
-    getDailyItemsReviewed: function() {
-      var total = 0;
-      var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
-      var stat = this.get(today);
-      if (stat) {
-        total += stat.get('char').defn.studied.day;
-        total += stat.get('char').rdng.studied.day;
-        total += stat.get('char').rune.studied.day;
-        total += stat.get('char').tone.studied.day;
-        total += stat.get('word').defn.studied.day;
-        total += stat.get('word').rdng.studied.day;
-        total += stat.get('word').rune.studied.day;
-        total += stat.get('word').tone.studied.day;
-      }
-      return total;
-    },
+  /**
+   * @method getDailyItemsReviewed
+   * @returns {Number}
+   */
+  getDailyItemsReviewed: function() {
+    var total = 0;
+    var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
+    var stat = this.get(today);
+    if (stat) {
+      total += stat.get('char').defn.studied.day;
+      total += stat.get('char').rdng.studied.day;
+      total += stat.get('char').rune.studied.day;
+      total += stat.get('char').tone.studied.day;
+      total += stat.get('word').defn.studied.day;
+      total += stat.get('word').rdng.studied.day;
+      total += stat.get('word').rune.studied.day;
+      total += stat.get('word').tone.studied.day;
+    }
+    return total;
+  },
 
   /**
    * @method getDailyTimeStudied
@@ -577,6 +577,16 @@ module.exports = SkritterCollection.extend({
     }
 
     return this.convertToLargestTimeUnit(timeStudied);
+  },
+
+  /**
+   * Public wrapper to get stats models for a specified date range
+   * @param {String} start the start date (inclusive) in YYYY-MM-DD format
+   * @param {String} end the end date (inclusive) in YYYY-MM-DD format
+   * @returns {Array<ProgressStat>} The models within the specified range
+   */
+  getStatsInRange: function(start, end) {
+    return this._getStatsInRange(start, end);
   },
 
   /**
