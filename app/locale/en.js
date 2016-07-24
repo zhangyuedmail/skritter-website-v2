@@ -30,6 +30,7 @@ module.exports = {
     "save": "Save",
     "saving": "Saving",
     "settings": "Settings",
+    "undo": "Undo",
     "update": "Update",
     "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription.",
     "zh": "Chinese"
@@ -178,12 +179,15 @@ module.exports = {
     },
 
     "vocabLists": {
+      "addSection": "Add section",
       "addToQueue": "Add to queue",
       "backToCpod": "back to ChinesePod lists",
       "backToMy": "back to my lists",
       "backToOfficial": "back to official lists",
       "backToPublished": "back to published lists",
       "complete": "complete",
+      "deleted": "deleted",
+      "enterDescription": "Enter a description here",
       "export": "Export",
       "history": "History",
       "publish": "Publish",

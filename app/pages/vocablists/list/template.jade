@@ -30,12 +30,15 @@ gelato-page(data-name='vocablists-list')
                     #editing-buttons
                       if editor.editing
                         button#discard-changes.btn.btn-primary
-                          i.fa.fa-close &nbsp;#{app.locale('common.cancel')}&nbsp;
+                          i.fa.fa-close
+                          | #{app.locale('common.cancel')}
                         button#save-changes.btn.btn-success
-                          i.fa.fa-save &nbsp;#{app.locale('common.save')}&nbsp;
+                          i.fa.fa-save
+                          | #{app.locale('common.save')}
                       else
                         button#edit-list.btn.btn-success
-                          i.fa.fa-pencil &nbsp;Edit&nbsp;
+                          i.fa.fa-pencil
+                          | Edit
 
               .list-stats
                 span.spr Made by:
@@ -66,7 +69,7 @@ gelato-page(data-name='vocablists-list')
                 span= vocablist.getWordCount()
 
               if view.editing
-                textarea.list-description= vocablist.get('description')
+                textarea.list-description(placeholder=app.locale('pages.vocabLists.enterDescription'))= vocablist.get('description')
               else
                 .list-description !{vocablist.get('description')}
 
@@ -83,5 +86,4 @@ gelato-page(data-name='vocablists-list')
                   .col-xs-12
                     button#add-section.btn.btn-success
                       i.fa.fa-plus
-                      | &nbsp;&nbsp;
-                      | Add section
+                      | #{app.locale('pages.vocabLists.addSection')}

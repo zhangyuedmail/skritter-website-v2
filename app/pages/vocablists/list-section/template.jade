@@ -25,9 +25,9 @@ gelato-page(data-name='vocablists-list-section')
                       | &nbsp;
                       span= vocablist.get('name')
                   if editor.editing
-                    input#section-name(value=vocablistSection.get('name'))
+                    input#section-name.section-name(value=vocablistSection.get('name'))
                   else
-                    #section-name= vocablistSection.get('name') || '(empty)'
+                    #section-name.section-name= vocablistSection.get('name') || '(empty)'
                 .col-xs-6.text-right
                   #editing-buttons
                     if vocablist.isEditable()
