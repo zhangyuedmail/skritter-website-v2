@@ -72,18 +72,22 @@ var GelatoView = Backbone.View.extend({
   handleClickHref: function(event) {
     var target = Backbone.$(event.currentTarget);
     var href = target.attr('href');
+    var ignore = target.data('ignore');
     if (window.app !== undefined &&
       window.app.router !== undefined &&
+      !ignore &&
       href !== undefined &&
       href.indexOf('#') !== 0 &&
       href.indexOf('http://') !== 0 &&
       href.indexOf('https://') !== 0) {
       event.preventDefault();
+      var dataReplace = target.data('replace');
+      var dataTrigger = target.data('trigger');
       window.app.router.navigate(
         href,
         {
-          replace: target.data('replace') || false,
-          trigger: target.data('trigger') || true
+          replace: dataReplace !== undefined ? dataReplace : false,
+          trigger: dataTrigger !== undefined ? dataTrigger : true
         }
       );
     }
