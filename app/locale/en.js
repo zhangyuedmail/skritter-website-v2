@@ -136,9 +136,9 @@ module.exports = {
     },
 
     "home": {
-      "motto1": "Chinese & Japanese",
-      "motto2": "characters, made fun",
-      "headerText": "The best way to learn Chinese and Japanese",
+      "motto1": "Your path to",
+      "motto2": "Chinese & Japanese mastery",
+      "headerText": "Chinese and Japanese made fun",
       "planeHeader": "Characters on the go",
       "planeText": "Learn Chinese & Japanese characters anywhere, even in Antarctica.",
       "flashcardsHeader": "Smart flashcards",
