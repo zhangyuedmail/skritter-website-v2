@@ -36,6 +36,8 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
+    $.getScript('https://www.youtube.com/iframe_api');
+    window.onYouTubeIframeAPIReady = this.handleYouTubeIframeAPIReady.bind(this);
 
     return this;
   },
@@ -61,10 +63,37 @@ module.exports = GelatoPage.extend({
   },
 
   /**
+   * @method handleYouTubeStateChangePromoVideo
+   */
+  handleYouTubeStateChangePromoVideo: function(event) {
+    if (event.data === -1) {
+      app.mixpanel.track('Started home promo video');
+    }
+  },
+
+  /**
+   * @method handleYouTubeIframeAPIReady
+   */
+  handleYouTubeIframeAPIReady: function() {
+    new YT.Player(
+      'promo-video',
+      {
+        videoId: 'LafTN34lc_Q',
+        height: '360',
+        width: '640',
+        events: {
+          onStateChange: this.handleYouTubeStateChangePromoVideo.bind(this)
+        }
+      }
+    );
+  },
+
+  /**
    * @method remove
    * @returns {Home}
    */
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
   }
+
 });
