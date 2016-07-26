@@ -1,6 +1,12 @@
 function init(token) {
   if (window.mixpanel === undefined) {
-    window.mixpanel = {track: function() {}};
+    window.mixpanel = {
+      alias: function() {},
+      identify: function() {},
+      init: function() {},
+      register: function() {},
+      track: function() {}
+    };
     console.warn('Unable to init mixpanel');
   } else {
     window.mixpanel.init(token);
