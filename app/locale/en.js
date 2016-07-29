@@ -153,7 +153,13 @@ module.exports = {
 
     "signup": {
       "title": "Signup - Skritter",
+      "errorCouponAlreadyUsed": "",
+      "errorCouponExpired": "The coupon code is expired.",
+      "errorCouponExhausted": "The coupon code has exhausted all its uses.",
+      "errorCouponInvalid": "The coupon code entered was not valid.",
+      "errorCouponNotReady": "The coupon code is not ready for use. Try again later.",
       "errorCCExpired": "The credit card has expired.",
+      "errorDefault": "Unknown error while signing up. Please try again.",
       "errorInvalidCCNumber": "Invalid credit card number entered.",
       "errorInvalidRecaptcha": "The reCAPTCHA must be answered correctly.",
       "errorInvalidPasswordLength": "Password length must be 6 characters or longer.",

@@ -364,14 +364,40 @@ module.exports = GelatoPage.extend({
       error.code === 'invalid_expiry_year' ||
       error.code === 'incorrect_number') {
       this.displayErrorMessage(error.message);
+      return;
     }
 
+    var errorMsg = '';
+
     // user API errors
-    if (error.statusCode === 400) {
-      if (error.message === "Another user is already using that display name.") {
-        var errorMsg = app.locale('pages.signup.errorDuplicateUsername').replace('#{username}', this.user.get('name'));
-        this.displayErrorMessage(errorMsg);
+    if (error.statusCode === 404) {
+      if (error.message === "Coupon not found.") {
+        errorMsg = app.locale('pages.signup.errorCouponInvalid');
       }
+    }
+
+    if (error.statusCode === 400) {
+      switch(error.message) {
+        case "Another user is already using that display name.":
+          errorMsg = app.locale('pages.signup.errorDuplicateUsername').replace('#{username}', this.user.get('name'));
+          break;
+        case "This coupon is expired.":
+          errorMsg = app.locale('pages.signup.errorCouponExpired');
+          break;
+        case "Code has already been used.":
+          errorMsg = app.locale('pages.signup.errorCouponAlreadyUsed');
+          break;
+        case "Coupon is not ready for use. Try again later.":
+          errorMsg = app.locale('pages.signup.errorCouponNotReady');
+          break;
+        case "This code has been exhausted.":
+          errorMsg = app.locale('pages.signup.errorCouponExhausted');
+          break;
+        default:
+          errorMsg = app.locale('pages.signup.errorDefault');
+      }
+
+      this.displayErrorMessage(errorMsg);
     }
   },
 
