@@ -102,7 +102,7 @@ module.exports = {
       "setupExplanation": "All these settings and more can be changed later, these are just to get you started.",
       "setupYourAccount": "Let's setup your account!",
       "simpChars": "Simplified Characters",
-      "simpCharsDescription": "Used in the People's Republic of China (PRC)",
+      "simpCharsDescription": "Used in the People's Republic of China (PRC) and Singapore",
       "timezoneLabel": "Timezone",
       "tradChars": "Traditional Characters",
       "tradCharsDescription": "Used in Taiwan (RoC), Hong Kong, and Macau"
