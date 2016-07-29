@@ -19,7 +19,7 @@ module.exports = GelatoPage.extend({
    */
   initialize: function() {
     StripeLoader.load();
-    this.coupon = new Coupon({code: ''});
+    this.coupon = new Coupon({code: app.getStoredCouponCode() || ''});
     this.sidebar = new AccountSidebar();
     this.subscription = new Subscription({id: app.user.id});
     this.listenTo(this.subscription, 'state', this.render);
