@@ -23,9 +23,6 @@
     "start": "node ./bin/start",
     "test": "node ./bin/test"
   },
-  "dependencies": {
-    "lodash": "~4.13.0"
-  },
   "devDependencies": {
     "auto-reload-brunch": "~2.7.0",
     "brunch": "~2.8.0",
