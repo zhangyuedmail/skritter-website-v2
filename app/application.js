@@ -475,49 +475,49 @@ module.exports = GelatoApplication.extend({
     }
 
     //use async for cleaner loading code
-    async.series([
-      function(callback) {
-        //check for user authentication type
-        if (app.user.id === 'application') {
-          app.user.session.authenticate(
-            'client_credentials',
-            null,
-            null,
-            function() {
-              callback();
-            },
-            function() {
-              callback();
-            }
-          );
-        } else {
-          app.user.session.refresh(
-            function() {
-              callback();
-            },
-            function(error) {
-              // if the session token is invalid, log the user out.
-              // TODO: get referesh tokens working properly
-              if (error.responseJSON.statusCode === 400 && error.responseJSON.message.indexOf("No such refresh token") > -1) {
-                app.user.logout();
-              } else {
+    async.series(
+      [
+        function(callback) {
+          //check for user authentication type
+          if (app.user.id === 'application') {
+            app.user.session.authenticate(
+              'client_credentials',
+              null,
+              null,
+              function() {
+                callback();
+              },
+              function() {
                 callback();
               }
-            }
-          );
+            );
+          } else {
+            app.user.session.refresh(
+              function() {
+                callback();
+              },
+              function(error) {
+                // TODO: get refresh tokens working properly
+                // if the session token is invalid, log the user out
+                if (error.responseJSON.statusCode === 400 &&
+                  error.responseJSON.message.indexOf("No such refresh token") > -1) {
+                  app.user.logout();
+                } else {
+                  callback();
+                }
+              }
+            );
+          }
         }
-      },
-      //load primary user based on state
-      function(callback) {
-        app.user.load(callback);
+      ],
+      function() {
+        setTimeout(function() {
+          ScreenLoader.hide();
+          app.loadHelpscout();
+          app.router.start();
+        }, 500);
       }
-    ], function() {
-      setTimeout(function() {
-        ScreenLoader.hide();
-        app.loadHelpscout();
-        app.router.start();
-      }, 500);
-    });
+    );
 
   }
 });
