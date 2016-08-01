@@ -36,6 +36,16 @@ module.exports = {
     "zh": "Chinese"
   },
 
+  "components": {
+    "studyPrompt": {
+      "addListCallToAction": "If you don't have any lists to study from yet, add a new one!",
+      "canUsePlus": "Remember! You can also use the plus button",
+      "canUsePlus2": "to add an item to your queue.",
+      "manageLists": "Manage Lists",
+      "pleaseWait": "Please hang tight while we find some items for you to study..."
+    }
+  },
+
   "navbar": {
     "backToOldSkritter": "Back to Skritter 1.0",
     "backToOldSkritterAlt": "New Skritter too spicy? Return to the original flavor.",
