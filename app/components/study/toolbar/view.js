@@ -69,14 +69,13 @@ module.exports = GelatoComponent.extend({
         null,
         {
           error: function() {
-            //TODO: show some kind of error message
             ScreenLoader.hide();
             dialog.close();
           },
           success: function() {
-            self.page.schedule.reset();
+            self.page.items.reset();
             self.page.prompt.reset();
-            self.page.loadSchedule();
+            self.page.next();
             dialog.close();
           }
         }
