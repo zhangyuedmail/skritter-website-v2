@@ -416,26 +416,6 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
-   * @method reset
-   */
-  reset: function() {
-    app.user.setLastItemUpdate(0).cache();
-    async.parallel(
-      [
-        function(callback) {
-          app.user.db.items.clear().finally(callback);
-        },
-        function(callback) {
-          app.user.db.reviews.clear().finally(callback);
-        }
-      ],
-      function() {
-        app.reload();
-      }
-    );
-  },
-
-  /**
    * @method start
    */
   start: function() {
