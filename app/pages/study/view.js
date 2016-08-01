@@ -20,6 +20,8 @@ module.exports = GelatoPage.extend({
     this.item = null;
     this.items = new Items();
     this.prompt = new Prompt({page: this});
+    this.promptCurrent = null;
+    this.promptPrevious = null;
     this.scheduleState = 'standby';
     this.toolbar = new Toolbar({page: this});
 
@@ -72,6 +74,7 @@ module.exports = GelatoPage.extend({
       this._views['recipe'].setElement('#recipes-container').render();
     }
 
+    this.prompt.reviewStatus.setItems(this.items);
     this.next();
 
     return this;
@@ -161,19 +164,23 @@ module.exports = GelatoPage.extend({
    */
   handlePromptNext: function(promptItems) {
     var self = this;
-    var review = promptItems.getReview();
-    this.items.reviews.put(
-      review,
-      null,
-      function() {
-        if (self.items.reviews.length > 3) {
-          self.items.reviews.post({skip: 1});
+    if (this.item) {
+      var review = promptItems.getReview();
+      this.items.reviews.put(
+        review,
+        null,
+        function() {
+          if (self.items.reviews.length > 3) {
+            self.items.reviews.post({skip: 1});
+          }
+          self.items.addHistory(self.item);
+          self.item = null;
+          self.next();
         }
-        self.items.addHistory(self.item);
-        self.item = null;
-        self.next();
-      }
-    );
+      );
+    } else {
+      this.prompt.reviewStatus.render();
+    }
   },
 
   /**
@@ -189,6 +196,7 @@ module.exports = GelatoPage.extend({
    */
   next: function() {
     var items = this.items.getNext();
+    this.prompt.reviewStatus.render();
     if (items.length) {
       ScreenLoader.hide();
       this.item = items[0];
@@ -199,7 +207,6 @@ module.exports = GelatoPage.extend({
     } else {
       this.items.clearHistory();
       this.items.fetchNext({limit: 10}, this.next.bind(this));
-      this.prompt.reviewStatus.setReviews(this.items.reviews);
     }
   },
 

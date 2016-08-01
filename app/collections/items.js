@@ -173,6 +173,14 @@ module.exports = SkritterCollection.extend({
   },
 
   /**
+   * @method hasNext
+   * @returns {Boolean}
+   */
+  hasNext: function() {
+    return this.getNext().length > 0;
+  },
+
+  /**
    * @method parse
    * @param {Object} response
    * @returns {Object}

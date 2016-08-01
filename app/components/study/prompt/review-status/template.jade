@@ -1,9 +1,9 @@
 gelato-component(data-name="study-prompt-review-status")
-  - var items = view.prompt.page.items;
+  - var items = view.items;
 
-  if items.reviews.length
+  if items && items.reviews.length
 
-    if items.reviews.state === 'standby'
+    if items.hasNext() && items.reviews.state === 'standby'
       button#save-reviews.btn.btn-sm.btn-success= 'Save (' + items.reviews.length + ')'
     else
       #loading-indicator
