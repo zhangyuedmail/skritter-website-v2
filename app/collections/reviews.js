@@ -86,7 +86,7 @@ module.exports = SkritterCollection.extend({
             ].join('');
           });
           $.ajax({
-            url: app.getApiUrl() + 'reviews?spaceItems=false',
+            url: app.getApiUrl() + 'reviews',
             async: options.async,
             headers: app.user.session.getHeaders(),
             type: 'POST',
