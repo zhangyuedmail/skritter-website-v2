@@ -1,5 +1,6 @@
 var SkritterModel = require('base/skritter-model');
 var Session = require('models/session');
+var Vocablists = require('collections/vocablists');
 
 /**
  * A model that represents a Skritter user.
@@ -7,13 +8,6 @@ var Session = require('models/session');
  * @extends {SkritterModel}
  */
 module.exports = SkritterModel.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    this.session = new Session(null, {user: this});
-  },
 
   /**
    * @property defaults
@@ -44,6 +38,23 @@ module.exports = SkritterModel.extend({
    * @type {String}
    */
   urlRoot: 'users',
+
+  /**
+   * A vocablist collection
+   * @property vocablists
+   * @type {Vocablists}
+   */
+  vocablists: new Vocablists(),
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.session = new Session(null, {user: this});
+  },
+
+
 
   /**
    * @method cache
