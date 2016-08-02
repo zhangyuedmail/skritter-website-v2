@@ -9,9 +9,9 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    mixpanel.track('Viewed login page');
+    app.mixpanel.track('Viewed login page');
   },
-  
+
   /**
    * @property title
    * @type {String}

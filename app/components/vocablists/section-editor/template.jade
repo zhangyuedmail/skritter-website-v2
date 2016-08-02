@@ -15,15 +15,15 @@ gelato-component(data-name='vocablists-list-section-editor')
     .row(class=classes.join(' '), data-index=index, data-section-id=section.id)
       if section.deleted
         .col-xs-6
-          span.deleted-text= '(deleted)'
+          span.deleted-text= app.locale('pages.vocabLists.deleted')
         .col-xs-6.text-right
           if view.editing
             i#restore-section.fa.fa-undo.cursor-pointer
-              span.undo-text Undo
+              span.undo-text= app.locale('common.undo')
       else
         .col-xs-6
           if view.editing
-            input#section-name(value=section.name)
+            input#section-name.section-name(value=section.name)
           else
             a(href="/vocablists/view/" + vocablist.id + "/" + section.id)
               span= section.name || '(empty)'

@@ -12,11 +12,11 @@ gelato-component[data-name='study-prompt-vocab-sentence'] {
     display: none;
     font-family: $font-ubuntu;
     .hint-definition {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 300;
     }
     .hint-reading {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 400;
     }
   }
@@ -24,7 +24,7 @@ gelato-component[data-name='study-prompt-vocab-sentence'] {
   .value {
     color: $grey3;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 400;
   }
 

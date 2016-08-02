@@ -1,5 +1,6 @@
 var SkritterModel = require('base/skritter-model');
 var Session = require('models/session');
+var Vocablists = require('collections/vocablists');
 
 /**
  * A model that represents a Skritter user.
@@ -7,13 +8,6 @@ var Session = require('models/session');
  * @extends {SkritterModel}
  */
 module.exports = SkritterModel.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    this.session = new Session(null, {user: this});
-  },
 
   /**
    * @property defaults
@@ -24,6 +18,7 @@ module.exports = SkritterModel.extend({
     avatar: require('data/default-avatar'),
     allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     allJapaneseParts: ['defn', 'rdng', 'rune'],
+    dailyItemAddingLimit: 20,
     filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     filteredJapaneseParts: ['defn', 'rdng', 'rune'],
     hideDefinition: false,
@@ -43,6 +38,23 @@ module.exports = SkritterModel.extend({
    * @type {String}
    */
   urlRoot: 'users',
+
+  /**
+   * A vocablist collection
+   * @property vocablists
+   * @type {Vocablists}
+   */
+  vocablists: new Vocablists(),
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.session = new Session(null, {user: this});
+  },
+
+
 
   /**
    * @method cache
@@ -153,6 +165,14 @@ module.exports = SkritterModel.extend({
    */
   isAudioEnabled: function() {
     return this.get('volume') > 0;
+  },
+
+  /**
+   * @method isItemAddingAllowed
+   * @returns {Boolean}
+   */
+  isItemAddingAllowed: function() {
+    return this.get('addFrequency') > 0;
   },
 
   /**

@@ -2,6 +2,7 @@ var GelatoApplication = require('gelato/application');
 var AddVocabDialog = require('dialogs1/add-vocab/view');
 var User = require('models/user');
 var Functions = require('functions');
+var Mixpanel = require('mixpanel');
 var Router = require('router');
 var Config = require('config');
 
@@ -42,6 +43,7 @@ module.exports = GelatoApplication.extend({
     Raygun.setVersion(this.get('version'));
 
     this.fn = Functions;
+    this.mixpanel = Mixpanel;
     this.router = new Router();
     this.user = new User({id: this.getSetting('user') || 'application'});
 
@@ -55,8 +57,8 @@ module.exports = GelatoApplication.extend({
       ga('set', 'forceSSL', true);
     }
 
-    if (window.mixpanel && this.isWebsite()) {
-      mixpanel.init(this.getMixpanelKey());
+    if (this.isWebsite()) {
+      this.mixpanel.init(this.getMixpanelKey());
     }
 
     if (this.isDevelopment()) {
@@ -70,7 +72,7 @@ module.exports = GelatoApplication.extend({
    */
   defaults: {
     apiDomain: location.hostname.indexOf('.cn') > -1 ? '.cn' : '.com',
-    apiRoot: 'https://beta.skritter',
+    apiRoot: 'https://legacy.skritter',
     apiVersion: 0,
     demoLang: 'zh',
     description: '{!application-description!}',

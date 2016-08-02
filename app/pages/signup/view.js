@@ -8,21 +8,6 @@ var User = require('models/user');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-
-  /**
-   * Creates a new Signup View.
-   * @param {Object} options
-   * @constructor
-   */
-  initialize: function(options) {
-    this.plan = options.plan;
-    this.subscribing = false;
-    this.user = new User();
-    this.userReferral = app.getUserReferral();
-    this.couponCode = app.getStoredCouponCode();
-    mixpanel.track('Viewed signup page');
-  },
-
   /**
    * @property events
    * @type Object
@@ -77,7 +62,24 @@ module.exports = GelatoPage.extend({
    * The page title to display
    * @type {String}
    */
-  title: 'Signup - Skritter',
+  title: app.locale('pages.signup.title'),
+
+  /**
+   * Creates a new Signup View.
+   * @param {Object} options
+   * @constructor
+   */
+  initialize: function(options) {
+    _.bindAll(this, '_saveNewUser');
+
+    this.plan = options.plan;
+    this.subscribing = false;
+    this.user = new User();
+    this.userReferral = app.getUserReferral();
+    this.couponCode = app.getStoredCouponCode();
+
+    app.mixpanel.track('Viewed signup page');
+  },
 
   /**
    * @method render
@@ -135,21 +137,7 @@ module.exports = GelatoPage.extend({
     this.user.set('client', 'website');
 
     async.series([
-      function(callback) {
-        ScreenLoader.post('Creating new user');
-        self.user.save(
-          null,
-          {
-            error: function(user, error) {
-              callback(error);
-            },
-            success: function(user) {
-              app.removeSetting('siteRef');
-              callback();
-            }
-          }
-        )
-      },
+      this._saveNewUser,
       function(callback) {
         app.user.login(
           formData.username,
@@ -159,7 +147,7 @@ module.exports = GelatoPage.extend({
               callback(error);
             } else {
               mixpanel.alias(self.user.id);
-              mixpanel.track(
+              app.mixpanel.track(
                 'Signup',
                 {
                   'Display Name': self.user.get('name'),
@@ -174,8 +162,7 @@ module.exports = GelatoPage.extend({
           }
         )
       },
-      this._processUserReferral,
-      this._sendWelcomeEmail
+      this._processUserReferral
     ], callback);
   },
 
@@ -254,14 +241,6 @@ module.exports = GelatoPage.extend({
         this.subscribeCoupon(formData);
       }
     }
-  },
-
-  /**
-   * @method remove
-   * @returns {Signup}
-   */
-  remove: function() {
-    return GelatoPage.prototype.remove.call(this);
   },
 
   /**
@@ -385,13 +364,40 @@ module.exports = GelatoPage.extend({
       error.code === 'invalid_expiry_year' ||
       error.code === 'incorrect_number') {
       this.displayErrorMessage(error.message);
+      return;
     }
 
+    var errorMsg = '';
+
     // user API errors
-    if (error.statusCode === 400) {
-      if (error.message === "Another user is already using that display name.") {
-        this.displayErrorMessage("Another person has taken the username " + this.user.get('name') + ". Please choose another one.");
+    if (error.statusCode === 404) {
+      if (error.message === "Coupon not found.") {
+        errorMsg = app.locale('pages.signup.errorCouponInvalid');
       }
+    }
+
+    if (error.statusCode === 400) {
+      switch(error.message) {
+        case "Another user is already using that display name.":
+          errorMsg = app.locale('pages.signup.errorDuplicateUsername').replace('#{username}', this.user.get('name'));
+          break;
+        case "This coupon is expired.":
+          errorMsg = app.locale('pages.signup.errorCouponExpired');
+          break;
+        case "Code has already been used.":
+          errorMsg = app.locale('pages.signup.errorCouponAlreadyUsed');
+          break;
+        case "Coupon is not ready for use. Try again later.":
+          errorMsg = app.locale('pages.signup.errorCouponNotReady');
+          break;
+        case "This code has been exhausted.":
+          errorMsg = app.locale('pages.signup.errorCouponExhausted');
+          break;
+        default:
+          errorMsg = app.locale('pages.signup.errorDefault');
+      }
+
+      this.displayErrorMessage(errorMsg);
     }
   },
 
@@ -432,30 +438,26 @@ module.exports = GelatoPage.extend({
   },
 
   /**
-   * Sends an email that welcomes the new user to Skritter.
-   * @param {Function} callback called when the process is complete
+   * Saves a new user to the server and marks it as new to the frontend code.
+   * Updates the screenloader with progress
+   * @param {Function} callback called when the user is saved
    * @private
    */
-  _sendWelcomeEmail: function(callback) {
-    if (app.isProduction()) {
-      ScreenLoader.post('Sending welcome email');
-      $.ajax({
-        method: 'GET',
-        url: 'https://api-dot-write-way.appspot.com/v1/email/welcome',
-        data: {
-          client: 'website',
-          token: app.user.session.get('access_token')
-        },
-        error: function(error) {
+  _saveNewUser: function(callback) {
+    ScreenLoader.post('Creating new user');
+    this.user.isNewUser = true;
+    this.user.save(
+      null,
+      {
+        error: function(user, error) {
           callback(error);
         },
-        success: function() {
-          callback()
+        success: function(user) {
+          app.removeSetting('siteRef');
+          callback();
         }
-      });
-    } else {
-      callback();
-    }
+      }
+    );
   },
 
   /**
@@ -469,30 +471,50 @@ module.exports = GelatoPage.extend({
     var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
     if (_.isEmpty(formData.username)) {
-      this.displayErrorMessage('Invalid username entered.');
+      this.displayErrorMessage(app.locale('pages.signup.errorNoUsername'));
       return false;
     }
 
     if (_.isEmpty(formData.email) || !formData.email.match(emailRegex)) {
-      this.displayErrorMessage('Invalid email address entered.');
+      this.displayErrorMessage(app.locale('pages.signup.errorInvalidEmail'));
       return false;
     }
 
-    // TODO: find serverside validation setting for password length
     if (formData.password1 !== formData.password2 ||
       _.isEmpty(formData.password1)) {
-      this.displayErrorMessage('Invalid password entered or passwords don\'t match');
+      this.displayErrorMessage(app.locale('pages.signup.errorInvalidPasswords'));
       return false;
     }
 
     if (formData.password1.length < 6) {
-      this.displayErrorMessage('Password length must be 6 characters or longer.');
+      this.displayErrorMessage(app.locale('pages.signup.errorInvalidPasswordLength'));
       return false;
     }
 
-    if (!formData.recaptcha) {
-      this.displayErrorMessage('The reCAPTCHA must be correctly answered.');
+    if (!formData.recaptcha && !app.isDevelopment()) {
+      this.displayErrorMessage(app.locale('pages.signup.errorInvalidRecaptcha'));
       return false;
+    }
+
+    if (formData.method === 'credit') {
+      var cardYear = formData.card.expires_year;
+      var cardMonth = formData.card.expires_month;
+      var cardNumber = formData.card.number;
+      var ccRegexp = /^[0-9]+$/;
+      if (!cardNumber) {
+        this.displayErrorMessage(app.locale('pages.signup.errorNoCCNmber'));
+        return false;
+      }
+
+      if (cardNumber.length < 13 || cardNumber.length > 19 || !ccRegexp.test(cardNumber)) {
+        this.displayErrorMessage(app.locale('pages.signup.errorInvalidCCNumber'));
+        return false;
+      }
+
+      if (moment(cardMonth + '-' + cardYear, 'MM-YYYY').diff(moment(), 'months') < 0) {
+        this.displayErrorMessage(app.locale('pages.signup.errorCCExpired'));
+        return false;
+      }
     }
 
     return true;

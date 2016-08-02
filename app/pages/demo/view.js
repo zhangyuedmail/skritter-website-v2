@@ -18,7 +18,7 @@ module.exports = GelatoPage.extend({
     this.dialog = null;
     this.lang = 'zh';
     this.notify = null;
-    this.prompt = new Prompt();
+    this.prompt = new Prompt({page: this});
     this.promptItems = null;
     this.vocab = null;
     this.vocabs = new Vocabs();
@@ -64,7 +64,7 @@ module.exports = GelatoPage.extend({
       function(lang, callback) {
         ScreenLoader.show();
         ScreenLoader.post('Loading demo word');
-        mixpanel.track('Started demo', {'Language': lang});
+        app.mixpanel.track('Started demo', {'Language': lang});
         self.vocabs.fetch({
           data: {
             include_decomps: true,
@@ -128,7 +128,7 @@ module.exports = GelatoPage.extend({
    * @method step2
    */
   step2: function() {
-    mixpanel.track('Completed tracing demo character #1');
+    app.mixpanel.track('Completed tracing demo character #1');
     this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step2')));
     this.prompt.part.eraseCharacter();
     this.prompt.review.set('score', 3);
@@ -140,7 +140,7 @@ module.exports = GelatoPage.extend({
    * @method step3
    */
   step3: function() {
-    mixpanel.track('Completed writing demo character #1');
+    app.mixpanel.track('Completed writing demo character #1');
     this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step3')));
     this.prompt.$('#toolbar-action-container').hide();
     this.prompt.once('character:complete', this.step4.bind(this));
@@ -149,7 +149,7 @@ module.exports = GelatoPage.extend({
    * @method step4
    */
   step4: function() {
-    mixpanel.track('Completed tracing demo character #2');
+    app.mixpanel.track('Completed tracing demo character #2');
     this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step4')));
     this.prompt.part.eraseCharacter();
     this.prompt.review.set('score', 3);
@@ -160,7 +160,7 @@ module.exports = GelatoPage.extend({
    * @method step5
    */
   step5: function() {
-    mixpanel.track('Completed writing demo character #2');
+    app.mixpanel.track('Completed writing demo character #2');
     this.dialog = new DemoCallToActionDialog();
     this.dialog.open();
   },

@@ -10,6 +10,5 @@ gelato-component(data-name='vocablist-history-table')
           .col-md-4= history.get('displayName')
           .col-md-6= history.getChanges()
           .col-md-2= history.getChangedDate()
-            | #{console.log(history)}
   else
-    .row This list has no history yet.
+    .row= app.locale('dialogs.vocablistHistory.noHistory')

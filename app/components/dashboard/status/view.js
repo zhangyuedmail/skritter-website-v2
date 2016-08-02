@@ -6,6 +6,12 @@ var GelatoComponent = require('gelato/component');
  */
 module.exports = GelatoComponent.extend({
   /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./template'),
+  
+  /**
    * @method initialize
    * @constructor
    */
@@ -13,11 +19,7 @@ module.exports = GelatoComponent.extend({
     this.dueCount = null;
     this.updateDueCount();
   },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+  
   /**
    * @method render
    * @returns {DashboardStatus}
@@ -26,6 +28,7 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     return this;
   },
+  
   /**
    * @method updateDueCount
    */
@@ -36,6 +39,7 @@ module.exports = GelatoComponent.extend({
     var now = moment().unix();
     var parts = app.user.getFilteredParts();
     var styles = app.user.getFilteredStyles();
+    
     app.user.db.items
       .where('next')
       .belowOrEqual(now)

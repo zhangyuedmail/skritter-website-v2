@@ -63,6 +63,18 @@ module.exports = SkritterModel.extend({
   },
 
   /**
+   * @method getNormalizedStudyingMode
+   * @returns {String}
+   */
+  getNormalizedStudyingMode: function() {
+    if (_.includes(['adding', 'studing'], this.get('studyingMode'))) {
+      return 'studying';
+    } else {
+      return this.get('studyingMode');
+    }
+  },
+
+  /**
    * @method getImageUrl
    * @returns {String}
    */

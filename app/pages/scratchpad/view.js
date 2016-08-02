@@ -15,7 +15,7 @@ module.exports = GelatoPage.extend({
   initialize: function(options) {
     ScreenLoader.show();
     this.part = options.part;
-    this.prompt = new Prompt();
+    this.prompt = new Prompt({page: this});
     this.vocabs = new Vocabs();
     this.vocabId = app.fn.mapper.toBase(options.writing);
     this.writing = options.writing;

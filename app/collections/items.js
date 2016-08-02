@@ -14,7 +14,7 @@ module.exports = SkritterCollection.extend({
    */
   initialize: function(models, options) {
     options = options || {};
-    
+
     this.cursor = null;
     this.sorted = null;
     this.reviews = new Reviews(null, {items: this});
@@ -67,6 +67,24 @@ module.exports = SkritterCollection.extend({
           success: function() {
             callback(null, result);
           }
+        });
+      },
+      function(result, callback) {
+        app.user.db.transaction(
+          'rw',
+          app.user.db.items,
+          function() {
+            _.forEach(
+              result.Items,
+              function(item) {
+                app.user.db.items.put(item);
+              }
+            );
+          }
+        ).then(function() {
+          callback(null, result);
+        }).catch(function(error) {
+          callback(error);
         });
       }
     ], function(error, result) {

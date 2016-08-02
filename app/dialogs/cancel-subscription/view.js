@@ -68,9 +68,9 @@ module.exports = BootstrapDialog.extend({
       this.requestSaveCancelReason()
     ).done(function() {
       if (app.user.getAccountAgeBy('days') > 7) {
-        mixpanel.track('Unsubscribe', {'Trial': false});
+        app.mixpanel.track('Unsubscribe', {'Trial': false});
       } else {
-        mixpanel.track('Unsubscribe', {'Trial': true});
+        app.mixpanel.track('Unsubscribe', {'Trial': true});
       }
       app.reload();
     });

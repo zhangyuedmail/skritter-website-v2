@@ -22,9 +22,11 @@ gelato-page[data-name='home'] {
 
   #hero-slider {
     position: relative;
+
     img {
       width: 100%;
     }
+
     .carousel-header {
       color: $white1;
       font-size: 36px;
@@ -37,6 +39,12 @@ gelato-page[data-name='home'] {
       }
 
     }
+  }
+
+  #promo-video {
+    margin: auto;
+    display: block;
+    margin-bottom: 80px;
   }
 
   #section-action {
@@ -52,7 +60,8 @@ gelato-page[data-name='home'] {
 
   #section-features {
     .header {
-      margin-bottom: 90px;
+      margin-top: 0px;
+      margin-bottom: 60px;
     }
     .media {
       margin-bottom: 60px;
@@ -188,9 +197,14 @@ gelato-page[data-name='home'] {
 
   @media (max-width: 768px) {
     .motto-text {
-      text-shadow: 1px 1px 5px #222;
+      text-shadow: 2px 2px 4px #151515;
     }
 
+    #hero-slider {
+      img {
+        opacity: 0.9;
+      }
+    }
     .ios-store-link, .android-store-link {
       text-align: center;
       margin-bottom: 15px;

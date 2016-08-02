@@ -1,5 +1,4 @@
 var NavbarComponent = require('gelato/component');
-var ConfirmLogoutDialog = require('dialogs/confirm-logout/view');
 
 /**
  * @class DefaultNavbar
@@ -12,6 +11,7 @@ module.exports = NavbarComponent.extend({
    */
   events: {
     'click #button-beacon': 'handleClickButtonBeacon',
+    'click #refer-link': 'handleClickReferLink',
     'click #switch-targetLang': 'handleClickSwitchTargetLang',
     'click .item-dropdown': 'handleClickDropdown'
   },
@@ -90,6 +90,12 @@ module.exports = NavbarComponent.extend({
       $dropdown.removeClass('open');
       $dropdown.find('.dropdown').addClass('hidden');
     }
+  },
+
+  handleClickReferLink: function(event) {
+    event.preventDefault();
+    app.mixpanel.track('Clicked navbar refer link');
+    app.router.navigate('refer', {trigger: true});
   },
 
   handleClickSwitchTargetLang: function(e) {

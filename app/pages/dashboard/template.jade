@@ -1,6 +1,5 @@
 gelato-page(data-name='dashboard')
 
-
   .container
 
     .row#first-row
@@ -12,19 +11,19 @@ gelato-page(data-name='dashboard')
 
       .col-md-3.hidden-sm.hidden-xs
         .content-block
-          .title This Month
+          .title= app.locale('pages.dashboard.thisMonth')
           .content
             #dashboard-month-container
 
       .col-md-3.hidden-sm.hidden-xs
         .content-block
-          .title All Time
+          .title= app.locale('pages.dashboard.allTime')
           .content
             #dashboard-total-container
 
     .row
       .col-xs-12
         .content-block
-          .title Lists
+          .title= app.locale('pages.dashboard.lists')
           .content
             #dashboard-queue-container

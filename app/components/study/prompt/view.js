@@ -26,18 +26,27 @@ var VocabWriting = require('components/study/prompt/vocab-writing/view');
  */
 module.exports = GelatoComponent.extend({
   /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./template'),
+
+  /**
    * @method initialize
+   * @param {Object} options
    * @constructor
    */
-  initialize: function() {
+  initialize: function(options) {
     //properties
     this.$inputContainer = null;
     this.$panelLeft = null;
     this.$panelRight = null;
+    this.page = options.page;
     this.part = null;
     this.review = null;
     this.reviews = null;
     this.schedule = null;
+
     //components
     this.canvas = new Canvas({prompt: this});
     this.navigation = new Navigation({prompt: this});
@@ -56,20 +65,18 @@ module.exports = GelatoComponent.extend({
     this.vocabWriting = new VocabWriting({prompt: this});
     this.on('resize', this.resize);
   },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
    * @returns {StudyPrompt}
    */
   render: function() {
     this.renderTemplate();
+
     this.$inputContainer = this.$('#input-container');
     this.$panelLeft = this.$('#panel-left');
     this.$panelRight = this.$('#panel-right');
+
     this.canvas.setElement('#canvas-container').render();
     this.navigation.setElement('#navigation-container').render();
     this.reviewStatus.setElement('#review-status-container').render();
@@ -84,10 +91,13 @@ module.exports = GelatoComponent.extend({
     this.vocabSentence.setElement('#vocab-sentence-container').render();
     this.vocabStyle.setElement('#vocab-style-container').render();
     this.vocabWriting.setElement('#vocab-writing-container').render();
+
     this.shortcuts.registerAll();
     this.resize();
+
     return this;
   },
+
   /**
    * @method renderPart
    * @returns {StudyPrompt}
@@ -96,11 +106,13 @@ module.exports = GelatoComponent.extend({
     if (this.part) {
       this.part.remove();
     }
+
     if (this.reviews.isNew()) {
       this.$('#new-ribbon').removeClass('hidden');
     } else {
       this.$('#new-ribbon').addClass('hidden');
     }
+
     switch (this.reviews.part) {
       case 'defn':
         this.part = new PartDefn({prompt: this}).render();
@@ -115,9 +127,15 @@ module.exports = GelatoComponent.extend({
         this.part = new PartTone({prompt: this}).render();
         break;
     }
+
+    // brush dot
+    this.$('#canvas-container').toggleClass('rune', this.reviews.part === 'rune');
+
     this.toolbarVocab.disableEditing();
+
     return this;
   },
+
   /**
    * @method getInputSize
    * @returns {Number}
@@ -130,6 +148,7 @@ module.exports = GelatoComponent.extend({
       return 0;
     }
   },
+
   /**
    * @method isLoaded
    * @returns {Boolean}
@@ -137,12 +156,14 @@ module.exports = GelatoComponent.extend({
   isLoaded: function() {
     return this.reviews ? true : false;
   },
+
   /**
    * @method next
    * @param {Boolean} [skip]
    */
   next: function(skip) {
     this.review.stop();
+
     if (skip || this.reviews.isLast()) {
       if (skip) {
         this.reviews.skip = true;
@@ -154,11 +175,13 @@ module.exports = GelatoComponent.extend({
       this.renderPart();
     }
   },
+
   /**
    * @method previous
    */
   previous: function() {
     this.review.stop();
+
     if (this.reviews.isFirst()) {
       this.trigger('previous', this.reviews);
     } else {
@@ -167,6 +190,7 @@ module.exports = GelatoComponent.extend({
       this.renderPart();
     }
   },
+
   /**
    * @method remove
    * @returns {StudyPrompt}
@@ -174,9 +198,11 @@ module.exports = GelatoComponent.extend({
   remove: function() {
     this.canvas.remove();
     this.navigation.remove();
+
     if (this.part) {
       this.part.remove();
     }
+
     this.reviewStatus.remove();
     this.shortcuts.unregisterAll();
     this.toolbarAction.remove();
@@ -190,8 +216,10 @@ module.exports = GelatoComponent.extend({
     this.vocabSentence.remove();
     this.vocabStyle.remove();
     this.vocabWriting.remove();
+
     return GelatoComponent.prototype.remove.call(this);
   },
+
   /**
    * @method reset
    * @returns {StudyPrompt}
@@ -203,6 +231,7 @@ module.exports = GelatoComponent.extend({
     this.render();
     return this;
   },
+
   /**
    * @method resize
    * @returns {StudyPrompt}
@@ -211,8 +240,10 @@ module.exports = GelatoComponent.extend({
     var inputSize = this.getInputSize();
     this.$inputContainer.css({height: inputSize, width: inputSize});
     this.canvas.resize();
+
     return this;
   },
+
   /**
    * @method set
    * @param {PromptReviews} reviews
@@ -224,8 +255,10 @@ module.exports = GelatoComponent.extend({
     this.renderPart();
     this.navigation.render();
     this.reviewStatus.render();
+
     return this;
   },
+
   /**
    * @method setSchedule
    * @param {Items} schedule
@@ -234,6 +267,7 @@ module.exports = GelatoComponent.extend({
   setSchedule: function(schedule) {
     this.navigation.setReviews(schedule.reviews);
     this.reviewStatus.setReviews(schedule.reviews);
+
     return this;
   }
 });

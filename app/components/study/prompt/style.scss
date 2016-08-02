@@ -46,6 +46,7 @@ gelato-component[data-name='study-prompt'] {
         cursor: pointer;
         position: relative;
         z-index: 5000;
+
         #canvas-container {
           height: 100%;
           left: 0;
@@ -53,7 +54,12 @@ gelato-component[data-name='study-prompt'] {
           top: 0;
           width: 100%;
           z-index: 5002;
+
+          &.rune {
+            cursor: url('#{$dir-assets}/images/brush-dot.png') 11 10, auto;
+          }
         }
+
         #review-container {
           height: 100%;
           left: 0;
@@ -113,10 +119,10 @@ gelato-component[data-name='study-prompt'] {
         width: 12px;
       }
       &::-webkit-scrollbar-thumb {
-        background-color: $white5;
+        background-color: $grey1;
       }
       &::-webkit-scrollbar-track {
-        background-color: transparent;
+        background-color: ($white5 - #030303);
       }
     }
     #review-status-container {
@@ -124,6 +130,12 @@ gelato-component[data-name='study-prompt'] {
       position: absolute;
       right: 15px;
     }
+  }
+
+  .icon-margin {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
 }

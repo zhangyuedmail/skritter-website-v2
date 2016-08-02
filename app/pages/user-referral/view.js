@@ -5,6 +5,13 @@ var GelatoPage = require('gelato/page');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    app.mixpanel.track('Viewed refer page');
+  },
 
   events: {
     'click #user-link': 'handleUserLinkClicked'

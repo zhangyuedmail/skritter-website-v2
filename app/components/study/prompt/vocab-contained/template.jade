@@ -39,7 +39,7 @@ gelato-component(data-name='study-prompt-vocab-contained')
                       | &nbsp;
                       if app.user.get('showHeisig') && child.heisigDefinition
                         em!= child.heisigDefinition + ' - '
-                      span.decomp-definition= child.definitions.en
+                      .decomp-definition= child.definitions.en
 
               if vocabs.length && definition
                 .child-vocab-row

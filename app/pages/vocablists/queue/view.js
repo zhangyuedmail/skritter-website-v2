@@ -23,6 +23,9 @@ module.exports = GelatoPage.extend({
     this.listenTo(
       this.vocablists, 'state:standby',
       function() {
+        if (!this.vocablists.length) {
+          app.router.navigate('vocablists/browse', {trigger: true});
+        }
         if (this.vocablists.cursor) {
           this.vocablists.fetch({
             data: {
@@ -46,6 +49,7 @@ module.exports = GelatoPage.extend({
         lang: app.getLanguage()
       }
     });
+
   },
 
   /**
@@ -62,7 +66,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method render
-   * @returns {VocablistQueue}
+   * @returns {VocablistsQueue}
    */
   render: function() {
     this.renderTemplate();
@@ -75,7 +79,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method remove
-   * @returns {VocablistQueue}
+   * @returns {VocablistsQueue}
    */
   remove: function() {
     this.addingTable.remove();
@@ -84,4 +88,5 @@ module.exports = GelatoPage.extend({
 
     return GelatoPage.prototype.remove.call(this);
   }
+
 });

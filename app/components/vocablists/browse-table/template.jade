@@ -29,7 +29,7 @@ gelato-component(data-name='vocablists-browse-table')
                 span.glyphicon.glyphicon-plus-sign.text-success
                 span Add to queue
             else
-              span= _.capitalize(list.get('studyingMode'))
+              span= _.capitalize(list.getNormalizedStudyingMode())
 
   else if view._layout === 'grid'
     #grid
@@ -37,18 +37,23 @@ gelato-component(data-name='vocablists-browse-table')
         for list, i in view._lists
           .col-md-3
             .grid-tile
-              .tile-header.text-center.text-capitalize
-                a(href="/vocablists/view/" + list.id)= list.get('name')
-              img(src=list.getImageUrl())
-              .background
-                span.glyphicon.glyphicon-book
-              .footer.text-center
+              a(href="/vocablists/view/" + list.id)
+                .tile-header.text-center.text-capitalize
+                  span= list.get('name')
+                span.img-center
+                img(src=list.getImageUrl())
+                .background
+              div.footer.text-center(class= list.get('studyingMode') === 'adding' ? (list.justAdded ? 'just-added' : 'adding') : '')
                 if list.get('studyingMode') === 'not studying'
                   span.add-to-queue-link(data-vocablist-id=list.id)
                     span.glyphicon.glyphicon-plus-sign.text-success
-                    span Add to queue
+                    span.add-to-queue Add to queue
                 else
-                  span= _.capitalize(list.get('studyingMode'))
+                  if list.justAdded
+                    span.glyphicon.glyphicon-ok-sign
+                    span Added
+                  else
+                    span= _.capitalize(list.getNormalizedStudyingMode())
           if i % 4 === 3
             .clearfix
         .clearfix

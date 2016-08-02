@@ -10,22 +10,40 @@ module.exports = {
     "confirm": "Confirm",
     "cancel": "Cancel",
     "changePhoto": "Change Photo",
+    "continue": "Continue",
     "copy": "Copy",
     "delete": "Delete",
     "errorApplication": "Application Error",
     "errorUserReferralExpired": "User referrals can only be used with new accounts.",
     "errorUserReferralFailed": "Error making user referral. Please try again.",
+    "ja": "Japanese",
     "parts": {
       "defn": "definition",
       "rdng": "reading",
       "rune": "writing",
-      "tone": "tone"
+      "tone": "tone",
+      "defnCapital": "Definition",
+      "rdngCapital": "Reading",
+      "runeCapital": "Writing",
+      "toneCapital": "Tone"
     },
     "save": "Save",
     "saving": "Saving",
     "settings": "Settings",
+    "undo": "Undo",
     "update": "Update",
-    "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription."
+    "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription.",
+    "zh": "Chinese"
+  },
+
+  "components": {
+    "studyPrompt": {
+      "addListCallToAction": "If you don't have any lists to study from yet, add a new one!",
+      "canUsePlus": "Remember! You can also use the plus button",
+      "canUsePlus2": "to add an item to your queue.",
+      "manageLists": "Manage Lists",
+      "pleaseWait": "Please hang tight while we find some items for you to study..."
+    }
   },
 
   "navbar": {
@@ -43,7 +61,13 @@ module.exports = {
       "textbookAdditionalInfo": "Published lists marked as textbooks must go through a review process by the Skritter team. Before you submit, please include information about the textbook in the description of the list such as the full title, author(s), ISBN, edition, and publication date."
     },
     "vocablistHistory": {
-      "title": "Vocablist History"
+      "title": "Vocablist History",
+      "addedNewWords": "Added #{num} new words",
+      "addedSection": "Added #{section}",
+      "noHistory": "This list has no history yet.",
+      "removed": "Removed #{removed}",
+      "renamed": "Renamed #{oldName} to #{newName}",
+      "unknownChange": "Made a change to the list"
     }
   },
 
@@ -77,6 +101,23 @@ module.exports = {
       "userIdDescription": "Unique system id for your account. Cannot be changed."
     },
 
+    "accountSetup": {
+      "title": "Account Configure - Skritter",
+      "bothChars": "Both!",
+      "bothCharsDescription": "You want to be a true Chinese master",
+      "charTypeLabel": "What style characters do you want to study?",
+      "countryLabel": "Country",
+      "errorNoCharacterTypeSelected": "You must select either simplified, traditional, or both character types to study.",
+      "languageLabel": "What language do you want to learn?",
+      "setupExplanation": "All these settings and more can be changed later, these are just to get you started.",
+      "setupYourAccount": "Let's setup your account!",
+      "simpChars": "Simplified Characters",
+      "simpCharsDescription": "Used in the People's Republic of China (PRC) and Singapore",
+      "timezoneLabel": "Timezone",
+      "tradChars": "Traditional Characters",
+      "tradCharsDescription": "Used in Taiwan (RoC), Hong Kong, and Macau"
+    },
+
     "contact": {
       "title": "Contact Us",
       "email": "Email",
@@ -91,19 +132,52 @@ module.exports = {
       "submit": "Submit"
     },
 
+    "dashboard": {
+      "title": "Dashboard - Skritter",
+      "allTime": "All Time",
+      "thisMonth": "This Month",
+      "lists": "Lists"
+    },
+
+    "features": {
+      "callToAction": "Try it out now",
+      "handwritingTitle": "Handwriting Recognition",
+      "handwritingDescription": "With Skritter you write characters in your browser and get real-time grading."
+    },
+
     "home": {
-      "motto1": "Chinese & Japanese",
-      "motto2": "characters, made fun",
-      "headerText": "The best way to learn Chinese and Japanese",
+      "motto1": "Your path to",
+      "motto2": "Chinese & Japanese mastery",
+      "headerText": "Chinese and Japanese made fun",
       "planeHeader": "Characters on the go",
       "planeText": "Learn Chinese & Japanese characters anywhere, even in Antarctica.",
       "flashcardsHeader": "Smart flashcards",
       "flashcardsText": "Skritter gives you immediate stroke-level feedback and helps you review hard characters more often.",
       "freeTrial": "Start your 7-day free trial",
       "bookHeader": "Studying, your way",
-      "bookText": "Start learning from hundreds of textbooks and users lists, or make your own.",
+      "bookText": "Start learning from hundreds of textbooks and users' lists, or make your own.",
       "reviewHeader": "Efficient reviewing",
-      "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn."
+      "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn.",
+      "demoLink": "Try it out now"
+    },
+
+    "signup": {
+      "title": "Signup - Skritter",
+      "errorCouponAlreadyUsed": "",
+      "errorCouponExpired": "The coupon code is expired.",
+      "errorCouponExhausted": "The coupon code has exhausted all its uses.",
+      "errorCouponInvalid": "The coupon code entered was not valid.",
+      "errorCouponNotReady": "The coupon code is not ready for use. Try again later.",
+      "errorCCExpired": "The credit card has expired.",
+      "errorDefault": "Unknown error while signing up. Please try again.",
+      "errorInvalidCCNumber": "Invalid credit card number entered.",
+      "errorInvalidRecaptcha": "The reCAPTCHA must be answered correctly.",
+      "errorInvalidPasswordLength": "Password length must be 6 characters or longer.",
+      "errorInvalidPasswords": "Invalid password entered or passwords don\'t match",
+      "errorInvalidEmail": "Invalid email address entered.",
+      "errorNoCCNmber": "You must enter a credit card number.",
+      "errorNoUsername": "You must enter a username.",
+      "errorDuplicateUsername": "Another person has taken the username #{username}. Please choose another one."
     },
 
     "starredWords": {
@@ -112,13 +186,24 @@ module.exports = {
       "confirmDeleteDialogBody": "All your words will be completely unstarred once you press confirm."
     },
 
+    "stats": {
+      "added": "Added",
+      "forgot": "forgot",
+      "learned": "learned",
+      "reviews": "Reviews",
+      "retention": "Retention"
+    },
+
     "vocabLists": {
+      "addSection": "Add section",
       "addToQueue": "Add to queue",
       "backToCpod": "back to ChinesePod lists",
       "backToMy": "back to my lists",
       "backToOfficial": "back to official lists",
       "backToPublished": "back to published lists",
       "complete": "complete",
+      "deleted": "deleted",
+      "enterDescription": "Enter a description here",
       "export": "Export",
       "history": "History",
       "publish": "Publish",

@@ -1,6 +1,6 @@
 gelato-component(data-name='stats-study-part-linegraph')
   .row.hidden-md.hidden-lg
-    - var title = view.part === 'rune' ? 'Writing' : view.part === 'rdng' ? 'Reading' : view.part === 'defn' ? 'Definition' : 'Tone';
+    - var title = app.locale('common.parts.' + view.part +'Capital');
     #graph-title.graph-title #{title}
   .row
     .col-md-9.col-xs-9
@@ -9,11 +9,11 @@ gelato-component(data-name='stats-study-part-linegraph')
       .num.num-learned#num-learned ...
   .row
     .col-md-4.col-xs-4
-      .num-label Added
+      .num-label= app.locale('pages.stats.added')
       .num#num-added ...
     .col-md-4.col-xs-4
-      .num-label Reviews
+      .num-label= app.locale('pages.stats.reviews')
       .num#num-reviews ...
     .col-md-4.col-xs-4
-      .num-label Retention
+      .num-label= app.locale('pages.stats.retention')
       .num#num-retention ...

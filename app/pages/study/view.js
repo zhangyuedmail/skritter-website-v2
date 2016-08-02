@@ -1,8 +1,8 @@
 var GelatoPage = require('gelato/page');
 var Prompt = require('components/study/prompt/view');
 var Toolbar = require('components/study/toolbar/view');
-var Items = require('collections/items');
 var Recipes = require('components/common/recipes/view');
+var Items = require('collections/items');
 
 /**
  * @class Study
@@ -17,7 +17,7 @@ module.exports = GelatoPage.extend({
     ScreenLoader.show();
 
     this.item = null;
-    this.prompt = new Prompt();
+    this.prompt = new Prompt({page: this});
     this.queue = [];
     this.schedule = new Items();
     this.scheduleState = 'standby';
@@ -77,7 +77,13 @@ module.exports = GelatoPage.extend({
     return this;
   },
 
-  addItem: function() {
+  /**
+   * Adds an item to the study queue
+   * @method addItem
+   * @param {Boolean} silenceNoItems whether to suppress messages to the user
+   *                                 about the items added if nothing was added.
+   */
+  addItem: function(silenceNoItems) {
     var self = this;
     this.schedule.addItems(
       {
@@ -87,6 +93,32 @@ module.exports = GelatoPage.extend({
       function(error, result) {
         if (!error) {
           var added = result.numVocabsAdded;
+
+
+
+          if (added === 0) {
+            if (silenceNoItems) {
+              return;
+            }
+
+            $.notify(
+              {
+                title: 'Update',
+                message: 'No more words to add. <a href="/vocablists/browse">Add a new list</a>'
+              },
+              {
+                type: 'pastel-info',
+                animate: {
+                  enter: 'animated fadeInDown',
+                  exit: 'animated fadeOutUp'
+                },
+                delay: 5000,
+                icon_type: 'class'
+              }
+            );
+            return;
+          }
+
           $.notify(
             {
               title: 'Update',
@@ -103,7 +135,7 @@ module.exports = GelatoPage.extend({
             }
           );
         }
-        self.populateQueue();
+        //self.populateQueue();
       }
     );
   },

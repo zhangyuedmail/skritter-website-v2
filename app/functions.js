@@ -156,6 +156,19 @@ function getBoundingRectangle(points, areaWidth, areaHeight, pointRadius) {
 }
 
 /**
+ * @method getCookie
+ * @param {String} name
+ * @returns {String}
+ */
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) {
+    return parts.pop().split(";").shift();
+  }
+}
+
+/**
  * @method getDistance
  * @param {createjs.Point|Object} point1
  * @param {createjs.Point|Object} point2
@@ -367,6 +380,7 @@ module.exports = {
   getAngle: getAngle,
   getBoundingRectangle: getBoundingRectangle,
   getDistance: getDistance,
+  getCookie: getCookie,
   getGuid: getGuid,
   getLength: getLength,
   getParameterByName: getParameterByName,

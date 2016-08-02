@@ -19,7 +19,7 @@ gelato-component[data-name='study-prompt-vocab-contained'] {
 
   .value {
     color: $grey3;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 300;
     margin-bottom: 5px;
     .child-character {
@@ -27,21 +27,26 @@ gelato-component[data-name='study-prompt-vocab-contained'] {
     }
     .child-decomp {
       .decomp-definition {
+        margin-bottom: 5px;
       }
       .decomp-reading {
         font-style: italic;
+        margin-right: 15px;
       }
       .decomp-writing {
+        color: $grey5;
+        margin-right: 5px;
+        font-size: 20px;
       }
     }
     .child-reading {
       color: $grey3;
       font-weight: 400;
-      margin-left: 15px;
+      margin-left: 18px;
     }
     .child-writing {
       color: $grey5;
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 400;
     }
   }

@@ -4,11 +4,17 @@ gelato-component(data-name='dashboard-status')
       a(href="/account")= user.get('name')
       | , you have &nbsp;
       if view.dueCount === null
-        | -
-      else
+        | - items ready to review.
+      else if view.dueCount > 0
         span= view.dueCount
-      | &nbsp; items ready to review.
+        | &nbsp; items ready to review.
+      else
+        span no items to review.
+
   .row
     .col-xs-12.text-center
       br
-      a.btn.btn-fixed.btn-success(type="button", href="/study") Study
+      if view.dueCount !== 0
+        a.btn.btn-fixed.btn-success(type="button", href="/study") Study
+      else
+        a.btn.btn-fixed.btn-success(type="button", href="/vocablists/browse") Add a list to study
