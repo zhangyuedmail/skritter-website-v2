@@ -5,6 +5,30 @@ var GelatoComponent = require('gelato/component');
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
+
+  /**
+   * @property el
+   * @type {String}
+   */
+  el: '#review-container',
+  /**
+   * @property events
+   * @type Object
+   */
+  events: {},
+
+  /**
+   * Whether the keyboard shortcuts should be registered for this prompt
+   * @type {Boolean}
+   */
+  registerShortcuts: true,
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./template'),
+
   /**
    * @method initialize
    * @param {Object} options
@@ -22,26 +46,12 @@ module.exports = GelatoComponent.extend({
     this.listenTo(this.prompt.toolbarAction, 'click:show', this.handlePromptToolbarActionShow);
     this.listenTo(this.prompt.toolbarAction, 'click:teach', this.handlePromptToolbarActionTeach);
     this.listenTo(this.prompt.toolbarGrading, 'mousedown', this.handlePromptToolbarGradingMousedown);
-    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
+    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptToolbarGradingMouseup);
     this.on('attempt:fail', this.handleAttemptFail);
     this.on('attempt:success', this.handleAttemptSuccess);
     this.on('resize', this.render);
   },
-  /**
-   * @property el
-   * @type {String}
-   */
-  el: '#review-container',
-  /**
-   * @property events
-   * @type Object
-   */
-  events: {},
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
    * @returns {StudyPromptPartRune}
@@ -73,6 +83,7 @@ module.exports = GelatoComponent.extend({
     }
     return this;
   },
+
   /**
    * @method renderComplete
    * @returns {StudyPromptPartRune}
@@ -119,6 +130,7 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method renderIncomplete
    * @returns {StudyPromptPartRune}
@@ -156,6 +168,7 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method handleAttemptFail
    */
@@ -193,12 +206,14 @@ module.exports = GelatoComponent.extend({
       }
     }
   },
+
   /**
    * @method handleAttemptSuccess
    */
   handleAttemptSuccess: function() {
     this.prompt.review.set('failedConsecutive', 0);
   },
+
   /**
    * @method handlePromptCanvasClick
    */
@@ -216,6 +231,7 @@ module.exports = GelatoComponent.extend({
       this.prompt.canvas.fadeLayer('character-hint');
     }
   },
+
   /**
    * @method handlePromptCanvasInputUp
    * @param {Array} points
@@ -253,6 +269,7 @@ module.exports = GelatoComponent.extend({
       }
     }
   },
+
   /**
    * @method handlePromptCanvasSwipeUp
    */
@@ -266,6 +283,7 @@ module.exports = GelatoComponent.extend({
     this.prompt.review.character.reset();
     this.render();
   },
+
   /**
    * @method handlePromptDoubleTap
    */
@@ -281,6 +299,7 @@ module.exports = GelatoComponent.extend({
       this.prompt.review.set('score', 1);
     }
   },
+
   /**
    * @method handlePromptCanvasTap
    */
@@ -292,6 +311,7 @@ module.exports = GelatoComponent.extend({
       this.handleAttemptFail();
     }
   },
+
   /**
    * @method handlePromptToolbarActionCorrect
    */
@@ -306,24 +326,28 @@ module.exports = GelatoComponent.extend({
     }
     this.prompt.toolbarAction.render();
   },
+
   /**
    * @method handlePromptToolbarActionErase
    */
   handlePromptToolbarActionErase: function() {
     this.eraseCharacter();
   },
+
   /**
    * @method handlePromptToolbarActionShow
    */
   handlePromptToolbarActionShow: function() {
     this.showCharacter();
   },
+
   /**
    * @method handlePromptToolbarActionTeach
    */
   handlePromptToolbarActionTeach: function() {
     this.teachCharacter();
   },
+
   /**
    * @method handlePromptToolbarGradingMousedown
    * @param {Number} value
@@ -337,6 +361,14 @@ module.exports = GelatoComponent.extend({
       );
     }
   },
+
+  /**
+   * @method handlePromptToolbarGradingMouseup
+   */
+  handlePromptToolbarGradingMouseup: function(value) {
+    this.prompt.review.set('score', value);
+  },
+
   /**
    * @method completeCharacter
    */
@@ -347,6 +379,7 @@ module.exports = GelatoComponent.extend({
     this.prompt.review.character.add(this.prompt.review.character.targets[0].models);
     this.render();
   },
+
   /**
    * @method eraseCharacter
    */
@@ -355,12 +388,6 @@ module.exports = GelatoComponent.extend({
     this.prompt.review.character.reset();
     this.render();
   },
-
-  /**
-   * Whether the keyboard shortcuts should be registered for this prompt
-   * @type {Boolean}
-   */
-  registerShortcuts: true,
 
   /**
    * @method showCharacter
@@ -374,6 +401,7 @@ module.exports = GelatoComponent.extend({
       {color: '#e8ded2'}
     );
   },
+
   /**
    * @method teachCharacter
    */
@@ -401,4 +429,5 @@ module.exports = GelatoComponent.extend({
       }
     }
   }
+
 });

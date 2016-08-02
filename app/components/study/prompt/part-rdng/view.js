@@ -5,7 +5,6 @@ var GelatoComponent = require('gelato/component');
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
-  lastInput: '',
 
   /**
    * @property el
@@ -22,6 +21,12 @@ module.exports = GelatoComponent.extend({
     'keyup #reading-prompt': 'handleReadingPromptKeyup',
     'click gelato-component': 'handlePromptCanvasClick'
   },
+
+  /**
+   * @property lastInput
+   * @type {String}
+   */
+  lastInput: '',
 
   /**
    * @property template
@@ -49,7 +54,7 @@ module.exports = GelatoComponent.extend({
     this.zhInputType = 'pinyin';
 
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
-    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
+    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptToolbarGradingMouseup);
   },
 
   /**
@@ -194,6 +199,13 @@ module.exports = GelatoComponent.extend({
       this.prompt.review.set('complete', true);
       this.render();
     }
+  },
+
+  /**
+   * @method handlePromptToolbarGradingMouseup
+   */
+  handlePromptToolbarGradingMouseup: function(value) {
+    this.prompt.review.set('score', value);
   },
 
   /**
@@ -512,7 +524,7 @@ module.exports = GelatoComponent.extend({
 
       // case 1: user deleted number that was part of a word with a tone e.g. gōng -> gong
       if (removedToneVowel !== wordlike &&
-          (i+1 >= input.length || (i+1 < input.length && !isToneSubscript.test(input[i+1])))) {
+        (i+1 >= input.length || (i+1 < input.length && !isToneSubscript.test(input[i+1])))) {
         processed.push(removedToneVowel);
       }
 
@@ -582,9 +594,10 @@ module.exports = GelatoComponent.extend({
       // TODO: check that syllable is valid before appending a 5
       var wordlike = input.slice(0, -1);
       if (app.fn.pinyin.toTone(wordlike.replace(/ü/g, 'v') + '5'))
-      output = output + '₅';
+        output = output + '₅';
     }
 
     return output;
   }
+
 });

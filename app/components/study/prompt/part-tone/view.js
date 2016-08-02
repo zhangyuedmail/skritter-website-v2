@@ -5,6 +5,31 @@ var GelatoComponent = require('gelato/component');
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
+
+  /**
+   * @property el
+   * @type {String}
+   */
+  el: '#review-container',
+
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {},
+
+  /**
+   * Whether the keyboard shortcuts should be registered for this prompt
+   * @type {Boolean}
+   */
+  registerShortcuts: true,
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./template'),
+
   /**
    * @method initialize
    * @param {Object} options
@@ -16,24 +41,11 @@ module.exports = GelatoComponent.extend({
     this.listenTo(this.prompt.canvas, 'input:up', this.handlePromptCanvasInputUp);
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mousedown', this.handlePromptToolbarGradingMousedown);
-    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
+    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptToolbarGradingMouseup);
     this.on('resize', this.render);
   },
-  /**
-   * @property el
-   * @type {String}
-   */
-  el: '#review-container',
-  /**
-   * @property events
-   * @type {Object}
-   */
-  events: {},
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
+
   /**
    * @method render
    * @returns {StudyPromptPartTone}
@@ -66,6 +78,7 @@ module.exports = GelatoComponent.extend({
     }
     return this;
   },
+
   /**
    * @method renderComplete
    * @returns {StudyPromptPartTone}
@@ -99,6 +112,7 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method renderIncomplete
    * @returns {StudyPromptPartTone}
@@ -122,6 +136,7 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method handlePromptCanvasClick
    */
@@ -130,6 +145,7 @@ module.exports = GelatoComponent.extend({
       this.prompt.next();
     }
   },
+
   /**
    * @method handlePromptCanvasInputUp
    * @param {Array} points
@@ -179,6 +195,7 @@ module.exports = GelatoComponent.extend({
       this.renderComplete();
     }
   },
+
   /**
    * @method handlePromptToolbarActionCorrect
    */
@@ -187,6 +204,7 @@ module.exports = GelatoComponent.extend({
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.toolbarAction.render();
   },
+
   /**
    * @method handlePromptToolbarGradingMousedown
    * @param {Number} value
@@ -200,6 +218,14 @@ module.exports = GelatoComponent.extend({
       );
     }
   },
+
+  /**
+   * @method handlePromptToolbarGradingMouseup
+   */
+  handlePromptToolbarGradingMouseup: function(value) {
+    this.prompt.review.set('score', value);
+  },
+
   /**
    * @method completeTone
    */
@@ -211,11 +237,6 @@ module.exports = GelatoComponent.extend({
     this.prompt.review.character.reset();
     this.prompt.review.character.add(expectedTone);
     this.render();
-  },
+  }
 
-  /**
-   * Whether the keyboard shortcuts should be registered for this prompt
-   * @type {Boolean}
-   */
-  registerShortcuts: true
 });
