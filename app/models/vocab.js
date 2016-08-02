@@ -410,7 +410,9 @@ var Vocab = SkritterModel.extend({
         }
       );
     } else {
-      this.audios[0].play();
+      if (this.has('audios')) {
+        this.audios[0].play();
+      }
     }
   },
   /**
