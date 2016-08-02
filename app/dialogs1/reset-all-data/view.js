@@ -64,7 +64,7 @@ var ResetAllDataDialog = GelatoDialog.extend({
         app.user.setLastItemUpdate(0);
         app.user.cache();
         app.router.navigate('dashboard');
-        app.reset();
+        app.reload();
       }
     });
   }
