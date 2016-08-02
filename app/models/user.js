@@ -424,5 +424,6 @@ module.exports = SkritterModel.extend({
     app.removeSetting('user');
     app.removeSetting('siteRef');
     app.reload();
-  },
+  }
+
 });

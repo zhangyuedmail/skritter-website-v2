@@ -438,6 +438,11 @@ module.exports = GelatoApplication.extend({
       });
       mixpanel.identify(this.user.id);
 
+      //cleanup unused indexedDB instance
+      if (window.indexedDB) {
+        window.indexedDB.deleteDatabase(this.user.id + '-database');
+      }
+
       //lets start listening to global keyboard events
       this.listener = new window.keypress.Listener();
       this.listener.simple_combo("shift a", function() {
