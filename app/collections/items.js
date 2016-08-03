@@ -50,53 +50,55 @@ module.exports = SkritterCollection.extend({
   },
 
   /**
+   * @method addItem
+   * @param {Object} [options]
+   * @param {Function} callback
+   */
+  addItem: function(options, callback) {
+    this.fetch({
+      remove: false,
+      sort: false,
+      type: 'POST',
+      url: app.getApiUrl() + 'items/add?lists=' + (options.lists || ''),
+      error: function(error) {
+        callback(error);
+      },
+      success: function(items, result) {
+        callback(null, result);
+      }
+    });
+  },
+
+  /**
    * @method addItems
    * @param {Object} [options]
    * @param {Function} callback
    */
   addItems: function(options, callback) {
     var self = this;
+    var count = 0;
+    var results = {items: [], numVocabsAdded: 0};
     options = options || {};
-    async.waterfall(
-      [
-        function(callback) {
-          self.fetch({
-            remove: false,
-            sort: false,
-            type: 'POST',
-            url: app.getApiUrl() + 'items/add?lists=' + (options.lists || ''),
-            error: function(error) {
-              callback(error);
-            },
-            success: function(items, result) {
-              callback(null, result);
+    options.limit = options.limit || 1;
+    async.whilst(
+      function() {
+        return count < options.limit;
+      },
+      function(callback) {
+        count++;
+        self.addItem(
+          options,
+          function(error, result) {
+            if (!error) {
+              results.items.push(result);
+              results.numVocabsAdded += result.numVocabsAdded;
             }
-          });
-        },
-        function(result, callback) {
-          self.fetch({
-            data: {
-              ids: _.map(result.Items, 'id').join('|'),
-              include_contained: true
-            },
-            remove: false,
-            sort: false,
-            error: function(error) {
-              callback(error);
-            },
-            success: function() {
-              callback(null, result);
-            }
-          });
-        }
-      ],
-      function(error, result) {
-        if (error) {
-          console.error('ITEM ADD ERROR:', error);
-          callback(error)
-        } else {
-          callback(null, result);
-        }
+            callback();
+          }
+        );
+      },
+      function() {
+        callback(null, results);
       }
     );
   },
