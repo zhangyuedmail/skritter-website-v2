@@ -135,8 +135,12 @@ module.exports = {
     "dashboard": {
       "title": "Dashboard - Skritter",
       "allTime": "All Time",
-      "thisMonth": "This Month",
-      "lists": "Lists"
+      "goToSubSettings": "Go to your subscription settings",
+      "hide": "Hide",
+      "lists": "Lists",
+      "subExpiredDetails": "Purchase a subscription to study new items and lists.",
+      "subscriptionExpired": "Subscription expired",
+      "thisMonth": "This Month"
     },
 
     "features": {

@@ -11,6 +11,10 @@ var DashboardTotal = require('components/dashboard/total/view');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+  events: {
+    'click #hide-sub-expired': 'handleHideSubscriptionExpiredNotice'
+  },
+
   /**
    * @property title
    * @type {String}
@@ -33,6 +37,9 @@ module.exports = GelatoPage.extend({
     this._views['total'] = new DashboardTotal();
     this._views['queue'] = new DashboardQueue();
 
+    // this.listenTo(app.user.subscription, 'state', this.updateSubscriptionState);
+    // app.user.subscription.fetch();
+
     app.mixpanel.track('Viewed dashboard page');
   },
 
@@ -48,6 +55,24 @@ module.exports = GelatoPage.extend({
     this._views['total'].setElement('#dashboard-total-container').render();
     this._views['queue'].setElement('#dashboard-queue-container').render();
 
+    app.user.isSubscriptionActive(_.bind(this.updateSubscriptionState, this));
+
     return this;
+  },
+
+  handleHideSubscriptionExpiredNotice: function(event) {
+    event.preventDefault();
+
+    app.setSetting('hideSubscriptionNotification', true);
+    this.updateSubscriptionState();
+  },
+
+  updateSubscriptionState: function() {
+    var sub = app.user.subscription;
+    var hide = app.getSetting('hideSubscriptionNotification');
+
+    if (sub.state === 'standby') {
+      this.$('#subscription-notice').toggleClass('hidden', sub.get('subscribed') || hide);
+    }
   }
 });
