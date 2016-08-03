@@ -202,11 +202,11 @@ module.exports = SkritterModel.extend({
     var self = this;
 
     if (this.subscription.isFetched) {
-      callback(this.subscription.get('subscribed'));
+      callback(this.subscription.getStatus() !== 'Expired');
     } else {
       this.subscription.fetch({
         success: function() {
-          callback(self.subscription.get('subscribed'));
+          callback(self.subscription.getStatus() !== 'Expired');
         }
       });
     }
