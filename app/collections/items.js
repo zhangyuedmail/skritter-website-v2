@@ -56,15 +56,19 @@ module.exports = SkritterCollection.extend({
    * @param {Function} callback
    */
   addItem: function(options, callback) {
-    this.fetch({
-      remove: false,
-      sort: false,
-      type: 'POST',
+    $.ajax({
       url: app.getApiUrl() + 'items/add?lists=' + (options.lists || ''),
+      type: 'POST',
+      headers: app.user.session.getHeaders(),
+      context: this,
+      data: {
+        lang: app.getLanguage()
+      },
       error: function(error) {
+        console.log(error);
         callback(error);
       },
-      success: function(items, result) {
+      success: function(result) {
         callback(null, result);
       }
     });
@@ -233,7 +237,6 @@ module.exports = SkritterCollection.extend({
       error: function(error) {
         console.log(error);
         this.dueCount = '-';
-        this.render();
       },
       success: function(result) {
         var count = 0;
