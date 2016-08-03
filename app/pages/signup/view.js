@@ -277,8 +277,7 @@ module.exports = GelatoPage.extend({
         ScreenLoader.hide();
         self._handleSubmittedProcessError(error);
       } else {
-        app.router.navigate('dashboard');
-        app.reload();
+        self._handleSubmittedProcessSuccess();
       }
     });
   },
