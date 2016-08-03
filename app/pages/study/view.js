@@ -82,6 +82,66 @@ module.exports = GelatoPage.extend({
   },
 
   /**
+   * Adds an item to the study queue
+   * @method addItem
+   * @param {Boolean} [silenceNoItems]
+   * whether to suppress messages to the user about the items added if nothing was added.
+   */
+  addItem: function(silenceNoItems) {
+    this.items.addItems(
+      {
+        lang: app.getLanguage(),
+        limit: 1
+      },
+      function(error, result) {
+        if (!error) {
+          var added = result.numVocabsAdded;
+
+          if (added === 0) {
+            if (silenceNoItems) {
+              return;
+            }
+
+            $.notify(
+              {
+                title: 'Update',
+                message: 'No more words to add. <a href="/vocablists/browse">Add a new list</a>'
+              },
+              {
+                type: 'pastel-info',
+                animate: {
+                  enter: 'animated fadeInDown',
+                  exit: 'animated fadeOutUp'
+                },
+                delay: 5000,
+                icon_type: 'class'
+              }
+            );
+            return;
+          }
+
+          $.notify(
+            {
+              title: 'Update',
+              message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.'
+            },
+            {
+              type: 'pastel-info',
+              animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+              },
+              delay: 5000,
+              icon_type: 'class'
+            }
+          );
+        }
+
+      }
+    );
+  },
+
+  /**
    * @method checkRequirements
    */
   checkRequirements: function() {
@@ -155,66 +215,6 @@ module.exports = GelatoPage.extend({
   },
 
   /**
-   * Adds an item to the study queue
-   * @method addItem
-   * @param {Boolean} [silenceNoItems]
-   * whether to suppress messages to the user about the items added if nothing was added.
-   */
-  addItem: function(silenceNoItems) {
-    this.items.addItems(
-      {
-        lang: app.getLanguage(),
-        limit: 1
-      },
-      function(error, result) {
-        if (!error) {
-          var added = result.numVocabsAdded;
-
-          if (added === 0) {
-            if (silenceNoItems) {
-              return;
-            }
-
-            $.notify(
-              {
-                title: 'Update',
-                message: 'No more words to add. <a href="/vocablists/browse">Add a new list</a>'
-              },
-              {
-                type: 'pastel-info',
-                animate: {
-                  enter: 'animated fadeInDown',
-                  exit: 'animated fadeOutUp'
-                },
-                delay: 5000,
-                icon_type: 'class'
-              }
-            );
-            return;
-          }
-
-          $.notify(
-            {
-              title: 'Update',
-              message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.'
-            },
-            {
-              type: 'pastel-info',
-              animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
-              },
-              delay: 5000,
-              icon_type: 'class'
-            }
-          );
-        }
-
-      }
-    );
-  },
-
-  /**
    * @method handleClickAddItemButton
    */
   handleClickAddItemButton: function(event) {
@@ -234,7 +234,7 @@ module.exports = GelatoPage.extend({
         review,
         null,
         function() {
-          if (self.items.reviews.length > 100) {
+          if (self.items.reviews.length > 1) {
             self.items.reviews.post({skip: 1});
           }
           self.items.addHistory(self.item);
@@ -264,9 +264,12 @@ module.exports = GelatoPage.extend({
       this.item = items[0];
       this.prompt.set(this.item.getPromptItems());
       this.prompt.reviewStatus.render();
-    }
-    if (this.items.length < 5) {
-      this.items.fetchNext({limit: 10});
+      if (this.items.length < 5) {
+
+      }
+    } else {
+      this.items.clearHistory();
+      this.items.fetchNext({limit: 10}, this.next.bind(this));
     }
   },
 
