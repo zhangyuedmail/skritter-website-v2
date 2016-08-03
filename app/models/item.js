@@ -146,6 +146,7 @@ module.exports = SkritterModel.extend({
     promptItems.interval = this.get('interval');
     promptItems.item = this;
     promptItems.part = part;
+    promptItems.readiness = this.getReadiness();
     promptItems.vocab = vocab;
     return promptItems;
   },

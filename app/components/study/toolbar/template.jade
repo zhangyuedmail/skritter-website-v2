@@ -6,7 +6,7 @@ gelato-component(data-name='study-toolbar')
       if page.vocablist
         .vocablist-name= page.vocablist.get('name')
       else
-        span#due-count= view.dueCount
+        span#due-count= view.getDueCountWithOffset()
         span.spl items due
     .col-xs-4.text-center
       #timer-container

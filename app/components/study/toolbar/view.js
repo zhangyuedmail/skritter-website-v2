@@ -9,18 +9,7 @@ var Timer = require('components/study/toolbar/timer/view');
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function(options) {
-    this.page = options.page;
-    this.stats = new ProgressStats();
-    this.timer = new Timer();
-    this.listenTo(this.stats, 'state:standby', this.updateTimerOffset);
-    this.stats.fetchToday();
-    this.updateDueCount();
-  },
+
   /**
    * @property events
    * @type {Object}
@@ -29,11 +18,28 @@ module.exports = GelatoComponent.extend({
     'click #button-add-item': 'handleClickAddItem',
     'click #button-study-settings': 'handleClickStudySettings'
   },
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function(options) {
+    this.dueCountOffset = 0;
+    this.page = options.page;
+    this.stats = new ProgressStats();
+    this.timer = new Timer();
+    this.listenTo(this.page.items, 'due-count', this.render);
+    this.listenTo(this.stats, 'state:standby', this.updateTimerOffset);
+    this.stats.fetchToday();
+
+  },
+
   /**
    * @method render
    * @returns {StudyToolbar}
@@ -43,6 +49,16 @@ module.exports = GelatoComponent.extend({
     this.timer.setElement('#timer-container').render();
     return this;
   },
+
+  /**
+   * @method getDueCountWithOffset
+   * @returns {Number}
+   */
+  getDueCountWithOffset: function() {
+    var dueCount = this.page.items.dueCount - this.dueCountOffset;
+    return dueCount > 0 ? dueCount : 0;
+  },
+
   /**
    * @method handleClickAddItem
    * @param {Event} event
@@ -51,6 +67,7 @@ module.exports = GelatoComponent.extend({
     event.preventDefault();
     this.page.addItem();
   },
+
   /**
    * @method handleClickStudySettings
    * @param {Event} event
@@ -82,6 +99,7 @@ module.exports = GelatoComponent.extend({
       );
     });
   },
+
   /**
    * @function remove
    * @returns {StudyToolbar}
@@ -90,41 +108,12 @@ module.exports = GelatoComponent.extend({
     this.timer.remove();
     return this;
   },
-  /**
-   * @method updateDueCount
-   */
-  updateDueCount: function() {
-    $.ajax({
-      url: app.getApiUrl() + 'items/due',
-      type: 'GET',
-      headers: app.user.session.getHeaders(),
-      context: this,
-      data: {
-        lang: app.getLanguage(),
-        parts: app.user.getFilteredParts().join(','),
-        styles: app.user.getFilteredStyles().join(',')
-      },
-      error: function(error) {
-        console.log(error);
-        this.dueCount = '-';
-        this.render();
-      },
-      success: function(result) {
-        var count = 0;
-        for (var part in result.due) {
-          for (var style in result.due[part]) {
-            count += result.due[part][style];
-          }
-        }
-        this.dueCount =  count;
-        this.render();
-      }
-    });
-  },
+
   /**
    * @method updateTimerOffset
    */
   updateTimerOffset: function(stats) {
     this.timer.setServerOffset(stats.getDailyTimeStudied());
   }
+
 });

@@ -73,6 +73,7 @@ module.exports = GelatoPage.extend({
       this._views['recipe'].setElement('#recipes-container').render();
     }
 
+    this.items.updateDueCount();
     this.prompt.navigation.setItems(this.items);
     this.prompt.reviewStatus.setItems(this.items);
 
@@ -234,11 +235,15 @@ module.exports = GelatoPage.extend({
         review,
         null,
         function() {
-          if (self.items.reviews.length > 1) {
+          if (promptItems.readiness > 1.0) {
+            self.toolbar.dueCountOffset++;
+          }
+          if (self.items.reviews.length > 100) {
             self.items.reviews.post({skip: 1});
           }
           self.items.addHistory(self.item);
           self.item = null;
+          self.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
           self.next();
         }
       );
@@ -264,6 +269,7 @@ module.exports = GelatoPage.extend({
       this.item = items[0];
       this.prompt.set(this.item.getPromptItems());
       this.prompt.reviewStatus.render();
+      this.toolbar.render();
       if (this.items.length < 5) {
         this.items.fetchNext({limit: 10});
       }
