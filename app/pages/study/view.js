@@ -3,6 +3,8 @@ var Prompt = require('components/study/prompt/view');
 var Toolbar = require('components/study/toolbar/view');
 var Recipes = require('components/common/recipes/view');
 var Items = require('collections/items');
+var Vocablists = require('collections/vocablists');
+var ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
 
 /**
  * @class Study
@@ -20,10 +22,9 @@ module.exports = GelatoPage.extend({
     this.item = null;
     this.items = new Items();
     this.prompt = new Prompt({page: this});
-    this.promptCurrent = null;
-    this.promptPrevious = null;
     this.scheduleState = 'standby';
     this.toolbar = new Toolbar({page: this});
+    this.vocablists = new Vocablists();
 
     if (app.user.get('eccentric')) {
       this._views['recipe'] = new Recipes();
@@ -31,7 +32,6 @@ module.exports = GelatoPage.extend({
 
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
-    window.onbeforeunload = this.handleWindowOnBeforeUnload.bind(this);
   },
 
   /**
@@ -74,10 +74,79 @@ module.exports = GelatoPage.extend({
       this._views['recipe'].setElement('#recipes-container').render();
     }
 
+    this.prompt.navigation.setItems(this.items);
     this.prompt.reviewStatus.setItems(this.items);
-    this.next();
+
+    this.checkRequirements();
 
     return this;
+  },
+
+  /**
+   * @method checkRequirements
+   */
+  checkRequirements: function() {
+    var self = this;
+    var hasItems = false;
+    var hasVocablists = false;
+    this.items.clearHistory();
+    async.parallel(
+      [
+        function(callback) {
+          self.items.fetchNext(
+            {limit: 10},
+            function(error, result) {
+              hasItems = !error && result.length;
+              callback();
+            }
+          );
+        },
+        function(callback) {
+          self.vocablists.fetch({
+            data: {
+              lang: app.getLanguage(),
+              limit: 1,
+              sort: 'adding'
+            },
+            error: function() {
+              hasVocablists = false;
+              callback();
+            },
+            success: function(result) {
+              hasVocablists = result.length > 0;
+              callback();
+            }
+          });
+        }
+      ],
+      function() {
+        ScreenLoader.hide();
+        if (!hasItems && !hasVocablists) {
+          self.dialog = new ConfirmGenericDialog({
+            body: '{no-vocablists-body-text}',
+            buttonConfirm: '{no-vocablists-button-text}',
+            buttonConfirmClass: 'btn-success',
+            title: '{no-vocablists-title-text}'
+          });
+          self.dialog.on(
+            'confirm',
+            function() {
+              app.router.navigate('vocablists/browse', {trigger: true});
+            }
+          );
+          self.dialog.open();
+        } else if (!hasItems && hasVocablists) {
+          self.items.addItems(
+            {lang: app.getLanguage(), limit: 1},
+            function() {
+              self.next();
+            }
+          );
+        } else {
+          self.next();
+        }
+      }
+    );
   },
 
   /**
@@ -90,7 +159,7 @@ module.exports = GelatoPage.extend({
     this.items.addItems(
       {
         lang: app.getLanguage(),
-        lists: this.vocablist ? this.vocablist.id : null
+        limit: 1
       },
       function(error, result) {
         if (!error) {
@@ -149,16 +218,6 @@ module.exports = GelatoPage.extend({
   },
 
   /**
-   * @method handleWindowOnBeforeUnload
-   */
-  handleWindowOnBeforeUnload: function() {
-    if (!this.items.reviews.length) {
-      return;
-    }
-    return 'You have ' + this.items.reviews.length + ' unsaved reviews!';
-  },
-
-  /**
    * @method handlePromptNext
    * @param {PromptItems} promptItems
    */
@@ -170,7 +229,7 @@ module.exports = GelatoPage.extend({
         review,
         null,
         function() {
-          if (self.items.reviews.length > 3) {
+          if (self.items.reviews.length > 100) {
             self.items.reviews.post({skip: 1});
           }
           self.items.addHistory(self.item);
@@ -188,7 +247,7 @@ module.exports = GelatoPage.extend({
    * @param {PromptItems} promptItems
    */
   handlePromptPrevious: function(promptItems) {
-    //TODO: FIX THIS SHIT
+    this.previous();
   },
 
   /**
@@ -196,17 +255,13 @@ module.exports = GelatoPage.extend({
    */
   next: function() {
     var items = this.items.getNext();
-    this.prompt.reviewStatus.render();
     if (items.length) {
-      ScreenLoader.hide();
       this.item = items[0];
       this.prompt.set(this.item.getPromptItems());
-      if (this.items.length < 5) {
-        this.items.fetchNext({limit: 10});
-      }
-    } else {
-      this.items.clearHistory();
-      this.items.fetchNext({limit: 10}, this.next.bind(this));
+      this.prompt.reviewStatus.render();
+    }
+    if (this.items.length < 5) {
+      this.items.fetchNext({limit: 10});
     }
   },
 
@@ -217,8 +272,8 @@ module.exports = GelatoPage.extend({
     if (this.items.reviews.length) {
       var review = this.items.reviews.last();
       if (review.has('promptItems')) {
-        this.toolbar.render();
         this.prompt.set(review.get('promptItems'));
+        this.toolbar.render();
       }
     }
   },
@@ -231,8 +286,6 @@ module.exports = GelatoPage.extend({
     this.prompt.remove();
     this.toolbar.remove();
     this.items.reviews.post();
-    window.onbeforeunload = null;
-
     return GelatoPage.prototype.remove.call(this);
   }
 
