@@ -65,7 +65,6 @@ module.exports = GelatoPage.extend({
    * @returns {Study}
    */
   render: function() {
-    ScreenLoader.post('Preparing study');
     this.renderTemplate();
     this.prompt.setElement('#study-prompt-container').render();
     this.toolbar.setElement('#study-toolbar-container').render();
@@ -86,6 +85,7 @@ module.exports = GelatoPage.extend({
    * @method checkRequirements
    */
   checkRequirements: function() {
+    ScreenLoader.post('Preparing study');
     var self = this;
     var hasItems = false;
     var hasVocablists = false;
@@ -136,8 +136,12 @@ module.exports = GelatoPage.extend({
           self.dialog.open();
           ScreenLoader.hide();
         } else if (!hasItems && hasVocablists) {
+          ScreenLoader.post('Adding your first words');
           self.items.addItems(
-            {lang: app.getLanguage(), limit: 1},
+            {
+              lang: app.getLanguage(),
+              limit: 5
+            },
             function() {
               app.reload();
             }
