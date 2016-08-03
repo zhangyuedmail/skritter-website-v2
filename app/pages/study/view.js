@@ -265,7 +265,7 @@ module.exports = GelatoPage.extend({
       this.prompt.set(this.item.getPromptItems());
       this.prompt.reviewStatus.render();
       if (this.items.length < 5) {
-
+        this.items.fetchNext({limit: 10});
       }
     } else {
       this.items.clearHistory();
