@@ -135,6 +135,7 @@ module.exports = SkritterCollection.extend({
     this.fetch({
       data: {
         sort: 'next',
+        cursor: options.cursor,
         lang: app.getLanguage(),
         limit: options.limit,
         include_contained: true,

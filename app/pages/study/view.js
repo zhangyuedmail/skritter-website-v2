@@ -155,8 +155,11 @@ module.exports = GelatoPage.extend({
       [
         function(callback) {
           self.items.fetchNext(
-            {limit: 10},
+            {
+              limit: 2
+            },
             function(error, result) {
+              self.items.fetchNext({cursor: result.cursor, limit: 10});
               hasItems = !error && result.length;
               callback();
             }

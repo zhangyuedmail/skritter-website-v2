@@ -25,6 +25,7 @@ var VocabWriting = require('components/study/prompt/vocab-writing/view');
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
+
   /**
    * @property template
    * @type {Function}
@@ -45,7 +46,6 @@ module.exports = GelatoComponent.extend({
     this.part = null;
     this.review = null;
     this.reviews = null;
-    this.schedule = null;
 
     //components
     this.canvas = new Canvas({prompt: this});
@@ -270,4 +270,5 @@ module.exports = GelatoComponent.extend({
 
     return this;
   }
+
 });
