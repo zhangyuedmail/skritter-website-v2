@@ -16,6 +16,7 @@ module.exports = SkritterCollection.extend({
   initialize: function(models, options) {
     options = options || {};
     this.cursor = null;
+    this.dueCount = 0;
     this.history = [];
     this.sorted = null;
     this.reviews = new Reviews(null, {items: this});
@@ -212,6 +213,38 @@ module.exports = SkritterCollection.extend({
   sort: function() {
     this.sorted = moment().unix();
     return SkritterCollection.prototype.sort.call(this);
+  },
+
+  /**
+   * @method updateDueCount
+   */
+  updateDueCount: function() {
+    $.ajax({
+      url: app.getApiUrl() + 'items/due',
+      type: 'GET',
+      headers: app.user.session.getHeaders(),
+      context: this,
+      data: {
+        lang: app.getLanguage(),
+        parts: app.user.getFilteredParts().join(','),
+        styles: app.user.getFilteredStyles().join(',')
+      },
+      error: function(error) {
+        console.log(error);
+        this.dueCount = '-';
+        this.render();
+      },
+      success: function(result) {
+        var count = 0;
+        for (var part in result.due) {
+          for (var style in result.due[part]) {
+            count += result.due[part][style];
+          }
+        }
+        this.dueCount =  count;
+        this.trigger('due-count', this.dueCount);
+      }
+    });
   }
 
 });
