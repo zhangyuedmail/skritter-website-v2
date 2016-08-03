@@ -72,7 +72,7 @@ module.exports = GelatoPage.extend({
     var hide = app.getSetting('hideSubscriptionNotification');
 
     if (sub.state === 'standby') {
-      this.$('#subscription-notice').toggleClass('hidden', sub.get('subscribed') || hide);
+      this.$('#subscription-notice').toggleClass('hidden', !!sub.get('subscribed') || hide);
     }
   }
 });
