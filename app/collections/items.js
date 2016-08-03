@@ -8,28 +8,68 @@ var Item = require('models/item');
  * @extends {SkritterCollection}
  */
 module.exports = SkritterCollection.extend({
+
   /**
    * @method initialize
    * @constructor
    */
   initialize: function(models, options) {
     options = options || {};
-
     this.cursor = null;
+    this.dueCount = 0;
+    this.history = [];
     this.sorted = null;
     this.reviews = new Reviews(null, {items: this});
-    this.vocabs = new Vocabs(options.vocabs || null, {items: this});
+    this.vocabs = new Vocabs(null, {items: this});
   },
+
   /**
    * @property model
    * @type {Item}
    */
   model: Item,
+
   /**
    * @property url
    * @type {String}
    */
   url: 'items',
+
+  /**
+   * @method addHistory
+   * @param {Item} item
+   * @returns {Items}
+   */
+  addHistory: function(item) {
+    this.remove(item);
+    this.history.push(item.getBase());
+    if (this.history.length > 4) {
+      this.history.shift();
+    }
+
+    return this;
+  },
+
+  /**
+   * @method addItem
+   * @param {Object} [options]
+   * @param {Function} callback
+   */
+  addItem: function(options, callback) {
+    this.fetch({
+      remove: false,
+      sort: false,
+      type: 'POST',
+      url: app.getApiUrl() + 'items/add?lists=' + (options.lists || ''),
+      error: function(error) {
+        callback(error);
+      },
+      success: function(items, result) {
+        callback(null, result);
+      }
+    });
+  },
+
   /**
    * @method addItems
    * @param {Object} [options]
@@ -37,65 +77,44 @@ module.exports = SkritterCollection.extend({
    */
   addItems: function(options, callback) {
     var self = this;
+    var count = 0;
+    var results = {items: [], numVocabsAdded: 0};
     options = options || {};
-    async.waterfall([
+    options.limit = options.limit || 1;
+    async.whilst(
+      function() {
+        return count < options.limit;
+      },
       function(callback) {
-        self.fetch({
-          remove: false,
-          sort: false,
-          type: 'POST',
-          url: app.getApiUrl() + 'items/add?lists=' + (options.lists || ''),
-          error: function(error) {
-            callback(error);
-          },
-          success: function(items, result) {
-            callback(null, result);
+        count++;
+        self.addItem(
+          options,
+          function(error, result) {
+            if (!error) {
+              results.items.push(result);
+              results.numVocabsAdded += result.numVocabsAdded;
+            }
+            callback();
           }
-        });
+        );
       },
-      function(result, callback) {
-        self.fetch({
-          data: {
-            ids: _.map(result.Items, 'id').join('|'),
-            include_contained: true
-          },
-          remove: false,
-          sort: false,
-          error: function(error) {
-            callback(error);
-          },
-          success: function() {
-            callback(null, result);
-          }
-        });
-      },
-      function(result, callback) {
-        app.user.db.transaction(
-          'rw',
-          app.user.db.items,
-          function() {
-            _.forEach(
-              result.Items,
-              function(item) {
-                app.user.db.items.put(item);
-              }
-            );
-          }
-        ).then(function() {
-          callback(null, result);
-        }).catch(function(error) {
-          callback(error);
-        });
+      function() {
+        callback(null, results);
       }
-    ], function(error, result) {
-      if (error) {
-        console.error('ITEM ADD ERROR:', error);
-        callback(error)
-      } else {
-        callback(null, result);
-      }
-    });
+    );
   },
+
+  /**
+   * @method clearHistory
+   * @returns {Items}
+   */
+  clearHistory: function() {
+    this.reset();
+    this.history = [];
+
+    return this;
+  },
+
   /**
    * @method comparator
    * @param {Item} item
@@ -104,6 +123,66 @@ module.exports = SkritterCollection.extend({
   comparator: function(item) {
     return -item.getReadiness();
   },
+
+  /**
+   * @method fetchNext
+   * @param {Object} options
+   * @param {Function} [callback]
+   */
+  fetchNext: function(options, callback) {
+    options = options || {};
+    options.limit = options.limit || 10;
+    this.fetch({
+      data: {
+        sort: 'next',
+        lang: app.getLanguage(),
+        limit: options.limit,
+        include_contained: true,
+        include_decomps: true,
+        include_heisigs: true,
+        include_sentences: true,
+        include_strokes: true,
+        include_vocabs: true,
+        parts: app.user.getFilteredParts().join(','),
+        styles: app.user.getFilteredStyles().join(',')
+      },
+      merge: true,
+      remove: false,
+      sort: false,
+      error: function(error) {
+        _.isFunction(callback) && callback(error);
+      },
+      success: function(items) {
+        _.isFunction(callback) && callback(null, items);
+      }
+    });
+  },
+
+  /**
+   * @method getNext
+   * @returns {Array}
+   */
+  getNext: function() {
+    var history = this.history;
+    return _
+      .chain(this.models)
+      .filter(
+        function(model) {
+          return model.isActive() && !model.isBanned() && !_.includes(history, model.getBase());
+        }
+      )
+      .shuffle()
+      .value();
+  },
+
+  /**
+   * @method hasNext
+   * @returns {Boolean}
+   */
+  hasNext: function() {
+    return this.getNext().length > 0;
+  },
+
   /**
    * @method parse
    * @param {Object} response
@@ -117,6 +196,7 @@ module.exports = SkritterCollection.extend({
     this.vocabs.strokes.add(response.Strokes);
     return response.Items.concat(response.ContainedItems || []);
   },
+
   /**
    * @method reset
    * @returns {Items}
@@ -125,6 +205,7 @@ module.exports = SkritterCollection.extend({
     this.vocabs.reset();
     return SkritterCollection.prototype.reset.call(this);
   },
+
   /**
    * @method sort
    * @returns {Items}
@@ -132,5 +213,38 @@ module.exports = SkritterCollection.extend({
   sort: function() {
     this.sorted = moment().unix();
     return SkritterCollection.prototype.sort.call(this);
+  },
+
+  /**
+   * @method updateDueCount
+   */
+  updateDueCount: function() {
+    $.ajax({
+      url: app.getApiUrl() + 'items/due',
+      type: 'GET',
+      headers: app.user.session.getHeaders(),
+      context: this,
+      data: {
+        lang: app.getLanguage(),
+        parts: app.user.getFilteredParts().join(','),
+        styles: app.user.getFilteredStyles().join(',')
+      },
+      error: function(error) {
+        console.log(error);
+        this.dueCount = '-';
+        this.render();
+      },
+      success: function(result) {
+        var count = 0;
+        for (var part in result.due) {
+          for (var style in result.due[part]) {
+            count += result.due[part][style];
+          }
+        }
+        this.dueCount =  count;
+        this.trigger('due-count', this.dueCount);
+      }
+    });
   }
+
 });
