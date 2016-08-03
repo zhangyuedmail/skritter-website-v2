@@ -120,7 +120,6 @@ module.exports = GelatoPage.extend({
         }
       ],
       function() {
-        ScreenLoader.hide();
         if (!hasItems && !hasVocablists) {
           self.dialog = new ConfirmGenericDialog({
             body: '{no-vocablists-body-text}',
@@ -135,15 +134,17 @@ module.exports = GelatoPage.extend({
             }
           );
           self.dialog.open();
+          ScreenLoader.hide();
         } else if (!hasItems && hasVocablists) {
           self.items.addItems(
             {lang: app.getLanguage(), limit: 1},
             function() {
-              self.next();
+              app.reload();
             }
           );
         } else {
           self.next();
+          ScreenLoader.hide();
         }
       }
     );
