@@ -153,11 +153,9 @@ module.exports = GelatoPage.extend({
                   'Display Name': self.user.get('name'),
                   'Method': formData.method,
                   'Plan': formData.plan
-                },
-                function() {
-                  callback();
                 }
               );
+              callback();
             }
           }
         )
@@ -277,7 +275,7 @@ module.exports = GelatoPage.extend({
     ], function(error) {
       if (error) {
         ScreenLoader.hide();
-        console.error(error);
+        self._handleSubmittedProcessError(error);
       } else {
         app.router.navigate('dashboard');
         app.reload();
