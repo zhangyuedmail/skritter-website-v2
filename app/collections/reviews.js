@@ -6,6 +6,7 @@ var Review = require('models/review');
  * @extends {SkritterCollection}
  */
 module.exports = SkritterCollection.extend({
+
   /**
    * @method initialize
    * @param {Array|Object} [models]
@@ -16,6 +17,7 @@ module.exports = SkritterCollection.extend({
     options = options || {};
     this.items = options.items;
   },
+
   /**
    * @property model
    * @type {Review}
@@ -26,6 +28,7 @@ module.exports = SkritterCollection.extend({
    * @type {String}
    */
   url: 'reviews',
+
   /**
    * @method comparator
    * @param {Review} review
@@ -34,6 +37,7 @@ module.exports = SkritterCollection.extend({
   comparator: function(review) {
     return review.get('created');
   },
+
   /**
    * @method fetchReviewErrors
    * @param {Function} [callback]
@@ -55,6 +59,7 @@ module.exports = SkritterCollection.extend({
       }
     });
   },
+
   /**
    * @method post
    * @param {Object} [options]
@@ -86,7 +91,7 @@ module.exports = SkritterCollection.extend({
             ].join('');
           });
           $.ajax({
-            url: app.getApiUrl() + 'reviews?spaceItems=false',
+            url: app.getApiUrl() + 'reviews',
             async: options.async,
             headers: app.user.session.getHeaders(),
             type: 'POST',
@@ -105,9 +110,8 @@ module.exports = SkritterCollection.extend({
                     error: error.responseJSON
                   }
                 );
-                self.reroll(items, function() {
-                  callback(error);
-                });
+                self.reset();
+                callback(error);
               } else {
                 Raygun.send(
                   new Error('Review Error: Unable to post chunk'),
@@ -117,17 +121,13 @@ module.exports = SkritterCollection.extend({
                   }
                 );
                 self.remove(chunk);
-                self.removeReviewCache(chunk, function() {
-                  callback(error);
-                });
+                callback();
               }
 
             },
             success: function() {
               self.remove(chunk);
-              self.removeReviewCache(chunk, function() {
-                setTimeout(callback, 1000);
-              });
+              setTimeout(callback, 1000);
             }
           });
         },
@@ -144,6 +144,7 @@ module.exports = SkritterCollection.extend({
       );
     }
   },
+
   /**
    * @method put
    * @param {Object} models
@@ -197,128 +198,7 @@ module.exports = SkritterCollection.extend({
       }
       updatedReviews.push(this.add(model, options));
     }
-    async.parallel([
-      async.apply(this.updateItemCache, updatedItems),
-      async.apply(this.updateReviewCache, updatedReviews)
-    ], callback);
-  },
-  /**
-   * @method removeReviewCache
-   * @param {Array} reviews
-   * @param {Function} callback
-   */
-  removeReviewCache: function(reviews, callback) {
-    async.each(
-      reviews || [],
-      function(review, callback) {
-        app.user.db.reviews
-          .delete(review.id)
-          .then(function() {
-            callback();
-          })
-          .catch(callback);
-      },
-      callback
-    );
-  },
-  /**
-   * @method reroll
-   * @param {Array|Object} items
-   * @param {Function} [callback]
-   */
-  reroll: function(items, callback) {
-    var updatedItems = [];
-    var updatedReviews = [];
-    var itemIds = _.isArray(items) ? _.map(items, 'id') : [items.id];
-    this.items.add(items, {merge: true});
-    for (var a = 0, lengthA = this.length; a < lengthA; a++) {
-      var review = this.at(a);
-      var reviewData = review.get('data');
-      for (var b = 0, lengthB = reviewData.length; b < lengthB; b++) {
-        var modelData = reviewData[b];
-        if (itemIds.indexOf(modelData.itemId) > -1) {
-          var item = this.items.get(modelData.itemId);
-          var submitTimeSeconds = Math.round(modelData.submitTime);
-          if (submitTimeSeconds < item.get('changed')) {
-            var now = Date.now() / 1000;
-            submitTimeSeconds = Math.round(now);
-            modelData.submitTime = now;
-          }
-          modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
-          modelData.currentInterval = item.get('interval');
-          modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
-          modelData.previousInterval = item.get('previousInterval') || 0;
-          modelData.previousSuccess = item.get('previousSuccess') || false;
-          if (!_.isInteger(modelData.score)) {
-            modelData = 3;
-            modelData.newInterval = 86400;
-          }
-          if (app.isDevelopment()) {
-            console.log(
-              item.id,
-              'scheduled for',
-              moment.duration(modelData.newInterval, 'seconds').as('days'),
-              'days'
-            );
-          }
-          item.set({
-            changed: submitTimeSeconds,
-            last: submitTimeSeconds,
-            interval: modelData.newInterval,
-            next: submitTimeSeconds + modelData.newInterval,
-            previousInterval: modelData.currentInterval,
-            previousSuccess: modelData.score > 1
-          });
-          updatedItems.push(item);
-        }
-      }
-      updatedReviews.push(review);
-    }
-    async.parallel([
-      async.apply(this.updateItemCache, updatedItems),
-      async.apply(this.updateReviewCache, updatedReviews)
-    ], callback);
-  },
-  /**
-   * @method updateItemCache
-   * @param {Array} items
-   * @param {Function} callback
-   */
-  updateItemCache: function(items, callback) {
-    async.each(
-      items || [],
-      function(item, callback) {
-        app.user.db.items
-          .put(item.toJSON())
-          .then(function() {
-            callback();
-          })
-          .catch(callback);
-      },
-      callback
-    );
-  },
-  /**
-   * @method updateReviewCache
-   * @param {Array} reviews
-   * @param {Function} callback
-   */
-  updateReviewCache: function(reviews, callback) {
-    async.each(
-      reviews || [],
-      function(review, callback) {
-        app.user.db.reviews
-          .put({
-            group: review.get('group'),
-            created: review.get('created'),
-            data: review.get('data')
-          })
-          .then(function() {
-            callback();
-          })
-          .catch(callback);
-      },
-      callback
-    );
+    callback();
   }
+
 });

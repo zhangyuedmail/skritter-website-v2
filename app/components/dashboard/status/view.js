@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
    * @type {Function}
    */
   template: require('./template'),
-  
+
   /**
    * @method initialize
    * @constructor
@@ -19,7 +19,7 @@ module.exports = GelatoComponent.extend({
     this.dueCount = null;
     this.updateDueCount();
   },
-  
+
   /**
    * @method render
    * @returns {DashboardStatus}
@@ -28,44 +28,36 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     return this;
   },
-  
+
   /**
    * @method updateDueCount
    */
   updateDueCount: function() {
-    var self = this;
-    var count = 0;
-    var lang = app.getLanguage();
-    var now = moment().unix();
-    var parts = app.user.getFilteredParts();
-    var styles = app.user.getFilteredStyles();
-    
-    app.user.db.items
-      .where('next')
-      .belowOrEqual(now)
-      .toArray()
-      .then(function(items) {
-        items.forEach(function(item) {
-          if (!item.vocabIds.length) {
-            return;
-          } else if (item.lang !== lang) {
-            return
-          } else if (parts.indexOf(item.part) === -1) {
-            return;
-          } else if (styles.indexOf(item.style) === -1) {
-            return;
+    $.ajax({
+      url: app.getApiUrl() + 'items/due',
+      type: 'GET',
+      headers: app.user.session.getHeaders(),
+      context: this,
+      data: {
+        lang: app.getLanguage(),
+        parts: app.user.getFilteredParts().join(','),
+        styles: app.user.getFilteredStyles().join(',')
+      },
+      error: function(error) {
+        console.log(error);
+        this.dueCount = '-';
+        this.render();
+      },
+      success: function(result) {
+        var count = 0;
+        for (var part in result.due) {
+          for (var style in result.due[part]) {
+            count += result.due[part][style];
           }
-          if (!item.last) {
-            count++;
-            return;
-          }
-          var readiness = (now - item.last) / (item.next - item.last);
-          if (readiness >= 1.0) {
-            count++;
-          }
-        });
-        self.dueCount = count;
-        self.render();
-      });
+        }
+        this.dueCount =  count;
+        this.render();
+      }
+    });
   }
 });

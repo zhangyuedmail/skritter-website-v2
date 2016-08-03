@@ -14,7 +14,7 @@ module.exports = GelatoComponent.extend({
     this.prompt = options.prompt;
     this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
-    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
+    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptToolbarGradingMouseup);
   },
   /**
    * @property el
@@ -124,5 +124,11 @@ module.exports = GelatoComponent.extend({
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.toolbarAction.render();
+  },
+  /**
+   * @method handlePromptToolbarGradingMouseup
+   */
+  handlePromptToolbarGradingMouseup: function(value) {
+    this.prompt.review.set('score', value);
   }
 });
