@@ -14,23 +14,6 @@ var VacationDialog = require('dialogs/vacation/view');
  */
 module.exports = GelatoPage.extend({
   /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    StripeLoader.load();
-    this.coupon = new Coupon({code: app.getStoredCouponCode() || ''});
-    this.sidebar = new AccountSidebar();
-    this.subscription = new Subscription({id: app.user.id});
-    this.listenTo(this.subscription, 'state', this.render);
-    this.listenTo(this.coupon, 'sync', function(model, response) {
-      this.subscription.set(response.Subscription);
-      this.coupon.unset('code');
-    });
-    this.listenTo(this.coupon, 'state', this.render);
-    this.subscription.fetch();
-  },
-  /**
    * @property events
    * @type {Object}
    */
@@ -46,6 +29,19 @@ module.exports = GelatoPage.extend({
     'click #unsubscribe-btn': 'handleClickUnsubscribeButton',
     'click #subscribe-paypal-btn': 'handleClickSubscribePaypalButton'
   },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./template'),
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Billing Subscription - Account - Skritter',
+
   /**
    * @property paypalPlans
    * @type {Array}
@@ -60,25 +56,36 @@ module.exports = GelatoPage.extend({
       fullName: 'Year Plan : $99.99 USD - yearly'
     }
   ],
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    StripeLoader.load();
+    this.coupon = new Coupon({code: app.getStoredCouponCode() || ''});
+    this._views['sidebar'] = new AccountSidebar();
+    this.subscription = new Subscription({id: app.user.id});
+    this.listenTo(this.subscription, 'state', this.render);
+    this.listenTo(this.coupon, 'sync', function(model, response) {
+      this.subscription.set(response.Subscription);
+      this.coupon.unset('code');
+    });
+    this.listenTo(this.coupon, 'state', this.render);
+    this.subscription.fetch();
+  },
+
   /**
    * @method render
    * @returns {AccountBillingSubscription}
    */
   render: function() {
     this.renderTemplate();
-    this.sidebar.setElement('#sidebar-container').render();
+    this._views['sidebar'].setElement('#sidebar-container').render();
+
     return this;
   },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Billing Subscription - Account - Skritter',
+
   /**
    * @method handleChangePaymentMethod
    */
@@ -87,6 +94,7 @@ module.exports = GelatoPage.extend({
     this.$('.credit-card-form-group').toggleClass('hide', method !== 'stripe');
     this.$('.paypal-form-group').toggleClass('hide', method !== 'paypal');
   },
+
   /**
    * @method handleClickCancelVacationLink
    */
@@ -95,15 +103,18 @@ module.exports = GelatoPage.extend({
       parse: true,
       method: 'PUT'
     });
+
     this.$('#cancel-vacation-spinner').removeClass('hide');
     this.$('#cancel-vacation-link').addClass('hide');
   },
+
   /**
    * @method handleClickGoOnVacationLink
    */
   handleClickGoOnVacationLink: function() {
     this.openVacationDialog();
   },
+
   /**
    * @method handleClickRedeemCodeButton
    */
@@ -112,6 +123,7 @@ module.exports = GelatoPage.extend({
     this.coupon.use();
     this.render();
   },
+
   /**
    * @method handleClickSpoofButtonAreaButton
    * @param {Event} event
@@ -274,14 +286,16 @@ module.exports = GelatoPage.extend({
     $(event.target).closest('button').addClass('active');
     this.render();
   },
+
   /**
    * @method handleClickSubscribePaypalButton
    */
   handleClickSubscribePaypalButton: function() {
-    var plan = $('#paypal-plan-select').val();
-    $('#paypal-subscribe-form select').val(plan);
-    $('#paypal-subscribe-form').submit();
+    var plan = this.$('#paypal-plan-select').val();
+    this.$('#paypal-subscribe-select').val(plan);
+    this.$('#paypal-subscribe-form').submit();
   },
+
   /**
    * @method handleClickSubscribeStripeButton
    */
@@ -297,6 +311,7 @@ module.exports = GelatoPage.extend({
     this.setSubscribeStripeButtonDisabled(true);
     this.$('#card-error-alert').addClass('hide');
   },
+
   /**
    * @method this.handleClickSubscribeStripeButtonResponse
    */
@@ -309,11 +324,9 @@ module.exports = GelatoPage.extend({
     }
     else {
       var token = response.id;
-      var url = (
-      app.getApiUrl() +
-      this.subscription.url() +
-      '/stripe/subscribe');
+      var url = app.getApiUrl() + this.subscription.url() + '/stripe/subscribe';
       var headers = app.user.session.getHeaders();
+      var self = this;
       var data = {
         token: token,
         plan: this.$('#plan-select').val()
@@ -332,12 +345,13 @@ module.exports = GelatoPage.extend({
               'Plan': data.plan
             }
           );
-          this.subscription.set(response.Subscription);
-          this.render();
+          self.subscription.set(response.Subscription);
+          self.render();
         }
       })
     }
   },
+
   /**
    * @method handleClickUnsubscribeButton
    */
@@ -353,12 +367,15 @@ module.exports = GelatoPage.extend({
       }
     });
   },
+
   /**
    * @method handleClickUnsubscribeITunesButton
    */
   handleClickUnsubscribeITunesButton: function() {
     var url = app.getApiUrl() + this.subscription.url() + '/ios/cancel';
     var headers = app.user.session.getHeaders();
+    var self = this;
+
     this.$('#unsubscribe-itunes-btn *').toggleClass('hide');
     $.ajax({
       url: url,
@@ -366,11 +383,12 @@ module.exports = GelatoPage.extend({
       method: 'POST',
       context: this,
       success: function(response) {
-        this.subscription.set(response.Subscription);
-        this.renderMainContent();
+        self.subscription.set(response.Subscription);
+        self.render();
       }
     });
   },
+
   /**
    * @method handleClickUpdateStripeSubscriptionButton
    */
@@ -380,17 +398,17 @@ module.exports = GelatoPage.extend({
       exp_month: this.$('#card-month-select').val(),
       exp_year: this.$('#card-year-select').val()
     };
+
     if (cardData.number) {
       var handler = _.bind(this.handleClickUpdateStripeSubscriptionButtonResponse, this);
       Stripe.setPublishableKey(app.getStripeKey());
       Stripe.card.createToken(cardData, handler);
       this.setSubscribeStripeButtonDisabled(true);
-    }
-    else {
-      var url = (
-      app.getApiUrl() + this.subscription.url() + '/stripe');
+    } else {
+      var url = (app.getApiUrl() + this.subscription.url() + '/stripe');
       var headers = app.user.session.getHeaders();
       var data = {plan: this.$('#plan-select').val()};
+      var self = this;
       $.ajax({
         url: url,
         headers: headers,
@@ -399,14 +417,23 @@ module.exports = GelatoPage.extend({
         data: JSON.stringify(data),
         context: this,
         success: function(response) {
-          this.subscription.set(response.Subscription);
-          this.renderMainContent();
+          self.subscription.set(response.Subscription);
+          self.render();
+        },
+        error: function(response) {
+          self.setSubscribeStripeButtonDisabled(false);
+          self.$('#card-error-alert')
+            .text(response.error.message)
+            .removeClass('hide');
         }
       });
+
       this.setSubscribeStripeButtonDisabled(true);
     }
+
     this.$('#card-error-alert').addClass('hide');
   },
+
   /**
    * @method this.handleClickSubscribeStripeButtonResponse
    */
@@ -416,16 +443,16 @@ module.exports = GelatoPage.extend({
       this.$('#card-error-alert')
         .text(response.error.message)
         .removeClass('hide');
-    }
-    else {
+    } else {
+      var self = this;
       var token = response.id;
-      var url = (
-      app.getApiUrl() + this.subscription.url() + '/stripe');
+      var url = (app.getApiUrl() + this.subscription.url() + '/stripe');
       var headers = app.user.session.getHeaders();
       var data = {
         token: token,
         plan: this.$('#plan-select').val()
       };
+
       $.ajax({
         url: url,
         headers: headers,
@@ -434,12 +461,13 @@ module.exports = GelatoPage.extend({
         data: JSON.stringify(data),
         context: this,
         success: function(response) {
-          this.subscription.set(response.Subscription);
-          this.renderMainContent();
+          self.subscription.set(response.Subscription);
+          self.render();
         }
-      })
+      });
     }
   },
+
   /**
    * @method openVacationDialog
    */
@@ -447,14 +475,7 @@ module.exports = GelatoPage.extend({
     var dialog = new VacationDialog({subscription: this.subscription});
     dialog.render().open();
   },
-  /**
-   * @method remove
-   * @returns {AccountBillingSubscription}
-   */
-  remove: function() {
-    this.sidebar.remove();
-    return GelatoPage.prototype.remove.call(this);
-  },
+
   /**
    * @method setSubscribeStripeButtonDisabled
    * @param {Boolean} disabled

@@ -159,10 +159,10 @@ gelato-page(data-name='signup')
 
   #section-policy.content-block
     .policy-row
-      strong Refund Policy:
-      | If you’re not satisfied for any reason, we offer a full refund on your first month's purchase, and we provide a pro-rated refund on longer subscriptions. Just&nbsp;
-      a(href='#', data-url='contact') contact us
-      | ; we'll make you happy.
+      strong #{app.locale('pages.signup.refundPolicy')}:&nbsp;
+      | #{app.locale('pages.signup.refundDetails1')}&nbsp;
+      a(href='#', data-url='contact')= app.locale('pages.signup.refundDetails2')
+      = app.locale('pages.signup.refundDetails3')
     .policy-row
       | Note: We cannot issue refunds for Apple purchases. Sorry, but they won't let us! Please try&nbsp;
       a(href='http://www.labnol.org/software/itunes-app-store-refunds/13838/', target='_blank') these instructions
