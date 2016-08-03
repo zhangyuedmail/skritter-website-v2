@@ -235,10 +235,10 @@ module.exports = GelatoPage.extend({
         review,
         null,
         function() {
-          if (promptItems.readiness > 1.0) {
+          if (promptItems.readiness >= 1.0) {
             self.toolbar.dueCountOffset++;
           }
-          if (self.items.reviews.length > 100) {
+          if (self.items.reviews.length > 2) {
             self.items.reviews.post({skip: 1});
           }
           self.items.addHistory(self.item);
