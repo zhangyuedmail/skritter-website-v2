@@ -12,7 +12,7 @@ module.exports = GelatoComponent.extend({
    */
   initialize: function(options) {
     this.prompt = options.prompt;
-    this.reviews = null;
+    this.items = null;
     this.showLeft = true;
     this.showRight = true;
   },
@@ -54,14 +54,14 @@ module.exports = GelatoComponent.extend({
     this.prompt.previous();
   },
   /**
-   * @method setReviews
-   * @param {Reviews} reviews
+   * @method setItems
+   * @param {Reviews} items
    */
-  setReviews: function(reviews) {
+  setItems: function(items) {
     this.stopListening();
-    this.listenTo(reviews, 'add', this.render);
-    this.listenTo(reviews, 'state', this.render);
-    this.reviews = reviews;
+    this.listenTo(items.reviews, 'add', this.render);
+    this.listenTo(items.reviews, 'state', this.render);
+    this.items = items;
     return this.render();
   }
 });
