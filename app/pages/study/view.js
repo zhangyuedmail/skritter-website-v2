@@ -29,6 +29,7 @@ module.exports = GelatoPage.extend({
       this._views['recipe'] = new Recipes();
     }
 
+    this.listenTo(this.items, 'state', this.handleItemState);
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
   },
@@ -206,13 +207,20 @@ module.exports = GelatoPage.extend({
             }
           );
         } else {
-          self.next();
           ScreenLoader.hide();
         }
       }
     );
   },
 
+  /**
+   * @method handleItemState
+   */
+  handleItemState: function() {
+    if (!this.item) {
+      this.next();
+    }
+  },
 
   /**
    * @method handlePromptNext
@@ -221,22 +229,24 @@ module.exports = GelatoPage.extend({
   handlePromptNext: function(promptItems) {
     var self = this;
     var review = promptItems.getReview();
-    this.items.reviews.put(
-      review,
-      null,
-      function() {
-        if (promptItems.readiness >= 1.0) {
-          self.toolbar.dueCountOffset++;
+    if (this.item) {
+      this.items.reviews.put(
+        review,
+        null,
+        function() {
+          if (promptItems.readiness >= 1.0) {
+            self.toolbar.dueCountOffset++;
+          }
+          if (self.items.reviews.length > 2) {
+            self.items.reviews.post({skip: 1});
+          }
+          self.items.addHistory(self.item);
+          self.item = null;
+          self.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
+          self.next();
         }
-        if (self.items.reviews.length > 2) {
-          self.items.reviews.post({skip: 1});
-        }
-        self.items.addHistory(self.item);
-        self.item = null;
-        self.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
-        self.next();
-      }
-    );
+      );
+    }
   },
 
   /**
@@ -254,6 +264,7 @@ module.exports = GelatoPage.extend({
     var items = this.items.getNext();
     if (items.length) {
       this.item = items[0];
+      this.prompt.$panelLeft.css('opacity', 1.0);
       this.prompt.set(this.item.getPromptItems());
       this.prompt.reviewStatus.render();
       this.toolbar.render();
@@ -261,7 +272,7 @@ module.exports = GelatoPage.extend({
         this.items.fetchNext({limit: 2, loop: 5});
       }
     } else {
-      this.items.clearHistory();
+      this.prompt.$panelLeft.css('opacity', 0.2);
       this.items.fetchNext({limit: 1}, this.next.bind(this));
     }
   },
