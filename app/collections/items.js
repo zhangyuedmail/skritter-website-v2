@@ -90,17 +90,23 @@ module.exports = SkritterCollection.extend({
         return count < options.limit;
       },
       function(callback) {
-        count++;
-        self.addItem(
-          options,
-          function(error, result) {
-            if (!error) {
-              results.items.push(result);
-              results.numVocabsAdded += result.numVocabsAdded;
-            }
-            callback();
+        app.user.isSubscriptionActive(function(active) {
+          if (active) {
+            count++;
+            self.addItem(
+              options,
+              function(error, result) {
+                if (!error) {
+                  results.items.push(result);
+                  results.numVocabsAdded += result.numVocabsAdded;
+                }
+                callback();
+              }
+            );
+          } else {
+            callback(null, results);
           }
-        );
+        });
       },
       function() {
         callback(null, results);
