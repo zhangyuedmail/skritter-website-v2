@@ -134,33 +134,54 @@ module.exports = SkritterCollection.extend({
    * @param {Function} [callback]
    */
   fetchNext: function(options, callback) {
+    if (this.state === 'fetching') {
+      return;
+    }
+
+    var self = this;
+    var count = 0;
     options = options || {};
+    options.cursor = options.cursor || null;
     options.limit = options.limit || 10;
-    this.fetch({
-      data: {
-        sort: 'next',
-        cursor: options.cursor,
-        lang: app.getLanguage(),
-        limit: options.limit,
-        include_contained: true,
-        include_decomps: true,
-        include_heisigs: true,
-        include_sentences: true,
-        include_strokes: true,
-        include_vocabs: true,
-        parts: app.user.getFilteredParts().join(','),
-        styles: app.user.getFilteredStyles().join(',')
+    options.loop = options.loop || 1;
+
+    async.whilst(
+      function() {
+        return count < options.loop;
       },
-      merge: true,
-      remove: false,
-      sort: false,
-      error: function(error) {
-        _.isFunction(callback) && callback(error);
+      function(callback) {
+        count++;
+        self.fetch({
+          data: {
+            sort: 'next',
+            cursor: options.cursor,
+            lang: app.getLanguage(),
+            limit: 2,
+            include_contained: true,
+            include_decomps: true,
+            include_heisigs: true,
+            include_sentences: true,
+            include_strokes: true,
+            include_vocabs: true,
+            parts: app.user.getFilteredParts().join(','),
+            styles: app.user.getFilteredStyles().join(',')
+          },
+          merge: true,
+          remove: false,
+          sort: false,
+          error: function(error) {
+            callback(error);
+          },
+          success: function(items) {
+            options.cursor = items.cursor;
+            callback();
+          }
+        });
       },
-      success: function(items) {
-        _.isFunction(callback) && callback(null, items);
+      function(error) {
+        _.isFunction(callback) && callback(error, self);
       }
-    });
+    );
   },
 
   /**
@@ -178,14 +199,6 @@ module.exports = SkritterCollection.extend({
       )
       .shuffle()
       .value();
-  },
-
-  /**
-   * @method hasNext
-   * @returns {Boolean}
-   */
-  hasNext: function() {
-    return this.getNext().length > 0;
   },
 
   /**

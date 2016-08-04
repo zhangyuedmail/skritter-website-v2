@@ -22,7 +22,6 @@ module.exports = GelatoPage.extend({
     this.item = null;
     this.items = new Items();
     this.prompt = new Prompt({page: this});
-    this.scheduleState = 'standby';
     this.toolbar = new Toolbar({page: this});
     this.vocablists = new Vocablists();
 
@@ -150,16 +149,20 @@ module.exports = GelatoPage.extend({
     var self = this;
     var hasItems = false;
     var hasVocablists = false;
-    this.items.clearHistory();
     async.parallel(
       [
         function(callback) {
+          self.items.clearHistory();
           self.items.fetchNext(
             {
-              limit: 2
+              limit: 1
             },
             function(error, result) {
-              self.items.fetchNext({cursor: result.cursor, limit: 10});
+              self.items.fetchNext({
+                cursor: result.cursor,
+                limit: 2,
+                loop: 5
+              });
               hasItems = !error && result.length;
               callback();
             }
@@ -232,27 +235,23 @@ module.exports = GelatoPage.extend({
    */
   handlePromptNext: function(promptItems) {
     var self = this;
-    if (this.item) {
-      var review = promptItems.getReview();
-      this.items.reviews.put(
-        review,
-        null,
-        function() {
-          if (promptItems.readiness >= 1.0) {
-            self.toolbar.dueCountOffset++;
-          }
-          if (self.items.reviews.length > 2) {
-            self.items.reviews.post({skip: 1});
-          }
-          self.items.addHistory(self.item);
-          self.item = null;
-          self.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
-          self.next();
+    var review = promptItems.getReview();
+    this.items.reviews.put(
+      review,
+      null,
+      function() {
+        if (promptItems.readiness >= 1.0) {
+          self.toolbar.dueCountOffset++;
         }
-      );
-    } else {
-      this.prompt.reviewStatus.render();
-    }
+        if (self.items.reviews.length > 2) {
+          self.items.reviews.post({skip: 1});
+        }
+        self.items.addHistory(self.item);
+        self.item = null;
+        self.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
+        self.next();
+      }
+    );
   },
 
   /**
@@ -274,11 +273,11 @@ module.exports = GelatoPage.extend({
       this.prompt.reviewStatus.render();
       this.toolbar.render();
       if (this.items.length < 5) {
-        this.items.fetchNext({limit: 10});
+        this.items.fetchNext({limit: 2, loop: 5});
       }
     } else {
       this.items.clearHistory();
-      this.items.fetchNext({limit: 10}, this.next.bind(this));
+      this.items.fetchNext({limit: 1}, this.next.bind(this));
     }
   },
 
