@@ -47,7 +47,25 @@ module.exports = GelatoComponent.extend({
   render: function() {
     this.renderTemplate();
     this.timer.setElement('#timer-container').render();
+
+    this.checkSubscription();
+
     return this;
+  },
+
+  /**
+   * Checks whether a subscription is active and hides UI elements that
+   * won't work if it's not active.
+   * @method checkSubscription
+   */
+  checkSubscription: function() {
+    var self = this;
+
+    app.user.isSubscriptionActive(function(active) {
+      if (!active) {
+        self.$('#button-add-item').hide();
+      }
+    });
   },
 
   /**

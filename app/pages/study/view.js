@@ -34,14 +34,6 @@ module.exports = GelatoPage.extend({
   },
 
   /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'click #add-item-button': 'handleClickAddItemButton'
-  },
-
-  /**
    * @property showFooter
    * @type {Boolean}
    */
@@ -221,13 +213,6 @@ module.exports = GelatoPage.extend({
     );
   },
 
-  /**
-   * @method handleClickAddItemButton
-   */
-  handleClickAddItemButton: function(event) {
-    event.preventDefault();
-    this.addItem();
-  },
 
   /**
    * @method handlePromptNext
