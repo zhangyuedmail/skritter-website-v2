@@ -1,0 +1,11 @@
+gelato-component(data-name='expired-notification').hidden.row
+  .col-xs-12
+    .content-block.subscription-notice-area.dark
+      .content.clearfix
+        .push-left
+          .bold= app.locale('pages.dashboard.subscriptionExpired')
+          .expiration-description= app.locale('pages.dashboard.subExpiredDetails')
+        .push-right
+          a(href="/account/billing/subscription")
+            .btn.btn-success= app.locale('pages.dashboard.goToSubSettings')
+          span#hide-sub-expired.hide-sub-expired= app.locale('pages.dashboard.hide')

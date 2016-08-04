@@ -3,6 +3,7 @@ var DashboardGoal = require('components/dashboard/status/view');
 var DashboardMonth = require('components/dashboard/month/view');
 var DashboardQueue = require('components/dashboard/queue/view');
 var DashboardTotal = require('components/dashboard/total/view');
+var ExpiredNotification = require('components/account/expired-notification/view');
 
 /**
  * A page that shows a summary of the user's review count due, stats, and lists
@@ -11,10 +12,6 @@ var DashboardTotal = require('components/dashboard/total/view');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-  events: {
-    'click #hide-sub-expired': 'handleHideSubscriptionExpiredNotice'
-  },
-
   /**
    * @property title
    * @type {String}
@@ -36,9 +33,7 @@ module.exports = GelatoPage.extend({
     this._views['month'] = new DashboardMonth();
     this._views['total'] = new DashboardTotal();
     this._views['queue'] = new DashboardQueue();
-
-    // this.listenTo(app.user.subscription, 'state', this.updateSubscriptionState);
-    // app.user.subscription.fetch();
+    this._views['expiration'] = new ExpiredNotification();
 
     app.mixpanel.track('Viewed dashboard page');
   },
@@ -54,25 +49,8 @@ module.exports = GelatoPage.extend({
     this._views['month'].setElement('#dashboard-month-container').render();
     this._views['total'].setElement('#dashboard-total-container').render();
     this._views['queue'].setElement('#dashboard-queue-container').render();
-
-    app.user.isSubscriptionActive(_.bind(this.updateSubscriptionState, this));
+    this._views['expiration'].setElement('#subscription-notice').render();
 
     return this;
-  },
-
-  handleHideSubscriptionExpiredNotice: function(event) {
-    event.preventDefault();
-
-    app.setSetting('hideSubscriptionNotification', true);
-    this.updateSubscriptionState();
-  },
-
-  updateSubscriptionState: function() {
-    var sub = app.user.subscription;
-    var hide = app.getSetting('hideSubscriptionNotification');
-
-    if (sub.state === 'standby') {
-      this.$('#subscription-notice').toggleClass('hidden', sub.getStatus() !== 'Expired' || hide);
-    }
   }
 });
