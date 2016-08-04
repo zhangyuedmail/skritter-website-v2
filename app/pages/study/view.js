@@ -144,6 +144,16 @@ module.exports = GelatoPage.extend({
     async.parallel(
       [
         function(callback) {
+          app.user.subscription.fetch({
+            error: function() {
+              callback();
+            },
+            success: function() {
+              callback();
+            }
+          });
+        },
+        function(callback) {
           self.items.clearHistory();
           self.items.fetchNext(
             {
@@ -180,6 +190,7 @@ module.exports = GelatoPage.extend({
       ],
       function() {
         if (!hasItems && !hasVocablists) {
+          self.prompt.render();
           self.prompt.$('#overlay').show();
           ScreenLoader.hide();
         } else if (!hasItems && hasVocablists) {

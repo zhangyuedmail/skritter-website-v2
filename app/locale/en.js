@@ -38,9 +38,12 @@ module.exports = {
 
   "components": {
     "studyPrompt": {
-      "addListCallToAction": "You'll need to add at least one list before you can start studying.",
-      "manageLists": "Browse Lists",
-      "pleaseWait": "Choose a list to get started."
+      "emptyButton": "Browse Lists",
+      "emptyCallToAction": "You'll need to add at least one list before you can start studying.",
+      "emptyHeader": "Choose a list to get started.",
+      "expiredButton": "Subscription",
+      "expiredCallToAction": "You'll need an active subscription to add new words to study.",
+      "expiredHeader": "Start a new subscription."
     }
   },
 
