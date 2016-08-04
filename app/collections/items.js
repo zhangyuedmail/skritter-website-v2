@@ -109,6 +109,7 @@ module.exports = SkritterCollection.extend({
         });
       },
       function() {
+        self.updateDueCount();
         callback(null, results);
       }
     );
