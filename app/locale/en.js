@@ -203,6 +203,9 @@ module.exports = {
     },
 
     "vocabLists": {
+      "titleBrowse": "Browse - Skritter",
+      "titleCpod": "ChinesePod - Skritter",
+      "titlePublished": "Published Lists - Skritter",
       "addSection": "Add section",
       "addToQueue": "Add to queue",
       "backToCpod": "back to ChinesePod lists",

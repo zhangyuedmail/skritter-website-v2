@@ -15,17 +15,17 @@ gelato-component(data-name='vocablists-mine-table')
         .col-md-2= list.get('creatorName') || list.get('creator')
         .col-md-2= moment(list.get('published') * 1000).format('l')
         .col-md-3
-          if list.get('studyingMode') === 'not studying'
+          if list.get('studyingMode') === 'not studying' && app.user.isSubscriptionActive()
             span.add-to-queue-link(data-vocablist-id=list.id)
               span.glyphicon.glyphicon-plus-sign.text-success
-              span Add to queue
+              span= app.locale('pages.vocabLists.addToQueue')
           else
             span= _.capitalize(list.getNormalizedStudyingMode())
 
   if view.vocablists.state === 'standby' && view.vocablists.cursor
     button#load-more-btn.btn.btn-primary.btn-block Load More
 
-  if view.vocablists.state === 'fetching'
+  if view.vocablists.state === 'fetching' || app.user.subscription.state === 'fetching'
     p.text-center
       i.fa.fa-3x.fa-spinner.fa-pulse
 

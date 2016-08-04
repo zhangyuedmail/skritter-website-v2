@@ -2,6 +2,7 @@ var GelatoPage = require('gelato/page');
 
 var Table = require('components/vocablists/published-table/view');
 var Sidebar = require('components/vocablists/sidebar/view');
+var ExpiredNotification = require('components/account/expired-notification/view');
 
 /**
  * Page that allows a user to search for user-published lists of words and
@@ -10,16 +11,6 @@ var Sidebar = require('components/vocablists/sidebar/view');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-
-  /**
-   * Initializes the view. Instantiates subviews.
-   * @constructor
-   */
-  initialize: function() {
-    this.sidebar = new Sidebar();
-    this.table = new Table();
-  },
-
   /**
    * Dictionary of events this view should listen to
    * @type {Object<String, String>}
@@ -40,7 +31,17 @@ module.exports = GelatoPage.extend({
    * @type {String}
    * @default
    */
-  title: 'Published Lists - Skritter',
+  title: app.locale('pages.vocabLists.titlePublished'),
+
+  /**
+   * Initializes the view. Instantiates subviews.
+   * @constructor
+   */
+  initialize: function() {
+    this._views['sidebar'] = new Sidebar();
+    this._views['table'] = new Table();
+    this._views['expiration'] = new ExpiredNotification();
+  },
 
   /**
    * Renders the view
@@ -48,46 +49,44 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.sidebar.setElement('#vocablist-sidebar-container').render();
-    this.table.setElement('#vocablist-container').render();
+    this._views['sidebar'].setElement('#vocablist-sidebar-container').render();
+    this._views['table'].setElement('#vocablist-container').render();
+    this._views['expiration'].setElement('#expiration-container').render();
 
     return this;
   },
 
+  /**
+   * @param {jQuery.Event} e
+   * @method handleClickClearSearch
+   */
   handleClickClearSearch: function(e) {
     this.$('#clear-search').addClass('hidden');
     this.$('#query-results-text').addClass('invisible');
     this.$('#list-search-input').val('');
-    this.table.searchFor('');
+    this._views['table'].searchFor('');
   },
 
   /**
    * Checks to see if the key pressed was "enter". If it was, gets
    * the search value and performs a search.
    * @param {jQuery.Event} event the keyup event
+   * @method handleKeypressListSearchInput
    */
   handleKeypressListSearchInput: function(event) {
     if (event.which === 13 || event.keyCode === 13) {
       var needle = ($(event.target).val() || '').trim().toLowerCase().split(' ');
-      this.table.searchFor(needle[0]);
+      this._views['table'].searchFor(needle[0]);
       this.$('#clear-search').removeClass('hidden');
       this.updateQueryResultsText(needle);
     }
   },
 
   /**
-   * Destructor that cleans up subviews and events for this view
-   * @returns {VocablistBrowse}
+   * @param {String[]} needle
+   * @method updateQueryResultsText
    */
-  remove: function() {
-    this.sidebar.remove();
-    this.table.remove();
-    
-    return GelatoPage.prototype.remove.call(this);
-  },
-
   updateQueryResultsText: function(needle) {
-
     var multiWordSearch = (needle.length > 1),
       s = "Showing results for <i>" + needle[0] + "</i>.";
 

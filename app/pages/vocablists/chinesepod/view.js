@@ -11,28 +11,6 @@ var VocablistSidebar = require('components/vocablists/sidebar/view');
  */
 module.exports = GelatoPage.extend({
   /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    this.sidebar = new VocablistSidebar();
-    this.chinesepodSession = new ChinesePodSession();
-    this.chinesepodLabels = new ChinesePodLabels();
-    this.chinesepodLessons = new ChinesePodLessons();
-    this.viewOption = 'lessons';
-    this.email = '';
-    this.password = '';
-    this.errorMessage = '';
-    this.searchString = '';
-    this.chinesepodSession.fetch();
-    this.listenToOnce(this.chinesepodSession, 'state', this.handleChinesepodSessionLoaded);
-    this.listenTo(this.chinesepodLabels, 'state', this.render);
-    this.listenTo(this.chinesepodLessons, 'state', this.render);
-    this.listenTo(this.chinesepodLabels, 'error', this.handleChinesePodError);
-    this.listenTo(this.chinesepodLessons, 'error', this.handleChinesePodError);
-  },
-
-  /**
    * @property events
    * @type {Object}
    */
@@ -48,13 +26,37 @@ module.exports = GelatoPage.extend({
    * @property title
    * @type {String}
    */
-  title: 'ChinesePod - Skritter',
+  title: app.locale('pages.vocabLists.titleCpod'),
 
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.sidebar = new VocablistSidebar();
+    this.chinesepodSession = new ChinesePodSession();
+    this.chinesepodLabels = new ChinesePodLabels();
+    this.chinesepodLessons = new ChinesePodLessons();
+
+    this.viewOption = 'lessons';
+    this.email = '';
+    this.password = '';
+    this.errorMessage = '';
+    this.searchString = '';
+    this.chinesepodSession.fetch();
+
+    this.listenToOnce(this.chinesepodSession, 'state', this.handleChinesepodSessionLoaded);
+    this.listenTo(this.chinesepodLabels, 'state', this.render);
+    this.listenTo(this.chinesepodLessons, 'state', this.render);
+    this.listenTo(this.chinesepodLabels, 'error', this.handleChinesePodError);
+    this.listenTo(this.chinesepodLessons, 'error', this.handleChinesePodError);
+  },
 
   /**
    * @method render

@@ -195,6 +195,8 @@ module.exports = SkritterModel.extend({
   /**
    * Asynchronously checks whether the user's subscription is active while
    * optimizing fetches using memoization kinda.
+   * Can also get a synchronous return if things have already been fetched.
+   * This is bad design. I'm sorry. Will refactor once we do ES6. I..."promise".
    * @param {Function} callback called when it can be determined
    *                            whether the subscription is active.
    */
@@ -202,7 +204,11 @@ module.exports = SkritterModel.extend({
     var self = this;
 
     if (this.subscription.isFetched) {
-      callback(this.subscription.getStatus() !== 'Expired');
+      if (_.isFunction(callback)) {
+        callback(this.subscription.getStatus() !== 'Expired');
+      }
+
+      return this.subscription.getStatus() !== 'Expired';
     } else {
       this.subscription.fetch({
         success: function() {
