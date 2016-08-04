@@ -3,18 +3,19 @@ gelato-component(data-name='dashboard-status')
     .col-xs-12.text-center
       a(href="/account")= user.get('name')
       | , you have &nbsp;
-      if view.dueCount === null
-        | - items ready to review.
-      else if view.dueCount > 0
+      if view.dueCount > 0 && view.vocablists.state === 'standby'
         span= view.dueCount
         | &nbsp; items ready to review.
-      else
+      else if view.dueCount === 0 && view.vocablists.state === 'standby'
         span no items to review.
+      else
+        | - items ready to review.
+
 
   .row
     .col-xs-12.text-center
       br
-      if view.dueCount !== 0
+      if view.dueCount !== 0 || (view.vocablists.state === 'standby' && view.vocablists.length > 0)
         a.btn.btn-fixed.btn-success(type="button", href="/study") Study
       else
         a.btn.btn-fixed.btn-success(type="button", href="/vocablists/browse") Add a list to study
