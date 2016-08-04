@@ -38,11 +38,9 @@ module.exports = {
 
   "components": {
     "studyPrompt": {
-      "addListCallToAction": "If you don't have any lists to study from yet, add a new one!",
-      "canUsePlus": "Remember! You can also use the plus button",
-      "canUsePlus2": "to add an item to your queue.",
-      "manageLists": "Manage Lists",
-      "pleaseWait": "Please hang tight while we find some items for you to study..."
+      "addListCallToAction": "You'll need to add at least one list before you can start studying.",
+      "manageLists": "Browse Lists",
+      "pleaseWait": "Choose a list to get started."
     }
   },
 

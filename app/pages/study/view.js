@@ -4,7 +4,6 @@ var Toolbar = require('components/study/toolbar/view');
 var Recipes = require('components/common/recipes/view');
 var Items = require('collections/items');
 var Vocablists = require('collections/vocablists');
-var ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
 
 /**
  * @class Study
@@ -181,19 +180,7 @@ module.exports = GelatoPage.extend({
       ],
       function() {
         if (!hasItems && !hasVocablists) {
-          self.dialog = new ConfirmGenericDialog({
-            body: '{no-vocablists-body-text}',
-            buttonConfirm: '{no-vocablists-button-text}',
-            buttonConfirmClass: 'btn-success',
-            title: '{no-vocablists-title-text}'
-          });
-          self.dialog.on(
-            'confirm',
-            function() {
-              app.router.navigate('vocablists/browse', {trigger: true});
-            }
-          );
-          self.dialog.open();
+          self.prompt.$('#overlay').show();
           ScreenLoader.hide();
         } else if (!hasItems && hasVocablists) {
           ScreenLoader.post('Adding your first words');

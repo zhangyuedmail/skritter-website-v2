@@ -2,13 +2,10 @@ gelato-component(data-name='study-prompt')
 
   #overlay
     .text-center
-      h3= app.locale('components.studyPrompt.pleaseWait')
-      p= app.locale('components.studyPrompt.canUsePlus')
-        span.fa.fa-plus-circle.icon-margin
-        = app.locale('components.studyPrompt.canUsePlus2')
+      h2= app.locale('components.studyPrompt.pleaseWait')
       p= app.locale('components.studyPrompt.addListCallToAction')
-      a(href='/vocablists').btn.btn-lg.btn-primary
-        i.fa.fa-list
+      a(href='/vocablists/browse').btn.btn-lg.btn-primary
+        i.fa.fa-list-alt
         span.spl= app.locale('components.studyPrompt.manageLists')
 
   #panel-left.no-select
