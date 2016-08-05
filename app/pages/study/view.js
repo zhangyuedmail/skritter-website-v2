@@ -270,7 +270,7 @@ module.exports = GelatoPage.extend({
         this.items.fetchNext({limit: 2, loop: 5});
       }
       if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
-        this.addItem();
+        this.addItem(true);
       }
     } else {
       this.prompt.$panelLeft.css('opacity', 0.2);
