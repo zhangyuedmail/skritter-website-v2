@@ -269,9 +269,13 @@ module.exports = GelatoPage.extend({
       if (this.items.length < 5) {
         this.items.fetchNext({limit: 2, loop: 5});
       }
+      if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
+        this.addItem();
+      }
     } else {
       this.prompt.$panelLeft.css('opacity', 0.2);
-      this.items.fetchNext({limit: 1}, this.next.bind(this));
+      this.items.shortenHistory();
+      this.items.fetchNext({limit: 1});
     }
   },
 

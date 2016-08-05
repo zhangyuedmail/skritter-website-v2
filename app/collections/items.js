@@ -18,6 +18,7 @@ module.exports = SkritterCollection.extend({
     this.cursor = null;
     this.dueCount = 0;
     this.history = [];
+    this.addingState = 'standby';
     this.sorted = null;
     this.reviews = new Reviews(null, {items: this});
     this.vocabs = new Vocabs(null, {items: this});
@@ -42,9 +43,9 @@ module.exports = SkritterCollection.extend({
    */
   addHistory: function(item) {
     this.remove(item);
-    this.history.push(item.getBase());
+    this.history.unshift(item.getBase());
     if (this.history.length > 4) {
-      this.history.shift();
+      this.history.pop();
     }
 
     return this;
@@ -56,6 +57,13 @@ module.exports = SkritterCollection.extend({
    * @param {Function} callback
    */
   addItem: function(options, callback) {
+    if (this.addingState === 'standby') {
+      this.addingState = 'adding';
+    } else {
+      _.isFunction(callback) && callback();
+      return;
+    }
+
     $.ajax({
       url: app.getApiUrl() + 'items/add?lists=' + (options.lists || ''),
       type: 'POST',
@@ -66,9 +74,11 @@ module.exports = SkritterCollection.extend({
       },
       error: function(error) {
         console.log(error);
+        this.addingState = 'standby';
         callback(error);
       },
       success: function(result) {
+        this.addingState = 'standby';
         callback(null, result);
       }
     });
@@ -141,16 +151,18 @@ module.exports = SkritterCollection.extend({
    * @param {Function} [callback]
    */
   fetchNext: function(options, callback) {
-    if (this.state === 'fetching') {
-      return;
-    }
-
     var self = this;
     var count = 0;
+
     options = options || {};
     options.cursor = options.cursor || null;
     options.limit = options.limit || 10;
     options.loop = options.loop || 1;
+
+    if (this.state === 'fetching') {
+      _.isFunction(callback) && callback(null, self);
+      return;
+    }
 
     async.whilst(
       function() {
@@ -186,6 +198,7 @@ module.exports = SkritterCollection.extend({
         });
       },
       function(error) {
+        self.updateDueCount();
         _.isFunction(callback) && callback(error, self);
       }
     );
@@ -229,6 +242,18 @@ module.exports = SkritterCollection.extend({
   reset: function() {
     this.vocabs.reset();
     return SkritterCollection.prototype.reset.call(this);
+  },
+
+  /**
+   * @method shortenHistory
+   * @returns {Items}
+   */
+  shortenHistory: function() {
+    if (this.history.length > 1) {
+      this.history = [this.history[0]];
+    }
+
+    return this;
   },
 
   /**
