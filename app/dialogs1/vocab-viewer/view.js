@@ -88,7 +88,7 @@ module.exports = GelatoDialog.extend({
               function(callback) {
                 self.items.fetch({
                   data: {
-                    vocab_ids: self.vocabs.pluck('id').join('|')
+                    vocab_ids: vocabId
                   },
                   error: function(error) {
                     callback(error);
