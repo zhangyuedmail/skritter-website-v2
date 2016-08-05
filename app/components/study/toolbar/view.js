@@ -91,9 +91,12 @@ module.exports = GelatoComponent.extend({
    * @param {Event} event
    */
   handleClickStudySettings: function(event) {
-    var self = this;
-    var dialog = new StudySettings();
     event.preventDefault();
+
+    //post all reviews while changing settings
+    this.page.items.reviews.post();
+
+    var dialog = new StudySettings();
     dialog.open();
     dialog.on('save', function(settings) {
       ScreenLoader.show();
