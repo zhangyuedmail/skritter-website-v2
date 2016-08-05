@@ -108,7 +108,7 @@ module.exports = SkritterCollection.extend({
             self.addItem(
               options,
               function(error, result) {
-                if (!error) {
+                if (!error && result) {
                   results.items.push(result);
                   results.numVocabsAdded += result.numVocabsAdded;
                 }
@@ -181,9 +181,9 @@ module.exports = SkritterCollection.extend({
             lang: app.getLanguage(),
             limit: 2,
             include_contained: true,
-            include_decomps: true,
-            include_heisigs: true,
-            include_sentences: true,
+            //include_decomps: true,
+            //include_heisigs: true,
+            //include_sentences: true,
             include_strokes: true,
             include_vocabs: true,
             parts: app.user.getFilteredParts().join(','),
