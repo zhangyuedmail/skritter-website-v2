@@ -108,10 +108,7 @@ module.exports = GelatoComponent.extend({
             dialog.close();
           },
           success: function() {
-            self.page.items.reset();
-            self.page.prompt.reset();
-            self.page.checkRequirements();
-            dialog.close();
+            app.reload();
           }
         }
       );
