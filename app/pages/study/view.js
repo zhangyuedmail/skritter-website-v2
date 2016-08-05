@@ -28,7 +28,6 @@ module.exports = GelatoPage.extend({
       this._views['recipe'] = new Recipes();
     }
 
-    this.listenTo(this.items, 'state', this.handleItemState);
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
   },
@@ -206,6 +205,9 @@ module.exports = GelatoPage.extend({
           );
         } else {
           ScreenLoader.hide();
+          self.next();
+          self.stopListening(self.items);
+          self.listenTo(self.items, 'state', self.handleItemState);
         }
       }
     );
