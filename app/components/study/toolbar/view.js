@@ -34,7 +34,7 @@ module.exports = GelatoComponent.extend({
     this.page = options.page;
     this.stats = new ProgressStats();
     this.timer = new Timer();
-    this.listenTo(this.page.items, 'due-count', this.render);
+    this.listenTo(this.page.items, 'update:due-count', this.handleUpdateDueCount);
     this.listenTo(this.stats, 'state:standby', this.updateTimerOffset);
     this.stats.fetchToday();
 
@@ -113,6 +113,14 @@ module.exports = GelatoComponent.extend({
         }
       );
     });
+  },
+
+  /**
+   * @method handleUpdateDueCount
+   */
+  handleUpdateDueCount: function() {
+    this.dueCountOffset = 0;
+    this.render();
   },
 
   /**

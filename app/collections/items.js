@@ -19,6 +19,8 @@ module.exports = SkritterCollection.extend({
     this.dueCount = 0;
     this.history = [];
     this.addingState = 'standby';
+    this.dueCountState = 'standby';
+    this.fetchingState = 'standby';
     this.sorted = null;
     this.reviews = new Reviews(null, {items: this});
     this.vocabs = new Vocabs(null, {items: this});
@@ -159,9 +161,11 @@ module.exports = SkritterCollection.extend({
     options.limit = options.limit || 10;
     options.loop = options.loop || 1;
 
-    if (this.state === 'fetching') {
+    if (this.fetchingState === 'fetching') {
       _.isFunction(callback) && callback(null, self);
       return;
+    } else {
+      this.fetchingState = 'fetching';
     }
 
     async.whilst(
@@ -199,6 +203,7 @@ module.exports = SkritterCollection.extend({
       },
       function(error) {
         self.updateDueCount();
+        self.fetchingState = 'standby';
         _.isFunction(callback) && callback(error, self);
       }
     );
@@ -269,6 +274,12 @@ module.exports = SkritterCollection.extend({
    * @method updateDueCount
    */
   updateDueCount: function() {
+    if (this.dueCountState === 'fetching') {
+      return;
+    } else {
+      this.dueCountState = 'fetching';
+    }
+
     $.ajax({
       url: app.getApiUrl() + 'items/due',
       type: 'GET',
@@ -282,6 +293,7 @@ module.exports = SkritterCollection.extend({
       error: function(error) {
         console.log(error);
         this.dueCount = '-';
+        this.dueCountState = 'standby';
       },
       success: function(result) {
         var count = 0;
@@ -291,7 +303,8 @@ module.exports = SkritterCollection.extend({
           }
         }
         this.dueCount =  count;
-        this.trigger('due-count', this.dueCount);
+        this.dueCountState = 'standby';
+        this.trigger('update:due-count', this.dueCount);
       }
     });
   }
