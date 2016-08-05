@@ -1,4 +1,31 @@
 @import "../../../../styles/_variables";
 
 gelato-component[data-name='study-toolbar-timer'] {
+  .hover-tooltip {
+    position: relative;
+    cursor: help;
+
+    .tooltip-text {
+      visibility: hidden;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      /* Position the tooltip text - see examples below! */
+      position: absolute;
+      top: 35px;
+      left: -150px;
+      z-index: 1;
+      font-family: $font-ubuntu;
+      width: 360px;
+    }
+
+    &:hover {
+      .tooltip-text {
+        visibility: visible;
+      }
+    }
+  }
 }

@@ -203,6 +203,10 @@ module.exports = {
       "retention": "Retention"
     },
 
+    "study": {
+      "timerDescription": "The timer updates every time you complete a prompt, with a maximum time of 30 seconds per prompt."
+    },
+
     "vocabLists": {
       "titleBrowse": "Browse - Skritter",
       "titleCpod": "ChinesePod - Skritter",
