@@ -223,7 +223,6 @@ module.exports = SkritterCollection.extend({
           return model.isActive() && !model.isBanned() && !_.includes(history, model.getBase());
         }
       )
-      .shuffle()
       .value();
   },
 
