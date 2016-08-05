@@ -152,6 +152,10 @@ a {
   font-weight: 400;
 }
 
+[data-notify="container"].alert-pastel-success {
+  border-left-color: rgb(135, 166, 75);
+}
+
 [data-notify="container"].alert-pastel-info {
   border-left-color: rgb(255, 179, 40);
 }

@@ -90,10 +90,9 @@ module.exports = GelatoPage.extend({
             if (silenceNoItems) {
               return;
             }
-            
+
             $.notify(
               {
-                title: 'Update',
                 message: 'No more words to add from your list. <a href="/vocablists/browse">Add a new list</a>'
               },
               {
@@ -111,11 +110,10 @@ module.exports = GelatoPage.extend({
 
           $.notify(
             {
-              title: 'Update',
               message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.'
             },
             {
-              type: 'pastel-info',
+              type: 'pastel-success',
               animate: {
                 enter: 'animated fadeInDown',
                 exit: 'animated fadeOutUp'
