@@ -183,6 +183,7 @@ module.exports = SkritterCollection.extend({
             include_contained: true,
             include_decomps: true,
             include_heisigs: true,
+            //skip including sentences for performance reasons
             //include_sentences: true,
             include_strokes: true,
             include_vocabs: true,
