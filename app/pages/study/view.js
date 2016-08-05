@@ -63,10 +63,6 @@ module.exports = GelatoPage.extend({
       this._views['recipe'].setElement('#recipes-container').render();
     }
 
-    this.items.updateDueCount();
-    this.prompt.navigation.setItems(this.items);
-    this.prompt.reviewStatus.setItems(this.items);
-
     this.checkRequirements();
 
     return this;
@@ -152,6 +148,7 @@ module.exports = GelatoPage.extend({
         },
         function(callback) {
           self.items.clearHistory();
+          self.items.updateDueCount();
           self.items.fetchNext(
             {
               limit: 1
