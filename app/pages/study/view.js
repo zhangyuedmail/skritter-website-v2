@@ -18,8 +18,11 @@ module.exports = GelatoPage.extend({
   initialize: function() {
     ScreenLoader.show();
 
-    this.item = null;
+    this.currentPromptItems = null;
+    this.index = 0;
     this.items = new Items();
+    this.previousPrompt = false;
+    this.previousPromptItems = null;
     this.prompt = new Prompt({page: this});
     this.toolbar = new Toolbar({page: this});
     this.vocablists = new Vocablists();
@@ -212,7 +215,7 @@ module.exports = GelatoPage.extend({
    * @method handleItemState
    */
   handleItemState: function() {
-    if (!this.item) {
+    if (!this.currentPromptItems) {
       this.next();
     }
   },
@@ -224,24 +227,29 @@ module.exports = GelatoPage.extend({
   handlePromptNext: function(promptItems) {
     var self = this;
     var review = promptItems.getReview();
-    if (this.item) {
-      this.items.reviews.put(
-        review,
-        null,
-        function() {
+
+    this.items.reviews.put(
+      review,
+      null,
+      function() {
+
+        if (!self.previousPrompt) {
           if (promptItems.readiness >= 1.0) {
             self.toolbar.dueCountOffset++;
           }
           if (self.items.reviews.length > 2) {
             self.items.reviews.post({skip: 1});
           }
-          self.items.addHistory(self.item);
-          self.item = null;
+          self.currentPromptItems = null;
+          self.previousPromptItems = promptItems;
           self.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
-          self.next();
+          self.items.addHistory(promptItems.item);
         }
-      );
-    }
+
+        self.previousPrompt = false;
+        self.next();
+      }
+    );
   },
 
   /**
@@ -249,6 +257,8 @@ module.exports = GelatoPage.extend({
    * @param {PromptItems} promptItems
    */
   handlePromptPrevious: function(promptItems) {
+    this.previousPrompt = true;
+    this.currentPromptItems = promptItems;
     this.previous();
   },
 
@@ -257,11 +267,16 @@ module.exports = GelatoPage.extend({
    */
   next: function() {
     var items = this.items.getNext();
-    if (items.length) {
-      this.item = items[0];
+    if (this.previousPrompt) {
       this.prompt.$panelLeft.css('opacity', 1.0);
-      this.prompt.set(this.item.getPromptItems());
       this.prompt.reviewStatus.render();
+      this.prompt.set(this.currentPromptItems);
+      this.toolbar.render();
+    } else if (items.length) {
+      this.currentPromptItems = items[0].getPromptItems();
+      this.prompt.$panelLeft.css('opacity', 1.0);
+      this.prompt.reviewStatus.render();
+      this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
       if (this.items.length < 5) {
         this.items.fetchNext({limit: 2, loop: 5});
@@ -280,12 +295,11 @@ module.exports = GelatoPage.extend({
    * @method previous
    */
   previous: function() {
-    if (this.items.reviews.length) {
-      var review = this.items.reviews.last();
-      if (review.has('promptItems')) {
-        this.prompt.set(review.get('promptItems'));
-        this.toolbar.render();
-      }
+    if (this.previousPromptItems) {
+      this.prompt.$panelLeft.css('opacity', 1.0);
+      this.prompt.reviewStatus.render();
+      this.prompt.set(this.previousPromptItems);
+      this.toolbar.render();
     }
   },
 

@@ -1,9 +1,15 @@
 gelato-component(data-name="study-prompt-navigation")
+  - var page = view.prompt.page;
   - var prompt = view.prompt;
 
   if prompt.reviews
 
-    if view.showLeft && !prompt.reviews.isFirst()
-      i#navigate-previous.fa.fa-angle-left
+    if page.previousPrompt
+      if view.showLeft && !prompt.reviews.isFirst()
+        i#navigate-previous.fa.fa-angle-left
+    else
+      if view.showLeft && page.items.reviews.length
+        i#navigate-previous.fa.fa-angle-left
+
     if view.showRight
       i#navigate-next.fa.fa-angle-right
