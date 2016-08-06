@@ -12,6 +12,24 @@ var Vocablists = require('collections/vocablists');
 module.exports = GelatoPage.extend({
 
   /**
+   * @property showFooter
+   * @type {Boolean}
+   */
+  showFooter: false,
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./template'),
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Study - Skritter',
+
+  /**
    * @method initialize
    * @constructor
    */
@@ -34,24 +52,6 @@ module.exports = GelatoPage.extend({
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
   },
-
-  /**
-   * @property showFooter
-   * @type {Boolean}
-   */
-  showFooter: false,
-
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Study - Skritter',
 
   /**
    * @method render

@@ -65,8 +65,10 @@ module.exports = SkritterCollection.extend({
       return;
     }
 
+    options.listId = options.listId || '';
+
     $.ajax({
-      url: app.getApiUrl() + 'items/add?lists=' + (options.lists || ''),
+      url: app.getApiUrl() + 'items/add?lists=' + options.listId,
       type: 'POST',
       headers: app.user.session.getHeaders(),
       context: this,
@@ -94,8 +96,10 @@ module.exports = SkritterCollection.extend({
     var self = this;
     var count = 0;
     var results = {items: [], numVocabsAdded: 0};
+
     options = options || {};
     options.limit = options.limit || 1;
+
     async.whilst(
       function() {
         return count < options.limit;
@@ -158,6 +162,7 @@ module.exports = SkritterCollection.extend({
     options = options || {};
     options.cursor = options.cursor || null;
     options.limit = options.limit || 10;
+    options.listId = options.listId || null;
     options.loop = options.loop || 1;
 
     if (this.fetchingState === 'fetching') {
@@ -182,12 +187,12 @@ module.exports = SkritterCollection.extend({
             include_contained: true,
             include_decomps: true,
             include_heisigs: true,
-            //skip including sentences for performance reasons
-            //include_sentences: true,
+            include_sentences: false,
             include_strokes: true,
             include_vocabs: true,
             parts: app.user.getFilteredParts().join(','),
-            styles: app.user.getFilteredStyles().join(',')
+            styles: app.user.getFilteredStyles().join(','),
+            vocab_list: options.listId
           },
           merge: true,
           remove: false,
