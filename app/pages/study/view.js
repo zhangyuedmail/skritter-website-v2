@@ -37,7 +37,6 @@ module.exports = GelatoPage.extend({
     ScreenLoader.show();
 
     this.currentPromptItems = null;
-    this.index = 0;
     this.items = new Items();
     this.previousPrompt = false;
     this.previousPromptItems = null;
@@ -278,7 +277,7 @@ module.exports = GelatoPage.extend({
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
-      if (this.items.length < 5) {
+      if (items.length < 5) {
         this.items.fetchNext({limit: 2, loop: 5});
       }
       if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {

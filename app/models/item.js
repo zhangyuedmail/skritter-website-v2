@@ -220,7 +220,7 @@ module.exports = SkritterModel.extend({
    * @returns {Boolean}
    */
   isActive: function() {
-    return this.get('vocabIds').length > 0;
+    return this.get('active') && this.get('vocabIds').length > 0;
   },
 
   /**
