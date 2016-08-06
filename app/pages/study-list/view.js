@@ -185,12 +185,12 @@ module.exports = GelatoPage.extend({
         }
       ],
       function() {
-        if (!hasItems && !hasVocablist) {
-          self.prompt.render();
-          self.prompt.$('#overlay').show();
+        if (!hasVocablist) {
           ScreenLoader.hide();
-        } else if (!hasItems && hasVocablist) {
-          ScreenLoader.post('Adding your first words');
+          app.router.navigate('', {trigger: true});
+        } else if (!hasItems) {
+          ScreenLoader.post('Adding words from list');
+          document.title = self.vocablist.get('name') + ' - Skritter';
           self.items.addItems(
             {
               lang: app.getLanguage(),
