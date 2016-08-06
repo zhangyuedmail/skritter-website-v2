@@ -5,20 +5,21 @@ var SkritterModel = require('base/skritter-model');
  * @extends {SkritterModel}
  */
 module.exports = SkritterModel.extend({
+
+  /**
+   * @property idAttribute
+   * @type String
+   */
+  idAttribute: 'group',
+
   /**
    * @method defaults
    * @returns {Object}
    */
   defaults: function() {
     return {
-      created: null,
-      data: [],
-      promptItems: null
+      data: []
     };
-  },
-  /**
-   * @property idAttribute
-   * @type String
-   */
-  idAttribute: 'group'
+  }
+
 });

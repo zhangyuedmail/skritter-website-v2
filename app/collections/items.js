@@ -44,7 +44,6 @@ module.exports = SkritterCollection.extend({
    * @returns {Items}
    */
   addHistory: function(item) {
-    this.remove(item);
     this.history.unshift(item.getBase());
     if (this.history.length > 4) {
       this.history.pop();

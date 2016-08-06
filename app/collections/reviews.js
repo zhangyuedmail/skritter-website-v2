@@ -8,6 +8,18 @@ var Review = require('models/review');
 module.exports = SkritterCollection.extend({
 
   /**
+   * @property model
+   * @type {Review}
+   */
+  model: Review,
+
+  /**
+   * @property url
+   * @type {String}
+   */
+  url: 'reviews',
+
+  /**
    * @method initialize
    * @param {Array|Object} [models]
    * @param {Object} [options]
@@ -17,17 +29,6 @@ module.exports = SkritterCollection.extend({
     options = options || {};
     this.items = options.items;
   },
-
-  /**
-   * @property model
-   * @type {Review}
-   */
-  model: Review,
-  /**
-   * @property url
-   * @type {String}
-   */
-  url: 'reviews',
 
   /**
    * @method comparator
@@ -174,12 +175,14 @@ module.exports = SkritterCollection.extend({
         if (app.isDevelopment()) {
           console.log(
             item.id,
+            'graded',
+            modelData.score,
             'scheduled for',
             moment.duration(modelData.newInterval, 'seconds').as('days'),
             'days'
           );
         }
-        if (!this.get(model.id)) {
+        if (!this.get(model.group)) {
           item.set({
             changed: submitTimeSeconds,
             last: submitTimeSeconds,
