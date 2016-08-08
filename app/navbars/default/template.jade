@@ -54,7 +54,7 @@ bootstrap-navbar(data-name='default')
                   a#refer-link(href="/refer", data-ignore) Get Free Skritter
                 li.divider(role="separator")
                 li
-                  a#button-logout(href="/logout") Logout
+                  a#button-logout(href="/logout")= app.locale('common.logOut')
             li.dropdown.target-lang-dropdown
               a.dropdown-toggle.lang-select-icon-wrapper(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
                 - var lang = user.get('targetLang');
@@ -86,6 +86,6 @@ bootstrap-navbar(data-name='default')
 
           ul.nav.navbar-nav.navbar-right
             li(class=currentSection === 'signup' ? 'active' : '')
-              a(href="/signup") Signup
+              a(href="/signup")= app.locale('common.signUp')
             li(class=currentSection === 'login' ? 'active' : '')
-              a(href="/login") Login
+              a(href="/login")= app.locale('common.logIn')

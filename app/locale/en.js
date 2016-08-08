@@ -7,9 +7,11 @@ module.exports = {
 
   "common": {
     "areYouSure": "Are you sure?",
+    "back": "Back",
     "confirm": "Confirm",
     "cancel": "Cancel",
     "changePhoto": "Change Photo",
+    "close": "Close",
     "continue": "Continue",
     "copy": "Copy",
     "delete": "Delete",
@@ -17,6 +19,8 @@ module.exports = {
     "errorUserReferralExpired": "User referrals can only be used with new accounts.",
     "errorUserReferralFailed": "Error making user referral. Please try again.",
     "ja": "Japanese",
+    "logIn": "Log In",
+    "logOut": "Log Out",
     "parts": {
       "defn": "definition",
       "rdng": "reading",
@@ -30,6 +34,7 @@ module.exports = {
     "save": "Save",
     "saving": "Saving",
     "settings": "Settings",
+    "signUp": "Sign Up",
     "undo": "Undo",
     "update": "Update",
     "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription.",
@@ -92,7 +97,7 @@ module.exports = {
       "emailLabel": "Email",
       "emailDescription": "The email address associated with your account",
       "passwordLabel": "Password",
-      "passwordDescription": "The password you use to login",
+      "passwordDescription": "The password you use to log in",
       "privateLabel": "Private Account",
       "privateDescription": "Excludes your account from leaderboard rankings",
       "resetAllData": "Reset All Data",
@@ -164,6 +169,10 @@ module.exports = {
       "reviewHeader": "Efficient reviewing",
       "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn.",
       "demoLink": "Try it out now"
+    },
+
+    "resetPassword": {
+      "backToLogin": "Back to Login"
     },
 
     "signup": {
