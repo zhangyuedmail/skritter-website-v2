@@ -228,7 +228,7 @@ module.exports = SkritterCollection.extend({
           //exclude items with related characters from history
           for (var i = 0, length = history.length; i < length; i++) {
             if (_.includes(model.getBase(), history[i])) {
-
+              return false;
             }
           }
 
