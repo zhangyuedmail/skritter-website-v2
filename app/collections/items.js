@@ -10,6 +10,18 @@ var Item = require('models/item');
 module.exports = SkritterCollection.extend({
 
   /**
+   * @property model
+   * @type {Item}
+   */
+  model: Item,
+
+  /**
+   * @property url
+   * @type {String}
+   */
+  url: 'items',
+
+  /**
    * @method initialize
    * @constructor
    */
@@ -27,24 +39,12 @@ module.exports = SkritterCollection.extend({
   },
 
   /**
-   * @property model
-   * @type {Item}
-   */
-  model: Item,
-
-  /**
-   * @property url
-   * @type {String}
-   */
-  url: 'items',
-
-  /**
    * @method addHistory
    * @param {Item} item
    * @returns {Items}
    */
   addHistory: function(item) {
-    item.set('active', false);
+    this.remove(item);
     this.history.unshift(item.getBase());
     if (this.history.length > 4) {
       this.history.pop();
@@ -203,12 +203,6 @@ module.exports = SkritterCollection.extend({
           },
           success: function(items) {
             options.cursor = items.cursor;
-            _.forEach(
-              items.models,
-              function(model) {
-                model.set('active', true);
-              }
-            );
             callback();
           }
         });

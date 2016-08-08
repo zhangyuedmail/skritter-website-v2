@@ -224,31 +224,23 @@ module.exports = GelatoPage.extend({
    * @param {PromptItems} promptItems
    */
   handlePromptNext: function(promptItems) {
-    var self = this;
-    var review = promptItems.getReview();
+    this.items.reviews.put(promptItems.getReview());
 
-    this.items.reviews.put(
-      review,
-      null,
-      function() {
-
-        if (!self.previousPrompt) {
-          if (promptItems.readiness >= 1.0) {
-            self.toolbar.dueCountOffset++;
-          }
-          if (self.items.reviews.length > 2) {
-            self.items.reviews.post({skip: 1});
-          }
-          self.currentPromptItems = null;
-          self.previousPromptItems = promptItems;
-          self.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
-          self.items.addHistory(promptItems.item);
-        }
-
-        self.previousPrompt = false;
-        self.next();
+    if (!this.previousPrompt) {
+      if (promptItems.readiness >= 1.0) {
+        this.toolbar.dueCountOffset++;
       }
-    );
+      if (this.items.reviews.length > 2) {
+        this.items.reviews.post({skip: 1});
+      }
+      this.currentPromptItems = null;
+      this.previousPromptItems = promptItems;
+      this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
+      this.items.addHistory(promptItems.item);
+    }
+
+    this.previousPrompt = false;
+    this.next();
   },
 
   /**

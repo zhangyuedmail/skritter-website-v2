@@ -27,6 +27,13 @@ module.exports = SkritterModel.extend({
   urlRoot: 'items',
 
   /**
+   * @method ban
+   */
+  ban: function() {
+    this.getVocab().banPart(this.get('part'));
+  },
+
+  /**
    * @property defaults
    * @type {Object}
    */
@@ -34,13 +41,6 @@ module.exports = SkritterModel.extend({
     return {
       vocabIds: []
     };
-  },
-
-  /**
-   * @method ban
-   */
-  ban: function() {
-    this.getVocab().banPart(this.get('part'));
   },
 
   /**
@@ -220,7 +220,7 @@ module.exports = SkritterModel.extend({
    * @returns {Boolean}
    */
   isActive: function() {
-    return this.get('active') && this.get('vocabIds').length > 0;
+    return this.get('vocabIds').length > 0;
   },
 
   /**

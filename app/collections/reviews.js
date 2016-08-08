@@ -150,10 +150,10 @@ module.exports = SkritterCollection.extend({
    * @method put
    * @param {Object} models
    * @param {Object} [options]
-   * @param {Function} callback
+   * @returns {Array}
    */
-  put: function(models, options, callback) {
-    var updatedItems = [];
+  put: function(models, options) {
+    //var updatedItems = [];
     var updatedReviews = [];
     models = _.isArray(models) ? models : [models];
     options = _.defaults(options || {}, {merge: true});
@@ -162,7 +162,7 @@ module.exports = SkritterCollection.extend({
       model.data = _.uniqBy(model.data, 'itemId');
       for (var b = 0, lengthB = model.data.length; b < lengthB; b++) {
         var modelData = model.data[b];
-        var item = this.items.get(modelData.itemId);
+        var item = modelData.item.clone();
         var submitTimeSeconds = Math.round(modelData.submitTime);
         modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
         modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
@@ -182,7 +182,9 @@ module.exports = SkritterCollection.extend({
             'days'
           );
         }
-        if (!this.get(model.group)) {
+        /**
+         * used for updating of local items
+         if (!this.get(model.group)) {
           item.set({
             changed: submitTimeSeconds,
             last: submitTimeSeconds,
@@ -192,16 +194,18 @@ module.exports = SkritterCollection.extend({
             timeStudied: item.get('timeStudied') + modelData.reviewTime
           });
         }
-        item.set({
+         item.set({
           interval: modelData.newInterval,
           next: submitTimeSeconds + modelData.newInterval,
           previousSuccess: modelData.score > 1
         });
-        updatedItems.push(item);
+         updatedItems.push(item);
+         **/
+
       }
       updatedReviews.push(this.add(model, options));
     }
-    callback();
+    return updatedReviews;
   }
 
 });
