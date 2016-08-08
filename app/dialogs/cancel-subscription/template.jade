@@ -19,42 +19,12 @@ bootstrap-dialog(data-name='cancel-subscription')
               li Your subscription will continue until the end of your
                 | current billing period.
 
+            .checkbox
+              label
+                input#receive-newsletters(type="checkbox" name="receive-newsletters")
+                | Keep getting newsletters
+
             .text-center
-              button#continue-cancel-btn.btn.btn-primary.btn-fixed
-                | Cancel subscription
-
-          #page-2.hide
-            p
-              | Please take a moment to tell us your thoughts!
-            p
-              | We want to make Skritter the best it can be, so we'd very
-              | much appriate it if you told us why you are conceling so
-              | we can improve this service.
-
-            #reasons-form.form
-              if view.reasons.state === 'fetching'
-                .text-center
-                  i.fa.fa-3x.fa-spinner.fa-pulse
-              else
-                for reason in view.reasons.models
-                  .radio
-                    label
-                      input(type="radio" name="reason" value=reason.id, checked=reason.get('isDefault'))
-                      | #{reason.get('text')}
-
-              .form-group
-                label Notes
-                textarea#notes-textarea.form-control
-
-              .checkbox
-                label
-                  input(type="checkbox" name="receive-newsletters")
-                  | Keep getting newsletters
-
-              .text-center
-                button#submit-btn.btn.btn-lg.btn-success
-                  span Submit
-                  i.fa.fa-1x.fa-spinner.fa-pulse.hide
-
-
-
+              button#submit-btn.btn.btn-lg.btn-success
+                span Submit
+                i.fa.fa-1x.fa-spinner.fa-pulse.hide
