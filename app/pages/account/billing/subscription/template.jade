@@ -293,7 +293,7 @@ gelato-page(data-name='account-billing-subscription')
                     input(type="hidden" name="cmd" value="_s-xclick")
                     input(type="hidden" name="hosted_button_id" value="KNXCYJ7LW72V2")
                     input(type="hidden" name="on0" value="Plan")
-                    select(name="os0")
+                    select#paypal-subscribe-select(name="os0")
                       option(value="Month Plan") Month Plan : $14.99 USD - monthly
                       option(value="Year Plan") Year Plan : $99.99 USD - yearly
                     input(type="hidden" name="currency_code" value="USD")
@@ -346,12 +346,11 @@ gelato-page(data-name='account-billing-subscription')
 
               #policies
                 p
-                  strong.spr Refund Policy:
-                  | If you are unsatisfied with your subscription for any reason,
-                  | let us know and we will issue you a full refund, no questions
-                  | asked. Just
-                  a.spl(href="/contact") contact us
-                  | ; we'll make you happy.
+                  strong.spr= app.locale('pages.signup.refundPolicy')
+                  span :&nbsp;
+                  = app.locale('pages.signup.refundDetails1')
+                  a.spl(href="/contact")= app.locale('pages.signup.refundDetails2')
+                  = app.locale('pages.signup.refundDetails3')
 
                 p
                   strong.spr Note:

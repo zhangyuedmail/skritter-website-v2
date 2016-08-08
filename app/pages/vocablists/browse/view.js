@@ -1,21 +1,14 @@
 var GelatoPage = require('gelato/page');
 var Table = require('components/vocablists/browse-table/view');
 var Sidebar = require('components/vocablists/sidebar/view');
+var ExpiredNotification = require('components/account/expired-notification/view');
 
 /**
+ * A page that allows a user to browse different categories of vocablists they can study.
  * @class VocablistBrowse
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    this.sidebar = new Sidebar();
-    this.table = new Table();
-  },
-  
   /**
    * @property events
    * @type {Object}
@@ -26,31 +19,42 @@ module.exports = GelatoPage.extend({
     'click #list-option': 'handleClickListOption',
     'click #grid-option': 'handleClickGridOption'
   },
-  
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: app.locale('pages.vocabLists.titleBrowse'),
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
-  
+
   /**
-   * @property title
-   * @type {String}
+   * @method initialize
+   * @constructor
    */
-  title: 'Browse - Skritter',
-  
+  initialize: function() {
+    this._views['sidebar'] = new Sidebar();
+    this._views['table'] = new Table();
+    this._views['expiration'] = new ExpiredNotification();
+  },
+
   /**
    * @method render
    * @returns {VocablistBrowse}
    */
   render: function() {
     this.renderTemplate();
-    this.sidebar.setElement('#vocablist-sidebar-container').render();
-    this.table.setElement('#vocablist-container').render();
-    
+    this._views['sidebar'].setElement('#vocablist-sidebar-container').render();
+    this._views['table'].setElement('#vocablist-container').render();
+    this._views['expiration'].setElement('#expiration-container').render();
+
     return this;
   },
-  
+
   /**
    * @method handleChangeCheckbox
    */
@@ -64,44 +68,36 @@ module.exports = GelatoPage.extend({
      this.table.render();
      **/
   },
-  
+
   /**
    * @method onClickListOption
    * @param {Event} event
    */
   handleClickListOption: function(event) {
     event.preventDefault();
-    this.table.setLayout('list');
+
+    this._views['table'].setLayout('list');
     this.$('#list-option').addClass('chosen');
     this.$('#grid-option').removeClass('chosen');
   },
-  
+
   /**
    * @method onClickGridOption
    * @param {Event} event
    */
   handleClickGridOption: function(event) {
     event.preventDefault();
-    this.table.setLayout('grid');
+
+    this._views['table'].setLayout('grid');
     this.$('#list-option').removeClass('chosen');
     this.$('#grid-option').addClass('chosen');
   },
-  
+
   /**
    * @method handleKeypressListSearchInput
    * @param {Event} event
    */
   handleKeypressListSearchInput: function(event) {
-    this.table.setFilterString(event.target.value);
-  },
-  
-  /**
-   * @method remove
-   * @returns {VocablistBrowse}
-   */
-  remove: function() {
-    this.sidebar.remove();
-    this.table.remove();
-    return GelatoPage.prototype.remove.call(this);
+    this._views['table'].setFilterString(event.target.value);
   }
 });

@@ -5,26 +5,31 @@ var GelatoModel = require('gelato/model');
  * @extends {GelatoModel}
  */
 module.exports = GelatoModel.extend({
+
   /**
    * @property character
    * @type {PromptCharacter}
    */
   character: null,
+
   /**
    * @property interval
    * @type {Number}
    */
   interval: 0,
+
   /**
    * @property item
    * @type {Item}
    */
   item: null,
+
   /**
    * @property vocab
    * @type {Vocab}
    */
   vocab: null,
+
   /**
    * @method defaults
    * @returns {Object}
@@ -47,6 +52,7 @@ module.exports = GelatoModel.extend({
       thinkingStop: 0
     };
   },
+
   /**
    * @method getGradingColor
    * @returns {String}
@@ -54,6 +60,7 @@ module.exports = GelatoModel.extend({
   getGradingColor: function() {
     return app.user.get('gradingColors')[this.get('score')];
   },
+
   /**
    * @method getPosition
    * @returns {Number}
@@ -61,13 +68,14 @@ module.exports = GelatoModel.extend({
   getPosition: function() {
     return this.collection.indexOf(this);
   },
+
   /**
    * @method getReviewData
    * @returns {Object}
    */
   getReviewData: function() {
     return {
-      id: this.id,
+      item: this.item,
       itemId: this.item ? this.item.id : this.vocab.id,
       bearTime: false,
       currentInterval: this.interval || 0,
@@ -78,6 +86,7 @@ module.exports = GelatoModel.extend({
       wordGroup: this.collection.group
     };
   },
+
   /**
    * @method getReviewingTime
    * @returns {Number}
@@ -89,6 +98,7 @@ module.exports = GelatoModel.extend({
     }
     return reviewingTime > 30 ? 30 : reviewingTime;
   },
+
   /**
    * @method getThinkingTime
    * @returns {Number}
@@ -100,6 +110,7 @@ module.exports = GelatoModel.extend({
     }
     return thinkingTime > 15 ? 15 : thinkingTime;
   },
+
   /**
    * @method getTones
    * @returns {Array}
@@ -107,6 +118,7 @@ module.exports = GelatoModel.extend({
   getTones: function() {
     return this.collection.vocab.getTones()[this.getPosition()];
   },
+
   /**
    * @method isChinese
    * @returns {Boolean}
@@ -114,6 +126,7 @@ module.exports = GelatoModel.extend({
   isChinese: function() {
     return this.vocab.isChinese();
   },
+
   /**
    * @method isComplete
    * @returns {Boolean}
@@ -121,6 +134,7 @@ module.exports = GelatoModel.extend({
   isComplete: function() {
     return this.get('complete');
   },
+
   /**
    * @method isDefinitionHidden
    * @returns {Boolean}
@@ -138,6 +152,7 @@ module.exports = GelatoModel.extend({
       return app.user.get('hideDefinition') && !this.isComplete();
     }
   },
+
   /**
    * @method isJapanese
    * @returns {Boolean}
@@ -145,6 +160,7 @@ module.exports = GelatoModel.extend({
   isJapanese: function() {
     return this.vocab.isJapanese();
   },
+
   /**
    * @method isReadingHidden
    * @returns {Boolean}
@@ -162,6 +178,7 @@ module.exports = GelatoModel.extend({
       return app.user.get('hideReading') && !this.isComplete();
     }
   },
+
   /**
    * @method start
    * @returns {PromptItem}
@@ -176,6 +193,7 @@ module.exports = GelatoModel.extend({
     }
     return this;
   },
+
   /**
    * @method stop
    * @returns {PromptItem}
@@ -186,6 +204,7 @@ module.exports = GelatoModel.extend({
     this.stopThinking(timestamp);
     return this;
   },
+
   /**
    * @method stopReviewing
    * @param {Number} [timestamp]
@@ -197,6 +216,7 @@ module.exports = GelatoModel.extend({
     }
     return this;
   },
+
   /**
    * @method stopThinking
    * @param {Number} [timestamp]
@@ -208,4 +228,5 @@ module.exports = GelatoModel.extend({
     }
     return this;
   }
+
 });

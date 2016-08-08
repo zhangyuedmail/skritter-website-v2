@@ -14,5 +14,5 @@ gelato-dialog(data-name='confirm-generic')
         .modal-body!= view.dialogBody
 
         .modal-footer
-          button#button-confirm.btn.btn-danger!= view.dialogButtonConfirm
+          button#button-confirm.btn(class=view.dialogButtonConfirmClass)!= view.dialogButtonConfirm
           button#button-cancel.btn.btn-default!= view.dialogButtonCancel

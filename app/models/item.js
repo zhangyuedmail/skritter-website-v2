@@ -7,21 +7,32 @@ var PromptItem = require('models/prompt-item');
  * @extends {SkritterModel}
  */
 module.exports = SkritterModel.extend({
+
   /**
    * @property consecutiveWrong
    * @type {Number}
    */
   consecutiveWrong: 0,
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'id',
+
   /**
    * @property urlRoot
    * @type {String}
    */
   urlRoot: 'items',
+
+  /**
+   * @method ban
+   */
+  ban: function() {
+    this.getVocab().banPart(this.get('part'));
+  },
+
   /**
    * @property defaults
    * @type {Object}
@@ -31,12 +42,7 @@ module.exports = SkritterModel.extend({
       vocabIds: []
     };
   },
-  /**
-   * @method ban
-   */
-  ban: function() {
-    this.getVocab().banPart(this.get('part'));
-  },
+
   /**
    * @method getBase
    * @returns {String}
@@ -44,6 +50,7 @@ module.exports = SkritterModel.extend({
   getBase: function() {
     return this.id.split('-')[2];
   },
+
   /**
    * @method getContainedItems
    * @returns {Array}
@@ -75,6 +82,7 @@ module.exports = SkritterModel.extend({
     }
     return containedItems;
   },
+
   /**
    * @method getContainedVocabs
    * @returns {Array}
@@ -83,6 +91,7 @@ module.exports = SkritterModel.extend({
     var vocab = this.getVocab();
     return vocab ? vocab.getContained() : [];
   },
+
   /**
    * @method getPromptItems
    * @returns {PromptItems}
@@ -137,9 +146,11 @@ module.exports = SkritterModel.extend({
     promptItems.interval = this.get('interval');
     promptItems.item = this;
     promptItems.part = part;
+    promptItems.readiness = this.getReadiness();
     promptItems.vocab = vocab;
     return promptItems;
   },
+
   /**
    * @method getReadiness
    * @returns {Number}
@@ -155,6 +166,7 @@ module.exports = SkritterModel.extend({
     }
     return Number.NEGATIVE_INFINITY;
   },
+
   /**
    * @method getVariation
    * @returns {Number}
@@ -162,6 +174,7 @@ module.exports = SkritterModel.extend({
   getVariation: function() {
     return parseInt(this.id.split('-')[3], 10);
   },
+
   /**
    * @method getVocab
    * @returns {Vocab}
@@ -170,6 +183,7 @@ module.exports = SkritterModel.extend({
     var vocabs = this.getVocabs();
     return vocabs[this.get('reviews') % vocabs.length];
   },
+
   /**
    * @method getVocabs
    * @returns {Array}
@@ -200,6 +214,15 @@ module.exports = SkritterModel.extend({
     }
     return vocabs;
   },
+
+  /**
+   * @method isActive
+   * @returns {Boolean}
+   */
+  isActive: function() {
+    return this.get('vocabIds').length > 0;
+  },
+
   /**
    * @method isBanned
    * @returns {Boolean}
@@ -207,6 +230,7 @@ module.exports = SkritterModel.extend({
   isBanned: function() {
     return _.includes(this.getVocab().get('bannedParts'), this.get('part'));
   },
+
   /**
    * @method isChinese
    * @returns {Boolean}
@@ -214,6 +238,7 @@ module.exports = SkritterModel.extend({
   isChinese: function() {
     return this.get('lang') === 'zh';
   },
+
   /**
    * @method isJapanese
    * @returns {Boolean}
@@ -221,6 +246,7 @@ module.exports = SkritterModel.extend({
   isJapanese: function() {
     return this.get('lang') === 'ja';
   },
+
   /**
    * @method isKosher
    * @returns {Boolean}
@@ -237,6 +263,7 @@ module.exports = SkritterModel.extend({
     }
     return true;
   },
+
   /**
    * @method isLeech
    * @returns {Boolean}
@@ -244,6 +271,7 @@ module.exports = SkritterModel.extend({
   isLeech: function() {
     return !this.isNew() && this.consecutiveWrong > 2;
   },
+
   /**
    * @method isNew
    * @returns {Boolean}
@@ -251,6 +279,7 @@ module.exports = SkritterModel.extend({
   isNew: function() {
     return !this.get('reviews');
   },
+
   /**
    * @method isPartDefn
    * @returns {Boolean}
@@ -258,6 +287,7 @@ module.exports = SkritterModel.extend({
   isPartDefn: function() {
     return this.get('part') === 'defn';
   },
+
   /**
    * @method isPartRdng
    * @returns {Boolean}
@@ -265,6 +295,7 @@ module.exports = SkritterModel.extend({
   isPartRdng: function() {
     return this.get('part') === 'rdng';
   },
+
   /**
    * @method isPartRune
    * @returns {Boolean}
@@ -272,6 +303,7 @@ module.exports = SkritterModel.extend({
   isPartRune: function() {
     return this.get('part') === 'rune';
   },
+
   /**
    * @method isPartTone
    * @returns {Boolean}
@@ -279,6 +311,7 @@ module.exports = SkritterModel.extend({
   isPartTone: function() {
     return this.get('part') === 'tone';
   },
+
   /**
    * @method parse
    * @param {Object} response
@@ -287,10 +320,12 @@ module.exports = SkritterModel.extend({
   parse: function(response) {
     return response.Item || response;
   },
+
   /**
    * @method unban
    */
   unban: function() {
     this.getVocab().unbanPart(this.get('part'));
   }
+
 });

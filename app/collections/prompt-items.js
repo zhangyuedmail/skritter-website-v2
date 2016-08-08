@@ -6,51 +6,61 @@ var PromptItem = require('models/prompt-item');
  * @extends {GelatoCollection}
  */
 module.exports = GelatoCollection.extend({
+
   /**
    * @property group
    * @type {String}
    */
   group: null,
+
   /**
    * @property interval
    * @type {Number}
    */
   interval: 0,
+
   /**
    * @property item
    * @type {Item}
    */
   item: null,
+
   /**
    * @property model
    * @type {PromptItem}
    */
   model: PromptItem,
+
   /**
    * @property originals
    * @type {Array}
    */
   originals: [],
+
   /**
    * @property part
    * @type {String}
    */
   part: null,
+
   /**
    * @property position
    * @type {Number}
    */
   position: 0,
+
   /**
    * @property skip
    * @type {Boolean}
    */
   skip: false,
+
   /**
    * @property vocab
    * @type {Vocab}
    */
   vocab: null,
+
   /**
    * @method current
    * @returns {PromptItem}
@@ -58,6 +68,7 @@ module.exports = GelatoCollection.extend({
   current: function() {
     return this.getActive()[this.position];
   },
+
   /**
    * @method getActive
    * @returns {Array}
@@ -70,6 +81,7 @@ module.exports = GelatoCollection.extend({
       }
     );
   },
+
   /**
    * @method getActiveLength
    * @returns {Number}
@@ -77,13 +89,14 @@ module.exports = GelatoCollection.extend({
   getActiveLength: function() {
     return this.getActive().length;
   },
+
   /**
    * @method getBaseReviewData
    * @returns {Object}
    */
   getBaseReviewData: function() {
     return {
-      id: this.at(0).id,
+      item: this.item,
       itemId: this.item ? this.item.id : this.vocab.id,
       bearTime: true,
       currentInterval: this.interval || 0,
@@ -94,6 +107,7 @@ module.exports = GelatoCollection.extend({
       wordGroup: this.group
     };
   },
+
   /**
    * @method getBaseSubmitTime
    * @returns {Number}
@@ -101,6 +115,7 @@ module.exports = GelatoCollection.extend({
   getBaseSubmitTime: function() {
     return this.at(0).get('submitTime');
   },
+
   /**
    * @method getBaseReviewingTime
    * @returns {Number}
@@ -112,6 +127,7 @@ module.exports = GelatoCollection.extend({
     }
     return reviewingTime;
   },
+
   /**
    * @method getBaseScore
    * @returns {Number}
@@ -139,6 +155,7 @@ module.exports = GelatoCollection.extend({
     }
     return score || this.at(0).get('score');
   },
+
   /**
    * @method getBaseThinkingTime
    * @returns {Number}
@@ -150,6 +167,7 @@ module.exports = GelatoCollection.extend({
     }
     return thinkingTime;
   },
+
   /**
    * @method getChildReviewData
    * @returns {Array}
@@ -161,6 +179,7 @@ module.exports = GelatoCollection.extend({
       return model.getReviewData();
     });
   },
+
   /**
    * @method getReview
    * @returns {Object}
@@ -177,6 +196,7 @@ module.exports = GelatoCollection.extend({
       promptItems: this
     };
   },
+
   /**
    * @method getLimit
    * @returns {Number}
@@ -184,6 +204,7 @@ module.exports = GelatoCollection.extend({
   getLimit: function() {
     return this.part === 'tone' ? 15000 : 30000;
   },
+
   /**
    * @method isChinese
    * @returns {Boolean}
@@ -191,6 +212,7 @@ module.exports = GelatoCollection.extend({
   isChinese: function() {
     return this.vocab.isChinese();
   },
+
   /**
    * @method isComplete
    * @returns {Boolean}
@@ -198,6 +220,7 @@ module.exports = GelatoCollection.extend({
   isComplete: function() {
     return _.includes(this.map('complete'), false) === false;
   },
+
   /**
    * @method isFirst
    * @returns {Boolean}
@@ -205,6 +228,7 @@ module.exports = GelatoCollection.extend({
   isFirst: function() {
     return this.position === 0;
   },
+
   /**
    * @method isJapanese
    * @returns {Boolean}
@@ -212,6 +236,7 @@ module.exports = GelatoCollection.extend({
   isJapanese: function() {
     return this.vocab.isJapanese();
   },
+
   /**
    * @method isNew
    * @returns {Boolean}
@@ -219,6 +244,7 @@ module.exports = GelatoCollection.extend({
   isNew: function() {
     return this.item ? this.item.isNew() : false;
   },
+
   /**
    * @method isLast
    * @returns {Boolean}
@@ -226,6 +252,7 @@ module.exports = GelatoCollection.extend({
   isLast: function() {
     return this.position >= this.getActiveLength() - 1;
   },
+
   /**
    * @method isTeachable
    * @returns {Boolean}
@@ -236,6 +263,7 @@ module.exports = GelatoCollection.extend({
     }
     return false;
   },
+
   /**
    * @method next
    * @returns {PromptItem}
@@ -246,6 +274,7 @@ module.exports = GelatoCollection.extend({
     }
     return this.current();
   },
+
   /**
    * @method previous
    * @returns {PromptItem}
@@ -256,6 +285,7 @@ module.exports = GelatoCollection.extend({
     }
     return this.current();
   },
+
   /**
    * @method teachAll
    */
@@ -264,4 +294,5 @@ module.exports = GelatoCollection.extend({
       review.set('showTeaching', true);
     });
   }
+
 });

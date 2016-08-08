@@ -3,6 +3,7 @@ var DashboardGoal = require('components/dashboard/status/view');
 var DashboardMonth = require('components/dashboard/month/view');
 var DashboardQueue = require('components/dashboard/queue/view');
 var DashboardTotal = require('components/dashboard/total/view');
+var ExpiredNotification = require('components/account/expired-notification/view');
 
 /**
  * A page that shows a summary of the user's review count due, stats, and lists
@@ -32,6 +33,7 @@ module.exports = GelatoPage.extend({
     this._views['month'] = new DashboardMonth();
     this._views['total'] = new DashboardTotal();
     this._views['queue'] = new DashboardQueue();
+    this._views['expiration'] = new ExpiredNotification();
 
     app.mixpanel.track('Viewed dashboard page');
   },
@@ -47,6 +49,7 @@ module.exports = GelatoPage.extend({
     this._views['month'].setElement('#dashboard-month-container').render();
     this._views['total'].setElement('#dashboard-total-container').render();
     this._views['queue'].setElement('#dashboard-queue-container').render();
+    this._views['expiration'].setElement('#subscription-notice').render();
 
     return this;
   }

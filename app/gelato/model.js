@@ -4,10 +4,18 @@
  */
 var GelatoModel = Backbone.Model.extend({
   /**
+   * Whether the model has been successfully fetched at least once
+   * @property isFetched
+   * @type {Boolean}
+   */
+  isFetched: false,
+
+  /**
    * @property state
    * @type {String}
    */
   state: 'standby',
+
   /**
    * @method fetch
    * @param {Object} [options]
@@ -51,6 +59,7 @@ var GelatoModel = Backbone.Model.extend({
       if (typeof originalOptions.success === 'function') {
         originalOptions.success.apply(originalOptions, arguments);
       }
+      this.isFetched = true;
     }).bind(this);
   },
   /**

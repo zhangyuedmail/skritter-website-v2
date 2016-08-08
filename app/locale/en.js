@@ -38,11 +38,12 @@ module.exports = {
 
   "components": {
     "studyPrompt": {
-      "addListCallToAction": "If you don't have any lists to study from yet, add a new one!",
-      "canUsePlus": "Remember! You can also use the plus button",
-      "canUsePlus2": "to add an item to your queue.",
-      "manageLists": "Manage Lists",
-      "pleaseWait": "Please hang tight while we find some items for you to study..."
+      "emptyButton": "Browse Lists",
+      "emptyCallToAction": "You'll need to add at least one list before you can start studying.",
+      "emptyHeader": "Choose a list to get started.",
+      "expiredButton": "Subscription",
+      "expiredCallToAction": "You'll need an active subscription to add new words to study.",
+      "expiredHeader": "Start a new subscription."
     }
   },
 
@@ -135,8 +136,12 @@ module.exports = {
     "dashboard": {
       "title": "Dashboard - Skritter",
       "allTime": "All Time",
-      "thisMonth": "This Month",
-      "lists": "Lists"
+      "goToSubSettings": "Go to your subscription settings",
+      "hide": "Hide",
+      "lists": "Lists",
+      "subExpiredDetails": "Purchase a subscription to study new items and lists.",
+      "subscriptionExpired": "Subscription expired",
+      "thisMonth": "This Month"
     },
 
     "features": {
@@ -177,7 +182,11 @@ module.exports = {
       "errorInvalidEmail": "Invalid email address entered.",
       "errorNoCCNmber": "You must enter a credit card number.",
       "errorNoUsername": "You must enter a username.",
-      "errorDuplicateUsername": "Another person has taken the username #{username}. Please choose another one."
+      "errorDuplicateUsername": "Another person has taken the username #{username}. Please choose another one.",
+      "refundPolicy": "Refund Policy",
+      "refundDetails1": "If you’re not satisfied for any reason, we offer a full refund on your first month's purchase, and we provide a pro-rated refund on longer subscriptions. Just",
+      "refundDetails2": "contact us",
+      "refundDetails3": "; we'll make you happy."
     },
 
     "starredWords": {
@@ -194,7 +203,14 @@ module.exports = {
       "retention": "Retention"
     },
 
+    "study": {
+      "timerDescription": "The timer updates every time you complete a prompt, with a maximum time of 30 seconds per prompt."
+    },
+
     "vocabLists": {
+      "titleBrowse": "Browse - Skritter",
+      "titleCpod": "ChinesePod - Skritter",
+      "titlePublished": "Published Lists - Skritter",
       "addSection": "Add section",
       "addToQueue": "Add to queue",
       "backToCpod": "back to ChinesePod lists",

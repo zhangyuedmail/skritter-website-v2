@@ -392,6 +392,11 @@ var Vocab = SkritterModel.extend({
    * @returns {Object}
    */
   parse: function(response) {
+    if (this.collection) {
+      this.collection.decomps.add(response.Decomp);
+      this.collection.sentences.add(response.Sentence);
+      this.collection.strokes.add(response.Stroke);
+    }
     return response.Vocab || response;
   },
   /**
@@ -410,7 +415,9 @@ var Vocab = SkritterModel.extend({
         }
       );
     } else {
-      this.audios[0].play();
+      if (this.has('audios')) {
+        this.audios[0].play();
+      }
     }
   },
   /**

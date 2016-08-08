@@ -1,6 +1,6 @@
 gelato-component(data-name='vocablists-browse-table')
 
-  if view.vocablists.state === 'fetching'
+  if view.vocablists.state === 'fetching' || app.user.subscription.state === 'fetching'
     p.text-center
       i.fa.fa-3x.fa-spinner.fa-pulse
 
@@ -24,10 +24,10 @@ gelato-component(data-name='vocablists-browse-table')
             .progress(style="width:" + (100 * list.getPopularity()) + '%')
               .progress-bar(style="width:100%")
           .col-md-3
-            if list.get('studyingMode') === 'not studying'
+            if list.get('studyingMode') === 'not studying' && app.user.isSubscriptionActive()
               span.add-to-queue-link(data-vocablist-id=list.id)
                 span.glyphicon.glyphicon-plus-sign.text-success
-                span Add to queue
+                span= app.locale('pages.vocabLists.addToQueue')
             else
               span= _.capitalize(list.getNormalizedStudyingMode())
 
@@ -44,10 +44,10 @@ gelato-component(data-name='vocablists-browse-table')
                 img(src=list.getImageUrl())
                 .background
               div.footer.text-center(class= list.get('studyingMode') === 'adding' ? (list.justAdded ? 'just-added' : 'adding') : '')
-                if list.get('studyingMode') === 'not studying'
+                if list.get('studyingMode') === 'not studying' && app.user.isSubscriptionActive()
                   span.add-to-queue-link(data-vocablist-id=list.id)
                     span.glyphicon.glyphicon-plus-sign.text-success
-                    span.add-to-queue Add to queue
+                    span.add-to-queue= app.locale('pages.vocabLists.addToQueue')
                 else
                   if list.justAdded
                     span.glyphicon.glyphicon-ok-sign

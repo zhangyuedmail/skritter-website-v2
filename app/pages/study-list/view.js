@@ -1,6 +1,7 @@
 var GelatoPage = require('gelato/page');
 var Prompt = require('components/study/prompt/view');
 var Toolbar = require('components/study/toolbar/view');
+var Recipes = require('components/common/recipes/view');
 var Items = require('collections/items');
 var Vocablist = require('models/vocablist');
 
@@ -9,34 +10,6 @@ var Vocablist = require('models/vocablist');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-  /**
-   * @method initialize
-   * @param {Object} [options]
-   * @constructor
-   */
-  initialize: function(options) {
-    ScreenLoader.show();
-    this.item = null;
-    this.prompt = new Prompt({page: this});
-    this.queue = [];
-    this.schedule = new Items();
-    this.scheduleState = 'standby';
-    this.toolbar = new Toolbar({page: this});
-    this.vocablist = new Vocablist({id: options.listId});
-    this.listenTo(this.schedule, 'populate', this.handleSchedulePopulate);
-    this.listenTo(this.schedule, 'load', this.handleScheduledLoad);
-    this.listenTo(this.prompt, 'next', this.handlePromptNext);
-    this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
-    window.onbeforeunload = this.handleWindowOnBeforeUnload.bind(this);
-  },
-
-  /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'click #add-item-button': 'handleClickAddItemButton'
-  },
 
   /**
    * @property showFooter
@@ -57,6 +30,30 @@ module.exports = GelatoPage.extend({
   title: 'Study - Skritter',
 
   /**
+   * @method initialize
+   * @param {Object} options
+   * @constructor
+   */
+  initialize: function(options) {
+    ScreenLoader.show();
+
+    this.currentPromptItems = null;
+    this.items = new Items();
+    this.previousPrompt = false;
+    this.previousPromptItems = null;
+    this.prompt = new Prompt({page: this});
+    this.toolbar = new Toolbar({page: this});
+    this.vocablist = new Vocablist({id: options.listId});
+
+    if (app.user.get('eccentric')) {
+      this._views['recipe'] = new Recipes();
+    }
+
+    this.listenTo(this.prompt, 'next', this.handlePromptNext);
+    this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
+  },
+
+  /**
    * @method render
    * @returns {StudyList}
    */
@@ -64,7 +61,12 @@ module.exports = GelatoPage.extend({
     this.renderTemplate();
     this.prompt.setElement('#study-prompt-container').render();
     this.toolbar.setElement('#study-toolbar-container').render();
-    this.loadSchedule();
+
+    if (app.user.get('eccentric')) {
+      this._views['recipe'].setElement('#recipes-container').render();
+    }
+
+    this.checkRequirements();
 
     return this;
   },
@@ -72,15 +74,15 @@ module.exports = GelatoPage.extend({
   /**
    * Adds an item to the study queue
    * @method addItem
-   * @param {Boolean} silenceNoItems whether to suppress messages to the user
-   *                                 about the items added if nothing was added.
+   * @param {Boolean} [silenceNoItems]
+   * whether to suppress messages to the user about the items added if nothing was added.
    */
   addItem: function(silenceNoItems) {
-    var self = this;
-    this.schedule.addItems(
+    this.items.addItems(
       {
         lang: app.getLanguage(),
-        lists: this.vocablist ? this.vocablist.id : null
+        limit: 1,
+        listId: this.vocablist.id
       },
       function(error, result) {
         if (!error) {
@@ -90,11 +92,10 @@ module.exports = GelatoPage.extend({
             if (silenceNoItems) {
               return;
             }
-            
+
             $.notify(
               {
-                title: 'Update',
-                message: 'No more words to add from your list. <a href="/vocablists/browse">Add a new list</a>'
+                message: 'No more words to add. <a href="/vocablists/browse">Add a new list</a>'
               },
               {
                 type: 'pastel-info',
@@ -111,11 +112,10 @@ module.exports = GelatoPage.extend({
 
           $.notify(
             {
-              title: 'Update',
               message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.'
             },
             {
-              type: 'pastel-info',
+              type: 'pastel-success',
               animate: {
                 enter: 'animated fadeInDown',
                 exit: 'animated fadeOutUp'
@@ -125,24 +125,99 @@ module.exports = GelatoPage.extend({
             }
           );
         }
-        self.populateQueue();
+
       }
     );
   },
 
-  handleClickAddItemButton: function(event) {
-    event.preventDefault();
-    this.addItem();
+  /**
+   * @method checkRequirements
+   */
+  checkRequirements: function() {
+    ScreenLoader.post('Preparing study');
+    var self = this;
+    var hasItems = false;
+    var hasVocablist = false;
+    async.parallel(
+      [
+        function(callback) {
+          app.user.subscription.fetch({
+            error: function() {
+              callback();
+            },
+            success: function() {
+              callback();
+            }
+          });
+        },
+        function(callback) {
+          self.items.clearHistory();
+          self.items.updateDueCount();
+          self.items.fetchNext(
+            {
+              limit: 1,
+              listId: self.vocablist.id
+            },
+            function(error, result) {
+              self.items.fetchNext({
+                cursor: result.cursor,
+                limit: 2,
+                listId: self.vocablist.id,
+                loop: 5
+              });
+              hasItems = !error && result.length;
+              callback();
+            }
+          );
+        },
+        function(callback) {
+          self.vocablist.fetch({
+            error: function() {
+              hasVocablist = false;
+              callback();
+            },
+            success: function(result) {
+              hasVocablist = result !== undefined;
+              callback();
+            }
+          });
+        }
+      ],
+      function() {
+        if (!hasVocablist) {
+          ScreenLoader.hide();
+          app.router.navigate('', {trigger: true});
+        } else if (!hasItems) {
+          ScreenLoader.post('Adding words from list');
+          document.title = self.vocablist.get('name') + ' - Skritter';
+          self.items.addItems(
+            {
+              lang: app.getLanguage(),
+              limit: 5,
+              listId: self.vocablist.id
+            },
+            function() {
+              app.reload();
+            }
+          );
+        } else {
+          ScreenLoader.hide();
+          document.title = self.vocablist.get('name') + ' - Skritter';
+          self.next();
+          self.stopListening(self.items);
+          self.listenTo(self.items, 'state', self.handleItemState);
+        }
+      }
+    );
   },
 
   /**
-   * @method handleWindowOnBeforeUnload
+   * @method handleItemState
    */
-  handleWindowOnBeforeUnload: function() {
-    if (!this.schedule.reviews.length) {
-      return;
+  handleItemState: function() {
+    if (!this.currentPromptItems) {
+      this.next();
     }
-    return 'You have ' + this.schedule.reviews.length + ' unsaved reviews!';
   },
 
   /**
@@ -150,22 +225,23 @@ module.exports = GelatoPage.extend({
    * @param {PromptItems} promptItems
    */
   handlePromptNext: function(promptItems) {
-    var self = this;
-    if (promptItems.skip) {
-      this.next();
-    } else {
-      var review = promptItems.getReview();
-      if (!this.schedule.reviews.get(review)) {
-        this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
+    this.items.reviews.put(promptItems.getReview());
+
+    if (!this.previousPrompt) {
+      if (promptItems.readiness >= 1.0) {
+        this.toolbar.dueCountOffset++;
       }
-      this.schedule.reviews.put(review, null, function() {
-        if (self.schedule.reviews.length > 4) {
-          self.schedule.reviews.post({skip: 1});
-        }
-        self.item = null;
-        self.next();
-      });
+      if (this.items.reviews.length > 2) {
+        this.items.reviews.post({skip: 1});
+      }
+      this.currentPromptItems = null;
+      this.previousPromptItems = promptItems;
+      this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
+      this.items.addHistory(promptItems.item);
     }
+
+    this.previousPrompt = false;
+    this.next();
   },
 
   /**
@@ -173,201 +249,37 @@ module.exports = GelatoPage.extend({
    * @param {PromptItems} promptItems
    */
   handlePromptPrevious: function(promptItems) {
-    if (!this.queue[0].group) {
-      this.queue.unshift(promptItems);
-      this.previous();
-    }
-  },
-
-  /**
-   * @method handleScheduledLoad
-   */
-  handleScheduledLoad: function() {
-    var self = this;
-    ScreenLoader.post('Preparing for study');
-    app.user.db.reviews
-      .toArray()
-      .then(function(reviews) {
-        self.schedule.reviews.add(reviews);
-        self.prompt.setSchedule(self.schedule);
-        self.populateQueue();
-      })
-      .catch(function(error) {
-        console.error('SCHEDULE LOAD ERROR:', error);
-        self.populateQueue();
-      });
-  },
-
-  /**
-   * @method handleSchedulePopulate
-   */
-  handleSchedulePopulate: function() {
-    if (this.prompt.isLoaded()) {
-      console.info('QUEUE:', 'Added more items to queue.');
-    } else {
-      ScreenLoader.hide();
-      this.next();
-    }
-  },
-
-  /**
-   * @method loadSchedule
-   */
-  loadSchedule: function() {
-    var self = this;
-    var lang = app.getLanguage();
-    var parts = app.user.getFilteredParts();
-    var studyKana = app.user.get('studyKana');
-    var styles = app.user.getFilteredStyles();
-    async.series(
-      [
-        function(callback) {
-          self.vocablist.fetch({
-            error: function(error) {
-              callback(error);
-            },
-            success: function() {
-              document.title = self.vocablist.get('name') + ' - Study - Skritter';
-              callback();
-            }
-          });
-        },
-        function(callback) {
-          app.user.db.items
-            .toArray()
-            .then(function(items) {
-              items = _.filter(items, function(item) {
-                if (!item.vocabIds.length) {
-                  return false;
-                } else if (item.lang !== lang) {
-                  return false
-                } else if (!item.vocabListIds) {
-                  return false;
-                } else if (!_.includes(item.vocabListIds, self.vocablist.id)) {
-                  return false;
-                } else if (!_.includes(parts, item.part)) {
-                  return false;
-                } else if (!_.includes(styles, item.style)) {
-                  return false;
-                }
-                if (item.lang === 'ja') {
-                  var writing = item.id.split('-')[2];
-                  // Skip all kana items when no kanji exists
-                  if (!studyKana && app.fn.isKana(writing)) {
-                    return false;
-                  }
-                }
-                return true;
-              });
-              self.queue = [];
-              self.schedule.set(items.splice(0, 2000));
-              callback();
-            })
-            .catch(function(error) {
-              callback(error);
-            });
-        }
-      ],
-      function(error) {
-        if (error) {
-          self.schedule.trigger('error', error);
-        } else {
-          self.schedule.trigger('load', self.schedule);
-        }
-      }
-    );
+    this.previousPrompt = true;
+    this.currentPromptItems = promptItems;
+    this.previous();
   },
 
   /**
    * @method next
    */
   next: function() {
-    var item = this.queue.shift();
-    if (item) {
-      if (item.isBanned()) {
-        this.item = null;
-        this.next();
-      } else {
-        this.toolbar.render();
-        this.prompt.set(item.group ? item : item.getPromptItems());
-        if (this.scheduleState === 'standby' && this.queue.length < 5) {
-          this.scheduleState = 'populating';
-          this.populateQueue();
-        }
-        this.item = item;
+    var items = this.items.getNext();
+    if (this.previousPrompt) {
+      this.prompt.$panelLeft.css('opacity', 1.0);
+      this.prompt.reviewStatus.render();
+      this.prompt.set(this.currentPromptItems);
+      this.toolbar.render();
+    } else if (items.length) {
+      this.currentPromptItems = items[0].getPromptItems();
+      this.prompt.$panelLeft.css('opacity', 1.0);
+      this.prompt.reviewStatus.render();
+      this.prompt.set(this.currentPromptItems);
+      this.toolbar.render();
+      if (items.length < 5) {
+        this.items.fetchNext({limit: 2, listId: this.vocablist.id, loop: 5});
+      }
+      if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
+        this.addItem(true);
       }
     } else {
-      this.item = null;
-      this.prompt.$('#overlay').show();
-    }
-  },
-
-  /**
-   * @method populateQueue
-   */
-  populateQueue: function() {
-    var self = this;
-    var items = [];
-    this.$('#loading-indicator').removeClass('hidden');
-    //store base histories for better spacing
-    var localHistory = [];
-    var queueHistory = this.queue.map(function(item) {
-      return item.getBase();
-    });
-    //creates an array items to queue
-    for (var i = 0, length = this.schedule.sort().length; i < length; i++) {
-      var item = this.schedule.at(i);
-      var itemBase = item.getBase();
-      if (items.length < 10 && item.get('vocabIds').length) {
-        if (localHistory.indexOf(itemBase) === -1 &&
-          queueHistory.indexOf(itemBase) === -1) {
-          localHistory.push(itemBase);
-          items.push(item);
-        }
-      } else {
-        break;
-      }
-    }
-    if (items.length) {
-      //fetch resource data for queue items
-      this.schedule.fetch({
-        data: {
-          ids: _.map(items, 'id').join('|'),
-          include_contained: true,
-          include_decomps: true,
-          include_heisigs: true,
-          include_sentences: true,
-          include_strokes: true,
-          include_vocabs: true
-        },
-        merge: false,
-        remove: false,
-        error: function(error) {
-          self.schedule.trigger('error', error);
-          self.scheduleState = 'standby';
-        },
-        success: function(items, result) {
-          var now = moment().unix();
-          var sortedItems = _.sortBy(result.Items, function(item) {
-            var readiness = 0;
-            if (!item.last) {
-              readiness = 9999;
-            } else {
-              readiness = (now - item.last) / (item.next - item.last);
-            }
-            return -readiness;
-          });
-          for (var i = 0, length = sortedItems.length; i < length; i++) {
-            self.queue.push(self.schedule.get(sortedItems[i].id));
-          }
-          self.prompt.$('#overlay').hide();
-          self.schedule.trigger('populate', self.queue);
-          self.scheduleState = 'standby';
-        }
-      });
-    } else {
-      this.prompt.$('#overlay').show();
-      ScreenLoader.hide();
+      this.prompt.$panelLeft.css('opacity', 0.2);
+      this.items.shortenHistory();
+      this.items.fetchNext({limit: 1, listId: this.vocablist.id});
     }
   },
 
@@ -375,12 +287,11 @@ module.exports = GelatoPage.extend({
    * @method previous
    */
   previous: function() {
-    if (this.schedule.reviews.length) {
-      var review = this.schedule.reviews.last();
-      if (review.has('promptItems')) {
-        this.toolbar.render();
-        this.prompt.set(review.get('promptItems'));
-      }
+    if (this.previousPromptItems) {
+      this.prompt.$panelLeft.css('opacity', 1.0);
+      this.prompt.reviewStatus.render();
+      this.prompt.set(this.previousPromptItems);
+      this.toolbar.render();
     }
   },
 
@@ -391,8 +302,8 @@ module.exports = GelatoPage.extend({
   remove: function() {
     this.prompt.remove();
     this.toolbar.remove();
-    this.schedule.reviews.post();
-    window.onbeforeunload = null;
+    this.items.reviews.post();
     return GelatoPage.prototype.remove.call(this);
   }
+
 });

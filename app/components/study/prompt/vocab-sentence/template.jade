@@ -3,12 +3,17 @@ gelato-component(data-name='study-prompt-vocab-sentence')
 
   if prompt.reviews
     - var sentence = prompt.reviews.vocab.getSentence();
+    - var vocab = prompt.reviews.vocab;
 
-    if sentence
+    label Sentence
+
+    if vocab.state === 'fetching'
+
+      i.fa.fa-2x.fa-spinner.fa-pulse.fa-fw
+
+    else if sentence
       - var sentenceDefinition = sentence.getDefinition();
       - var sentenceReading = sentence.get('reading');
-
-      label Example sentence
 
       .value(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
 
@@ -23,3 +28,7 @@ gelato-component(data-name='study-prompt-vocab-sentence')
           else
             .hint-reading= sentenceReading
           .hint-definition= sentenceDefinition
+
+    else
+
+      button.show-sentence.btn.btn-sm.btn-default show

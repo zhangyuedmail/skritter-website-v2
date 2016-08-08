@@ -18,6 +18,7 @@ module.exports = GelatoComponent.extend({
    * @type Object
    */
   events: {
+    'click .show-sentence': 'handleClickShowSentence',
     'click .value': 'handleClickValue'
   },
   /**
@@ -34,6 +35,22 @@ module.exports = GelatoComponent.extend({
     return this;
   },
   /**
+   * @method handleClickShowSentence
+   * @param {Event} event
+   */
+  handleClickShowSentence: function(event) {
+    event.preventDefault();
+
+    this.stopListening();
+    this.listenTo(this.prompt.reviews.vocab, 'state', this.render);
+    this.prompt.reviews.vocab.fetch({
+      data: {
+        include_sentences: true
+      },
+      merge: true
+    });
+  },
+  /**
    * @method handleClickValue
    * @param {Event} event
    */
@@ -46,6 +63,5 @@ module.exports = GelatoComponent.extend({
       this.$('.hint').addClass('open');
       this.$('.hint').show('slide', {direction: 'up'}, '500');
     }
-
   }
 });

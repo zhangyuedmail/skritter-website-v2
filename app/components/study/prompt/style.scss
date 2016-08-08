@@ -19,9 +19,11 @@ gelato-component[data-name='study-prompt'] {
     position: absolute;
     width: 100%;
     z-index: 7000;
-    button {
-      display: block;
-      margin: 30px auto;
+    .btn {
+      i {
+        margin: 0 5px;
+      }
+      margin: 25px auto;
     }
   }
 

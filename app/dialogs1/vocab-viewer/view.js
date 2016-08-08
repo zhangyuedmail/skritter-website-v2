@@ -1,5 +1,6 @@
 var GelatoDialog = require('gelato/dialog');
 
+var Items = require('collections/items');
 var Vocabs = require('collections/vocabs');
 var Content = require('dialogs1/vocab-viewer/content/view');
 
@@ -14,7 +15,7 @@ module.exports = GelatoDialog.extend({
    */
   initialize: function() {
     this.content = new Content({dialog: this});
-    this.items = [];
+    this.items = new Items;
     this.vocabs = new Vocabs();
     this.vocabsContaining = new Vocabs();
   },
@@ -45,7 +46,7 @@ module.exports = GelatoDialog.extend({
     async.parallel(
       [
         function(callback) {
-          async.waterfall(
+          async.series(
             [
               function(callback) {
                 self.vocabs.fetch({
@@ -61,15 +62,15 @@ module.exports = GelatoDialog.extend({
                   },
                   success: function(vocabs) {
                     wordVocabs = vocabs;
-                    callback(null, vocabs);
+                    callback();
                   }
                 });
               },
-              function(vocabs, callback) {
-                if (vocabs.at(0).has('containedVocabIds')) {
+              function(callback) {
+                if (self.vocabs.at(0).has('containedVocabIds')) {
                   self.vocabs.fetch({
                     data: {
-                      ids: vocabs.at(0).get('containedVocabIds').join('|')
+                      ids: self.vocabs.at(0).get('containedVocabIds').join('|')
                     },
                     remove: false,
                     error: function(error) {
@@ -77,12 +78,26 @@ module.exports = GelatoDialog.extend({
                     },
                     success: function(vocabs) {
                       wordVocabs = vocabs;
-                      callback(null, vocabs);
+                      callback(null);
                     }
                   });
                 } else {
                   callback();
                 }
+              },
+              function(callback) {
+                self.items.fetch({
+                  data: {
+                    vocab_ids: vocabId
+                  },
+                  error: function(error) {
+                    callback(error);
+                  },
+                  success: function(items) {
+                    wordItems = items;
+                    callback(null);
+                  }
+                });
               }
             ],
             callback
@@ -102,22 +117,6 @@ module.exports = GelatoDialog.extend({
               callback();
             }
           });
-        },
-        function(callback) {
-          app.user.db.items
-            .toArray()
-            .then(function(items) {
-              this.items = wordItems = _.filter(
-                items,
-                function(item) {
-                  return _.includes(item.id, vocabId);
-                }
-              );
-              callback();
-            })
-            .catch(function(error) {
-              callback(error);
-            });
         }
       ],
       function(error) {
