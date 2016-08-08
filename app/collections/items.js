@@ -45,7 +45,7 @@ module.exports = SkritterCollection.extend({
    */
   addHistory: function(item) {
     this.remove(item);
-    this.history.unshift(item.getBase());
+    this.history.unshift(item.getBase().split(''));
     if (this.history.length > 4) {
       this.history.pop();
     }
@@ -220,14 +220,20 @@ module.exports = SkritterCollection.extend({
    * @returns {Array}
    */
   getNext: function() {
-    var history = this.history;
+    var history = _.flatten(this.history);
+    console.log('history', history);
     return _
       .chain(this.models)
       .filter(
         function(model) {
-          if (_.includes(history, model.getBase())) {
-            return false;
-          } else if (!model.isActive()) {
+          //exclude items with related characters from history
+          for (var i = 0, length = history.length; i < length; i++) {
+            if (_.includes(model.getBase(), history[i])) {
+              return false;
+            }
+          }
+
+          if (!model.isActive()) {
             return false;
           } else if (model.isBanned()) {
             return false;
