@@ -364,7 +364,7 @@ module.exports = GelatoPage.extend({
       return;
     }
 
-    var errorMsg = '';
+    var errorMsg = app.locale('pages.signup.errorDefault');
 
     // user API errors
     if (error.statusCode === 404) {
@@ -393,9 +393,9 @@ module.exports = GelatoPage.extend({
         default:
           errorMsg = app.locale('pages.signup.errorDefault');
       }
-
-      this.displayErrorMessage(errorMsg);
     }
+
+    this.displayErrorMessage(errorMsg);
   },
 
   /**
@@ -512,6 +512,8 @@ module.exports = GelatoPage.extend({
         this.displayErrorMessage(app.locale('pages.signup.errorCCExpired'));
         return false;
       }
+
+      delete formData.coupon;
     }
 
     if (formData.method === 'coupon') {
