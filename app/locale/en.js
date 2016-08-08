@@ -168,10 +168,11 @@ module.exports = {
 
     "signup": {
       "title": "Signup - Skritter",
-      "errorCouponAlreadyUsed": "",
+      "errorCouponAlreadyUsed": "The coupon code has already been used.",
       "errorCouponExpired": "The coupon code is expired.",
       "errorCouponExhausted": "The coupon code has exhausted all its uses.",
       "errorCouponInvalid": "The coupon code entered was not valid.",
+      "errorCouponNotEntered": "You must enter a coupon code.",
       "errorCouponNotReady": "The coupon code is not ready for use. Try again later.",
       "errorCCExpired": "The credit card has expired.",
       "errorDefault": "Unknown error while signing up. Please try again.",

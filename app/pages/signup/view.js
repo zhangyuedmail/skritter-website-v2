@@ -514,6 +514,13 @@ module.exports = GelatoPage.extend({
       }
     }
 
+    if (formData.method === 'coupon') {
+      if (_.isEmpty(formData.coupon)) {
+        this.displayErrorMessage(app.locale('pages.signup.errorCouponNotEntered'));
+        return false;
+      }
+    }
+
     return true;
   }
 });
