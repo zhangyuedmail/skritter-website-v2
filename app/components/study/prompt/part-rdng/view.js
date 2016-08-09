@@ -18,7 +18,7 @@ module.exports = GelatoComponent.extend({
    */
   events: {
     'keydown #reading-prompt': 'handleReadingPromptKeydown',
-    'keyup #reading-prompt': 'handleReadingPromptKeyup',
+    'input #reading-prompt': 'handleReadingPromptInput',
     'click gelato-component': 'handlePromptCanvasClick'
   },
 
@@ -236,7 +236,7 @@ module.exports = GelatoComponent.extend({
    * (pinyin or kana)
    * @param {jQuery.Event} event a keypress event
    */
-  handleReadingPromptKeyup: function(event) {
+  handleReadingPromptInput: function(event) {
 
     // left and right arrows
     if (event.keyCode === 37 || event.keyCode === 39) {
@@ -342,7 +342,7 @@ module.exports = GelatoComponent.extend({
    */
   _processPromptInput: function(event) {
     var newValue = '';
-    if (app.isChinese(event)) {
+    if (app.isChinese()) {
       if (this.zhInputType === 'pinyin') {
         newValue = this._parsePinyinInput(null, event);
       }
