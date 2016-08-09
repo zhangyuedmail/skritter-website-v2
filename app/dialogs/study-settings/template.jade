@@ -68,5 +68,13 @@ bootstrap-dialog(data-name='study-settings')
                   label
                     input(type="checkbox", checked=user.isAudioEnabled())
 
+            if app.isChinese()
+              .form-group
+                label.col-sm-3.control-label(for="pinyin-input") Disable pinyin input on reading prompts
+                .col-sm-9#field-pinyin-input
+                  .checkbox
+                    label
+                      input(type="checkbox", checked=app.user.get('disablePinyinReadingPromptInput'))
+
           .text-right
             button#button-save.btn.btn-fixed.btn-primary(type='button') Save
