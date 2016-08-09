@@ -116,20 +116,27 @@ module.exports = GelatoComponent.extend({
       return;
     }
 
+    var timeStudied = this.collection.getTimeStudiedForPeriod(this.range.start, this.range.end, true);
+    var avgTimeStudied = this.collection.convertToLargestTimeUnit(timeStudied / 7);
+
     var daysRange = moment(this.range.end, config.dateFormatApp).diff(
       moment(this.range.start, config.dateFormatApp), 'days'
     ) + 1;
-    this.$('#days-range').text(daysRange);
 
-    // time studied
-    var timeStudied = this.collection.getTimeStudiedForPeriod(this.range.start, this.range.end, true);
-    var avgTimeStudied = this.collection.convertToLargestTimeUnit(timeStudied / 7);
+    this.$('#days-range').text(daysRange);
     this.$('#num-time-per-day').text(Number(avgTimeStudied.amount.split(':')[0]));
+
     this.$('#time-per-day-units').text(avgTimeStudied.units + ' per day');
 
     // retention rate
     var retentionRate = this.collection.getRetentionRateForPeriod(
       this.range.start, this.range.end, 'word', 'rune');
+
+    if (retentionRate === 0) {
+      retentionRate = this.collection.getRetentionRateForPeriod(
+        this.range.start, this.range.end, 'char', 'rune');
+    }
+    
     this.$('#num-retention-rate').text(Math.round(retentionRate) + '%');
 
     // circle inner vals
