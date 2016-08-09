@@ -468,11 +468,9 @@ module.exports = GelatoComponent.extend({
         processed.push(wordlike.replace(/v/g, 'ü'));
       }
 
-      // case 3: add pinyin neutral tone e.g. (typing 有的時候) yǒudes -> yǒude₅s
+      // case 4: add pinyin neutral tone e.g. (typing 有的時候) yǒudes -> yǒude₅s
       else if (wordlikeMinusEnd && resMinusEnd && resMinusEnd !== wordlikeMinusEnd + '5' && initials.test(lastChar) &&
-        !resPotentialNeutral) {
-
-
+        !resPotentialNeutral && wordlike[wordlike.length - 1] !== 'n') {
 
         processed.push(resMinusEnd + subMap['5']);
 
@@ -481,7 +479,8 @@ module.exports = GelatoComponent.extend({
       }
 
       // TODO: case n: pinyin was valid word, user added a letter that isn't valid e.g. gōng₁ -> gōnwg₁
-
+      // TODO: case n+1: refactor all this into a state machine or something
+        
       // fallthrough case: no mutations made
       else {
         processed.push(wordlike.replace(/v/g, 'ü'));
