@@ -10,6 +10,7 @@ var ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
   /**
    * @method initialize
    * @constructor
@@ -168,6 +169,7 @@ module.exports = GelatoPage.extend({
     this.vocablistSection.set('name', this.$('#section-name').val());
     this.vocablistSection.set('rows', this.editor.rows);
     this.vocablistSection.save();
+
     //remove all results button
     _.forEach(
       this.editor.rows,
@@ -175,6 +177,7 @@ module.exports = GelatoPage.extend({
         delete row.results;
       }
     );
+
     this.render();
   },
 
@@ -193,7 +196,7 @@ module.exports = GelatoPage.extend({
       }
 
       var $input = $(event.target);
-      this.$('#input-message .value');
+      this.$('#input-message .value').empty();
       this.editor.addRow($(event.target).val());
       window.scrollTo(0, document.body.scrollHeight);
       $input.val('');
@@ -216,4 +219,5 @@ module.exports = GelatoPage.extend({
     this.editor.remove();
     return GelatoPage.prototype.remove.call(this);
   }
+
 });
