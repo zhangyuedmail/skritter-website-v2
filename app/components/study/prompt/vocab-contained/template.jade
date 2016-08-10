@@ -1,15 +1,11 @@
 gelato-component(data-name='study-prompt-vocab-contained')
   - var prompt = view.prompt;
 
-  - console.log('moose:', prompt.reviews);
-
   if prompt.reviews
     - var reviews = prompt.reviews;
     - var part = prompt.reviews.part;
     - var position = prompt.reviews.position;
     - var vocabs = reviews.vocab.getContained(true);
-
-    - console.log('VOCABS' ,vocabs);
 
     if _.includes(['rune', 'tone'], part) || vocabs.length === 1
       - var vocab = vocabs[position];
