@@ -28,6 +28,13 @@ gelato-component(data-name='study-prompt-vocab-contained')
                   | &nbsp;
                   span.child-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
 
+              if vocabs.length && definition
+                .child-vocab-row
+                  .child-definition
+                    if app.user.get('showHeisig') && heisig
+                      em!= heisig + ' - '
+                    span!= definition
+
               if decomp && !decomp.get('atomic')
                 .child-vocab-row
                   label Decomposition
@@ -40,14 +47,6 @@ gelato-component(data-name='study-prompt-vocab-contained')
                       if app.user.get('showHeisig') && child.heisigDefinition
                         em!= child.heisigDefinition + ' - '
                       .decomp-definition= child.definitions.en
-
-              if vocabs.length && definition
-                .child-vocab-row
-                  label Definition
-                  .child-definition
-                    if app.user.get('showHeisig') && heisig
-                      em!= heisig + ' - '
-                    span!= definition
 
               if vocabs.length && mnemonic
                 .child-vocab-row
