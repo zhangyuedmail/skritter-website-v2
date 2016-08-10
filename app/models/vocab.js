@@ -110,7 +110,12 @@ var Vocab = SkritterModel.extend({
    * @returns {Decomp}
    */
   getDecomp: function() {
-    return this.collection.decomps.get(this.get('writing'));
+    var decomp = this.collection.decomps.get(this.get('writing'));
+    if (decomp && !decomp.get('atomic')) {
+      return decomp;
+    } else {
+      return null;
+    }
   },
   /**
    * @method getDefinition

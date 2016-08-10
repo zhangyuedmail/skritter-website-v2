@@ -8,6 +8,12 @@ var PromptItem = require('models/prompt-item');
 module.exports = GelatoCollection.extend({
 
   /**
+   * @property complete
+   * @type {Boolean}
+   */
+  complete: false,
+
+  /**
    * @property group
    * @type {String}
    */
@@ -48,6 +54,12 @@ module.exports = GelatoCollection.extend({
    * @type {Number}
    */
   position: 0,
+
+  /**
+   * @property showContained
+   * @type {Boolean}
+   */
+  showContained: false,
 
   /**
    * @property skip
@@ -218,7 +230,15 @@ module.exports = GelatoCollection.extend({
    * @returns {Boolean}
    */
   isComplete: function() {
-    return _.includes(this.map('complete'), false) === false;
+    return this.complete || _.includes(this.map('complete'), false) === false;
+  },
+
+  /**
+   * @method isContainedShown
+   * @returns {Boolean}
+   */
+  isContainedShown: function() {
+    return this.showContained || this.current().get('showContained');
   },
 
   /**
