@@ -46,7 +46,7 @@ module.exports = GelatoComponent.extend({
     this.userReading =  this.prompt.review.get('userReading') || '';
 
     // only support pinyin for first go around. Nihongo ga kite imasu!
-    this.showReadingPrompt = app.isDevelopment() && !app.user.get('disablePinyinReadingPromptInput') && app.isChinese();
+    this.showReadingPrompt = !app.user.get('disablePinyinReadingPromptInput') && app.isChinese();
 
     this.registerShortcuts = !this.showReadingPrompt;
 
