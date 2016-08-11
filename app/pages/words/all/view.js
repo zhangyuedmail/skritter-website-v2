@@ -34,7 +34,7 @@ module.exports = GelatoPage.extend({
    * @type {Object}
    */
   events: {
-    'click .writing-td': 'handleClickWritingTd',
+    'click .vocab-row': 'handleClickVocabRow',
     'click #load-more-btn': 'handleClickLoadMoreButton',
     'click #next-sort-link': 'handleClickNextSortLink',
     'click #previous-sort-link': 'handleClickPreviousSortLink',
@@ -244,10 +244,10 @@ module.exports = GelatoPage.extend({
   },
 
   /**
-   * @method handleClickWritingTd
+   * @method handleClickVocabRow
    * @param {Event} event
    */
-  handleClickWritingTd: function(event) {
+  handleClickVocabRow: function(event) {
     event.preventDefault();
     var row = $(event.target).parent('tr');
     var vocabId = row.data('vocab-id');

@@ -29,10 +29,10 @@ gelato-page(data-name='words-mnemonics')
                   tr(data-vocab-id=vocab.id)
                     td.checkbox-td
                       input(type="checkbox")
-                    td.writing-td= vocab.getWriting()
-                    td.reading-td= vocab.getReading()
-                    td.mnemonic-td!= mnemonic.text
-                    td.edited-td= moment(mnemonic.changed * 1000).format('LL')
+                    td.vocab-row.writing-td= vocab.getWriting()
+                    td.vocab-row.reading-td= vocab.getReading()
+                    td.vocab-row.mnemonic-td!= mnemonic.text
+                    td.vocab-row.edited-td= moment(mnemonic.changed * 1000).format('LL')
 
             if view.mnemonicVocabs.state === 'fetching'
               p.text-center

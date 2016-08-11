@@ -37,6 +37,10 @@ gelato-page[data-name='words-banned'] {
     width: 20%;
   }
 
+  .vocab-row {
+    cursor: pointer;
+  }
+
   #load-more-btn {
     margin: 0 auto;
     max-width: 300px;

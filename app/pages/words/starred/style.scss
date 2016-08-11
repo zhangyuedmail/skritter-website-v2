@@ -54,4 +54,9 @@ gelato-page[data-name='words-starred'] {
   .not-starred {
     color: $grey3;
   }
+
+  .vocab-row {
+    cursor: pointer;
+  }
+
 }
