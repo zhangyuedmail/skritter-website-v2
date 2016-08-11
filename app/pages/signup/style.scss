@@ -238,6 +238,22 @@ gelato-page[data-name='signup'] {
     }
   }
 
+  .school-email-info {
+    text-align: center;
+  }
+
+  #signup-validation-code {
+    margin-bottom: 20px;
+  }
+
+  .send-validation-email {
+    margin: 20px 0;
+  }
+
+  .validation-email-sent-msg {
+    padding: 10px;
+  }
+
   #signup-error-alert {
     margin-top: 10px;
   }

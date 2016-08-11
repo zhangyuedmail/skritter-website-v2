@@ -15,7 +15,8 @@ module.exports = GelatoPage.extend({
    */
   events: {
     'change #signup-payment-method': 'handleChangeSignupPaymentMethod',
-    'click #signup-submit': 'handleClickSignupSubmit'
+    'click #signup-submit': 'handleClickSignupSubmit',
+    'click #send-validation-email': 'handleClickValidateSchoolEmail'
   },
 
   /**
@@ -118,6 +119,7 @@ module.exports = GelatoPage.extend({
 
     this.user.set({
       email: formData.email,
+      method: formData.method,
       name: formData.username,
       password: formData.password1,
       recaptcha: formData.recaptcha,
@@ -128,8 +130,10 @@ module.exports = GelatoPage.extend({
         plan: formData.plan,
         token: formData.token
       });
-    } else {
+    } else if (formData.method === 'coupon') {
       this.user.set('couponCode', formData.coupon);
+    } else {
+      this.user.set('validationCode', formData.validationCode);
     }
     if (app.isDevelopment()) {
       this.user.unset('avatar');
@@ -192,7 +196,8 @@ module.exports = GelatoPage.extend({
       password2: _.trim(this.$('#signup-password2').val()),
       plan: this.$('#signup-plan').val(),
       username: _.trim(this.$('#signup-username').val()),
-      recaptcha: grecaptcha.getResponse()
+      validationCode: _.trim(this.$('#signup-validation-code').val()),
+      recaptcha: window.grecaptcha ? window.grecaptcha.getResponse() : null
     };
   },
 
@@ -218,11 +223,19 @@ module.exports = GelatoPage.extend({
       this.$('#signup-input-credit').removeClass('hidden');
       this.$('#signup-input-credit-expire').removeClass('hidden');
       this.$('#signup-plan').closest('.form-group').removeClass('hidden');
-    } else {
+      this.$('#signup-input-school').addClass('hidden');
+    } else if (formData.method === 'coupon') {
       this.$('#signup-input-coupon').removeClass('hidden');
       this.$('#signup-input-credit').addClass('hidden');
       this.$('#signup-input-credit-expire').addClass('hidden');
       this.$('#signup-plan').closest('.form-group').addClass('hidden');
+      this.$('#signup-input-school').addClass('hidden');
+    } else {
+      this.$('#signup-input-coupon').addClass('hidden');
+      this.$('#signup-input-credit').addClass('hidden');
+      this.$('#signup-input-credit-expire').addClass('hidden');
+      this.$('#signup-plan').closest('.form-group').addClass('hidden');
+      this.$('#signup-input-school').removeClass('hidden');
     }
   },
 
@@ -237,10 +250,73 @@ module.exports = GelatoPage.extend({
       var formData = this.getFormData();
       if (formData.method === 'credit') {
         this.subscribeCredit(formData);
-      } else {
+      } else if (formData.method === 'coupon') {
         this.subscribeCoupon(formData);
+      } else {
+        this.subscribeSchool(formData);
       }
     }
+  },
+
+  handleClickValidateSchoolEmail: function(event) {
+    var self = this;
+    var formData = this.getFormData();
+
+    if (!this._validateEmail(formData.email)) {
+      this.displayErrorMessage(app.locale('pages.signup.errorInvalidEmail'));
+      this.$('#signup-email').addClass('alert-warning');
+      try {
+        this.$('#signup-error-alert')[0].scrollIntoView(false);
+      } catch(e) {}
+
+      this.subscribing = false;
+      ScreenLoader.hide();
+      return;
+    }
+
+    this.$('#signup-email').removeClass('alert-warning');
+
+    async.series([
+      function(callback) {
+        ScreenLoader.show();
+        ScreenLoader.post('Sending validation email');
+        self.subscribing = true;
+        self.sendValidationEmail(formData.email, callback);
+      }
+    ], function(error) {
+      ScreenLoader.hide();
+
+      if (error) {
+        self._handleSubmittedProcessError(error);
+      } else {
+        self.subscribing = false;
+        self.$('#validation-sent-address').text(formData.email);
+        self.$('#validation-email-sent-msg').removeClass('hidden');
+      }
+    });
+  },
+
+  sendValidationEmail: function(email, callback) {
+     var validationUrl = app.getApiUrl() + 'email-validation/send';
+
+    $.ajax({
+      url: validationUrl,
+      method: 'POST',
+      headers: app.user.headers(),
+      data: {
+        email: email
+      },
+      success: function() {
+        if (_.isFunction(callback)) {
+          callback();
+        }
+      },
+      error: function(error) {
+        if (_.isFunction(callback)) {
+          callback(error);
+        }
+      }
+    });
   },
 
   /**
@@ -250,7 +326,7 @@ module.exports = GelatoPage.extend({
   setCouponCode: function(couponCode) {
     this.$('.credit').addClass('hide');
     this.$('.coupon').removeClass('hide');
-    this.$('#signup-coupon').val(this.couponCode);
+    this.$('#signup-coupon-code').val(this.couponCode);
     this.$('#method-credit').prop('checked', false);
     this.$('#method-coupon').prop('checked', true);
   },
@@ -275,8 +351,8 @@ module.exports = GelatoPage.extend({
         self.createUser(formData, callback);
       }
     ], function(error) {
+      ScreenLoader.hide();
       if (error) {
-        ScreenLoader.hide();
         self._handleSubmittedProcessError(error);
       } else {
         self._handleSubmittedProcessSuccess();
@@ -332,6 +408,35 @@ module.exports = GelatoPage.extend({
     ], function(error) {
       ScreenLoader.hide();
       if (error) {
+        self._handleSubmittedProcessError(error);
+      } else {
+        self._handleSubmittedProcessSuccess();
+      }
+    });
+  },
+
+  /**
+   * Subscribes a user using a school subscription.
+   * @param {object} formData the submitted data
+   */
+  subscribeSchool: function(formData) {
+    var self = this;
+
+    if (!this._validateUserData(formData)) {
+      this.subscribing = false;
+      ScreenLoader.hide();
+      return;
+    }
+
+    async.series([
+      function(callback) {
+        ScreenLoader.show();
+        ScreenLoader.post('Creating a new user');
+        self.createUser(formData, callback);
+      }
+    ], function(error) {
+      if (error) {
+        ScreenLoader.hide();
         self._handleSubmittedProcessError(error);
       } else {
         self._handleSubmittedProcessSuccess();
@@ -459,6 +564,12 @@ module.exports = GelatoPage.extend({
     );
   },
 
+  _validateEmail: function(email) {
+    var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    return (!_.isEmpty(email) && email.match(emailRegex));
+  },
+
   /**
    * Validates submitted user form data to check if it conforms to submission
    * rules. Displays an error message to the user if any part of the data is
@@ -467,14 +578,12 @@ module.exports = GelatoPage.extend({
    * @return {Boolean} whether the data can be submitted
    */
   _validateUserData: function(formData) {
-    var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-
     if (_.isEmpty(formData.username)) {
       this.displayErrorMessage(app.locale('pages.signup.errorNoUsername'));
       return false;
     }
 
-    if (_.isEmpty(formData.email) || !formData.email.match(emailRegex)) {
+    if (!this._validateEmail(formData.email)) {
       this.displayErrorMessage(app.locale('pages.signup.errorInvalidEmail'));
       return false;
     }
@@ -514,8 +623,6 @@ module.exports = GelatoPage.extend({
         this.displayErrorMessage(app.locale('pages.signup.errorCCExpired'));
         return false;
       }
-
-      delete formData.coupon;
     }
 
     if (formData.method === 'coupon') {
@@ -523,6 +630,17 @@ module.exports = GelatoPage.extend({
         this.displayErrorMessage(app.locale('pages.signup.errorCouponNotEntered'));
         return false;
       }
+    } else {
+      delete formData.coupon;
+    }
+
+    if (formData.method === 'school') {
+      if (_.isEmpty(formData.validationCode)) {
+        this.displayErrorMessage(app.locale('pages.signup.errorValidationCodeNotEntered'));
+        return false;
+      }
+    } else {
+      delete formData.validationCode;
     }
 
     return true;

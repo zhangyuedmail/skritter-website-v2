@@ -193,6 +193,7 @@ module.exports = {
       "errorNoCCNmber": "You must enter a credit card number.",
       "errorNoUsername": "You must enter a username.",
       "errorDuplicateUsername": "Another person has taken the username #{username}. Please choose another one.",
+      "errorValidationCodeNotEntered": "You must enter a validation code from your school email.",
       "refundPolicy": "Refund Policy",
       "refundDetails1": "If you’re not satisfied for any reason, we offer a full refund on your first month's purchase, and we provide a pro-rated refund on longer subscriptions. Just",
       "refundDetails2": "contact us",
