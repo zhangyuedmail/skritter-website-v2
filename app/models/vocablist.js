@@ -200,15 +200,23 @@ module.exports = SkritterModel.extend({
    * @returns {Boolean}
    */
   isEditable: function() {
-    return app.user.get('isAdmin') ? true : _.every([
-      !this.get('disabled'),
-      this.get('sort') === 'custom',
-      _.some([
-        this.get('user') === app.user.id,
-        _.includes(this.get('editors'), app.user.id),
-        this.get('public')
-      ])
-    ]);
+    //give admin account full editing power
+    if (app.user.get('isAdmin')) {
+      return true;
+    }
+
+    return _.every(
+      [
+        !this.get('disabled'),
+        this.get('sort') === 'custom',
+        _.some(
+          [
+            _.includes(this.get('editors'), app.user.id),
+            this.get('creator') === app.user.id
+          ]
+        )
+      ]
+    );
   },
 
   /**
