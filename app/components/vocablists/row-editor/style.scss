@@ -9,6 +9,9 @@ gelato-component[data-name='vocablists-list-editor-rows'] {
     font-weight: 300;
     padding: 10px 25px;
     border-top: 1px solid $white5;
+    img {
+      width: 100%;
+    }
     &.banned {
       color: $grade1 !important;
     }
