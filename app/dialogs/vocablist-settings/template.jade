@@ -84,7 +84,7 @@ bootstrap-dialog(data-name='vocablist-settings')
                   .col-sm-9
                     select.form-control(name="currentSection")
                       for section in sections
-                        option(value=section.id selected=section.id === currentSection)= section.name
+                        option(value=section.id, selected=(section.id === currentSection))= section.name
                     .help-block All sections before chosen section will not be studied.
 
                 - var sectionsSkipping = view.vocablist.get('sectionsSkipping');
