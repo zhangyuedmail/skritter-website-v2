@@ -8,6 +8,7 @@ var User = require('models/user');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
   /**
    * @property events
    * @type Object
@@ -94,6 +95,7 @@ module.exports = GelatoPage.extend({
       this.$('#signup-password1').val('skrit123');
       this.$('#signup-password2').val('skrit123');
       this.$('#signup-card-number').val('4242424242424242');
+      this.$('#card-month-select').val('01');
       this.$('#card-year-select').val(new Date().getFullYear() + 1);
     }
 
@@ -525,4 +527,5 @@ module.exports = GelatoPage.extend({
 
     return true;
   }
+
 });

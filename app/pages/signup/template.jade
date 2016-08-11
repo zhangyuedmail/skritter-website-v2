@@ -71,6 +71,7 @@ gelato-page(data-name='signup')
               | Expiration date
             .col-sm-4
               select#card-month-select.form-control
+                option(value='', selected) Month
                 option(value='01') 01 - January
                 option(value='02') 02 - February
                 option(value='03') 03 - March
@@ -86,6 +87,7 @@ gelato-page(data-name='signup')
             .col-sm-3
               select#card-year-select.form-control
                 - var year = moment().year();
+                option(value='', selected) Year
                 for i in _.range(10)
                   option(value=year + i)= year + i
           .form-group.coupon.hide
