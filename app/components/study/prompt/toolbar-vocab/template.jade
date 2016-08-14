@@ -3,22 +3,22 @@ gelato-component(data-name="study-prompt-toolbar-vocab")
 
   if prompt.reviews
 
-    i#button-vocab-audio.icon.icon-study-word-volume
+    i#button-vocab-audio.icon.icon-study-word-volume.hover-enlarge
 
     if prompt.reviews.item
       if prompt.reviews.vocab.isStarred()
-        i#button-vocab-star.icon.icon-study-word-star-filled
+        i#button-vocab-star.icon.icon-study-word-star-filled.hover-enlarge
       else
-        i#button-vocab-star.icon.icon-study-word-star
+        i#button-vocab-star.icon.icon-study-word-star.hover-enlarge
 
     if prompt.reviews.item
-      i#button-vocab-edit.icon.icon-study-word-edit
+      i#button-vocab-edit.icon.icon-study-word-edit.hover-enlarge
 
     if prompt.reviews.item
-      i#button-vocab-ban.icon.icon-study-ban
+      i#button-vocab-ban.icon.icon-study-ban.hover-enlarge
 
     if prompt.reviews.item
-      i#button-vocab-info.icon.icon-study-info
+      i#button-vocab-info.icon.icon-study-info.hover-enlarge
 
     if prompt.reviews.item
       if prompt.reviews.item.get('last')

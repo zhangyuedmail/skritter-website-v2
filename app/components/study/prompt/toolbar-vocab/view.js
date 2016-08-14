@@ -109,6 +109,8 @@ module.exports = GelatoComponent.extend({
     } else {
       this.enableEditing();
     }
+
+    this.$('#button-vocab-edit').toggleClass('active', this.prompt.editing);
   },
   /**
    * @method handleClickButtonVocabInfo
