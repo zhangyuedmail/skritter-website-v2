@@ -3,23 +3,25 @@
 gelato-component[data-name='study-prompt-vocab-contained'] {
 
   button {
+    background-color: $grey1;
     border-radius: 4px;
   }
 
   hr {
     border-top: 1px solid $grey1;
+    margin-bottom: 5px;
   }
 
   label {
     color: $grey3;
     font-size: 14px;
     font-weight: 700;
-    margin-top: 15px;
+    margin-top: 30px;
   }
 
   .value {
     color: $grey3;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 300;
     margin-bottom: 5px;
     .child-character {
@@ -30,13 +32,14 @@ gelato-component[data-name='study-prompt-vocab-contained'] {
         margin-bottom: 5px;
       }
       .decomp-reading {
+        font-size: 16px;
         font-style: italic;
         margin-right: 15px;
       }
       .decomp-writing {
         color: $grey5;
         margin-right: 5px;
-        font-size: 20px;
+        font-size: 24px;
       }
     }
     .child-reading {

@@ -20,4 +20,4 @@ gelato-page(data-name='password-reset')
             label(for="password-reset-input") Email address
             input#password-reset-input.form-control(type="text", placeholder="")
         button#button-reset.btn.btn-fixed.btn-primary(type="button") Reset
-      a#back-to-login(href="/login") Back to login
+      a#back-to-login(href="/login")= app.locale('pages.resetPassword.backToLogin')

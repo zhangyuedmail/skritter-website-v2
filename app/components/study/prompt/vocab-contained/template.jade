@@ -2,58 +2,67 @@ gelato-component(data-name='study-prompt-vocab-contained')
   - var prompt = view.prompt;
 
   if prompt.reviews
-    - var contained = prompt.reviews.vocab.getContained(true);
-    - var vocabs = [prompt.review.vocab];
+    - var reviews = prompt.reviews;
+    - var part = prompt.reviews.part;
+    - var position = prompt.reviews.position;
+    - var vocabs = reviews.vocab.getContained(true);
 
-    if _.includes(['rune', 'tone'], prompt.reviews.part) && contained.length > 1
+    if _.includes(['rune', 'tone'], part) || vocabs.length === 1
+      - var vocab = vocabs[position];
+      - var decomp = vocab.getDecomp();
 
-      hr
+      if decomp && vocab
 
-      div.value
-        if prompt.review.get('showContained') || prompt.review.isComplete()
+        div
+          label Decomposition
 
-          for vocab in vocabs
-            - var decomp = vocab.getDecomp();
-            - var definition = vocab.getDefinition();
-            - var heisig = vocab.get('heisigDefinition');
-            - var mnemonic = vocab.getMnemonic();
-            - var reading = vocab.get('reading');
-            - var writing = vocab.get('writing');
+        if prompt.reviews.isContainedShown() || prompt.review.isComplete()
 
-            .child-character
+          div.value
 
-              if vocabs.length
-                .child-vocab-row
-                  span.child-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= writing
-                  | &nbsp;
-                  span.child-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
-
-              if decomp && !decomp.get('atomic')
-                .child-vocab-row
-                  label Decomposition
-                  for child in decomp.get('Children')
-                    .child-decomp
-                      span.decomp-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
-                      | &nbsp;
-                      span.decomp-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
-                      | &nbsp;
-                      if app.user.get('showHeisig') && child.heisigDefinition
-                        em!= child.heisigDefinition + ' - '
-                      .decomp-definition= child.definitions.en
-
-              if vocabs.length && definition
-                .child-vocab-row
-                  label Definition
-                  .child-definition
-                    if app.user.get('showHeisig') && heisig
-                      em!= heisig + ' - '
-                    span!= definition
-
-              if vocabs.length && mnemonic
-                .child-vocab-row
-                  label Mnemonic
-                  .child-mnemonic!= vocab.getMnemonic().text
+            if decomp && !decomp.get('atomic')
+              .child-vocab-row
+                for child in decomp.get('Children')
+                  .child-decomp
+                    span.decomp-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
+                    | &nbsp;
+                    span.decomp-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                    | &nbsp;
+                    if app.user.get('showHeisig') && child.heisigDefinition
+                      em!= child.heisigDefinition + ' - '
+                    .decomp-definition= child.definitions.en
 
         else
 
-          button#show-contained.btn.btn-default show
+          button#show-contained.btn.btn-sm.btn-default show
+
+    else
+
+      div
+        label Characters
+
+      if prompt.reviews.isContainedShown() || prompt.review.isComplete()
+
+        for vocab in vocabs
+          - var definition = vocab.getDefinition();
+          - var heisig = vocab.get('heisigDefinition');
+          - var reading = vocab.get('reading');
+          - var writing = vocab.get('writing');
+
+          div.value
+
+            if vocabs.length
+              .child-vocab-row
+                span.child-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= writing
+                | &nbsp;
+                span.child-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+
+            if vocabs.length && definition
+              .child-vocab-row
+                .child-definition
+                  if app.user.get('showHeisig') && heisig
+                    em!= heisig + ' - '
+                  span!= definition
+      else
+
+        button#show-contained.btn.btn-sm.btn-default show

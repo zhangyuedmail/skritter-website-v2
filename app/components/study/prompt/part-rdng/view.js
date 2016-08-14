@@ -18,7 +18,7 @@ module.exports = GelatoComponent.extend({
    */
   events: {
     'keydown #reading-prompt': 'handleReadingPromptKeydown',
-    'keyup #reading-prompt': 'handleReadingPromptKeyup',
+    'input #reading-prompt': 'handleReadingPromptInput',
     'click gelato-component': 'handlePromptCanvasClick'
   },
 
@@ -46,7 +46,7 @@ module.exports = GelatoComponent.extend({
     this.userReading =  this.prompt.review.get('userReading') || '';
 
     // only support pinyin for first go around. Nihongo ga kite imasu!
-    this.showReadingPrompt = app.isDevelopment() && app.isChinese();
+    this.showReadingPrompt = !app.user.get('disablePinyinReadingPromptInput') && app.isChinese();
 
     this.registerShortcuts = !this.showReadingPrompt;
 
@@ -236,7 +236,7 @@ module.exports = GelatoComponent.extend({
    * (pinyin or kana)
    * @param {jQuery.Event} event a keypress event
    */
-  handleReadingPromptKeyup: function(event) {
+  handleReadingPromptInput: function(event) {
 
     // left and right arrows
     if (event.keyCode === 37 || event.keyCode === 39) {
@@ -342,7 +342,7 @@ module.exports = GelatoComponent.extend({
    */
   _processPromptInput: function(event) {
     var newValue = '';
-    if (app.isChinese(event)) {
+    if (app.isChinese()) {
       if (this.zhInputType === 'pinyin') {
         newValue = this._parsePinyinInput(null, event);
       }
@@ -419,7 +419,9 @@ module.exports = GelatoComponent.extend({
     var currTone;
     var res;
     var resMinusEnd;
+    var lastWordlikeCharIsN;
     var resPotentialNeutral;
+    var nextWordlikeIsToneChange;
 
     // loop through each part and perform the necessary mutations
     for (var i = 0; i < input.length; i++) {
@@ -428,11 +430,15 @@ module.exports = GelatoComponent.extend({
       wordlike = input[i];
       wordlikeMinusEnd = wordlike.slice(0, -1);
       lastChar = wordlike.slice(wordlike.length - 1, wordlike.length);
+      lastWordlikeCharIsN = lastChar === 'n';
 
       currTone = toneNumInput.exec(wordlike) || [];
 
       res = app.fn.pinyin.toTone(wordlike.replace(/ü/g, 'v'));
       resMinusEnd = app.fn.pinyin.toTone(wordlikeMinusEnd.replace(/ü/g, 'v') + '5');
+
+      nextWordlikeIsToneChange = i < (input.length - 1) &&
+        toneSubscript.test(input[i+1]);
 
       // check that the input (e.g. ren) could be a valid syllable
       // rather than interpreting it as re5 + n (as an initial)
@@ -468,11 +474,9 @@ module.exports = GelatoComponent.extend({
         processed.push(wordlike.replace(/v/g, 'ü'));
       }
 
-      // case 3: add pinyin neutral tone e.g. (typing 有的時候) yǒudes -> yǒude₅s
+      // case 4: add pinyin neutral tone e.g. (typing 有的時候) yǒudes -> yǒude₅s
       else if (wordlikeMinusEnd && resMinusEnd && resMinusEnd !== wordlikeMinusEnd + '5' && initials.test(lastChar) &&
-        !resPotentialNeutral) {
-
-
+        !resPotentialNeutral && !lastWordlikeCharIsN && !nextWordlikeIsToneChange) {
 
         processed.push(resMinusEnd + subMap['5']);
 
@@ -481,6 +485,7 @@ module.exports = GelatoComponent.extend({
       }
 
       // TODO: case n: pinyin was valid word, user added a letter that isn't valid e.g. gōng₁ -> gōnwg₁
+      // TODO: case n+1: refactor all this into a state machine or something
 
       // fallthrough case: no mutations made
       else {

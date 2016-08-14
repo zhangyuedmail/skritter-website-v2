@@ -21,27 +21,27 @@ module.exports = GelatoPage.extend({
     this.listenTo(this.bannedVocabs, 'sync', this.renderTable);
     this.fetchBannedVocabs();
   },
-  
+
   /**
    * @property events
    * @type {Object}
    */
   events: {
-    'click .writing-td': 'handleClickWritingTd',
+    'click .vocab-row': 'handleClickVocabRow',
     'change input[type="checkbox"]': 'handleChangeCheckbox',
     'click #load-more-btn': 'handleClickLoadMoreButton',
     'click #unban-vocabs-btn': 'handleClickUnbanVocabsButton'
   },
-  
+
   /**
    * @method remove
    */
   remove: function() {
     this.sidebar.remove();
-    
+
     return GelatoPage.prototype.remove.call(this);
   },
-  
+
   /**
    * @method render
    * @returns {VocablistBrowse}
@@ -49,22 +49,22 @@ module.exports = GelatoPage.extend({
   render: function() {
     this.renderTemplate();
     this.sidebar.setElement('#words-sidebar-container').render();
-    
+
     return this;
   },
-  
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
-  
+
   /**
    * @property title
    * @type {String}
    */
   title: 'Starred Words - Skritter',
-  
+
   /**
    * @method fetchItems
    * @param {string} [cursor]
@@ -80,7 +80,7 @@ module.exports = GelatoPage.extend({
       sort: false
     });
   },
-  
+
   /**
    * @method handleChangeCheckbox
    * @param {Event} event
@@ -93,14 +93,14 @@ module.exports = GelatoPage.extend({
     var anyChecked = this.$('input[type="checkbox"]:checked').length;
     this.$('#unban-vocabs-btn').prop('disabled', !anyChecked);
   },
-  
+
   /**
    * @method handleClickLoadMoreButton
    */
   handleClickLoadMoreButton: function() {
     this.fetchBannedVocabs(this.bannedVocabs.cursor);
   },
-  
+
   /**
    * @method handleClickUnbanVocabsButton
    */
@@ -119,12 +119,12 @@ module.exports = GelatoPage.extend({
     this.renderTable();
     this.$('#unban-vocabs-btn').prop('disabled', true);
   },
-  
+
   /**
-   * @method handleClickWritingTd
+   * @method handleClickVocabRow
    * @param {Event} event
    */
-  handleClickWritingTd: function(event) {
+  handleClickVocabRow: function(event) {
     event.preventDefault();
     var row = $(event.target).parent('tr');
     var vocabId = row.data('vocab-id');
@@ -134,7 +134,7 @@ module.exports = GelatoPage.extend({
       this.dialog.open();
     }
   },
-  
+
   /**
    * @method renderTable
    */

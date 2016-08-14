@@ -14,11 +14,13 @@ module.exports = BootstrapDialog.extend({
     'click #button-save': 'handleClickSave',
     'click .part-checkbox': 'handleClickVocabPart'
   },
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @method render
    * @returns {StudySettingsDialog}
@@ -36,8 +38,10 @@ module.exports = BootstrapDialog.extend({
     this.$('#field-parts :checked').each(function() {
       parts.push($(this).val());
     });
+
     return parts;
   },
+
   /**
    * @method getSettings
    * @returns {Object}
@@ -56,6 +60,7 @@ module.exports = BootstrapDialog.extend({
     } else {
       return {
         //dailyItemAddingLimit: this.$('#field-daily-item-adding-limit input').val(),
+        disablePinyinReadingPromptInput: this.$('#field-pinyin-input').is(':checked'),
         filteredChineseParts: this.getSelectedParts(),
         hideDefinition: this.$('#field-hide-definition input').is(':checked'),
         hideReading: this.$('#field-hide-reading input').is(':checked'),
@@ -65,6 +70,7 @@ module.exports = BootstrapDialog.extend({
       };
     }
   },
+
   /**
    * @method handleClickClose
    * @param {Event} event
@@ -74,13 +80,14 @@ module.exports = BootstrapDialog.extend({
     this.trigger('close');
     this.close();
   },
+
   /**
    * @method handleClickSave
    * @param {Event} event
    */
   handleClickSave: function(event) {
     event.preventDefault();
-    this.trigger('save', this.getSettings());
+    this.trigger('save', this.getSettings()); 
     this.$(':input').attr('disabled', true);
   },
 

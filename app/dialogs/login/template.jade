@@ -11,6 +11,6 @@ bootstrap-dialog(data-name='login')
             .form-group
               label(for="login-password") Password
               input#login-password.form-control(type="password", placeholder="Password")
-            button#button-close.btn.btn-default(type="button") Close
+            button#button-close.btn.btn-default(type="button")= app.locale('common.close')
             | &nbsp;&nbsp;&nbsp;
-            button#button-login.btn.btn-primary(type="button") Login
+            button#button-login.btn.btn-primary(type="button")= app.locale('common.logOut')

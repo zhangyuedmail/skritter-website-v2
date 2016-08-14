@@ -67,13 +67,13 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickSaveButton
    */
   handleClickSaveButton: function() {
-    var self = this;
     var sections = this.vocablist.get('sections');
     var getVals = function(el) {
       return $(el).val();
     };
 
     var attributes = {
+      id: this.vocablist.id,
       studyingMode: this.$el.find('input[name="studyingMode"]:checked').val(),
       partsStudying: $.map(this.$el.find('input[name="partsStudying"]:checked'), getVals),
       limitSentenceParts: this.$el.find('input[name="limitSentenceParts"]').is(':checked'),
@@ -102,19 +102,10 @@ module.exports = BootstrapDialog.extend({
 
     if (sections && sections.length) {
       attributes.currentIndex = 0;
-      attributes.currentSection = sections[0].id;
     }
 
-    this.vocablist.set(attributes).save(
-      null,
-      {
-        error: function() {
-          self.close();
-        },
-        success: function() {
-          self.close();
-        }
-      }
-    );
+    this.vocablist.set(attributes).save(attributes, {patch: true});
+
+    this.close();
   }
 });

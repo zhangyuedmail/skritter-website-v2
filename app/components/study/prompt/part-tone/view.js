@@ -98,6 +98,7 @@ module.exports = GelatoComponent.extend({
     this.prompt.toolbarGrading.render();
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.toolbarVocab.render();
+    this.prompt.vocabContained.render();
     this.prompt.vocabDefinition.render();
     this.prompt.vocabMnemonic.render();
     this.prompt.vocabReading.render();
@@ -127,6 +128,7 @@ module.exports = GelatoComponent.extend({
     this.prompt.toolbarAction.render();
     this.prompt.toolbarGrading.render();
     this.prompt.toolbarVocab.render();
+    this.prompt.vocabContained.render();
     this.prompt.vocabDefinition.render();
     this.prompt.vocabMnemonic.render();
     this.prompt.vocabReading.render();

@@ -7,9 +7,11 @@ module.exports = {
 
   "common": {
     "areYouSure": "Are you sure?",
+    "back": "Back",
     "confirm": "Confirm",
     "cancel": "Cancel",
     "changePhoto": "Change Photo",
+    "close": "Close",
     "continue": "Continue",
     "copy": "Copy",
     "delete": "Delete",
@@ -17,6 +19,8 @@ module.exports = {
     "errorUserReferralExpired": "User referrals can only be used with new accounts.",
     "errorUserReferralFailed": "Error making user referral. Please try again.",
     "ja": "Japanese",
+    "logIn": "Log In",
+    "logOut": "Log Out",
     "parts": {
       "defn": "definition",
       "rdng": "reading",
@@ -30,6 +34,7 @@ module.exports = {
     "save": "Save",
     "saving": "Saving",
     "settings": "Settings",
+    "signUp": "Sign Up",
     "undo": "Undo",
     "update": "Update",
     "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription.",
@@ -92,7 +97,7 @@ module.exports = {
       "emailLabel": "Email",
       "emailDescription": "The email address associated with your account",
       "passwordLabel": "Password",
-      "passwordDescription": "The password you use to login",
+      "passwordDescription": "The password you use to log in",
       "privateLabel": "Private Account",
       "privateDescription": "Excludes your account from leaderboard rankings",
       "resetAllData": "Reset All Data",
@@ -166,12 +171,17 @@ module.exports = {
       "demoLink": "Try it out now"
     },
 
+    "resetPassword": {
+      "backToLogin": "Back to Login"
+    },
+
     "signup": {
       "title": "Signup - Skritter",
-      "errorCouponAlreadyUsed": "",
+      "errorCouponAlreadyUsed": "The coupon code has already been used.",
       "errorCouponExpired": "The coupon code is expired.",
       "errorCouponExhausted": "The coupon code has exhausted all its uses.",
       "errorCouponInvalid": "The coupon code entered was not valid.",
+      "errorCouponNotEntered": "You must enter a coupon code.",
       "errorCouponNotReady": "The coupon code is not ready for use. Try again later.",
       "errorCCExpired": "The credit card has expired.",
       "errorDefault": "Unknown error while signing up. Please try again.",
@@ -183,6 +193,7 @@ module.exports = {
       "errorNoCCNmber": "You must enter a credit card number.",
       "errorNoUsername": "You must enter a username.",
       "errorDuplicateUsername": "Another person has taken the username #{username}. Please choose another one.",
+      "errorValidationCodeNotEntered": "You must enter a validation code from your school email.",
       "refundPolicy": "Refund Policy",
       "refundDetails1": "If you’re not satisfied for any reason, we offer a full refund on your first month's purchase, and we provide a pro-rated refund on longer subscriptions. Just",
       "refundDetails2": "contact us",

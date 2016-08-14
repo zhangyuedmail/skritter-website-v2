@@ -37,7 +37,7 @@ gelato-page(data-name='vocablists-chinesepod')
           else
             p
               | You are logged in as "#{view.chinesepodSession.get('email')}."
-              a.spl#logout-chinesepod-link Logout
+              a.spl#logout-chinesepod-link= app.locale('common.logOut')
               | .
 
             - var collectionViewing = view.viewOption === 'lessons' ? view.chinesepodLessons : view.chinesepodLabels;

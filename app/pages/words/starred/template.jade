@@ -32,10 +32,10 @@ gelato-page(data-name='words-starred')
                       a.glyphicon.glyphicon-star
                     else
                       a.glyphicon.glyphicon-star-empty
-                  td.writing-td= vocab.getWriting()
-                  td.reading-td= vocab.getReading()
-                  td.definition-td!= vocab.getDefinition()
-                  td.date-starred-td
+                  td.vocab-row.writing-td= vocab.getWriting()
+                  td.vocab-row.reading-td= vocab.getReading()
+                  td.vocab-row.definition-td!= vocab.getDefinition()
+                  td.vocab-row.date-starred-td
                     if vocab.get('starred')
                       | #{moment(vocab.get('starred') * 1000).format('LL')}
                     else

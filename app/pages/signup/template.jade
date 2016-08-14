@@ -50,10 +50,35 @@ gelato-page(data-name='signup')
                 input#method-credit(
                 type='radio', name='payment-method', value='credit', checked=true)
                 | Credit card
-              label#paypal-radio.radio-inline
+              label#coupon-radio.radio-inline
                 input#method-coupon(
                 type='radio', name='payment-method', value='coupon')
                 | Coupon
+              label#school-radio.radio-inline
+                input#menthod-school(
+                type='radio', name='payment-method', value='school')
+                | School email
+
+          #signup-input-coupon.form-group.coupon.hidden
+            label.col-sm-5.control-label(for='signup-coupon-code') Coupon code
+            .col-sm-7
+              input#signup-coupon-code.form-control(
+              type='text', placeholder='code123')
+
+          #signup-input-school.form-group.school.hidden
+            .col-sm-12.school-email-info If you do not have a validation code yet,
+              | please enter your school-provided email address
+              | in the account information above.
+              .wrapper
+                #send-validation-email.btn.btn-primary.send-validation-email Send a validation email to your address
+
+              #validation-email-sent-msg.validation-email-sent-msg.hidden.alert-success A validation email has been sent to
+                span#validation-sent-address
+                |. Please check your email for the validation code.
+            label.col-sm-5.control-label(for='signup-validation-code') Validation code
+            .col-sm-7
+              input#signup-validation-code.form-control(type='text', placeholder='code123')
+
           #signup-input-credit.form-group.credit
             label.col-sm-5.control-label(for='signup-card-number') Card number
             .col-sm-7
@@ -61,16 +86,12 @@ gelato-page(data-name='signup')
               type='text', placeholder='1234 1234 1234 1234')
               #accepted-payments
                 img(src='/media/images/signup/credit_cards.png', alt='')
-          #signup-input-coupon.form-group.coupon.hidden
-            label.col-sm-5.control-label(for='signup-card-number') Coupon code
-            .col-sm-7
-              input#signup-coupon-code.form-control(
-              type='text', placeholder='code123')
           #signup-input-credit-expire.form-group.credit
             label.col-sm-5.control-label(for='card-year-select')
               | Expiration date
             .col-sm-4
               select#card-month-select.form-control
+                option(value='', selected) Month
                 option(value='01') 01 - January
                 option(value='02') 02 - February
                 option(value='03') 03 - March
@@ -86,6 +107,7 @@ gelato-page(data-name='signup')
             .col-sm-3
               select#card-year-select.form-control
                 - var year = moment().year();
+                option(value='', selected) Year
                 for i in _.range(10)
                   option(value=year + i)= year + i
           .form-group.coupon.hide
@@ -97,7 +119,7 @@ gelato-page(data-name='signup')
             .g-recaptcha(data-sitekey="6LeuZRsTAAAAAGt-TNhO8Hcv7BcHrKLoEs82LixC")
           .text-center
             button#signup-submit.btn.btn-success(type='submit')
-              span Sign up
+              span= app.locale('common.signUp')
               i.fa.fa-1x.fa-spinner.fa-pulse.hide
             #signup-error-alert.alert.alert-danger.hide
           #trial-notice
@@ -145,7 +167,7 @@ gelato-page(data-name='signup')
               .header No charge until after your trial
               .subtext See if Skritter works for you.
             li
-              .header Cancel anytime - easy
+              .header Cancel anytime—easy
               .subtext One click to unsubscribe.
             li
               .header 100% money back guarantee

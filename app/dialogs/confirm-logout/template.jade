@@ -4,6 +4,6 @@ bootstrap-dialog(data-name='confirm-logout')
       .modal-content
         .modal-body.text-center
           h3 Are you sure?
-          button#button-cancel.btn.btn-lg.btn.btn-default Cancel
+          button#button-cancel.btn.btn-lg.btn.btn-default= app.locale('common.cancel')
           | &nbsp;&nbsp;&nbsp;
-          button#button-logout.btn.btn-lg.btn-danger Log Out
+          button#button-logout.btn.btn-lg.btn-danger= app.locale('common.logOut')

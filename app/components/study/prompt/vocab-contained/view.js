@@ -39,7 +39,11 @@ module.exports = GelatoComponent.extend({
    */
   handleClickShowContained: function(event) {
     event.preventDefault();
-    this.prompt.review.set('showContained', true);
+    if (_.includes(['rune', 'tone'], this.prompt.reviews.part)) {
+      this.prompt.review.showContained = true;
+    } else {
+      this.prompt.review.set('showContained', true);
+    }
     this.render();
   }
 });

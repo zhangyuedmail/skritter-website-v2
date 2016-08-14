@@ -47,16 +47,16 @@ gelato-page(data-name='words-all')
                 tr(data-vocab-id=vocab.id)
                   td.checkbox-td
                     input(type="checkbox")
-                  td.writing-td= vocab.getWriting()
-                  td.reading-td= vocab.getReading()
-                  td.definition-td!= vocab.getDefinition()
+                  td.vocab-row.writing-td= vocab.getWriting()
+                  td.vocab-row.reading-td= vocab.getReading()
+                  td.vocab-row.definition-td!= vocab.getDefinition()
 
                   if lastItem && lastItem.get('last')
                     - var last = moment(lastItem.get('last')*1000);
-                    td.last-td(title=last.format('LLLL'))
+                    td.vocab-row.last-td(title=last.format('LLLL'))
                       | #{last.fromNow()}
                   else
-                    td.last-td
+                    td.vocab-row.last-td
                       if vocab.get('itemState') === 'queued'
                         i.fa.fa-1x.fa-spinner.fa-pulse
                       else
@@ -64,13 +64,13 @@ gelato-page(data-name='words-all')
 
                   if nextItem
                     - var next = moment(nextItem.get('next')*1000);
-                    td.next-td(title=next.format('LLLL'))
+                    td.vocab-row.next-td(title=next.format('LLLL'))
                       if nextItem.get('next') * 1000 > now
                         | #{next.fromNow()}
                       else
                         | Ready
                   else
-                    td.next-td
+                    td.vocab-row.next-td
                       if vocab.get('itemState') === 'queued'
                         i.fa.fa-1x.fa-spinner.fa-pulse
                       else

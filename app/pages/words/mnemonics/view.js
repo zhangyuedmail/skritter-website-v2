@@ -2,6 +2,7 @@ var GelatoPage = require('gelato/page');
 var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words/sidebar/view');
 var VocabActionMixin = require('mixins/vocab-action');
+var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 
 /**
  * @class Mnemonics
@@ -26,6 +27,7 @@ module.exports = GelatoPage.extend({
    * @type {Object}
    */
   events: {
+    'click .vocab-row': 'handleClickVocabRow',
     'click #load-more-btn': 'handleClickLoadMoreButton',
     'change input[type="checkbox"]': 'handleChangeCheckbox',
     'click #delete-mnemonics-btn': 'handleClickDeleteMnemonicsButton'
@@ -116,6 +118,21 @@ module.exports = GelatoPage.extend({
    */
   handleClickLoadMoreButton: function() {
     this.fetchMnemonics(this.mnemonicVocabs.cursor);
+  },
+
+  /**
+   * @method handleClickVocabRow
+   * @param {Event} event
+   */
+  handleClickVocabRow: function(event) {
+    event.preventDefault();
+    var row = $(event.target).parent('tr');
+    var vocabId = row.data('vocab-id');
+    if (vocabId) {
+      this.dialog = new VocabViewerDialog();
+      this.dialog.load(vocabId);
+      this.dialog.open();
+    }
   },
 
   /**

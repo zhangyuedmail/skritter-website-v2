@@ -29,10 +29,10 @@ gelato-page(data-name='words-banned')
                 tr(data-vocab-id=vocab.id)
                   td.checkbox-td
                     input(type="checkbox")
-                  td.writing-td= vocab.getWriting()
-                  td.reading-td= vocab.getReading()
-                  td.definition-td!= vocab.getDefinition()
-                  td.date-changed-td
+                  td.vocab-row.writing-td= vocab.getWriting()
+                  td.vocab-row.reading-td= vocab.getReading()
+                  td.vocab-row.definition-td!= vocab.getDefinition()
+                  td.vocab-row.date-changed-td
                     | #{moment(vocab.get('changed') * 1000).format('LL')}
 
             if view.bannedVocabs.state === 'fetching'
