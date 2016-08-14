@@ -1,6 +1,3 @@
-// screen loader
-window.ScreenLoader = new (require('startup/screen-loader/module'))();
-window.ScreenLoader.post('Loading application');
 // google analytics
 (function(i, s, o, g, r, a, m) {
   i['GoogleAnalyticsObject'] = r;
