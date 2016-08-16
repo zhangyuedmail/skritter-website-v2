@@ -10,15 +10,31 @@ gelato-component(data-name='study-prompt-vocab-contained')
     if _.includes(['rune', 'tone'], part) || vocabs.length === 1
       - var vocab = vocabs[position];
       - var decomp = vocab.getDecomp();
+      - var definition = vocab.getDefinition();
+      - var heisig = vocab.get('heisigDefinition');
+      - var reading = vocab.get('reading');
+      - var writing = vocab.get('writing');
 
-      if decomp && vocab
+      if prompt.reviews.isContainedShown() || prompt.review.isComplete()
 
-        div
-          label Decomposition
+        div.value
 
-        if prompt.reviews.isContainedShown() || prompt.review.isComplete()
+          if vocabs.length > 1
 
-          div.value
+            hr
+
+            .child-vocab-row
+              span.child-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= writing
+              | &nbsp;
+              span.child-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+
+            .child-vocab-row
+              .child-definition
+                if app.user.get('showHeisig') && heisig
+                  em!= heisig + ' - '
+                span!= definition
+
+          if decomp && vocab
 
             if decomp && !decomp.get('atomic')
               .child-vocab-row
@@ -31,17 +47,16 @@ gelato-component(data-name='study-prompt-vocab-contained')
                     if app.user.get('showHeisig') && child.heisigDefinition
                       em!= child.heisigDefinition + ' - '
                     .decomp-definition= child.definitions.en
+      else
 
-        else
-
-          button#show-contained.btn.btn-sm.btn-default show
+        //TODO: maybe show a reveal button?
+        //button#show-contained.btn.btn-sm.btn-default show
 
     else
 
-      div
-        label Characters
-
       if prompt.reviews.isContainedShown() || prompt.review.isComplete()
+
+        hr
 
         for vocab in vocabs
           - var definition = vocab.getDefinition();
@@ -65,4 +80,5 @@ gelato-component(data-name='study-prompt-vocab-contained')
                   span!= definition
       else
 
-        button#show-contained.btn.btn-sm.btn-default show
+        //TODO: maybe show a reveal button?
+        //button#show-contained.btn.btn-sm.btn-default show
