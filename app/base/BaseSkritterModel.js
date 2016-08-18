@@ -1,10 +1,11 @@
-var GelatoModel = require('gelato/model');
+const GelatoModel = require('gelato/model');
 
 /**
- * @class SkritterModel
+ * @class BaseSkritterModel
  * @extends {GelatoModel}
  */
-module.exports = GelatoModel.extend({
+const BaseSkritterModel = GelatoModel.extend({
+
   /**
    * @method headers
    * @returns {Object}
@@ -12,6 +13,7 @@ module.exports = GelatoModel.extend({
   headers: function() {
     return app.user.session.getHeaders();
   },
+
   /**
    * @method sync
    * @param {String} method
@@ -20,9 +22,13 @@ module.exports = GelatoModel.extend({
    */
   sync: function(method, model, options) {
     options.headers = _.result(this, 'headers');
+
     if (!options.url) {
       options.url = app.getApiUrl() + _.result(this, 'url');
     }
+
     GelatoModel.prototype.sync.call(this, method, model, options);
   }
 });
+
+module.exports = BaseSkritterModel;
