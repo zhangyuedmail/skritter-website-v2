@@ -1,4 +1,6 @@
-var application = require('./package.json');
+'use strict';
+
+const application = require('./package.json');
 
 exports.config = {
   files: {
@@ -61,11 +63,14 @@ exports.config = {
     'watched': ['app', 'startup', 'test', 'vendor']
   },
   plugins: {
+    babel: {
+      presets: ['es2015']
+    },
     replace: {
       mappings: {
-        'application-description': application.description,
-        'application-title': application.title,
-        'application-version': application.version
+        'application-description': project.description,
+        'application-title': project.title,
+        'application-version': project.version
       },
       paths: [
         'public/js/application.js',
