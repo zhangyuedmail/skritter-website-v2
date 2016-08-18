@@ -24,7 +24,7 @@ if (process.env.DEVELOPMENT) {
 }
 
 app.get(
-  '/',
+  '/*',
   function(req, res) {
     res.render('index');
   }
