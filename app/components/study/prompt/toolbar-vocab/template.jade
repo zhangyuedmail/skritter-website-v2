@@ -13,7 +13,10 @@ gelato-component(data-name="study-prompt-toolbar-vocab")
 
     if prompt.reviews.item
       i#button-vocab-edit.icon.icon-study-word-edit.hover-enlarge
-
+        svg
+          use(xlink:href="/media/vectors/study-word-edit.svg#study-word-edit")
+        //object.edit-icon(type="image/svg+xml", data="/media/vectors/study-word-edit.svg", class="logo")
+        // .icon-study-word-edit
     if prompt.reviews.item
       i#button-vocab-ban.icon.icon-study-ban.hover-enlarge
 
