@@ -599,6 +599,13 @@ module.exports = SkritterCollection.extend({
   _getStatsInRange: function(start, end) {
     var endFound = false;
     var models = [];
+    var momentEnd = moment(end, app.config.dateFormatApp);
+
+    // if the end date requested is in the "future" and the collection
+    // doesn't go that far, just pick the most recent model available as the end.
+    if (this.models.length && moment(this.at(0).id, app.config.dateFormatApp).diff(momentEnd, 'days') < 0) {
+      end = this.at(0).id;
+    }
 
     for (var i = 0; i < this.length; i++) {
       if (this.at(i).id === end) {
