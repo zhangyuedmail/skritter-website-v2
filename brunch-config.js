@@ -64,13 +64,14 @@ exports.config = {
   },
   plugins: {
     babel: {
+      ignore: /^vendor/,
       presets: ['es2015']
     },
     replace: {
       mappings: {
-        'application-description': project.description,
-        'application-title': project.title,
-        'application-version': project.version
+        'application-description': application.description,
+        'application-title': application.title,
+        'application-version': application.version
       },
       paths: [
         'public/js/application.js',
