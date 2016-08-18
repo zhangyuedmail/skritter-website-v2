@@ -1,11 +1,11 @@
-var GelatoCollection = require('gelato/collection');
-var PromptItem = require('models/prompt-item');
+const GelatoCollection = require('gelato/collection');
+const PromptItemModel = require('models/PromptItemModel');
 
 /**
- * @class PromptItems
+ * @class PromptItemCollection
  * @extends {GelatoCollection}
  */
-module.exports = GelatoCollection.extend({
+const PromptItemCollection = GelatoCollection.extend({
 
   /**
    * @property complete
@@ -33,9 +33,9 @@ module.exports = GelatoCollection.extend({
 
   /**
    * @property model
-   * @type {PromptItem}
+   * @type {PromptItemModel}
    */
-  model: PromptItem,
+  model: PromptItemModel,
 
   /**
    * @property originals
@@ -75,7 +75,7 @@ module.exports = GelatoCollection.extend({
 
   /**
    * @method current
-   * @returns {PromptItem}
+   * @returns {PromptItemModel}
    */
   current: function() {
     return this.getActive()[this.position];
@@ -286,7 +286,7 @@ module.exports = GelatoCollection.extend({
 
   /**
    * @method next
-   * @returns {PromptItem}
+   * @returns {PromptItemModel}
    */
   next: function() {
     if (!this.isLast()) {
@@ -297,7 +297,7 @@ module.exports = GelatoCollection.extend({
 
   /**
    * @method previous
-   * @returns {PromptItem}
+   * @returns {PromptItemModel}
    */
   previous: function() {
     if (!this.isFirst()) {
@@ -314,5 +314,6 @@ module.exports = GelatoCollection.extend({
       review.set('showTeaching', true);
     });
   }
-
 });
+
+module.exports = PromptItemCollection;

@@ -1,11 +1,27 @@
-var GelatoCollection = require('gelato/collection');
-var PromptStroke = require('models/prompt-stroke');
+const GelatoCollection = require('gelato/collection');
+const PromptStrokeModel = require('models/PromptStrokeModel');
 
 /**
- * @class PromptCharacter
+ * @class PromptStrokeCollection
  * @extends {GelatoCollection}
  */
-module.exports = GelatoCollection.extend({
+const PromptStrokeCollection = GelatoCollection.extend({
+
+  /**
+   * @property model
+   * @type {PromptStrokeModel}
+   */
+  model: PromptStrokeModel,
+
+  /**
+   * @method comparator
+   * @param {PromptStrokeModel} stroke
+   * @returns {Number}
+   */
+  comparator: function(stroke) {
+    return stroke.get('position');
+  },
+
   /**
    * @method initialize
    * @constructor
@@ -15,26 +31,15 @@ module.exports = GelatoCollection.extend({
     this.targets = [];
     this.writing = null;
   },
-  /**
-   * @property model
-   * @type {PromptStroke}
-   */
-  model: PromptStroke,
-  /**
-   * @method comparator
-   * @param {PromptStroke} stroke
-   * @returns {Number}
-   */
-  comparator: function(stroke) {
-    return stroke.get('position');
-  },
+
   /**
    * @method getExpectedStroke
-   * @returns {PromptStroke}
+   * @returns {PromptStrokeModel}
    */
   getExpectedStroke: function() {
     return this.getExpectedTargets()[0].at(this.length);
   },
+
   /**
    * @method getExpectedTargets
    * @returns {Array}
@@ -57,37 +62,45 @@ module.exports = GelatoCollection.extend({
     }
     return expected.length ? expected : [this.targets[0]];
   },
+
   /**
    * @method getExpectedTone
-   * @returns {PromptStroke}
+   * @returns {PromptStrokeModel}
    */
   getExpectedTone: function() {
     return null;
   },
+
   /**
    * @method getMaxPosition
    * @returns {Number}
    */
   getMaxPosition: function() {
     var max = 0;
+
     for (var i = 0, length = this.targets.length; i < length; i++) {
       var targetMax = this.targets[i].getPosition();
       max = targetMax > max ? targetMax : max;
     }
+
     return max;
   },
+
   /**
    * @method getPosition
    * @returns {Number}
    */
   getPosition: function() {
     var position = 0;
+
     for (var i = 0, length = this.length; i < length; i++) {
       var contains = this.at(i).get('contains');
       position += contains.length ? contains.length : 1;
     }
+
     return position;
   },
+
   /**
    * @method size
    * @returns {Number}
@@ -95,6 +108,7 @@ module.exports = GelatoCollection.extend({
   getSize: function() {
     return app.get('canvasSize');
   },
+
   /**
    * @method getTargetShape
    * @param {Number} [excludeStrokes]
@@ -103,22 +117,26 @@ module.exports = GelatoCollection.extend({
   getTargetShape: function(excludeStrokes) {
     var container = new createjs.Container();
     var target = this.getExpectedTargets()[0];
+
     for (var i = 0, length = target.length; i < length; i++) {
       if (!excludeStrokes) {
         container.addChild(target.at(i).getTargetShape());
       }
     }
     container.name = 'character';
+
     return container;
   },
+
   /**
    * @method getTone
    * @param {Number} number
-   * @returns {PromptStroke}
+   * @returns {PromptStrokeModel}
    */
   getTone: function(number) {
     return this.writing === 'tones' ? this.targets[number - 1].at(0) : null;
   },
+
   /**
    * @method getUserShape
    * @param {Number} [excludeStrokes]
@@ -126,14 +144,17 @@ module.exports = GelatoCollection.extend({
    */
   getUserShape: function(excludeStrokes) {
     var container = new createjs.Container();
+
     for (var i = 0, length = this.length; i < length; i++) {
       if (!excludeStrokes) {
         container.addChild(this.at(i).getTargetShape());
       }
     }
     container.name = 'character';
+
     return container;
   },
+
   /**
    * @method getUserSquig
    * @param {Number} [excludeStrokes]
@@ -149,6 +170,7 @@ module.exports = GelatoCollection.extend({
     container.name = 'character';
     return container;
   },
+
   /**
    * @method isComplete
    * @returns {Boolean}
@@ -156,6 +178,7 @@ module.exports = GelatoCollection.extend({
   isComplete: function() {
     return this.getPosition() >= this.getMaxPosition();
   },
+
   /**
    * @method isTweening
    * @returns {Boolean}
@@ -163,20 +186,25 @@ module.exports = GelatoCollection.extend({
   isTweening: function() {
     return this.map('tweening').indexOf(true) > -1;
   },
+
   /**
    * @method recognize
    * @param {Array} points
    * @param {createjs.Shape} shape
-   * @returns {PromptStroke}
+   * @returns {PromptStrokeModel}
    */
   recognize: function(points, shape) {
     if (points && points.length > 1) {
-      var newStroke = new PromptStroke({points: points});
+      var newStroke = new PromptStrokeModel({points: points});
       var stroke = app.fn.recognizer.recognize(newStroke, this, this.getSize());
+
       if (stroke) {
         stroke.set('squig', shape);
+
         return this.add(stroke);
       }
     }
   }
 });
+
+module.exports = PromptStrokeCollection;

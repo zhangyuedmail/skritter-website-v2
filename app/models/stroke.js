@@ -1,5 +1,5 @@
 var GelatoModel = require('gelato/model');
-var PromptCharacter = require('collections/prompt-character');
+var PromptCharacter = require('collections/PromptStrokeCollection');
 var PromptStroke = require('models/prompt-stroke');
 
 /**

@@ -1,19 +1,21 @@
-var SkritterCollection = require('base/skritter-collection');
-var Reviews = require('collections/reviews');
-var Vocabs = require('collections/vocabs');
-var Item = require('models/item');
+const BaseSkritterCollection = require('base/BaseSkritterCollection');
+const ReviewCollection = require('collections/ReviewCollection');
+const VocabCollection = require('collections/VocabCollection');
+const ItemModel = require('models/ItemModel');
 
 /**
- * @class Items
- * @extends {SkritterCollection}
+ * A collection of ItemModels for a user to review related to a specific
+ * Vocab they are studying.
+ * @class ItemCollection
+ * @extends {BaseSkritterCollection}
  */
-module.exports = SkritterCollection.extend({
+const ItemCollection = BaseSkritterCollection.extend({
 
   /**
    * @property model
-   * @type {Item}
+   * @type {ItemModel}
    */
-  model: Item,
+  model: ItemModel,
 
   /**
    * @property url
@@ -34,14 +36,37 @@ module.exports = SkritterCollection.extend({
     this.dueCountState = 'standby';
     this.fetchingState = 'standby';
     this.sorted = null;
-    this.reviews = new Reviews(null, {items: this});
-    this.vocabs = new Vocabs(null, {items: this});
+    this.reviews = new ReviewCollection(null, {items: this});
+    this.vocabs = new VocabCollection(null, {items: this});
+  },
+
+  /**
+   * @method parse
+   * @param {Object} response
+   * @returns {Object}
+   */
+  parse: function(response) {
+    this.cursor = response.cursor;
+    this.vocabs.add(response.Vocabs);
+    this.vocabs.decomps.add(response.Decomps);
+    this.vocabs.sentences.add(response.Sentences);
+    this.vocabs.strokes.add(response.Strokes);
+    return response.Items.concat(response.ContainedItems || []);
+  },
+
+  /**
+   * @method reset
+   * @returns {Items}
+   */
+  reset: function() {
+    this.vocabs.reset();
+    return BaseSkritterCollection.prototype.reset.call(this);
   },
 
   /**
    * @method addHistory
-   * @param {Item} item
-   * @returns {Items}
+   * @param {ItemModel} item
+   * @returns {ItemCollection}
    */
   addHistory: function(item) {
     this.remove(item);
@@ -59,6 +84,7 @@ module.exports = SkritterCollection.extend({
    * @param {Function} callback
    */
   addItem: function(options, callback) {
+    var self = this;
     if (this.addingState === 'standby') {
       this.addingState = 'adding';
     } else {
@@ -78,11 +104,11 @@ module.exports = SkritterCollection.extend({
       },
       error: function(error) {
         console.log(error);
-        this.addingState = 'standby';
+        self.addingState = 'standby';
         callback(error);
       },
       success: function(result) {
-        this.addingState = 'standby';
+        self.addingState = 'standby';
         callback(null, result);
       }
     });
@@ -245,29 +271,6 @@ module.exports = SkritterCollection.extend({
   },
 
   /**
-   * @method parse
-   * @param {Object} response
-   * @returns {Object}
-   */
-  parse: function(response) {
-    this.cursor = response.cursor;
-    this.vocabs.add(response.Vocabs);
-    this.vocabs.decomps.add(response.Decomps);
-    this.vocabs.sentences.add(response.Sentences);
-    this.vocabs.strokes.add(response.Strokes);
-    return response.Items.concat(response.ContainedItems || []);
-  },
-
-  /**
-   * @method reset
-   * @returns {Items}
-   */
-  reset: function() {
-    this.vocabs.reset();
-    return SkritterCollection.prototype.reset.call(this);
-  },
-
-  /**
    * @method shortenHistory
    * @returns {Items}
    */
@@ -285,13 +288,15 @@ module.exports = SkritterCollection.extend({
    */
   sort: function() {
     this.sorted = moment().unix();
-    return SkritterCollection.prototype.sort.call(this);
+
+    return BaseSkritterCollection.prototype.sort.call(this);
   },
 
   /**
    * @method updateDueCount
    */
   updateDueCount: function() {
+    var self = this;
     if (this.dueCountState === 'fetching') {
       return;
     } else {
@@ -310,8 +315,8 @@ module.exports = SkritterCollection.extend({
       },
       error: function(error) {
         console.log(error);
-        this.dueCount = '-';
-        this.dueCountState = 'standby';
+        self.dueCount = '-';
+        self.dueCountState = 'standby';
       },
       success: function(result) {
         var count = 0;
@@ -320,11 +325,13 @@ module.exports = SkritterCollection.extend({
             count += result.due[part][style];
           }
         }
-        this.dueCount =  count;
-        this.dueCountState = 'standby';
-        this.trigger('update:due-count', this.dueCount);
+        self.dueCount =  count;
+        self.dueCountState = 'standby';
+        self.trigger('update:due-count', this.dueCount);
       }
     });
   }
 
 });
+
+module.exports = ItemCollection;

@@ -1,17 +1,17 @@
-var SkritterCollection = require('base/skritter-collection');
-var ProgressStat = require('models/progress-stat');
+const BaseSkritterCollection = require('base/BaseSkritterCollection');
+const ProgressStatModel = require('models/ProgressStatModel');
 
 /**
- * @class ProgressStats
- * @extends {SkritterCollection}
+ * @class ProgressStatsCollection
+ * @extends {BaseSkritterCollection}
  */
-module.exports = SkritterCollection.extend({
+const ProgressStatsCollection = BaseSkritterCollection.extend({
 
   /**
    * @property model
-   * @type {ProgressStat}
+   * @type {ProgressStatModel}
    */
-  model: ProgressStat,
+  model: ProgressStatModel,
 
   /**
    * @property url
@@ -21,8 +21,8 @@ module.exports = SkritterCollection.extend({
 
   /**
    * @method comparator
-   * @param {ProgressStats} statA
-   * @param {ProgressStats} statB
+   * @param {ProgressStatModel} statA
+   * @param {ProgressStatModel} statB
    * @returns {Number}
    */
   comparator: function(statA, statB) {
@@ -45,6 +45,7 @@ module.exports = SkritterCollection.extend({
     var stats = response.ProgressStats.filter(function(s) {
       return Date.parse(s.date) <= now;
     });
+
     return stats;
   },
 
@@ -284,6 +285,11 @@ module.exports = SkritterCollection.extend({
     };
   },
 
+  /**
+   * Gets the average time a user has studied per day over all the time within the collection
+   * @returns {Object} the average time studied per day among all the models in the collection
+   * @method getAverageTimeStudied
+   */
   getAverageTimeStudied: function() {
     var avgTime = 0;
 
@@ -294,6 +300,12 @@ module.exports = SkritterCollection.extend({
     return this.convertToLargestTimeUnit(avgTime / (this.length || 1));
   },
 
+  /**
+   *
+   * @param {Number} time
+   * @returns {{amount: string, units: string, secondaryUnits: string}}
+   * @method convertToLargestTimeUnit
+   */
   convertToLargestTimeUnit: function(time) {
     var seconds = Math.floor(time) % 60;
     var minutes = Math.floor(time / 60) % 60;
@@ -424,11 +436,13 @@ module.exports = SkritterCollection.extend({
    */
   getMonthlyHeatmapData: function() {
     var data = {};
+
     for (var i = 0, length = this.length; i < length; i++) {
       var stat = this.at(i);
       var date = moment(stat.get('date')).unix();
       data[date] = stat.getStudiedCount();
     }
+
     return data;
   },
 
@@ -442,6 +456,7 @@ module.exports = SkritterCollection.extend({
   getMonthlyStreak: function(current) {
     var bestStreak = 0;
     var currentStreak = 0;
+
     for (var i = 0, length = this.length; i < length; i++) {
       var stat = this.at(i);
       if (stat.hasBeenStudied()) {
@@ -457,6 +472,7 @@ module.exports = SkritterCollection.extend({
         currentStreak = 0;
       }
     }
+
     return bestStreak;
   },
 
@@ -483,7 +499,7 @@ module.exports = SkritterCollection.extend({
    * Gets the number for a certain category of items learned within a specified granularity.
    * @param {String} itemType the type of item to get "char"|"word"
    * @param {String} timePeriod the time period to look for "all"|"month"|"week"|"day"
-   * @param {ProgressStat} [stat] the model from which to get the attributes
+   * @param {ProgressStatModel} [stat] the model from which to get the attributes
    * @returns {Number} The number of items learned in the time period
    * @method getItemsLearnedForPeriod
    */
@@ -509,7 +525,7 @@ module.exports = SkritterCollection.extend({
 
   /**
    *
-   * @param {Array<ProgressStat>} stats
+   * @param {Array<ProgressStatModel>} stats
    * @param {String} itemType The type of
    * @param {String} part
    * @returns {number|*}
@@ -583,7 +599,7 @@ module.exports = SkritterCollection.extend({
    * Public wrapper to get stats models for a specified date range
    * @param {String} start the start date (inclusive) in YYYY-MM-DD format
    * @param {String} end the end date (inclusive) in YYYY-MM-DD format
-   * @returns {Array<ProgressStat>} The models within the specified range
+   * @returns {Array<ProgressStatModel>} The models within the specified range
    */
   getStatsInRange: function(start, end) {
     return this._getStatsInRange(start, end);
@@ -593,7 +609,7 @@ module.exports = SkritterCollection.extend({
    * Gets the models for a specified date range
    * @param {String} start the start date (inclusive) in YYYY-MM-DD format
    * @param {String} end the end date (inclusive) in YYYY-MM-DD format
-   * @returns {Array<ProgressStat>} The models within the specified range
+   * @returns {Array<ProgressStatModel>} The models within the specified range
    * @private
    */
   _getStatsInRange: function(start, end) {
@@ -622,3 +638,5 @@ module.exports = SkritterCollection.extend({
     return models;
   }
 });
+
+module.exports = ProgressStatsCollection;

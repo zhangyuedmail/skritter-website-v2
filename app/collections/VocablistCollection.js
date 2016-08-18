@@ -1,11 +1,24 @@
-var SkritterCollection = require('base/skritter-collection');
-var Vocablist = require('models/vocablist');
+const BaseSkritterCollection = require('base/BaseSkritterCollection');
+const VocablistModel = require('models/VocablistModel');
 
 /**
- * @class Vocablists
- * @extends {SkritterCollection}
+ * @class VocablistCollection
+ * @extends {BaseSkritterCollection}
  */
-module.exports = SkritterCollection.extend({
+const VocablistCollection = BaseSkritterCollection.extend({
+
+  /**
+   * @property model
+   * @type {VocablistModel}
+   */
+  model: VocablistModel,
+
+  /**
+   * @property url
+   * @type {String}
+   */
+  url: 'vocablists',
+
   /**
    * @method initialize
    * @constructor
@@ -13,16 +26,7 @@ module.exports = SkritterCollection.extend({
   initialize: function() {
     this.cursor = null;
   },
-  /**
-   * @property model
-   * @type {Vocablist}
-   */
-  model: Vocablist,
-  /**
-   * @property url
-   * @type {String}
-   */
-  url: 'vocablists',
+
   /**
    * @method parse
    * @param {Object} response
@@ -32,6 +36,7 @@ module.exports = SkritterCollection.extend({
     this.cursor = response.cursor;
     return response.VocabLists;
   },
+
   /**
    * @method getAdding
    */
@@ -43,6 +48,7 @@ module.exports = SkritterCollection.extend({
       }
     );
   },
+
   /**
    * @method getAdding
    */
@@ -54,10 +60,11 @@ module.exports = SkritterCollection.extend({
       }
     );
   },
+
   /**
    * @method resetAllPositions
    * @param {Function} [callback]
-   * @returns {Vocablists}
+   * @returns {VocablistCollection}
    */
   resetAllPositions: function(callback) {
     async.each(
@@ -69,6 +76,9 @@ module.exports = SkritterCollection.extend({
         _.isFunction(callback) && callback();
       }
     );
+
     return this;
   }
 });
+
+module.exports = VocablistCollection;

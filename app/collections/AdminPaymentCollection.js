@@ -1,21 +1,18 @@
-var GelatoCollection = require('gelato/collection');
-var AdminPayment = require('models/admin-payment');
+const GelatoCollection = require('gelato/collection');
+const AdminPaymentModel = require('models/AdminPaymentModel');
 
 /**
- * @class AdminPayments
+ * @class AdminPaymentCollection
  * @extends {GelatoCollection}
  */
-var AdminPayments = GelatoCollection.extend({
-    /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {},
+const AdminPaymentCollection = GelatoCollection.extend({
+
     /**
      * @property model
-     * @type {AdminPayment}
+     * @type {AdminPaymentModel}
      */
-    model: AdminPayment,
+    model: AdminPaymentModel,
+
     /**
      * @method parse
      * @param {Object} response
@@ -24,6 +21,7 @@ var AdminPayments = GelatoCollection.extend({
     parse: function(response) {
         return response.Payments;
     },
+
     /**
      * @property url
      * @type {String}
@@ -31,6 +29,7 @@ var AdminPayments = GelatoCollection.extend({
     url: function() {
         return app.get('nodeApiRoot') + '/v1/admin/payments?token=' + app.user.session.get('access_token');
     },
+
     /**
      * @method getTotalByDate
      * @returns {Object}
@@ -99,8 +98,9 @@ var AdminPayments = GelatoCollection.extend({
                 totals[key] = date;
             }
         );
+
         return totals;
     }
 });
 
-module.exports = AdminPayments;
+module.exports = AdminPaymentCollection;

@@ -1,17 +1,17 @@
-var SkritterCollection = require('base/skritter-collection');
-var Review = require('models/review');
+const BaseSkritterCollection = require('base/BaseSkritterCollection');
+const ReviewModel = require('models/ReviewModel');
 
 /**
- * @class Reviews
- * @extends {SkritterCollection}
+ * @class ReviewCollection
+ * @extends {BaseSkritterCollection}
  */
-module.exports = SkritterCollection.extend({
+const ReviewCollection = BaseSkritterCollection.extend({
 
   /**
    * @property model
-   * @type {Review}
+   * @type {ReviewModel}
    */
-  model: Review,
+  model: ReviewModel,
 
   /**
    * @property url
@@ -32,7 +32,7 @@ module.exports = SkritterCollection.extend({
 
   /**
    * @method comparator
-   * @param {Review} review
+   * @param {ReviewModel} review
    * @return {String}
    */
   comparator: function(review) {
@@ -205,7 +205,9 @@ module.exports = SkritterCollection.extend({
       }
       updatedReviews.push(this.add(model, options));
     }
+
     return updatedReviews;
   }
-
 });
+
+module.exports = ReviewCollection;
