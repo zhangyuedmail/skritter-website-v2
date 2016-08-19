@@ -1,23 +1,25 @@
-var GelatoModel = require('gelato/model');
-var PromptCharacter = require('collections/PromptStrokeCollection');
-var PromptStroke = require('models/prompt-stroke');
+const GelatoModel = require('gelato/model');
+const PromptStrokeCollection = require('collections/PromptStrokeCollection');
+const PromptStrokeModel = require('models/PromptStrokeModel');
 
 /**
- * @class Stroke
+ * @class StrokeModel
  * @extends {GelatoModel}
  */
-module.exports = GelatoModel.extend({
+const StrokeModel = GelatoModel.extend({
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'rune',
+
   /**
    * @method getPromptCharacter
-   * @returns {PromptCharacter}
+   * @returns {PromptStrokeCollection}
    */
   getPromptCharacter: function() {
-    var character = new PromptCharacter();
+    var character = new PromptStrokeCollection();
     var variations = this.clone().get('strokes');
     var rune = this.get('rune');
     var targets = [];
@@ -27,7 +29,7 @@ module.exports = GelatoModel.extend({
       var strokePosition = 0;
       target.position = a;
       for (var b = 0, lengthB = targetVariation.length; b < lengthB; b++) {
-        var stroke = new PromptStroke();
+        var stroke = new PromptStrokeModel();
         var strokeData = targetVariation[b];
         var strokeId = strokeData[0];
         var strokeParams = this.collection.params.filter({strokeId: strokeId});
@@ -52,6 +54,7 @@ module.exports = GelatoModel.extend({
     character.writing = rune;
     return character;
   },
+
   /**
    * @method isKana
    * @returns {Boolean}
@@ -59,4 +62,7 @@ module.exports = GelatoModel.extend({
   isKana: function() {
     return app.fn.isKana(this.get('rune'));
   }
+
 });
+
+module.exports = StrokeModel;

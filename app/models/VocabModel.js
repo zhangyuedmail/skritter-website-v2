@@ -1,23 +1,26 @@
-var SkritterModel = require('base/skritter-model');
-var NeutralTones = require('data/neutral-tones');
-var PromptItems = require('collections/prompt-items');
-var PromptItem = require('models/prompt-item');
+const SkritterModel = require('base/skritter-model');
+const NeutralTones = require('data/neutral-tones');
+const PromptItemCollection = require('collections/PromptItemCollection');
+const PromptItemModel = require('models/PromptItemModel');
 
 /**
- * @class Vocab
+ * @class VocabModel
  * @extends {SkritterModel}
  */
-var Vocab = SkritterModel.extend({
+const VocabModel = SkritterModel.extend({
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'id',
+
   /**
    * @property urlRoot
    * @type {String}
    */
   urlRoot: 'vocabs',
+
   /**
    * @method initialize
    * @constructor
@@ -32,6 +35,7 @@ var Vocab = SkritterModel.extend({
     );
     this.audios = audios;
   },
+
   /**
    * @method defaults
    * @returns {Object}
@@ -44,6 +48,7 @@ var Vocab = SkritterModel.extend({
       vocabIds: []
     };
   },
+
   /**
    * @method banAll
    * @returns {Vocab}
@@ -52,6 +57,7 @@ var Vocab = SkritterModel.extend({
     this.set('bannedParts', ['defn', 'rdng', 'rune', 'tone']);
     return this;
   },
+
   /**
    * @method banPart
    * @param {String} part
@@ -62,6 +68,7 @@ var Vocab = SkritterModel.extend({
     this.set('bannedParts', _.uniq(this.get('bannedParts')));
     return this;
   },
+
   /**
    * @method getBase
    * @returns {String}
@@ -69,6 +76,7 @@ var Vocab = SkritterModel.extend({
   getBase: function() {
     return this.id.split('-')[1];
   },
+
   /**
    * @method getCharacters
    * @returns {Array}
@@ -76,6 +84,7 @@ var Vocab = SkritterModel.extend({
   getCharacters: function() {
     return this.get('writing').split('');
   },
+
   /**
    * @method getContained
    * @returns {Array}
@@ -105,6 +114,7 @@ var Vocab = SkritterModel.extend({
     }
     return containedVocabs;
   },
+
   /**
    * @method getDecomp
    * @returns {Decomp}
@@ -117,6 +127,7 @@ var Vocab = SkritterModel.extend({
       return null;
     }
   },
+
   /**
    * @method getDefinition
    * @param {Boolean} [ignoreFormat]
@@ -132,6 +143,7 @@ var Vocab = SkritterModel.extend({
     }
     return ignoreFormat === false ? definition : app.fn.textToHTML(definition);
   },
+
   /**
    * @method getFontClass
    * @returns {String}
@@ -139,6 +151,7 @@ var Vocab = SkritterModel.extend({
   getFontClass: function() {
     return this.isChinese() ? 'text-chinese' : 'text-japanese';
   },
+
   /**
    * @method getFontName
    * @returns {String}
@@ -146,6 +159,7 @@ var Vocab = SkritterModel.extend({
   getFontName: function() {
     return this.isChinese() ? 'KaiTi' : 'DFKaiSho-Md';
   },
+
   /**
    * @method getMnemonic
    * @returns {Object}
@@ -158,6 +172,7 @@ var Vocab = SkritterModel.extend({
     }
     return null;
   },
+
   /**
    * @method getPromptCharacters
    * @returns {Array}
@@ -175,13 +190,14 @@ var Vocab = SkritterModel.extend({
     }
     return characters;
   },
+
   /**
    * @method getPromptItems
    * @param {String} part
-   * @returns {PromptItems}
+   * @returns {PromptItemCollection}
    */
   getPromptItems: function(part) {
-    var promptItems = new PromptItems();
+    var promptItems = new PromptItemCollection();
     var containedVocabs = this.getContained();
     var characters = [];
     var now = Date.now();
@@ -201,7 +217,7 @@ var Vocab = SkritterModel.extend({
     }
     for (var i = 0, length = vocabs.length; i < length; i++) {
       var childVocab = vocabs[i];
-      var promptItem = new PromptItem();
+      var promptItem = new PromptItemModel();
       promptItem.character = characters[i];
       promptItem.vocab = childVocab;
       promptItem.set('filler', childVocab.isFiller());
@@ -213,6 +229,7 @@ var Vocab = SkritterModel.extend({
     promptItems.vocab = vocab;
     return promptItems;
   },
+
   /**
    * @method getPromptTones
    * @returns {Array}
@@ -225,6 +242,7 @@ var Vocab = SkritterModel.extend({
     }
     return tones;
   },
+
   /**
    * @method getReading
    * @returns {String}
@@ -233,6 +251,7 @@ var Vocab = SkritterModel.extend({
     //TODO: depreciate this for direct usage in templates
     return this.isChinese() ? app.fn.pinyin.toTone(this.get('reading')) : this.get('reading');
   },
+
   /**
    * @method getReadingObjects
    * @returns {Array}
@@ -256,6 +275,7 @@ var Vocab = SkritterModel.extend({
       return {type: 'character', value: value};
     });
   },
+
   /**
    * @method getSentence
    * @returns {Sentence}
@@ -263,6 +283,7 @@ var Vocab = SkritterModel.extend({
   getSentence: function() {
     return this.collection.sentences.get(this.get('sentenceId'));
   },
+
   /**
    * @method getStrokes
    * @returns {Array}
@@ -288,6 +309,7 @@ var Vocab = SkritterModel.extend({
     }
     return strokes;
   },
+
   /**
    * @method getTones
    * @returns {Array}
@@ -317,6 +339,7 @@ var Vocab = SkritterModel.extend({
   getUniqueAudios: function() {
     return _.uniqBy(this.get('audios'), 'reading');
   },
+
   /**
    * @method getVariation
    * @returns {Number}
@@ -324,6 +347,7 @@ var Vocab = SkritterModel.extend({
   getVariation: function() {
     return parseInt(this.id.split('-')[2], 10);
   },
+
   /**
    * @method getWriting
    * @returns {String}
@@ -331,6 +355,7 @@ var Vocab = SkritterModel.extend({
   getWriting: function() {
     return this.get('writing');
   },
+
   /**
    * @method getWritingDifference
    * @param {String} vocabId
@@ -344,6 +369,7 @@ var Vocab = SkritterModel.extend({
         return thisChar === otherChar ? '-' : otherChar;
       }).join('');
   },
+
   /**
    * @method isBanned
    * @returns {Boolean}
@@ -351,6 +377,7 @@ var Vocab = SkritterModel.extend({
   isBanned: function() {
     return this.get('bannedParts').length ? true : false;
   },
+
   /**
    * @method isChinese
    * @returns {Boolean}
@@ -358,6 +385,7 @@ var Vocab = SkritterModel.extend({
   isChinese: function() {
     return this.get('lang') === 'zh';
   },
+
   /**
    * @method isFiller
    * @returns {Boolean}
@@ -370,6 +398,7 @@ var Vocab = SkritterModel.extend({
     }
     return _.includes(['~', '-', '～', '.', '。', ',', '，', '、', '・'], this.get('writing'));
   },
+
   /**
    * @method isJapanese
    * @returns {Boolean}
@@ -377,6 +406,7 @@ var Vocab = SkritterModel.extend({
   isJapanese: function() {
     return this.get('lang') === 'ja';
   },
+
   /**
    * @method isKana
    * @returns {Boolean}
@@ -384,6 +414,7 @@ var Vocab = SkritterModel.extend({
   isKana: function() {
     return app.fn.isKana(this.get('writing'));
   },
+
   /**
    * @method isStarred
    * @returns {Boolean}
@@ -391,6 +422,7 @@ var Vocab = SkritterModel.extend({
   isStarred: function() {
     return this.get('starred');
   },
+
   /**
    * @method parse
    * @param {Object} response
@@ -404,6 +436,7 @@ var Vocab = SkritterModel.extend({
     }
     return response.Vocab || response;
   },
+
   /**
    * @method play
    */
@@ -425,6 +458,7 @@ var Vocab = SkritterModel.extend({
       }
     }
   },
+
   /**
    * @method post
    * @param {Function} callback
@@ -451,6 +485,7 @@ var Vocab = SkritterModel.extend({
       }
     });
   },
+
   /**
    * @method toggleStarred
    * @returns {Boolean}
@@ -463,6 +498,7 @@ var Vocab = SkritterModel.extend({
     this.set('starred', true);
     return true;
   },
+
   /**
    * @method unbanAll
    * @returns {Vocab}
@@ -471,6 +507,7 @@ var Vocab = SkritterModel.extend({
     this.set('bannedParts', []);
     return this;
   },
+
   /**
    * @method unbanPart
    * @param {String} part
@@ -480,6 +517,7 @@ var Vocab = SkritterModel.extend({
     this.set('bannedParts', _.remove(this.get('bannedParts'), part));
     return this;
   }
+
 });
 
-module.exports = Vocab;
+module.exports = VocabModel;

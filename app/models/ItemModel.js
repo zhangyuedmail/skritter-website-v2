@@ -1,12 +1,12 @@
-var SkritterModel = require('base/skritter-model');
-var PromptItems = require('collections/prompt-items');
-var PromptItem = require('models/prompt-item');
+const SkritterModel = require('base/skritter-model');
+const PromptItemCollection = require('collections/PromptItemCollection');
+const PromptItemModel = require('models/PromptItemModel');
 
 /**
- * @class Item
+ * @class ItemModel
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
+const ItemModel = SkritterModel.extend({
 
   /**
    * @property consecutiveWrong
@@ -94,10 +94,10 @@ module.exports = SkritterModel.extend({
 
   /**
    * @method getPromptItems
-   * @returns {PromptItems}
+   * @returns {PromptItemCollection}
    */
   getPromptItems: function() {
-    var promptItems = new PromptItems();
+    var promptItems = new PromptItemCollection();
     var containedItems = this.getContainedItems();
     var containedVocabs = this.getContainedVocabs();
     var now = Date.now();
@@ -124,7 +124,7 @@ module.exports = SkritterModel.extend({
     for (var i = 0, length = vocabs.length; i < length; i++) {
       var childItem = items[i];
       var childVocab = vocabs[i];
-      var promptItem = new PromptItem();
+      var promptItem = new PromptItemModel();
       promptItem.character = characters[i];
       promptItem.interval = childItem.get('interval');
       promptItem.item = childItem;
@@ -329,3 +329,5 @@ module.exports = SkritterModel.extend({
   }
 
 });
+
+module.exports = ItemModel;

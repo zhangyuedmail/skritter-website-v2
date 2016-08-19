@@ -1,15 +1,17 @@
 var GelatoModel = require('gelato/model');
 
 /**
- * @class Sentence
+ * @class SentenceModel
  * @extends {GelatoModel}
  */
-module.exports = GelatoModel.extend({
+const SentenceModel = GelatoModel.extend({
+
   /**
    * @property idAttribute
    * @type String
    */
   idAttribute: 'id',
+
   /**
    * @method getDefinition
    * @param {Boolean} [ignoreFormat]
@@ -22,6 +24,7 @@ module.exports = GelatoModel.extend({
     }
     return ignoreFormat === false ? definition : app.fn.textToHTML(definition);
   },
+
   /**
    * @method getWriting
    * @param {String} mask
@@ -37,4 +40,7 @@ module.exports = GelatoModel.extend({
     }
     return writing.replace(/\s+/g, '');
   }
+
 });
+
+module.exports = SentenceModel;

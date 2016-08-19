@@ -1,19 +1,22 @@
-var SkritterModel = require('base/skritter-model');
+const SkritterModel = require('base/skritter-model');
 
 /**
- * @class Payment
+ * @class PaymentModel
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
+const PaymentModel = SkritterModel.extend({
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'id',
+
   /**
    * @property urlRoot
    */
   urlRoot: 'payments',
+
   /**
    * @method parse
    * @returns {Object}
@@ -21,6 +24,7 @@ module.exports = SkritterModel.extend({
   parse: function(response) {
     return response.Payment || response;
   },
+
   /**
    * @method getChargedAmount
    * @returns {String}
@@ -34,4 +38,7 @@ module.exports = SkritterModel.extend({
     }
     return '$' + parseFloat(this.get('charged')).toFixed(2)
   }
+
 });
+
+module.exports = PaymentModel;

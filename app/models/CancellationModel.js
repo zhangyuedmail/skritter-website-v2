@@ -1,25 +1,22 @@
-var SkritterModel = require('base/skritter-model');
+const SkritterModel = require('base/skritter-model');
 
 /**
- * @class Cancellation
+ * @class CancellationModel
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-  },
+const CancellationModel = SkritterModel.extend({
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'id',
+
   /**
    * @property urlRoot
    */
   urlRoot: 'cancellation',
+
   /**
    * @method parse
    * @returns {Object}
@@ -27,4 +24,7 @@ module.exports = SkritterModel.extend({
   parse: function(response) {
     return response.Cancellation || response;
   }
+
 });
+
+module.exports = CancellationModel;

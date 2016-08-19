@@ -1,16 +1,23 @@
-var SkritterModel = require('base/skritter-model');
-var VocablistHistoryCollection = require('collections/vocablist-history');
+const SkritterModel = require('base/skritter-model');
+const VocablistHistoryCollection = require('collections/vocablist-history');
 
 /**
- * @class Vocablist
+ * @class VocablistModel
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
+const VocablistModel = SkritterModel.extend({
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'id',
+
+  /**
+   * @property urlRoot
+   * @type {String}
+   */
+  urlRoot: 'vocablists',
 
   /**
    *
@@ -31,12 +38,6 @@ module.exports = SkritterModel.extend({
   parse: function(response) {
     return response.VocabList || response;
   },
-
-  /**
-   * @property urlRoot
-   * @type {String}
-   */
-  urlRoot: 'vocablists',
 
   /**
    * @method deletable
@@ -280,7 +281,7 @@ module.exports = SkritterModel.extend({
   /**
    * @method resetPosition
    * @param {Function} callback
-   * @returns {Vocablist}
+   * @returns {VocablistModel}
    */
   resetPosition: function(callback) {
     this.fetch({
@@ -315,4 +316,7 @@ module.exports = SkritterModel.extend({
 
     return this;
   }
+
 });
+
+module.exports = VocablistModel;

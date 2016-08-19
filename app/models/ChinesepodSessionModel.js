@@ -1,20 +1,23 @@
-var SkritterModel = require('base/skritter-model');
+const SkritterModel = require('base/skritter-model');
 
 /**
- * @class ChinesePodSession
+ * @class ChinesepodSessionModel
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
+const ChinesepodSessionModel = SkritterModel.extend({
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'id',
+
   /**
    * @method urlRoot
    * @returns {String}
    */
   url: 'cpod/login',
+
   /**
    * @method parse
    * @returns {Object}
@@ -22,4 +25,7 @@ module.exports = SkritterModel.extend({
   parse: function(response) {
     return response.ChinesePodSession || response;
   }
+
 });
+
+module.exports = ChinesepodSessionModel;

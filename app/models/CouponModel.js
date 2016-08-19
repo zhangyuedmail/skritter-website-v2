@@ -1,10 +1,22 @@
-var SkritterModel = require('base/skritter-model');
+const SkritterModel = require('base/skritter-model');
 
 /**
- * @class Coupon
+ * @class CouponModel
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
+const CouponModel = SkritterModel.extend({
+
+  /**
+   * @property idAttribute
+   * @type {String}
+   */
+  idAttribute: 'id',
+
+  /**
+   * @property urlRoot
+   */
+  urlRoot: 'coupons',
+
   /**
    * @method initialize
    * @constructor
@@ -13,15 +25,7 @@ module.exports = SkritterModel.extend({
     this.wasUsed = false;
     this.error = '';
   },
-  /**
-   * @property idAttribute
-   * @type {String}
-   */
-  idAttribute: 'id',
-  /**
-   * @property urlRoot
-   */
-  urlRoot: 'coupons',
+
   /**
    * @method parse
    * @returns {Object}
@@ -29,6 +33,7 @@ module.exports = SkritterModel.extend({
   parse: function(response) {
     return response.Coupon || response;
   },
+
   /**
    * @method use
    * @returns {jqXHR|null}
@@ -46,15 +51,17 @@ module.exports = SkritterModel.extend({
       method: 'POST'
     });
   },
+
   /**
    * @method useError
-   * @param {Coupon}
-   * @param {jqXHR}
+   * @param {CouponModel} model
+   * @param {jqXHR} jqxhr
    */
   useError: function(model, jqxhr) {
     this.error = jqxhr.responseJSON.message;
     this.stopListening(this, 'sync', this.useSync);
   },
+
   /**
    * @method useSync
    */
@@ -63,4 +70,7 @@ module.exports = SkritterModel.extend({
     this.wasUsed = true;
     this.stopListening(this, 'error', this.useError);
   }
+
 });
+
+module.exports = CouponModel;

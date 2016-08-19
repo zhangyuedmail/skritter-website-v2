@@ -1,21 +1,17 @@
-var GelatoModel = require('gelato/model');
+const GelatoModel = require('gelato/model');
 
 /**
- * @class ProgressStat
+ * @class ProgressStatModel
  * @extends {GelatoModel}
  */
-module.exports = GelatoModel.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-  },
+const ProgressStatModel = GelatoModel.extend({
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'date',
+
   /**
    * @method getStudiedCount
    * @returns {Number}
@@ -32,6 +28,7 @@ module.exports = GelatoModel.extend({
     count += this.get('word').tone.studied.day;
     return count;
   },
+
   /**
    * @method hasBeenStudied
    * @returns {Boolean}
@@ -39,4 +36,7 @@ module.exports = GelatoModel.extend({
   hasBeenStudied: function() {
     return this.getStudiedCount() > 0;
   }
+
 });
+
+module.exports = ProgressStatModel;

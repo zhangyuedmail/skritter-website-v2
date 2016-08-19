@@ -1,15 +1,17 @@
-var GelatoModel = require('gelato/model');
+const GelatoModel = require('gelato/model');
 
 /**
- * @class StrokeShape
+ * @class StrokeShapeModel
  * @extends {GelatoModel}
  */
-module.exports = GelatoModel.extend({
+const StrokeShapeModel = GelatoModel.extend({
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'id',
+
   /**
    * @method defaults
    * @returns {Object}
@@ -21,4 +23,7 @@ module.exports = GelatoModel.extend({
       strokeId: undefined
     };
   }
+
 });
+
+module.exports = StrokeShapeModel;

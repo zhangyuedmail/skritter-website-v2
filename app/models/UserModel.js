@@ -1,14 +1,14 @@
-var SkritterModel = require('base/skritter-model');
-var Session = require('models/session');
-var Subscription = require('models/subscription');
-var Vocablists = require('collections/vocablists');
+const SkritterModel = require('base/skritter-model');
+const SessionModel = require('models/SessionModel');
+const SubscriptionModel = require('models/SubscriptionModel');
+const VocablistCollection = require('collections/VocablistCollection');
 
 /**
  * A model that represents a Skritter user.
- * @class User
+ * @class UserModel
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
+const UserModel = SkritterModel.extend({
 
   /**
    * @property defaults
@@ -43,17 +43,17 @@ module.exports = SkritterModel.extend({
   /**
    * A vocablist collection
    * @property vocablists
-   * @type {Vocablists}
+   * @type {VocablistCollection}
    */
-  vocablists: new Vocablists(),
+  vocablists: new VocablistCollection(),
 
   /**
    * @method initialize
    * @constructor
    */
   initialize: function() {
-    this.session = new Session(null, {user: this});
-    this.subscription = new Subscription({id: this.id});
+    this.session = new SessionModel(null, {user: this});
+    this.subscription = new SubscriptionModel({id: this.id});
   },
 
   /**
@@ -295,13 +295,13 @@ module.exports = SkritterModel.extend({
 
     if (app.user.db) {
       app.user.db.delete()
-      .then(function() {
-        self._removeUserLocalStorageData()
-      })
-      .catch(function(error) {
-        console.error(error);
-        app.reload();
-      });
+        .then(function() {
+          self._removeUserLocalStorageData()
+        })
+        .catch(function(error) {
+          console.error(error);
+          app.reload();
+        });
     } else {
       // catches weird states where maybe some user data is still left over
       // but the login isn't valid
@@ -464,3 +464,5 @@ module.exports = SkritterModel.extend({
   }
 
 });
+
+module.exports = UserModel;

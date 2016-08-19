@@ -1,19 +1,22 @@
 var SkritterModel = require('base/skritter-model');
 
 /**
- * @class Subscription
+ * @class SubscriptionModel
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
+const SubscriptionModel = SkritterModel.extend({
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'id',
+
   /**
    * @property urlRoot
    */
   urlRoot: 'subscriptions',
+
   /**
    * @method parse
    * @returns {Object}
@@ -21,6 +24,7 @@ module.exports = SkritterModel.extend({
   parse: function(response) {
     return response.Subscription || response;
   },
+
   /**
    * @method getStatus
    */
@@ -46,4 +50,7 @@ module.exports = SkritterModel.extend({
     }
     return 'Expired';
   }
+
 });
+
+module.exports = SubscriptionModel;

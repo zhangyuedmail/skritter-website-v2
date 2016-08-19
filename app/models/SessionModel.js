@@ -1,25 +1,17 @@
-var SkritterModel = require('base/skritter-model');
+const SkritterModel = require('base/skritter-model');
 
 /**
- * @class Session
+ * @class SessionModel
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
-  /**
-   * @method initialize
-   * @param {Object} [attributes]
-   * @param {Object} [options]
-   * @constructor
-   */
-  initialize: function(attributes, options) {
-    options = options || {};
-    this.user = options.user;
-  },
+const SessionModel = SkritterModel.extend({
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'user_id',
+
   /**
    * @property defaults
    * @type {Object}
@@ -33,6 +25,18 @@ module.exports = SkritterModel.extend({
    * @type {String}
    */
   url: 'oauth2/token',
+
+  /**
+   * @method initialize
+   * @param {Object} [attributes]
+   * @param {Object} [options]
+   * @constructor
+   */
+  initialize: function(attributes, options) {
+    options = options || {};
+    this.user = options.user;
+  },
+
   /**
    * @method authenticate
    * @param {String} type
@@ -59,12 +63,14 @@ module.exports = SkritterModel.extend({
       }, this)
     });
   },
+
   /**
    * @method cache
    */
   cache: function() {
     app.setLocalStorage(this.user.id + '-session', this.toJSON());
   },
+
   /**
    * @method getClientId
    * @returns {String}
@@ -79,6 +85,7 @@ module.exports = SkritterModel.extend({
         return 'skritterweb';
     }
   },
+
   /**
    * @method getExpires
    * @returns {Number}
@@ -86,6 +93,7 @@ module.exports = SkritterModel.extend({
   getExpires: function() {
     return this.get('created') + this.get('expires_in');
   },
+
   /**
    * @method isExpired
    * @returns {Boolean}
@@ -93,6 +101,7 @@ module.exports = SkritterModel.extend({
   isExpired: function() {
     return this.getExpires() < moment().unix();
   },
+
   /**
    * @method getHeaders
    * @returns {Object}
@@ -100,6 +109,7 @@ module.exports = SkritterModel.extend({
   getHeaders: function() {
     return {'Authorization': 'bearer ' + this.get('access_token')};
   },
+
   /**
    * @method getLoginCredentials
    * @returns {String}
@@ -121,6 +131,7 @@ module.exports = SkritterModel.extend({
   getLoginHeaders: function() {
     return {'Authorization': 'basic ' + this.getLoginCredentials()};
   },
+
   /**
    * @method headers
    * @returns {Object}
@@ -128,6 +139,7 @@ module.exports = SkritterModel.extend({
   headers: function() {
     return this.getLoginHeaders();
   },
+
   /**
    * @method refresh
    * @param {Function} callbackSuccess
@@ -150,4 +162,7 @@ module.exports = SkritterModel.extend({
       }, this)
     });
   }
+
 });
+
+module.exports = SessionModel;

@@ -1,9 +1,11 @@
-var SkritterModel = require('base/skritter-model');
+const SkritterModel = require('base/skritter-model');
+
 /**
- * @class VocablistHistory
+ * @class VocablistHistoryModel
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
+const VocablistHistoryModel = SkritterModel.extend({
+
   getChangedDate: function() {
     return moment().subtract(this.get('secondsAgo'), 'seconds').calendar();
   },
@@ -34,4 +36,7 @@ module.exports = SkritterModel.extend({
 
     return app.locale('dialogs.vocablistHistory.unknownChange');
   }
+
 });
+
+module.exports = VocablistHistoryModel;

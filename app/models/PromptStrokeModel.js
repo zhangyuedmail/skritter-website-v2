@@ -1,10 +1,17 @@
-var GelatoModel = require('gelato/model');
+const GelatoModel = require('gelato/model');
 
 /**
- * @class PromptStroke
+ * @class PromptStrokeModel
  * @extends {GelatoModel}
  */
-module.exports = GelatoModel.extend({
+const PromptStrokeModel = GelatoModel.extend({
+
+  /**
+   * @property idAttribute
+   * @type String
+   */
+  idAttribute: 'id',
+
   /**
    * @method initialize
    * @constructor
@@ -13,11 +20,7 @@ module.exports = GelatoModel.extend({
     this.on('change:points', this.updateCorners);
     this.updateCorners();
   },
-  /**
-   * @property idAttribute
-   * @type String
-   */
-  idAttribute: 'id',
+
   /**
    * @method defaults
    * @returns {Object}
@@ -27,6 +30,7 @@ module.exports = GelatoModel.extend({
       tweening: false
     };
   },
+
   /**
    * @method getFirstAngle
    * @returns {Number}
@@ -34,9 +38,10 @@ module.exports = GelatoModel.extend({
   getFirstAngle: function() {
     return app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
   },
+
   /**
    * @method getParamPath
-   * @returns {DataParam}
+   * @returns {ParamModel}
    */
   getParamPath: function() {
     //TODO: make sure to get the trace parameter
@@ -56,6 +61,7 @@ module.exports = GelatoModel.extend({
     param.set('corners', corners);
     return param.get('corners');
   },
+
   /**
    * @method getParams
    * @returns {Array}
@@ -81,6 +87,7 @@ module.exports = GelatoModel.extend({
     }
     return inflatedParams;
   },
+
   /**
    * @method size
    * @returns {Number}
@@ -88,6 +95,7 @@ module.exports = GelatoModel.extend({
   getSize: function() {
     return app.get('canvasSize');
   },
+
   /**
    * @method getTargetShape
    * @return {createjs.Shape}
@@ -115,6 +123,7 @@ module.exports = GelatoModel.extend({
     shape.name = 'stroke-' + this.get('position');
     return shape;
   },
+
   /**
    * @method getUserRectangle
    * @returns {Object}
@@ -124,6 +133,7 @@ module.exports = GelatoModel.extend({
     var corners = _.clone(this.get('corners'));
     return app.fn.getBoundingRectangle(corners, size, size, 18);
   },
+
   /**
    * @method getUserShape
    * @returns {createjs.Shape}
@@ -141,6 +151,7 @@ module.exports = GelatoModel.extend({
     shape.name = 'stroke-' + this.get('strokeId');
     return shape;
   },
+
   /**
    * @method getUserSquig
    * @returns {createjs.Shape}
@@ -148,6 +159,7 @@ module.exports = GelatoModel.extend({
   getUserSquig: function() {
     return this.get('squig');
   },
+
   /**
    * @method inflatedData
    * @return {Object}
@@ -167,6 +179,7 @@ module.exports = GelatoModel.extend({
       rot: -data[5]
     };
   },
+
   /**
    * @method isKana
    * @returns {Boolean}
@@ -174,13 +187,17 @@ module.exports = GelatoModel.extend({
   isKana: function() {
     return this.get('strokeId') >= 600 && this.get('strokeId') <= 834;
   },
+
   /**
    * @method updateCorners
-   * @returns {PromptStroke}
+   * @returns {PromptStrokeModel}
    */
   updateCorners: function() {
     var points = _.clone(this.get('points'));
     this.set('corners', app.fn.shortstraw.process(points));
     return this;
   }
+
 });
+
+module.exports = PromptStrokeModel;

@@ -1,15 +1,17 @@
-var GelatoModel = require('gelato/model');
+const GelatoModel = require('gelato/model');
 
 /**
- * @class Param
+ * @class ParamModel
  * @extends {GelatoModel}
  */
-module.exports = GelatoModel.extend({
+const ParamModel = GelatoModel.extend({
+
   /**
    * @property idAttribute
    * @type {String}
    */
   idAttribute: 'id',
+
   /**
    * @method defaults
    * @returns {Object}
@@ -21,6 +23,7 @@ module.exports = GelatoModel.extend({
       strokeId: undefined
     };
   },
+
   /**
    * @method angle
    * @returns {Number}
@@ -28,6 +31,7 @@ module.exports = GelatoModel.extend({
   getAngle: function() {
     return app.fn.getAngle(this.get('corners'));
   },
+
   /**
    * @method getFirstAngle
    * @returns {Number}
@@ -35,6 +39,7 @@ module.exports = GelatoModel.extend({
   getFirstAngle: function() {
     return app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
   },
+
   /**
    * @method getCornerLength
    * @returns {Number}
@@ -47,6 +52,7 @@ module.exports = GelatoModel.extend({
     }
     return cornersLength;
   },
+
   /**
    * @method getRectangle
    * @returns {Object}
@@ -55,4 +61,7 @@ module.exports = GelatoModel.extend({
     var corners = _.clone(this.get('corners'));
     return app.fn.getBoundingRectangle(corners, this.size, this.size, 18);
   }
+
 });
+
+module.exports = ParamModel;

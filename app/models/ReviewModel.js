@@ -1,10 +1,10 @@
-var SkritterModel = require('base/skritter-model');
+const SkritterModel = require('base/skritter-model');
 
 /**
- * @class Review
+ * @class ReviewModel
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
+const ReviewModel = SkritterModel.extend({
 
   /**
    * @property idAttribute
@@ -23,3 +23,5 @@ module.exports = SkritterModel.extend({
   }
 
 });
+
+module.exports = ReviewModel;

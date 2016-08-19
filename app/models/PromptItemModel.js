@@ -1,10 +1,10 @@
-var GelatoModel = require('gelato/model');
+const GelatoModel = require('gelato/model');
 
 /**
- * @class PromptItem
+ * @class PromptItemModel
  * @extends {GelatoModel}
  */
-module.exports = GelatoModel.extend({
+const PromptItemModel = GelatoModel.extend({
 
   /**
    * @property character
@@ -181,7 +181,7 @@ module.exports = GelatoModel.extend({
 
   /**
    * @method start
-   * @returns {PromptItem}
+   * @returns {PromptItemModel}
    */
   start: function() {
     if (this.get('reviewingStart') === 0) {
@@ -196,7 +196,7 @@ module.exports = GelatoModel.extend({
 
   /**
    * @method stop
-   * @returns {PromptItem}
+   * @returns {PromptItemModel}
    */
   stop: function() {
     var timestamp = new Date().getTime();
@@ -208,7 +208,7 @@ module.exports = GelatoModel.extend({
   /**
    * @method stopReviewing
    * @param {Number} [timestamp]
-   * @returns {PromptItem}
+   * @returns {PromptItemModel}
    */
   stopReviewing: function(timestamp) {
     if (this.get('reviewingStop') === 0) {
@@ -220,7 +220,7 @@ module.exports = GelatoModel.extend({
   /**
    * @method stopThinking
    * @param {Number} [timestamp]
-   * @returns {PromptItem}
+   * @returns {PromptItemModel}
    */
   stopThinking: function(timestamp) {
     if (this.get('thinkingStop') === 0) {
@@ -230,3 +230,5 @@ module.exports = GelatoModel.extend({
   }
 
 });
+
+module.exports = PromptItemModel;
