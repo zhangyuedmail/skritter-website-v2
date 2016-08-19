@@ -1,10 +1,16 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
+
 /**
  * Cooks delicious, well-seasoned meals for the user
- * @class Recipes
+ * @class CommonRecipesComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const CommonRecipesComponent = GelatoComponent.extend({
+
+  /**
+   * @property events
+   * @type {Object}
+   */
   events: {
     'click #recipe': 'cookNewDish'
   },
@@ -39,11 +45,11 @@ module.exports = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./CommonRecipes'),
 
   /**
    * @method render
-   * @returns {Recipe}
+   * @returns {CommonRecipesComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -55,7 +61,7 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method remove
-   * @returns {Recipe}
+   * @returns {CommonRecipesComponent}
    */
   remove: function() {
     if (this.timer) {
@@ -92,4 +98,7 @@ module.exports = GelatoComponent.extend({
       self.cookNewDish();
     }, 120000);
   }
+
 });
+
+module.exports = CommonRecipesComponent;

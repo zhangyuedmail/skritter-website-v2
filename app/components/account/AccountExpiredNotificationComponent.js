@@ -1,12 +1,17 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
  * A component that notifies the user if their account subscription has expired
  * and has a call to action to reactivate their description.
- * @class ExpiredNotification
+ * @class ExpiredNotificationComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const ExpiredNotificationComponent = GelatoComponent.extend({
+
+  /**
+   * @property events
+   * @type {Object}
+   */
   events: {
     'click #hide-sub-expired': 'handleHideSubscriptionExpiredNotice'
   },
@@ -15,11 +20,11 @@ module.exports = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./ExpiredNotification'),
 
   /**
    * @method render
-   * @returns {Dashboard}
+   * @returns {ExpiredNotificationComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -54,4 +59,7 @@ module.exports = GelatoComponent.extend({
       this.$('gelato-component').toggleClass('hidden', sub.getStatus() !== 'Expired' || hide);
     }
   }
+
 });
+
+module.exports = ExpiredNotificationComponent;

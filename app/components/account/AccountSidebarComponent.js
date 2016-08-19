@@ -1,18 +1,20 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class AccountSidebar
+ * @class AccountSidebarComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const AccountSidebarComponent = GelatoComponent.extend({
+
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./AccountSidebar'),
+
   /**
    * @method render
-   * @returns {AccountSidebar}
+   * @returns {AccountSidebarComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -22,4 +24,7 @@ module.exports = GelatoComponent.extend({
       }
     });
   }
+
 });
+
+module.exports = AccountSidebarComponent;
