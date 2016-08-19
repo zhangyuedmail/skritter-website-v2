@@ -1,20 +1,27 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class MarketingFloor
+ * @class MarketingFooterComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
-  /**
-   * Id for the element
-   */
-  id: 'footer-container',
+const MarketingFooterComponent = GelatoComponent.extend({
 
   /**
    * CSS class for the element
    * @default
    */
   className: 'footer-container',
+
+  /**
+   * Id for the element
+   */
+  id: 'footer-container',
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./MarketingFooter'),
 
   /**
    * Initializes a new footer
@@ -30,14 +37,8 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
    * @method render
-   * @returns {GelatoComponent}
+   * @returns {MarketingFooterComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -48,4 +49,7 @@ module.exports = GelatoComponent.extend({
 
     return this;
   }
+
 });
+
+module.exports = MarketingFooterComponent;
