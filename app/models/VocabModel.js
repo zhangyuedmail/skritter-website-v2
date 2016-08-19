@@ -1,4 +1,4 @@
-const SkritterModel = require('base/skritter-model');
+const SkritterModel = require('base/BaseSkritterModel');
 const NeutralTones = require('data/neutral-tones');
 const PromptItemCollection = require('collections/PromptItemCollection');
 const PromptItemModel = require('models/PromptItemModel');

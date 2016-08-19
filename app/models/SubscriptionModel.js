@@ -1,4 +1,4 @@
-var SkritterModel = require('base/skritter-model');
+var SkritterModel = require('base/BaseSkritterModel');
 
 /**
  * @class SubscriptionModel

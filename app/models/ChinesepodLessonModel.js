@@ -1,4 +1,4 @@
-const SkritterModel = require('base/skritter-model');
+const SkritterModel = require('base/BaseSkritterModel');
 
 /**
  * @class ChinesepodLessonModel

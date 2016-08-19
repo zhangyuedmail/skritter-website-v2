@@ -1,4 +1,4 @@
-const SkritterModel = require('base/skritter-model');
+const SkritterModel = require('base/BaseSkritterModel');
 const PromptItemCollection = require('collections/PromptItemCollection');
 const PromptItemModel = require('models/PromptItemModel');
 

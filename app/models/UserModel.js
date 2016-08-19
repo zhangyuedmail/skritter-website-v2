@@ -1,4 +1,4 @@
-const SkritterModel = require('base/skritter-model');
+const SkritterModel = require('base/BaseSkritterModel');
 const SessionModel = require('models/SessionModel');
 const SubscriptionModel = require('models/SubscriptionModel');
 const VocablistCollection = require('collections/VocablistCollection');
