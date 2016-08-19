@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
  * Stats graph component that shows numerical information about the
@@ -8,7 +8,8 @@ var GelatoComponent = require('gelato/component');
  * @class StatsItemsLearnedComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StatsItemsLearnedComponent = GelatoComponent.extend({
+
   /**
    * @param {Object} options initialization options used to set instance variables
    * @param {Object} [options.range] time range by which to limit the stats
@@ -56,11 +57,11 @@ module.exports = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./StatsItemsLearned'),
 
   /**
    * @method render
-   * @returns {VocablistSideBar}
+   * @returns {StatsItemsLearnedComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -181,4 +182,7 @@ module.exports = GelatoComponent.extend({
       this.$('#total-reviews-num').text(this.collection.getCountAllTimeReviews());
     }
   }
+
 });
+
+module.exports = StatsItemsLearnedComponent;

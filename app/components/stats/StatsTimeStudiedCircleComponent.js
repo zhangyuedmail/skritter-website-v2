@@ -1,13 +1,20 @@
-var GelatoComponent = require('gelato/component');
-var config = require('config');
+const GelatoComponent = require('gelato/component');
+const config = require('config');
 
 /**
  * A circle graph that displays the retention percentage, minutes per day,
  * and number of days studied for a certain time period.
- * @class TimeStudiedCircleComponent
+ * @class StatsTimeStudiedCircleComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StatsTimeStudiedCircle'),
+
   /**
    * Initializes a new circle graph component.
    * @method initialize
@@ -31,14 +38,8 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
    * @method render
-   * @returns {TimeStudiedCircleComponent}
+   * @returns {StatsTimeStudiedCircleComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -136,7 +137,7 @@ module.exports = GelatoComponent.extend({
       retentionRate = this.collection.getRetentionRateForPeriod(
         this.range.start, this.range.end, 'char', 'rune');
     }
-    
+
     this.$('#num-retention-rate').text(Math.round(retentionRate) + '%');
 
     // circle inner vals
@@ -151,4 +152,7 @@ module.exports = GelatoComponent.extend({
       {name: "Didn't Study", color: '#efeef3', y: daysNotStudied}
     ], true);
   }
+
 });
+
+module.exports = StatsTimeStudiedCircleComponent;

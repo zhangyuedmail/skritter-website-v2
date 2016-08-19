@@ -1,9 +1,9 @@
-var GelatoComponent = require('gelato/component');
-var TimeStudiedBragraphComponent = require('components/stats/time-studied-bargraph/view');
-var ItemsLearnedGraphComponent = require('components/stats/items-learned/view');
-var TimeStudiedCircleComponent = require('components/stats/time-studied-circle/view');
-var StudyPartLinegraphComponent = require('components/stats/study-part-linegraph/view');
-var config = require('config');
+const GelatoComponent = require('gelato/component');
+const TimeStudiedBargraphComponent = require('components/stats/StatsTimeStudiedBargraphComponent');
+const ItemsLearnedGraphComponent = require('components/stats/StatsItemsLearnedComponent');
+const TimeStudiedCircleComponent = require('components/stats/StatsTimeStudiedCircleComponent');
+const StudyPartLinegraphComponent = require('components/stats/StatsStudyPartLinegraphComponent');
+const config = require('config');
 
 /**
  * A component that is a composite of graphs which show user study statistics
@@ -11,10 +11,21 @@ var config = require('config');
  * @class StatsTimelineComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StatsTimelineComponent = GelatoComponent.extend({
+
+  /**
+   * @property events
+   * @type {Event}
+   */
   events: {
     'change #granularity-selector': 'onTimelineUnitsChanged'
   },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StatsTimeline'),
 
   /**
    * @method initialize
@@ -48,7 +59,7 @@ module.exports = GelatoComponent.extend({
     this.granularity = 'minutes';
 
     // TODO: check localStorage for user-set granularity config?
-    this._views['bargraph'] = new TimeStudiedBragraphComponent({
+    this._views['bargraph'] = new TimeStudiedBargraphComponent({
       collection: this.collection,
       granularity: 'minutes'
     });
@@ -128,12 +139,6 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
    * @method render
    * @returns {VocablistSideBar}
    */
@@ -173,7 +178,7 @@ module.exports = GelatoComponent.extend({
 
   remove: function() {
     this.$('#date-range-picker').off();
-    
+
     GelatoComponent.prototype.remove.call(this);
   },
 
@@ -252,4 +257,7 @@ module.exports = GelatoComponent.extend({
     this.$('#time-studied').text(timeStudied.amount);
     this.$('#time-studied-units-label').text(timeStudied.units);
   }
+
 });
+
+module.exports = StatsTimelineComponent;

@@ -1,12 +1,19 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
  * A line graph that displays the progress of a specific study part (reading,
  * writing, definition, tone) for a certain time period.
- * @class StudyPartLinegraphComponent
+ * @class StatsStudyPartLinegraphComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StatsStudyPartLinegraph'),
+
   /**
    * Initializes a new line graph component.
    * @method initialize
@@ -21,7 +28,7 @@ module.exports = GelatoComponent.extend({
     this.part = options.part || 'rune';
     this.partName = this.part === 'rune' ? 'writings' :
       this.part === 'defn' ? 'definitions' :
-      this.part === 'rdng' ? 'readings' : 'tones';
+        this.part === 'rdng' ? 'readings' : 'tones';
 
     this._graph = null;
 
@@ -29,14 +36,8 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
    * @method render
-   * @returns {VocablistSideBar}
+   * @returns {StatsStudyPartLinegraphComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -68,7 +69,7 @@ module.exports = GelatoComponent.extend({
         minorGridLineWidth: 0,
         lineColor: 'transparent',
         labels: {
-         enabled: false
+          enabled: false
         },
         minorTickLength: 0,
         tickLength: 0
@@ -221,4 +222,7 @@ module.exports = GelatoComponent.extend({
 
     return totalAdded;
   }
+
 });
+
+module.exports = StatsStudyPartLinegraphComponent;

@@ -1,27 +1,30 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
  * @class StatsHeatmapComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StatsHeatmapComponent = GelatoComponent.extend({
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StatsHeatmap'),
+
   /**
    *
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function() {
     this.heatmap = new CalHeatMap();
     this.listenTo(this.collection, 'state:standby', this.update);
   },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {VocablistSideBar}
+   * @returns {StatsHeatmapComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -63,4 +66,7 @@ module.exports = GelatoComponent.extend({
     this.$('#items-studied').text(itemsLearned)
       .toggleClass('bad', itemsLearned < 0);
   }
+
 });
+
+module.exports = StatsHeatmapComponent;

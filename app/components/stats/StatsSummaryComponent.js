@@ -1,6 +1,6 @@
-var GelatoComponent = require('gelato/component');
-var StatsItemsLearnedComponent = require('components/stats/items-learned/view');
-var StatsHeatmapComponent = require('components/stats/heatmap/view');
+const GelatoComponent = require('gelato/component');
+const StatsItemsLearnedComponent = require('components/stats/items-learned/view');
+const StatsHeatmapComponent = require('components/stats/heatmap/view');
 
 /**
  * A component that is a composite of graphs which show user study statistics
@@ -8,13 +8,20 @@ var StatsHeatmapComponent = require('components/stats/heatmap/view');
  * @class StatsSummaryComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StatsSummaryComponent = GelatoComponent.extend({
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StatsSummary'),
+
   /**
    * Initializes a new summary stats view
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function() {
     this._views['allTime'] = new StatsItemsLearnedComponent({
       collection: this.collection,
       title: 'All Time'
@@ -26,18 +33,15 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
    * @method render
-   * @returns {VocablistSideBar}
+   * @returns {StatsSummaryComponent}
    */
   render: function() {
     this.renderTemplate();
     this._views['allTime'].setElement('#stats-all-time-container').render();
     this._views['heatmap'].setElement('#stats-heatmap-container').render();
   }
+
 });
+
+module.exports = StatsSummaryComponent;

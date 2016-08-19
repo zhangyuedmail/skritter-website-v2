@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
  * A bargraph that displays the amount of time a user has studied over
@@ -6,7 +6,14 @@ var GelatoComponent = require('gelato/component');
  * @class StatsTimeStudiedBargraphComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StatsTimeStudiedBargraph'),
+
   /**
    * Initializes a new bargraph component. Sets the initial granularity.
    * @method initialize
@@ -23,12 +30,6 @@ module.exports = GelatoComponent.extend({
     this._granularity = options.granularity || 'minutes';
     this._graph = null;
   },
-
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
 
   /**
    * @method render
@@ -195,4 +196,7 @@ module.exports = GelatoComponent.extend({
 
     return dates;
   }
+
 });
+
+module.exports = StatsTimeStudiedBargraphComponent;
