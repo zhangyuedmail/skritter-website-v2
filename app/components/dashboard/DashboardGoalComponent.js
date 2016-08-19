@@ -1,10 +1,17 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class DashboardGoal
+ * @class DashboardGoalComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const DashboardGoalComponent = GelatoComponent.extend({
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./DashboardGoalComponent'),
+
   /**
    * @method initialize
    * @constructor
@@ -13,11 +20,7 @@ module.exports = GelatoComponent.extend({
     this.doughnut = null;
     this.on('resize', this.resize);
   },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
    * @returns {DashboardGoal}
@@ -75,13 +78,7 @@ module.exports = GelatoComponent.extend({
     //this.updateItems();
     return this;
   },
-  /**
-   * @method getSize
-   * @returns {Number}
-   */
-  getSize: function() {
-    return this.$el.width() > 200 ? 200 : this.$el.width();
-  },
+
   /**
    * @method remove
    * @returns {DashboardGoal}
@@ -90,12 +87,22 @@ module.exports = GelatoComponent.extend({
     this.doughnut.destroy();
     return GelatoComponent.prototype.remove.call(this);
   },
+
+  /**
+   * @method getSize
+   * @returns {Number}
+   */
+  getSize: function() {
+    return this.$el.width() > 200 ? 200 : this.$el.width();
+  },
+
   /**
    * @method resize
    */
   resize: function() {
     this.doughnut.setSize(this.getSize(), this.getSize(), true);
   },
+
   /**
    * @method updateDoughnut
    */
@@ -129,6 +136,7 @@ module.exports = GelatoComponent.extend({
       {name: "Remaining", color: '#efeef3', y: 100 - percent}
     ], true);
   },
+
   /**
    * @method updateItems
    */
@@ -140,4 +148,7 @@ module.exports = GelatoComponent.extend({
       this.$('#items-reviewed .value').text(app.user.data.stats.getDailyItemsReviewed());
     }
   }
+
 });
+
+module.exports = DashboardGoalComponent;

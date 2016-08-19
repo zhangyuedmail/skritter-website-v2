@@ -1,16 +1,16 @@
-var GelatoComponent = require('gelato/component');
-var Vocablists = require('collections/vocablists');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class DashboardQueue
+ * @class DashboardQueueComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const DashboardQueueComponent = GelatoComponent.extend({
+
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./DashboardQueue'),
 
   /**
    * @method initialize
@@ -31,11 +31,14 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method render
-   * @returns {DashboardQueue}
+   * @returns {DashboardQueueComponent}
    */
   render: function() {
     this.renderTemplate();
 
     return this;
   }
+
 });
+
+module.exports = DashboardQueueComponent;

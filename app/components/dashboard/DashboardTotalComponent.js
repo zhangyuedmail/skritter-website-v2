@@ -1,11 +1,18 @@
-var GelatoComponent = require('gelato/component');
-var ProgressStats = require('collections/progress-stats');
+const GelatoComponent = require('gelato/component');
+const ProgressStats = require('collections/ProgressStatsCollection');
 
 /**
- * @class DashboardTotal
+ * @class DashboardTotalComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const DashboardTotalComponent = GelatoComponent.extend({
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./DashboardTotal'),
+
   /**
    * @method initialize
    * @constructor
@@ -15,20 +22,17 @@ module.exports = GelatoComponent.extend({
     this.listenTo(this.stats, 'state:standby', this.update);
     this.stats.fetchToday();
   },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {GelatoComponent}
+   * @returns {DashboardTotalComponent}
    */
   render: function() {
     this.renderTemplate();
     this.update();
     return this;
   },
+
   /**
    * @method update
    */
@@ -38,4 +42,7 @@ module.exports = GelatoComponent.extend({
       this.$('#words-learned .value').text(this.stats.getAllTimeWordsLearned());
     }
   }
+
 });
+
+module.exports = DashboardTotalComponent;
