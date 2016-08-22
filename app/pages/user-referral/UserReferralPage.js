@@ -1,21 +1,23 @@
 var GelatoPage = require('gelato/page');
 
 /**
+ * A page that explains the foundation of Skritter, our learning philosophy,
+ * and shows the Skritter team members.
  * @class About
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    app.mixpanel.track('Viewed refer page');
-  },
 
+  /**
+   * Dictionary of events the view should listen to and the
+   * corresponding handlers.
+   * @property events
+   * @type {Object<String, String>}
+   */
   events: {
     'click #user-link': 'handleUserLinkClicked'
   },
+
   /**
    * HTML Title text
    * @type {String}
@@ -26,7 +28,15 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./UserReferral'),
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    app.mixpanel.track('Viewed refer page');
+  },
 
   /**
    * @method render
