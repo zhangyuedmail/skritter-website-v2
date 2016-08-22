@@ -1,19 +1,20 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class WordsSideBar
+ * @class WordsSidebarComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const WordsSidebarComponent = GelatoComponent.extend({
+
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./WordsSidebar'),
 
   /**
    * @method render
-   * @returns {WordsSideBar}
+   * @returns {WordsSidebarComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -26,4 +27,7 @@ module.exports = GelatoComponent.extend({
       }
     });
   }
+
 });
+
+module.exports = WordsSidebarComponent;
