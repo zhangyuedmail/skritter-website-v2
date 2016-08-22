@@ -1,18 +1,10 @@
 var GelatoPage = require('gelato/page');
 
 /**
- * @class PasswordReset
+ * @class PasswordResetPage
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    this.choices = [];
-    this.errorMessage = null;
-  },
 
   /**
    * @property events
@@ -27,13 +19,22 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./PasswordReset'),
 
   /**
    * @property title
    * @type {String}
    */
-  title: 'Login - Skritter',
+  title: 'Reset Password - Skritter',
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.choices = [];
+    this.errorMessage = null;
+  },
 
   /**
    * @method render
@@ -41,7 +42,7 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    
+
     return this;
   },
 

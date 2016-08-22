@@ -1,10 +1,11 @@
 var GelatoPage = require('gelato/page');
 
 /**
- * @class NotFound
+ * @class NotFoundPage
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+  
   /**
    * @property bodyClass
    * @type {String}
@@ -21,15 +22,15 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./NotFound'),
 
   /**
    * @method render
-   * @returns {NotFound}
+   * @returns {NotFoundPage}
    */
   render: function() {
     this.renderTemplate();
-    
+
     return this;
   },
 

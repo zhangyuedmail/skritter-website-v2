@@ -1,13 +1,34 @@
 var GelatoPage = require('gelato/page');
-var StatsSummaryComponent = require('components/stats/summary/view');
-var StatsTimelineComponent = require('components/stats/timeline/view');
-var ProgressStats = require('collections/progress-stats');
+var StatsSummaryComponent = require('components/stats/StatsSummaryComponent');
+var StatsTimelineComponent = require('components/stats/StatsTimelineComponent');
+var ProgressStats = require('collections/ProgressStatsCollection');
 
 /**
- * @class Stats
+ * @class StatsPage
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click .stats-section-selector': 'handleStatsSectionSelectorClicked'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./Stats'),
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Stats - Skritter',
+
   /**
    * @method initialize
    * @constructor
@@ -29,22 +50,6 @@ module.exports = GelatoPage.extend({
 
     this.activeSection = 'summary';
   },
-
-  events: {
-    'click .stats-section-selector': 'handleStatsSectionSelectorClicked'
-  },
-
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Stats - Skritter',
 
   /**
    * @method render

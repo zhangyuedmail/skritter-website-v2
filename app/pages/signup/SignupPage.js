@@ -1,10 +1,10 @@
 var GelatoPage = require('gelato/page');
-var User = require('models/user');
+var User = require('models/UserModel');
 
 /**
  * A page that allows a user to create account for Skritter by entering
  * user credentials, subscription options, and payment information.
- * @class Signup
+ * @class SignupPage
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
@@ -58,7 +58,7 @@ module.exports = GelatoPage.extend({
    * The template to render
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./Signup'),
 
   /**
    * The page title to display

@@ -1,12 +1,31 @@
 var GelatoPage = require('gelato/page');
-var Vocabs = require('collections/vocabs');
-var Prompt = require('components/study/prompt/view');
+var Vocabs = require('collections/VocabCollection');
+var Prompt = require('components/study/StudyPromptComponent');
 
 /**
- * @class Scratchpad
+ * @class ScratchpadPage
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
+  /**
+   * @property showFooter
+   * @type {Boolean}
+   */
+  showFooter: false,
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./Scratchpad'),
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Scratchpad - Skritter',
+
   /**
    * @method initialize
    * @param {Object} options
@@ -21,24 +40,6 @@ module.exports = GelatoPage.extend({
     this.writing = options.writing;
     this.load();
   },
-
-  /**
-   * @property showFooter
-   * @type {Boolean}
-   */
-  showFooter: false,
-
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Scratchpad - Skritter',
 
   /**
    * @method render

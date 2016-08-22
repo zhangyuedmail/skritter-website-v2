@@ -1,19 +1,10 @@
 var GelatoPage = require('gelato/page');
 
 /**
- * @class MailUnsubscribe
+ * @class MailUnsubscribePage
  * @extends {GelatoPage}
  */
 var MailUnsubscribe = GelatoPage.extend({
-  /**
-   * @method initialize
-   * @param {Object} options
-   * @constructor
-   */
-  initialize: function(options) {
-    this.email = options.email;
-  },
-
   /**
    * @property bodyClass
    * @type {String}
@@ -30,7 +21,16 @@ var MailUnsubscribe = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./MailUnsubscribe'),
+
+  /**
+   * @method initialize
+   * @param {Object} options
+   * @constructor
+   */
+  initialize: function(options) {
+    this.email = options.email;
+  },
 
   /**
    * @method render
