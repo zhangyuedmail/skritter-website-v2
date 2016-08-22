@@ -1,15 +1,14 @@
 var GelatoPage = require('gelato/page');
-
-var ChinesePodSession = require('models/chinesepod-session');
-var ChinesePodLabels = require('collections/chinesepod-labels');
-var ChinesePodLessons = require('collections/chinesepod-lessons');
-var VocablistSidebar = require('components/vocablists/sidebar/view');
-
+var ChinesePodSession = require('models/ChinesepodSessionModel');
+var ChinesePodLabels = require('collections/ChinesepodLabelCollection');
+var ChinesePodLessons = require('collections/ChinesepodLessonCollection');
+var VocablistSidebar = require('components/vocablists/VocablistsSidebarComponent');
 /**
  * @class VocablistsChinesepodPage
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
   /**
    * @property events
    * @type {Object}
@@ -32,7 +31,7 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./VocablistsChinesepod'),
 
   /**
    * @method initialize

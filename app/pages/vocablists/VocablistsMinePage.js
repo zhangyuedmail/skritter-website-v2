@@ -1,13 +1,25 @@
 var GelatoPage = require('gelato/page');
-
-var Table = require('components/vocablists/deleted-table/view');
-var Sidebar = require('components/vocablists/sidebar/view');
+var Table = require('components/vocablists/VocablistsMineTableComponent');
+var Sidebar = require('components/vocablists/VocablistsSidebarComponent');
 
 /**
- * @class VocablistDeleted
+ * @class VocablistMine
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./VocablistsMine'),
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'My Lists - Skritter',
+
   /**
    * @method initialize
    * @constructor
@@ -18,20 +30,8 @@ module.exports = GelatoPage.extend({
   },
 
   /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Deleted Lists - Skritter',
-
-  /**
    * @method render
-   * @returns {VocablistDeleted}
+   * @returns {VocablistBrowse}
    */
   render: function() {
     this.renderTemplate();
@@ -42,7 +42,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method remove
-   * @returns {VocablistDeleted}
+   * @returns {VocablistBrowse}
    */
   remove: function() {
     this.sidebar.remove();

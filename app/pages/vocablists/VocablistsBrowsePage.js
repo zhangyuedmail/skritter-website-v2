@@ -1,7 +1,7 @@
 var GelatoPage = require('gelato/page');
-var Table = require('components/vocablists/browse-table/view');
-var Sidebar = require('components/vocablists/sidebar/view');
-var ExpiredNotification = require('components/account/expired-notification/view');
+var Table = require('components/vocablists/VocablistsBrowseTableComponent');
+var Sidebar = require('components/vocablists/VocablistsSidebarComponent');
+var ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 
 /**
  * A page that allows a user to browse different categories of vocablists they can study.
@@ -9,6 +9,7 @@ var ExpiredNotification = require('components/account/expired-notification/view'
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
   /**
    * @property events
    * @type {Object}
@@ -30,7 +31,7 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./VocablistsBrowse'),
 
   /**
    * @method initialize

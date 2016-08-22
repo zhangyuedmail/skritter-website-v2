@@ -1,8 +1,7 @@
 var GelatoPage = require('gelato/page');
-
-var EditorRows = require('components/vocablists/row-editor/view');
-var Vocablist = require('models/vocablist');
-var VocablistSection = require('models/vocablist-section');
+var EditorRows = require('components/vocablists/VocablistsRowEditorComponent');
+var Vocablist = require('models/VocablistModel');
+var VocablistSection = require('models/VocablistSectionModel');
 var ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
 
 /**
@@ -10,6 +9,30 @@ var ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'keydown #add-input': 'handleKeydownAddInput',
+    'click #back-link': 'handleClickBackLink',
+    'click #discard-changes': 'handleClickDiscardChanges',
+    'click #edit-section': 'handleClickEditSection',
+    'click #save-changes': 'handleClickSaveChanges'
+  },
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Vocablist - Skritter',
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./VocablistsListSection'),
 
   /**
    * @method initialize
@@ -56,30 +79,6 @@ module.exports = GelatoPage.extend({
       this.render();
     }, this));
   },
-
-  /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'keydown #add-input': 'handleKeydownAddInput',
-    'click #back-link': 'handleClickBackLink',
-    'click #discard-changes': 'handleClickDiscardChanges',
-    'click #edit-section': 'handleClickEditSection',
-    'click #save-changes': 'handleClickSaveChanges'
-  },
-
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Vocablist - Skritter',
-
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
 
   /**
    * @method render

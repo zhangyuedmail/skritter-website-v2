@@ -1,15 +1,27 @@
 var GelatoPage = require('gelato/page');
-
-var AddingTable = require('components/vocablists/adding-table/view');
-var ReviewingTable = require('components/vocablists/reviewing-table/view');
-var Sidebar = require('components/vocablists/sidebar/view');
-var Vocablists = require('collections/vocablists');
+var AddingTable = require('components/vocablists/VocablistsAddingTableComponent');
+var ReviewingTable = require('components/vocablists/VocablistsReviewingTableComponent');
+var Sidebar = require('components/vocablists/VocablistsSidebarComponent');
+var Vocablists = require('collections/VocablistCollection');
 
 /**
  * @class VocablistsQueue
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Queue - Skritter',
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./VocablistsQueue'),
+
   /**
    * @method initialize
    * @constructor
@@ -51,18 +63,6 @@ module.exports = GelatoPage.extend({
     });
 
   },
-
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Queue - Skritter',
-
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
 
   /**
    * @method render

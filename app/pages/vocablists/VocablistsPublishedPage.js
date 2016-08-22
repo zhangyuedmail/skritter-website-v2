@@ -1,8 +1,7 @@
 var GelatoPage = require('gelato/page');
-
-var Table = require('components/vocablists/published-table/view');
-var Sidebar = require('components/vocablists/sidebar/view');
-var ExpiredNotification = require('components/account/expired-notification/view');
+var Table = require('components/vocablists/VocablistsPublishedTableComponent');
+var Sidebar = require('components/vocablists/VocablistsSidebarComponent');
+var ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 
 /**
  * Page that allows a user to search for user-published lists of words and
@@ -11,6 +10,7 @@ var ExpiredNotification = require('components/account/expired-notification/view'
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
   /**
    * Dictionary of events this view should listen to
    * @type {Object<String, String>}
@@ -24,7 +24,7 @@ module.exports = GelatoPage.extend({
    * Template to render
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./VocablistsPublished'),
 
   /**
    * HTML Title of the page

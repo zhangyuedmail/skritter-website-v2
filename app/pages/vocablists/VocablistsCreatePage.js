@@ -1,20 +1,11 @@
 var GelatoPage = require('gelato/page');
-
-var Vocablist = require('models/vocablist');
+var Vocablist = require('models/VocablistModel');
 
 /**
  * @class NewVocablistPage
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function(options) {
-    this.vocablist = new Vocablist();
-    this.errorMessage = '';
-  },
 
   /**
    * @property events
@@ -34,7 +25,16 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./VocablistsCreate'),
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function(options) {
+    this.vocablist = new Vocablist();
+    this.errorMessage = '';
+  },
 
   /**
    * @method render
@@ -42,7 +42,7 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    
+
     return this;
   },
 

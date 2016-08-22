@@ -1,16 +1,15 @@
 var GelatoPage = require('gelato/page');
-
-var EditorSections = require('components/vocablists/section-editor/view');
-var Sidebar = require('components/vocablists/list-sidebar/view');
-var Vocablist = require('models/vocablist');
-var VocablistSection = require('models/vocablist-section');
-var User = require('models/user');
+var EditorSections = require('components/vocablists/VocablistsSectionEditorComponent');
+var Sidebar = require('components/vocablists/VocablistsListSidebarComponent');
+var Vocablist = require('models/VocablistModel');
+var VocablistSection = require('models/VocablistSectionModel');
 
 /**
  * @class VocablistsListPage
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
   /**
    * @property events
    * @type {Object}
@@ -33,7 +32,7 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./VocablistsList'),
 
   /**
    * @method initialize
