@@ -5,17 +5,18 @@ var GelatoPage = require('gelato/page');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+  
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./Test'),
+
   /**
    * @property title
    * @type {String}
    */
   title: 'Test - Skritter',
-
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
 
   /**
    * @method render
