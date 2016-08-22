@@ -1,9 +1,9 @@
 var GelatoPage = require('gelato/page');
-var Prompt = require('components/study/prompt/view');
-var Toolbar = require('components/study/toolbar/view');
-var Recipes = require('components/common/recipes/view');
-var Items = require('collections/items');
-var Vocablist = require('models/vocablist');
+var Prompt = require('components/study/StudyPromptComponent');
+var Toolbar = require('components/study/StudyToolbarComponent');
+var Recipes = require('components/common/CommonRecipesComponent');
+var Items = require('collections/ItemsModel');
+var Vocablist = require('models/VocablistModel');
 
 /**
  * @class StudyList
@@ -21,7 +21,7 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./StudyList'),
 
   /**
    * @property title
