@@ -1,20 +1,16 @@
-var GelatoPage = require('gelato/page');
+const GelatoPage = require('gelato/page');
+
 /**
- * @class Legal
+ * @class LegalPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const LegalPage = GelatoPage.extend({
+
   /**
    * @property bodyClass
    * @type {String}
    */
   bodyClass: 'background2',
-
-  /**
-   * @property events
-   * @type Object
-   */
-  events: {},
 
   /**
    * @property title
@@ -26,23 +22,17 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./Legal'),
 
   /**
    * @method render
-   * @returns {Legal}
+   * @returns {LegalPage}
    */
   render: function() {
     this.renderTemplate();
 
     return this;
-  },
-
-  /**
-   * @method remove
-   * @returns {Legal}
-   */
-  remove: function() {
-    return GelatoPage.prototype.remove.call(this);
   }
 });
+
+module.exports = LegalPage;

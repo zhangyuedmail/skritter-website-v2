@@ -1,16 +1,10 @@
-var GelatoPage = require('gelato/page');
+const GelatoPage = require('gelato/page');
+
 /**
- * @class Institutions
+ * @class InstitutionsPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    app.mixpanel.track('Viewed institutions page');
-  },
+const InstitutionsPage = GelatoPage.extend({
 
   /**
    * @property events
@@ -32,11 +26,19 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./Institutions'),
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    app.mixpanel.track('Viewed institutions page');
+  },
 
   /**
    * @method render
-   * @returns {Institutions}
+   * @returns {InstitutionsPage}
    */
   render: function() {
     this.renderTemplate();
@@ -118,13 +120,7 @@ module.exports = GelatoPage.extend({
     var section = this.$('#section-request');
     $('html, body').animate({scrollTop: section.offset().top}, 1000);
     this.$('#institution-request-type [value="trial"]').prop('checked', 'checked');
-  },
-
-  /**
-   * @method remove
-   * @returns {Institutions}
-   */
-  remove: function() {
-    return GelatoPage.prototype.remove.call(this);
   }
 });
+
+module.exports = InstitutionsPage;

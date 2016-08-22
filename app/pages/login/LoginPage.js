@@ -1,15 +1,19 @@
-var GelatoPage = require('gelato/page');
+const GelatoPage = require('gelato/page');
+
 /**
- * @class Login
+ * @class LoginPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const LoginPage = GelatoPage.extend({
+
   /**
-   * @method initialize
-   * @constructor
+   * @property events
+   * @type {Object}
    */
-  initialize: function() {
-    app.mixpanel.track('Viewed login page');
+  events: {
+    'keyup #login-password': 'handleKeyUpLoginPassword',
+    'click #button-login': 'handleClickLoginButton',
+    'click #button-skeleton': 'handleClickSkeleton'
   },
 
   /**
@@ -22,26 +26,24 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./Login'),
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    app.mixpanel.track('Viewed login page');
+  },
 
   /**
    * @method render
-   * @returns {Login}
+   * @returns {LoginPage}
    */
   render: function() {
     this.renderTemplate();
 
     return this;
-  },
-
-  /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'keyup #login-password': 'handleKeyUpLoginPassword',
-    'click #button-login': 'handleClickLoginButton',
-    'click #button-skeleton': 'handleClickSkeleton'
   },
 
   /**
@@ -123,9 +125,11 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method remove
-   * @returns {Login}
+   * @returns {LoginPage}
    */
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
   }
 });
+
+module.exports = LoginPage;

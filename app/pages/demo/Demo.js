@@ -1,14 +1,35 @@
-var GelatoPage = require('gelato/page');
-var Vocabs = require('collections/vocabs');
-var Prompt = require('components/study/prompt/view');
-var DemoCallToActionDialog = require('dialogs1/demo-call-to-action/view');
-var DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
+const GelatoPage = require('gelato/page');
+const Vocabs = require('collections/VocabCollection');
+const Prompt = require('components/study/StudyPromptComponent');
+const DemoCallToActionDialog = require('dialogs1/demo-call-to-action/view');
+const DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
 
 /**
  * @class Demo
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const DemoPage = GelatoPage.extend({
+
+  /**
+   * @property events
+   * @type Object
+   */
+  events: {
+    'click #contact-submit': 'handleClickContactSubmit'
+  },
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Demo - Skritter',
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./Demo'),
+
   /**
    * @method initialize
    * @param {Object} [options]
@@ -23,23 +44,7 @@ module.exports = GelatoPage.extend({
     this.vocab = null;
     this.vocabs = new Vocabs();
   },
-  /**
-   * @property events
-   * @type Object
-   */
-  events: {
-    'click #contact-submit': 'handleClickContactSubmit'
-  },
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Demo - Skritter',
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
    * @returns {Contact}
@@ -50,6 +55,7 @@ module.exports = GelatoPage.extend({
     this.loadDemo();
     return this;
   },
+
   /**
    * @method loadDemo
    */
@@ -111,6 +117,7 @@ module.exports = GelatoPage.extend({
       self.step1();
     });
   },
+
   /**
    * @method step1
    */
@@ -124,6 +131,7 @@ module.exports = GelatoPage.extend({
     this.prompt.$('#toolbar-vocab-container').hide();
     this.prompt.once('character:complete', this.step2.bind(this));
   },
+
   /**
    * @method step2
    */
@@ -136,6 +144,7 @@ module.exports = GelatoPage.extend({
     this.prompt.$('#toolbar-grading-container').hide();
     this.prompt.once('reviews:next', this.step3.bind(this));
   },
+
   /**
    * @method step3
    */
@@ -145,6 +154,7 @@ module.exports = GelatoPage.extend({
     this.prompt.$('#toolbar-action-container').hide();
     this.prompt.once('character:complete', this.step4.bind(this));
   },
+
   /**
    * @method step4
    */
@@ -156,6 +166,7 @@ module.exports = GelatoPage.extend({
     this.prompt.$('#toolbar-action-container').show();
     this.prompt.once('character:complete', this.step5.bind(this));
   },
+
   /**
    * @method step5
    */
@@ -164,12 +175,16 @@ module.exports = GelatoPage.extend({
     this.dialog = new DemoCallToActionDialog();
     this.dialog.open();
   },
+
   /**
    * @method remove
    * @returns {Contact}
    */
   remove: function() {
     this.prompt.remove();
+
     return GelatoPage.prototype.remove.call(this);
   }
 });
+
+module.exports = DemoPage;

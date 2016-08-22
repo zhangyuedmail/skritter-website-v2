@@ -1,18 +1,15 @@
-var GelatoPage = require('gelato/page');
+const GelatoPage = require('gelato/page');
 
 /**
- * @class Home
+ * @class HomePage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    app.mixpanel.track('Viewed home page');
-  },
+const HomePage = GelatoPage.extend({
 
+  /**
+   * @property events
+   * @type {Object}
+   */
   events: {
     'click #link-apple-store': 'handleClickLinkAppleStore',
     'click #link-google-store': 'handleClickLinkGoogleStore'
@@ -22,7 +19,7 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./Home'),
 
   /**
    * @property title
@@ -31,8 +28,16 @@ module.exports = GelatoPage.extend({
   title: 'Skritter - Learn to Write Chinese and Japanese Characters',
 
   /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    app.mixpanel.track('Viewed home page');
+  },
+
+  /**
    * @method render
-   * @returns {Home}
+   * @returns {HomePage}
    */
   render: function() {
     this.renderTemplate();
@@ -86,14 +91,7 @@ module.exports = GelatoPage.extend({
         }
       }
     );
-  },
-
-  /**
-   * @method remove
-   * @returns {Home}
-   */
-  remove: function() {
-    return GelatoPage.prototype.remove.call(this);
   }
-
 });
+
+module.exports = HomePage;
