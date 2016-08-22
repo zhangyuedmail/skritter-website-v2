@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 var AddVocabDialog = require('dialogs1/add-vocab/view');
 var ConfirmDialog = require('dialogs/confirm/view');
@@ -9,10 +9,11 @@ var VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
 var ViewDialog = require('dialogs1/view-dialog/view');
 
 /**
- * @class VocablistsListSidebar
+ * @class VocablistsListSidebarComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const VocablistsListSidebarComponent = GelatoComponent.extend({
+
   /**
    * @property events
    * @type {Object}
@@ -34,7 +35,7 @@ module.exports = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./VocablistsListSidebar'),
 
   /**
    * @method initialize
@@ -60,7 +61,7 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method render
-   * @returns {VocablistsListSidebar}
+   * @returns {VocablistsListSidebarComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -213,4 +214,7 @@ module.exports = GelatoComponent.extend({
     this.dialog = new VocablistSettingsDialog({vocablist: this.vocablist});
     this.dialog.render().open();
   }
+
 });
+
+module.exports = VocablistsListSidebarComponent;

@@ -1,11 +1,27 @@
-var GelatoComponent = require('gelato/component');
-var Vocablists = require('collections/vocablists');
+const GelatoComponent = require('gelato/component');
+const Vocablists = require('collections/VocablistCollection');
 
 /**
- * @class VocablistDeletedTable
+ * @class VocablistsMineTableComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const VocablistsMineTableComponent = GelatoComponent.extend({
+
+  /**
+   * @property events
+   * @typeof {Object}
+   */
+  events: {
+    'click #load-more-btn': 'handleClickLoadMoreButton',
+    'click .add-to-queue-link': 'handleClickAddToQueueLink'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./VocablistsMineTable'),
+
   /**
    * @method initialize
    * @constructor
@@ -16,44 +32,36 @@ module.exports = GelatoComponent.extend({
     this.vocablists.fetch({
       data: {
         limit: 10,
-        sort: 'deleted',
+        sort: 'custom',
         lang: app.getLanguage()
       }
     });
   },
-  /**
-   * @property events
-   * @typeof {Object}
-   */
-  events: {
-    'click #load-more-btn': 'handleClickLoadMoreButton',
-    'click .restore-link': 'handleClickRestoreLink'
-  },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {VocablistDeletedTable}
+   * @returns {VocablistsMineTableComponent}
    */
   render: function() {
     this.renderTemplate();
     return this;
   },
+
   /**
-   * @method handleClickRestoreLink
+   * @method handleClickAddToQueueLink
    * @param {Event} event
    */
-  handleClickRestoreLink: function(event) {
+  handleClickAddToQueueLink: function(event) {
     event.preventDefault();
-    var listID = $(event.target).closest('.restore-link').data('vocablist-id');
+    var listID = $(event.target).closest('.add-to-queue-link').data('vocablist-id');
     var vocablist = this.vocablists.get(listID);
-    vocablist.set({disabled: false, studyingMode: 'not studying'});
-    vocablist.save(null, {patch: true});
+    if (vocablist.get('studyingMode') !== 'not studying') {
+      return;
+    }
+    vocablist.save({'studyingMode': 'adding'}, {patch: true});
     this.render();
   },
+
   /**
    * @method handleClickLoadMoreButton
    * @param {Event} event
@@ -74,4 +82,7 @@ module.exports = GelatoComponent.extend({
     });
     this.render();
   }
+
 });
+
+module.exports = VocablistsMineTableComponent;

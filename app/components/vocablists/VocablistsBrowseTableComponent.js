@@ -1,26 +1,27 @@
-var GelatoComponent = require('gelato/component');
-var Vocablists = require('collections/vocablists');
+const GelatoComponent = require('gelato/component');
+const Vocablists = require('collections/VocablistCollection');
 
 /**
- * @class VocablistBrowseTable
+ * @class VocablistsBrowseTableComponent
  * @extends {GelatoComponent}
  */
-  module.exports = GelatoComponent.extend({
-    /**
-     * @property events
-     * @typeof {Object}
-     */
-    events: {
-      'click #title-sort': 'handleClickTitleSort',
-      'click #popularity-sort': 'handleClickPopularitySort',
-      'click .add-to-queue-link': 'handleClickAddToQueueLink'
-    },
+const VocablistsBrowseTableComponent = GelatoComponent.extend({
 
-    /**
-     * @property template
-     * @type {Function}
-     */
-    template: require('./template'),
+  /**
+   * @property events
+   * @typeof {Object}
+   */
+  events: {
+    'click #title-sort': 'handleClickTitleSort',
+    'click #popularity-sort': 'handleClickPopularitySort',
+    'click .add-to-queue-link': 'handleClickAddToQueueLink'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./VocablistsBrowseTable'),
 
   /**
    * @method initialize
@@ -49,7 +50,7 @@ var Vocablists = require('collections/vocablists');
 
   /**
    * @method render
-   * @returns {VocablistTable}
+   * @returns {VocablistsBrowseTableComponent}
    */
   render: function() {
     this.update();
@@ -122,7 +123,7 @@ var Vocablists = require('collections/vocablists');
 
   /**
    * @method update
-   * @returns {VocablistBrowseTable}
+   * @returns {VocablistsBrowseTableComponent}
    */
   update: function() {
     this._lists = this.vocablists.models;
@@ -154,7 +155,7 @@ var Vocablists = require('collections/vocablists');
       return true;
     }).bind(this));
   },
-    
+
   /**
    * @method updateSort
    */
@@ -166,4 +167,7 @@ var Vocablists = require('collections/vocablists');
       return vocablist.get('name');
     }).bind(this));
   }
+
 });
+
+module.exports = VocablistsBrowseTableComponent;

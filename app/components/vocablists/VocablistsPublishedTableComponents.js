@@ -1,11 +1,12 @@
-var GelatoComponent = require('gelato/component');
-var Vocablists = require('collections/vocablists');
+const GelatoComponent = require('gelato/component');
+const Vocablists = require('collections/VocablistCollection');
 
 /**
- * @class VocablistPublishedTable
+ * @class VocablistsPublishedTableComponents
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const VocablistsPublishedTableComponents = GelatoComponent.extend({
+
   /**
    * @property events
    * @typeof {Object}
@@ -14,6 +15,13 @@ module.exports = GelatoComponent.extend({
     'click .add-to-queue-link': 'handleClickAddToQueueLink',
     'click #load-more-btn': 'handleClickLoadMoreButton'
   },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./VocablistsPublishedTable'),
+
   /**
    * @method initialize
    * @constructor
@@ -30,19 +38,16 @@ module.exports = GelatoComponent.extend({
       }
     });
   },
+
   /**
    * @method render
-   * @returns {VocablistPublishedTable}
+   * @returns {VocablistsPublishedTableComponents}
    */
   render: function() {
     this.renderTemplate();
     return this;
   },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method handleClickAddToQueueLink
    * @param {Event} event
@@ -57,6 +62,7 @@ module.exports = GelatoComponent.extend({
     vocablist.save({studyingMode: 'adding'}, {patch: true});
     this.render();
   },
+
   /**
    * @method handleClickLoadMoreButton
    * @param {Event} event
@@ -78,6 +84,7 @@ module.exports = GelatoComponent.extend({
     });
     this.render();
   },
+
   /**
    * @method searchFor
    * @param {String} value
@@ -107,4 +114,7 @@ module.exports = GelatoComponent.extend({
     this.vocablists.reset();
     this.render();
   }
+
 });
+
+module.exports = VocablistsPublishedTableComponents;

@@ -1,24 +1,20 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class VocablistSideBar
+ * @class VocablistsSidebarComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-  },
+const VocablistsSidebarComponent = GelatoComponent.extend({
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @method render
-   * @returns {VocablistSideBar}
+   * @returns {VocablistsSidebarComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -33,4 +29,7 @@ module.exports = GelatoComponent.extend({
       });
     }
   }
+
 });
+
+module.exports = VocablistsSidebarComponent;

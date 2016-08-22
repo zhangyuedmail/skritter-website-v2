@@ -1,13 +1,29 @@
-var GelatoComponent = require('gelato/component');
-var Vocablists = require('collections/vocablists');
-var VocablistSettings = require('dialogs/vocablist-settings/view');
-var VocablistRemoveDialog = require('dialogs/vocablist-remove/view');
+const GelatoComponent = require('gelato/component');
+const VocablistSettings = require('dialogs/vocablist-settings/view');
+const VocablistRemoveDialog = require('dialogs/vocablist-remove/view');
 
 /**
- * @class VocablistReviewTable
+ * @class VocablistsAddingTableComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const VocablistsAddingTableComponent = GelatoComponent.extend({
+
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click .stop-adding-link': 'handleClickStopAddingLink',
+    'click .list-settings-span': 'handleClickListSettingsSpan',
+    'click .remove-list-span': 'handleClickRemoveListSpan'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./VocablistsAddingTable'),
+
   /**
    * @method initialize
    * @constructor
@@ -16,56 +32,53 @@ module.exports = GelatoComponent.extend({
     this.vocablists = options.vocablists;
     this.listenTo(this.vocablists, 'state', this.render);
   },
-  /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'click .restart-adding-link': 'handleClickRestartAddingLink',
-    'click .list-settings-span': 'handleClickListSettingsSpan',
-    'click .remove-list-span': 'handleClickRemoveListSpan'
-  },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {VocablistTable}
+   * @returns {VocablistsAddingTableComponent}
    */
   render: function() {
     this.renderTemplate();
+
     return this;
   },
+
   /**
-   * @method handleClickRestartAddingLink
+   * @method handleClickStopAddingLink
    * @param {Event} event
    */
-  handleClickRestartAddingLink: function(event) {
+  handleClickStopAddingLink: function(event) {
+    event.preventDefault();
     var listID = $(event.target).closest('.row').data('list-id');
     var list = this.vocablists.get(listID.toString());
-    list.save({'studyingMode': 'adding'}, {patch: true});
+    list.save({'studyingMode': 'reviewing'}, {patch: true});
     this.render();
   },
+
   /**
    * @method handleClickListSettingsSpan
    * @param {Event} event
    */
   handleClickListSettingsSpan: function(event) {
+    event.preventDefault();
     var listID = $(event.target).closest('.row').data('list-id');
     var list = this.vocablists.get(listID.toString());
     this.dialog = new VocablistSettings({vocablist: list});
     this.dialog.render().open();
   },
+
   /**
    * @method handleClickRemoveListSpan
    * @param {Event} event
    */
   handleClickRemoveListSpan: function(event) {
+    event.preventDefault();
     var listID = $(event.target).closest('.row').data('list-id');
     var list = this.vocablists.get(listID.toString());
     this.dialog = new VocablistRemoveDialog({vocablist: list});
     this.dialog.render().open();
   }
+
 });
+
+module.exports = VocablistsAddingTableComponent;

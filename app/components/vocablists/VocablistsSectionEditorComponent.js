@@ -1,21 +1,10 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class VocablistsListEditorSections
+ * @class VocablistsSectionEditorComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
-  /**
-   * @method initialize
-   * @param {Object} options
-   * @constructor
-   */
-  initialize: function(options) {
-    this.editing = false;
-    this.vocablist = options.vocablist;
-    this.listenTo(this.vocablist, 'change:sections', this.render);
-    this.listenTo(this.vocablistSection, 'change:vocabs', this.render);
-  },
+const VocablistsSectionEditorComponent = GelatoComponent.extend({
 
   /**
    * @property events
@@ -31,11 +20,23 @@ module.exports = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./VocablistsSectionEditor'),
+
+  /**
+   * @method initialize
+   * @param {Object} options
+   * @constructor
+   */
+  initialize: function(options) {
+    this.editing = false;
+    this.vocablist = options.vocablist;
+    this.listenTo(this.vocablist, 'change:sections', this.render);
+    this.listenTo(this.vocablistSection, 'change:vocabs', this.render);
+  },
 
   /**
    * @method render
-   * @returns {VocablistsListEditorSections}
+   * @returns {VocablistsSectionEditorComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -99,4 +100,7 @@ module.exports = GelatoComponent.extend({
         section.name = name;
       }).bind(this));
   }
+
 });
+
+module.exports = VocablistsSectionEditorComponent;

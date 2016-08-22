@@ -1,4 +1,4 @@
-@import "../../../styles/_variables";
+@import "../../styles/_variables";
 
 gelato-component[data-name='vocablists-mine-table'] {
 
@@ -21,6 +21,10 @@ gelato-component[data-name='vocablists-mine-table'] {
       cursor: pointer;
       color: $grey9;
     }
+  }
+
+  #vocablist-table {
+    margin-bottom: 25px;
   }
 
   .row {

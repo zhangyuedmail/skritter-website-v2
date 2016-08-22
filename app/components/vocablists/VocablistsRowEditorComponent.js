@@ -1,14 +1,31 @@
-var GelatoComponent = require('gelato/component');
-
-var Vocab = require('models/vocab');
-var Vocabs = require('collections/vocabs');
-var VocabCreatorDialog = require('dialogs1/vocab-creator/view');
+const GelatoComponent = require('gelato/component');
+const Vocabs = require('collections/VocabCollection');
+const VocabCreatorDialog = require('dialogs1/vocab-creator/view');
 
 /**
- * @class VocablistsListEditorRows
+ * @class VocablistsRowEditorComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const VocablistsRowEditorComponent = GelatoComponent.extend({
+
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click .add-entry': 'handleClickAddEntry',
+    'click .remove-row': 'handleClickRemoveRow',
+    'click .result-row': 'handleClickResultRow',
+    'click .show-results': 'handleClickShowResults',
+    'click .study-writing': 'handleClickStudyWriting'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./VocablistsRowEditor'),
+
   /**
    * @method initialize
    * @param {Object} options
@@ -23,30 +40,16 @@ module.exports = GelatoComponent.extend({
     this.vocablistSection = options.vocablistSection;
     this.listenTo(this.vocablistSection, 'state', this.render);
   },
-  /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'click .add-entry': 'handleClickAddEntry',
-    'click .remove-row': 'handleClickRemoveRow',
-    'click .result-row': 'handleClickResultRow',
-    'click .show-results': 'handleClickShowResults',
-    'click .study-writing': 'handleClickStudyWriting'
-  },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {VocablistsListEditorRows}
+   * @returns {VocablistsRowEditorComponent}
    */
   render: function() {
     this.renderTemplate();
     this.$('#vocablist-section-rows').sortable({update: _.bind(this.handleUpdateSort, this)});
   },
+
   /**
    * @method addRow
    * @param {String} query
@@ -112,6 +115,7 @@ module.exports = GelatoComponent.extend({
     });
     this.render();
   },
+
   /**
    * @method discardChanges
    */
@@ -119,6 +123,7 @@ module.exports = GelatoComponent.extend({
     this.rows = _.clone(this.saved);
     this.render();
   },
+
   /**
    * Returns a filtered list of verified rows with vocabIds.
    *
@@ -133,6 +138,7 @@ module.exports = GelatoComponent.extend({
       }
     );
   },
+
   /**
    * @method handleClickAddEntry
    * @param {Event} event
@@ -153,6 +159,7 @@ module.exports = GelatoComponent.extend({
       }
     );
   },
+
   /**
    * @method handleClickRemoveRow
    * @param {Event} event
@@ -163,6 +170,7 @@ module.exports = GelatoComponent.extend({
     this.removeRow($row.data('index'));
     this.render();
   },
+
   /**
    * @method handleClickResultRow
    * @param {Event} event
@@ -178,6 +186,7 @@ module.exports = GelatoComponent.extend({
     row.tradVocabId = result.vocabs[1].id;
     this.render();
   },
+
   /**
    * @method handleClickShowResults
    * @param {Event} event
@@ -192,6 +201,7 @@ module.exports = GelatoComponent.extend({
       $resultRows.addClass('hidden');
     }
   },
+
   /**
    * @method handleClickStudyWriting
    * @param {Event} event
@@ -204,6 +214,7 @@ module.exports = GelatoComponent.extend({
     row.studyWriting = $toggle.hasClass('active') ? false : true;
     this.render();
   },
+
   /**
    * @method handleUpdateSort
    * @param {Event} event
@@ -220,6 +231,7 @@ module.exports = GelatoComponent.extend({
     this.rows = sortedRows;
     this.render();
   },
+
   /**
    * @method loadRows
    * @param {Object} [options]
@@ -274,6 +286,7 @@ module.exports = GelatoComponent.extend({
       }, this)
     );
   },
+
   /**
    * @method removeRow
    * @param {Number} index
@@ -282,4 +295,7 @@ module.exports = GelatoComponent.extend({
   removeRow: function(index) {
     return this.rows.splice(index, 1);
   }
+
 });
+
+module.exports = VocablistsRowEditorComponent;
