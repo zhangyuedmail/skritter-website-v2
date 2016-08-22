@@ -1,7 +1,7 @@
 var GelatoPage = require('gelato/page');
 var Items = require('collections/items');
 var Vocabs = require('collections/vocabs');
-var WordsSidebar = require('components/words/sidebar/view');
+var WordsSidebar = require('components/words/WordsSidebarComponent');
 var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 var VocabActionMixin = require('mixins/vocab-action');
 
@@ -10,6 +10,33 @@ var VocabActionMixin = require('mixins/vocab-action');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click .vocab-row': 'handleClickVocabRow',
+    'click #load-more-btn': 'handleClickLoadMoreButton',
+    'click #next-sort-link': 'handleClickNextSortLink',
+    'click #previous-sort-link': 'handleClickPreviousSortLink',
+    'change input[type="checkbox"]': 'handleChangeCheckbox',
+    'change #action-select': 'handleChangeActionSelect',
+    'change #word-search-input': 'handleChangeWordSearchInput'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./WordsAll'),
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'All Words - Skritter',
+
   /**
    * @method initialize
    * @constructor
@@ -27,20 +54,6 @@ module.exports = GelatoPage.extend({
     this.searchString = '';
     this.initAllCollections();
     this.fetchItems();
-  },
-
-  /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'click .vocab-row': 'handleClickVocabRow',
-    'click #load-more-btn': 'handleClickLoadMoreButton',
-    'click #next-sort-link': 'handleClickNextSortLink',
-    'click #previous-sort-link': 'handleClickPreviousSortLink',
-    'change input[type="checkbox"]': 'handleChangeCheckbox',
-    'change #action-select': 'handleChangeActionSelect',
-    'change #word-search-input': 'handleChangeWordSearchInput'
   },
 
   /**
@@ -62,18 +75,6 @@ module.exports = GelatoPage.extend({
 
     return this;
   },
-
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'All Words - Skritter',
 
   /**
    * @method fetchItems

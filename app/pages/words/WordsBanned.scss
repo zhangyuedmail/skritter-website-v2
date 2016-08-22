@@ -1,6 +1,6 @@
-@import "../../../styles/_variables";
+@import "../../styles/_variables";
 
-gelato-page[data-name='words-starred'] {
+gelato-page[data-name='words-banned'] {
 
   background: $background-primary;
   padding-top: 75px;
@@ -13,11 +13,7 @@ gelato-page[data-name='words-starred'] {
     margin-top: 30px;
   }
 
-  .glyphicon-star {
-    color: $green5;
-  }
-
-  .star-td {
+  .checkbox-td {
     width: 10%;
   }
 
@@ -37,26 +33,17 @@ gelato-page[data-name='words-starred'] {
     width: 50%;
   }
 
-  .date-starred-td {
+  .date-changed-td {
     width: 20%;
+  }
+
+  .vocab-row {
+    cursor: pointer;
   }
 
   #load-more-btn {
     margin: 0 auto;
     max-width: 300px;
-  }
-
-  .no-date {
-    color: $grey2;
-    margin-left: 30px;
-  }
-
-  .not-starred {
-    color: $grey3;
-  }
-
-  .vocab-row {
-    cursor: pointer;
   }
 
 }

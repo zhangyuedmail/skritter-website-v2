@@ -1,7 +1,6 @@
 var GelatoPage = require('gelato/page');
-var Vocabs = require('collections/vocabs');
-var WordsSidebar = require('components/words/sidebar/view');
-var ProgressDialog = require('dialogs/progress/view');
+var Vocabs = require('collections/VocabCollection');
+var WordsSidebar = require('components/words/WordsSidebarComponent');
 var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 var VocabActionMixin = require('mixins/vocab-action');
 
@@ -10,17 +9,6 @@ var VocabActionMixin = require('mixins/vocab-action');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    this.sidebar = new WordsSidebar();
-    this.bannedVocabs = new Vocabs();
-    this.limit = 20;
-    this.listenTo(this.bannedVocabs, 'sync', this.renderTable);
-    this.fetchBannedVocabs();
-  },
 
   /**
    * @property events
@@ -31,6 +19,30 @@ module.exports = GelatoPage.extend({
     'change input[type="checkbox"]': 'handleChangeCheckbox',
     'click #load-more-btn': 'handleClickLoadMoreButton',
     'click #unban-vocabs-btn': 'handleClickUnbanVocabsButton'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./WordsBanned'),
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Starred Words - Skritter',
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.sidebar = new WordsSidebar();
+    this.bannedVocabs = new Vocabs();
+    this.limit = 20;
+    this.listenTo(this.bannedVocabs, 'sync', this.renderTable);
+    this.fetchBannedVocabs();
   },
 
   /**
@@ -52,18 +64,6 @@ module.exports = GelatoPage.extend({
 
     return this;
   },
-
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Starred Words - Skritter',
 
   /**
    * @method fetchItems

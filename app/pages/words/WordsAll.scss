@@ -1,4 +1,4 @@
-@import "../../../styles/_variables";
+@import "../../styles/_variables";
 
 gelato-page[data-name='words-all'] {
 
@@ -51,7 +51,7 @@ gelato-page[data-name='words-all'] {
   .writing-td {
     width: 10%;
   }
-  
+
   .vocab-row {
     cursor: pointer;
   }

@@ -1,6 +1,6 @@
-@import "../../../styles/_variables";
+@import "../../styles/_variables";
 
-gelato-page[data-name='words-banned'] {
+gelato-page[data-name='words-mnemonics'] {
 
   background: $background-primary;
   padding-top: 75px;
@@ -29,11 +29,11 @@ gelato-page[data-name='words-banned'] {
     width: 10%;
   }
 
-  .definition-td {
+  .mnemonic-td {
     width: 50%;
   }
 
-  .date-changed-td {
+  .edited-td {
     width: 20%;
   }
 

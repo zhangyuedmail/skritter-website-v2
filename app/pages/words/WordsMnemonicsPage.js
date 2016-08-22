@@ -1,6 +1,6 @@
 var GelatoPage = require('gelato/page');
-var Vocabs = require('collections/vocabs');
-var WordsSidebar = require('components/words/sidebar/view');
+var Vocabs = require('collections/VocabCollection');
+var WordsSidebar = require('components/words/WordsSidebarComponent');
 var VocabActionMixin = require('mixins/vocab-action');
 var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 
@@ -9,6 +9,30 @@ var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click .vocab-row': 'handleClickVocabRow',
+    'click #load-more-btn': 'handleClickLoadMoreButton',
+    'change input[type="checkbox"]': 'handleChangeCheckbox',
+    'click #delete-mnemonics-btn': 'handleClickDeleteMnemonicsButton'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./WordsMnemonics'),
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Mnemonics - Skritter',
+
   /**
    * @method initialize
    * @constructor
@@ -20,17 +44,6 @@ module.exports = GelatoPage.extend({
 
     this.listenTo(this.mnemonicVocabs, 'state', this.renderTable);
     this.fetchMnemonics();
-  },
-
-  /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'click .vocab-row': 'handleClickVocabRow',
-    'click #load-more-btn': 'handleClickLoadMoreButton',
-    'change input[type="checkbox"]': 'handleChangeCheckbox',
-    'click #delete-mnemonics-btn': 'handleClickDeleteMnemonicsButton'
   },
 
   /**
@@ -52,18 +65,6 @@ module.exports = GelatoPage.extend({
 
     return this;
   },
-
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Mnemonics - Skritter',
 
   /**
    * @method fetchItems

@@ -1,6 +1,6 @@
 var GelatoPage = require('gelato/page');
-var Vocabs = require('collections/vocabs');
-var WordsSidebar = require('components/words/sidebar/view');
+var Vocabs = require('collections/VocabCollection');
+var WordsSidebar = require('components/words/WordsSidebarComponent');
 var ProgressDialog = require('dialogs/progress/view');
 var VocabActionMixin = require('mixins/vocab-action');
 var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
@@ -10,6 +10,30 @@ var ConfirmDialog = require('dialogs1/confirm-generic/view');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+  
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click .vocab-row': 'handleClickVocabRow',
+    'click #load-more-btn': 'handleClickLoadMoreButton',
+    'click #remove-all-stars-link': 'fetchAllStarredVocabsThenRemoveThem',
+    'click .star-td a': 'handleClickStarLink'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./WordsStarred'),
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: app.locale('pages.starredWords.title'),
+
   /**
    * @method initialize
    * @constructor
@@ -31,17 +55,6 @@ module.exports = GelatoPage.extend({
   },
 
   /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'click .vocab-row': 'handleClickVocabRow',
-    'click #load-more-btn': 'handleClickLoadMoreButton',
-    'click #remove-all-stars-link': 'fetchAllStarredVocabsThenRemoveThem',
-    'click .star-td a': 'handleClickStarLink'
-  },
-
-  /**
    * @method remove
    */
   remove: function() {
@@ -60,18 +73,6 @@ module.exports = GelatoPage.extend({
 
     return this;
   },
-
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: app.locale('pages.starredWords.title'),
 
   /**
    * @method fetchAllStarredVocabsThenRemoveThem
