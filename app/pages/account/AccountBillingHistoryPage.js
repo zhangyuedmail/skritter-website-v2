@@ -1,13 +1,33 @@
-var GelatoPage = require('gelato/page');
-
-var AccountSidebar = require('components/account/sidebar/view');
-var Payments = require('collections/payments');
+const GelatoPage = require('gelato/page');
+const AccountSidebar = require('components/account/AccountSidebarComponent');
+const Payments = require('collections/PaymentCollection');
 
 /**
- * @class AccountBillingHistory
+ * @class AccountBillingHistoryPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const AccountBillingHistoryPage = GelatoPage.extend({
+
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click #load-more-btn': 'handleClickLoadMoreButton'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./AccountBillingHistory'),
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Billing History - Account - Skritter',
+
   /**
    * @method initialize
    * @constructor
@@ -22,32 +42,17 @@ module.exports = GelatoPage.extend({
     this.listenTo(this.payments, 'sync', this.render);
     this.fetchPayments();
   },
-  /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'click #load-more-btn': 'handleClickLoadMoreButton'
-  },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Billing History - Account - Skritter',
+
   /**
    * @method render
-   * @returns {AccountBillingHistory}
+   * @returns {AccountBillingHistoryPage}
    */
   render: function() {
     this.renderTemplate();
     this.sidebar.setElement('#sidebar-container').render();
     return this;
   },
+
   /**
    * @method fetchPayments
    * @param {string} cursor
@@ -61,6 +66,7 @@ module.exports = GelatoPage.extend({
       remove: false
     });
   },
+
   /**
    * @method handleClickLoadMoreButton
    */
@@ -68,12 +74,16 @@ module.exports = GelatoPage.extend({
     this.fetchPayments(this.payments.cursor);
     this.renderTable();
   },
+
   /**
    * @method remove
-   * @returns {AccountBillingHistory}
+   * @returns {AccountBillingHistoryPage}
    */
   remove: function() {
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
   }
+
 });
+
+module.exports = AccountBillingHistoryPage;

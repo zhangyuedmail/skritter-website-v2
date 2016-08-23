@@ -1,4 +1,4 @@
-@import "../../../../styles/_variables";
+@import "../../styles/_variables";
 
 gelato-page[data-name='account-settings-general'] {
   background: $background-primary;
@@ -63,7 +63,7 @@ gelato-page[data-name='account-settings-general'] {
       height: 100px;
       width: 100px;
     }
-    
+
     #reset-all-data {
       position: absolute;
       right: 50px;

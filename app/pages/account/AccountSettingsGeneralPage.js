@@ -1,25 +1,15 @@
-var GelatoPage = require('gelato/page');
-var AccountSidebar = require('components/account/sidebar/view');
-var ChangePasswordDialog = require('dialogs1/change-password/view');
-var ResetAllDataDialog = require('dialogs1/reset-all-data/view');
+const GelatoPage = require('gelato/page');
+const AccountSidebar = require('components/account/AccountSidebarComponent');
+
+const ChangePasswordDialog = require('dialogs1/change-password/view');
+const ResetAllDataDialog = require('dialogs1/reset-all-data/view');
 
 /**
- * @class AccountSettingsGeneral
+ * @class AccountSettingsGeneralPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    this.countries = require('data/country-codes');
-    this.dialog = null;
-    this.timezones = require('data/country-timezones');
-    this.sidebar = new AccountSidebar();
-    this.listenTo(app.user, 'state', this.render);
-    app.user.fetch();
-  },
+const AccountSettingsGeneralPage = GelatoPage.extend({
+
   /**
    * @property events
    * @type {Object}
@@ -32,25 +22,42 @@ module.exports = GelatoPage.extend({
     'click #change-avatar': 'handleClickChangeAvatar',
     'click #reset-all-data': 'handleClickResetAllData'
   },
+
   /**
    * @property title
    * @type {String}
    */
   title: app.locale('pages.accountGeneral.title'),
+
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./AccountSettingsGeneral'),
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.countries = require('data/country-codes');
+    this.dialog = null;
+    this.timezones = require('data/country-timezones');
+    this.sidebar = new AccountSidebar();
+    this.listenTo(app.user, 'state', this.render);
+    app.user.fetch();
+  },
+
   /**
    * @method render
-   * @returns {AccountSettingsGeneral}
+   * @returns {AccountSettingsGeneralPage}
    */
   render: function() {
     this.renderTemplate();
     this.sidebar.setElement('#sidebar-container').render();
     return this;
   },
+
   /**
    * @method getSelectedCountryCode
    * @returns {String}
@@ -58,6 +65,7 @@ module.exports = GelatoPage.extend({
   getSelectedCountryCode: function() {
     return this.$('#field-country :selected').val() || app.user.get('country');
   },
+
   /**
    * @method handleChangeAvatarUploadInput
    * @param {Event} event
@@ -89,6 +97,7 @@ module.exports = GelatoPage.extend({
       timezone: this.$('#field-timezone :selected').val()
     }).save();
   },
+
   /**
    * @method handleClickChangeAvatar
    * @param {Event} event
@@ -97,6 +106,7 @@ module.exports = GelatoPage.extend({
     event.preventDefault();
     this.$('#avatar-upload-input').trigger('click');
   },
+
   /**
    * @method handleClickChangePassword
    * @param {Event} event
@@ -107,6 +117,7 @@ module.exports = GelatoPage.extend({
     this.dialog.render();
     this.dialog.open();
   },
+
   /**
    * @method handleClickResetAllData
    * @param {Event} event
@@ -117,6 +128,7 @@ module.exports = GelatoPage.extend({
     this.dialog.render();
     this.dialog.open();
   },
+
   /**
    * @method handleSelectCountry
    * @param event
@@ -125,12 +137,16 @@ module.exports = GelatoPage.extend({
     event.preventDefault();
     this.render();
   },
+
   /**
    * @method remove
-   * @returns {AccountSettingsGeneral}
+   * @returns {AccountSettingsGeneralPage}
    */
   remove: function() {
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
   }
+
 });
+
+module.exports = AccountSettingsGeneralPage;

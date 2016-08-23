@@ -1,18 +1,18 @@
-var GelatoPage = require('gelato/page');
+const GelatoPage = require('gelato/page');
+const AccountSidebar = require('components/account/AccountSidebarComponent');
+const Coupon = require('models/CouponModel');
+const Subscription = require('models/SubscriptionModel');
+const StripeLoader = require('utils/stripe-loader');
 
-var AccountSidebar = require('components/account/sidebar/view');
-var Coupon = require('models/coupon');
-var Subscription = require('models/subscription');
-var StripeLoader = require('utils/stripe-loader');
-
-var CancelSubscriptionDialog = require('dialogs/cancel-subscription/view');
-var VacationDialog = require('dialogs/vacation/view');
+const CancelSubscriptionDialog = require('dialogs/cancel-subscription/view');
+const VacationDialog = require('dialogs/vacation/view');
 
 /**
- * @class AccountBillingSubscription
+ * @class AccountBillingSubscriptionPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const AccountBillingSubscriptionPage = GelatoPage.extend({
+
   /**
    * @property events
    * @type {Object}
@@ -31,18 +31,6 @@ module.exports = GelatoPage.extend({
   },
 
   /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
-
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Billing Subscription - Account - Skritter',
-
-  /**
    * @property paypalPlans
    * @type {Array}
    */
@@ -56,6 +44,18 @@ module.exports = GelatoPage.extend({
       fullName: 'Year Plan : $99.99 USD - yearly'
     }
   ],
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./AccountBillingSubscription'),
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Billing Subscription - Account - Skritter',
 
   /**
    * @method initialize
@@ -77,7 +77,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method render
-   * @returns {AccountBillingSubscription}
+   * @returns {AccountBillingSubscriptionPage}
    */
   render: function() {
     this.renderTemplate();
@@ -486,4 +486,7 @@ module.exports = GelatoPage.extend({
     button.find('span').toggleClass('hide', disabled);
     button.find('i').toggleClass('hide', !disabled);
   }
+
 });
+
+module.exports = AccountBillingSubscriptionPage;

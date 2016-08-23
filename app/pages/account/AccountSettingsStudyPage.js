@@ -1,12 +1,35 @@
-var GelatoPage = require('gelato/page');
-var AccountSidebar = require('components/account/sidebar/view');
-var ResetVocablistPositionDialog = require('dialogs1/reset-vocablist-position/view');
+const GelatoPage = require('gelato/page');
+const AccountSidebar = require('components/account/AccountSidebarComponent');
+
+const ResetVocablistPositionDialog = require('dialogs1/reset-vocablist-position/view');
 
 /**
- * @class AccountSettingsStudy
+ * @class AccountSettingsStudyPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const AccountSettingsStudyPage = GelatoPage.extend({
+
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'change #field-target-language': 'handleChangeTargetLanguage',
+    'click #button-save': 'handleClickButtonSave'
+  },
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Study Settings - Skritter',
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./AccountSettingsStudy'),
+
   /**
    * @method initialize
    * @constructor
@@ -17,33 +40,17 @@ module.exports = GelatoPage.extend({
     this.listenTo(app.user, 'state', this.render);
     app.user.fetch();
   },
-  /**
-   * @property events
-   * @type {Object}
-   */
-  events: {
-    'change #field-target-language': 'handleChangeTargetLanguage',
-    'click #button-save': 'handleClickButtonSave'
-  },
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Study Settings - Skritter',
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {AccountSettingsStudy}
+   * @returns {AccountSettingsStudyPage}
    */
   render: function() {
     this.renderTemplate();
     this.sidebar.setElement('#sidebar-container').render();
     return this;
   },
+
   /**
    * @method getSelectedParts
    * @returns {Array}
@@ -55,6 +62,7 @@ module.exports = GelatoPage.extend({
     });
     return parts;
   },
+
   /**
    * @method handleChangeTargetLanguage
    * @param {Event} event
@@ -64,6 +72,7 @@ module.exports = GelatoPage.extend({
     app.user.set('targetLang', this.$('#field-target-language').val());
     this.render();
   },
+
   /**
    * @method handleClickButtonSave
    * @param {Event} event
@@ -97,12 +106,16 @@ module.exports = GelatoPage.extend({
     }
     app.user.save();
   },
+
   /**
    * @method remove
-   * @returns {AccountSettingsStudy}
+   * @returns {AccountSettingsStudyPage}
    */
   remove: function() {
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
   }
+
 });
+
+module.exports = AccountSettingsStudyPage;

@@ -1,9 +1,11 @@
-var GelatoPage = require('gelato/page');
+const GelatoPage = require('gelato/page');
+
 /**
- * @class AccountSetup
+ * @class AccountSetupPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const AccountSetupPage = GelatoPage.extend({
+
   /**
    * @property events
    * @type Object
@@ -33,7 +35,7 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./AccountSetup'),
 
   /**
    * @property title
@@ -41,6 +43,10 @@ module.exports = GelatoPage.extend({
    */
   title: app.locale('pages.accountSetup.title'),
 
+  /**
+   * @property showFooter
+   * @type {Boolean}
+   */
   showFooter: false,
 
   /**
@@ -54,7 +60,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method render
-   * @returns {Scratchpad}
+   * @returns {AccountSetupPage}
    */
   render: function() {
     this.renderTemplate();
@@ -191,4 +197,7 @@ module.exports = GelatoPage.extend({
 
     return null;
   }
+
 });
+
+module.exports = AccountSetupPage;
