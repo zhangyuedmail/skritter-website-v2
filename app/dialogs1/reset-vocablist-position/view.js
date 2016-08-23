@@ -1,5 +1,5 @@
 var GelatoDialog = require('gelato/dialog');
-var Vocablists = require('collections/vocablists');
+var Vocablists = require('collections/VocablistCollection');
 
 /**
  * @class ResetVocablistPositionDialog

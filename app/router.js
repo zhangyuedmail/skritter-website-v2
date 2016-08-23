@@ -143,8 +143,9 @@ module.exports = Router.extend({
    */
   navigateAccountBillingSubscription: function() {
     if (app.user.isLoggedIn()) {
+      console.log('navi');
       this.navigate('account/billing/subscription');
-      this.go('pages/account/AccountBillingSubscription');
+      this.go('pages/account/AccountBillingSubscriptionPage');
     } else {
       this.navigateLogin();
     }

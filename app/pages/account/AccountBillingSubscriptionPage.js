@@ -63,15 +63,18 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
    */
   initialize: function() {
     StripeLoader.load();
+
     this.coupon = new Coupon({code: app.getStoredCouponCode() || ''});
     this._views['sidebar'] = new AccountSidebar();
     this.subscription = new Subscription({id: app.user.id});
+
     this.listenTo(this.subscription, 'state', this.render);
+    this.listenTo(this.coupon, 'state', this.render);
     this.listenTo(this.coupon, 'sync', function(model, response) {
       this.subscription.set(response.Subscription);
       this.coupon.unset('code');
     });
-    this.listenTo(this.coupon, 'state', this.render);
+
     this.subscription.fetch();
   },
 
