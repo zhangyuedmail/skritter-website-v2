@@ -1,9 +1,9 @@
-var GelatoPage = require('gelato/page');
-var DashboardGoal = require('components/dashboard/status/view');
-var DashboardMonth = require('components/dashboard/month/view');
-var DashboardQueue = require('components/dashboard/queue/view');
-var DashboardTotal = require('components/dashboard/total/view');
-var ExpiredNotification = require('components/account/expired-notification/view');
+const GelatoPage = require('gelato/page');
+const DashboardGoal = require('components/dashboard/DashboardStatusComponent');
+const DashboardMonth = require('components/dashboard/DashboardMonthComponent');
+const DashboardQueue = require('components/dashboard/DashboardQueueComponent');
+const DashboardTotal = require('components/dashboard/DashboardTotalComponent');
+const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 
 /**
  * A page that shows a summary of the user's review count due, stats, and lists
@@ -11,7 +11,8 @@ var ExpiredNotification = require('components/account/expired-notification/view'
  * @class Dashboard
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const DashboardPage = GelatoPage.extend({
+
   /**
    * @property title
    * @type {String}
@@ -22,7 +23,7 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./Dashboard'),
 
   /**
    * @method initialize
@@ -54,3 +55,5 @@ module.exports = GelatoPage.extend({
     return this;
   }
 });
+
+module.exports = DashboardPage;

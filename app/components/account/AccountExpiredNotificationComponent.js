@@ -20,7 +20,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./ExpiredNotification'),
+  template: require('./AccountExpiredNotification'),
 
   /**
    * @method render
