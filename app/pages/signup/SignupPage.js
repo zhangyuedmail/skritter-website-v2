@@ -435,8 +435,8 @@ module.exports = GelatoPage.extend({
         self.createUser(formData, callback);
       }
     ], function(error) {
+      ScreenLoader.hide();
       if (error) {
-        ScreenLoader.hide();
         self._handleSubmittedProcessError(error);
       } else {
         self._handleSubmittedProcessSuccess();
