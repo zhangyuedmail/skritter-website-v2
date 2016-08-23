@@ -1,12 +1,23 @@
-var GelatoPage = require('gelato/page');
-var AdminPayments = require('collections/admin-payments');
-var config = require('config');
+const GelatoPage = require('gelato/page');
+const AdminPayments = require('collections/AdminPaymentCollection');
 
 /**
- * @class Admin
+ * @class AdminPage
  * @extends {GelatoPage}
  */
-var Admin = GelatoPage.extend({
+const AdminPage = GelatoPage.extend({
+
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Admin - Skritter',
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./Admin'),
+
   /**
    * @method initialize
    * @constructor
@@ -18,19 +29,10 @@ var Admin = GelatoPage.extend({
     this.listenTo(this.payments, 'state', this.render);
     this.loadSubscriptions();
   },
-  /**
-   * @property title
-   * @type {String}
-   */
-  title: 'Admin - Skritter',
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {Admin}
+   * @returns {AdminPage}
    */
   render: function() {
     this.renderTemplate();
@@ -47,13 +49,15 @@ var Admin = GelatoPage.extend({
     );
     return this;
   },
+
   /**
    * @method remove
-   * @returns {Admin}
+   * @returns {AdminPage}
    */
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
   },
+
   /**
    * @method handleChangeDate
    * @params {String} start
@@ -64,9 +68,10 @@ var Admin = GelatoPage.extend({
     this.dateStart = start;
     this.loadSubscriptions();
   },
+
   /**
    * @method loadSubscriptions
-   * @returns {Admin}
+   * @returns {AdminPage}
    */
   loadSubscriptions: function() {
     this.payments.fetch({
@@ -78,6 +83,7 @@ var Admin = GelatoPage.extend({
     });
     return this;
   }
+
 });
 
-module.exports = Admin;
+module.exports = AdminPage;

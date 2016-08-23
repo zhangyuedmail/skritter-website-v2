@@ -1,10 +1,10 @@
-var GelatoPage = require('gelato/page');
+const GelatoPage = require('gelato/page');
 
 /**
- * @class About
+ * @class AboutPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const AboutPage = GelatoPage.extend({
 
   /**
    * HTML Title text
@@ -16,11 +16,11 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./About'),
 
   /**
    * @method render
-   * @returns {About}
+   * @returns {AboutPage}
    */
   render: function() {
     this.renderTemplate();
@@ -38,4 +38,7 @@ module.exports = GelatoPage.extend({
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
   }
+
 });
+
+module.exports = AboutPage;

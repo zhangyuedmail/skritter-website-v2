@@ -1,10 +1,11 @@
-var GelatoPage = require('gelato/page');
+const GelatoPage = require('gelato/page');
 
 /**
- * @class Contact
+ * @class ContactPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const ContactPage = GelatoPage.extend({
+
   /**
    * @property events
    * @type Object
@@ -12,19 +13,22 @@ module.exports = GelatoPage.extend({
   events: {
     'click #contact-submit': 'handleClickContactSubmit'
   },
+
   /**
    * @property title
    * @type {String}
    */
   title: 'Contact - Skritter',
+
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./Contact'),
+
   /**
    * @method render
-   * @returns {Contact}
+   * @returns {ContactPage}
    */
   render: function() {
     this.renderTemplate();
@@ -34,6 +38,7 @@ module.exports = GelatoPage.extend({
 
     return this;
   },
+
   /**
    * @method getFormData
    * @returns {Object}
@@ -45,6 +50,7 @@ module.exports = GelatoPage.extend({
       subject: this.$('#field-topic').val()
     };
   },
+
   /**
    * @method handleClickContactSubmit
    * @param {Event} event
@@ -83,11 +89,15 @@ module.exports = GelatoPage.extend({
       this.enableForm('form');
     });
   },
+
   /**
    * @method remove
-   * @returns {Contact}
+   * @returns {ContactPage}
    */
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
   }
+
 });
+
+module.exports = ContactPage;
