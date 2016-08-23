@@ -1,5 +1,5 @@
 var GelatoComponent = require('gelato/component');
-var Vocabs = require('collections/vocabs');
+var Vocabs = require('collections/VocabCollection');
 
 /**
  * @class AddVocabContent

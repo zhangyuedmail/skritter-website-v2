@@ -1,5 +1,5 @@
 const SkritterModel = require('base/BaseSkritterModel');
-const VocablistHistoryCollection = require('collections/vocablist-history');
+const VocablistHistoryCollection = require('collections/VocablistHistoryCollection');
 
 /**
  * @class VocablistModel

@@ -1,6 +1,6 @@
 var GelatoDialog = require('gelato/dialog');
 var Content = require('./content/view');
-var Vocablists = require('collections/vocablists');
+var Vocablists = require('collections/VocablistCollection');
 
 /**
  * @class AddVocabConfirm

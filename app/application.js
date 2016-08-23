@@ -1,6 +1,6 @@
 var GelatoApplication = require('gelato/application');
 var AddVocabDialog = require('dialogs1/add-vocab/view');
-var User = require('models/user');
+var User = require('models/UserModel');
 var Functions = require('functions');
 var Mixpanel = require('mixpanel');
 var Router = require('router');
