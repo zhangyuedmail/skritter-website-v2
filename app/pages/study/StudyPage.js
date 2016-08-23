@@ -1,8 +1,8 @@
 var GelatoPage = require('gelato/page');
-var Prompt = require('components/study/StudyPromptComponent');
-var Toolbar = require('components/study/StudyToolbarComponent');
+var Prompt = require('components/study/prompt/view');
+var Toolbar = require('components/study/toolbar/view');
 var Recipes = require('components/common/CommonRecipesComponent');
-var Items = require('collections/ItemsModel');
+var Items = require('collections/ItemCollection');
 var Vocablists = require('collections/VocablistCollection');
 
 /**

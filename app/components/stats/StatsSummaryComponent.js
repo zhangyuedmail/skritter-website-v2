@@ -1,6 +1,6 @@
 const GelatoComponent = require('gelato/component');
-const StatsItemsLearnedComponent = require('components/stats/items-learned/view');
-const StatsHeatmapComponent = require('components/stats/heatmap/view');
+const StatsItemsLearnedComponent = require('components/stats/StatsItemsLearnedComponent');
+const StatsHeatmapComponent = require('components/stats/StatsHeatmapComponent');
 
 /**
  * A component that is a composite of graphs which show user study statistics

@@ -1,4 +1,4 @@
-const ChinesePodLabelModel = require('models/chinesepod-label');
+const ChinesePodLabelModel = require('models/ChinesepodLabelModel');
 const BaseSkritterCollection = require('base/BaseSkritterCollection');
 
 /**

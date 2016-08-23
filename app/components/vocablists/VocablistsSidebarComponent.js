@@ -10,7 +10,7 @@ const VocablistsSidebarComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./VocablistsSidebar'),
 
   /**
    * @method render

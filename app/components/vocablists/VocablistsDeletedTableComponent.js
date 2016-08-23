@@ -1,5 +1,5 @@
 const GelatoComponent = require('gelato/component');
-const Vocablists = require('collections/VocablistsCollection');
+const Vocablists = require('collections/VocablistCollection');
 
 /**
  * @class VocablistsDeletedTableComponent

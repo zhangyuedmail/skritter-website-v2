@@ -24,7 +24,7 @@ const StrokeModel = GelatoModel.extend({
     var rune = this.get('rune');
     var targets = [];
     for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
-      var target = new PromptCharacter();
+      var target = new PromptStrokeCollection();
       var targetVariation = variations[a];
       var strokePosition = 0;
       target.position = a;

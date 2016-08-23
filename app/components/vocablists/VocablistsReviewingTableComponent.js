@@ -1,5 +1,5 @@
 const GelatoComponent = require('gelato/component');
-const Vocablists = require('collections/vocablists');
+const Vocablists = require('collections/VocablistCollection');
 const VocablistSettings = require('dialogs/vocablist-settings/view');
 const VocablistRemoveDialog = require('dialogs/vocablist-remove/view');
 
