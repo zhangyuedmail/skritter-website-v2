@@ -64,7 +64,7 @@ exports.config = {
   },
   plugins: {
     babel: {
-      ignore: /^vendor/,
+      ignore: [/^vendor/, 'app/data/*', 'app/utils/*'],
       presets: ['es2015']
     },
     replace: {
