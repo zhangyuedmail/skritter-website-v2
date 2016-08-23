@@ -14,6 +14,7 @@
     "url": "https://www.github.com/skritter/skritter-html5.git"
   },
   "scripts": {
+    "build": "node ./scripts/npm-build",
     "monitor": "node ./scripts/npm-monitor",
     "prune": "node ./scripts/npm-prune",
     "start": "node ./scripts/npm-start",
