@@ -85,7 +85,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method render
-   * @returns {Signup}
+   * @returns {SignupPage}
    */
   render: function() {
     this.renderTemplate();
@@ -275,7 +275,8 @@ module.exports = GelatoPage.extend({
     }
 
     this.$('#signup-email').removeClass('alert-warning');
-
+    this.$('#signup-error-alert').addClass('hidden');
+    
     async.series([
       function(callback) {
         ScreenLoader.show();
@@ -496,6 +497,15 @@ module.exports = GelatoPage.extend({
           break;
         case "This code has been exhausted.":
           errorMsg = app.locale('pages.signup.errorCouponExhausted');
+          break;
+        case "The email entered has already been used.":
+          errorMsg = app.locale('pages.signup.errorSchoolEmailAlreadyUsed');
+          break;
+        case "School validation cannot add time to this account.":
+          errorMsg = app.locale('pages.signup.errorSchoolCantAddTime');
+          break;
+        case "The email entered is not an eligible email.":
+          errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
           break;
         default:
           errorMsg = app.locale('pages.signup.errorDefault');
