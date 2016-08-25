@@ -194,7 +194,7 @@ module.exports = {
       "errorNoCCNmber": "You must enter a credit card number.",
       "errorNoUsername": "You must enter a username.",
       "errorNotSchoolEmail": "The email entered is not an eligible school email.",
-      "errorSchoolCantAddTime": "School validation cannot add time to this account.",
+      "errorSchoolCantAddTime": "School validation cannot add time to this account or the time has already been added.",
       "errorSchoolEmailAlreadyUsed": "A user already exists with that email who has a school subscription.",
       "errorValidationCodeNotEntered": "You must enter a validation code from your school email.",
       "refundPolicy": "Refund Policy",

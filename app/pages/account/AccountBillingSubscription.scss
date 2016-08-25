@@ -32,4 +32,18 @@ gelato-page[data-name='account-billing-subscription'] {
   #policies {
     margin: 40px 0;
   }
+
+  .wrapper {
+    text-align: center;
+    margin: 20px;
+  }
+
+  #validation-error-alert {
+    margin-top: 20px;
+  }
+
+  #validation-email-sent-msg {
+    padding: 20px;
+    margin: 20px 0;
+  }
 }

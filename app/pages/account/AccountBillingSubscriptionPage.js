@@ -27,7 +27,9 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
     'click #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton',
     'click .spoof-button-area button': 'handleClickSpoofButtonAreaButton',
     'click #unsubscribe-btn': 'handleClickUnsubscribeButton',
-    'click #subscribe-paypal-btn': 'handleClickSubscribePaypalButton'
+    'click #subscribe-paypal-btn': 'handleClickSubscribePaypalButton',
+    'click #send-validation-email-btn': 'handleClickValidationEmailButton',
+    'click #update-school-subscription-btn': 'handleClickSubscribeSchoolButton'
   },
 
   /**
@@ -96,6 +98,7 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
     var method = this.$('input[name="payment-method"]:checked').val();
     this.$('.credit-card-form-group').toggleClass('hide', method !== 'stripe');
     this.$('.paypal-form-group').toggleClass('hide', method !== 'paypal');
+    this.$('.school-form-group').toggleClass('hide', method !== 'school');
   },
 
   /**
@@ -300,6 +303,48 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   },
 
   /**
+   * @method handleClickSubscribeSchoolButton
+   */
+  handleClickSubscribeSchoolButton: function() {
+    var self = this;
+    var validationCode = this.$('#signup-validation-code').val().trim();
+    var data = {
+      email: app.user.get('email'),
+      code: validationCode
+    };
+
+    if (!validationCode) {
+      this._displayValidationErrorMessage(app.locale('pages.signup.errorValidationCodeNotEntered'));
+      return;
+    }
+
+    this.$('#update-school-subscription-btn span').addClass('hide');
+    this.$('#update-school-subscription-btn i').removeClass('hide');
+    $.ajax({
+      url: app.getApiUrl() + 'email-validation/use',
+      headers: app.user.session.getHeaders(),
+      method: 'POST',
+      data: data,
+      context: this,
+      success: function(response) {
+        app.mixpanel.track(
+          'Subscribe',
+          {
+            'Method': 'school'
+          }
+        );
+        self.subscription.set(response.Subscription);
+        self.render();
+      },
+      error: function(response) {
+        self._handleValidationError(response);
+        self.$('#update-school-subscription-btn span').removeClass('hide');
+        self.$('#update-school-subscription-btn i').addClass('hide');
+      }
+    });
+  },
+
+  /**
    * @method handleClickSubscribeStripeButton
    */
   handleClickSubscribeStripeButton: function() {
@@ -438,7 +483,7 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   },
 
   /**
-   * @method this.handleClickSubscribeStripeButtonResponse
+   * @method handleClickSubscribeStripeButtonResponse
    */
   handleClickUpdateStripeSubscriptionButtonResponse: function(status, response) {
     if (response.error) {
@@ -472,6 +517,63 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   },
 
   /**
+   * @method handleClickValidationEmailButton
+   */
+  handleClickValidationEmailButton: function() {
+    var self = this;
+    var email = app.user.get('email');
+
+    this.$('#validation-error-alert').addClass('hide');
+
+    this.$('#send-validation-email-btn').addClass('hide');
+    this.$('#sending-validation-email-notice').removeClass('hide');
+
+    async.series([
+      function(callback) {
+        self.sendValidationEmail(email, callback);
+      }
+    ], function(error) {
+      self.$('#send-validation-email-btn').removeClass('hide');
+      self.$('#sending-validation-email-notice').addClass('hide');
+
+      if (error) {
+        self._handleValidationError(error);
+      } else {
+        self.$('#validation-sent-address').text(email);
+        self.$('#validation-email-sent-msg').removeClass('hidden');
+      }
+    });
+  },
+
+  /**
+   * Attempts to send a school validation email to the specified email address
+   * @param {String} email the email address to send to
+   * @param {Function} callback called when the email has been sent
+   */
+  sendValidationEmail: function(email, callback) {
+     var validationUrl = app.getApiUrl() + 'email-validation/send';
+
+    $.ajax({
+      url: validationUrl,
+      method: 'POST',
+      headers: app.user.headers(),
+      data: {
+        email: email
+      },
+      success: function() {
+        if (_.isFunction(callback)) {
+          callback();
+        }
+      },
+      error: function(error) {
+        if (_.isFunction(callback)) {
+          callback(error);
+        }
+      }
+    });
+  },
+
+  /**
    * @method openVacationDialog
    */
   openVacationDialog: function() {
@@ -488,6 +590,39 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
     button.attr('disabled', disabled);
     button.find('span').toggleClass('hide', disabled);
     button.find('i').toggleClass('hide', !disabled);
+  },
+
+  _handleValidationError: function(error) {
+    // For when the error is a jQuery XHR object, we just want the plain error object
+    if (_.isFunction(error.error)) {
+      error = error.responseJSON;
+    }
+
+    var errorMsg = app.locale('pages.signup.errorDefault');
+    if (error.statusCode === 400) {
+      switch(error.message) {
+        case "This code has been exhausted.":
+          errorMsg = app.locale('pages.signup.errorCouponExhausted');
+          break;
+        case "The email entered has already been used.":
+          errorMsg = app.locale('pages.signup.errorSchoolEmailAlreadyUsed');
+          break;
+        case "School validation cannot add time to this account.":
+          errorMsg = app.locale('pages.signup.errorSchoolCantAddTime');
+          break;
+        case "The email entered is not an eligible email.":
+          errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
+          break;
+        default:
+          errorMsg = app.locale('pages.signup.errorDefault');
+      }
+    }
+
+    this._displayValidationErrorMessage(errorMsg);
+  },
+
+  _displayValidationErrorMessage: function(message) {
+    this.$('#validation-error-alert').text(message).removeClass('hide');
   }
 
 });

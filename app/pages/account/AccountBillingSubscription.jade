@@ -183,11 +183,15 @@ gelato-page(data-name='account-billing-subscription')
                       | Credit card
                     label.radio-inline
                       input(type="radio", name="payment-method",
-                      value="paypal", disabled=subscribed === 'stripe')
+                      value="paypal", disabled=subscribed === 'stripe' || subscribed === 'school')
                       span(class=subscribed ? 'text-mutedI' : '') Paypal
+                    label.radio-inline
+                      input(type="radio", name="payment-method",
+                      value="school")
+                      span(class=subscribed ? 'text-mutedI' : '') School subscription
                     if subscribed === 'stripe'
                       .help-block
-                        | Cancel your current subscription in order to subscribe
+                        | Cancel your current subscription first in order to subscribe
                         | through Paypal
 
                 .form-group.form-group-lg.credit-card-form-group
@@ -301,7 +305,28 @@ gelato-page(data-name='account-billing-subscription')
 
                   .col-sm-9
                     #card-error-alert.alert.alert-danger.hide
+                .form-group-form-group-lg.school-form-group.hide
+                  .col-sm-12 If your school has purchased Skritter, you&nbsp;
+                    | can validate your school email address here to get time
+                    | &nbsp;added to your account. Once you have received the validation email,
+                    | copy the code inside into the form below and update your subscription.
+                    .wrapper
+                      #send-validation-email-btn.btn.btn-primary.send-validation-email-btn Send a validation email to your address (#{user.get('email')})
+                      i#sending-validation-email-notice.fa.fa-1x.fa-spinner.fa-pulse.hide
+                      #validation-email-sent-msg.validation-email-sent-msg.hidden.alert-success A validation email has been sent to&nbsp;
+                        span#validation-sent-address
+                        | . Please check your email for the validation code.
+                      #validation-error-alert.alert.alert-danger.hide
+                    label.col-sm-5.control-label(for='signup-validation-code')
 
+                .form-group.form-group-lg.school-form-group.hide
+                  label.control-label.col-sm-3 Validation code
+                  .col-sm-5
+                    input#signup-validation-code.form-control(type='text', placeholder='abc123')
+                  .col-sm-2
+                    button#update-school-subscription-btn.btn.btn-fixed.btn-success
+                      span Update subscription
+                      i.fa.fa-1x.fa-spinner.fa-pulse.hide
 
               else if app.isMobile() && subscribed === 'stripe'
                 //- ON MOBILE, SUBSCRIBED TO STRIPE
