@@ -33,6 +33,8 @@ module.exports = Router.extend({
     'dashboard': 'navigateDashboard',
     'demo': 'navigateDemo',
     'discourse/login': 'navigateDiscourseLogin',
+    'features': 'navigateFeatures',
+    'home': 'navigateHome',
     'institutions': 'navigateInstitutions',
     'legal': 'navigateLegal',
     'login': 'navigateLogin',
@@ -71,7 +73,7 @@ module.exports = Router.extend({
     if (app.user.isLoggedIn()) {
       this.navigateDashboard();
     } else {
-      window.location.href = '/';
+      this.navigateHome();
     }
   },
 
@@ -184,7 +186,7 @@ module.exports = Router.extend({
     }
   },
 
-  /**
+   /**
    * @method navigateAdmin
    */
   navigateAdmin: function() {
@@ -249,6 +251,22 @@ module.exports = Router.extend({
   navigateDiscourseLogin: function() {
     //TODO: redirect to legacy until support is added
     location.href = location.href.toString().replace('https://www.', 'http://legacy.');
+  },
+
+  /**
+   * @method navigateFeatures
+   */
+  navigateFeatures: function() {
+    this.navigate('features');
+    this.go('pages/features/FeaturesPage');
+  },
+
+  /**
+   * @method navigateHome
+   */
+  navigateHome: function() {
+    this.navigate('home');
+    this.go('pages/home/HomePage');
   },
 
   /**
