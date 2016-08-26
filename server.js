@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const cors = require('cors');
 const express = require('express');
+const lodash = require('lodash');
 const loggy = require('loggy');
 const morgan = require('morgan');
 
@@ -23,10 +24,35 @@ if (process.env.DEVELOPMENT) {
   //TODO: production specific logic here
 }
 
+const locale = function(path) {
+  /**
+   * TODO: cleanup locale system
+   * The client probably needs to support cookies so
+   * we can properly detect a language and render it
+   * server side. Right now it's just mirroring the
+   * application code defaulting to English.
+   */
+  return lodash.get(require('./app/locale/en'), path);
+};
+
+app.get(
+  '/',
+  function(req, res) {
+    res.render('home', {app: {locale: locale}});
+  }
+);
+
+app.get(
+  '/features',
+  function(req, res) {
+    res.render('features', {app: {locale: locale}});
+  }
+);
+
 app.get(
   '/*',
   function(req, res) {
-    res.render('index');
+    res.render('app');
   }
 );
 
