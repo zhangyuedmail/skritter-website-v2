@@ -75,7 +75,7 @@ body
             a.btn.btn-lg.btn-danger(href='/demo')= app.locale('pages.home.demoLink')
           .header.text-center= app.locale('pages.home.headerText')
           .row
-            #promo-video
+            iframe#promo-video(width='640', height='360', src='https://www.youtube.com/embed/LafTN34lc_Q', frameborder='0', allowfullscreen)
           .row
             .col-sm-6
               .media
@@ -235,4 +235,7 @@ body
   script.
     if (mixpanel) {
       mixpanel.track('Viewed home page')
+      mixpanel.track_links('#link-apple-store', 'Clicked ios app button');
+      mixpanel.track_links('#link-google-store', 'Clicked android app button');
+      mixpanel.track_links('#promo-video', 'Started home promo video');
     }
