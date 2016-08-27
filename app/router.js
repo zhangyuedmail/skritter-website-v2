@@ -257,16 +257,14 @@ module.exports = Router.extend({
    * @method navigateFeatures
    */
   navigateFeatures: function() {
-    this.navigate('features');
-    this.go('pages/features/FeaturesPage');
+    window.location.replace('/features');
   },
 
   /**
    * @method navigateHome
    */
   navigateHome: function() {
-    this.navigate('home');
-    this.go('pages/home/HomePage');
+    window.location.replace('/');
   },
 
   /**
