@@ -287,7 +287,7 @@ module.exports = Router.extend({
    */
   navigateLogin: function() {
     if (app.user.isLoggedIn()) {
-      this.navigateHome();
+      this.defaultRoute();
     } else {
       this.navigate('login');
       this.go('pages/login/LoginPage');
@@ -302,7 +302,7 @@ module.exports = Router.extend({
     if (app.user.isLoggedIn()) {
       app.user.logout();
     } else {
-      this.navigateHome();
+      this.defaultRoute();
     }
   },
 
@@ -318,7 +318,7 @@ module.exports = Router.extend({
    */
   navigatePasswordReset: function() {
     if (app.user.isLoggedIn()) {
-      this.navigateHome();
+      this.defaultRoute();
     } else {
       this.navigate('password-reset');
       this.go('pages/password-reset/PasswordResetPage');
