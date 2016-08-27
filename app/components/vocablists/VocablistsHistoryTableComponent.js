@@ -10,7 +10,7 @@ const VocablistsHistoryTableComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./VocablistsHistoryTable'),
 
   /**
    * @method initialize
