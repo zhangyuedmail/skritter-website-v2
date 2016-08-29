@@ -2,6 +2,5 @@
 
 const shell = require('shelljs');
 
-shell.rm('-rf', './public');
-shell.exec('brunch build --production', {async: false});
+process.env.NODE_ENV = 'production';
 shell.exec('node ./server.js', {async: false});

@@ -18,10 +18,9 @@ app.use(compression(6));
 app.use(cors());
 app.use(express.static(__dirname + '/public'));
 
-if (process.env.DEVELOPMENT) {
-  app.use(morgan('combined'));
-} else {
-  //TODO: production specific logic here
+switch (app.get('env')) {
+  case 'development':
+    app.use(morgan('combined'));
 }
 
 const locale = function(path) {
