@@ -99,7 +99,7 @@ module.exports = Router.extend({
    * @method handleRoute
    */
   handleRoute: function() {
-    if (window.ga) {
+    if (window.ga && this.page) {
       ga('send', 'pageview', {
         page: document.location.pathname,
         title: this.page.title
