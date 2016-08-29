@@ -185,11 +185,15 @@ module.exports = GelatoPage.extend({
         }
       ],
       function() {
-        if (!hasItems && !hasVocablists) {
+
+        // can guarantee synchronous usage here b/c we just fetched sub above
+        // in the async.parallel chain.
+        var active = app.user.isSubscriptionActive();
+        if (!hasItems && !hasVocablists || !active) {
           self.prompt.render();
           self.prompt.$('#overlay').show();
           ScreenLoader.hide();
-        } else if (!hasItems && hasVocablists) {
+        } else if (!hasItems && hasVocablists && active) {
           ScreenLoader.post('Adding your first words');
           self.items.addItems(
             {
