@@ -47,7 +47,10 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.$('#vocablist-section-rows').sortable({update: _.bind(this.handleUpdateSort, this)});
+
+    if (this.editing) {
+      this.$('#vocablist-section-rows').sortable({update: _.bind(this.handleUpdateSort, this)});
+    }
   },
 
   /**

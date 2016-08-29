@@ -14,6 +14,9 @@ gelato-component(data-name='vocablists-list-editor-rows')
     else
       - classes.push('odd');
 
+    if view.editing
+      - classes.push('editing')
+
     .row(class=classes.join(' '), data-index=index, data-row-id=row.id)
       case row.state
 
