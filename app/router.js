@@ -370,7 +370,7 @@ module.exports = Router.extend({
         //this.go('pages/study-section', {listId: listId, sectionId: sectionId});
         this.go('pages/study/StudyPage');
       } else if (listId) {
-        this.go('pages/study-list/StudyList', {listId: listId});
+        this.go('pages/study-list/StudyListPage', {listId: listId});
       } else {
         this.go('pages/study/StudyPage');
       }
