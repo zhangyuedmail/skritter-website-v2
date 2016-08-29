@@ -9,6 +9,7 @@ const loggy = require('loggy');
 const morgan = require('morgan');
 
 const app = express();
+app.set('port', 3333);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(bodyParser.json());
@@ -19,10 +20,8 @@ app.use(express.static(__dirname + '/public'));
 
 switch (app.get('env')) {
   case 'production':
-    app.set('port', 49152);
     break;
   default:
-    app.set('port', 3333);
     app.use(morgan('combined'));
 }
 
@@ -61,7 +60,6 @@ app.get(
 app.listen(
   app.get('port'),
   function() {
-    loggy.info('starting application in', app.get('env'), 'mode');
-    loggy.info('started application on port', app.get('port'));
+    loggy.info('started application on', 'http://localhost:' + app.get('port'));
   }
 );
