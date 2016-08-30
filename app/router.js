@@ -340,7 +340,7 @@ module.exports = Router.extend({
    */
   navigateSignup: function(plan) {
     if (!app.user.isLoggedIn()) {
-      this.navigate('signup');
+      this.navigate('signup', {replace: true});
       this.go('pages/signup/SignupPage', {plan: plan});
     } else {
       this.navigateDashboard();
