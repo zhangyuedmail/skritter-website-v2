@@ -246,14 +246,32 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @returns {Array}
    */
   getNext: function() {
+    var collection = this;
     var history = _.flatten(this.history);
     return _
       .chain(this.models)
       .filter(
         function(model) {
+
+          //check if model has been removed from collection
+          if (!model) {
+            return false;
+          }
+
           //exclude items with related characters from history
           for (var i = 0, length = history.length; i < length; i++) {
             if (_.includes(model.getBase(), history[i])) {
+              return false;
+            }
+          }
+
+          if (model.isJapanese()) {
+            //skip all kana writings when study kana disabled
+            if (!app.user.get('studyKana') && model.isPartRune() && model.isKana()) {
+              //TODO: investigate why models unable to save
+              collection.remove(model);
+              model.bump();
+              model.save();
               return false;
             }
           }

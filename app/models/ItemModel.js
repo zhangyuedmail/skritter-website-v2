@@ -34,6 +34,16 @@ const ItemModel = SkritterModel.extend({
   },
 
   /**
+   * Forcefully bump the next value two weeks into the future.
+   * @method bump
+   * @returns {ItemModel}
+   */
+  bump: function() {
+    this.set('next', moment(this.get('next')).add(2, 'weeks').unix());
+    return this;
+  },
+
+  /**
    * @property defaults
    * @type {Object}
    */
@@ -245,6 +255,14 @@ const ItemModel = SkritterModel.extend({
    */
   isJapanese: function() {
     return this.get('lang') === 'ja';
+  },
+
+  /**
+   * @method isKana
+   * @returns {Boolean}
+   */
+  isKana: function() {
+    return app.fn.isKana(this.getBase());
   },
 
   /**
