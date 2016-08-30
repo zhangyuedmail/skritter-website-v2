@@ -44,9 +44,9 @@ body
 
               ul.nav.navbar-nav.navbar-right
                 li(class=currentSection === 'signup' ? 'active' : '')
-                  a(href="/signup")= app.locale('common.signUp')
+                  a#menu-sign-up-btn(href="/signup")= app.locale('common.signUp')
                 li(class=currentSection === 'login' ? 'active' : '')
-                  a(href="/login")= app.locale('common.logIn')
+                  a#menu-log-in-btn(href="/login")= app.locale('common.logIn')
 
 
       #hero-slider.carousel.slide(data-ride="carousel", data-interval="false")
