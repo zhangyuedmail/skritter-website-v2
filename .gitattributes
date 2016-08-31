@@ -16,6 +16,8 @@
 *.woff2 binary
 
 # Other
+chromedriver binary
+chromedriver.exe binary
 *.jar binary
 *.mp3 binary
 *.zip binary
