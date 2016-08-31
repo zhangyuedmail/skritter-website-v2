@@ -97,12 +97,13 @@ const VocabModel = SkritterModel.extend({
       var base = app.fn.mapper.toBase(characters[i], {lang: lang});
       var containedVocab = this.collection.get(base);
       if (!containedVocab) {
-        containedVocab = new Vocab({
+        containedVocab = new VocabModel({
           id: base,
           filler: true,
           lang: lang,
           writing: characters[i]
         });
+
         this.collection.add(containedVocab);
       }
       containedVocabs.push(containedVocab);
