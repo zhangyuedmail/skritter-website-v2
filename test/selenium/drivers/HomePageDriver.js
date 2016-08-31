@@ -1,0 +1,30 @@
+"use strict";
+const SeleniumWebdriver = require('selenium-webdriver');
+const By = SeleniumWebdriver.By;
+const until = SeleniumWebdriver.until;
+const Config = require('../Config');
+const browser = Config.driver;
+
+/**
+ * A static helper object with commands and interactions that can be performed
+ * with the home page.
+ * @type {Object<String, Function>}
+ */
+const HomePageDriver = {
+  goToSignupFromMenu: function() {
+    browser.findElement(By.id('menu-sign-up-btn')).click();
+    return browser.wait(until.titleIs('Signup - Skritter'));
+  },
+
+  goToLoginFromMenu: function() {
+    browser.findElement(By.id('menu-log-in-btn')).click();
+    return browser.wait(until.titleIs('Login - Skritter'));
+  },
+
+  navigate: function() {
+    browser.get(Config.server);
+    return browser.wait(until.titleIs('Skritter - Learn to Write Chinese and Japanese Characters'), Config.TIMEOUT_DEFAULT);
+  }
+};
+
+module.exports = HomePageDriver;

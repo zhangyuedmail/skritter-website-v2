@@ -18,7 +18,8 @@
     "monitor": "node ./scripts/npm-monitor",
     "prune": "node ./scripts/npm-prune",
     "start": "node ./scripts/npm-start",
-    "test": "node ./scripts/npm-test"
+    "test": "node ./scripts/npm-test",
+    "uitest": "node ./scripts/npm-uitest"
   },
   "dependencies": {
     "auto-reload-brunch": "~2.7.0",
@@ -28,6 +29,7 @@
     "body-parser": "~1.15.0",
     "brunch": "~2.8.0",
     "chai": "~3.5.0",
+    "chai-webdriver": "^1.2.0",
     "clean-css-brunch": "~2.0.0",
     "compression": "~1.6.0",
     "cors": "~2.8.0",
@@ -43,6 +45,7 @@
     "nodemon": "~1.10.0",
     "replace-brunch": "~1.0.0",
     "sass-brunch": "~2.6.0",
+    "selenium-webdriver": "^2.53.3",
     "shelljs": "~0.7.0",
     "sinon": "~1.17.0",
     "uglify-js-brunch": "~2.0.0"
