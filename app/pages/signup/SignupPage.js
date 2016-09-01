@@ -276,7 +276,7 @@ module.exports = GelatoPage.extend({
 
     this.$('#signup-email').removeClass('alert-warning');
     this.$('#signup-error-alert').addClass('hidden');
-    
+
     async.series([
       function(callback) {
         ScreenLoader.show();
@@ -327,6 +327,7 @@ module.exports = GelatoPage.extend({
   setCouponCode: function(couponCode) {
     this.$('.credit').addClass('hide');
     this.$('.coupon').removeClass('hide');
+    this.$('#signup-coupon').val(this.couponCode);
     this.$('#signup-coupon-code').val(this.couponCode);
     this.$('#method-credit').prop('checked', false);
     this.$('#method-coupon').prop('checked', true);
@@ -356,6 +357,8 @@ module.exports = GelatoPage.extend({
       if (error) {
         self._handleSubmittedProcessError(error);
       } else {
+        self.coupon = null;
+        app.removeSetting('coupon');
         self._handleSubmittedProcessSuccess();
       }
     });

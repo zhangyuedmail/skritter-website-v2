@@ -234,6 +234,28 @@ body
   include ./includes/tracking
 
   script.
+    function getParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    var couponCode = getParameterByName('coupon');
+    var siteRef = getParameterByName('siteref');
+
+    if (localStorage && couponCode) {
+      localStorage.setItem('application-coupon', JSON.stringify(couponCode));
+    }
+
+    if (localStorage && siteRef) {
+      localStorage.setItem('application-siteRef', JSON.stringify(siteRef));
+    }
+
+  script.
     if (mixpanel) {
       mixpanel.track('Viewed home page')
       mixpanel.track_links('#link-apple-store', 'Clicked ios app button');

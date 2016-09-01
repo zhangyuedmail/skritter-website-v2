@@ -96,10 +96,10 @@ module.exports = GelatoApplication.extend({
    * @method checkAndSetReferralInfo
    */
   checkAndSetReferralInfo: function() {
-    var siteRef = Functions.getParameterByName('siteref');
-    var couponCode = Functions.getParameterByName('coupon');
+    var siteRef = Functions.getParameterByName('siteref') || this.getSetting('siteRef');
+    var couponCode = Functions.getParameterByName('coupon') || this.getSetting('coupon');
 
-    if (siteRef) {
+    if (siteRef && typeof siteRef === 'string') {
       var expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
       this.setSetting('siteRef', {
         referer: siteRef,
