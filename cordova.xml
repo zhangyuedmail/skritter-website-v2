@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<widget id="{!application-id!}"
+        version="{!application-version!}"
+        xmlns="http://www.w3.org/ns/widgets"
+        xmlns:cdv="http://cordova.apache.org/ns/1.0">
+
+  <name>{!application-name!}</name>
+
+  <description>
+    Learn to write Chinese and Japanese characters.
+  </description>
+
+  <author email="team@skritter.com" href="https://www.skritter.com">
+    Inkren, Inc.
+  </author>
+
+  <content src="cordova.html" />
+
+  <plugin name="cordova-plugin-whitelist" spec="1" />
+
+  <access origin="*" />
+
+  <allow-intent href="http://*/*" />
+  <allow-intent href="https://*/*" />
+  <allow-intent href="tel:*" />
+  <allow-intent href="sms:*" />
+  <allow-intent href="mailto:*" />
+  <allow-intent href="geo:*" />
+
+  <platform name="android">
+    <allow-intent href="market:*" />
+    <icon src="../res/{!application-language!}/android/ldpi.png" density="ldpi" />
+    <icon src="../res/{!application-language!}/android/mdpi.png" density="mdpi" />
+    <icon src="../res/{!application-language!}/android/hdpi.png" density="hdpi" />
+    <icon src="../res/{!application-language!}/android/xhdpi.png" density="xhdpi" />
+  </platform>
+
+  <platform name="ios">
+    <allow-intent href="itms:*" />
+    <allow-intent href="itms-apps:*" />
+  </platform>
+
+  <engine name="android" spec="~5.2.2" />
+  <engine name="ios" spec="~4.2.1" />
+
+  <preference name="xwalkVersion" value="20+" />
+  <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />
+  <preference name="xwalkMode" value="embedded" />
+  <preference name="xwalkMultipleApk" value="true" />
+  <preference name="android-minSdkVersion" value="16" />
+
+</widget>
