@@ -32,11 +32,12 @@ module.exports = GelatoApplication.extend({
     Raygun.init(
       'VF3L4HPYRvk1x0F5x3hGVg==',
       {
+        disablePulse: true,
         excludedHostnames: ['localhost'],
         excludedUserAgents: ['PhantomJS'],
         ignore3rdPartyErrors: true,
-        ignoreAjaxAbort: false,
-        ignoreAjaxError: false
+        ignoreAjaxAbort: true,
+        ignoreAjaxError: true
       }
     ).attach();
 
