@@ -1,5 +1,6 @@
 var GelatoApplication = require('gelato/application');
 var AddVocabDialog = require('dialogs1/add-vocab/view');
+var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 var User = require('models/UserModel');
 var Functions = require('functions');
 var Mixpanel = require('mixpanel');
@@ -85,6 +86,10 @@ module.exports = GelatoApplication.extend({
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
     version: '{!application-version!}'
+  },
+
+  dialogs: {
+    vocabViewer: new VocabViewerDialog()
   },
 
   /**
