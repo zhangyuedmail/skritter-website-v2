@@ -19,30 +19,36 @@ module.exports = GelatoDialog.extend({
     this.vocabs = new Vocabs();
     this.vocabsContaining = new Vocabs();
   },
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @method render
    * @returns {VocabViewer}
    */
   render: function() {
     this.renderTemplate();
+    this.content.set();
     this.content.setElement('#content-container').render();
     return this;
   },
+
   /**
    * @method load
    * @param {String} vocabId
    * @returns {VocabViewer}
    */
-  load: function(vocabId) {
+  load: function(vocabId, vocab) {
     var self = this;
     var wordItems = null;
     var wordVocabs = null;
     var wordVocabsContaining = null;
+    this.content.vocab = vocab;
+
     async.parallel(
       [
         function(callback) {
@@ -128,8 +134,10 @@ module.exports = GelatoDialog.extend({
         }
       }
     );
+
     return this;
   },
+
   /**
    * @method remove
    * @returns {VocabViewer}

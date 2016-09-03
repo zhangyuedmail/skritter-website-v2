@@ -7,17 +7,7 @@ var VocabViewerLookup = require('dialogs1/vocab-viewer/lookup/view');
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
-  /**
-   * @method initialize
-   * @param {Object} [options]
-   * @constructor
-   */
-  initialize: function(options) {
-    this.lookup = new VocabViewerLookup();
-    this.items = null;
-    this.vocabs = null;
-    this.vocabsContaining = null;
-  },
+
   /**
    * @property events
    * @type {Object}
@@ -26,11 +16,28 @@ module.exports = GelatoComponent.extend({
     'click .item-ban': 'handleClickItemBan',
     'click .item-unban': 'handleClickItemUnban'
   },
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
+  /**
+   * @method initialize
+   * @param {Object} [options]
+   * @constructor
+   */
+  initialize: function(options) {
+    options = options || {};
+    this.lookup = new VocabViewerLookup();
+    this.items = null;
+    this.vocabs = null;
+    this.vocabsContaining = null;
+
+    this.vocab = options.vocab;
+  },
+
   /**
    * @method render
    * @returns {VocabViewerContent}
@@ -40,6 +47,7 @@ module.exports = GelatoComponent.extend({
     this.lookup.setElement('#lookup-container').render();
     return this;
   },
+
   /**
    * @method getContainingCharacters
    * @returns {Array}
@@ -53,6 +61,7 @@ module.exports = GelatoComponent.extend({
       }
     );
   },
+
   /**
    * @method getContainingWords
    * @returns {Array}
@@ -65,6 +74,7 @@ module.exports = GelatoComponent.extend({
       }
     );
   },
+
   /**
    * @method handleClickItemBan
    * @param {Event} event
@@ -76,6 +86,7 @@ module.exports = GelatoComponent.extend({
     vocab.banPart($row.data('part')).save();
     this.render();
   },
+
   /**
    * @method handleClickItemUnban
    * @param {Event} event
@@ -87,6 +98,7 @@ module.exports = GelatoComponent.extend({
     vocab.unbanPart($row.data('part')).save();
     this.render();
   },
+
   /**
    * @method set
    * @param {Vocabs} vocabs
