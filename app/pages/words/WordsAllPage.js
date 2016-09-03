@@ -2,7 +2,6 @@ var GelatoPage = require('gelato/page');
 var Items = require('collections/ItemCollection');
 var Vocabs = require('collections/VocabCollection');
 var WordsSidebar = require('components/words/WordsSidebarComponent');
-var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 var VocabActionMixin = require('mixins/vocab-action');
 
 /**
@@ -16,7 +15,7 @@ module.exports = GelatoPage.extend({
    * @type {Object}
    */
   events: {
-    'click .vocab-row': 'handleClickVocabRow',
+    'click .writing-td': 'handleClickVocabRow',
     'click #load-more-btn': 'handleClickLoadMoreButton',
     'click #next-sort-link': 'handleClickNextSortLink',
     'click #previous-sort-link': 'handleClickPreviousSortLink',
@@ -252,10 +251,10 @@ module.exports = GelatoPage.extend({
     event.preventDefault();
     var row = $(event.target).parent('tr');
     var vocabId = row.data('vocab-id');
+    var vocab = this.vocabMap[vocabId];
+
     if (vocabId) {
-      this.dialog = new VocabViewerDialog();
-      this.dialog.load(vocabId);
-      this.dialog.open();
+      app.dialogs.vocabViewer.load(vocabId, vocab.get('reading')).open();
     }
   },
 
