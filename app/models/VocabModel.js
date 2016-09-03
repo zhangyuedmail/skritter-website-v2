@@ -358,16 +358,38 @@ const VocabModel = SkritterModel.extend({
   },
 
   /**
+   * Gets the alternate writing for a character. E.g. If given a simplified
+   * character, will find the traditional variant of it.
    * @method getWritingDifference
-   * @param {String} vocabId
+   * @param {String} vocabId the
    * @returns {String}
    */
   getWritingDifference: function(vocabId) {
+    vocabId = vocabId || this.id;
+
     return _.zipWith(
       this.get('writing').split(),
       app.fn.mapper.fromBase(vocabId).split(),
       function(thisChar, otherChar) {
-        return thisChar === otherChar ? '-' : otherChar;
+
+        // the simplified character
+        var idChar = vocabId.split('-')[1];
+
+        // default case -- no difference
+        var res = null;
+
+        if (thisChar === otherChar) {
+
+          // Means we got two traditional characters back.
+          // The id char is simplified, so send that back
+          if (thisChar !== idChar) {
+            res = idChar;
+          }
+        } else {
+          res = otherChar;
+        }
+
+        return res;
       }).join('');
   },
 
