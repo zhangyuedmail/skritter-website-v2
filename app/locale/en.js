@@ -134,7 +134,7 @@ module.exports = {
       "bugReport": "Bug Report",
       "featureSuggestion": "Feature Suggestion",
       "paymentIssue": "Payment Issue",
-      "friendlyText": "Thanks for contacting us! We do respond to everything. If you're interested in Skritter for your school, click here.",
+      "friendlyText": "Thanks for contacting us! We do respond to everything. If you're interested in Skritter for your school, <a href='/institutions' target='_self'>click here</a>.",
       "submit": "Submit"
     },
 
