@@ -184,22 +184,30 @@ module.exports = GelatoPage.extend({
         }
       ],
       function() {
+        var active = app.user.isSubscriptionActive();
+
         if (!hasVocablist) {
           ScreenLoader.hide();
           app.router.navigate('', {trigger: true});
         } else if (!hasItems) {
-          ScreenLoader.post('Adding words from list');
-          document.title = self.vocablist.get('name') + ' - Skritter';
-          self.items.addItems(
-            {
-              lang: app.getLanguage(),
-              limit: 5,
-              listId: self.vocablist.id
-            },
-            function() {
-              app.reload();
-            }
-          );
+          if (active) {
+            ScreenLoader.post('Adding words from list');
+            document.title = self.vocablist.get('name') + ' - Skritter';
+            self.items.addItems(
+              {
+                lang: app.getLanguage(),
+                limit: 5,
+                listId: self.vocablist.id
+              },
+              function() {
+                app.reload();
+              }
+            );
+          } else {
+            self.prompt.render();
+            self.prompt.$('#overlay').show();
+            ScreenLoader.hide();
+          }
         } else {
           ScreenLoader.hide();
           document.title = self.vocablist.get('name') + ' - Skritter';
