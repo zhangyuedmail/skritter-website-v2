@@ -185,25 +185,29 @@ module.exports = GelatoPage.extend({
         }
       ],
       function() {
-
-        // can guarantee synchronous usage here b/c we just fetched sub above
-        // in the async.parallel chain.
         var active = app.user.isSubscriptionActive();
-        if (!hasItems && !hasVocablists || !active) {
+
+        if (!hasItems && !hasVocablists) {
           self.prompt.render();
           self.prompt.$('#overlay').show();
           ScreenLoader.hide();
-        } else if (!hasItems && hasVocablists && active) {
-          ScreenLoader.post('Adding your first words');
-          self.items.addItems(
-            {
-              lang: app.getLanguage(),
-              limit: 5
-            },
-            function() {
-              app.reload();
-            }
-          );
+        } else if (!hasItems && hasVocablists) {
+          if (active) {
+            ScreenLoader.post('Adding your first words');
+            self.items.addItems(
+              {
+                lang: app.getLanguage(),
+                limit: 5
+              },
+              function() {
+                app.reload();
+              }
+            );
+          } else {
+            self.prompt.render();
+            self.prompt.$('#overlay').show();
+            ScreenLoader.hide();
+          }
         } else {
           ScreenLoader.hide();
           self.next();

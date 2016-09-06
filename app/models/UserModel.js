@@ -197,7 +197,7 @@ const UserModel = SkritterModel.extend({
    * optimizing fetches using memoization kinda.
    * Can also get a synchronous return if things have already been fetched.
    * This is bad design. I'm sorry. Will refactor once we do ES6. I..."promise".
-   * @param {Function} callback called when it can be determined
+   * @param {Function} [callback] called when it can be determined
    *                            whether the subscription is active.
    */
   isSubscriptionActive: function(callback) {
