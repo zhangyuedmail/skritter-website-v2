@@ -1,0 +1,261 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='signup'] {
+  background: $background-marketing;
+  padding-top: 50px;
+
+  #section-header {
+    margin-bottom: 50px;
+
+    .title {
+      color: $grey6;
+      font-family: $font-slab;
+      font-size: 48px;
+      font-weight: 400;
+    }
+  }
+
+  #section-main {
+    background-color: $white3;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 992px;
+    padding: 0 15px;
+
+    #accepted-payments img {
+      margin-top: 15px;
+    }
+
+    #section-form {
+      background-color: #ffffff;
+      border-bottom-left-radius: 25px;
+      border-top-left-radius: 25px;
+      padding: 15px;
+
+      button {
+        height: 50px;
+        margin-top: 10px;
+        width: 184px;
+      }
+
+      input[type="email"],
+      input[type="password"],
+      input[type="text"],
+      select {
+        border-radius: 0;
+        color: $grey5;
+        float: right;
+        font-family: $font-ubuntu;
+        font-size: 16px;
+        font-weight: 300;
+        height: 50px;
+      }
+
+      ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+        color: $grey2;
+      }
+
+      :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+       color: $grey2;
+       opacity:  1;
+      }
+
+      ::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: $grey2;
+        opacity:  1;
+      }
+
+      :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: $grey2;
+      }
+
+      textarea {
+        border: 1px solid #cccccc;
+        color: $grey3;
+        float: right;
+        font-family: $font-ubuntu;
+        font-size: 16px;
+        font-weight: 300;
+        margin-right: 15px;
+        width: 250px;
+      }
+
+      label {
+        color: $grey5;
+        font-family: $font-ubuntu;
+        font-size: 16px;
+        font-weight: 300;
+        text-align: left;
+      }
+
+      .header {
+        background-color: $white2;
+        color: $grey5;
+        font-family: $font-ubuntu;
+        font-size: 24px;
+        font-weight: 400;
+        margin: 15px -15px 40px -15px;
+        padding: 20px 40px;
+
+        &.first {
+          border-top-left-radius: 25px;
+          margin-top: -15px;
+        }
+      }
+
+      .subtext {
+        color: $grey4;
+        font-family: $font-ubuntu;
+        font-size: 16px;
+        font-weight: 300;
+        margin-bottom: 40px;
+      }
+
+      #trial-notice {
+        color: $grey2;
+        font-family: $font-ubuntu;
+        font-size: 14px;
+        font-weight: 300;
+        margin-top: 30px;
+
+        strong {
+          color: $grey4;
+          font-weight: 400;
+        }
+      }
+
+      .captcha-wrapper {
+        margin-top: 45px;
+      }
+
+      .g-recaptcha {
+        display: inline-block;
+      }
+    }
+
+    #section-information {
+      border-bottom-right-radius: 25px;
+      border-top-right-radius: 25px;
+      padding: 30px;
+
+      hr {
+        border-color: $grey1;
+      }
+
+      .testimonial-name {
+        color: $grey5;
+        font-family: $font-ubuntu;
+        font-size: 16px;
+        font-weight: 400;
+        margin-bottom: 4px;
+        margin-top: 8px;
+        padding-left: 15px;
+      }
+
+      .testimonial-subtext {
+        color: $grey3;
+        font-family: $font-ubuntu;
+        font-size: 16px;
+        font-weight: 300;
+      }
+
+      .header {
+        color: $grey5;
+        font-family: $font-ubuntu;
+        font-size: 24px;
+        font-weight: 400;
+        margin-bottom: 30px;
+      }
+
+      .media {
+        margin-bottom: 35px;
+      }
+
+      #authorize-badge {
+        margin-top: 15px;
+      }
+
+      #trial-highlight {
+
+        ul > li {
+          color: $grey5;
+          margin-left: 15px;
+        }
+
+        .header {
+          color: #404851;
+          font-family: $font-ubuntu;
+          font-size: 16px;
+          font-weight: 400;
+          margin-bottom: 5px;
+        }
+
+        .subtext {
+          color: #666c73;
+          font-family: $font-ubuntu;
+          font-size: 16px;
+          font-weight: 300;
+          margin-bottom: 15px;
+        }
+
+        .title {
+          color: #404851;
+          font-family: $font-ubuntu;
+          font-size: 24px;
+          font-weight: 400;
+          margin-bottom: 30px;
+        }
+      }
+    }
+  }
+
+  .user-referral-top-info {
+    margin-bottom: 35px;
+    margin-top: -15px;
+  }
+
+  #section-policy {
+    color: $grey2;
+    font-family: $font-ubuntu;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 30px auto 60px auto;
+    max-width: 992px;
+    padding: 15px;
+
+    strong {
+      color: $grey4;
+      font-weight: 400;
+    }
+
+    .content-block {
+      background-color: #ffffff;
+      padding: 30px;
+    }
+
+    .policy-row {
+      margin-bottom: 15px;
+    }
+  }
+
+  .school-email-info {
+    text-align: center;
+  }
+
+  #signup-validation-code {
+    margin-bottom: 20px;
+  }
+
+  .send-validation-email {
+    margin: 20px 0;
+  }
+
+  .validation-email-sent-msg {
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+
+  #signup-error-alert {
+    margin-top: 10px;
+  }
+}

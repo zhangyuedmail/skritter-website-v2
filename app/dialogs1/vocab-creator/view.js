@@ -1,5 +1,5 @@
 var GelatoDialog = require('gelato/dialog');
-var Vocab = require('models/vocab');
+var Vocab = require('models/VocabModel');
 
 /**
  * @class VocabCreatorDialog

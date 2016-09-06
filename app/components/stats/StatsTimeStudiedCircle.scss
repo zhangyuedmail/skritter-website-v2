@@ -1,0 +1,33 @@
+@import "../../styles/_variables";
+
+gelato-component[data-name='stats-time-studied-circle-component'] {
+  .num {
+    color: $green5;
+    font-size: 38px;
+  }
+
+  .units-label {
+    font-size: 16px;
+    color: $grey3;
+  }
+
+  .days-studied-wrapper {
+    position: absolute;
+    top: 78px;
+    left: 0;
+    right: 0;
+  }
+
+  .graph-wrapper {
+    text-align: center;
+  }
+
+  .num-days-studied, .week {
+    display: inline-block;
+  }
+
+  .num-area-wrapper {
+    margin-top: 70px;
+    text-align: center;
+  }
+}

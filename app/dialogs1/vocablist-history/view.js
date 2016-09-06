@@ -1,5 +1,5 @@
 var GelatoComponent = require('gelato/component');
-var VocablistHistoryTableComponent = require('components/vocablists/history-table/view');
+var VocablistHistoryTableComponent = require('components/vocablists/VocablistsHistoryTableComponent');
 /**
  * @class AddVocabContent
  * @extends {GelatoComponent}

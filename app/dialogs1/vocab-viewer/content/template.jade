@@ -3,6 +3,7 @@ gelato-component(data-name='vocab-viewer-content')
   if view.vocabs && view.vocabs.length
     - var items = view.items;
     - var vocab = view.vocabs.at(0);
+    - var altVocab = vocab.getWritingDifference();
     - var containingVocabs = view.getContainingCharacters();
     - var containingWords = view.getContainingWords();
     - var definition = vocab.getDefinition();
@@ -11,8 +12,16 @@ gelato-component(data-name='vocab-viewer-content')
 
     #header-section
       .block.separator
-        #vocab-writing(class=vocab.getFontClass())= vocab.get('writing')
-        #vocab-reading= vocab.getReading()
+        #vocab-writing(class=vocab.getFontClass() +　' vocab-writing')= vocab.get('writing')
+        #vocab-reading.vocab-reading= vocab.getReading()
+      if altVocab && altVocab !== vocab
+        .block
+          .vocab-writing(class=vocab.getFontClass())
+           span.alt-bracket 【
+           span.alt-writing= altVocab
+           span.alt-bracket 】
+          .vocab-reading &nbsp;
+
       .block
         #vocab-difficulty= vocab.get('toughnessString')
         #vocab-difficulty-text LEVEL
@@ -91,3 +100,13 @@ gelato-component(data-name='vocab-viewer-content')
                       span.spr.reading= model.getReading()
                       span.spr :
                       span.definition= model.getDefinition()
+  else
+    #header-section
+      .block.separator
+        if view.vocab
+          .vocab-writing= view.vocab.getWriting()
+      .pull-right
+        a(href='#', data-dismiss='modal')
+          i.fa.fa-times-circle-o
+    #content-section.text-center
+      i.fa.fa-3x.fa-spinner.fa-pulse

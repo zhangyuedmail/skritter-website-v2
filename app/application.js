@@ -1,6 +1,7 @@
 var GelatoApplication = require('gelato/application');
 var AddVocabDialog = require('dialogs1/add-vocab/view');
-var User = require('models/user');
+var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
+var User = require('models/UserModel');
 var Functions = require('functions');
 var Mixpanel = require('mixpanel');
 var Router = require('router');
@@ -32,11 +33,12 @@ module.exports = GelatoApplication.extend({
     Raygun.init(
       'VF3L4HPYRvk1x0F5x3hGVg==',
       {
+        disablePulse: true,
         excludedHostnames: ['localhost'],
         excludedUserAgents: ['PhantomJS'],
         ignore3rdPartyErrors: true,
-        ignoreAjaxAbort: false,
-        ignoreAjaxError: false
+        ignoreAjaxAbort: true,
+        ignoreAjaxError: true
       }
     ).attach();
 
@@ -86,6 +88,10 @@ module.exports = GelatoApplication.extend({
     version: '{!application-version!}'
   },
 
+  dialogs: {
+    vocabViewer: new VocabViewerDialog()
+  },
+
   /**
    * Checks if the URL contains a siteref param, and if it does, sets its value
    * as the siteRef instance varaible on the application object. Processes and
@@ -96,10 +102,10 @@ module.exports = GelatoApplication.extend({
    * @method checkAndSetReferralInfo
    */
   checkAndSetReferralInfo: function() {
-    var siteRef = Functions.getParameterByName('siteref');
-    var couponCode = Functions.getParameterByName('coupon');
+    var siteRef = Functions.getParameterByName('siteref') || this.getSetting('siteRef');
+    var couponCode = Functions.getParameterByName('coupon') || this.getSetting('coupon');
 
-    if (siteRef) {
+    if (siteRef && typeof siteRef === 'string') {
       var expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
       this.setSetting('siteRef', {
         referer: siteRef,

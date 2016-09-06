@@ -215,9 +215,20 @@
 }
 
 .icon-study-word-edit {
-  background-image: url('#{$dir-assets}/vectors/study-word-edit.svg');
+  //background-image: url('#{$dir-assets}/vectors/study-word-edit.svg');
   height: 23px;
   width: 19px;
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: $green5;
+  }
+
+  &.active {
+    svg {
+      fill: $green7;
+    }
+  }
 }
 
 .icon-study-word-star {

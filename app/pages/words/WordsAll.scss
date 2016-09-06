@@ -1,0 +1,63 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='words-all'] {
+
+  background: $background-primary;
+  padding-top: 75px;
+
+  img {
+    max-width: 100%;
+  }
+
+  td .glyphicon {
+    display: none;
+  }
+
+  td.active .glyphicon {
+    display: inline;
+    margin-left: 5px;
+    position: relative;
+    top: 3px;
+  }
+
+  .checkbox-td {
+    width: 10%;
+  }
+
+  .table-oversized-wrapper {
+    margin-top: 30px;
+  }
+
+  .definition-td {
+    width: 25%;
+  }
+
+  .last-td {
+    width: 20%;
+  }
+
+  .next-td {
+    width: 20%;
+  }
+
+  .reading-td {
+    width: 15%;
+  }
+
+  .word-td {
+    width: 50%;
+  }
+
+  .writing-td {
+    width: 10%;
+    color: $green6;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  #load-more-btn {
+    margin: 0 auto;
+    max-width: 300px;
+  }
+
+}

@@ -1,7 +1,4 @@
-// screen loader
-window.ScreenLoader = new (require('startup/screen-loader/module'))();
-window.ScreenLoader.post('Loading application');
-// google analytics
+//google analytics
 (function(i, s, o, g, r, a, m) {
   i['GoogleAnalyticsObject'] = r;
   i[r] = i[r] || function() {
@@ -13,7 +10,8 @@ window.ScreenLoader.post('Loading application');
   a.src = g;
   m.parentNode.insertBefore(a, m)
 })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-// mixpanel
+
+//mixpanel
 (function(e, b) {
   if (!b.__SV) {
     var a, f, i, g;

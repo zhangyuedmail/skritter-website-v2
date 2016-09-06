@@ -1,0 +1,4 @@
+{
+  "ignore": ["app/*", "public/*"],
+  "verbose": false
+}

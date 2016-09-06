@@ -1,7 +1,7 @@
 var GelatoDialog = require('gelato/dialog');
 var Content = require('./content/view');
-var Vocab = require('models/vocab');
-var Vocablist = require('models/vocablist');
+var Vocab = require('models/VocabModel');
+var Vocablist = require('models/VocablistModel');
 
 /**
  * @class ExportVocablist

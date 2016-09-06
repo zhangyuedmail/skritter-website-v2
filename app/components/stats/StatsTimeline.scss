@@ -1,0 +1,179 @@
+@import "../../styles/_variables";
+
+gelato-component[data-name='stats-timeline'] {
+  .heading-block {
+    background-color: $white3;
+    border-radius: 25px 25px 0 0;
+    padding: 15px;
+    font-size: 24px;
+    color: $grey5;
+  }
+
+  .granularity-selector {
+    background-color: $white3;
+    cursor: pointer;
+
+    // thx, bootstrap
+    border: 0 !important;
+    outline: 0 !important;
+
+    &:hover {
+      color: $grey4;
+    }
+  }
+
+  .date-range-picker {
+    color: $grey5;
+    cursor: pointer;
+
+    &:hover {
+      color: $grey4;
+    }
+  }
+
+  .fetching {
+    color: $grey3;
+  }
+
+  .down-arrow {
+    margin-left: 15px;
+  }
+
+  .content-block {
+    background: none;
+    padding: 0;
+  }
+
+  .content {
+    padding-bottom: 35px;
+    background: #FFF;
+    border-radius: 0 0 25px 25px;
+  }
+
+  .time-studied, .units-label {
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .time-studied {
+    text-align: center;
+    font-size: 38px;
+    color: $grade3;
+  }
+
+  .push-left {
+    padding-left: 20px;
+    margin-left: 0px;
+    margin-right: 0px;
+    position: relative;
+  }
+
+  .word-line-graphs-wrapper {
+    background: $white2;
+  }
+
+
+  gelato-component[data-name='stats-items-learned'] {
+    background: $white2;
+    padding: 15px 0;
+    border-right: 1px solid $white5;
+
+    .title {
+      display: none;
+    }
+
+    .data-section {
+      margin-bottom: 0;
+      margin-top: 56px;
+    }
+  }
+
+  .days-studied-container {
+    background: $white2;
+  }
+
+  #time-studied-bar-graph-container {
+    border-bottom: 1px solid $white5;
+  }
+
+  .days-studied-container, .items-learned-container {
+    border-bottom: 1px solid $white5;
+  }
+
+  // TODO: fix this...
+  .days-studied-container {
+    gelato-component {
+
+      #circle {
+        height: 230px;
+      }
+    }
+  }
+
+  .days-studied-placeholder {
+    height: 205px;
+    background: $grey6;
+    color: #FFF;
+  }
+
+  .middle-graph-wrapper-l {
+    padding-right: 0;
+  }
+
+  .middle-graph-wrapper-r {
+    padding-left: 0;
+  }
+
+  .days-studied-placeholder {
+    background: $grey7;
+    padding-left: 0;
+  }
+
+  .rwdt-label {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .vertical-label {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    height: 150px;
+    position: absolute;
+    text-align: center;
+    font-size: 16px;
+    color: $grey5;
+    left: 0px;
+    top: 0px;
+  }
+
+  .graph {
+    height: 150px;
+  }
+
+  .date-range-wrapper {
+    text-align: right;
+    display: inline-block;
+  }
+
+  .border-left {
+    border-left: 1px solid $white5;
+  }
+
+  .border-right {
+    border-right: 1px solid $white5;
+  }
+
+  @media all and (max-width: 1000px) {
+    .border-left {
+      border-left: none;
+    }
+
+    .border-right {
+      border-right: none;
+    }
+
+    .days-studied-container {
+      margin-left: 0px;
+    }
+  }
+}

@@ -3,11 +3,13 @@
  * @extends {Backbone.Router}
  */
 var GelatoRouter = Backbone.Router.extend({
+
   /**
    * @property page
    * @type {String}
    */
   page: null,
+
   /**
    * @method go
    * @param {String} path
@@ -19,9 +21,10 @@ var GelatoRouter = Backbone.Router.extend({
       this.page.remove();
     }
     window.scrollTo(0, 0);
-    this.page = new (require(path + '/view'))(options);
+    this.page = new (require(path))(options);
     return this.page.render();
   },
+
   /**
    * @method start
    * @param {Object} [options]

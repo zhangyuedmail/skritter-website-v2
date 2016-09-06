@@ -34,4 +34,18 @@ gelato-component[data-name='study-toolbar'] {
     font-size: 14px;
   }
 
+  #button-study-settings {
+    -ms-transform: rotate(0deg) scale(1,1);
+    -webkit-transform: rotate(0deg) scale(1,1);
+    transform: rotate(0deg) scale(1,1);
+    -webkit-transition: transform 50ms; /* Safari */
+    transition: transform 75ms;
+
+    &:hover {
+      -ms-transform: rotate(15deg) scale(1.15,1.15);
+      -webkit-transform: rotate(15deg) scale(1.15,1.15);
+      transform: rotate(15deg) scale(1.15,1.15);
+    }
+  }
+
 }

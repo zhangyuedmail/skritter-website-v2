@@ -1,8 +1,7 @@
-var GelatoComponent = require('gelato/component');
-
-var ProgressStats = require('collections/progress-stats');
-var StudySettings = require('dialogs/study-settings/view');
-var Timer = require('components/study/toolbar/timer/view');
+const GelatoComponent = require('gelato/component');
+const ProgressStats = require('collections/ProgressStatsCollection');
+const StudySettings = require('dialogs/study-settings/view');
+const Timer = require('components/study/toolbar/timer/view');
 
 /**
  * @class StudyToolbar
