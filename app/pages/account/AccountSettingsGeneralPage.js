@@ -86,8 +86,12 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    */
   handleClickButtonSave: function(event) {
     event.preventDefault();
+    var avatar = this.$('#field-avatar').get(0).src;
+    avatar = avatar.replace('data:image/gif;base64,', '');
+    avatar = avatar.replace('data:image/jpeg;base64,', '');
+    avatar = avatar.replace('data:image/png;base64,', '');
     app.user.set({
-      avatar: this.$('#field-avatar').get(0).src.replace('data:image/png;base64,', ''),
+      avatar: avatar,
       aboutMe: this.$('#field-about').val(),
       country: this.$('#field-country').find(':selected').val(),
       email: this.$('#field-email').val(),
