@@ -520,6 +520,18 @@ module.exports = GelatoPage.extend({
         case "Invalid code entered.":
           errorMsg = app.locale('pages.signup.errorInvalidEmailValidationCode');
           break;
+        case 'Property "name" must be no longer than 20 characters long.':
+          errorMsg = app.locale('pages.signup.errorUsernameTooLong');
+          break;
+        case "InvalidValidationCode":
+          errorMsg = app.locale('pages.signup.errorInvalidEmailValidationCode');
+          break;
+        case "NoValidationCode":
+          errorMsg = app.locale('pages.signup.errorValidationCodeNotEntered');
+          break;
+        case "IneligibleSchoolEmail":
+          errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
+          break;
         default:
           errorMsg = app.locale('pages.signup.errorDefault');
       }
