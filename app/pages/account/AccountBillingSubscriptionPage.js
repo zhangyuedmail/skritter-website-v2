@@ -521,7 +521,12 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
    */
   handleClickValidationEmailButton: function() {
     var self = this;
-    var email = app.user.get('email');
+    var email = this.$('#school-validation-email').val().trim();
+
+    if (!email || email.indexOf('@') < 1 || email.indexOf('.') < 2) {
+      this._displayValidationErrorMessage(app.locale('pages.signup.errorInvalidEmail'));
+      return;
+    }
 
     this.$('#validation-error-alert').addClass('hide');
 
@@ -612,6 +617,12 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
           break;
         case "The email entered is not an eligible email.":
           errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
+          break;
+        case "Invalid code entered.":
+          errorMsg = app.locale('pages.signup.errorInvalidEmailValidationCode');
+          break;
+        case "<email> is not in params: {u'email': u''}":
+          errorMsg = app.locale('pages.signup.errorInvalidEmail');
           break;
         default:
           errorMsg = app.locale('pages.signup.errorDefault');

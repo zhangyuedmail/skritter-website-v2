@@ -517,6 +517,9 @@ module.exports = GelatoPage.extend({
         case "The email entered is not an eligible email.":
           errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
           break;
+        case "Invalid code entered.":
+          errorMsg = app.locale('pages.signup.errorInvalidEmailValidationCode');
+          break;
         default:
           errorMsg = app.locale('pages.signup.errorDefault');
       }
