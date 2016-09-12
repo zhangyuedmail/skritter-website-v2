@@ -72,7 +72,7 @@ var GelatoApplication = Backbone.Model.extend({
    * @returns {Boolean}
    */
   isMobile: function() {
-    return false;
+    return this.isAndroid() || this.isIOS();
   },
   /**
    * @method isPortrait
