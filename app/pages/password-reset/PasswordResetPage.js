@@ -15,6 +15,8 @@ module.exports = GelatoPage.extend({
     'click #button-reset': 'handleClickButtonReset'
   },
 
+  showFooter: !app.isMobile(),
+
   /**
    * @property template
    * @type {Function}
@@ -38,7 +40,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method render
-   * @returns {Login}
+   * @returns {PasswordResetPage}
    */
   render: function() {
     this.renderTemplate();
@@ -52,7 +54,14 @@ module.exports = GelatoPage.extend({
    */
   handleClickButtonReset: function(event) {
     event.preventDefault();
-    this.resetPassword();
+    var email = this.$('#password-reset-input').val().trim();
+
+    if (!email || email.indexOf('@') < 1 || email.indexOf('.') < 2) {
+      this._displayValidationErrorMessage(app.locale('pages.signup.errorInvalidEmail'));
+      return;
+    }
+
+    this.resetPassword(email);
   },
 
   /**
@@ -68,19 +77,22 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method resetPassword
+   * @param {String} email the email of the account for which to reset the passwrod
    */
-  resetPassword: function() {
+  resetPassword: function(email) {
     var self = this;
-    var input = this.$('#password-reset-input').val();
+
     this.$('#password-reset-form').prop('disabled', true);
     this.errorMessage = null;
+
     ScreenLoader.show();
     ScreenLoader.post('Recovering user credentials');
+
     $.ajax({
       url: app.getApiUrl() + 'reset-password',
       type: 'POST',
       headers: app.user.session.getHeaders(),
-      data: JSON.stringify({input: input}),
+      data: JSON.stringify({input: email}),
       error: function(error) {
         var response = error.responseJSON;
         if (response.choices) {
@@ -103,10 +115,11 @@ module.exports = GelatoPage.extend({
   },
 
   /**
-   * @method remove
-   * @returns {Login}
+   * Displays a validation error message to the user
+   * @param {String} message the message to display
+   * @private
    */
-  remove: function() {
-    return GelatoPage.prototype.remove.call(this);
+  _displayValidationErrorMessage: function(message) {
+    this.$('#validation-error-alert').text(message).removeClass('hidden');
   }
 });
