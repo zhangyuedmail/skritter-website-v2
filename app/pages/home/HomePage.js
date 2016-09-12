@@ -19,7 +19,7 @@ const HomePage = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./Home'),
+  template: require('./HomePage.jade'),
 
   /**
    * @property title
@@ -40,7 +40,14 @@ const HomePage = GelatoPage.extend({
    * @returns {HomePage}
    */
   render: function() {
+    if (app.isAndroid()) {
+      this.template = require('./MobileHomePage.jade');
+      this.showFooter = false;
+      this.showNavbar = false;
+    }
+
     this.renderTemplate();
+
     $.getScript('https://www.youtube.com/iframe_api');
     window.onYouTubeIframeAPIReady = this.handleYouTubeIframeAPIReady.bind(this);
 

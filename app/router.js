@@ -264,7 +264,11 @@ module.exports = Router.extend({
    * @method navigateHome
    */
   navigateHome: function() {
-    window.location.replace('/');
+    if (app.isAndroid()) {
+      this.go('pages/home/HomePage.js');
+    } else {
+      window.location.replace('/');
+    }
   },
 
   /**

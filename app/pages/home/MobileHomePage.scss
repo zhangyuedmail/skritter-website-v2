@@ -1,0 +1,39 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='mobile-home'] {
+
+  background: $background-primary;
+  height: 100%;
+  padding: 30px;
+
+  .welcome-options {
+
+    padding-top: 20%;
+
+    .btn {
+      width: 100%;
+    }
+
+  }
+
+  .welcome-panel {
+
+    background: $white;
+    border-radius: 5px;
+    height: 80%;
+    padding: 5px;
+    text-align: center;
+
+    .character {
+      color: $white3;
+      font-size: 50vw;
+    }
+
+    .title {
+      font-family: $font-slab;
+      font-size: 10vw;
+    }
+
+  }
+
+}
