@@ -16,12 +16,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(compression(6));
 app.use(cors());
-app.use(express.static(__dirname + '/public'));
 
 switch (app.get('env')) {
   case 'production':
+    app.use(express.static(__dirname + '/build'));
     break;
   default:
+    app.use(express.static(__dirname + '/public'));
     app.use(morgan('combined'));
 }
 
