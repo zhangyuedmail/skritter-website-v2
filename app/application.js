@@ -61,6 +61,14 @@ module.exports = GelatoApplication.extend({
 
     if (this.isWebsite()) {
       this.mixpanel.init(this.getMixpanelKey());
+    } else {
+      window.mixpanel = {
+        alias: function() {},
+        identify: function() {},
+        init: function() {},
+        register: function() {},
+        track: function() {}
+      };
     }
 
     if (this.isDevelopment()) {
