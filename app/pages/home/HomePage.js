@@ -40,7 +40,7 @@ const HomePage = GelatoPage.extend({
    * @returns {HomePage}
    */
   render: function() {
-    if (app.isAndroid()) {
+    if (app.isMobile()) {
       this.template = require('./MobileHomePage.jade');
       this.showFooter = false;
       this.showNavbar = false;
