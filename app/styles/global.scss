@@ -73,3 +73,10 @@ body {
 
   }
 }
+
+@media (max-width: 767px) {
+  .content-block {
+    border-radius: 5px;
+    margin-bottom: 15px;
+  }
+}

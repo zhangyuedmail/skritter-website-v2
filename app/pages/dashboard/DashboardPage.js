@@ -14,6 +14,12 @@ const ExpiredNotification = require('components/account/AccountExpiredNotificati
 const DashboardPage = GelatoPage.extend({
 
   /**
+   * @property showFooter
+   * @type {Boolean}
+   */
+  showFooter: !app.isMobile(),
+
+  /**
    * @property title
    * @type {String}
    */
@@ -23,7 +29,7 @@ const DashboardPage = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./Dashboard'),
+  template: require('./DashboardPage.jade'),
 
   /**
    * @method initialize
