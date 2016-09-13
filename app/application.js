@@ -459,9 +459,14 @@ module.exports = GelatoApplication.extend({
 
       //lets start listening to global keyboard events
       this.listener = new window.keypress.Listener();
-      this.listener.simple_combo("shift a", function() {
-        new AddVocabDialog().open();
-      });
+      this.listener.simple_combo(
+        'shift a',
+        function(event) {
+          if (!$(event.target).is('input')) {
+            new AddVocabDialog().open();
+          }
+        }
+      );
 
     } else {
       Raygun.setUser('guest', true);
