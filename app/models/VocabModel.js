@@ -239,7 +239,7 @@ const VocabModel = SkritterModel.extend({
     var tones = [];
     var strokes = this.getCharacters();
     for (var i = 0, length = strokes.length; i < length; i++) {
-      tones.push(this.collection.strokes.getPromptTones());
+      tones.push(this.collection.character.getPromptTones());
     }
     return tones;
   },
@@ -293,7 +293,7 @@ const VocabModel = SkritterModel.extend({
     var strokes = [];
     var characters = this.getCharacters();
     for (var i = 0, length = characters.length; i < length; i++) {
-      var stroke = this.collection.strokes.get(characters[i]);
+      var stroke = this.collection.character.get(characters[i]);
       if (stroke) {
         if (this.isJapanese()) {
           if (!app.user.get('studyKana') && stroke.isKana()) {
@@ -455,7 +455,7 @@ const VocabModel = SkritterModel.extend({
     if (this.collection) {
       this.collection.decomps.add(response.Decomp);
       this.collection.sentences.add(response.Sentence);
-      this.collection.strokes.add(response.Stroke);
+      this.collection.character.add(response.Stroke);
     }
     return response.Vocab || response;
   },

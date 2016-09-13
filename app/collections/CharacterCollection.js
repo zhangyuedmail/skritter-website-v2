@@ -2,23 +2,23 @@ const GelatoCollection = require('gelato/collection');
 const StrokeParamsCollection = require('collections/StrokeParamCollection');
 const KanaStrokes = require('data/kana-strokes');
 const ToneStrokes = require('data/tone-strokes');
-const StrokeModel = require('models/StrokeModel');
+const CharacterModel = require('models/CharacterModel');
 
 //TODO: replace stroke shapes with a collection
 //var StrokeShapes = require('collections/stroke-shapes');
 const ShapeData = require('data/shape-data');
 
 /**
- * @class StrokeCollection
+ * @class CharacterCollection
  * @extends {GelatoCollection}
  */
-const StrokeCollection = GelatoCollection.extend({
+const CharacterCollection = GelatoCollection.extend({
 
   /**
    * @property model
-   * @type {StrokeModel}
+   * @type {CharacterModel}
    */
-  model: StrokeModel,
+  model: CharacterModel,
 
   /**
    * @method initialize
@@ -33,7 +33,7 @@ const StrokeCollection = GelatoCollection.extend({
 
   /**
    * @method reset
-   * @returns {StrokeCollection}
+   * @returns {CharacterCollection}
    */
   reset: function() {
     GelatoCollection.prototype.reset.call(this);
@@ -52,4 +52,4 @@ const StrokeCollection = GelatoCollection.extend({
   }
 });
 
-module.exports = StrokeCollection;
+module.exports = CharacterCollection;

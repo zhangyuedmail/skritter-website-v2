@@ -3,10 +3,10 @@ const PromptStrokeCollection = require('collections/PromptStrokeCollection');
 const PromptStrokeModel = require('models/PromptStrokeModel');
 
 /**
- * @class StrokeModel
+ * @class CharacterModel
  * @extends {GelatoModel}
  */
-const StrokeModel = GelatoModel.extend({
+const CharacterModel = GelatoModel.extend({
 
   /**
    * @property idAttribute
@@ -65,4 +65,4 @@ const StrokeModel = GelatoModel.extend({
 
 });
 
-module.exports = StrokeModel;
+module.exports = CharacterModel;
