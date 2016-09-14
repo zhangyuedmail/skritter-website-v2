@@ -463,8 +463,11 @@ module.exports = GelatoApplication.extend({
         'shift a',
         function(event) {
           if (!$(event.target).is('input')) {
+            event.preventDefault();
             new AddVocabDialog().open();
           }
+
+          return true;
         }
       );
 
