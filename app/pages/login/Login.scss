@@ -1,17 +1,30 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='login'] {
-
-  background: $background-marketing;
+  background: $background-primary;
   padding-top: 50px;
 
-  .content-block {
+  label {
+    font-size: 20px;
+  }
+
+  input {
+    padding: 12px 12px;
+    font-size: 20px;
+    line-height: normal;
+    margin: auto;
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .wrapper {
+    background: none;
     margin: 100px auto;
     max-width: 400px;
   }
 
-  #login-form {
-    margin-bottom: 15px;
+  .push-bottom {
+    margin-bottom: 25px;
   }
 
   @media (max-width: 500px) {
