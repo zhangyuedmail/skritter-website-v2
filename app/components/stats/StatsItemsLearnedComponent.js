@@ -169,7 +169,7 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
     chartData[1].update(Math.max(totalCharactersLearned, 0));
 
     this.$('#characters-learned').text(totalCharactersLearned);
-    this.$('#words-learned').text(totalWordsLearned);
+    this.$('.words-learned').text(totalWordsLearned);
     this.$('#num-items-learned').text(totalItemsLearned);
 
     if (this.showTimeStudied) {
@@ -179,7 +179,7 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
     }
 
     if (this.showNumReviews) {
-      this.$('#total-reviews-num').text(this.collection.getCountAllTimeReviews());
+      this.$('.total-reviews-num').text(this.collection.getCountAllTimeReviews());
     }
   }
 

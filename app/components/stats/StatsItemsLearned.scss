@@ -6,6 +6,7 @@ gelato-component[data-name='stats-items-learned'] {
     top: 25px;
     width: 100%;
   }
+
   .chart-overlay {
     border-radius: 50%;
     background: $white1;
@@ -93,18 +94,34 @@ gelato-component[data-name='stats-items-learned'] {
     cursor: default !important;
   }
 
+
   @media (max-width: 1000px) {
     .data-section {
       width: 50%;
     }
 
     .words-learned-bg {
-      left: auto;
-      right: 20%;
+      right: auto;
+      left: 20%;
     }
 
     .chars-learned-bg {
       right: 20%;
+    }
+
+    .top-data {
+
+      .data-section {
+        margin-bottom: 0;
+      }
+    }
+
+    .visible-xs {
+      display: inline-block !important;
+    }
+
+    .xs-pushup {
+      margin-top: -30px;
     }
   }
 }
