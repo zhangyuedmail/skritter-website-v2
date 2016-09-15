@@ -1,10 +1,29 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptTutorial
+ * @class StudyPromptTutorialComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyPromptTutorialComponent = GelatoComponent.extend({
+
+  /**
+   * @property message
+   * @type {String}
+   */
+  message: null,
+
+  /**
+   * @property events
+   * @type Object
+   */
+  events: {},
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StudyPromptTutorialComponent.jade'),
+
   /**
    * @method initialize
    * @param {Object} options
@@ -13,29 +32,16 @@ module.exports = GelatoComponent.extend({
   initialize: function(options) {
     this.prompt = options.prompt;
   },
-  /**
-   * @property message
-   * @type {String}
-   */
-  message: null,
-  /**
-   * @property events
-   * @type Object
-   */
-  events: {},
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {StudyPromptTutorial}
+   * @returns {StudyPromptTutorialComponent}
    */
   render: function() {
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method setMessage
    * @param {String} value
@@ -44,4 +50,7 @@ module.exports = GelatoComponent.extend({
     this.message = value;
     this.render();
   }
+
 });
+
+module.exports = StudyPromptTutorialComponent;

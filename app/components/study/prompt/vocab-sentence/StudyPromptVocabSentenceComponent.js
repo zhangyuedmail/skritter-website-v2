@@ -1,18 +1,11 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptVocabSentence
+ * @class StudyPromptVocabSentenceComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
-  /**
-   * @method initialize
-   * @param {Object} options
-   * @constructor
-   */
-  initialize: function(options) {
-    this.prompt = options.prompt;
-  },
+const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
+
   /**
    * @property events
    * @type Object
@@ -21,19 +14,31 @@ module.exports = GelatoComponent.extend({
     'click .show-sentence': 'handleClickShowSentence',
     'click .value': 'handleClickValue'
   },
+
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./StudyPromptVocabSentenceComponent.jade'),
+
+  /**
+   * @method initialize
+   * @param {Object} options
+   * @constructor
+   */
+  initialize: function(options) {
+    this.prompt = options.prompt;
+  },
+
   /**
    * @method render
-   * @returns {StudyPromptVocabSentence}
+   * @returns {StudyPromptVocabSentenceComponent}
    */
   render: function() {
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method handleClickShowSentence
    * @param {Event} event
@@ -50,6 +55,7 @@ module.exports = GelatoComponent.extend({
       merge: true
     });
   },
+
   /**
    * @method handleClickValue
    * @param {Event} event
@@ -64,4 +70,7 @@ module.exports = GelatoComponent.extend({
       this.$('.hint').show('slide', {direction: 'up'}, '500');
     }
   }
+
 });
+
+module.exports = StudyPromptVocabSentenceComponent;

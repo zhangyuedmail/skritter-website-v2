@@ -1,36 +1,37 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
-var Canvas = require('components/study/prompt/canvas/view');
-var Navigation = require('components/study/prompt/navigation/view');
-var PartDefn = require('components/study/prompt/part-defn/view');
-var PartRdng = require('components/study/prompt/part-rdng/view');
-var PartRune = require('components/study/prompt/part-rune/view');
-var PartTone = require('components/study/prompt/part-tone/view');
-var ReviewStatus = require('components/study/prompt/review-status/view');
-var Shortcuts = require('components/study/prompt/shortcuts');
-var ToolbarAction = require('components/study/prompt/toolbar-action/view');
-var ToolbarGrading = require('components/study/prompt/toolbar-grading/view');
-var ToolbarVocab = require('components/study/prompt/toolbar-vocab/view');
-var Tutorial = require('components/study/prompt/tutorial/view');
-var VocabContained = require('components/study/prompt/vocab-contained/view');
-var VocabDefinition = require('components/study/prompt/vocab-definition/view');
-var VocabMnemonic = require('components/study/prompt/vocab-mnemonic/view');
-var VocabReading = require('components/study/prompt/vocab-reading/view');
-var VocabSentence = require('components/study/prompt/vocab-sentence/view');
-var VocabStyle = require('components/study/prompt/vocab-style/view');
-var VocabWriting = require('components/study/prompt/vocab-writing/view');
+const Canvas = require('components/study/prompt/canvas/StudyPromptCanvasComponent.js');
+const Navigation = require('components/study/prompt/navigation/StudyPromptNavigationComponent.js');
+const PartDefn = require('components/study/prompt/part-defn/StudyPromptPartDefnComponent.js');
+const PartRdng = require('components/study/prompt/part-rdng/StudyPromptPartRdngComponent.js');
+const PartRune = require('components/study/prompt/part-rune/StudyPromptPartRuneComponent.js');
+const PartTone = require('components/study/prompt/part-tone/StudyPromptPartToneComponent.js');
+const ReviewStatus = require('components/study/prompt/review-status/StudyPromptReviewStatusComponent.js');
+const ToolbarAction = require('components/study/prompt/toolbar-action/StudyPromptToolbarActionComponent.js');
+const ToolbarGrading = require('components/study/prompt/toolbar-grading/StudyPromptToolbarGradingComponent.js');
+const ToolbarVocab = require('components/study/prompt/toolbar-vocab/StudyPromptToolbarVocabComponent.js');
+const Tutorial = require('components/study/prompt/tutorial/StudyPromptTutorialComponent.js');
+const VocabContained = require('components/study/prompt/vocab-contained/StudyPromptVocabContainedComponent.js');
+const VocabDefinition = require('components/study/prompt/vocab-definition/StudyPromptVocabDefinitionComponent.js');
+const VocabMnemonic = require('components/study/prompt/vocab-mnemonic/StudyPromptVocabMnemonicComponent.js');
+const VocabReading = require('components/study/prompt/vocab-reading/StudyPromptVocabReadingComponent.js');
+const VocabSentence = require('components/study/prompt/vocab-sentence/StudyPromptVocabSentenceComponent.js');
+const VocabStyle = require('components/study/prompt/vocab-style/StudyPromptVocabStyleComponent.js');
+const VocabWriting = require('components/study/prompt/vocab-writing/StudyPromptVocabWritingComponent.js');
+
+const Shortcuts = require('components/study/prompt/StudyPromptShortcuts');
 
 /**
- * @class StudyPrompt
+ * @class StudyPromptComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyPromptComponent = GelatoComponent.extend({
 
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./StudyPromptComponent.jade'),
 
   /**
    * @method initialize
@@ -272,3 +273,5 @@ module.exports = GelatoComponent.extend({
   }
 
 });
+
+module.exports = StudyPromptComponent;

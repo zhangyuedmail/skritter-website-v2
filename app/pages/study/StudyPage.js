@@ -1,15 +1,15 @@
-var GelatoPage = require('gelato/page');
-var Prompt = require('components/study/prompt/view');
-var Toolbar = require('components/study/toolbar/view');
-var Recipes = require('components/common/CommonRecipesComponent');
-var Items = require('collections/ItemCollection');
-var Vocablists = require('collections/VocablistCollection');
+const GelatoPage = require('gelato/page');
+const Prompt = require('components/study/prompt/StudyPromptComponent.js');
+const Toolbar = require('components/study/toolbar/StudyToolbarComponent.js');
+const Recipes = require('components/common/CommonRecipesComponent.js');
+const Items = require('collections/ItemCollection.js');
+const Vocablists = require('collections/VocablistCollection.js');
 
 /**
- * @class Study
+ * @class StudyPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const StudyPage = GelatoPage.extend({
 
   /**
    * @property showFooter
@@ -54,7 +54,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method render
-   * @returns {Study}
+   * @returns {StudyPage}
    */
   render: function() {
     this.renderTemplate();
@@ -304,7 +304,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method remove
-   * @returns {Study}
+   * @returns {StudyPage}
    */
   remove: function() {
     this.prompt.remove();
@@ -314,3 +314,5 @@ module.exports = GelatoPage.extend({
   }
 
 });
+
+module.exports = StudyPage;

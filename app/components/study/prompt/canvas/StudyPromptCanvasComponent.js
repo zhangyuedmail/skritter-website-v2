@@ -1,10 +1,23 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptCanvas
+ * @class StudyPromptCanvasComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyPromptCanvasComponent = GelatoComponent.extend({
+
+  /**
+   * @property events
+   * @type Object
+   */
+  events: {},
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StudyPromptCanvasComponent.jade'),
+
   /**
    * @method initialize
    * @param {Object} options
@@ -52,19 +65,10 @@ module.exports = GelatoComponent.extend({
     };
 
   },
-  /**
-   * @property events
-   * @type Object
-   */
-  events: {},
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {StudyPromptCanvas}
+   * @returns {StudyPromptCanvasComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -83,10 +87,11 @@ module.exports = GelatoComponent.extend({
     this.enableCanvas();
     return this;
   },
+
   /**
    * @method clearLayer
    * @param {String} name
-   * @returns {StudyPromptCanvas}
+   * @returns {StudyPromptCanvasComponent}
    */
   clearLayer: function(name) {
     var layer = this.getLayer(name);
@@ -97,6 +102,7 @@ module.exports = GelatoComponent.extend({
     this.stage.update();
     return this;
   },
+
   /**
    * @method createLayer
    * @param {String} name
@@ -108,6 +114,7 @@ module.exports = GelatoComponent.extend({
     this.stage.addChild(layer);
     return layer;
   },
+
   /**
    * @method createStage
    * @returns {createjs.Stage}
@@ -123,6 +130,7 @@ module.exports = GelatoComponent.extend({
     stage.enableDOMEvents(true);
     return stage;
   },
+
   /**
    * @method disableCanvas
    * @returns {Canvas}
@@ -132,18 +140,20 @@ module.exports = GelatoComponent.extend({
     this.stage.removeEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
     return this;
   },
+
   /**
    * @method disableGrid
-   * @returns {StudyPromptCanvas}
+   * @returns {StudyPromptCanvasComponent}
    */
   disableGrid: function() {
     this.clearLayer('character-grid');
     this.grid = false;
     return this;
   },
+
   /**
    * @method disableInput
-   * @returns {StudyPromptCanvas}
+   * @returns {StudyPromptCanvasComponent}
    */
   disableInput: function() {
     this.$('#input-canvas').off('.Input');
@@ -153,6 +163,7 @@ module.exports = GelatoComponent.extend({
     this.stage.removeEventListener('mouseleave', this.leaveListener);
     return this;
   },
+
   /**
    * @method drawCircle
    * @param {String} layerName
@@ -174,9 +185,10 @@ module.exports = GelatoComponent.extend({
     this.stage.update();
     return circle;
   },
+
   /**
    * @method drawGrid
-   * @returns {StudyPromptCanvas}
+   * @returns {StudyPromptCanvasComponent}
    */
   drawGrid: function() {
     var grid = new createjs.Shape();
@@ -192,6 +204,7 @@ module.exports = GelatoComponent.extend({
     this.stage.update();
     return this;
   },
+
   /**
    * @method drawCharacter
    * @param {String} layerName
@@ -210,6 +223,7 @@ module.exports = GelatoComponent.extend({
     this.stage.update();
     return text;
   },
+
   /**
    * @method drawShape
    * @param {String} layerName
@@ -226,6 +240,7 @@ module.exports = GelatoComponent.extend({
     this.stage.update();
     return shape;
   },
+
   /**
    * @method enableCanvas
    * @returns {Canvas}
@@ -235,20 +250,22 @@ module.exports = GelatoComponent.extend({
     this.stage.addEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
     return this;
   },
+
   /**
    * @method disableGrid
-   * @returns {StudyPromptCanvas}
+   * @returns {StudyPromptCanvasComponent}
    */
   enableGrid: function() {
     this.drawGrid();
     this.grid = true;
     return this;
   },
+
   /**
    * Enables touch and mouse input on the canvas and handles the events.
    * Draws a line to follow the input.
    * @method enableInput
-   * @returns {StudyPromptCanvas}
+   * @returns {StudyPromptCanvasComponent}
    * @TODO refactor these inner functions and local vars into instance fns
    * and variables--this function does too much!
    */
@@ -333,6 +350,7 @@ module.exports = GelatoComponent.extend({
         }
       });
   },
+
   /**
    * @method fadeShape
    * @param {String} layerName
@@ -356,6 +374,7 @@ module.exports = GelatoComponent.extend({
         }
       });
   },
+
   /**
    * @method getLayer
    * @param {String} name
@@ -364,6 +383,7 @@ module.exports = GelatoComponent.extend({
   getLayer: function(name) {
     return this.stage.getChildByName('layer-' + name);
   },
+
   /**
    * @method injectColor
    * @param {createjs.Container|createjs.Shape} object
@@ -389,25 +409,28 @@ module.exports = GelatoComponent.extend({
     })(object);
     return this;
   },
+
   /**
    * @method injectLayerColor
    * @param {String} layerName
    * @param {String} color
-   * @returns {StudyPromptCanvas}
+   * @returns {StudyPromptCanvasComponent}
    */
   injectLayerColor: function(layerName, color) {
     return this.injectColor(this.getLayer(layerName), color);
   },
+
   /**
    * @method remove
-   * @returns {StudyPrompt}
+   * @returns {StudyPromptCanvasComponent}
    */
   remove: function() {
     return GelatoComponent.prototype.remove.call(this);
   },
+
   /**
    * @method reset
-   * @returns {StudyPromptCanvas}
+   * @returns {StudyPromptCanvasComponent}
    */
   reset: function() {
     clearTimeout(this.mouseTapTimeout);
@@ -424,9 +447,10 @@ module.exports = GelatoComponent.extend({
     this.resize();
     return this;
   },
+
   /**
    * @method resize
-   * @returns {StudyPromptCanvas}
+   * @returns {StudyPromptCanvasComponent}
    */
   resize: function() {
     var size = this.prompt.getInputSize();
@@ -443,6 +467,7 @@ module.exports = GelatoComponent.extend({
     app.set('canvasSize', size);
     return this;
   },
+
   /**
    * @method tracePath
    * @param {String} layerName
@@ -468,6 +493,7 @@ module.exports = GelatoComponent.extend({
       }
     }
   },
+
   /**
    * @method triggerCanvasMouseDown
    * @param {Object} event
@@ -477,6 +503,7 @@ module.exports = GelatoComponent.extend({
     this.trigger('mousedown', event);
     this.mouseDownEvent = event;
   },
+
   /**
    * @method triggerCanvasMouseUp
    * @param {Object} event
@@ -522,6 +549,7 @@ module.exports = GelatoComponent.extend({
     }
     this.trigger('click', event);
   },
+
   /**
    * @method triggerInputDown
    * @param {createjs.Point} point
@@ -529,6 +557,7 @@ module.exports = GelatoComponent.extend({
   triggerInputDown: function(point) {
     this.trigger('input:down', point);
   },
+
   /**
    * @method triggerInputMove
    * @param {createjs.Point} point
@@ -536,6 +565,7 @@ module.exports = GelatoComponent.extend({
   triggerInputMove: function(point) {
     this.trigger('input:move', point);
   },
+
   /**
    * @method triggerInputUp
    * @param {Array} points
@@ -544,6 +574,7 @@ module.exports = GelatoComponent.extend({
   triggerInputUp: function(points, shape) {
     this.trigger('input:up', points, shape);
   },
+
   /**
    * @method triggerNavigateNext
    * @param {Event} event
@@ -552,6 +583,7 @@ module.exports = GelatoComponent.extend({
     event.preventDefault();
     this.trigger('navigate:next');
   },
+
   /**
    * @method triggerNavigatePrevious
    * @param {Event} event
@@ -560,6 +592,7 @@ module.exports = GelatoComponent.extend({
     event.preventDefault();
     this.trigger('navigate:previous');
   },
+
   /**
    * @method tweenShape
    * @param {String} layerName
@@ -567,7 +600,7 @@ module.exports = GelatoComponent.extend({
    * @param {createjs.Shape} toShape
    * @param {Object} [options]
    * @param {Function} [callback]
-   * @returns {StudyPromptCanvas}
+   * @returns {StudyPromptCanvasComponent}
    */
   tweenShape: function(layerName, fromShape, toShape, options, callback) {
     this.getLayer(layerName).addChild(fromShape);
@@ -587,4 +620,7 @@ module.exports = GelatoComponent.extend({
     });
     return this;
   }
+
 });
+
+module.exports = StudyPromptCanvasComponent;

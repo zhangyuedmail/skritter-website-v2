@@ -1,18 +1,11 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptToolbarGrading
+ * @class StudyPromptToolbarGradingComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
-  /**
-   * @method initialize
-   * @param {Object} options
-   * @constructor
-   */
-  initialize: function(options) {
-    this.prompt = options.prompt;
-  },
+const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
+
   /**
    * @property events
    * @type Object
@@ -21,32 +14,46 @@ module.exports = GelatoComponent.extend({
     'mousedown button': 'handleMousedownButton',
     'mouseup button': 'handleMouseupButton'
   },
+
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./StudyPromptToolbarGradingComponent.jade'),
+
   /**
    * @property value
    * @type {Number}
    */
   value: null,
+
+  /**
+   * @method initialize
+   * @param {Object} options
+   * @constructor
+   */
+  initialize: function(options) {
+    this.prompt = options.prompt;
+  },
+
   /**
    * @method render
-   * @returns {StudyPromptToolbarGrading}
+   * @returns {StudyPromptToolbarGradingComponent}
    */
   render: function() {
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method deselect
-   * @returns {StudyPromptToolbarGrading}
+   * @returns {StudyPromptToolbarGradingComponent}
    */
   deselect: function() {
     this.value = null;
     return this.render();
   },
+
   /**
    * @method handleMousedownButton
    * @param {Event} event
@@ -56,6 +63,7 @@ module.exports = GelatoComponent.extend({
     this.select($(event.currentTarget).data('value'));
     this.trigger('mousedown', this.value);
   },
+
   /**
    * @method handleMousedownButton
    * @param {Event} event
@@ -65,13 +73,17 @@ module.exports = GelatoComponent.extend({
     this.select($(event.currentTarget).data('value'));
     this.trigger('mouseup', this.value);
   },
+
   /**
    * @method select
    * @param {Number} value
-   * @returns {StudyPromptToolbarGrading}
+   * @returns {StudyPromptToolbarGradingComponent}
    */
   select: function(value) {
     this.value = parseInt(value, 10);
     return this.render();
   }
+
 });
+
+module.exports = StudyPromptToolbarGradingComponent;

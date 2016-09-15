@@ -1,10 +1,10 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptNavigation
+ * @class StudyPromptNavigationComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyPromptNavigationComponent = GelatoComponent.extend({
 
   /**
    * @property events
@@ -19,7 +19,7 @@ module.exports = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./StudyPromptNavigationComponent.jade'),
 
   /**
    * @method initialize
@@ -34,7 +34,7 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method render
-   * @returns {StudyPromptNavigation}
+   * @returns {StudyPromptNavigationComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -63,3 +63,5 @@ module.exports = GelatoComponent.extend({
   }
 
 });
+
+module.exports = StudyPromptNavigationComponent;

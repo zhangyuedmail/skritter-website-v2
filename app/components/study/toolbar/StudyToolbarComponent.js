@@ -1,13 +1,14 @@
 const GelatoComponent = require('gelato/component');
 const ProgressStats = require('collections/ProgressStatsCollection');
+const StudyToolbarTimerComponent = require('components/study/toolbar/timer/StudyToolbarTimerComponent.js');
+
 const StudySettings = require('dialogs/study-settings/view');
-const Timer = require('components/study/toolbar/timer/view');
 
 /**
- * @class StudyToolbar
+ * @class StudyToolbarComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyToolbarComponent = GelatoComponent.extend({
 
   /**
    * @property events
@@ -22,7 +23,7 @@ module.exports = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./StudyToolbarComponent.jade'),
 
   /**
    * @method initialize
@@ -32,7 +33,7 @@ module.exports = GelatoComponent.extend({
     this.dueCountOffset = 0;
     this.page = options.page;
     this.stats = new ProgressStats();
-    this.timer = new Timer();
+    this.timer = new StudyToolbarTimerComponent();
     this.listenTo(this.page.items, 'update:due-count', this.handleUpdateDueCount);
     this.listenTo(this.stats, 'state:standby', this.updateTimerOffset);
     this.stats.fetchToday();
@@ -41,7 +42,7 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method render
-   * @returns {StudyToolbar}
+   * @returns {StudyToolbarComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -127,7 +128,7 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @function remove
-   * @returns {StudyToolbar}
+   * @returns {StudyToolbarComponent}
    */
   remove: function() {
     this.timer.remove();
@@ -142,3 +143,5 @@ module.exports = GelatoComponent.extend({
   }
 
 });
+
+module.exports = StudyToolbarComponent;

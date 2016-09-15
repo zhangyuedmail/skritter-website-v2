@@ -1,10 +1,25 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StylePromptVocabReading
+ * @class StudyPromptVocabReadingComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyPromptVocabReadingComponent = GelatoComponent.extend({
+
+  /**
+   * @property events
+   * @type Object
+   */
+  events: {
+    'click .show-reading': 'handleClickShowReading'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StudyPromptVocabReadingComponent.jade'),
+
   /**
    * @method initialize
    * @param {Object} options
@@ -13,26 +28,16 @@ module.exports = GelatoComponent.extend({
   initialize: function(options) {
     this.prompt = options.prompt;
   },
-  /**
-   * @property events
-   * @type Object
-   */
-  events: {
-    'click .show-reading': 'handleClickShowReading'
-  },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {StylePromptVocabReading}
+   * @returns {StudyPromptVocabReadingComponent}
    */
   render: function() {
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method handleClickShowReading
    * @param {Event} event
@@ -44,4 +49,7 @@ module.exports = GelatoComponent.extend({
     this.prompt.reviews.at(position).set('showReading', true);
     this.render();
   }
+
 });
+
+module.exports = StudyPromptVocabReadingComponent;

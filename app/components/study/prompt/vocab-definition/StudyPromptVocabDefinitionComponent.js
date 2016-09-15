@@ -1,10 +1,25 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptVocabDefinition
+ * @class StudyPromptVocabDefinitionComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
+
+  /**
+   * @property events
+   * @type Object
+   */
+  events: {
+    'click #show-definition': 'handleClickShowDefinition'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StudyPromptVocabDefinitionComponent.jade'),
+
   /**
    * @method initialize
    * @param {Object} options
@@ -14,26 +29,16 @@ module.exports = GelatoComponent.extend({
     this.editing = false;
     this.prompt = options.prompt;
   },
-  /**
-   * @property events
-   * @type Object
-   */
-  events: {
-    'click #show-definition': 'handleClickShowDefinition'
-  },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {StudyPromptVocabDefinition}
+   * @returns {StudyPromptVocabDefinitionComponent}
    */
   render: function() {
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method getValue
    * @returns {Object}
@@ -41,6 +46,7 @@ module.exports = GelatoComponent.extend({
   getValue: function() {
     return this.$('textarea').val();
   },
+
   /**
    * @method handleClickShowDefinition
    * @param {Event} event
@@ -52,4 +58,7 @@ module.exports = GelatoComponent.extend({
     });
     this.render();
   }
+
 });
+
+module.exports = StudyPromptVocabDefinitionComponent;

@@ -1,10 +1,10 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptPartRdng
+ * @class StudyPromptPartRdngComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyPromptPartRdngComponent = GelatoComponent.extend({
 
   /**
    * @property el
@@ -32,7 +32,7 @@ module.exports = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./StudyPromptPartRdngComponent.jade'),
 
   /**
    * @method initialize
@@ -59,7 +59,7 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method render
-   * @returns {StudyPromptPartDefn}
+   * @returns {StudyPromptPartRdngComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -606,3 +606,5 @@ module.exports = GelatoComponent.extend({
   }
 
 });
+
+module.exports = StudyPromptPartRdngComponent;

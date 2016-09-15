@@ -1,10 +1,29 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptPartDefn
+ * @class StudyPromptPartDefnComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyPromptPartDefnComponent = GelatoComponent.extend({
+
+  /**
+   * @property el
+   * @type {String}
+   */
+  el: '#review-container',
+
+  /**
+   * @property events
+   * @type Object
+   */
+  events: {},
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StudyPromptPartDefnComponent.jade'),
+
   /**
    * @method initialize
    * @param {Object} options
@@ -16,24 +35,10 @@ module.exports = GelatoComponent.extend({
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptToolbarGradingMouseup);
   },
-  /**
-   * @property el
-   * @type {String}
-   */
-  el: '#review-container',
-  /**
-   * @property events
-   * @type Object
-   */
-  events: {},
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {StudyPromptPartDefn}
+   * @returns {StudyPromptPartDefnComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -61,7 +66,7 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method renderComplete
-   * @returns {StudyPromptPartRune}
+   * @returns {StudyPromptPartDefnComponent}
    */
   renderComplete: function() {
     this.prompt.review.stop();
@@ -85,9 +90,10 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method renderIncomplete
-   * @returns {StudyPromptPartRune}
+   * @returns {StudyPromptPartDefnComponent}
    */
   renderIncomplete: function() {
     this.prompt.review.start();
@@ -106,6 +112,7 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method handlePromptCanvasClick
    */
@@ -117,6 +124,7 @@ module.exports = GelatoComponent.extend({
       this.render();
     }
   },
+
   /**
    * @method handlePromptToolbarActionCorrect
    */
@@ -125,10 +133,14 @@ module.exports = GelatoComponent.extend({
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.toolbarAction.render();
   },
+
   /**
    * @method handlePromptToolbarGradingMouseup
    */
   handlePromptToolbarGradingMouseup: function(value) {
     this.prompt.review.set('score', value);
   }
+
 });
+
+module.exports = StudyPromptPartDefnComponent;

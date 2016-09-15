@@ -1,10 +1,25 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptVocabMnemonic
+ * @class StudyPromptVocabMnemonicComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
+
+  /**
+   * @property events
+   * @type Object
+   */
+  events: {
+    'click #show-mnemonic': 'handleClickShowMnemonic'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StudyPromptVocabMnemonicComponent.jade'),
+
   /**
    * @method initialize
    * @param {Object} options
@@ -14,26 +29,16 @@ module.exports = GelatoComponent.extend({
     this.editing = false;
     this.prompt = options.prompt;
   },
-  /**
-   * @property events
-   * @type Object
-   */
-  events: {
-    'click #show-mnemonic': 'handleClickShowMnemonic'
-  },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {StudyPromptVocabMnemonic}
+   * @returns {StudyPromptVocabMnemonicComponent}
    */
   render: function() {
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method getValue
    * @returns {Object}
@@ -45,6 +50,7 @@ module.exports = GelatoComponent.extend({
       text: this.$('textarea').val()
     };
   },
+
   /**
    * @method handleClickShowMnemonic
    * @param {Event} event
@@ -54,4 +60,7 @@ module.exports = GelatoComponent.extend({
     this.prompt.review.set('showMnemonic', true);
     this.render();
   }
+
 });
+
+module.exports = StudyPromptVocabMnemonicComponent;

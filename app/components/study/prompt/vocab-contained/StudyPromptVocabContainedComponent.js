@@ -1,10 +1,25 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptVocabContained
+ * @class StudyPromptVocabContainedComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyPromptVocabContainedComponent = GelatoComponent.extend({
+
+  /**
+   * @property events
+   * @type Object
+   */
+  events: {
+    'click #show-contained': 'handleClickShowContained'
+  },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StudyPromptVocabContainedComponent.jade'),
+
   /**
    * @method initialize
    * @param {Object} options
@@ -13,26 +28,16 @@ module.exports = GelatoComponent.extend({
   initialize: function(options) {
     this.prompt = options.prompt;
   },
-  /**
-   * @property events
-   * @type Object
-   */
-  events: {
-    'click #show-contained': 'handleClickShowContained'
-  },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method render
-   * @returns {StudyPromptVocabContained}
+   * @returns {StudyPromptVocabContainedComponent}
    */
   render: function() {
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method handleClickShowContained
    * @param {Event} event
@@ -46,4 +51,7 @@ module.exports = GelatoComponent.extend({
     }
     this.render();
   }
+
 });
+
+module.exports = StudyPromptVocabContainedComponent;

@@ -21,7 +21,7 @@ module.exports = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./StudyPromptToolbarVocabComponent.jade'),
   /**
    * @method render
    * @returns {StudyPromptToolbarVocab}

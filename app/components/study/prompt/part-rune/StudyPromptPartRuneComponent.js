@@ -1,10 +1,10 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptPartRune
+ * @class StudyPromptPartRuneComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyPromptPartRuneComponent = GelatoComponent.extend({
 
   /**
    * @property el
@@ -27,7 +27,7 @@ module.exports = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./StudyPromptPartRuneComponent.jade'),
 
   /**
    * @method initialize
@@ -54,7 +54,7 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method render
-   * @returns {StudyPromptPartRune}
+   * @returns {StudyPromptPartRuneComponent}
    */
   render: function() {
     this.prompt.review = this.prompt.reviews.current();
@@ -86,7 +86,7 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method renderComplete
-   * @returns {StudyPromptPartRune}
+   * @returns {StudyPromptPartRuneComponent}
    */
   renderComplete: function() {
     this.prompt.review.stop();
@@ -133,7 +133,7 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method renderIncomplete
-   * @returns {StudyPromptPartRune}
+   * @returns {StudyPromptPartRuneComponent}
    */
   renderIncomplete: function() {
     this.prompt.review.start();
@@ -431,3 +431,5 @@ module.exports = GelatoComponent.extend({
   }
 
 });
+
+module.exports = StudyPromptPartRuneComponent;

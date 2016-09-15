@@ -1,9 +1,9 @@
-var GelatoPage = require('gelato/page');
-var Prompt = require('components/study/prompt/view');
-var Toolbar = require('components/study/toolbar/view');
-var Recipes = require('components/common/CommonRecipesComponent');
-var Items = require('collections/ItemCollection');
-var Vocablist = require('models/VocablistModel');
+const GelatoPage = require('gelato/page');
+const Prompt = require('components/study/prompt/StudyPromptComponent.js');
+const Toolbar = require('components/study/toolbar/StudyToolbarComponent.js');
+const Recipes = require('components/common/CommonRecipesComponent.js');
+const Items = require('collections/ItemCollection.js');
+const Vocablist = require('models/VocablistModel.js');
 
 /**
  * @class StudyListPage

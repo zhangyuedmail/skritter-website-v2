@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
  * @class StudyToolbarStopwatch
@@ -23,10 +23,17 @@ function Stopwatch() {
 }
 
 /**
- * @class StudyToolbarTimer
+ * @class StudyToolbarTimerComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const StudyToolbarTimerComponent = GelatoComponent.extend({
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StudyToolbarTimerComponent.jade'),
+
   /**
    * @method initialize
    * @constructor
@@ -39,27 +46,25 @@ module.exports = GelatoComponent.extend({
     this.stopwatch = new Stopwatch();
     this.time = 0;
   },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./template'),
+
   /**
    * @method remove
-   * @returns {StudyToolbarTimer}
+   * @returns {StudyToolbarTimerComponent}
    */
   remove: function() {
     this.interval = clearInterval(this.interval);
     return GelatoComponent.prototype.remove.call(this);
   },
+
   /**
    * @method render
-   * @returns {StudyToolbarTimer}
+   * @returns {StudyToolbarTimerComponent}
    */
   render: function() {
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method addLocalOffset
    * @param {Number} value
@@ -68,6 +73,7 @@ module.exports = GelatoComponent.extend({
     this.localOffset += value;
     this.update();
   },
+
   /**
    * @method addServerOffset
    * @param {Number} value
@@ -76,6 +82,7 @@ module.exports = GelatoComponent.extend({
     this.serverOffset += value;
     this.update();
   },
+
   /**
    * @method getOffset
    * @returns {Number}
@@ -83,6 +90,7 @@ module.exports = GelatoComponent.extend({
   getOffset: function() {
     return (this.localOffset + this.serverOffset) * 1000;
   },
+
   /**
    * @method isStarted
    * @returns {Boolean}
@@ -90,6 +98,7 @@ module.exports = GelatoComponent.extend({
   isStarted: function() {
     return this.interval ? true : false;
   },
+
   /**
    * @method isStopped
    * @returns {Boolean}
@@ -97,6 +106,7 @@ module.exports = GelatoComponent.extend({
   isStopped: function() {
     return this.interval ? false : true;
   },
+
   /**
    * @method reset
    */
@@ -104,6 +114,7 @@ module.exports = GelatoComponent.extend({
     this.stopwatch.reset();
     this.lapOffset = 0;
   },
+
   /**
    * @method setLocalOffset
    * @param {Number} value
@@ -112,6 +123,7 @@ module.exports = GelatoComponent.extend({
     this.localOffset = value;
     this.update();
   },
+
   /**
    * @method setServerOffset
    * @param {Number} value
@@ -120,6 +132,7 @@ module.exports = GelatoComponent.extend({
     this.serverOffset = value;
     this.update();
   },
+
   /**
    * @method start
    */
@@ -129,6 +142,7 @@ module.exports = GelatoComponent.extend({
       this.interval = setInterval(this.update.bind(this), 100);
     }
   },
+
   /**
    * @method stop
    */
@@ -138,6 +152,7 @@ module.exports = GelatoComponent.extend({
       this.interval = clearInterval(this.interval);
     }
   },
+
   /**
    * @method update
    */
@@ -150,4 +165,7 @@ module.exports = GelatoComponent.extend({
       this.render();
     }
   }
+
 });
+
+module.exports = StudyToolbarTimerComponent;
