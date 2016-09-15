@@ -21,7 +21,7 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./Study'),
+  template: require('./StudyPage.jade'),
 
   /**
    * @property title

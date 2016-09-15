@@ -372,11 +372,11 @@ module.exports = Router.extend({
       if (sectionId) {
         //TODO: replace when single list section study ready for action
         //this.go('pages/study-section', {listId: listId, sectionId: sectionId});
-        this.go('pages/study/StudyPage');
+        this.go('pages/study/StudyPage.js');
       } else if (listId) {
         this.go('pages/study-list/StudyListPage', {listId: listId});
       } else {
-        this.go('pages/study/StudyPage');
+        this.go('pages/study/StudyPage.js');
       }
     } else {
       this.navigateLogin();
