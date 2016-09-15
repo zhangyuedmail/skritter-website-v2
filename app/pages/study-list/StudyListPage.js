@@ -6,10 +6,10 @@ var Items = require('collections/ItemCollection');
 var Vocablist = require('models/VocablistModel');
 
 /**
- * @class StudyList
+ * @class StudyListPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const StudyListPage = GelatoPage.extend({
 
   /**
    * @property showFooter
@@ -21,7 +21,7 @@ module.exports = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./StudyList'),
+  template: require('./StudyListPage.jade'),
 
   /**
    * @property title
@@ -55,7 +55,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method render
-   * @returns {StudyList}
+   * @returns {StudyListPage}
    */
   render: function() {
     this.renderTemplate();
@@ -305,7 +305,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method remove
-   * @returns {StudyList}
+   * @returns {StudyListPage}
    */
   remove: function() {
     this.prompt.remove();
@@ -315,3 +315,5 @@ module.exports = GelatoPage.extend({
   }
 
 });
+
+module.exports = StudyListPage;
