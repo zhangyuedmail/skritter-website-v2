@@ -1,19 +1,31 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='login'] {
-  background: $background-primary;
+  background: $background-marketing;
   padding-top: 50px;
 
+  &.mobile {
+    background: $background-primary;
+  }
+
   label {
+    font-size: 16px;
+  }
+
+  .large-label {
     font-size: 20px;
   }
 
   input {
+    height: auto;
+    font-size: 18px;
+  }
+
+  .large-input {
     padding: 12px 12px;
     font-size: 20px;
     line-height: normal;
     margin: auto;
-    height: auto;
     margin-bottom: 20px;
   }
 
@@ -21,6 +33,16 @@ gelato-page[data-name='login'] {
     background: none;
     margin: 100px auto;
     max-width: 400px;
+  }
+
+  .content-block {
+    margin: 100px auto;
+    max-width: 400px;
+  }
+
+  .pad-top {
+    margin-top: 25px;
+    display: inline-block;
   }
 
   .push-bottom {

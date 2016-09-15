@@ -47,6 +47,10 @@ const LoginPage = GelatoPage.extend({
    * @returns {LoginPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileLogin.jade');
+    }
+
     this.renderTemplate();
 
     return this;

@@ -43,6 +43,10 @@ module.exports = GelatoPage.extend({
    * @returns {PasswordResetPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobilePasswordReset.jade');
+    }
+
     this.renderTemplate();
 
     return this;

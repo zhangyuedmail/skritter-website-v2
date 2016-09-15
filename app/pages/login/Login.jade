@@ -1,7 +1,7 @@
 gelato-page(data-name='login')
   section.container
-    .wrapper
-      form#login-form.push-bottom
+    .content-block
+      form#login-form
         #login-message.text-danger
         .form-group
           label(for="login-username") Username
@@ -9,9 +9,8 @@ gelato-page(data-name='login')
         .form-group
           label(for="login-password") Password
           input#login-password.form-control(type="password", placeholder="Password")
-        .form-group.text-center
-          button#button-login.btn.btn-fixed.btn-primary.btn-success(type="button")= app.locale('common.logIn')
-          if app.isDevelopment()
-            | &nbsp;&nbsp;
-            button#button-skeleton.btn.btn-fixed.btn-default(type="button") Skeleton
-      a#password-reset(href="/password-reset") Forgot your password?
+        button#button-login.btn.btn-fixed.btn-primary(type="button")= app.locale('common.logIn')
+        if app.isDevelopment()
+          | &nbsp;&nbsp;
+          button#button-skeleton.btn.btn-fixed.btn-default(type="button") Skeleton
+      a#password-reset.pad-top(href="/password-reset") Forgot your password?
