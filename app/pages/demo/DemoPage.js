@@ -1,6 +1,6 @@
 const GelatoPage = require('gelato/page');
 const Vocabs = require('collections/VocabCollection');
-const Prompt = require('components/study/prompt/view');
+const Prompt = require('components/study/prompt/StudyPromptComponent.js');
 const DemoCallToActionDialog = require('dialogs1/demo-call-to-action/view');
 const DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
 const ItemsCollection = require('collections/ItemCollection');
@@ -55,7 +55,7 @@ const DemoPage = GelatoPage.extend({
     this.renderTemplate();
     this.prompt.setElement('#demo-prompt-container').render().hide();
     this.loadDemo();
-    
+
     return this;
   },
 
