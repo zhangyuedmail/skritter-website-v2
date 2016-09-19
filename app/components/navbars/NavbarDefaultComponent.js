@@ -20,7 +20,7 @@ module.exports = NavbarComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./NavbarDefault.jade'),
 
   /**
    * @method render
