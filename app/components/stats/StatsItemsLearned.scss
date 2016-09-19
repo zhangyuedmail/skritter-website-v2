@@ -21,6 +21,7 @@ gelato-component[data-name='stats-items-learned'] {
     border-bottom: 1px solid #FFF;
   }
 
+
   .cicle-label {
     letter-spacing: .5px;
   }
@@ -61,7 +62,8 @@ gelato-component[data-name='stats-items-learned'] {
 
   .data-section {
     position: relative;
-    margin-bottom: 50px;
+    margin-bottom: 0px;
+    margin-top: 56px;
 
     // this will be reduced on smaller screens
     width: 100%;
@@ -98,6 +100,7 @@ gelato-component[data-name='stats-items-learned'] {
   @media (max-width: 1000px) {
     .data-section {
       width: 50%;
+      margin-top: 0px;
     }
 
     .words-learned-bg {

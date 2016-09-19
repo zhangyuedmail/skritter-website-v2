@@ -81,11 +81,6 @@ gelato-component[data-name='stats-timeline'] {
     .title {
       display: none;
     }
-
-    .data-section {
-      margin-bottom: 0;
-      margin-top: 56px;
-    }
   }
 
   .days-studied-container {
@@ -116,12 +111,8 @@ gelato-component[data-name='stats-timeline'] {
     color: #FFF;
   }
 
-  .middle-graph-wrapper-l {
-    padding-right: 0;
-  }
-
-  .middle-graph-wrapper-r {
-    padding-left: 0;
+  .middle-graph-wrapper-l, .middle-graph-wrapper-r {
+    padding: 0;
   }
 
   .days-studied-placeholder {
@@ -144,6 +135,12 @@ gelato-component[data-name='stats-timeline'] {
     color: $grey5;
     left: 0px;
     top: 0px;
+  }
+
+  .items-leaned-days-studied-wrapper {
+    .row {
+      margin: 0;
+    }
   }
 
   .graph {
