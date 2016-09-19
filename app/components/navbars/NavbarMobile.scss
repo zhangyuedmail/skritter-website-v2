@@ -1,0 +1,112 @@
+@import "../../styles/_variables";
+
+bootstrap-navbar[data-name='mobile'] {
+
+  img {
+    height: 30px;
+  }
+
+  nav {
+    background-color: #262b30;
+    border-color: #262b30;
+    box-shadow: 0 1px 10px rgba(38, 43, 48, .15);
+    z-index: 7001;
+  }
+
+  .navbar-header {
+    a {
+      color: $white1;
+      font-family: $font-slab;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+      &:hover {
+        color: $white5;
+      }
+    }
+  }
+
+  .navbar-nav {
+    a {
+      color: $white1;
+      font-family: $font-ubuntu;
+      font-size: 18px;
+      font-weight: 400;
+      text-decoration: none;
+      &:hover {
+        color: $white5;
+      }
+    }
+    .dropdown {
+      li > a {
+        color: $grey7;
+      }
+      .dropdown-menu {
+        z-index: 8000;
+      }
+    }
+    .open > a {
+      &:hover {
+        background-color: $grey7;
+      }
+      &:focus {
+        background-color: $grey7;
+      }
+    }
+
+    .target-lang-dropdown {
+      height: 50px;
+    }
+
+    .lang-icon {
+      font-size: smaller;
+    }
+
+    .lang-select-icon-wrapper {
+      padding-bottom: 13px;
+    }
+
+    .other-lang-icon {
+      display: inline-block;
+      min-width: 70px;
+    }
+
+    .language-select-menu {
+      background: $white;
+      margin-top: 1px;
+
+      .currently-studying {
+        background: $grey1;
+        font-size: 16px;
+        display: block;
+        padding: 3px 20px;
+        clear: both;
+        text-align: center;
+      }
+    }
+  }
+
+  .version {
+    margin-left: 10px;
+    font-weight: normal;
+    position: relative;
+  }
+
+  .point {
+    margin-left: 2px;
+  }
+
+  .beta {
+    color: $grade3;
+    font-size: 12px;
+    position: absolute;
+    left: 20px;
+    top: -10px;
+  }
+
+  #button-beacon {
+    font-size: 22px;
+    padding-bottom: 12px;
+    padding-top: 16px;
+  }
+}

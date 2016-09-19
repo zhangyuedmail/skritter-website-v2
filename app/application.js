@@ -76,6 +76,11 @@ module.exports = GelatoApplication.extend({
     }
   },
 
+  render: function() {
+    $('body').append()
+    return this;
+  },
+
   /**
    * @property defaults
    * @type {Object}
