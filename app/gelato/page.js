@@ -1,5 +1,5 @@
 var GelatoView = require('./view');
-var DefaultNavbar = require('navbars/default/view');
+var DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
 var MarketingFooter = require('components/marketing/MarketingFooterComponent');
 
 /**
