@@ -13,4 +13,20 @@ gelato-application {
   padding: 0;
   position: absolute;
   width: 100%;
+
+  #page-container {
+    gelato-page {
+      padding-bottom: 50px;
+    }
+  }
+
+  #navbar-container {
+    position: fixed;
+    z-index: 7001;
+    width: 100%;
+  }
+
+  #page-container {
+    //height: inherit;
+  }
 }

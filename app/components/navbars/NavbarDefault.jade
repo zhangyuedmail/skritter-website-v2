@@ -22,7 +22,7 @@ bootstrap-navbar(data-name='default')
 
         if user.isLoggedIn()
 
-          ul.nav.navbar-nav
+          ul.nav.navbar-nav.logged-in-nav
             li(class=currentSection === 'study' ? 'active' : '')
               a(href="/study") Study
             li(class=currentSection === 'vocablists' ? 'active' : '')
@@ -76,7 +76,7 @@ bootstrap-navbar(data-name='default')
 
         else
 
-          ul.nav.navbar-nav
+          ul.nav.navbar-nav.logged-out-nav
             li(class=currentSection === 'features' ? 'active' : '')
               a(href="/features", target="_blank") Features
             li

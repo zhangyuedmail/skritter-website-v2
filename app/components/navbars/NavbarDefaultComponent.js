@@ -38,7 +38,15 @@ module.exports = NavbarComponent.extend({
    * @returns {String} The section of the site the user is currently on.
    */
   getCurrentSection: function() {
-    return Backbone.history.getFragment().split('/')[0];
+    var history = null;
+
+    // this could null out on app initialization.
+    // should refactor whatever calls this before routing has officially started.
+    try {
+      history = Backbone.history.getFragment() || "".split('/')[0];
+    } catch(e) {}
+
+    return history;
   },
 
   /**
@@ -92,12 +100,22 @@ module.exports = NavbarComponent.extend({
     }
   },
 
+  /**
+   * Handles action when user wants to find their referral link.
+   * @param {jQuery.Event} event the click event
+   * @method handleClickReferLink
+   */
   handleClickReferLink: function(event) {
     event.preventDefault();
     app.mixpanel.track('Clicked navbar refer link');
     app.router.navigate('refer', {trigger: true});
   },
 
+  /**
+   * Handles action when user wants to switch the target language they are studying.
+   * @param {jQuery.Event} e the click event
+   * @method handleClickSwitchTargetLang
+   */
   handleClickSwitchTargetLang: function(e) {
     e.preventDefault();
     e.stopPropagation();

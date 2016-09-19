@@ -7,15 +7,16 @@ const GelatoComponent = require('gelato/component');
 const MarketingFooterComponent = GelatoComponent.extend({
 
   /**
+   * Element tag name
+   * @default
+   */
+  tagName: 'gelato-component',
+
+  /**
    * CSS class for the element
    * @default
    */
-  className: 'footer-container',
-
-  /**
-   * Id for the element
-   */
-  id: 'footer-container',
+  className: 'marketing-footer-component',
 
   /**
    * @property template

@@ -14,13 +14,16 @@ var Config = require('config');
  * @extends {GelatoApplication}
  */
 module.exports = GelatoApplication.extend({
+
   /**
    * Initializes a new application instance. Sets up error handling, analytics,
    * and various app-level properties such as referrals.
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function(options) {
+    GelatoApplication.prototype.initialize.call(this, arguments);
+
     this.config = Config;
 
     /**
@@ -42,7 +45,7 @@ module.exports = GelatoApplication.extend({
       }
     ).attach();
 
-    Raygun.setVersion(this.get('version'));
+    Raygun.setVersion(this.config.version);
 
     this.fn = Functions;
     this.mixpanel = Mixpanel;
@@ -76,14 +79,10 @@ module.exports = GelatoApplication.extend({
     }
   },
 
-  render: function() {
-    $('body').append()
-    return this;
-  },
-
   /**
    * @property defaults
    * @type {Object}
+   * @TODO: remove these in favor of config versions
    */
   defaults: {
     apiDomain: location.hostname.indexOf('.cn') > -1 ? '.cn' : '.com',
@@ -92,7 +91,7 @@ module.exports = GelatoApplication.extend({
     demoLang: 'zh',
     description: '{!application-description!}',
     canvasSize: 450,
-    language: undefined,
+    language: null,
     lastItemChanged: 0,
     locale: 'en',
     nodeApiRoot: 'https://api-dot-write-way.appspot.com',
@@ -100,6 +99,10 @@ module.exports = GelatoApplication.extend({
     title: '{!application-title!}',
     version: '{!application-version!}'
   },
+
+  // temporary hacks until code is refactored more
+  get: function(key) {return this.config[key]; },
+  set: function(key, value) { this.config[key] = value; },
 
   dialogs: {
     vocabViewer: new VocabViewerDialog()
@@ -137,10 +140,10 @@ module.exports = GelatoApplication.extend({
    */
   getApiUrl: function() {
     if (!this.isProduction() && this.localBackend) {
-      return 'http://localhost:8080' + '/api/v' + this.get('apiVersion') + '/';
+      return 'http://localhost:8080' + '/api/v' + this.config.apiVersion + '/';
     }
 
-    return this.get('apiRoot') + this.get('apiDomain') + '/api/v' + this.get('apiVersion') + '/';
+    return this.config.apiRoot + this.config.apiDomain + '/api/v' + this.config.apiVersion + '/';
   },
 
   /**
@@ -172,7 +175,7 @@ module.exports = GelatoApplication.extend({
    * @returns {String}
    */
   getLanguage: function() {
-    return this.get('language') || this.user.get('targetLang');
+    return this.config.language || this.user.get('targetLang');
   },
 
   /**
@@ -438,6 +441,7 @@ module.exports = GelatoApplication.extend({
    * @method start
    */
   start: function() {
+    GelatoApplication.prototype.start.call(this, arguments);
 
     //load cached user data if it exists
     this.user.set(this.getLocalStorage(this.user.id + '-user'));
