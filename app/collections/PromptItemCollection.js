@@ -62,6 +62,12 @@ const PromptItemCollection = GelatoCollection.extend({
   showContained: false,
 
   /**
+   * @property showDefinition
+   * @type {Boolean}
+   */
+  showDefinition: false,
+
+  /**
    * @property skip
    * @type {Boolean}
    */
@@ -239,6 +245,14 @@ const PromptItemCollection = GelatoCollection.extend({
    */
   isContainedShown: function() {
     return this.showContained || this.current().get('showContained');
+  },
+
+  /**
+   * @method isDefinitionShown
+   * @returns {Boolean}
+   */
+  isDefinitionShown: function() {
+    return this.showDefinition || !app.user.get('hideDefinition') || this.isComplete();
   },
 
   /**

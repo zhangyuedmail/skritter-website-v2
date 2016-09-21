@@ -27,11 +27,11 @@ gelato-component(data-name='study-prompt-vocab-definition')
             textarea= definition
           else
             if definition
-              if prompt.review.isDefinitionHidden()
-                button#show-definition.btn.btn-sm.btn-default show
-              else
+              if prompt.reviews.isDefinitionShown()
                 if app.user.get('showHeisig') && vocab.has('heisigDefinition')
                   em!= vocab.get('heisigDefinition') + ' - '
                 span!= definition
+              else
+                button#show-definition.btn.btn-sm.btn-default show
             else
               em Click the 'edit' icon to add a definition

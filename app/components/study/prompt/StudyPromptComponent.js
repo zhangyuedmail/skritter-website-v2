@@ -69,7 +69,7 @@ const StudyPromptComponent = GelatoComponent.extend({
 
   /**
    * @method render
-   * @returns {StudyPrompt}
+   * @returns {StudyPromptComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -101,7 +101,7 @@ const StudyPromptComponent = GelatoComponent.extend({
 
   /**
    * @method renderPart
-   * @returns {StudyPrompt}
+   * @returns {StudyPromptComponent}
    */
   renderPart: function() {
     if (this.part) {
@@ -194,7 +194,7 @@ const StudyPromptComponent = GelatoComponent.extend({
 
   /**
    * @method remove
-   * @returns {StudyPrompt}
+   * @returns {StudyPromptComponent}
    */
   remove: function() {
     this.canvas.remove();
@@ -223,7 +223,7 @@ const StudyPromptComponent = GelatoComponent.extend({
 
   /**
    * @method reset
-   * @returns {StudyPrompt}
+   * @returns {StudyPromptComponent}
    */
   reset: function() {
     this.review = null;
@@ -235,7 +235,7 @@ const StudyPromptComponent = GelatoComponent.extend({
 
   /**
    * @method resize
-   * @returns {StudyPrompt}
+   * @returns {StudyPromptComponent}
    */
   resize: function() {
     var inputSize = this.getInputSize();
@@ -248,7 +248,7 @@ const StudyPromptComponent = GelatoComponent.extend({
   /**
    * @method set
    * @param {PromptReviews} reviews
-   * @returns {StudyPrompt}
+   * @returns {StudyPromptComponent}
    */
   set: function(reviews) {
     console.info('PROMPT:', reviews);
@@ -263,7 +263,7 @@ const StudyPromptComponent = GelatoComponent.extend({
   /**
    * @method setSchedule
    * @param {Items} schedule
-   * @returns {Prompt}
+   * @returns {StudyPromptComponent}
    */
   setSchedule: function(schedule) {
     this.navigation.setReviews(schedule.reviews);
