@@ -31,7 +31,7 @@ gelato-component[data-name='mobile-study-prompt'] {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     height: 50%;
-    overflow: hidden;
+    margin-top: 15px;
     padding: 10px;
     .content {
       margin: 0 auto;
@@ -64,10 +64,9 @@ gelato-component[data-name='mobile-study-prompt'] {
           position: absolute;
           top: 0;
           width: 100%;
-          //z-index: 5001;
         }
         #toolbar-grading-container {
-          bottom: -40px;
+          bottom: -30px;
           left: 0;
           position: absolute;
           width: 100%;
@@ -78,6 +77,14 @@ gelato-component[data-name='mobile-study-prompt'] {
         margin-bottom: 25px;
         margin-top: 40px;
       }
+
+      gelato-component[data-name='study-prompt-part-tone'] {
+        .tone-message {
+          font-size: 5vh;
+          margin-top: -20px;
+        }
+      }
+
     }
     .ribbon {
       left: 0;
@@ -114,7 +121,7 @@ gelato-component[data-name='mobile-study-prompt'] {
       }
       &::-webkit-scrollbar {
         background-color: transparent;
-        width: 12px;
+        width: 6px;
       }
       &::-webkit-scrollbar-thumb {
         background-color: $grey1;
@@ -122,6 +129,24 @@ gelato-component[data-name='mobile-study-prompt'] {
       &::-webkit-scrollbar-track {
         background-color: ($white5 - #030303);
       }
+
+      gelato-component[data-name='study-prompt-vocab-sentence'] {
+        text-align: center;
+        button, i {
+          margin: 0 auto;
+        }
+      }
+
+      gelato-component[data-name='study-prompt-vocab-style'] {
+        left: 5px;
+        position: absolute;
+        top: 5px;
+      }
+
+      gelato-component[data-name='study-prompt-vocab-writing'] {
+        font-size: 5vh;
+      }
+
     }
     #review-status-container {
       bottom: 15px;
