@@ -61,6 +61,10 @@ const GelatoApplication = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template());
 
+    if (this.isMobile()) {
+      this.$el.addClass('mobile');
+    }
+
     this.renderNavbar();
     this.renderFooter();
 
@@ -72,11 +76,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method renderNavbar
    */
   renderFooter: function () {
-
-    // Don't render the footer on mobile
-    if (!this.isMobile()) {
-      this.$('#footer-container').html(this._views['footer'].render().el);
-    }
+    this.$('#footer-container').html(this._views['footer'].render().el);
 
     return this;
   },
@@ -98,7 +98,7 @@ const GelatoApplication = Backbone.View.extend({
    * @returns {Number}
    */
   getHeight: function() {
-    return Backbone.$('gelato-application').height();
+    return Backbone.$('body').height();
   },
 
   /**
@@ -131,7 +131,7 @@ const GelatoApplication = Backbone.View.extend({
    * @returns {Number}
    */
   getWidth: function() {
-    return Backbone.$('gelato-application').width();
+    return Backbone.$('body').width();
   },
 
   /**

@@ -15,16 +15,11 @@ gelato-application {
   width: 100%;
 
   #page-container {
-    display: block;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    width: 100%;
 
     gelato-page {
       padding-bottom: 50px;
     }
+
   }
 
   #navbar-container {
@@ -33,7 +28,17 @@ gelato-application {
     width: 100%;
   }
 
-  #page-container {
-    //height: inherit;
+  &.mobile {
+
+    #page-container {
+      display: block;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      width: 100%;
+    }
+
   }
+
 }
