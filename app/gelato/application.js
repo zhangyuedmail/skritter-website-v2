@@ -63,10 +63,11 @@ const GelatoApplication = Backbone.View.extend({
 
     if (this.isMobile()) {
       this.$el.addClass('mobile');
+      this.renderNavbar();
+    } else {
+      this.renderNavbar();
+      this.renderFooter();
     }
-
-    this.renderNavbar();
-    this.renderFooter();
 
     return this;
   },
