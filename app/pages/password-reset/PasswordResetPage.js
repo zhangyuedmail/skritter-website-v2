@@ -11,8 +11,7 @@ module.exports = GelatoPage.extend({
    * @type {Object}
    */
   events: {
-    'keyup #input-field': 'handleKeyUpInputField',
-    'click #button-reset': 'handleClickButtonReset'
+    'submit #password-reset-form': 'handleClickButtonReset'
   },
 
   showFooter: !app.isMobile(),
@@ -58,25 +57,15 @@ module.exports = GelatoPage.extend({
    */
   handleClickButtonReset: function(event) {
     event.preventDefault();
+
     var email = this.$('#password-reset-input').val().trim();
 
-    if (!email || email.indexOf('@') < 1 || email.indexOf('.') < 2) {
+    if (!this.choices.length && (email.indexOf('@') < 1 || email.indexOf('.') < 2)) {
       this._displayValidationErrorMessage(app.locale('pages.signup.errorInvalidEmail'));
       return;
     }
 
     this.resetPassword(email);
-  },
-
-  /**
-   * @method handleKeyUpInputField
-   * @param {Event} event
-   */
-  handleKeyUpInputField: function(event) {
-    event.preventDefault();
-    if (event.which === 13 || event.keyCode === 13) {
-      this.resetPassword();
-    }
   },
 
   /**
@@ -87,6 +76,7 @@ module.exports = GelatoPage.extend({
     var self = this;
 
     this.$('#password-reset-form').prop('disabled', true);
+    this.$('#validation-error-alert').text('');
     this.errorMessage = null;
 
     ScreenLoader.show();
@@ -113,6 +103,7 @@ module.exports = GelatoPage.extend({
         self.choices = [];
         self.successMessage = 'A temporary password has been emailed to you.';
         self.render();
+        self.$('#password-reset-form').hide();
         ScreenLoader.hide();
       }
     });
@@ -124,6 +115,7 @@ module.exports = GelatoPage.extend({
    * @private
    */
   _displayValidationErrorMessage: function(message) {
-    this.$('#validation-error-alert').text(message).removeClass('hidden');
+    this.$('#validation-error-alert').text(message);
   }
+
 });
