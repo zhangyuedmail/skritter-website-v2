@@ -9,9 +9,11 @@ gelato-page(data-name='login').mobile
         .form-group
           label(for="login-password") Password
           input#login-password.form-control.large-input(type="password", placeholder="Password")
-        .form-group.text-center
-          button#button-login.btn.btn-fixed.btn-primary.btn-success(type="button")= app.locale('common.logIn')
-          if app.isDevelopment()
-            | &nbsp;&nbsp;
-            button#button-skeleton.btn.btn-fixed.btn-default(type="button") Skeleton
-      a#password-reset(href="/password-reset") Forgot your password?
+        .text-center
+          .form-group.text-center
+            button#button-login.btn.btn-fixed.btn-primary.btn-success(type="button")= app.locale('common.logIn')
+            if app.isDevelopment()
+              | &nbsp;&nbsp;
+              button#button-skeleton.btn.btn-fixed.btn-default(type="button") Skeleton
+      .text-center
+        a#password-reset(href="/password-reset") Forgot your password?
