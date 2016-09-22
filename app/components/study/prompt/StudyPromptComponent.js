@@ -72,6 +72,10 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @returns {StudyPromptComponent}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileStudyPromptComponent.jade')
+    }
+
     this.renderTemplate();
 
     this.$inputContainer = this.$('#input-container');
@@ -241,6 +245,10 @@ const StudyPromptComponent = GelatoComponent.extend({
     var inputSize = this.getInputSize();
     this.$inputContainer.css({height: inputSize, width: inputSize});
     this.canvas.resize();
+
+    if (app.isMobile()) {
+      this.$el.height(this.page.getHeight());
+    }
 
     return this;
   },

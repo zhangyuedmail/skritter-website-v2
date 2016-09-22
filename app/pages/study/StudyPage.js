@@ -57,12 +57,20 @@ const StudyPage = GelatoPage.extend({
    * @returns {StudyPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileStudyPage.jade');
+    }
+
     this.renderTemplate();
     this.prompt.setElement('#study-prompt-container').render();
     this.toolbar.setElement('#study-toolbar-container').render();
 
-    if (app.user.get('eccentric')) {
+    if (!app.isMobile() && app.user.get('eccentric')) {
       this._views['recipe'].setElement('#recipes-container').render();
+    }
+
+    if (!app.isMobile()) {
+      this.toolbar.hide();
     }
 
     this.checkRequirements();
