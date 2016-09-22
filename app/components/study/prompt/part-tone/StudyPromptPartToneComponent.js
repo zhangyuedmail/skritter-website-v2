@@ -116,7 +116,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
 
   /**
    * @method renderIncomplete
-   * @returns {StudyPromptPartTone}
+   * @returns {StudyPromptPartToneComponent}
    */
   renderIncomplete: function() {
     this.prompt.review.start();

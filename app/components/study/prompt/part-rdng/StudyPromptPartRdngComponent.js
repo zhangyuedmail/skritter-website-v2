@@ -46,7 +46,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     this.userReading =  this.prompt.review.get('userReading') || '';
 
     // only support pinyin for first go around. Nihongo ga kite imasu!
-    this.showReadingPrompt = !app.user.get('disablePinyinReadingPromptInput') && app.isChinese();
+    this.showReadingPrompt = !app.user.get('disablePinyinReadingPromptInput') && !app.isMobile() && app.isChinese();
 
     this.registerShortcuts = !this.showReadingPrompt;
 
@@ -114,7 +114,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
 
   /**
    * @method renderComplete
-   * @returns {StudyPromptPartRune}
+   * @returns {StudyPromptPartRuneComponent}
    */
   renderComplete: function() {
     this.prompt.review.stop();
@@ -149,7 +149,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
 
   /**
    * @method renderIncomplete
-   * @returns {StudyPromptPartRune}
+   * @returns {StudyPromptPartRuneComponent}
    */
   renderIncomplete: function() {
     this.prompt.review.start();
