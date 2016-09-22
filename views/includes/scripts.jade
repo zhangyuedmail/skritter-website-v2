@@ -1,2 +1,24 @@
 script(src='https://code.jquery.com/jquery-3.1.0.min.js')
 script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+
+script.
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+      results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  var couponCode = getParameterByName('coupon');
+  var siteRef = getParameterByName('siteref');
+
+  if (localStorage && couponCode) {
+    localStorage.setItem('application-coupon', JSON.stringify(couponCode));
+  }
+
+  if (localStorage && siteRef) {
+    localStorage.setItem('application-siteRef', JSON.stringify(siteRef));
+  }
