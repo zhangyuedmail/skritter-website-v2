@@ -60,8 +60,23 @@ const GelatoApplication = Backbone.View.extend({
    */
   render: function() {
     this.$el.html(this.template());
-    this.$('#footer-container').html(this._views['footer'].render().el);
+
     this.renderNavbar();
+    this.renderFooter();
+
+    return this;
+  },
+
+  /**
+   * Renders the footer for the context
+   * @method renderNavbar
+   */
+  renderFooter: function () {
+
+    // Don't render the footer on mobile
+    if (!this.isMobile()) {
+      this.$('#footer-container').html(this._views['footer'].render().el);
+    }
 
     return this;
   },
