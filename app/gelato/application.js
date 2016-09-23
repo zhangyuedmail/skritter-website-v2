@@ -1,5 +1,5 @@
 const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
-const MobileNavbar = require('components/navbars/NavbarDefaultComponent');
+const MobileNavbar = require('components/navbars/NavbarMobileComponent');
 const MarketingFooter = require('components/footers/MarketingFooterComponent');
 
 /**
@@ -49,8 +49,14 @@ const GelatoApplication = Backbone.View.extend({
     this.rootSelector = options.rootSelector || 'body';
 
     this._views['page'] = null;
-    this._views['defaultNavbar'] = new DefaultNavbar();
-    this._views['mobileNavbar'] = new MobileNavbar();
+
+    // TODO: replace this with isAndroid || isIOS
+    if (this.isMobile()) {
+      this._views['navbar'] = new MobileNavbar();
+    } else {
+      this._views['navbar'] = new DefaultNavbar();
+    }
+
     this._views['footer'] =  new MarketingFooter();
   },
 
@@ -87,9 +93,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method renderNavbar
    */
   renderNavbar: function() {
-
-    // TODO: switch in mobile
-    this._views['defaultNavbar'].setElement('#navbar-container').render();
+    this._views['navbar'].setElement('#navbar-container').render();
 
     return this;
   },
@@ -294,7 +298,16 @@ const GelatoApplication = Backbone.View.extend({
 
     document.title = title || app.get('title');
 
-    this.trigger('title:change', title);
+    // temporary hack until the titles can be reformatted properly.
+    // Just get the section name
+    let trimmedTitle = title.replace('-', '').replace('Skritter', '').trim();
+
+    // And default to "Skritter" if we don't have a section name for some reason
+    if (!trimmedTitle) {
+      trimmedTitle = 'Skritter';
+    }
+
+    this.trigger('title:change', trimmedTitle);
   },
 
   /**
@@ -324,16 +337,7 @@ const GelatoApplication = Backbone.View.extend({
    */
   toggleNavbar: function(show) {
     let navbarContainer = this.$('#navbar-container');
-    /*
-    if (this._views['page'].showNavbar) {
-      this.showNavbar();
-      if (app.isMobile()) {
-        this.$view.prepend(this.navbar.render().el);
-      } else {
-        this.$view.prepend(this.navbar.render().el);
-      }
-    }
-     */
+
     navbarContainer.toggle(show);
 
     // navbar could possibly need to be updated since the last time it was
@@ -351,10 +355,10 @@ const GelatoApplication = Backbone.View.extend({
   updatePage: function(page) {
     page = page || this._views['page'];
 
+    this._views['page'].setElement('#page-container').render();
+
     this.toggleNavbar(this._views['page'].showNavbar);
     this.toggleFooter(this._views['page'].showFooter);
-
-    this._views['page'].setElement('#page-container').render();
   }
 });
 
