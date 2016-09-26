@@ -1,6 +1,7 @@
 const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
 const MobileNavbar = require('components/navbars/NavbarMobileComponent');
 const MarketingFooter = require('components/footers/MarketingFooterComponent');
+const vent = require('vent');
 
 /**
  * @class GelatoApplication
@@ -67,13 +68,14 @@ const GelatoApplication = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template());
 
+    // add a specific class if we're on mobile, and only render the footer if we're on mobile
     if (this.isMobile()) {
       this.$el.addClass('mobile');
-      this.renderNavbar();
     } else {
-      this.renderNavbar();
       this.renderFooter();
     }
+
+    this.renderNavbar();
 
     return this;
   },
@@ -162,7 +164,7 @@ const GelatoApplication = Backbone.View.extend({
     window.scrollTo(0, 0);
     this._views['page'] = new (require(path))(options);
 
-    this.updatePage();
+    this.updatePage(this._views['page'], path);
   },
 
   /**
@@ -297,17 +299,6 @@ const GelatoApplication = Backbone.View.extend({
     }
 
     document.title = title || app.get('title');
-
-    // temporary hack until the titles can be reformatted properly.
-    // Just get the section name
-    let trimmedTitle = title.replace('-', '').replace('Skritter', '').trim();
-
-    // And default to "Skritter" if we don't have a section name for some reason
-    if (!trimmedTitle) {
-      trimmedTitle = 'Skritter';
-    }
-
-    this.trigger('title:change', trimmedTitle);
   },
 
   /**
@@ -350,15 +341,18 @@ const GelatoApplication = Backbone.View.extend({
   /**
    * Updates the application to show the specified page.
    * Defaults to the 'page' subview.
-   * @param {GelatoPage} [page]
+   * @param {GelatoPage} [page] the page to show
+   * @param {String} [path] the path of the view constructed
    */
-  updatePage: function(page) {
+  updatePage: function(page, path) {
     page = page || this._views['page'];
 
     this._views['page'].setElement('#page-container').render();
 
     this.toggleNavbar(this._views['page'].showNavbar);
     this.toggleFooter(this._views['page'].showFooter);
+
+    vent.trigger('page:switch', page, path);
   }
 });
 
