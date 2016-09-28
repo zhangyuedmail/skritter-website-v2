@@ -1,6 +1,3 @@
-const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
-const MobileNavbar = require('components/navbars/NavbarMobileComponent');
-const MarketingFooter = require('components/footers/MarketingFooterComponent');
 const vent = require('vent');
 
 /**
@@ -50,15 +47,6 @@ const GelatoApplication = Backbone.View.extend({
     this.rootSelector = options.rootSelector || 'body';
 
     this._views['page'] = null;
-
-    // TODO: replace this with isAndroid || isIOS
-    if (this.isMobile()) {
-      this._views['navbar'] = new MobileNavbar();
-    } else {
-      this._views['navbar'] = new DefaultNavbar();
-    }
-
-    this._views['footer'] =  new MarketingFooter();
   },
 
   /**
@@ -71,11 +59,15 @@ const GelatoApplication = Backbone.View.extend({
     // add a specific class if we're on mobile, and only render the footer if we're on mobile
     if (this.isMobile()) {
       this.$el.addClass('mobile');
-    } else {
-      this.renderFooter();
     }
 
-    this.renderNavbar();
+    if (this._views['navbar']) {
+      this.renderNavbar();
+    }
+
+    if (this._views['footer']) {
+      this.renderFooter();
+    }
 
     return this;
   },
@@ -319,6 +311,10 @@ const GelatoApplication = Backbone.View.extend({
    * @param {Boolean} [show] whether to show or hide the footer
    */
   toggleFooter: function(show) {
+    if (!this._views['footer']) {
+      return;
+    }
+
     this.$('#footer-container').toggle(show);
   },
 
@@ -327,6 +323,10 @@ const GelatoApplication = Backbone.View.extend({
    * @param show
    */
   toggleNavbar: function(show) {
+    if (!this._views['navbar']) {
+      return;
+    }
+
     let navbarContainer = this.$('#navbar-container');
 
     navbarContainer.toggle(show);

@@ -1,11 +1,16 @@
-var GelatoApplication = require('gelato/application');
-var AddVocabDialog = require('dialogs1/add-vocab/view');
-var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
-var User = require('models/UserModel');
-var Functions = require('functions');
-var Mixpanel = require('mixpanel');
-var Router = require('router');
-var Config = require('config');
+const GelatoApplication = require('gelato/application');
+const AddVocabDialog = require('dialogs1/add-vocab/view');
+const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
+
+const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
+const MobileNavbar = require('components/navbars/NavbarMobileComponent');
+const MarketingFooter = require('components/footers/MarketingFooterComponent');
+
+const User = require('models/UserModel');
+const Functions = require('functions');
+const Mixpanel = require('mixpanel');
+const Router = require('router');
+const Config = require('config');
 
 /**
  * The base singleton class for Skritter that constructs and initializes all
@@ -23,6 +28,9 @@ module.exports = GelatoApplication.extend({
    */
   initialize: function(options) {
     GelatoApplication.prototype.initialize.call(this, arguments);
+
+    this.initNavbar();
+    this.initFooter();
 
     this.config = Config;
 
@@ -265,6 +273,22 @@ module.exports = GelatoApplication.extend({
     });
 
     return false;
+  },
+
+  initNavbar: function() {
+
+    // TODO: replace this with isAndroid || isIOS
+    if (this.isMobile()) {
+      this._views['navbar'] = new MobileNavbar();
+    } else {
+      this._views['navbar'] = new DefaultNavbar();
+    }
+  },
+
+  initFooter: function() {
+    if (!this.isMobile()) {
+      this._views['footer'] =  new MarketingFooter();
+    }
   },
 
   /**
