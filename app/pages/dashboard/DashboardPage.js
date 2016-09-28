@@ -4,6 +4,7 @@ const DashboardMonth = require('components/dashboard/DashboardMonthComponent');
 const DashboardQueue = require('components/dashboard/DashboardQueueComponent');
 const DashboardTotal = require('components/dashboard/DashboardTotalComponent');
 const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
+const MobileNavbar = require('components/navbars/NavbarMobileDashboardComponent');
 
 /**
  * A page that shows a summary of the user's review count due, stats, and lists
@@ -12,6 +13,8 @@ const ExpiredNotification = require('components/account/AccountExpiredNotificati
  * @extends {GelatoPage}
  */
 const DashboardPage = GelatoPage.extend({
+
+  mobileNavbar: MobileNavbar,
 
   /**
    * @property showFooter

@@ -1,6 +1,7 @@
 const NavbarDefaultComponent = require('./NavbarDefaultComponent.js');
 const vent = require('vent');
 
+
 const NavbarMobileComponent = NavbarDefaultComponent.extend({
 
   /**
@@ -14,8 +15,6 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    * @constructor
    */
   initialize: function(options) {
-    this._currentSection = null;
-
     this.listenTo(vent, 'page:switch', this.handlePageSwitch);
   },
 
@@ -25,16 +24,53 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    * @param {String} path the path of the
    */
   handlePageSwitch: function(page, path) {
-    let header = page.header;
+    this.updateSubNavbar(page);
+    this.updateTitle(page.section || page.title);
+  },
 
-    if (!header && page.section) {
-      // TODO
-      // header = require('./' + section + 'NavbarComponent.js');
-    } else {
-      // TODO: parse path?
+  /**
+   *
+   * @param event
+   */
+  handleToggleMenuClick: function(event) {
+    event.preventDefault();
+    vent.trigger('sideMenu:toggle');
+  },
+
+  /**
+   * Renders a subnavbar component
+   * @returns {NavbarMobileComponent}
+   */
+  renderSubNavbar: function() {
+    if (!this._views['subNavbar']) {
+      return;
+    }
+    this.$('#sub-navbar-container').html(this._views['subNavbar'].render().el);
+
+    return this;
+  },
+
+  /**
+   *
+   * @param {GelatoPage} page the current page
+   */
+  updateSubNavbar: function(page) {
+    let navbar = this._getNavbarFromPage(page);
+
+    if (!navbar) {
+      return;
     }
 
-    this.updateTitle(page.section || page.title);
+    if (this._views['subNavbar']) {
+      this._views['subNavbar'].remove();
+    }
+
+    this._views['subNavbar'] = new navbar({
+      page: page,
+      rootMenu: this
+    });
+
+    this.renderSubNavbar();
   },
 
   /**
@@ -53,6 +89,26 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     }
 
     this.$('#title-txt').text(trimmedTitle);
+  },
+
+  /**
+   * Given a page, finds the specific mobile navbar associated with that page,
+   * if it's defined.
+   * @param {GelatoPage} page the instance of the page to look at
+   * @private
+   */
+  _getNavbarFromPage: function(page) {
+    let navbar = page.mobileNavbar;
+
+    if (!navbar) {
+
+      // Hack until all pages get their own mobile navbars made
+      // TODO: make default mobile navbar with just a hamburger button and
+      // "Skritter" for the title?
+      navbar = require('./NavbarMobileDashboardComponent.js');
+    }
+
+    return navbar;
   }
 });
 

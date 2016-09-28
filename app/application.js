@@ -11,6 +11,7 @@ const Functions = require('functions');
 const Mixpanel = require('mixpanel');
 const Router = require('router');
 const Config = require('config');
+const vent = require('vent');
 
 /**
  * The base singleton class for Skritter that constructs and initializes all
@@ -84,6 +85,10 @@ module.exports = GelatoApplication.extend({
 
     if (this.isDevelopment()) {
       window.onerror = this.handleError;
+    }
+
+    if (this.isMobile()) {
+      this.listenTo(vent, 'sideMenu:toggle', this.toggleSideMenu);
     }
   },
 
@@ -558,6 +563,13 @@ module.exports = GelatoApplication.extend({
         }, 500);
       }
     );
+  },
 
+  /**
+   * Shows the side container of the application
+   * @param {Boolean} [show] whether to show the side element
+   */
+  toggleSideMenu: function(show) {
+    // this.$('#main-app-container').toggleClass('push-left', show);
   }
 });
