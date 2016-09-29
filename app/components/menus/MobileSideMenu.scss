@@ -1,0 +1,23 @@
+@import "../../styles/_variables";
+
+gelato-component.mobile-side-menu-component {
+  width: 250px;
+  height: 100%;
+  background: $texture-footer repeat;
+  position: fixed;
+
+  .user-info-wrapper {
+    text-align: center;
+  }
+
+  .profile-picture {
+    display: block;
+    margin: auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: #999;
+  }
+
+
+}

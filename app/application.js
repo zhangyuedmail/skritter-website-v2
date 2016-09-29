@@ -5,6 +5,7 @@ const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
 const MobileNavbar = require('components/navbars/NavbarMobileComponent');
 const MarketingFooter = require('components/footers/MarketingFooterComponent');
+const MobileSideMenuComponent = require('components/menus/MobileSideMenuComponent');
 
 const User = require('models/UserModel');
 const Functions = require('functions');
@@ -29,9 +30,6 @@ module.exports = GelatoApplication.extend({
    */
   initialize: function(options) {
     GelatoApplication.prototype.initialize.call(this, arguments);
-
-    this.initNavbar();
-    this.initFooter();
 
     this.config = Config;
 
@@ -87,8 +85,13 @@ module.exports = GelatoApplication.extend({
       window.onerror = this.handleError;
     }
 
+    this.initNavbar();
+    this.initFooter();
+    this.initSideMenu();
+
     if (this.isMobile()) {
       this.listenTo(vent, 'sideMenu:toggle', this.toggleSideMenu);
+      this.listenTo(vent, 'page:switch', () => { this.toggleSideMenu(false); });
     }
   },
 
@@ -293,6 +296,14 @@ module.exports = GelatoApplication.extend({
   initFooter: function() {
     if (!this.isMobile()) {
       this._views['footer'] =  new MarketingFooter();
+    }
+  },
+
+  initSideMenu: function() {
+    if (this.isMobile()) {
+      this._views['side'] = new MobileSideMenuComponent({
+        user: this.user
+      });
     }
   },
 
@@ -570,6 +581,6 @@ module.exports = GelatoApplication.extend({
    * @param {Boolean} [show] whether to show the side element
    */
   toggleSideMenu: function(show) {
-    // this.$('#main-app-container').toggleClass('push-left', show);
+    this.$('#main-app-container').toggleClass('push-left', show);
   }
 });

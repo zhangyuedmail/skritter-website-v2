@@ -69,6 +69,10 @@ const GelatoApplication = Backbone.View.extend({
       this.renderFooter();
     }
 
+    if (this._views['side']) {
+      this.renderSide();
+    }
+
     return this;
   },
 
@@ -88,6 +92,16 @@ const GelatoApplication = Backbone.View.extend({
    */
   renderNavbar: function() {
     this._views['navbar'].setElement('#navbar-container').render();
+
+    return this;
+  },
+
+  /**
+   * Renders a component in the side container of the application
+   * @returns {GelatoApplication}
+   */
+  renderSide: function() {
+    this.$('#side-app-container').html(this._views['side'].render().el);
 
     return this;
   },

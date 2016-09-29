@@ -17,19 +17,6 @@ bootstrap-navbar(data-name='mobile')
 
         if user.isLoggedIn()
 
-          ul.nav.navbar-nav
-            li(class=currentSection === 'dashboard' ? 'active' : '')
-              a(href="/dashboard") Dashboard
-            li(class=currentSection === 'study' ? 'active' : '')
-              a(href="/study") Study
-            li(class=currentSection === 'vocablists' ? 'active' : '')
-              a(href="/vocablists") Lists
-            li(class=currentSection === 'words' ? 'active' : '')
-              a(href="/words") Words
-            li(class=currentSection === 'stats' ? 'active' : '')
-              //TODO: replace when progress stats supported
-              a(href="/stats") Stats
-
           ul.nav.navbar-nav.navbar-right
             li
               a(href="http://legacy.skritter.com/home" title="#{app.locale('navbar.backToOldSkritterAlt')}")= app.locale('navbar.backToOldSkritter')

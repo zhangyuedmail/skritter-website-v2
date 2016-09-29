@@ -33,6 +33,10 @@ gelato-application {
   position: absolute;
   width: 100%;
 
+  &.mobile {
+    overflow-x: hidden;
+  }
+
   #page-container {
 
     gelato-page {
