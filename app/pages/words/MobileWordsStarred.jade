@@ -1,0 +1,58 @@
+gelato-page(data-name='mobile-words-starred')
+
+  #dialog-container
+
+    section#nav-links.container
+      .row.text-center
+        .col-xs-2
+          a(href='/words/all') All
+        .col-xs-3
+          a(href='/words/starred') Starred
+        .col-xs-3
+          a(href='/words/banned') Banned
+        .col-xs-4
+          a(href='/words/mnemonics') Mnemonics
+
+  section.container
+    .content-block
+      .row
+
+        .col-md-12.main-content
+
+          p View all the words you've starred while studying.
+
+          #table-options
+            .row
+              .col-md-12
+                //button#delete-mnemonics-btn.btn.btn-fixed.btn-success(disabled=true)
+                //  | Study starred words
+                button.btn.btn-warning#remove-all-stars-link(disabled=true) Remove all stars
+
+          .table-oversized-wrapper
+            table.table.table-striped
+              tr
+                td.star-td
+                td.word-td(colspan=2) Word
+                td.date-starred-td Date starred
+
+              for vocab in view.starredVocabs.models
+                tr(data-vocab-id=vocab.id, class=vocab.get('starred') ? '' : 'not-starred')
+                  td.star-td
+                    if vocab.isStarred()
+                      a.glyphicon.glyphicon-star
+                    else
+                      a.glyphicon.glyphicon-star-empty
+                  td.vocab-row.writing-td= vocab.getWriting()
+                  td.vocab-row.reading-td= vocab.getReading()
+                  td.vocab-row.date-starred-td
+                    if vocab.get('starred')
+                      | #{moment(vocab.get('starred') * 1000).format('LL')}
+                    else
+                      .no-date —
+
+            if view.starredVocabs.state === 'fetching'
+              p.text-center
+                i.fa.fa-3x.fa-spinner.fa-pulse
+
+            else if view.starredVocabs.cursor
+              button#load-more-btn.btn.btn-primary.btn-block Load More
