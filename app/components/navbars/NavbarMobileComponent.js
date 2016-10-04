@@ -34,7 +34,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    */
   handleToggleMenuClick: function(event) {
     event.preventDefault();
-    vent.trigger('sideMenu:toggle');
+    vent.trigger('mobileNavMenu:toggle');
   },
 
   /**

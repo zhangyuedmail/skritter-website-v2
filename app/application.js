@@ -87,10 +87,11 @@ module.exports = GelatoApplication.extend({
 
     this.initNavbar();
     this.initFooter();
-    this.initSideMenu();
+    this.initSideViews();
 
     if (this.isMobile()) {
-      this.listenTo(vent, 'sideMenu:toggle', this.toggleSideMenu);
+      this.listenTo(vent, 'mobileNavMenu:toggle', this.toggleSideMenu);
+      this.listenTo(vent, 'vocabInfo:toggle', this.toggleVocabInfo);
       this.listenTo(vent, 'page:switch', () => { this.toggleSideMenu(false); });
     }
   },
@@ -283,6 +284,11 @@ module.exports = GelatoApplication.extend({
     return false;
   },
 
+  /**
+   * Initilizes the navbar for the application based on the screen size/platform
+   * of the device.
+   * @method initNavbar
+   */
   initNavbar: function() {
 
     // TODO: replace this with isAndroid || isIOS
@@ -293,21 +299,34 @@ module.exports = GelatoApplication.extend({
     }
   },
 
+  /**
+   * Initializes the footer component for the application
+   * @method initFooter
+   */
   initFooter: function() {
     if (!this.isMobile()) {
       this._views['footer'] =  new MarketingFooter();
     }
   },
 
-  initSideMenu: function() {
+  /**
+   * Initializes app-level views that are rendered off to the sides of
+   * the main application frame.
+   * @method initSideViews
+   */
+  initSideViews: function() {
     if (this.isMobile()) {
-      this._views['side'] = new MobileSideMenuComponent({
+      this._views['leftSide'] = new MobileSideMenuComponent({
         user: this.user
       });
+
+      // TODO: add a view in here, adjust push amount in application.scss .push-right
+      this._views['rightSide'] = null;
     }
   },
 
   /**
+   * Determines whether the user is currently studying Chinese.
    * @method isChinese
    * @returns {Boolean}
    */
@@ -316,6 +335,7 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
+   * Determines whether the user is currently studying Japanese.
    * @method isJapanese
    * @returns {Boolean}
    */
@@ -581,6 +601,30 @@ module.exports = GelatoApplication.extend({
    * @param {Boolean} [show] whether to show the side element
    */
   toggleSideMenu: function(show) {
-    this.$('#main-app-container').toggleClass('push-left', show);
+    this.$('#main-app-container').toggleClass('push-right', show);
+  },
+
+  /**
+   * Shows a vocab info side view on mobile devices.
+   * @param {String} vocab the vocab
+   */
+  toggleVocabInfo: function(vocab) {
+    if (!this.isMobile()) {
+      return;
+    }
+
+    if (vocab) {
+      // TODO: update vocab info view
+      // this._views['rightSide'].update(vocab); // or something like this
+      this.$('#right-side-app-container').toggleClass('push-main', !!vocab);
+    } else {
+
+      // delay hiding the right side until the sliding animation of the main container is complete
+      setTimeout(() => {
+        this.$('#right-side-app-container').toggleClass('push-main', !!vocab);
+      }, 250);
+    }
+
+    this.$('#main-app-container').toggleClass('push-left', !!vocab);
   }
 });

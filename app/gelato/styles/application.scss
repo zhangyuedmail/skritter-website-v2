@@ -9,16 +9,29 @@ html, body {
 #main-app-container {
   z-index: 2;
   position: relative;
-  -webkit-transition: left 250ms; /* Safari */
-  transition: left 250ms;
+  -webkit-transition: left 250ms, right 250ms; /* Safari */
+  transition: left 250ms, right 250ms;
   left: 0;
 
   &.push-left {
+    left: -100%;
+  }
+
+  &.push-right {
     left: 250px;
   }
 }
 
-#side-app-container {
+#right-side-app-container {
+  left: 100%;
+  background: #1e365a;
+
+  &.push-main {
+    left: 0;
+  }
+}
+
+.side-app-container {
   width: 100%;
   height: 100%;
   z-index: 1;

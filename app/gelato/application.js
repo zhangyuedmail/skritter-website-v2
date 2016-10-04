@@ -69,8 +69,12 @@ const GelatoApplication = Backbone.View.extend({
       this.renderFooter();
     }
 
-    if (this._views['side']) {
-      this.renderSide();
+    if (this._views['leftSide']) {
+      this.renderLeftSide();
+    }
+
+    if (this._views['rightSide']) {
+      this.renderRightSide();
     }
 
     return this;
@@ -97,11 +101,21 @@ const GelatoApplication = Backbone.View.extend({
   },
 
   /**
-   * Renders a component in the side container of the application
+   * Renders a component in the left side container of the application
    * @returns {GelatoApplication}
    */
-  renderSide: function() {
-    this.$('#side-app-container').html(this._views['side'].render().el);
+  renderLeftSide: function() {
+    this.$('#left-side-app-container').html(this._views['leftSide'].render().el);
+
+    return this;
+  },
+
+  /**
+   * Renders a component in the left side container of the application
+   * @returns {GelatoApplication}
+   */
+  renderRightSide: function() {
+    this.$('#right-side-app-container').html(this._views['rightSide'].render().el);
 
     return this;
   },
