@@ -60,6 +60,10 @@ module.exports = GelatoPage.extend({
    * @returns {VocablistBrowse}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileWordsMnemonics.jade');
+    }
+
     this.renderTemplate();
     this.sidebar.setElement('#words-sidebar-container').render();
 
