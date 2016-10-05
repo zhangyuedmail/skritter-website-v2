@@ -46,9 +46,7 @@ gelato-application {
   position: absolute;
   width: 100%;
 
-  &.mobile {
-    overflow-x: hidden;
-  }
+  overflow-x: hidden;
 
   #page-container {
 
