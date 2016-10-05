@@ -17,6 +17,10 @@ head
   link(rel='canonical', href='https://skritter.com/')
 
 body
+  script.
+    if (localStorage && (localStorage.getItem('application-user') || '').replace(/"/g, '').length > 0) {
+      window.location = window.location.href + 'dashboard';
+    }
   gelato-application
 
     gelato-page(data-name='home')
@@ -39,7 +43,7 @@ body
 
               ul.nav.navbar-nav
                 li(class=currentSection === 'features' ? 'active' : '')
-                  a(href="/features") Features
+                  a#features-link(href="/features") Features
                 li
                   a(href="https://blog.skritter.com/", target="_blank") Blog
                 li
