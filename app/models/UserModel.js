@@ -2,6 +2,7 @@ const SkritterModel = require('base/BaseSkritterModel');
 const SessionModel = require('models/SessionModel');
 const SubscriptionModel = require('models/SubscriptionModel');
 const VocablistCollection = require('collections/VocablistCollection');
+const ProgressStatsCollection = require('collections/ProgressStatsCollection');
 
 /**
  * A model that represents a Skritter user.
@@ -46,6 +47,13 @@ const UserModel = SkritterModel.extend({
    * @type {VocablistCollection}
    */
   vocablists: new VocablistCollection(),
+
+  /**
+   * A progress stats collection
+   * @property stats
+   * @type {ProgressStatsCollection}
+   */
+  stats: new ProgressStatsCollection(),
 
   /**
    * @method initialize
