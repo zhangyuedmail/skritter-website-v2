@@ -194,9 +194,12 @@ module.exports = GelatoPage.extend({
         return;
       }
 
+      //split input based on spaces
       var $input = $(event.target);
+      var rows = $input.val().split(/\s/);
+
       this.$('#input-message .value').empty();
-      this.editor.addRow($(event.target).val());
+      this.editor.addRows(rows);
       window.scrollTo(0, document.body.scrollHeight);
       $input.val('');
       $input.focus();
