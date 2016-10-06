@@ -49,7 +49,7 @@
     "morgan": "~1.7.0",
     "nodemon": "~1.10.0",
     "replace-brunch": "~1.0.0",
-    "sass-brunch": "~2.6.0",
+    "sass-brunch": "~2.7.0",
     "selenium-webdriver": "~2.53.0",
     "shelljs": "~0.7.0",
     "sinon": "~1.17.0",
