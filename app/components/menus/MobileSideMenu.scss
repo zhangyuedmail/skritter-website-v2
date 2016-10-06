@@ -3,21 +3,53 @@
 gelato-component.mobile-side-menu-component {
   width: 250px;
   height: 100%;
-  background: $texture-footer repeat;
+  background-color: $grey8;
   position: fixed;
+  color: $grey1;
+  font-size: 16px;
+
+  .actions-wrapper {
+    padding-top: 15px;
+  }
 
   .user-info-wrapper {
     text-align: center;
   }
 
+  .username {
+    font-size: 18px;
+    color: $grey2;
+    margin-bottom: 20px;
+  }
+
   .profile-picture {
     display: block;
     margin: auto;
-    width: 200px;
-    height: 200px;
+    margin-bottom: 20px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     background: #999;
   }
 
+  .settings {
+    cursor: pointer;
+    margin-left: 15px;
+  }
 
+  .logout {
+    cursor: pointer;
+    float: right;
+    margin-right: 15px;
+    text-align: right;
+  }
+
+  a {
+    color: $grey1;
+    margin-left: 20px;
+
+    &:hover, &:focus {
+      background-color: $grey6;
+    }
+  }
 }

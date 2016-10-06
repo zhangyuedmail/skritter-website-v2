@@ -4,7 +4,7 @@ bootstrap-navbar(data-name='mobile')
 
 
   .navbar-header
-    button#toggle-menu.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#navbar-collapse", aria-expanded="false")
+    button#toggle-menu.navbar-toggle.collapsed
       span.sr-only Toggle navigation
       span.icon-bar
       span.icon-bar
@@ -16,45 +16,6 @@ bootstrap-navbar(data-name='mobile')
     if user.isLoggedIn()
 
       ul.nav.navbar-nav.navbar-right
-        li
-          a(href="http://legacy.skritter.com/home" title="#{app.locale('navbar.backToOldSkritterAlt')}")= app.locale('navbar.backToOldSkritter')
-        li.dropdown
-          a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
-            span= user.get('name')
-            | &nbsp;&nbsp;&nbsp;
-            span.caret
-          ul.dropdown-menu
-            li
-              a(href="/account") Account
-            li
-              a(href="https://blog.skritter.com/" target="_blank") Blog
-            li
-              a(href="http://classroom.skritter.com", target="_blank") Classroom
-            li
-              a(href="https://discourse.skritter.com/", target="_blank") Forum
-            li
-              a#refer-link(href="/refer", data-ignore) Get Free Skritter
-            li.divider(role="separator")
-            li
-              a#button-logout(href="/logout")= app.locale('common.logOut')
-        li.dropdown.target-lang-dropdown
-          a.dropdown-toggle.lang-select-icon-wrapper(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
-            - var lang = user.get('targetLang');
-            - var otherLang = lang === 'zh' ? 'ja' : 'zh';
-            span.lang-icon #{view.getDisplayLanguageCharacters(lang)}
-            | &nbsp;&nbsp;&nbsp;
-            span.caret
-          ul.dropdown-menu.language-select-menu
-            li.currently-studying
-              | You are studying #{view.getDisplayLanguageName(user.get('targetLang'))}.
-            li.divider(role="separator")
-            li
-              a(href="#", id="switch-targetLang")
-                span.lang-icon.other-lang-icon #{view.getDisplayLanguageCharacters(otherLang)}
-                | Study #{view.getDisplayLanguageName(otherLang)}
-        li
-          a#button-beacon(href="#")
-            i.fa.fa-question-circle
 
     else
 

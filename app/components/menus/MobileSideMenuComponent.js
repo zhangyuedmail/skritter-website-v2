@@ -18,6 +18,11 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    */
   className: 'mobile-side-menu-component',
 
+  events: {
+    'click #logout-btn': 'handleLogoutButtonClick',
+    'click #settings-btn': 'handleSettingsButtonClick',
+  },
+
   /**
    * @property template
    * @type {Function}
@@ -31,6 +36,14 @@ const MobileSideMenuComponent = GelatoComponent.extend({
 
   updateUsername: function() {
     this.$('#username').text(this.user.get('name'));
+  },
+
+  handleLogoutButtonClick: function(e) {
+    app.router.navigateLogout();
+  },
+
+  handleSettingsButtonClick: function(e) {
+    app.router.navigateAccountSettingsGeneral();
   }
 });
 

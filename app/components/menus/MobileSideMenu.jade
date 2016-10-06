@@ -1,14 +1,15 @@
-.settings.fa.fa-gear
-.logout.fa
-.user-info-wrapper
-  .profile-picture
-  #username.username= app.user.get('name')
+.actions-wrapper
+  #settings-btn.settings.fa.fa-gear
+  #logout-btn.logout.fa Log out
+  .user-info-wrapper
+    .profile-picture
+    #username.username= app.user.get('name')
 
 .user-stats-wrapper.row
-  .stats-wrapper.col-md-6
+  .stats-wrapper.col-xs-6.text-center
     .num-chars
     .stats-title characters
-  .stats-wrapper.col-md-6
+  .stats-wrapper.col-xs-6.text-center
     .num-words
     .stats-title words
 
@@ -24,3 +25,7 @@
       a(href="/words") Words
     li
       a(href="/stats") Stats
+    br
+    li
+      a#button-beacon(href="#")
+        i.fa.fa-question-circle
