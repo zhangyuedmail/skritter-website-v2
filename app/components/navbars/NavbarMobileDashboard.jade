@@ -1,4 +1,4 @@
-bootstrap-navbar(data-name='mobile')
+bootstrap-navbar(data-name='mobile-dashboard')
   - var user = app.user;
   - var currentSection = view.getCurrentSection();
 
@@ -13,12 +13,7 @@ bootstrap-navbar(data-name='mobile')
 
   #navbar-collapse.collapse.navbar-collapse
 
-    if user.isLoggedIn()
-
-      ul.nav.navbar-nav.navbar-right
-
-    else
-
+    if !user.isLoggedIn()
       ul.nav.navbar-nav
         li(class=currentSection === 'features' ? 'active' : '')
           a(href="/features", target="_blank") Features
