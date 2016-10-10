@@ -37,7 +37,7 @@ gelato-component(data-name='study-prompt-vocab-contained')
           if decomp && vocab
 
             if decomp && !decomp.get('atomic')
-              .child-vocab-row
+              .child-vocab-row(class= vocabs.length === 1 ? 'single-char' : 'multi-char')
                 for child in decomp.get('Children')
                   .child-decomp
                     span.decomp-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing

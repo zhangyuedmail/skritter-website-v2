@@ -29,8 +29,17 @@ gelato-component[data-name='study-prompt-vocab-contained'] {
       margin-top: 15px;
     }
 
+    .multi-char {
+      .child-decomp {
+        margin-left: 25px;
+      }
+    }
+
+    .single-char {
+      margin-top: 25px;
+    }
+
     .child-decomp {
-      margin-left: 25px;
 
       .decomp-definition {
         margin-bottom: 5px;
