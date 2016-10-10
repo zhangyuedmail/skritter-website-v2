@@ -48,6 +48,7 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
 
     this.stopListening();
     this.listenTo(this.prompt.reviews.vocab, 'state', this.render);
+    this.prompt.reviews.vocab.sentenceFetched = true;
     this.prompt.reviews.vocab.fetch({
       data: {
         include_sentences: true

@@ -11,24 +11,27 @@ gelato-component(data-name='study-prompt-vocab-sentence')
 
       i.fa.fa-2x.fa-spinner.fa-pulse.fa-fw
 
-    else if sentence
-      - var sentenceDefinition = sentence.getDefinition();
-      - var sentenceReading = sentence.get('reading');
-
-      .value(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
-
-        if prompt.reviews.part === 'rune' && !prompt.reviews.isComplete()
-          = sentence.getWriting(prompt.reviews.vocab.get('writing'))
-        else
-          = sentence.getWriting()
-
-        .hint
-          if prompt.reviews.isChinese()
-            .hint-reading= app.fn.pinyin.toTone(sentenceReading, true)
-          else
-            .hint-reading= sentenceReading
-          .hint-definition= sentenceDefinition
-
     else
+      if sentence
+        - var sentenceDefinition = sentence.getDefinition();
+        - var sentenceReading = sentence.get('reading');
 
-      button.show-sentence.btn.btn-sm.btn-default show
+        .value(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
+
+          if prompt.reviews.part === 'rune' && !prompt.reviews.isComplete()
+            = sentence.getWriting(prompt.reviews.vocab.get('writing'))
+          else
+            = sentence.getWriting()
+
+          .hint
+            if prompt.reviews.isChinese()
+              .hint-reading= app.fn.pinyin.toTone(sentenceReading, true)
+            else
+              .hint-reading= sentenceReading
+            .hint-definition= sentenceDefinition
+      else if vocab.sentenceFetched
+        .value(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese') No example sentence for this item.
+
+      else
+
+        button.show-sentence.btn.btn-sm.btn-default show
