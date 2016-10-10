@@ -36,17 +36,18 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
   },
 
   /**
+   * Filters response to only get stats data up to today.
    * @method parse
    * @param {Object} response
    * @returns Array
    */
   parse: function(response) {
-    var now = moment().startOf('day').toDate();
-    var stats = response.ProgressStats.filter(function(s) {
-      return Date.parse(s.date) <= now;
-    });
+    const now = moment().startOf('day').valueOf();
 
-    return stats;
+    return response.ProgressStats.filter(function(s) {
+      let statDate = moment(s.date, app.config.dateFormatApp).valueOf();
+      return statDate <= now;
+    });
   },
 
   /**
