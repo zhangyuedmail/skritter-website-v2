@@ -1,5 +1,4 @@
 const GelatoComponent = require('gelato/component');
-const ProgressStats = require('collections/ProgressStatsCollection');
 
 /**
  * @class DashboardTotalComponent
@@ -18,7 +17,7 @@ const DashboardTotalComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function() {
-    this.stats = new ProgressStats();
+    this.stats = app.user.stats;
     this.listenTo(this.stats, 'state:standby', this.update);
     this.stats.fetchToday();
   },
@@ -34,6 +33,7 @@ const DashboardTotalComponent = GelatoComponent.extend({
   },
 
   /**
+   * Updates the number of items a user has learned in total
    * @method update
    */
   update: function() {

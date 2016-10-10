@@ -39,9 +39,13 @@ const DashboardPage = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
+
+    if (!app.isMobile()) {
+      this._views['month'] = new DashboardMonth();
+      this._views['total'] = new DashboardTotal();
+    }
+
     this._views['goal'] = new DashboardGoal();
-    this._views['month'] = new DashboardMonth();
-    this._views['total'] = new DashboardTotal();
     this._views['queue'] = new DashboardQueue();
     this._views['expiration'] = new ExpiredNotification();
 
@@ -55,9 +59,15 @@ const DashboardPage = GelatoPage.extend({
   render: function() {
     this.renderTemplate();
 
+    if (this._views['month']) {
+      this._views['month'].setElement('#dashboard-month-container').render();
+    }
+
+    if (this._views['total']) {
+      this._views['total'].setElement('#dashboard-total-container').render();
+    }
+
     this._views['goal'].setElement('#dashboard-goal-container').render();
-    this._views['month'].setElement('#dashboard-month-container').render();
-    this._views['total'].setElement('#dashboard-total-container').render();
     this._views['queue'].setElement('#dashboard-queue-container').render();
     this._views['expiration'].setElement('#subscription-notice').render();
 
