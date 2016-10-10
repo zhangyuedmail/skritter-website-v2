@@ -12,6 +12,8 @@ html, body {
   -webkit-transition: left 250ms, right 250ms; /* Safari */
   transition: left 250ms, right 250ms;
   left: 0;
+  height: 100%;
+  overflow-x: hidden;
 
   &.push-left {
     left: -100%;
@@ -66,7 +68,7 @@ gelato-application {
 
     #page-container {
       display: block;
-      height: 100%;
+      height: auto;
       margin: 0;
       padding: 0;
       position: absolute;
