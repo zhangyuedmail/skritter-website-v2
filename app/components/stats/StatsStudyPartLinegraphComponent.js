@@ -57,7 +57,7 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
     $linegraph.highcharts({
       chart: {
         type: 'spline',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
       },
       colors: ['#C5DA4B'],
       title: null,
@@ -176,6 +176,10 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
       .toggleClass('bad', rangeData.retentionRate <= 60 && rangeData.studied > 0);
   },
 
+  /**
+   * Gets data from the collection for the specified range and organizes more meaningful data for the specified type of stat
+   * @returns {{chartData: Array<Number>, totalChangeLearned: number, studied: number, remembered: number, retentionRate: number, added: *}}
+   */
   getRangeData: function() {
     var chartData = [];
     var total = 0;
@@ -189,7 +193,7 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
     for (var i = length; i >= 0; i--) {
       var stat = collection[i].get(this.type)[this.part];
       stats.push(stat);
-      chartData.push(stat.learned.day);
+      chartData.push(stat.learned.all);
       total += stat.learned.day;
       studied += stat.studied.day;
       remembered += stat.remembered.day;
