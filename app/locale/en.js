@@ -324,7 +324,8 @@ module.exports = {
     ],
 
     "zh": [
-      {"quote": "ma ma ma ma..."}
+      {"quote": "ma ma ma ma..."},
+      {"quote": "老師，真不好意思沒來上課，我昨天拉肚子"}
     ]
   }
 };
