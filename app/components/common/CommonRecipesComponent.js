@@ -33,7 +33,8 @@ const CommonRecipesComponent = GelatoComponent.extend({
    * @method initialize
    */
   initialize: function() {
-    var recipes = app.locale('recipes');
+    let recipes = app.locale('recipes');
+
     recipes = [].concat(recipes['general'])
       .concat(app.isChinese() ? recipes['zh'] : [])
       .concat(app.isJapanese() ? recipes['ja'] : []);
@@ -77,11 +78,11 @@ const CommonRecipesComponent = GelatoComponent.extend({
    * @returns {String} a flavorful dish
    */
   cookNewDish: function() {
-    var newFavoriteDish = Math.floor(this.recipes.length * Math.random(Date.now()));
+    const newFavoriteDish = Math.floor(this.recipes.length * Math.random(Date.now()));
 
     this.currentRecipe = this.recipes[newFavoriteDish];
     this.$('#recipe').text(this.currentRecipe.quote);
-    this.$('#recipe').prop('title', this.currentRecipe.source);
+    this.$('#recipe').prop('title', this.currentRecipe.source || '');
 
     return this.currentRecipe;
   },
@@ -91,7 +92,7 @@ const CommonRecipesComponent = GelatoComponent.extend({
    * @private
    */
   _startTimer: function() {
-    var self = this;
+    const self = this;
 
     // switch every two minutes
     this.timer = setInterval(function() {
