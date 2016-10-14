@@ -30,7 +30,7 @@ gelato-component(data-name='study-prompt-vocab-sentence')
               .hint-reading= sentenceReading
             .hint-definition= sentenceDefinition
       else if vocab.sentenceFetched
-        .value(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese') No example sentence for this item.
+        .sentence-missing No example sentence found.
 
       else
 
