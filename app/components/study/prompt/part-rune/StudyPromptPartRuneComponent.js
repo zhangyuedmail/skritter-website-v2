@@ -104,7 +104,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.prompt.navigation.render();
     this.prompt.shortcuts.grading.listen();
     this.prompt.toolbarAction.render();
-    this.prompt.toolbarGrading.render();
+    this.prompt.toolbarGrading.render({delayEvents: true});
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.toolbarVocab.render();
     this.prompt.vocabContained.render();

@@ -34,14 +34,26 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
    */
   initialize: function(options) {
     this.prompt = options.prompt;
+
+    this._eventsDelayed = false;
   },
 
   /**
+   * @param {Object} [options] options for the component on how it should be rendered
+   * @param {Boolean} [options.delayEvents] whether to delay responding to
+   *                                        events for a short duration after rendering
    * @method render
    * @returns {StudyPromptToolbarGradingComponent}
    */
-  render: function() {
+  render: function(options) {
+    options = options || {};
+
     this.renderTemplate();
+
+    if (options.delayEvents) {
+      this._delayEvents();
+    }
+
     return this;
   },
 
@@ -69,6 +81,10 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
    * @param {Event} event
    */
   handleMouseupButton: function(event) {
+    if (this._eventsDelayed) {
+      return;
+    }
+
     event.preventDefault();
     this.select($(event.currentTarget).data('value'));
     this.trigger('mouseup', this.value);
@@ -82,6 +98,20 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
   select: function(value) {
     this.value = parseInt(value, 10);
     return this.render();
+  },
+
+  /**
+   * Delays component acknowledging any events within a specified duration.
+   * Used to prevent wonky event propagation.
+   * @method _delayEvents
+   * @private
+   */
+  _delayEvents: function() {
+    this._eventsDelayed = true;
+
+    setTimeout(() => {
+      this._eventsDelayed = false;
+    }, 100);
   }
 
 });

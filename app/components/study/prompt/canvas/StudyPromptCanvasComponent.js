@@ -510,6 +510,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   triggerCanvasMouseUp: function(event) {
     event.preventDefault();
+
     this.trigger('mouseup', event);
     this.mouseLastDownEvent = this.mouseDownEvent;
     this.mouseLastUpEvent = this.mouseUpEvent;
