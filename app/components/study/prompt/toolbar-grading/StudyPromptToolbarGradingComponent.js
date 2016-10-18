@@ -12,7 +12,8 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
    */
   events: {
     'mousedown button': 'handleMousedownButton',
-    'mouseup button': 'handleMouseupButton'
+    'mouseup button': 'handleMouseupButton',
+    'mousemove .draggable': 'handleMousemoveButton'
   },
 
   /**
@@ -36,6 +37,8 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
     this.prompt = options.prompt;
 
     this._eventsDelayed = false;
+
+    this._lastButtonMouseoverGrade = null;
   },
 
   /**
@@ -74,6 +77,22 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
     event.preventDefault();
     this.select($(event.currentTarget).data('value'));
     this.trigger('mousedown', this.value);
+
+    this.$('button').addClass('draggable');
+  },
+
+  /**
+   *
+   * @param event
+   */
+  handleMousemoveButton: function(event) {
+    let grade = $(event.currentTarget).data('value');
+
+    if (grade !== this._lastButtonMouseoverGrade !== this._lastButtonMouseoverGrade) {
+      this._lastButtonMouseoverGrade = grade;
+      this.select(grade);
+      this.trigger('mousemove', this.value);
+    }
   },
 
   /**
@@ -81,6 +100,9 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
    * @param {Event} event
    */
   handleMouseupButton: function(event) {
+    this.$('button').removeClass('draggable');
+    this._lastButtonMouseoverGrade = null;
+
     if (this._eventsDelayed) {
       return;
     }
@@ -97,7 +119,10 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
    */
   select: function(value) {
     this.value = parseInt(value, 10);
-    return this.render();
+    this.$('button').removeClass('selected');
+    this.$('.grade' + this.value).addClass('selected');
+
+    return this;
   },
 
   /**

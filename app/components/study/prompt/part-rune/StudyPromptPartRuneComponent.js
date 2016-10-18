@@ -47,6 +47,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.listenTo(this.prompt.toolbarAction, 'click:teach', this.handlePromptToolbarActionTeach);
     this.listenTo(this.prompt.toolbarGrading, 'mousedown', this.handlePromptToolbarGradingMousedown);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptToolbarGradingMouseup);
+    this.listenTo(this.prompt.toolbarGrading, 'mousemove', this.handlePromptToolbarGradingMousemove);
     this.on('attempt:fail', this.handleAttemptFail);
     this.on('attempt:success', this.handleAttemptSuccess);
     this.on('resize', this.render);
@@ -349,12 +350,14 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   },
 
   /**
+   * Handles a mousemove event from the grading component.
+   * Changes the color of the prompt to reflect the selected grade.
    * @method handlePromptToolbarGradingMousedown
-   * @param {Number} value
+   * @param {Number} score the new grade to apply
    */
-  handlePromptToolbarGradingMousedown: function(value) {
+  handlePromptToolbarGradingMousedown: function(score) {
     if (this.prompt.review.isComplete()) {
-      this.prompt.review.set('score', value);
+      this.prompt.review.set('score', score);
       this.prompt.canvas.injectLayerColor(
         'character',
         this.prompt.review.getGradingColor()
@@ -363,10 +366,27 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   },
 
   /**
-   * @method handlePromptToolbarGradingMouseup
+   * Handles a mousemove event from the grading component.
+   * Changes the color of the prompt to reflect the selected grade.
+   * @method handlePromptToolbarGradingMousemove
+   * @param {Number} score the new grade to apply
    */
-  handlePromptToolbarGradingMouseup: function(value) {
-    this.prompt.review.set('score', value);
+  handlePromptToolbarGradingMousemove: function(score) {
+    this.handlePromptToolbarGradingMouseup(score);
+  },
+
+  /**
+   * Handles a mouseup event from the grading component.
+   * Changes the color of the prompt to reflect the selected grade.
+   * @method handlePromptToolbarGradingMouseup
+   * @param {Number} score the new grade to apply
+   */
+  handlePromptToolbarGradingMouseup: function(score) {
+    this.prompt.review.set('score', score);
+    this.prompt.canvas.injectLayerColor(
+      'character',
+      this.prompt.review.getGradingColor()
+    );
   },
 
   /**
