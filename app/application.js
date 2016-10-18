@@ -602,6 +602,7 @@ module.exports = GelatoApplication.extend({
    */
   toggleSideMenu: function(show) {
     this.$('#main-app-container').toggleClass('push-right', show);
+    this.$('#left-side-app-container').toggleClass('push-right', show);
     if (this._views['leftSide'].toggleVisibility) {
       this._views['leftSide'].toggleVisibility(this.$('#main-app-container').hasClass('push-right'));
     }

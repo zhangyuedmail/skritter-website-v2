@@ -7,7 +7,6 @@ html, body {
 }
 
 #main-app-container {
-  z-index: 2;
   position: relative;
   -webkit-transition: left 250ms, right 250ms; /* Safari */
   transition: left 250ms, right 250ms;
@@ -21,6 +20,17 @@ html, body {
 
   &.push-right {
     left: 250px;
+  }
+}
+
+#left-side-app-container {
+  position: absolute;
+  -webkit-transition: left 250ms, right 250ms; /* Safari */
+  transition: left 250ms, right 250ms;
+  left: -250px;
+
+  &.push-right {
+    left: 0;
   }
 }
 
