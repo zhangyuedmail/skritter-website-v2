@@ -27,11 +27,8 @@ html, body {
   position: absolute;
   -webkit-transition: left 250ms, right 250ms; /* Safari */
   transition: left 250ms, right 250ms;
-  left: -250px;
-
-  &.push-right {
-    left: 0;
-  }
+  left: -100%;
+  width: 250px;
 }
 
 #right-side-app-container {
@@ -74,6 +71,7 @@ gelato-application {
     width: 100%;
   }
 
+
   &.mobile {
 
     #page-container {
@@ -87,7 +85,14 @@ gelato-application {
       gelato-page {
         position: absolute;
       }
+    }
 
+    #left-side-app-container {
+      left: -250px;
+
+      &.push-right {
+        left: 0;
+      }
     }
 
   }
