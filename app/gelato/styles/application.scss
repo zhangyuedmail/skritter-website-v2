@@ -1,3 +1,7 @@
+html {
+  overflow-x: hidden;
+}
+
 html, body {
   height: 100%;
   margin: 0;
@@ -12,7 +16,6 @@ html, body {
   transition: left 250ms, right 250ms;
   left: 0;
   height: 100%;
-  overflow-x: hidden;
 
   &.push-left {
     left: -100%;
@@ -54,8 +57,6 @@ gelato-application {
   padding: 0;
   position: absolute;
   width: 100%;
-
-  overflow-x: hidden;
 
   #page-container {
 
