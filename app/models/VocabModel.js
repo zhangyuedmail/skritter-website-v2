@@ -30,7 +30,13 @@ const VocabModel = SkritterModel.extend({
     _.forEach(
       this.getUniqueAudios(),
       function(data) {
-        audios.push(new Audio(data.mp3.replace('http://', 'https://')));
+        // Use proxy when accessing audio on google storage
+        var url = data.mp3.replace(
+          'http://storage.googleapis.com/skritter_audio/',
+          'https://audio.skritter.com/proxy/'
+        );
+
+        audios.push(new Audio(url));
       }
     );
     this.audios = audios;
