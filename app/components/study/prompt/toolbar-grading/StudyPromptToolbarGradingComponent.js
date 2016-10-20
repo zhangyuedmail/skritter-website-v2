@@ -13,7 +13,10 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
   events: {
     'mousedown button': 'handleMousedownButton',
     'mouseup button': 'handleMouseupButton',
-    'mousemove .draggable': 'handleMousemoveButton'
+    'mousemove .draggable': 'handleMousemoveButton',
+    'touchstart button': 'handleMousedownButton',
+    'touchend button': 'handleMouseupButton',
+    'touchmove .draggable': 'handleMousemoveButton',
   },
 
   /**
@@ -71,7 +74,7 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
 
   /**
    * @method handleMousedownButton
-   * @param {Event} event
+   * @param {jQuery.Event} event
    */
   handleMousedownButton: function(event) {
     event.preventDefault();
@@ -82,11 +85,15 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
   },
 
   /**
-   *
-   * @param event
+   * Updates the score when the user's selection has moved to
+   * a different value.
+   * @param {jQuery.Event} event
+   * @method handleMousemoveButton
    */
   handleMousemoveButton: function(event) {
-    let grade = $(event.currentTarget).data('value');
+    let el = event.type !== 'touchmove' ? event.currentTarget : this._getElementFromTouchEvent(event);
+    let grade = $(el).data('value');
+
 
     if (grade !== this._lastButtonMouseoverGrade !== this._lastButtonMouseoverGrade) {
       this._lastButtonMouseoverGrade = grade;
@@ -107,8 +114,10 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
       return;
     }
 
+    let el = event.type !== 'touchend' ? event.currentTarget : this._getElementFromTouchEvent(event);
+
     event.preventDefault();
-    this.select($(event.currentTarget).data('value'));
+    this.select($(el).data('value'));
     this.trigger('mouseup', this.value);
   },
 
@@ -137,7 +146,31 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
     setTimeout(() => {
       this._eventsDelayed = false;
     }, 100);
-  }
+  },
+
+  /**
+   * Who came up with the spec for touch events? Seriously?
+   * @param {TouchEvent} event the event to get the actual target for because
+   *                           currentTarget doesn't update correctly with touch events.
+   * @returns {HTMLElement}
+   * @private
+   */
+  _getElementFromTouchEvent: function(event) {
+    if (event.originalEvent) {
+      event = event.originalEvent;
+    }
+
+    if (event.changedTouches.length) {
+      event = event.changedTouches[0];
+    }
+
+    let el = document.elementFromPoint(event.clientX, event.clientY);
+    if (!$(el).data('value')) {
+      el = el.parentElement;
+    }
+
+    return el;
+  },
 
 });
 
