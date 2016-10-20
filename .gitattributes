@@ -18,6 +18,8 @@
 # Other
 chromedriver binary
 chromedriver.exe binary
+geckodriver binary
+geckodriver.exe binary
 *.jar binary
 *.mp3 binary
 *.zip binary
