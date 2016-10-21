@@ -33,10 +33,10 @@ const VocabModel = SkritterModel.extend({
         // Use proxy when accessing audio on google storage
         var url = data.mp3.replace(
           'http://storage.googleapis.com/skritter_audio/',
-          'https://audio.skritter.com/proxy/'
+          'https://skritter.com/audio/'
         );
 
-        audios.push(new Audio(url));
+        audios.push(new Howl({src: [url]}));
       }
     );
     this.audios = audios;
@@ -475,9 +475,13 @@ const VocabModel = SkritterModel.extend({
       async.eachSeries(
         this.audios,
         function(audio, callback) {
-          audio.onended = function() {
-            setTimeout(callback, 200);
-          };
+          audio.once(
+            'end',
+            function () {
+              setTimeout(callback, 200);
+            }
+          );
+
           audio.play();
         }
       );
