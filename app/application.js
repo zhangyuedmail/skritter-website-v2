@@ -29,7 +29,7 @@ module.exports = GelatoApplication.extend({
    * @constructor
    */
   initialize: function(options) {
-    GelatoApplication.prototype.initialize.call(this, arguments);
+    GelatoApplication.prototype.initialize.apply(this, arguments);
 
     this.config = Config;
 
@@ -501,7 +501,7 @@ module.exports = GelatoApplication.extend({
    * @method start
    */
   start: function() {
-    GelatoApplication.prototype.start.call(this, arguments);
+    GelatoApplication.prototype.start.apply(this, arguments);
 
     //load cached user data if it exists
     this.user.set(this.getLocalStorage(this.user.id + '-user'));
