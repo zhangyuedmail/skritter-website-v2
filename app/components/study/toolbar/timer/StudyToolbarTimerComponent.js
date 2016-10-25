@@ -39,7 +39,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function() {
-    this.interval = undefined;
+    this.interval = null;
     this.localOffset = 0;
     this.seconds = 0;
     this.serverOffset = 0;

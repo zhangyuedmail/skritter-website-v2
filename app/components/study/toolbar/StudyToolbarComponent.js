@@ -1,8 +1,7 @@
 const GelatoComponent = require('gelato/component');
 const ProgressStats = require('collections/ProgressStatsCollection');
 const StudyToolbarTimerComponent = require('components/study/toolbar/timer/StudyToolbarTimerComponent.js');
-
-const StudySettings = require('dialogs/study-settings/view');
+const vent = require('vent');
 
 /**
  * @class StudyToolbarComponent
@@ -78,44 +77,26 @@ const StudyToolbarComponent = GelatoComponent.extend({
   },
 
   /**
+   * Triggers an event to add an item from the user's lists
    * @method handleClickAddItem
-   * @param {Event} event
+   * @param {jQuery.ClickEvent} event
+   * @triggers item:add
    */
   handleClickAddItem: function(event) {
     event.preventDefault();
-    this.page.addItem();
+    vent.trigger('item:add');
   },
 
   /**
+   * Triggers an event to show a study settings popup.
    * @method handleClickStudySettings
-   * @param {Event} event
+   * @param {jQuery.ClickEvent} event
+   * @triggers studySettings:show
    */
   handleClickStudySettings: function(event) {
     event.preventDefault();
 
-    //post all reviews while changing settings
-    this.page.items.reviews.post();
-
-    var dialog = new StudySettings();
-    dialog.open();
-    dialog.on('save', function(settings) {
-      ScreenLoader.show();
-      ScreenLoader.post('Saving study settings');
-      app.user.set(settings, {merge: true});
-      app.user.cache();
-      app.user.save(
-        null,
-        {
-          error: function() {
-            ScreenLoader.hide();
-            dialog.close();
-          },
-          success: function() {
-            app.reload();
-          }
-        }
-      );
-    });
+    vent.trigger('studySettings:show');
   },
 
   /**

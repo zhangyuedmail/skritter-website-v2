@@ -1,10 +1,11 @@
-var NavbarComponent = require('gelato/component');
+const GelatoComponent = require('gelato/component');
 
 /**
  * @class DefaultNavbar
- * @extends {NavbarComponent}
+ * @extends {GelatoComponent}
  */
-module.exports = NavbarComponent.extend({
+module.exports = GelatoComponent.extend({
+
   /**
    * @property events
    * @type {Object}
@@ -29,6 +30,7 @@ module.exports = NavbarComponent.extend({
   render: function() {
     this.renderTemplate();
     this.$('[data-toggle="tooltip"]').tooltip();
+
     return this;
   },
 

@@ -1,0 +1,42 @@
+@import "../../styles/_variables";
+
+bootstrap-navbar[data-name='mobile'] {
+  color: $white2;
+
+  .navbar-toggle {
+    float: left;
+  }
+
+  .title-txt {
+    color: $white1;
+    font-size: 24px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  .buttons {
+    float: right;
+    font-size: 24px;
+    margin-top: 9px;
+
+    span {
+      margin-left: 25px;
+      cursor: pointer;
+    }
+
+    .last {
+      margin-right: 25px;
+    }
+  }
+
+  .wrapper {
+    display: inline-block;
+  }
+
+  // h4x
+  gelato-component[data-name='study-toolbar-timer'] .hover-tooltip .tooltip-text {
+    left: 0;
+  }
+}

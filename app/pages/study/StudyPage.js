@@ -4,6 +4,9 @@ const Toolbar = require('components/study/toolbar/StudyToolbarComponent.js');
 const Recipes = require('components/common/CommonRecipesComponent.js');
 const Items = require('collections/ItemCollection.js');
 const Vocablists = require('collections/VocablistCollection.js');
+const MobileStudyNavbar = require('components/navbars/NavbarMobileStudyComponent.js');
+const StudySettings = require('dialogs/study-settings/view');
+const vent = require('vent');
 
 /**
  * @class StudyPage
@@ -16,6 +19,12 @@ const StudyPage = GelatoPage.extend({
    * @type {Boolean}
    */
   showFooter: false,
+
+  /**
+   * The navbar to use in mobile views
+   * @type {NavbarMobileStudyComponent}
+   */
+  mobileNavbar: MobileStudyNavbar,
 
   /**
    * @property template
@@ -50,6 +59,8 @@ const StudyPage = GelatoPage.extend({
 
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
+    this.listenTo(vent, 'item:add', this.addItem);
+    this.listenTo(vent, 'studySettings:show', this.showStudySettings);
   },
 
   /**
@@ -98,7 +109,9 @@ const StudyPage = GelatoPage.extend({
             if (silenceNoItems) {
               return;
             }
-
+            // TODO: this should respond to vent item:added in a separate
+            // function--"app-level" notification?
+            // Could be added from lists or vocab info dialog...
             $.notify(
               {
                 message: 'No more words to add. <a href="/vocablists/browse">Add a new list</a>'
@@ -131,7 +144,7 @@ const StudyPage = GelatoPage.extend({
             }
           );
         }
-
+        vent.trigger('item:added', !error ? result : null);
       }
     );
   },
@@ -319,6 +332,35 @@ const StudyPage = GelatoPage.extend({
     this.toolbar.remove();
     this.items.reviews.post();
     return GelatoPage.prototype.remove.call(this);
+  },
+
+  /**
+   * Shows a dialog that allows the user to adjust their study settings
+   */
+  showStudySettings: function() {
+    //post all reviews while changing settings
+    this.items.reviews.post();
+
+    const dialog = new StudySettings();
+    dialog.open();
+    dialog.on('save', function(settings) {
+      ScreenLoader.show();
+      ScreenLoader.post('Saving study settings');
+      app.user.set(settings, {merge: true});
+      app.user.cache();
+      app.user.save(
+        null,
+        {
+          error: function() {
+            ScreenLoader.hide();
+            dialog.close();
+          },
+          success: function() {
+            app.reload();
+          }
+        }
+      );
+    });
   }
 
 });
