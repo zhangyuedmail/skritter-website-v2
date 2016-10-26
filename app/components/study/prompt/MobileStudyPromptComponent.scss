@@ -31,7 +31,6 @@ gelato-component[data-name='mobile-study-prompt'] {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     height: 50%;
-    margin-top: 15px;
     padding: 10px;
     .content {
       margin: 0 auto;
@@ -74,8 +73,7 @@ gelato-component[data-name='mobile-study-prompt'] {
         }
       }
       #toolbar-action-container {
-        margin-bottom: 25px;
-        margin-top: 40px;
+        margin-top: 15px;
       }
 
       gelato-component[data-name='study-prompt-part-tone'] {
@@ -150,6 +148,7 @@ gelato-component[data-name='mobile-study-prompt'] {
     }
     #review-status-container {
       bottom: 15px;
+      display: none;
       position: absolute;
       right: 15px;
     }
