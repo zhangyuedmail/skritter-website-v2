@@ -35,7 +35,12 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
    * @returns {StudyPromptVocabDefinitionComponent}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileStudyPromptVocabDefinitionComponent.jade')
+    }
+
     this.renderTemplate();
+
     return this;
   },
 

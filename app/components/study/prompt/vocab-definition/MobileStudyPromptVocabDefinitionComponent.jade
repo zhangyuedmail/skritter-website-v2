@@ -1,0 +1,35 @@
+gelato-component(data-name='mobile-study-prompt-vocab-definition')
+  - var prompt = view.prompt;
+
+  if prompt.reviews
+    - var vocab = prompt.reviews.vocab;
+    - var definition = prompt.reviews.vocab.getDefinition();
+
+    case prompt.reviews.part
+
+      when 'defn'
+        .value(class=(prompt.reviews.isComplete() ? 'visible' : 'invisible'))
+          if view.editing
+            textarea= definition
+          else
+            if definition
+              if app.user.get('showHeisig') && vocab.has('heisigDefinition')
+                em!= vocab.get('heisigDefinition') + ' - '
+              span!= definition
+            else
+              em Click the 'edit' icon to add a definition
+
+      default
+        .value
+          if view.editing
+            textarea= definition
+          else
+            if definition
+              if prompt.reviews.isDefinitionShown()
+                if app.user.get('showHeisig') && vocab.has('heisigDefinition')
+                  em!= vocab.get('heisigDefinition') + ' - '
+                span!= definition
+              else
+                button#show-definition.btn.btn-sm.btn-default show
+            else
+              em Click the 'edit' icon to add a definition
