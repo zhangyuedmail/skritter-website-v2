@@ -1,0 +1,53 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='mobile-account-billing-history'] {
+
+  background: $background-primary;
+  padding-top: 100px;
+
+  #nav-links {
+    background: $grey7;
+    margin-bottom: 15px;
+    margin-top: -50px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    position: fixed;
+    width: 100%;
+    z-index: 7002;
+  }
+
+  .billing-links {
+    left: 10px;
+    position: absolute;
+    top: 10px;
+  }
+
+  .table-oversized-wrapper {
+    margin-top: 30px;
+  }
+
+  .date-td {
+    width: 25%;
+  }
+
+  .service-td {
+    width: 15%;
+  }
+
+  .length-td {
+    width: 20%;
+  }
+
+  .main-content {
+    border-radius: 25px;
+    padding: 40px;
+  }
+
+  .state-td {
+    width: 20%;
+  }
+
+  .charged-td {
+    width: 20%;
+  }
+}

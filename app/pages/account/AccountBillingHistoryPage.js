@@ -48,6 +48,10 @@ const AccountBillingHistoryPage = GelatoPage.extend({
    * @returns {AccountBillingHistoryPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileAccountBillingHistory.jade');
+    }
+
     this.renderTemplate();
     this.sidebar.setElement('#sidebar-container').render();
     return this;
