@@ -21,7 +21,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
     NavbarDefaultComponent.prototype.initialize.apply(this, arguments);
     this._views['timer'] = new StudyToolbarTimerComponent();
 
-    this.listenTo('vent', 'item:added', this.handleItemAdded);
+    this.listenTo(vent, 'item:added', this.handleItemAdded);
   },
 
   /**
