@@ -85,6 +85,10 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
    * @returns {AccountBillingSubscriptionPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileAccountBillingSubscription.jade');
+    }
+
     this.renderTemplate();
     this._views['sidebar'].setElement('#sidebar-container').render();
 
