@@ -1,0 +1,24 @@
+gelato-component(data-name="mobile-study-prompt-part-rdng" class='noclick')
+  - var prompt = view.prompt;
+
+  if prompt.reviews.part === 'rdng' && prompt.reviews
+
+    .writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
+      span= prompt.reviews.vocab.get('writing')
+
+    .question(class=prompt.reviews.isComplete() ? 'hidden' : '')
+      if prompt.reviews.isChinese()
+        span What's the pinyin?
+      else
+        span What's the pronunciation?
+
+    .reading-prompt(class=view.showReadingPrompt ? '' : 'hidden')
+      input#reading-prompt.reading-prompt-input(value="#{view.userReading}", autocomplete="off" ,autocorrect="off" ,autocapitalize="off", spellcheck="false")
+
+    .answer(class=prompt.reviews.isComplete() ? '' : 'invisible')
+      - var writing = prompt.reviews.vocab.get('writing');
+      - var reading = prompt.reviews.vocab.get('reading');
+      if app.fn.isKana(writing)
+        span!= kana.toRomaji(reading)
+      else
+        span!= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading

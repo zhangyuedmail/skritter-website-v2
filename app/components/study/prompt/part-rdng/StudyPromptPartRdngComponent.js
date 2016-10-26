@@ -62,6 +62,10 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @returns {StudyPromptPartRdngComponent}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileStudyPromptPartRdngComponent.jade')
+    }
+
     this.renderTemplate();
 
     this.prompt.canvas.grid = false;
@@ -80,36 +84,6 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     }
 
     return this;
-  },
-
-  /**
-   * Called when attempting to advance to the next prompt via the enter key
-   */
-  completeReading: function() {
-    this._processTextPreCorrection();
-    var vocabReading = this.prompt.review.vocab.get('reading');
-    var userReading = this.$('#reading-prompt').val();
-
-    this.userReading = userReading;
-
-    this.prompt.review.set('userReading', userReading);
-    if (!this.showReadingPrompt || this.isCorrect(userReading, vocabReading)) {
-      this.prompt.review.set('complete', true);
-      this.prompt.review.set('score', 3);
-      this.render();
-    } else {
-      this.prompt.review.set('score', 1);
-      this.prompt.review.set('complete', true);
-      this.render();
-    }
-
-    if (this.showReadingPrompt) {
-      this._applyGradeColoring();
-    }
-
-    // TODO: this will cause problems if user submits an answer,
-    // then goes back and wants to change it
-    this.prompt.shortcuts.registerAll();
   },
 
   /**
@@ -174,6 +148,36 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     }
 
     return this;
+  },
+
+  /**
+   * Called when attempting to advance to the next prompt via the enter key
+   */
+  completeReading: function () {
+    this._processTextPreCorrection();
+    var vocabReading = this.prompt.review.vocab.get('reading');
+    var userReading = this.$('#reading-prompt').val();
+
+    this.userReading = userReading;
+
+    this.prompt.review.set('userReading', userReading);
+    if (!this.showReadingPrompt || this.isCorrect(userReading, vocabReading)) {
+      this.prompt.review.set('complete', true);
+      this.prompt.review.set('score', 3);
+      this.render();
+    } else {
+      this.prompt.review.set('score', 1);
+      this.prompt.review.set('complete', true);
+      this.render();
+    }
+
+    if (this.showReadingPrompt) {
+      this._applyGradeColoring();
+    }
+
+    // TODO: this will cause problems if user submits an answer,
+    // then goes back and wants to change it
+    this.prompt.shortcuts.registerAll();
   },
 
   /**
