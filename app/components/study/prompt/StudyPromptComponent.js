@@ -18,8 +18,10 @@ const VocabReading = require('components/study/prompt/vocab-reading/StudyPromptV
 const VocabSentence = require('components/study/prompt/vocab-sentence/StudyPromptVocabSentenceComponent.js');
 const VocabStyle = require('components/study/prompt/vocab-style/StudyPromptVocabStyleComponent.js');
 const VocabWriting = require('components/study/prompt/vocab-writing/StudyPromptVocabWritingComponent.js');
+const VocabViewerDialog = require('dialogs1/vocab-viewer/view.js');
 
 const Shortcuts = require('components/study/prompt/StudyPromptShortcuts');
+const vent = require('vent');
 
 /**
  * @class StudyPromptComponent
@@ -65,6 +67,9 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.vocabStyle = new VocabStyle({prompt: this});
     this.vocabWriting = new VocabWriting({prompt: this});
     this.on('resize', this.resize);
+
+    this.listenTo(vent, 'vocab:play', this.playVocabAudio);
+    this.listenTo(vent, 'studyPromptVocabInfo:show', this.showVocabInfo);
   },
 
   /**
@@ -182,6 +187,14 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
+   * Plays the audio for the current vocab.
+   * @method playVocabAudio
+   */
+  playVocabAudio: function() {
+    this.reviews.vocab.play();
+  },
+
+  /**
    * @method previous
    */
   previous: function() {
@@ -278,6 +291,15 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.reviewStatus.setReviews(schedule.reviews);
 
     return this;
+  },
+
+  showVocabInfo: function() {
+    if (app.isMobile()) {
+      vent.trigger('vocabInfo:toggle', this.reviews.vocab.id);
+    } else {
+      app.dialogs.vocabViewer.load(this.reviews.vocab.id);
+      app.dialogs.vocabViewer.open();
+    }
   }
 
 });

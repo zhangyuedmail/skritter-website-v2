@@ -321,7 +321,8 @@ module.exports = GelatoApplication.extend({
       });
 
       // TODO: add a view in here, adjust push amount in application.scss .push-right
-      this._views['rightSide'] = null;
+      const VocabInfoContent = require('dialogs1/vocab-viewer/content/view');
+      // this._views['rightSide'] = new VocabInfoContent();
     }
   },
 

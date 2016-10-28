@@ -1,35 +1,14 @@
-var GelatoComponent = require('gelato/component');
-
-var ConfirmItemBanDialog = require('dialogs1/confirm-item-ban/view');
-var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
+const GelatoComponent = require('gelato/component');
+const ConfirmItemBanDialog = require('dialogs1/confirm-item-ban/view');
+const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
+const vent = require('vent');
 
 /**
  * @class StudyPromptToolbarVocab
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
-  /**
-   * @method initialize
-   * @param {Object} options
-   * @constructor
-   */
-  initialize: function(options) {
-    this.dialog = null;
-    this.prompt = options.prompt;
-  },
-  /**
-   * @property template
-   * @type {Function}
-   */
-  template: require('./StudyPromptToolbarVocabComponent.jade'),
-  /**
-   * @method render
-   * @returns {StudyPromptToolbarVocab}
-   */
-  render: function() {
-    this.renderTemplate();
-    return this;
-  },
+
   /**
    * @property events
    * @type Object
@@ -41,6 +20,32 @@ module.exports = GelatoComponent.extend({
     'click #button-vocab-info': 'handleClickButtonVocabInfo',
     'click #button-vocab-star': 'handleClickButtonVocabStar'
   },
+
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./StudyPromptToolbarVocabComponent.jade'),
+
+  /**
+   * @method initialize
+   * @param {Object} options
+   * @constructor
+   */
+  initialize: function(options) {
+    this.dialog = null;
+    this.prompt = options.prompt;
+  },
+
+  /**
+   * @method render
+   * @returns {StudyPromptToolbarVocab}
+   */
+  render: function() {
+    this.renderTemplate();
+    return this;
+  },
+
   /**
    * @method disableEditing
    * @returns {StudyPromptToolbarVocab}
@@ -57,6 +62,7 @@ module.exports = GelatoComponent.extend({
     this.prompt.vocabMnemonic.render();
     return this;
   },
+
   /**
    * @method enableEditing
    * @returns {StudyPromptToolbarVocab}
@@ -70,14 +76,16 @@ module.exports = GelatoComponent.extend({
     this.prompt.vocabMnemonic.render();
     return this;
   },
+
   /**
    * @method handleClickButtonVocabAudio
    * @param {Event} event
    */
   handleClickButtonVocabAudio: function(event) {
     event.preventDefault();
-    this.prompt.reviews.vocab.play();
+    vent.trigger('vocab:play');
   },
+
   /**
    * @method handleClickButtonVocabBan
    * @param {Event} event
@@ -95,6 +103,7 @@ module.exports = GelatoComponent.extend({
     });
     this.dialog.open();
   },
+
   /**
    * @method handleClickButtonVocabEdit
    * @param {Event} event
@@ -112,16 +121,19 @@ module.exports = GelatoComponent.extend({
 
     this.$('#button-vocab-edit').toggleClass('active', this.prompt.editing);
   },
+
   /**
    * @method handleClickButtonVocabInfo
    * @param {Event} event
    */
   handleClickButtonVocabInfo: function(event) {
     event.preventDefault();
+    vent.trigger('studyPromptVocabInfo:show');
     this.dialog = new VocabViewerDialog();
     this.dialog.load(this.prompt.reviews.vocab.id);
     this.dialog.open();
   },
+
   /**
    * @method handleClickButtonVocabStar
    * @param {Event} event

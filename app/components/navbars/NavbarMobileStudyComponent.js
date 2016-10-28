@@ -66,7 +66,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * @method handlePlayClick
    */
   handlePlayClick: function(event) {
-
+    vent.trigger('vocab:play');
   },
 
   /**
@@ -75,7 +75,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * @method handleInfoClick
    */
   handleInfoClick: function(event) {
-
+    vent.trigger('studyPromptVocabInfo:show');
   },
 
   /**
