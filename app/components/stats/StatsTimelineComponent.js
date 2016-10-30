@@ -145,15 +145,27 @@ const StatsTimelineComponent = GelatoComponent.extend({
   render: function() {
     this.renderTemplate();
 
+    const userTZ = app.user.get('timezone');
+    const now = moment().tz(userTZ).subtract(4, 'hours').startOf('day');
+
     this.$('#date-range-picker').daterangepicker({
+      alwaysShowCalendars: !app.isMobile(),
       startDate: moment(this.range.start, app.config.dateFormatApp),
       endDate: moment(this.range.end, app.config.dateFormatApp),
-      maxDate: moment(),
+      maxDate: now,
       minDate: moment(app.user.get('created') * 1000),
       locale: {
         format: app.config.dateFormatApp
       },
-      opens: "left"
+      opens: app.isMobile() ? 'center' : 'left',
+
+      showCustomRangeLabel: false,
+      ranges: {
+        'Last 7 Days': [moment(now).subtract(6, 'days'), now],
+        'Last 30 Days': [moment(now).subtract(29, 'days'), now],
+        'This Month': [moment(now).startOf('month'), moment(now).endOf('month')],
+        'Last Month': [moment(now).subtract(1, 'month').startOf('month'), moment(now).subtract(1, 'month').endOf('month')]
+      }
     });
 
     this.$('#date-range-picker').on('apply.daterangepicker', $.proxy(this.onDatePickerUpdated, this));

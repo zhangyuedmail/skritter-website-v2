@@ -12,7 +12,7 @@ gelato-component(data-name='stats-timeline')
           .units-label
             span#time-studied-units-label #{view.granularity === 'minutes' ? 'minutes' : 'hours'}
             span &nbsp;studied
-        .col-md-4.date-range-wrapper
+        .col-md-4.col-xs-12.date-range-wrapper
           #date-range-picker.date-range-picker
             span#start-date #{moment().subtract(6, 'days').format('MMM DD, YYYY')}
             span &nbsp;-&nbsp;

@@ -37,7 +37,9 @@ gelato-component[data-name='stats-items-learned'] {
 
   #items-learned {
     height: 200px;
+    position: relative;
   }
+
   .num-hero {
     font-size: 38px;
   }
@@ -98,6 +100,10 @@ gelato-component[data-name='stats-items-learned'] {
 
 
   @media (max-width: 1000px) {
+    .highcharts-container {
+      width: 100% !important;
+    }
+
     .data-section {
       width: 50%;
       margin-top: 0px;
