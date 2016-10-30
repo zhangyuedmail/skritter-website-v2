@@ -2,6 +2,7 @@ var GelatoPage = require('gelato/page');
 var Items = require('collections/ItemCollection');
 var Vocabs = require('collections/VocabCollection');
 var WordsSidebar = require('components/words/WordsSidebarComponent');
+var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 var VocabActionMixin = require('mixins/vocab-action');
 
 /**
@@ -69,7 +70,12 @@ module.exports = GelatoPage.extend({
    * @returns {VocablistBrowse}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileWordsAll.jade');
+    }
+
     this.renderTemplate();
+
     this.sidebar.setElement('#words-sidebar-container').render();
 
     return this;
@@ -254,7 +260,9 @@ module.exports = GelatoPage.extend({
     var vocab = this.vocabMap[vocabId];
 
     if (vocabId) {
-      app.dialogs.vocabViewer.load(vocabId, vocab.get('reading')).open();
+      this.dialog = new VocabViewerDialog();
+      this.dialog.load(vocabId);
+      this.dialog.open();
     }
   },
 

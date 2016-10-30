@@ -6,7 +6,9 @@ module.exports = (function() {
     window.ScreenLoader = new (require('startup/screen-loader/module'))();
     window.ScreenLoader.post('Loading application');
 
-    window.app = new Application();
+    window.app = new Application({
+      rootSelector: 'body'
+    });
     window.app.start();
   }
 

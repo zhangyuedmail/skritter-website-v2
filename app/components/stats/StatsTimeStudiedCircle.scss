@@ -30,4 +30,11 @@ gelato-component[data-name='stats-time-studied-circle-component'] {
     margin-top: 70px;
     text-align: center;
   }
+
+  @media all and (max-width: 1000px) {
+
+    .num-area-wrapper {
+      margin-top: 0;
+    }
+  }
 }

@@ -2,6 +2,7 @@ const SkritterModel = require('base/BaseSkritterModel');
 const SessionModel = require('models/SessionModel');
 const SubscriptionModel = require('models/SubscriptionModel');
 const VocablistCollection = require('collections/VocablistCollection');
+const ProgressStatsCollection = require('collections/ProgressStatsCollection');
 
 /**
  * A model that represents a Skritter user.
@@ -46,6 +47,13 @@ const UserModel = SkritterModel.extend({
    * @type {VocablistCollection}
    */
   vocablists: new VocablistCollection(),
+
+  /**
+   * A progress stats collection
+   * @property stats
+   * @type {ProgressStatsCollection}
+   */
+  stats: new ProgressStatsCollection(),
 
   /**
    * @method initialize
@@ -197,7 +205,7 @@ const UserModel = SkritterModel.extend({
    * optimizing fetches using memoization kinda.
    * Can also get a synchronous return if things have already been fetched.
    * This is bad design. I'm sorry. Will refactor once we do ES6. I..."promise".
-   * @param {Function} callback called when it can be determined
+   * @param {Function} [callback] called when it can be determined
    *                            whether the subscription is active.
    */
   isSubscriptionActive: function(callback) {

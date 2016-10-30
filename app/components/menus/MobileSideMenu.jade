@@ -1,0 +1,31 @@
+.actions-wrapper
+  #settings-btn.settings.fa.fa-gear
+  #logout-btn.logout.fa.fa-sign-out
+  .user-info-wrapper.text-center
+    img.profile-picture#menu-avatar(src="data:image/png;base64, " + user.get('avatar'), alt="")
+    #username.username= app.user.get('name')
+
+.user-stats-wrapper.row
+  .stats-wrapper.col-xs-6.text-center
+    .num-chars.stats-num ...
+    .stats-title chars
+  .stats-wrapper.col-xs-6.text-center
+    .num-words.stats-num ...
+    .stats-title words
+
+.links-wrapper
+  ul.nav
+    li
+      a(href="/dashboard") Home
+    li
+      a(href="/study") Study
+    li
+      a(href="/vocablists") Lists
+    li
+      a(href="/words") My Words
+    li
+      a(href="/stats") Stats
+    br
+    li
+      a#button-beacon(href="#")
+        i.fa.fa-question-circle

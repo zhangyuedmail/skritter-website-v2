@@ -134,7 +134,7 @@ module.exports = {
       "bugReport": "Bug Report",
       "featureSuggestion": "Feature Suggestion",
       "paymentIssue": "Payment Issue",
-      "friendlyText": "Thanks for contacting us! We do respond to everything. If you're interested in Skritter for your school, click here.",
+      "friendlyText": "Thanks for contacting us! We do respond to everything. If you're interested in Skritter for your school, <a href='/institutions' target='_self'>click here</a>.",
       "submit": "Submit"
     },
 
@@ -180,13 +180,14 @@ module.exports = {
       "errorCouponAlreadyUsed": "The coupon code has already been used.",
       "errorCouponExpired": "The coupon code is expired.",
       "errorCouponExhausted": "The coupon code has exhausted all its uses.",
-      "errorCouponInvalid": "The coupon code entered was not valid.",
+      "errorCouponInvalid": "The coupon code entered is not valid.",
       "errorCouponNotEntered": "You must enter a coupon code.",
       "errorCouponNotReady": "The coupon code is not ready for use. Try again later.",
       "errorCCExpired": "The credit card has expired.",
       "errorDefault": "Unknown error while signing up. Please try again.",
       "errorDuplicateUsername": "Another person has taken the username #{username}. Please choose another one.",
       "errorInvalidCCNumber": "Invalid credit card number entered.",
+      "errorInvalidEmailValidationCode": "The email validation code entered is not valid.",
       "errorInvalidRecaptcha": "The reCAPTCHA must be answered correctly.",
       "errorInvalidPasswordLength": "Password length must be 6 characters or longer.",
       "errorInvalidPasswords": "Invalid password entered or passwords don\'t match",
@@ -196,6 +197,7 @@ module.exports = {
       "errorNotSchoolEmail": "The email entered is not an eligible school email.",
       "errorSchoolCantAddTime": "School validation cannot add time to this account or the time has already been added.",
       "errorSchoolEmailAlreadyUsed": "A user already exists with that email who has a school subscription.",
+      "errorUsernameTooLong": "Your username is too long. It cannot be longer than 20 characters.",
       "errorValidationCodeNotEntered": "You must enter a validation code from your school email.",
       "refundPolicy": "Refund Policy",
       "refundDetails1": "If you’re not satisfied for any reason, we offer a full refund on your first month's purchase, and we provide a pro-rated refund on longer subscriptions. Just",
@@ -322,7 +324,8 @@ module.exports = {
     ],
 
     "zh": [
-      {"quote": "ma ma ma ma..."}
+      {"quote": "ma ma ma ma..."},
+      {"quote": "老師，真不好意思沒來上課，我昨天拉肚子"}
     ]
   }
 };

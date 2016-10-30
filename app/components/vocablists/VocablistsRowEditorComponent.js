@@ -116,6 +116,16 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
         this.render();
       }, this)
     });
+  },
+
+  addRows: function (rows) {
+    _.forEach(
+      rows,
+      (row) => {
+        this.addRow(row)
+      }
+    );
+
     this.render();
   },
 

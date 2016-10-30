@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const cors = require('cors');
 const express = require('express');
+const helmet = require('helmet');
 const lodash = require('lodash');
 const loggy = require('loggy');
 const morgan = require('morgan');
@@ -15,13 +16,15 @@ app.set('view engine', 'jade');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(compression(6));
-app.use(cors());
-app.use(express.static(__dirname + '/public'));
 
 switch (app.get('env')) {
   case 'production':
+    app.use(express.static(__dirname + '/build'));
+    app.use(cors());
+    app.use(helmet());
     break;
   default:
+    app.use(express.static(__dirname + '/public'));
     app.use(morgan('combined'));
 }
 

@@ -227,7 +227,7 @@ module.exports = Router.extend({
   navigateDashboard: function() {
     if (app.user.isLoggedIn()) {
       this.navigate('dashboard');
-      this.go('pages/dashboard/DashboardPage');
+      this.go('pages/dashboard/DashboardPage.js');
     } else {
       this.navigateLogin();
     }
@@ -264,7 +264,11 @@ module.exports = Router.extend({
    * @method navigateHome
    */
   navigateHome: function() {
-    window.location.replace('/');
+    if (app.isMobile()) {
+      this.go('pages/home/HomePage.js');
+    } else {
+      window.location.replace('/');
+    }
   },
 
   /**
@@ -368,11 +372,11 @@ module.exports = Router.extend({
       if (sectionId) {
         //TODO: replace when single list section study ready for action
         //this.go('pages/study-section', {listId: listId, sectionId: sectionId});
-        this.go('pages/study/StudyPage');
+        this.go('pages/study/StudyPage.js');
       } else if (listId) {
-        this.go('pages/study-list/StudyListPage', {listId: listId});
+        this.go('pages/study-list/StudyListPage.js', {listId: listId});
       } else {
-        this.go('pages/study/StudyPage');
+        this.go('pages/study/StudyPage.js');
       }
     } else {
       this.navigateLogin();

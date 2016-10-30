@@ -1,0 +1,19 @@
+gelato-page(data-name='login').mobile
+  section.container
+    .wrapper
+      form#login-form.push-bottom
+        #login-message.text-danger
+        .form-group
+          label(for="login-username") Username
+          input#login-username.form-control.large-input(type="text", placeholder="Username")
+        .form-group
+          label(for="login-password") Password
+          input#login-password.form-control.large-input(type="password", placeholder="Password")
+        .text-center
+          .form-group.text-center
+            button#button-login.btn.btn-fixed.btn-primary.btn-success(type="button")= app.locale('common.logIn')
+            if app.isDevelopment()
+              | &nbsp;&nbsp;
+              button#button-skeleton.btn.btn-fixed.btn-default(type="button") Skeleton
+      .text-center
+        a#password-reset(href="/password-reset") Forgot your password?

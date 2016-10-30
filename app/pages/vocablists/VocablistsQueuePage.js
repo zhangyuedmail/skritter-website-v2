@@ -16,6 +16,8 @@ module.exports = GelatoPage.extend({
    */
   title: 'Queue - Skritter',
 
+  section: 'Lists',
+
   /**
    * @property template
    * @type {Function}

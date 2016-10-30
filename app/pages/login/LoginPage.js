@@ -17,6 +17,12 @@ const LoginPage = GelatoPage.extend({
   },
 
   /**
+   * Whether to show the footer. On mobile, it should be hidden
+   * @type {String}
+   */
+  showFooter: !app.isMobile(),
+
+  /**
    * @property title
    * @type {String}
    */
@@ -41,6 +47,10 @@ const LoginPage = GelatoPage.extend({
    * @returns {LoginPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileLogin.jade');
+    }
+
     this.renderTemplate();
 
     return this;

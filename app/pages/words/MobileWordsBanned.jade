@@ -1,0 +1,54 @@
+gelato-page(data-name='mobile-words-banned')
+
+  #dialog-container
+
+    section#nav-links.container
+      .row.text-center
+        .col-xs-2
+          a(href='/words/all') All
+        .col-xs-3
+          a(href='/words/starred') Starred
+        .col-xs-3
+          a(href='/words/banned') Banned
+        .col-xs-4
+          a(href='/words/mnemonics') Mnemonics
+
+  section.container
+    .content-block
+      .row
+
+        .col-md-12.main-content
+
+          p Words that you have banned.
+
+          #table-options
+            .row
+              .col-md-12
+                button#unban-vocabs-btn.btn.btn-fixed.btn-success(disabled=true)
+                  | Unban vocabs
+
+          .table-oversized-wrapper
+            table.table.table-striped
+              tr
+                td.checkbox-td
+                  input#all-checkbox(type="checkbox")
+                td.word-td(colspan=2) Word
+                td.date-changed-td Changed
+
+              for vocab in view.bannedVocabs.models
+                tr(data-vocab-id=vocab.id)
+                  td.checkbox-td
+                    input(type="checkbox")
+                  td.vocab-row.writing-td= vocab.getWriting()
+                  td.vocab-row.reading-td= vocab.getReading()
+                  td.vocab-row.date-changed-td
+                    | #{moment(vocab.get('changed') * 1000).format('LL')}
+
+            if view.bannedVocabs.state === 'fetching'
+              p.text-center
+                i.fa.fa-3x.fa-spinner.fa-pulse
+
+            else if view.bannedVocabs.cursor
+              button#load-more-btn.btn.btn-primary.btn-block Load More
+
+

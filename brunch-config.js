@@ -63,6 +63,9 @@ exports.config = {
     'watched': ['app', 'startup', 'test', 'vendor']
   },
   plugins: {
+    autoReload: {
+      delay: 200
+    },
     babel: {
       ignore: [/^vendor/, 'app/data/*', 'app/utils/*'],
       presets: ['es2015']

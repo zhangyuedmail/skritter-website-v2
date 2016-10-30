@@ -11,9 +11,10 @@ module.exports = GelatoPage.extend({
    * @type {Object}
    */
   events: {
-    'keyup #input-field': 'handleKeyUpInputField',
-    'click #button-reset': 'handleClickButtonReset'
+    'submit #password-reset-form': 'handleClickButtonReset'
   },
+
+  showFooter: !app.isMobile(),
 
   /**
    * @property template
@@ -38,9 +39,13 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method render
-   * @returns {Login}
+   * @returns {PasswordResetPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobilePasswordReset.jade');
+    }
+
     this.renderTemplate();
 
     return this;
@@ -52,35 +57,36 @@ module.exports = GelatoPage.extend({
    */
   handleClickButtonReset: function(event) {
     event.preventDefault();
-    this.resetPassword();
-  },
 
-  /**
-   * @method handleKeyUpInputField
-   * @param {Event} event
-   */
-  handleKeyUpInputField: function(event) {
-    event.preventDefault();
-    if (event.which === 13 || event.keyCode === 13) {
-      this.resetPassword();
+    var email = this.$('#password-reset-input').val().trim();
+
+    if (!this.choices.length && (email.indexOf('@') < 1 || email.indexOf('.') < 2)) {
+      this._displayValidationErrorMessage(app.locale('pages.signup.errorInvalidEmail'));
+      return;
     }
+
+    this.resetPassword(email);
   },
 
   /**
    * @method resetPassword
+   * @param {String} email the email of the account for which to reset the passwrod
    */
-  resetPassword: function() {
+  resetPassword: function(email) {
     var self = this;
-    var input = this.$('#password-reset-input').val();
+
     this.$('#password-reset-form').prop('disabled', true);
+    this.$('#validation-error-alert').text('');
     this.errorMessage = null;
+
     ScreenLoader.show();
     ScreenLoader.post('Recovering user credentials');
+
     $.ajax({
       url: app.getApiUrl() + 'reset-password',
       type: 'POST',
       headers: app.user.session.getHeaders(),
-      data: JSON.stringify({input: input}),
+      data: JSON.stringify({input: email}),
       error: function(error) {
         var response = error.responseJSON;
         if (response.choices) {
@@ -97,16 +103,19 @@ module.exports = GelatoPage.extend({
         self.choices = [];
         self.successMessage = 'A temporary password has been emailed to you.';
         self.render();
+        self.$('#password-reset-form').hide();
         ScreenLoader.hide();
       }
     });
   },
 
   /**
-   * @method remove
-   * @returns {Login}
+   * Displays a validation error message to the user
+   * @param {String} message the message to display
+   * @private
    */
-  remove: function() {
-    return GelatoPage.prototype.remove.call(this);
+  _displayValidationErrorMessage: function(message) {
+    this.$('#validation-error-alert').text(message);
   }
+
 });

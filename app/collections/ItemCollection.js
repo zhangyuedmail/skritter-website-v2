@@ -50,7 +50,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.vocabs.add(response.Vocabs);
     this.vocabs.decomps.add(response.Decomps);
     this.vocabs.sentences.add(response.Sentences);
-    this.vocabs.strokes.add(response.Strokes);
+    this.vocabs.character.add(response.Strokes);
     return response.Items.concat(response.ContainedItems || []);
   },
 

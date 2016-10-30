@@ -132,6 +132,8 @@ module.exports = GelatoPage.extend({
       });
     } else if (formData.method === 'coupon') {
       this.user.set('couponCode', formData.coupon);
+      this.couponCode = formData.coupon;
+      app.couponCode = formData.coupon;
     } else {
       this.user.set('validationCode', formData.validationCode);
     }
@@ -161,6 +163,11 @@ module.exports = GelatoPage.extend({
                   'Plan': formData.plan
                 }
               );
+
+              // coupon's been used, clear it from cache
+              app.couponCode = null;
+              app.removeSetting('coupon');
+
               callback();
             }
           }
@@ -325,9 +332,9 @@ module.exports = GelatoPage.extend({
    * @param {String} couponCode the code to set the input to
    */
   setCouponCode: function(couponCode) {
-    this.$('.credit').addClass('hide');
-    this.$('.coupon').removeClass('hide');
-    this.$('#signup-coupon').val(this.couponCode);
+    this.$('.credit').addClass('hidden');
+    this.$('.school').addClass('hidden');
+    this.$('.coupon').removeClass('hidden');
     this.$('#signup-coupon-code').val(this.couponCode);
     this.$('#method-credit').prop('checked', false);
     this.$('#method-coupon').prop('checked', true);
@@ -508,6 +515,21 @@ module.exports = GelatoPage.extend({
           errorMsg = app.locale('pages.signup.errorSchoolCantAddTime');
           break;
         case "The email entered is not an eligible email.":
+          errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
+          break;
+        case "Invalid code entered.":
+          errorMsg = app.locale('pages.signup.errorInvalidEmailValidationCode');
+          break;
+        case 'Property "name" must be no longer than 20 characters long.':
+          errorMsg = app.locale('pages.signup.errorUsernameTooLong');
+          break;
+        case "InvalidValidationCode":
+          errorMsg = app.locale('pages.signup.errorInvalidEmailValidationCode');
+          break;
+        case "NoValidationCode":
+          errorMsg = app.locale('pages.signup.errorValidationCodeNotEntered');
+          break;
+        case "IneligibleSchoolEmail":
           errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
           break;
         default:

@@ -1,0 +1,30 @@
+@import "../../../../styles/_variables";
+
+gelato-component[data-name='mobile-study-prompt-vocab-definition'] {
+
+  button {
+    background-color: $grey1;
+    border-radius: 4px;
+  }
+
+  label {
+    color: $grey4;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  img {
+    max-width: 250px;
+    width: 100%;
+  }
+
+  .value {
+    color: $grey4;
+    font-size: 16px;
+    font-weight: 300;
+    textarea {
+      width: 100%;
+    }
+  }
+
+}

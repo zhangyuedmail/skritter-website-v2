@@ -2,27 +2,35 @@ gelato-component(data-name='stats-items-learned')
 
   .title #{view.title}
   .row
-    .col-md-3.center
+    .col-md-3.text-center.top-data
       .characters.data-section
         #characters-learned.num-hero.chars-learned ...
         .units-label characters
         .colored-square.chars-learned-bg
       if view.showNumReviews
-        .total-reviews.data-section
-          #total-reviews-num.num-subhero ...
+        .total-reviews.data-section.hidden-xs
+          .total-reviews-num.num-subhero ...
           .units-label total reviews
-    .col-md-6
+      .words.data-section.visible-xs
+        .num-hero.words-learned ...
+        .units-label words
+        .colored-square.words-learned-bg
+    .col-md-6.xs-pushup
       .circle
         #items-learned
         .chart-overlay-wrapper
           .chart-overlay
             #num-items-learned.num-items-learned ...
             .cicle-label items learned
-    .col-md-3.center
-      .words.data-section
-        #words-learned.num-hero.words-learned ...
+    .col-md-3.text-center
+      .words.data-section.hidden-xs
+        .num-hero.words-learned ...
         .units-label words
         .colored-square.words-learned-bg
+      if view.showNumReviews
+        .total-reviews.data-section.visible-xs
+          .total-reviews-num.num-subhero ...
+          .units-label total reviews
       if view.showTimeStudied
         .days-studied.data-section
           #total-time-studied-num.num-subhero ...

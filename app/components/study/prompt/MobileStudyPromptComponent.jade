@@ -1,0 +1,39 @@
+gelato-component(data-name='mobile-study-prompt')
+
+  #overlay.text-center
+    case app.user.subscription.getStatus()
+      when 'Expired'
+        h2= app.locale('components.studyPrompt.expiredHeader')
+        p= app.locale('components.studyPrompt.expiredCallToAction')
+        a(href='/account/billing/subscription').btn.btn-lg.btn-primary
+          i.fa.fa-credit-card
+          span.spl= app.locale('components.studyPrompt.expiredButton')
+      default
+        h2= app.locale('components.studyPrompt.emptyHeader')
+        p= app.locale('components.studyPrompt.emptyCallToAction')
+        a(href='/vocablists/browse').btn.btn-lg.btn-primary
+          i.fa.fa-list-alt
+          span.spl= app.locale('components.studyPrompt.emptyButton')
+
+  #panel-right
+    .content
+      #tutorial-container
+      #toolbar-vocab-container
+      #vocab-style-container
+      #vocab-writing-container
+      #vocab-reading-container
+      #vocab-definition-container
+    #review-status-container
+
+  #panel-left.no-select
+    #leech-ribbon.ribbon.hidden
+      .icon.icon-study-leech
+    #new-ribbon.ribbon.hidden
+      .icon.icon-study-new-character
+    .content
+      #navigation-container
+      #input-container
+        #canvas-container
+        #review-container
+        #toolbar-grading-container
+      #toolbar-action-container

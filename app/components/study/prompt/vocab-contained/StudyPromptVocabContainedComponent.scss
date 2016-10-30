@@ -1,0 +1,74 @@
+@import "../../../../styles/_variables";
+
+gelato-component[data-name='study-prompt-vocab-contained'] {
+
+  button {
+    background-color: $grey1;
+    border-radius: 4px;
+  }
+
+  hr {
+    border-top: 1px solid $grey1;
+    margin-bottom: 15px;
+    margin-top: 25px;
+  }
+
+  label {
+    color: $grey3;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 30px;
+  }
+
+  .value {
+    color: $grey3;
+    font-weight: 300;
+    margin-bottom: 5px;
+
+    .child-character {
+      margin-top: 15px;
+    }
+
+    .multi-char {
+      .child-decomp {
+        margin-left: 25px;
+      }
+    }
+
+    .single-char {
+      margin-top: 25px;
+    }
+
+    .child-decomp {
+
+      .decomp-definition {
+        margin-bottom: 5px;
+      }
+
+      .decomp-reading {
+        font-size: 16px;
+        font-style: italic;
+        margin-right: 15px;
+      }
+
+      .decomp-writing {
+        color: $grey4;
+        margin-right: 5px;
+        font-size: 24px;
+      }
+    }
+
+    .child-reading {
+      color: $grey3;
+      font-weight: 400;
+      margin-left: 18px;
+      font-size: 16px;
+    }
+
+    .child-writing {
+      color: $grey5;
+      font-size: 26px;
+      font-weight: 400;
+    }
+  }
+}

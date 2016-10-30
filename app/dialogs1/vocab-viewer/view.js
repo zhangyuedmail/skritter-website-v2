@@ -32,7 +32,6 @@ module.exports = GelatoDialog.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.content.set();
     this.content.setElement('#content-container').render();
     return this;
   },

@@ -1,6 +1,8 @@
 gelato-page(data-name='words-all')
   - var now = new Date().getTime();
 
+  #dialog-container
+
   section.container
     .content-block
       .row
@@ -16,7 +18,7 @@ gelato-page(data-name='words-all')
                 .input-group.input-group-lg
                   span.input-group-addon
                     i.fa.fa-search
-                  input#word-search-input.form-control(type="text", placeholder="Type to search our dictionary")
+                  input#word-search-input.form-control(type="text", placeholder="你, ni3, etc...")
               .col-md-4
                 select#action-select.form-control.input-lg(disabled=true)
                   option(value="") Select words...

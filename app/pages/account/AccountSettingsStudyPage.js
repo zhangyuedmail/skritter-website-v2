@@ -46,6 +46,10 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * @returns {AccountSettingsStudyPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileAccountSettingsStudy.jade');
+    }
+
     this.renderTemplate();
     this.sidebar.setElement('#sidebar-container').render();
     return this;

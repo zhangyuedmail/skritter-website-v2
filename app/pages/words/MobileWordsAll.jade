@@ -1,0 +1,51 @@
+gelato-page(data-name='mobile-words-all')
+
+  #dialog-container
+
+  section#nav-links.container
+    .row.text-center
+      .col-xs-2
+        a(href='/words/all') All
+      .col-xs-3
+        a(href='/words/starred') Starred
+      .col-xs-3
+        a(href='/words/banned') Banned
+      .col-xs-4
+        a(href='/words/mnemonics') Mnemonics
+
+  section.container
+    .content-block
+      #table-options
+        .row
+          .col-xs-12
+            .input-group.input-group-lg
+              input#word-search-input.form-control(type="text", placeholder="你, ni3, etc...")
+
+      .table-oversized-wrapper
+        table.table.table-striped
+
+          mixin itemRow(vocab)
+            tr(data-vocab-id=vocab.id)
+              td.vocab-row.writing-td= vocab.getWriting()
+              td.vocab-row.reading-td= vocab.getReading()
+
+          if view.searchString
+            for vocab in view.searchVocabs.models
+              +itemRow(vocab)
+            if view.searchVocabs.state === 'fetching'
+
+
+          else
+            for item in view.items.models
+              for vocabID in item.get('vocabIds')
+                - var vocab = view.vocabMap[vocabID];
+                +itemRow(vocab)
+
+        if view.items.state === 'fetching' || view.searchVocabs.state === 'fetching'
+          p.text-center
+            i.fa.fa-3x.fa-spinner.fa-pulse
+
+        else if view.items.cursor || view.searchVocabs.cursor || view.searchVocabs.containingCursor
+          button#load-more-btn.btn.btn-primary.btn-block Load More
+
+

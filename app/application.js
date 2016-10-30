@@ -1,11 +1,18 @@
-var GelatoApplication = require('gelato/application');
-var AddVocabDialog = require('dialogs1/add-vocab/view');
-var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
-var User = require('models/UserModel');
-var Functions = require('functions');
-var Mixpanel = require('mixpanel');
-var Router = require('router');
-var Config = require('config');
+const GelatoApplication = require('gelato/application');
+const AddVocabDialog = require('dialogs1/add-vocab/view');
+const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
+
+const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
+const MobileNavbar = require('components/navbars/NavbarMobileComponent');
+const MarketingFooter = require('components/footers/MarketingFooterComponent');
+const MobileSideMenuComponent = require('components/menus/MobileSideMenuComponent');
+
+const User = require('models/UserModel');
+const Functions = require('functions');
+const Mixpanel = require('mixpanel');
+const Router = require('router');
+const Config = require('config');
+const vent = require('vent');
 
 /**
  * The base singleton class for Skritter that constructs and initializes all
@@ -14,13 +21,16 @@ var Config = require('config');
  * @extends {GelatoApplication}
  */
 module.exports = GelatoApplication.extend({
+
   /**
    * Initializes a new application instance. Sets up error handling, analytics,
    * and various app-level properties such as referrals.
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function(options) {
+    GelatoApplication.prototype.initialize.apply(this, arguments);
+
     this.config = Config;
 
     /**
@@ -42,7 +52,7 @@ module.exports = GelatoApplication.extend({
       }
     ).attach();
 
-    Raygun.setVersion(this.get('version'));
+    Raygun.setVersion(this.config.version);
 
     this.fn = Functions;
     this.mixpanel = Mixpanel;
@@ -61,16 +71,35 @@ module.exports = GelatoApplication.extend({
 
     if (this.isWebsite()) {
       this.mixpanel.init(this.getMixpanelKey());
+    } else {
+      window.mixpanel = {
+        alias: function() {},
+        identify: function() {},
+        init: function() {},
+        register: function() {},
+        track: function() {}
+      };
     }
 
     if (this.isDevelopment()) {
       window.onerror = this.handleError;
+    }
+
+    this.initNavbar();
+    this.initFooter();
+    this.initSideViews();
+
+    if (this.isMobile()) {
+      this.listenTo(vent, 'mobileNavMenu:toggle', this.toggleSideMenu);
+      this.listenTo(vent, 'vocabInfo:toggle', this.toggleVocabInfo);
+      this.listenTo(vent, 'page:switch', () => { this.toggleSideMenu(false); });
     }
   },
 
   /**
    * @property defaults
    * @type {Object}
+   * @TODO: remove these in favor of config versions
    */
   defaults: {
     apiDomain: location.hostname.indexOf('.cn') > -1 ? '.cn' : '.com',
@@ -79,7 +108,7 @@ module.exports = GelatoApplication.extend({
     demoLang: 'zh',
     description: '{!application-description!}',
     canvasSize: 450,
-    language: undefined,
+    language: null,
     lastItemChanged: 0,
     locale: 'en',
     nodeApiRoot: 'https://api-dot-write-way.appspot.com',
@@ -87,6 +116,10 @@ module.exports = GelatoApplication.extend({
     title: '{!application-title!}',
     version: '{!application-version!}'
   },
+
+  // temporary hacks until code is refactored more
+  get: function(key) {return this.config[key]; },
+  set: function(key, value) { this.config[key] = value; },
 
   dialogs: {
     vocabViewer: new VocabViewerDialog()
@@ -124,10 +157,10 @@ module.exports = GelatoApplication.extend({
    */
   getApiUrl: function() {
     if (!this.isProduction() && this.localBackend) {
-      return 'http://localhost:8080' + '/api/v' + this.get('apiVersion') + '/';
+      return 'http://localhost:8080' + '/api/v' + this.config.apiVersion + '/';
     }
 
-    return this.get('apiRoot') + this.get('apiDomain') + '/api/v' + this.get('apiVersion') + '/';
+    return this.config.apiRoot + this.config.apiDomain + '/api/v' + this.config.apiVersion + '/';
   },
 
   /**
@@ -159,7 +192,7 @@ module.exports = GelatoApplication.extend({
    * @returns {String}
    */
   getLanguage: function() {
-    return this.get('language') || this.user.get('targetLang');
+    return this.config.language || this.user.get('targetLang');
   },
 
   /**
@@ -252,6 +285,49 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
+   * Initilizes the navbar for the application based on the screen size/platform
+   * of the device.
+   * @method initNavbar
+   */
+  initNavbar: function() {
+
+    // TODO: replace this with isAndroid || isIOS
+    if (this.isMobile()) {
+      this._views['navbar'] = new MobileNavbar();
+    } else {
+      this._views['navbar'] = new DefaultNavbar();
+    }
+  },
+
+  /**
+   * Initializes the footer component for the application
+   * @method initFooter
+   */
+  initFooter: function() {
+    if (!this.isMobile()) {
+      this._views['footer'] =  new MarketingFooter();
+    }
+  },
+
+  /**
+   * Initializes app-level views that are rendered off to the sides of
+   * the main application frame.
+   * @method initSideViews
+   */
+  initSideViews: function() {
+    if (this.isMobile()) {
+      this._views['leftSide'] = new MobileSideMenuComponent({
+        user: this.user
+      });
+
+      // TODO: add a view in here, adjust push amount in application.scss .push-right
+      const VocabInfoContent = require('dialogs1/vocab-viewer/content/view');
+      // this._views['rightSide'] = new VocabInfoContent();
+    }
+  },
+
+  /**
+   * Determines whether the user is currently studying Chinese.
    * @method isChinese
    * @returns {Boolean}
    */
@@ -260,6 +336,7 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
+   * Determines whether the user is currently studying Japanese.
    * @method isJapanese
    * @returns {Boolean}
    */
@@ -425,6 +502,7 @@ module.exports = GelatoApplication.extend({
    * @method start
    */
   start: function() {
+    GelatoApplication.prototype.start.apply(this, arguments);
 
     //load cached user data if it exists
     this.user.set(this.getLocalStorage(this.user.id + '-user'));
@@ -451,9 +529,17 @@ module.exports = GelatoApplication.extend({
 
       //lets start listening to global keyboard events
       this.listener = new window.keypress.Listener();
-      this.listener.simple_combo("shift a", function() {
-        new AddVocabDialog().open();
-      });
+      this.listener.simple_combo(
+        'shift a',
+        function(event) {
+          if (!$(event.target).is('input')) {
+            event.preventDefault();
+            new AddVocabDialog().open();
+          }
+
+          return true;
+        }
+      );
 
     } else {
       Raygun.setUser('guest', true);
@@ -509,6 +595,41 @@ module.exports = GelatoApplication.extend({
         }, 500);
       }
     );
+  },
 
+  /**
+   * Shows the side container of the application
+   * @param {Boolean} [show] whether to show the side element
+   */
+  toggleSideMenu: function(show) {
+    this.$('#main-app-container').toggleClass('push-right', show);
+    this.$('#left-side-app-container').toggleClass('push-right', show);
+    if (this._views['leftSide'].toggleVisibility) {
+      this._views['leftSide'].toggleVisibility(this.$('#main-app-container').hasClass('push-right'));
+    }
+  },
+
+  /**
+   * Shows a vocab info side view on mobile devices.
+   * @param {String} vocab the vocab
+   */
+  toggleVocabInfo: function(vocab) {
+    if (!this.isMobile()) {
+      return;
+    }
+
+    if (vocab) {
+      // TODO: update vocab info view
+      // this._views['rightSide'].update(vocab); // or something like this
+      this.$('#right-side-app-container').toggleClass('push-main', !!vocab);
+    } else {
+
+      // delay hiding the right side until the sliding animation of the main container is complete
+      setTimeout(() => {
+        this.$('#right-side-app-container').toggleClass('push-main', !!vocab);
+      }, 250);
+    }
+
+    this.$('#main-app-container').toggleClass('push-left', !!vocab);
   }
 });

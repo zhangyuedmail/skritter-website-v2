@@ -21,9 +21,18 @@ const HomePageDriver = {
     return browser.wait(until.titleIs('Login - Skritter'));
   },
 
+  goToFeaturesFromMenu: function() {
+    browser.findElement(By.id('features-link')).click();
+    return browser.wait(until.elementLocated(By.className('')));
+  },
+
   navigate: function() {
     browser.get(Config.server);
     return browser.wait(until.titleIs('Skritter - Learn to Write Chinese and Japanese Characters'), Config.TIMEOUT_DEFAULT);
+  },
+
+  playPromoVideo: function() {
+    // TODO
   }
 };
 

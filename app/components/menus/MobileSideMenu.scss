@@ -1,0 +1,70 @@
+@import "../../styles/_variables";
+
+gelato-component.mobile-side-menu-component {
+  width: 250px;
+  height: 100%;
+  background-color: $grey8;
+  position: fixed;
+  color: $grey1;
+  font-size: 16px;
+
+  .actions-wrapper {
+    padding-top: 15px;
+  }
+
+  .user-info-wrapper {
+    margin-top: -15px;
+  }
+
+  .username {
+    font-size: 18px;
+    color: $grey2;
+    margin-bottom: 20px;
+  }
+
+  .stats-num {
+    color: $green5;
+    font-size: 24px;
+    font-family: $font-slab;
+  }
+
+  .user-stats-wrapper {
+    margin-bottom: 40px;
+  }
+
+  .profile-picture {
+    display: block;
+    margin: auto;
+    margin-bottom: 20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #999;
+  }
+
+  .settings {
+    cursor: pointer;
+    margin-left: 15px;
+  }
+
+  .logout {
+    cursor: pointer;
+    float: right;
+    margin-right: 15px;
+    text-align: right;
+  }
+
+  .settings, .logout {
+    font-size: 24px;
+  }
+
+  a {
+    color: $grey1;
+    margin-bottom: 10px;
+    font-size: 24px;
+
+    &:hover, &:focus {
+      background-color: $grey6;
+    }
+  }
+}

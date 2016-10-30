@@ -10,7 +10,7 @@ var ConfirmDialog = require('dialogs1/confirm-generic/view');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-  
+
   /**
    * @property events
    * @type {Object}
@@ -68,6 +68,10 @@ module.exports = GelatoPage.extend({
    * @returns {VocablistBrowse}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileWordsStarred.jade');
+    }
+
     this.renderTemplate();
     this.sidebar.setElement('#words-sidebar-container').render();
 

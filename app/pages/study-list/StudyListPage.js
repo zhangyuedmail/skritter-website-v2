@@ -1,15 +1,18 @@
-var GelatoPage = require('gelato/page');
-var Prompt = require('components/study/prompt/view');
-var Toolbar = require('components/study/toolbar/view');
-var Recipes = require('components/common/CommonRecipesComponent');
-var Items = require('collections/ItemCollection');
-var Vocablist = require('models/VocablistModel');
+const GelatoPage = require('gelato/page');
+const Prompt = require('components/study/prompt/StudyPromptComponent.js');
+const Toolbar = require('components/study/toolbar/StudyToolbarComponent.js');
+const Recipes = require('components/common/CommonRecipesComponent.js');
+const Items = require('collections/ItemCollection.js');
+const Vocablist = require('models/VocablistModel.js');
+const MobileStudyNavbar = require('components/navbars/NavbarMobileStudyComponent.js');
+const StudySettings = require('dialogs/study-settings/view');
+const vent = require('vent');
 
 /**
- * @class StudyList
+ * @class StudyListPage
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+const StudyListPage = GelatoPage.extend({
 
   /**
    * @property showFooter
@@ -18,10 +21,16 @@ module.exports = GelatoPage.extend({
   showFooter: false,
 
   /**
+   * The navbar to use in mobile views
+   * @type {NavbarMobileStudyComponent}
+   */
+  mobileNavbar: MobileStudyNavbar,
+
+  /**
    * @property template
    * @type {Function}
    */
-  template: require('./StudyList'),
+  template: require('./StudyListPage.jade'),
 
   /**
    * @property title
@@ -51,11 +60,13 @@ module.exports = GelatoPage.extend({
 
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
+    this.listenTo(vent, 'item:add', this.addItem);
+    this.listenTo(vent, 'studySettings:show', this.showStudySettings);
   },
 
   /**
    * @method render
-   * @returns {StudyList}
+   * @returns {StudyListPage}
    */
   render: function() {
     this.renderTemplate();
@@ -92,7 +103,9 @@ module.exports = GelatoPage.extend({
             if (silenceNoItems) {
               return;
             }
-
+            // TODO: this should respond to vent item:added in a separate
+            // function--"app-level" notification?
+            // Could be added from lists or vocab info dialog...
             $.notify(
               {
                 message: 'No more words to add. <a href="/vocablists/browse">Add a new list</a>'
@@ -125,7 +138,7 @@ module.exports = GelatoPage.extend({
             }
           );
         }
-
+        vent.trigger('item:added', !error ? result : null);
       }
     );
   },
@@ -184,22 +197,30 @@ module.exports = GelatoPage.extend({
         }
       ],
       function() {
+        var active = app.user.isSubscriptionActive();
+
         if (!hasVocablist) {
           ScreenLoader.hide();
           app.router.navigate('', {trigger: true});
         } else if (!hasItems) {
-          ScreenLoader.post('Adding words from list');
-          document.title = self.vocablist.get('name') + ' - Skritter';
-          self.items.addItems(
-            {
-              lang: app.getLanguage(),
-              limit: 5,
-              listId: self.vocablist.id
-            },
-            function() {
-              app.reload();
-            }
-          );
+          if (active) {
+            ScreenLoader.post('Adding words from list');
+            document.title = self.vocablist.get('name') + ' - Skritter';
+            self.items.addItems(
+              {
+                lang: app.getLanguage(),
+                limit: 5,
+                listId: self.vocablist.id
+              },
+              function() {
+                app.reload();
+              }
+            );
+          } else {
+            self.prompt.render();
+            self.prompt.$('#overlay').show();
+            ScreenLoader.hide();
+          }
         } else {
           ScreenLoader.hide();
           document.title = self.vocablist.get('name') + ' - Skritter';
@@ -297,13 +318,44 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method remove
-   * @returns {StudyList}
+   * @returns {StudyListPage}
    */
   remove: function() {
     this.prompt.remove();
     this.toolbar.remove();
     this.items.reviews.post();
     return GelatoPage.prototype.remove.call(this);
+  },
+
+  /**
+   * Shows a dialog that allows the user to adjust their study settings
+   */
+  showStudySettings: function() {
+    //post all reviews while changing settings
+    this.items.reviews.post();
+
+    const dialog = new StudySettings();
+    dialog.open();
+    dialog.on('save', function(settings) {
+      ScreenLoader.show();
+      ScreenLoader.post('Saving study settings');
+      app.user.set(settings, {merge: true});
+      app.user.cache();
+      app.user.save(
+        null,
+        {
+          error: function() {
+            ScreenLoader.hide();
+            dialog.close();
+          },
+          success: function() {
+            app.reload();
+          }
+        }
+      );
+    });
   }
 
 });
+
+module.exports = StudyListPage;

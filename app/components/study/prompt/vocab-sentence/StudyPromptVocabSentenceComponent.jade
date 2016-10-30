@@ -1,0 +1,37 @@
+gelato-component(data-name='study-prompt-vocab-sentence')
+  - var prompt = view.prompt;
+
+  if prompt.reviews
+    - var sentence = prompt.reviews.vocab.getSentence();
+    - var vocab = prompt.reviews.vocab;
+
+    label Sentence
+
+    if vocab.state === 'fetching'
+
+      i.fa.fa-2x.fa-spinner.fa-pulse.fa-fw
+
+    else
+      if sentence
+        - var sentenceDefinition = sentence.getDefinition();
+        - var sentenceReading = sentence.get('reading');
+
+        .value(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
+
+          if prompt.reviews.part === 'rune' && !prompt.reviews.isComplete()
+            = sentence.getWriting(prompt.reviews.vocab.get('writing'))
+          else
+            = sentence.getWriting()
+
+          .hint
+            if prompt.reviews.isChinese()
+              .hint-reading= app.fn.pinyin.toTone(sentenceReading, true)
+            else
+              .hint-reading= sentenceReading
+            .hint-definition= sentenceDefinition
+      else if vocab.sentenceFetched
+        .sentence-missing No example sentence found.
+
+      else
+
+        button.show-sentence.btn.btn-sm.btn-default show
