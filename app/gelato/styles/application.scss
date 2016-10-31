@@ -1,3 +1,5 @@
+@import "../../styles/_variables";
+
 html {
   overflow-x: hidden;
 }
@@ -12,17 +14,42 @@ html, body {
 
 #main-app-container {
   position: relative;
-  -webkit-transition: left 250ms, right 250ms; /* Safari */
+  -webkit-transition: left 250ms, right 250ms;
   transition: left 250ms, right 250ms;
   left: 0;
   height: 100%;
 
   &.push-left {
-    left: -100%;
+    left: -90%;
   }
 
   &.push-right {
     left: 250px;
+  }
+
+  &.default {
+    background: $background-primary;
+  }
+
+  &.marketing {
+    background: $background-marketing;
+  }
+}
+
+#main-app-container-overlay {
+  position: absolute;
+  top: 52px;
+  bottom: 0px;
+  width: 100%;
+  background: #000;
+  opacity: 0;
+  z-index: -1;
+  -webkit-transition: opacity 100ms;
+  transition: opacity 100ms;
+
+  &.show {
+    z-index: 9999;
+    opacity: 0.1;
   }
 }
 
@@ -36,7 +63,8 @@ html, body {
 
 #right-side-app-container {
   left: 100%;
-  background: #1e365a;
+  -webkit-transition: left 250ms, right 250ms; /* Safari */
+  transition: left 250ms, right 250ms;
 
   &.push-main {
     left: 0;
@@ -85,6 +113,8 @@ gelato-application {
 
       gelato-page {
         position: absolute;
+        left: 0;
+        right: 0;
       }
     }
 

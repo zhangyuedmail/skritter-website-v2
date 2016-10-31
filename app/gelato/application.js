@@ -380,6 +380,9 @@ const GelatoApplication = Backbone.View.extend({
     this.toggleNavbar(this._views['page'].showNavbar);
     this.toggleFooter(this._views['page'].showFooter);
 
+    this.$('#main-app-container').removeClass();
+    this.$('#main-app-container').addClass(this._views['page'].background || 'default');
+
     vent.trigger('page:switch', page, path);
   }
 });

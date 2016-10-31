@@ -1,12 +1,12 @@
-var GelatoComponent = require('gelato/component');
-
-var VocabViewerLookup = require('dialogs1/vocab-viewer/lookup/view');
+const GelatoComponent = require('gelato/component');
+const VocabViewerLookup = require('dialogs1/vocab-viewer/lookup/view');
+const vent = require('vent');
 
 /**
- * @class VocabViewerContent
+ * @class VocabViewerContentComponent
  * @extends {GelatoComponent}
  */
-module.exports = GelatoComponent.extend({
+const VocabViewerContentComponent = GelatoComponent.extend({
 
   /**
    * @property events
@@ -14,7 +14,8 @@ module.exports = GelatoComponent.extend({
    */
   events: {
     'click .item-ban': 'handleClickItemBan',
-    'click .item-unban': 'handleClickItemUnban'
+    'click .item-unban': 'handleClickItemUnban',
+    'click .fa-times-circle-o': 'handleClickClose'
   },
 
   /**
@@ -40,11 +41,12 @@ module.exports = GelatoComponent.extend({
 
   /**
    * @method render
-   * @returns {VocabViewerContent}
+   * @returns {VocabViewerContentComponent}
    */
   render: function() {
     this.renderTemplate();
     this.lookup.setElement('#lookup-container').render();
+
     return this;
   },
 
@@ -76,13 +78,26 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
+   *
+   * @param event
+   */
+  handleClickClose: function(event) {
+    if (app.isMobile()) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      vent.trigger('vocabInfo:toggle', false);
+    }
+  },
+
+  /**
    * @method handleClickItemBan
    * @param {Event} event
    */
   handleClickItemBan: function(event) {
     event.preventDefault();
-    var vocab = this.vocabs.at(0);
-    var $row = this.$(event.target).closest('tr');
+    let vocab = this.vocabs.at(0);
+    let $row = this.$(event.target).closest('tr');
     vocab.banPart($row.data('part')).save();
     this.render();
   },
@@ -93,8 +108,8 @@ module.exports = GelatoComponent.extend({
    */
   handleClickItemUnban: function(event) {
     event.preventDefault();
-    var vocab = this.vocabs.at(0);
-    var $row = this.$(event.target).closest('tr');
+    let vocab = this.vocabs.at(0);
+    let $row = this.$(event.target).closest('tr');
     vocab.unbanPart($row.data('part')).save();
     this.render();
   },
@@ -104,13 +119,16 @@ module.exports = GelatoComponent.extend({
    * @param {Vocabs} vocabs
    * @param {Vocabs} vocabsContaining
    * @param {Array} items
-   * @returns {VocabViewerContent}
+   * @returns {VocabViewerContentComponent}
    */
   set: function(vocabs, vocabsContaining, items) {
     this.items = items || null;
     this.vocabs = vocabs || null;
     this.vocabsContaining = vocabsContaining || null;
     this.lookup.set(vocabs);
+
     return this.render();
   }
 });
+
+module.exports = VocabViewerContentComponent;
