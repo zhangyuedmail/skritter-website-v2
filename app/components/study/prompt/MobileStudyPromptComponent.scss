@@ -76,6 +76,16 @@ gelato-component[data-name='mobile-study-prompt'] {
         margin-top: 15px;
       }
 
+      gelato-component[data-name='study-prompt-navigation'] {
+        top: 30%;
+        #navigate-next {
+          right: 0;
+        }
+        #navigate-previous {
+          left: 0;
+        }
+      }
+
       gelato-component[data-name='study-prompt-part-tone'] {
         .tone-message {
           font-size: 5vh;
