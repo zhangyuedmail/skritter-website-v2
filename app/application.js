@@ -118,7 +118,9 @@ module.exports = GelatoApplication.extend({
   },
 
   // temporary hacks until code is refactored more
-  get: function(key) {return this.config[key]; },
+  get: function (key) {
+    return this.config[key];
+  },
   set: function(key, value) { this.config[key] = value; },
 
   dialogs: {
@@ -192,7 +194,7 @@ module.exports = GelatoApplication.extend({
    * @returns {String}
    */
   getLanguage: function() {
-    return this.config.language || this.user.get('targetLang');
+    return _.isEmpty(this.config.language) ? this.user.get('targetLang') : this.config.language;
   },
 
   /**

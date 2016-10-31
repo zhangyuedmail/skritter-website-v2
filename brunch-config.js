@@ -73,6 +73,7 @@ exports.config = {
     replace: {
       mappings: {
         'application-description': application.description,
+        'application-language': '',
         'application-title': application.title,
         'application-version': application.version
       },

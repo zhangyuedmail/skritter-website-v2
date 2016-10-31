@@ -18,7 +18,7 @@ module.exports = {
 
   canvasSize: 450,
 
-  language: null,
+  language: '{!application-language!}',
 
   lastItemChanged: 0,
 

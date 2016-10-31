@@ -17,6 +17,7 @@ if (lang === 'ja') {
   shell.sed('-i', '{!application-name!}', 'Skritter Chinese', './cordova/config.xml');
 }
 
+shell.sed('-i', '{!application-language!}', lang, './public/js/application.js');
 shell.sed('-i', '{!application-version!}', '2.0.0', './cordova/config.xml');
 
 shell.rm('-rf', './cordova/www/*');
