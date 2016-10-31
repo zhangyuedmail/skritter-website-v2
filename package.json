@@ -54,5 +54,8 @@
     "shelljs": "~0.7.0",
     "sinon": "~1.17.0",
     "uglify-js-brunch": "~2.0.0"
+  },
+  "devDependencies": {
+    "chromedriver": "^2.25.1"
   }
 }

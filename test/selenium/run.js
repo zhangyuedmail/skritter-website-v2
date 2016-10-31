@@ -12,6 +12,7 @@ const edge = require('selenium-webdriver/edge');
 const safari = require('selenium-webdriver/safari');
 const chai = require('chai');
 const chaiWebdriver = require('chai-webdriver');
+const chromeDriver = require('chromedriver');
 const Config = require('./Config');
 
 // detect platform-specific stuff
@@ -53,16 +54,6 @@ args.forEach(a => {
 // Config.server = 'localhost:3333';
 
 browsersToTest.forEach(browser => {
-  const browserService = require('selenium-webdriver/' + browser);
-  let service;
-
-  // FF driver path can't be set this way, though the other drivers seem
-  // to have a more standardized interface
-  if (browser !== 'firefox') {
-    service = new browserService.ServiceBuilder(__dirname + '/' + browser + 'driver' + driverFileExt).build();
-	  browserService.setDefaultService(service);
-  }
-
   drivers[browser] = new SeleniumWebdriver.Builder()
     .forBrowser(browser)
     .build();
