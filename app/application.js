@@ -111,7 +111,6 @@ module.exports = GelatoApplication.extend({
     language: null,
     lastItemChanged: 0,
     locale: 'en',
-    nodeApiRoot: 'https://api-dot-write-way.appspot.com',
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
     version: '{!application-version!}'
