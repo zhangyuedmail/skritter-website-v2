@@ -197,6 +197,14 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
+   * @method getLanguageName
+   * @returns {String}
+   */
+  getLanguageName: function () {
+    return this.getLanguage() === 'ja' ? 'Japanese' : 'Chinese';
+  },
+
+  /**
    * @method getMixpanelKey
    * @returns {String}
    */

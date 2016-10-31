@@ -2,6 +2,7 @@ gelato-page(data-name='mobile-home')
 
   .welcome-panel
     .title Skritter
+    .language= app.getLanguageName()
     .character(class=app.getLanguage() === 'zh' ? 'text-chinese' : 'text-japanese') 学
 
 
