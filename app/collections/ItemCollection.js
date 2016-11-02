@@ -248,6 +248,8 @@ const ItemCollection = BaseSkritterCollection.extend({
   getNext: function() {
     var collection = this;
     var history = _.flatten(this.history);
+    var parts = app.user.getFilteredParts().join(',');
+    var styles = app.user.getFilteredStyles().join(',');
     return _
       .chain(this.models)
       .filter(
@@ -255,6 +257,16 @@ const ItemCollection = BaseSkritterCollection.extend({
 
           //check if model has been removed from collection
           if (!model) {
+            return false;
+          }
+
+          //exclude part not including in user settings
+          if (!_.includes(parts, model.get('part'))) {
+            return false;
+          }
+
+          //exclude style not including in user settings
+          if (!_.includes(styles, model.get('style'))) {
             return false;
           }
 
