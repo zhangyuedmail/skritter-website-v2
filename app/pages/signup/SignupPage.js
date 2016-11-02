@@ -189,7 +189,7 @@ module.exports = GelatoPage.extend({
    * @param {String} message the error to show to the user
    */
   displayErrorMessage: function(message) {
-    this.$('#signup-error-alert').text(message).removeClass('hide');
+    this.$('#signup-error-alert').html(message).removeClass('hide');
   },
 
   /**

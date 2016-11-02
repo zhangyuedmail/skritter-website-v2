@@ -129,7 +129,7 @@ const LoginPage = GelatoPage.extend({
       formData.password.trim(),
       function(error) {
         if (error) {
-          self.$('#login-message').text(error.responseJSON.message);
+          self.$('#login-message').html(error.responseJSON.message);
           self.$('#login-form').prop('disabled', false);
           ScreenLoader.hide();
         } else {
