@@ -6,6 +6,7 @@ const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
 const MobileNavbar = require('components/navbars/NavbarMobileComponent');
 const MarketingFooter = require('components/footers/MarketingFooterComponent');
 const MobileSideMenuComponent = require('components/menus/MobileSideMenuComponent');
+const VocabInfoContent = require('dialogs1/vocab-viewer/content/view');
 
 const User = require('models/UserModel');
 const Functions = require('functions');
@@ -329,9 +330,7 @@ module.exports = GelatoApplication.extend({
         user: this.user
       });
 
-      // TODO: add a view in here, adjust push amount in application.scss .push-right
-      const VocabInfoContent = require('dialogs1/vocab-viewer/content/view');
-      // this._views['rightSide'] = new VocabInfoContent();
+      this._views['rightSide'] = new VocabInfoContent();
     }
   },
 
@@ -620,25 +619,25 @@ module.exports = GelatoApplication.extend({
 
   /**
    * Shows a vocab info side view on mobile devices.
-   * @param {String} vocab the vocab
+   * @param {String} vocabId the vocab id
    */
-  toggleVocabInfo: function(vocab) {
+  toggleVocabInfo: function(vocabId) {
     if (!this.isMobile()) {
       return;
     }
 
-    if (vocab) {
+    if (vocabId) {
       // TODO: update vocab info view
-      // this._views['rightSide'].update(vocab); // or something like this
-      this.$('#right-side-app-container').toggleClass('push-main', !!vocab);
+      this._views['rightSide'].loadVocab(vocabId); // or something like this
+      this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
     } else {
 
       // delay hiding the right side until the sliding animation of the main container is complete
-      setTimeout(() => {
-        this.$('#right-side-app-container').toggleClass('push-main', !!vocab);
-      }, 250);
+      // setTimeout(() => {
+        this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
+      // }, 250);
     }
 
-    this.$('#main-app-container').toggleClass('push-left', !!vocab);
+    this.$('#main-app-container').toggleClass('push-left', !!vocabId);
   }
 });

@@ -1,5 +1,7 @@
 const GelatoComponent = require('gelato/component');
 const VocabViewerLookup = require('dialogs1/vocab-viewer/lookup/view');
+var Items = require('collections/ItemCollection');
+var Vocabs = require('collections/VocabCollection');
 const vent = require('vent');
 
 /**
@@ -37,6 +39,10 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     this.vocabsContaining = null;
 
     this.vocab = options.vocab;
+
+    this.items = new Items();
+    this.vocabs = new Vocabs();
+    this.vocabsContaining = new Vocabs();
   },
 
   /**
@@ -128,6 +134,109 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     this.lookup.set(vocabs);
 
     return this.render();
+  },
+
+  remove: function() {
+    this.vocabs.reset();
+
+    return GelatoComponent.prototype.remove.call(this);
+  },
+
+  loadVocab: function(vocabId, vocab) {
+    const self = this;
+    let wordItems = null;
+    let wordVocabs = null;
+    let wordVocabsContaining = null;
+
+    if (vocab) {
+      this.vocab = vocab;
+    }
+
+    async.parallel(
+      [
+        function(callback) {
+          async.series(
+            [
+              function(callback) {
+                self.vocabs.fetch({
+                  data: {
+                    include_decomps: true,
+                    include_heisigs: true,
+                    include_sentences: true,
+                    include_top_mnemonics: true,
+                    ids: vocabId
+                  },
+                  error: function(error) {
+                    callback(error);
+                  },
+                  success: function(vocabs) {
+                    wordVocabs = vocabs;
+                    callback();
+                  }
+                });
+              },
+              function(callback) {
+                if (self.vocabs.at(0).has('containedVocabIds')) {
+                  self.vocabs.fetch({
+                    data: {
+                      ids: self.vocabs.at(0).get('containedVocabIds').join('|')
+                    },
+                    remove: false,
+                    error: function(error) {
+                      callback(error);
+                    },
+                    success: function(vocabs) {
+                      wordVocabs = vocabs;
+                      callback(null);
+                    }
+                  });
+                } else {
+                  callback();
+                }
+              },
+              function(callback) {
+                self.items.fetch({
+                  data: {
+                    vocab_ids: vocabId
+                  },
+                  error: function(error) {
+                    callback(error);
+                  },
+                  success: function(items) {
+                    wordItems = items;
+                    callback(null);
+                  }
+                });
+              }
+            ],
+            callback
+          )
+        },
+        function(callback) {
+          self.vocabsContaining.fetch({
+            data: {
+              include_containing: true,
+              q: vocabId
+            },
+            error: function(error) {
+              callback(error);
+            },
+            success: function(vocabs) {
+              wordVocabsContaining = vocabs;
+              callback();
+            }
+          });
+        }
+      ],
+      function(error) {
+        if (error) {
+          console.error('WORD DIALOG LOAD ERROR:', error);
+        } else {
+          wordVocabsContaining.remove(wordVocabs.at(0).id);
+          self.set(wordVocabs, wordVocabsContaining, wordItems);
+        }
+      }
+    );
   }
 });
 

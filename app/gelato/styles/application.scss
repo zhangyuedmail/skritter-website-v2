@@ -65,9 +65,10 @@ html, body {
   left: 100%;
   -webkit-transition: left 250ms, right 250ms; /* Safari */
   transition: left 250ms, right 250ms;
+  width: 90%;
 
   &.push-main {
-    left: 0;
+    left: 10%;
   }
 }
 
