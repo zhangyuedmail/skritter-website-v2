@@ -234,11 +234,17 @@ const ItemModel = SkritterModel.extend({
   },
 
   /**
+   * Determines whether the current item is banned
    * @method isBanned
    * @returns {Boolean}
    */
   isBanned: function() {
-    return _.includes(this.getVocab().get('bannedParts'), this.get('part'));
+    const vocab = this.getVocab();
+    if (vocab) {
+      return _.includes(this.getVocab().get('bannedParts'), this.get('part'));
+    }
+
+    return false;
   },
 
   /**
