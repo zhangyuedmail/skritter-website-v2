@@ -11,11 +11,6 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @type {String}
    */
   el: '#review-container',
-  /**
-   * @property events
-   * @type Object
-   */
-  events: {},
 
   /**
    * Whether the keyboard shortcuts should be registered for this prompt
@@ -32,10 +27,32 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method initialize
    * @param {Object} options
+   * @param {StudyPromptComponent} options.prompt the prompt component
    * @constructor
    */
   initialize: function(options) {
+
+    /**
+     * The parent prompt instance
+     * @type {StudyPromptComponent}
+     */
     this.prompt = options.prompt;
+
+    /**
+     * UTC timestamp of when the last attempted stroke finished (mouseup)
+     * @type {number}
+     * @private
+     */
+    this._lastStrokeAttempt = Date.now();
+
+    /**
+     * How long to wait (in milliseconds) between when a user finishes a stroke
+     * and when to allow stroke-revealing hints through mouse clicks.
+     * @type {number}
+     * @private
+     */
+    this._helpInterval = 300;
+
     this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
     this.listenTo(this.prompt.canvas, 'doubletap', this.handlePromptDoubleTap);
     this.listenTo(this.prompt.canvas, 'swipeup', this.handlePromptCanvasSwipeUp);
@@ -48,6 +65,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.listenTo(this.prompt.toolbarGrading, 'mousedown', this.handlePromptToolbarGradingMousedown);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptToolbarGradingMouseup);
     this.listenTo(this.prompt.toolbarGrading, 'mousemove', this.handlePromptToolbarGradingMousemove);
+
     this.on('attempt:fail', this.handleAttemptFail);
     this.on('attempt:success', this.handleAttemptSuccess);
     this.on('resize', this.render);
@@ -229,7 +247,11 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
       }
       this.prompt.next();
     } else {
-      this.prompt.canvas.fadeLayer('character-hint');
+      const now = Date.now();
+
+      if (now - this._lastStrokeAttempt > this._helpInterval) {
+        this.prompt.canvas.fadeLayer('character-hint');
+      }
     }
   },
 
@@ -241,6 +263,8 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   handlePromptCanvasInputUp: function(points, shape) {
     if (app.fn.getLength(points) >= 5) {
       var stroke = this.prompt.review.character.recognize(points, shape);
+      this._lastStrokeAttempt = Date.now();
+
       if (stroke) {
         var targetShape = stroke.getTargetShape();
         var userShape = stroke.getUserShape();
@@ -289,8 +313,10 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method handlePromptDoubleTap
    */
   handlePromptDoubleTap: function() {
-    var expectedShape = this.prompt.review.character.getTargetShape();
-    if (expectedShape) {
+    const expectedShape = this.prompt.review.character.getTargetShape();
+    const pastHelpThreshold = Date.now() - this._lastStrokeAttempt > this._helpInterval;
+
+    if (pastHelpThreshold && expectedShape) {
       this.prompt.canvas.clearLayer('character-hint');
       this.prompt.canvas.drawShape(
         'character-hint',
