@@ -1,9 +1,9 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='study'] {
-
   background: $background-primary;
   padding-top: 50px;
+
 
   .recipes-container {
     margin: 0 auto;
@@ -11,4 +11,11 @@ gelato-page[data-name='study'] {
     padding-right: 15px;
   }
 
+}
+
+// need to do it like this for specificity to avoid using !important
+#page-container {
+  gelato-page[data-name='study'] {
+    padding-bottom: 0;
+  }
 }
