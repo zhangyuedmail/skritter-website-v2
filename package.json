@@ -39,7 +39,7 @@
     "cors": "~2.8.0",
     "css-brunch": "~2.6.0",
     "express": "~4.14.0",
-    "helmet": "~3.0.0",
+    "helmet": "~3.1.0",
     "jade": "~1.11.0",
     "jade-brunch": "~2.8.0",
     "javascript-brunch": "~2.0.0",
@@ -50,7 +50,7 @@
     "nodemon": "~1.11.0",
     "replace-brunch": "~1.0.0",
     "sass-brunch": "~2.7.0",
-    "selenium-webdriver": "~2.53.0",
+    "selenium-webdriver": "~3.0.0",
     "shelljs": "~0.7.0",
     "sinon": "~1.17.0",
     "uglify-js-brunch": "~2.0.0"
