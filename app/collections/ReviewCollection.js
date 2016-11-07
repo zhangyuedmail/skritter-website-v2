@@ -153,10 +153,11 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @returns {Array}
    */
   put: function(models, options) {
-    //var updatedItems = [];
     var updatedReviews = [];
+
     models = _.isArray(models) ? models : [models];
     options = _.defaults(options || {}, {merge: true});
+
     for (var a = 0, lengthA = models.length; a < lengthA; a++) {
       var model = models[a];
       model.data = _.uniqBy(model.data, 'itemId');
@@ -164,14 +165,19 @@ const ReviewCollection = BaseSkritterCollection.extend({
         var modelData = model.data[b];
         var item = modelData.item.clone();
         var submitTimeSeconds = Math.round(modelData.submitTime);
+
+        modelData.score = parseInt(modelData.score, 10);
+
+        if (!modelData.score) {
+          modelData = 3;
+          modelData.newInterval = 86400;
+        }
+
         modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
         modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
         modelData.previousInterval = item.get('previousInterval') || 0;
         modelData.previousSuccess = item.get('previousSuccess') || false;
-        if (!_.isInteger(modelData.score)) {
-          modelData = 3;
-          modelData.newInterval = 86400;
-        }
+
         if (app.isDevelopment()) {
           console.log(
             item.id,
@@ -182,27 +188,8 @@ const ReviewCollection = BaseSkritterCollection.extend({
             'days'
           );
         }
-        /**
-         * used for updating of local items
-         if (!this.get(model.group)) {
-          item.set({
-            changed: submitTimeSeconds,
-            last: submitTimeSeconds,
-            previousInterval: modelData.currentInterval,
-            reviews: item.get('reviews') + 1,
-            successes: modelData.score > 1 ? item.get('successes') + 1 : item.get('successes'),
-            timeStudied: item.get('timeStudied') + modelData.reviewTime
-          });
-        }
-         item.set({
-          interval: modelData.newInterval,
-          next: submitTimeSeconds + modelData.newInterval,
-          previousSuccess: modelData.score > 1
-        });
-         updatedItems.push(item);
-         **/
-
       }
+
       updatedReviews.push(this.add(model, options));
     }
 
