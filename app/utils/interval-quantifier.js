@@ -18,6 +18,7 @@ function IntervalQuantifier() {
 IntervalQuantifier.prototype.quantify = function(item, score) {
   var newInterval = 0;
   var now = moment().unix();
+
   //return new items with randomized default config values
   if (!item.last) {
     switch (score) {
@@ -36,11 +37,13 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
     }
     return this.randomizeInterval(newInterval);
   }
+
   //set values for further calculations
   var actualInterval = now - item.last;
   var factor = 0.9;
   var pctRight = item.successes / item.reviews;
   var scheduledInterval = item.next - item.last;
+
   //get the factor
   if (score === 2) {
     factor = 0.9;
@@ -57,24 +60,29 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
     }
     factor = factorsList[index];
   }
+
   //adjust the factor based on readiness
   if (score > 2) {
     factor -= 1;
     factor *= actualInterval / scheduledInterval;
     factor += 1;
   }
+
   //accelerate new items that appear to be known
   if (item.successes === item.reviews && item.reviews < 5) {
     factor *= 1.5;
   }
+
   //decelerate hard items consistently marked wrong
   if (item.reviews > 8) {
     if (pctRight < 0.5) {
       factor *= Math.pow(pctRight, 0.7);
     }
   }
+
   //multiple by the factor and randomize the interval
   newInterval = this.randomizeInterval(item.interval * factor);
+
   //bound the interval
   if (score === 1) {
     if (newInterval > 604800) {
@@ -82,6 +90,7 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
     } else if (newInterval < 30) {
       newInterval = 30;
     }
+
   } else {
     if (newInterval > 315569260) {
       newInterval = 315569260;
@@ -91,6 +100,12 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
       newInterval = 30;
     }
   }
+
+  //accelerate recently studied correct items
+  if (score > 2 && (item.next - item.last) < 7200) {
+    newInterval = this.randomizeInterval(43200 * factor);
+  }
+
   return newInterval;
 };
 
