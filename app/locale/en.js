@@ -186,6 +186,7 @@ module.exports = {
       "errorCCExpired": "The credit card has expired.",
       "errorDefault": "Unknown error while signing up. Please try again.",
       "errorDuplicateUsername": "Another person has taken the username #{username}. Please choose another one.",
+      "errorEmailTaken": "This email address has already been taken.",
       "errorInvalidCCNumber": "Invalid credit card number entered.",
       "errorInvalidEmailValidationCode": "The email validation code entered is not valid.",
       "errorInvalidRecaptcha": "The reCAPTCHA must be answered correctly.",

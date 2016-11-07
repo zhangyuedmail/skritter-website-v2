@@ -539,6 +539,9 @@ module.exports = GelatoPage.extend({
         case "IneligibleSchoolEmail":
           errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
           break;
+        case "EmailTaken":
+          errorMsg = app.locale('pages.signup.errorEmailTaken');
+          break;
         default:
           errorMsg = app.locale('pages.signup.errorDefault');
       }
