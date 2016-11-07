@@ -168,13 +168,14 @@ const ReviewCollection = BaseSkritterCollection.extend({
 
         modelData.score = parseInt(modelData.score, 10);
 
-        if (!modelData.score) {
-          modelData = 3;
+        if (modelData.score) {
+          modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
+        } else {
+          modelData.score = 3;
           modelData.newInterval = 86400;
         }
 
         modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
-        modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
         modelData.previousInterval = item.get('previousInterval') || 0;
         modelData.previousSuccess = item.get('previousSuccess') || false;
 
