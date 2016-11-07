@@ -425,7 +425,7 @@ const VocabModel = SkritterModel.extend({
         return true;
       }
     }
-    return _.includes(['~', '-', '～', '.', '。', ',', '，', '、', '・'], this.get('writing'));
+    return _.includes(['~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？'], this.get('writing'));
   },
 
   /**
