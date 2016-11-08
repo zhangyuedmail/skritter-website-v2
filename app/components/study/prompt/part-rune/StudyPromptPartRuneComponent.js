@@ -314,7 +314,10 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    */
   handlePromptDoubleTap: function() {
     const expectedShape = this.prompt.review.character.getTargetShape();
-    const pastHelpThreshold = Date.now() - this._lastStrokeAttempt > this._helpInterval;
+
+    // make delay a little longer for double tap--could misinterpret two
+    // consecutive strokes/attempts
+    const pastHelpThreshold = Date.now() - this._lastStrokeAttempt > this._helpInterval * 1.5;
 
     if (pastHelpThreshold && expectedShape) {
       this.prompt.canvas.clearLayer('character-hint');
