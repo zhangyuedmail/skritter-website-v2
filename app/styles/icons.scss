@@ -140,9 +140,19 @@
 
 /*** STUDY ***/
 .icon-study-ban {
-  background-image: url('#{$dir-assets}/vectors/study-ban.svg');
   height: 23px;
   width: 23px;
+
+  svg {
+    width: 23px;
+    height: 23px;
+    fill: $green5;
+    //stroke: $green5;
+
+    #Line {
+      stroke: $green5;
+    }
+  }
 }
 
 .icon-study-char-decomp {
@@ -173,15 +183,22 @@
   background-image: url('#{$dir-assets}/vectors/study-incorrect.svg');
   height: 44px;
   width: 59px;
+
   &.disabled {
     background-image: url('#{$dir-assets}/vectors/study-incorrect-disabled.svg');
   }
 }
 
 .icon-study-info {
-  background-image: url('#{$dir-assets}/vectors/study-info.svg');
+  //background-image: url('#{$dir-assets}/vectors/study-info.svg');
   height: 23px;
   width: 23px;
+
+  svg {
+    width: 23px;
+    height: 23px;
+    fill: $green5;
+  }
 }
 
 .icon-study-leech {
@@ -215,9 +232,9 @@
 }
 
 .icon-study-word-edit {
-  //background-image: url('#{$dir-assets}/vectors/study-word-edit.svg');
   height: 23px;
   width: 19px;
+
   svg {
     width: 24px;
     height: 24px;
@@ -244,9 +261,14 @@
 }
 
 .icon-study-word-volume {
-  background-image: url('#{$dir-assets}/vectors/study-word-volume.svg');
   height: 24px;
   width: 24px;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: $green5;
+  }
 }
 
 /*** STUDY: LIGHT ***/
