@@ -23,8 +23,14 @@ bootstrap-navbar[data-name='mobile'] {
     right: 0;
 
     span {
+      display: inline-block;
       margin-left: 25px;
       cursor: pointer;
+    }
+
+    .icon-study-word-volume, .icon-study-info {
+      position: relative;
+      top: 3px;
     }
 
     .last {
