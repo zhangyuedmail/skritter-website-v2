@@ -19,7 +19,8 @@ gelato-page(data-name='mobile-words-all')
         .row
           .col-xs-12
             .input-group.input-group-lg
-              input#word-search-input.form-control(type="text", placeholder="你, ni3, etc...")
+              -var p = app.isChinese() ? '你, ni3, etc...' : 'がくせい, 学生, etc...'
+              input#word-search-input.form-control(type="text", placeholder=p)
 
       .table-oversized-wrapper
         table.table.table-striped
