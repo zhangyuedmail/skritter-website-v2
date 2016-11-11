@@ -186,7 +186,7 @@ module.exports = {
       "errorCCExpired": "The credit card has expired.",
       "errorDefault": "Unknown error while signing up. Please try again.",
       "errorDuplicateUsername": "Another person has taken the username #{username}. Please choose another one.",
-      "errorEmailTaken": "This email address has already been taken.",
+      "errorEmailTaken": "This email address has already been taken. Visit the <a href='https://skritter.com/login'>login page</a> to log in to the account.",
       "errorInvalidCCNumber": "Invalid credit card number entered.",
       "errorInvalidEmailValidationCode": "The email validation code entered is not valid.",
       "errorInvalidRecaptcha": "The reCAPTCHA must be answered correctly.",
