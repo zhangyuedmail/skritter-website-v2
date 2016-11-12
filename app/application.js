@@ -53,7 +53,7 @@ module.exports = GelatoApplication.extend({
       }
     ).attach();
 
-    Raygun.setVersion(this.config.version);
+    Raygun.setVersion(this.config.version + '.' + this.config.timestamp);
 
     this.fn = Functions;
     this.mixpanel = Mixpanel;
