@@ -15,7 +15,6 @@ module.exports = GelatoPage.extend({
    * @type {Object}
    */
   events: {
-    'keydown #add-input': 'handleKeydownAddInput',
     'click #add-section': 'handleClickAddSection',
     'click #discard-changes': 'handleClickDiscardChanges',
     'click #edit-list': 'handleClickEditList',
@@ -167,19 +166,6 @@ module.exports = GelatoPage.extend({
     }
     this.vocablist.save(null, {patch: true});
     this.render();
-  },
-
-  /**
-   * @method handleKeydownAddInput
-   * @param {Event} event
-   */
-  handleKeydownAddInput: function(event) {
-    if (event.keyCode === 13) {
-      var $input = $(event.target);
-      this.editor.addWord($(event.target).val());
-      $input.val('');
-      $input.focus();
-    }
   },
 
   /**
