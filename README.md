@@ -5,7 +5,7 @@ Learn to write Chinese and Japanese characters.
 
 ## Requirements
 
-* [Node.js](https://nodejs.org/) >= 4.0
+* [Node.js](https://nodejs.org/) >= 6.0
 
 ## Setup
 

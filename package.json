@@ -13,6 +13,9 @@
     "type": "git",
     "url": "https://www.github.com/skritter/skritter-html5.git"
   },
+  "engines": {
+    "node": ">=6.0"
+  },
   "scripts": {
     "android": "node ./scripts/npm-android",
     "build": "node ./scripts/npm-build",
@@ -25,6 +28,14 @@
     "uitest": "node ./scripts/npm-uitest"
   },
   "dependencies": {
+    "cors": "~2.8.0",
+    "express": "~4.14.0",
+    "helmet": "~3.1.0",
+    "jade": "~1.11.0",
+    "lodash": "~4.16.0",
+    "morgan": "~1.7.0"
+  },
+  "devDependencies": {
     "auto-reload-brunch": "~2.7.0",
     "babel-brunch": "~6.0.0",
     "babel-polyfill": "~6.16.0",
@@ -34,19 +45,12 @@
     "chai": "~3.5.0",
     "chai-webdriver": "~1.2.0",
     "clean-css-brunch": "~2.0.0",
-    "compression": "~1.6.0",
+    "chromedriver": "~2.25.0",
     "cordova": "~6.3.0",
-    "cors": "~2.8.0",
     "css-brunch": "~2.6.0",
-    "express": "~4.14.0",
-    "helmet": "~3.1.0",
-    "jade": "~1.11.0",
     "jade-brunch": "~2.8.0",
     "javascript-brunch": "~2.0.0",
-    "lodash": "~4.16.0",
-    "loggy": "~0.3.5",
     "mocha": "~3.1.0",
-    "morgan": "~1.7.0",
     "nodemon": "~1.11.0",
     "replace-brunch": "~1.0.0",
     "sass-brunch": "~2.7.0",
@@ -54,8 +58,5 @@
     "shelljs": "~0.7.0",
     "sinon": "~1.17.0",
     "uglify-js-brunch": "~2.0.0"
-  },
-  "devDependencies": {
-    "chromedriver": "^2.25.1"
   }
 }
