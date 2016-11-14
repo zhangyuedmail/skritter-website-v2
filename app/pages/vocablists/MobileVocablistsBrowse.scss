@@ -1,0 +1,59 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='mobile-vocablists-browse'] {
+
+  background: $background-primary;
+  padding-top: 100px;
+
+  #table-options {
+    margin-bottom: 40px;
+    .input-group {
+      input {
+        border-bottom-right-radius: 25px;
+        border-top-right-radius: 25px;
+      }
+      span {
+        border-bottom-left-radius: 25px;
+        border-top-left-radius: 25px;
+      }
+      .input-group-addon {
+        background-color: transparent;
+      }
+    }
+
+    .glyphicon.layout-selector {
+      font-size: 38px;
+      color: $grey1;
+      cursor: pointer;
+      &.chosen {
+        color: $grey5;
+      }
+    }
+
+    .form-inline {
+      margin-top: 15px;
+      color: $grey4;
+      label {
+        margin-right: 10px;
+      }
+      input {
+        margin-right: 10px;
+        margin-left: 20px;
+      }
+    }
+  }
+
+  #vocablist-container {
+    margin-left: -25px;
+    margin-right: -25px;
+  }
+
+  .content-block {
+    margin-top: 25px;
+  }
+
+  .main-content {
+    border-radius: 25px;
+  }
+
+}

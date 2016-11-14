@@ -1,0 +1,37 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='mobile-vocablists-chinesepod'] {
+
+  background: $background-primary;
+  padding-top: 100px;
+
+  #login-form {
+    margin-top: 30px;
+  }
+
+  #search-form {
+    margin-top: 15px;
+    margin-bottom: 20px;
+  }
+
+  .form-inline {
+    margin-bottom: 20px;
+
+    label {
+      margin-right: 20px;
+    }
+  }
+
+  table a {
+    color: $grey3;
+  }
+
+  .content-block {
+    margin-top: 25px;
+  }
+
+  .main-content {
+    border-radius: 25px;
+  }
+
+}

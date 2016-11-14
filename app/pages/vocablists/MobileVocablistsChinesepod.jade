@@ -1,0 +1,90 @@
+gelato-page(data-name='mobile-vocablists-chinesepod')
+
+  #dialog-container
+
+  section#vocablist-nav-links.container
+    .row.text-center
+      .col-xs-6
+        a(href='/vocablists/queue') Queue
+      .col-xs-6
+        a(href='/vocablists/browse') Browse
+
+    .row.text-center
+      .col-xs-4
+        a(href='/vocablists/my-lists') My Lists
+      .col-xs-4
+        a(href='/vocablists/chinesepod') ChinesePod
+      .col-xs-4
+        a(href='/vocablists/deleted') Deleted
+
+  .container
+    .content-block
+      .row
+
+        .col-md-12.main-content
+          .title ChinesePod
+
+          if view.chinesepodSession.state === 'fetching'
+            p.text-center
+              i.fa.fa-5x.fa-spinner.fa-pulse
+
+          else if view.chinesepodSession.isNew()
+            p Log in to your ChinesePod account to sync vocabulary lists
+
+            form#login-form.form
+              if view.errorMessage
+                .alert.alert-danger= view.errorMessage
+
+              .row
+                .col-sm-4
+                  .form-group
+                    input#email.form-control(name='email', placeholder='Email', value=view.email)
+                  // http://stackoverflow.com/questions/12374442/chrome-browser-ignoring-autocomplete-off
+                  input.hide
+                  .form-group
+                    input#password.form-control(name='password', type='password', placeholder='Password', value=view.password)
+
+              button#login-chinesepod-btn.btn.btn-fixed.btn-success(type="submit")
+                if view.chinesepodSession.state === 'saving'
+                  i.fa.fa-1x.fa-spinner.fa-pulse
+                else
+                  | Login
+
+          else
+            p
+              | You are logged in as "#{view.chinesepodSession.get('email')}."
+              a.spl#logout-chinesepod-link= app.locale('common.logOut')
+              | .
+
+            - var collectionViewing = view.viewOption === 'lessons' ? view.chinesepodLessons : view.chinesepodLabels;
+            if collectionViewing.state === 'fetching'
+              p.text-center
+                i.fa.fa-5x.fa-spinner.fa-pulse
+
+            else
+              #search-form
+                .input-group.input-group-lg
+                  span.input-group-addon
+                    i.fa.fa-search
+                  input#search-input.form-control(type="text", placeholder="Type to search by title")
+              .form-inline
+                label View:
+                .radio-inline
+                  label
+                    input#lessons(type="radio" name='view-option', value='lessons' checked=true, autocomplete='email')
+                    | Official Lessons
+                .radio-inline
+                  label
+                    input#labels(type="radio" name='view-option', value='labels')
+                    | Your Labels
+
+              .table-oversized-wrapper
+                table.table.table-striped
+                  - var models = collectionViewing.models;
+                  if view.searchString
+                    - models = collectionViewing.filter(function(m) { return _.includes(m.get('name').toLowerCase(), view.searchString); });
+
+                  for model in models
+                    tr
+                      td
+                        a.lookup-link(data-lookup-token=model.get('lookupToken'))= model.get('name')

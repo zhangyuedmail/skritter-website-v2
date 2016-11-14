@@ -28,3 +28,15 @@ gelato-page > .container > .content-block {
   margin-bottom: 15px;
   margin-top: 40px;
 }
+
+#vocablist-nav-links {
+  background: $grey7;
+  margin-bottom: 15px;
+  margin-top: -50px;
+  overflow-x: scroll;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  position: fixed;
+  width: 100%;
+  z-index: 7002;
+}

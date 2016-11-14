@@ -1,0 +1,16 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='mobile-vocablists-queue'] {
+
+  background: $background-primary;
+  padding-top: 100px;
+
+  .content-block {
+    margin-top: 25px;
+  }
+
+  .main-content {
+    border-radius: 25px;
+  }
+
+}
