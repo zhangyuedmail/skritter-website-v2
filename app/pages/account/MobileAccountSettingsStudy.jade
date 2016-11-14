@@ -97,6 +97,7 @@ gelato-page(data-name='mobile-account-settings-study')
 
               .form-group
                 .col-sm-12.button-options
+                  #error-alert.alert.alert-danger.hidden
                   .text-center
                     if user.state === 'standby'
                       button#button-save.btn.btn-fixed.btn-success(type="submit") Save

@@ -1,6 +1,5 @@
 const GelatoPage = require('gelato/page');
 const AccountSidebar = require('components/account/AccountSidebarComponent');
-
 const ChangePasswordDialog = require('dialogs1/change-password/view');
 const ResetAllDataDialog = require('dialogs1/reset-all-data/view');
 
@@ -45,6 +44,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     this.timezones = require('data/country-timezones');
     this.sidebar = new AccountSidebar();
     this.listenTo(app.user, 'state', this.render);
+
     app.user.fetch();
   },
 
@@ -59,7 +59,16 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
 
     this.renderTemplate();
     this.sidebar.setElement('#sidebar-container').render();
+
     return this;
+  },
+
+  /**
+   * Displays an error message to the user.
+   * @param {String} msg the message to display to the user
+   */
+  displayErrorMessage: function(msg) {
+    this.$('#error-alert').text(msg).removeClass('hidden');
   },
 
   /**
@@ -85,25 +94,31 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
   },
 
   /**
+   * Handles click on the save button
    * @method handleClickButtonSave
    * @param {Event} event
    */
   handleClickButtonSave: function(event) {
+    let self = this;
     event.preventDefault();
-    var avatar = this.$('#field-avatar').get(0).src;
-    avatar = avatar.replace('data:image/gif;base64,', '');
-    avatar = avatar.replace('data:image/jpeg;base64,', '');
-    avatar = avatar.replace('data:image/png;base64,', '');
-    app.user.set({
-      avatar: avatar,
-      aboutMe: this.$('#field-about').val(),
-      country: this.$('#field-country').find(':selected').val(),
-      email: this.$('#field-email').val(),
-      eccentric: this.$('#field-eccentric').is(':checked'),
-      name: this.$('#field-name').val(),
-      private: this.$('#field-private').is(':checked'),
-      timezone: this.$('#field-timezone :selected').val()
-    }).save();
+    let formData = this._getFormData();
+
+    if (!this._validateAccountData(formData)) {
+      return;
+    }
+    this.$('#error-alert').addClass('hidden');
+
+    app.user.save(formData, {
+      error: function(req, error) {
+        let msg = error.responseJSON.message;
+
+        if (msg.indexOf('Another user goes by that name.') > -1) {
+          msg = app.locale('pages.accountGeneral.errorDuplicateDisplayName');
+        }
+
+        self.displayErrorMessage(msg);
+      }
+    });
   },
 
   /**
@@ -153,6 +168,53 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
   remove: function() {
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
+  },
+
+  /**
+   * Gets form data from HTML input fields
+   * @returns {object} the form data
+   * @method _getFormData
+   * @private
+   */
+  _getFormData: function() {
+    let avatar = this.$('#field-avatar').get(0).src;
+    avatar = avatar.replace('data:image/gif;base64,', '');
+    avatar = avatar.replace('data:image/jpeg;base64,', '');
+    avatar = avatar.replace('data:image/png;base64,', '');
+    return {
+      avatar: avatar,
+      aboutMe: this.$('#field-about').val().trim(),
+      country: this.$('#field-country').find(':selected').val(),
+      email: this.$('#field-email').val().trim(),
+      eccentric: this.$('#field-eccentric').is(':checked'),
+      name: this.$('#field-name').val().trim(),
+      private: this.$('#field-private').is(':checked'),
+      timezone: this.$('#field-timezone :selected').val()
+    };
+  },
+
+  /**
+   * Validates that account data is valid for submission to the server.
+   * @param {object} formData the data to validate
+   * @method _validateAccountData
+   * @private
+   */
+  _validateAccountData: function(formData) {
+    if (formData.email !== app.user.get('email')) {
+      const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+      if (_.isEmpty(formData.email) || !formData.email.match(emailRegex)) {
+        this.displayErrorMessage(app.locale('pages.signup.errorInvalidEmail'));
+        return false;
+      }
+    }
+
+    if (_.isEmpty(formData.name)) {
+      this.displayErrorMessage(app.locale('pages.accountGeneral.errorNoDisplayName'));
+      return false;
+    }
+
+    return true;
   }
 
 });
