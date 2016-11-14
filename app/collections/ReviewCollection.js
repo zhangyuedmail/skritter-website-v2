@@ -177,7 +177,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
 
         modelData.score = parseInt(modelData.score, 10);
 
-        if (_.isEmpty(modelData.score)) {
+        if (!_.isInteger(modelData.score)) {
           modelData.score = 3;
         }
 
@@ -186,7 +186,9 @@ const ReviewCollection = BaseSkritterCollection.extend({
         modelData.previousInterval = item.get('previousInterval') || 0;
         modelData.previousSuccess = item.get('previousSuccess') || false;
 
-        if (_.isEmpty(modelData.newInterval)) {
+        if (!_.isInteger(modelData.newInterval)) {
+          console.error('REVIEW ERROR: Missing new interval value');
+
           Raygun.send(
             new Error('Review Error: Missing new interval value'),
             {
