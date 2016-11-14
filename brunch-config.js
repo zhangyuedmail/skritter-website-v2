@@ -33,7 +33,7 @@ exports.config = {
           'vendor/mocha-2.4.5.js',
           'vendor/moment-2.12.0.js',
           'vendor/moment.timezone-0.5.3.js',
-          'vendor/raygun-2.3.0.js',
+          'vendor/raygun-2.4.1.js',
           'vendor/sinon-1.17.3.js',
           'vendor/wanakana-1.3.7.js',
           'vendor/daterangepicker-2.1.19.js'
