@@ -23,7 +23,17 @@ const HomePageDriver = {
 
   goToFeaturesFromMenu: function() {
     browser.findElement(By.id('features-link')).click();
-    return browser.wait(until.elementLocated(By.className('')));
+    return browser.wait(until.elementLocated(By.id('section-call-to-action')));
+  },
+
+  goToAboutFromFooter: function() {
+    browser.findElement(By.id('about-link')).click();
+    return browser.wait(until.titleIs('About Us - Skritter'));
+  },
+
+  goToLegalFromFooter: function() {
+    browser.findElement(By.id('legal-link')).click();
+    return browser.wait(until.titleIs('Legal - Skritter'));
   },
 
   navigate: function() {

@@ -28,4 +28,25 @@ describe('Home page tests', function() {
       done();
     });
   });
+
+  it('Logged out user should be able to go to the features page', function (done) {
+    HomePage.goToFeaturesFromMenu();
+    expect('#section-call-to-action').dom.to.be.visible().then(() => {
+      done();
+    });
+  });
+
+  it('User should be able to go to the about page', function (done) {
+    HomePage.goToAboutFromFooter();
+    expect('#about-title').dom.to.be.visible().then(() => {
+      done();
+    });
+  });
+
+  it('User should be able to go to the legal page', function (done) {
+    HomePage.goToLegalFromFooter();
+    expect('#section-content').dom.to.be.visible().then(() => {
+      done();
+    });
+  });
 });
