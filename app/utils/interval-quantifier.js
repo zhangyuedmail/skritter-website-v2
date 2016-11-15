@@ -20,7 +20,7 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
   var now = moment().unix();
 
   //return new items with randomized default config values
-  if (!item.last) {
+  if (!item.interval || !item.last) {
     switch (score) {
       case 1:
         newInterval = this.initialWrongInterval;
@@ -105,6 +105,8 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
   if (score > 2 && (item.next - item.last) < 7200) {
     newInterval = this.randomizeInterval(43200 * factor);
   }
+
+  console.log(newInterval);
 
   return newInterval;
 };
