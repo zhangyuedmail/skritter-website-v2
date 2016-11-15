@@ -19,7 +19,7 @@ gelato-component.mobile-side-menu-component {
   .username {
     font-size: 18px;
     color: $grey2;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .stats-num {
@@ -29,13 +29,13 @@ gelato-component.mobile-side-menu-component {
   }
 
   .user-stats-wrapper {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
   }
 
   .profile-picture {
     display: block;
-    margin: auto;
-    margin-bottom: 20px;
+    margin-left: 75px;
+    margin-bottom: 10px;
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -60,7 +60,6 @@ gelato-component.mobile-side-menu-component {
 
   a {
     color: $grey1;
-    margin-bottom: 10px;
     font-size: 24px;
 
     &:hover, &:focus {
