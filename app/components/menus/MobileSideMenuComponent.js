@@ -7,21 +7,26 @@ const GelatoComponent = require('gelato/component');
 const MobileSideMenuComponent = GelatoComponent.extend({
 
   /**
-   * Element tag name
-   * @default
-   */
-  tagName: 'gelato-component',
-
-  /**
    * CSS class for the element
    * @default
    */
   className: 'mobile-side-menu-component',
 
+  /**
+   * @property events
+   * @type {Object}
+   */
   events: {
+    'click #button-beacon': 'handleClickButtonBeacon',
     'click #logout-btn': 'handleLogoutButtonClick',
     'click #settings-btn': 'handleSettingsButtonClick',
   },
+
+  /**
+   * Element tag name
+   * @default
+   */
+  tagName: 'gelato-component',
 
   /**
    * @property template
@@ -38,6 +43,18 @@ const MobileSideMenuComponent = GelatoComponent.extend({
   initialize: function(options) {
     this.user = options.user;
     this.listenTo(this.user.stats, 'state:standby', this.updateStats);
+  },
+
+  /**
+   * @method handleClickButtonBeacon
+   * @param {Event} event
+   */
+  handleClickButtonBeacon: function (event) {
+    event.preventDefault();
+
+    if (window.HS) {
+      HS.beacon.open();
+    }
   },
 
   /**
@@ -91,6 +108,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
     this.$('.num-chars').text(this.user.stats.getAllTimeCharactersLearned());
     this.$('.num-words').text(this.user.stats.getAllTimeWordsLearned());
   }
+
 });
 
 module.exports = MobileSideMenuComponent;

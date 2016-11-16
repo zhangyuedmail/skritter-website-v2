@@ -137,11 +137,11 @@ module.exports = GelatoApplication.extend({
    * @method checkAndSetReferralInfo
    */
   checkAndSetReferralInfo: function() {
-    var siteRef = Functions.getParameterByName('siteref') || this.getSetting('siteRef');
-    var couponCode = Functions.getParameterByName('coupon') || this.getSetting('coupon');
+    let siteRef = Functions.getParameterByName('siteref') || this.getSetting('siteRef');
+    let couponCode = Functions.getParameterByName('coupon') || this.getSetting('coupon');
 
     if (siteRef && typeof siteRef === 'string') {
-      var expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
+      let expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
       this.setSetting('siteRef', {
         referer: siteRef,
         expiration: expiration,
@@ -171,9 +171,9 @@ module.exports = GelatoApplication.extend({
    * @returns {String} the coupon code, if it exists
    */
   getStoredCouponCode: function() {
-    var ref = (this.getSetting('siteRef') || {});
-    var expiration = ref['expiration'];
-    var couponCode = ref['couponCode'];
+    let ref = (this.getSetting('siteRef') || {});
+    let expiration = ref['expiration'];
+    let couponCode = ref['couponCode'];
 
     // check for a coupon code as part of an affiliate referral
     if (couponCode && expiration) {
@@ -224,9 +224,9 @@ module.exports = GelatoApplication.extend({
    * @returns {null}
    */
   getRefererId: function() {
-    var ref = (this.getSetting('siteRef') || {});
-    var referer = ref['referer'];
-    var expiration = ref['expiration'];
+    let ref = (this.getSetting('siteRef') || {});
+    let referer = ref['referer'];
+    let expiration = ref['expiration'];
 
     if (!referer || !expiration) {
       return null;
@@ -261,14 +261,14 @@ module.exports = GelatoApplication.extend({
    * @returns {String} The referrer id if found and valid, or null
    */
   getUserReferral: function() {
-    var referral = this.getSetting('referral');
+    let referral = this.getSetting('referral');
 
     if (!referral) {
       return null;
     }
 
-    var now = moment();
-    var expiration = moment(referral.expiration, Config.dateFormatApp);
+    let now = moment();
+    let expiration = moment(referral.expiration, Config.dateFormatApp);
 
     if (expiration.diff(now, 'days') > 0) {
       return referral.referrer;
@@ -356,10 +356,10 @@ module.exports = GelatoApplication.extend({
    * @method loadHelpscout
    */
   loadHelpscout: function() {
-    var parent = document.getElementsByTagName('script')[0];
-    var script = document.createElement('script');
-    var HSCW = {config: {}};
-    var HS = {beacon: {readyQueue: [], user: this.user}};
+    let parent = document.getElementsByTagName('script')[0];
+    let script = document.createElement('script');
+    let HSCW = {config: {}};
+    let HS = {beacon: {readyQueue: [], user: this.user}};
     HSCW.config = {
       contact: {
         enabled: true,
@@ -374,9 +374,14 @@ module.exports = GelatoApplication.extend({
       this.readyQueue.push(callback);
     };
     HS.beacon.userConfig = {
+      attachment: true,
+      autoInit: true,
       color: '#32a8d9',
       icon: 'question',
-      modal: true
+      instructions: "Bugs, comments or suggestions? We'd love to hear from you!",
+      modal: true,
+      poweredBy: false,
+      zIndex: 9999
     };
     HS.beacon.ready(function(beacon) {
       if (this.user.isLoggedIn()) {
@@ -386,7 +391,7 @@ module.exports = GelatoApplication.extend({
         });
       }
     });
-    script.async = false;
+    script.async = true;
     script.src = 'https://djtflbt20bdde.cloudfront.net/';
     script.type = 'text/javascript';
     parent.parentNode.insertBefore(script, parent);
@@ -401,7 +406,7 @@ module.exports = GelatoApplication.extend({
    * @returns {*}
    */
   locale: function(path, code) {
-    var locale;
+    let locale;
     try {
       locale = require('locale/' + (code || app.get('locale')));
     } catch (error) {
@@ -440,16 +445,16 @@ module.exports = GelatoApplication.extend({
    * @method processUserReferral
    */
   processUserReferral: function(suppressMessages) {
-    var referral = this.getSetting('referral');
+    let referral = this.getSetting('referral');
 
     if (!referral) {
       return false;
     }
 
-    var now = moment();
-    var expiration = moment(referral.expiration, Config.dateFormatApp);
-    var dfd = $.Deferred();
-    var self = this;
+    let now = moment();
+    let expiration = moment(referral.expiration, Config.dateFormatApp);
+    let dfd = $.Deferred();
+    let self = this;
 
     if (expiration.diff(now, 'days') > 0) {
       $.ajax({
@@ -495,7 +500,7 @@ module.exports = GelatoApplication.extend({
    * @method setUserReferral
    */
   setUserReferral: function(userId, processImmediately) {
-    var expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
+    let expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
     this.setSetting('referral', {
       referrer: userId,
       expiration: expiration
