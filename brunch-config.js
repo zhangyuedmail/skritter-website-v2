@@ -25,6 +25,7 @@ exports.config = {
           'vendor/createjs.easel-0.8.2.js',
           'vendor/createjs.tween-0.6.2.js',
           'vendor/d3-3.5.16.js',
+          'vendor/daterangepicker-2.1.19.js',
           'vendor/dexie-1.3.6.js',
           'vendor/heatmap-3.5.4.js',
           'vendor/highcharts-4.2.4.js',
@@ -36,7 +37,7 @@ exports.config = {
           'vendor/raygun-2.4.1.js',
           'vendor/sinon-1.17.3.js',
           'vendor/wanakana-1.3.7.js',
-          'vendor/daterangepicker-2.1.19.js'
+          'vendor/webfontloader-1.6.26.js'
         ]
       }
     },

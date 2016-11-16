@@ -1,0 +1,41 @@
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Ubuntu'), url('fonts/google/Ubuntu-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Ubuntu'), url('fonts/google/Ubuntu-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto Slab';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Slab'), url('fonts/google/RobotoSlab-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto Slab';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Slab'), url('fonts/google/RobotoSlab-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'KaiTi';
+  font-style: normal;
+  font-weight: 400;
+  src: local('KaiTi'), url('fonts/KaiTi-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'DFKaiSho-Md';
+  font-style: normal;
+  font-weight: 400;
+  src: local('DFPKaiSho-Md'), url('fonts/DFKaiSho-Regular.ttf') format('truetype');
+}
