@@ -331,12 +331,11 @@ const StudyListPage = GelatoPage.extend({
    * Shows a dialog that allows the user to adjust their study settings
    */
   showStudySettings: function() {
-    //post all reviews while changing settings
-    this.items.reviews.post();
-
     const dialog = new StudySettings();
+
     dialog.open();
-    dialog.on('save', function(settings) {
+
+    dialog.on('save', (settings) => {
       ScreenLoader.show();
       ScreenLoader.post('Saving study settings');
       app.user.set(settings, {merge: true});
@@ -344,12 +343,12 @@ const StudyListPage = GelatoPage.extend({
       app.user.save(
         null,
         {
-          error: function() {
+          error: () => {
             ScreenLoader.hide();
             dialog.close();
           },
-          success: function() {
-            app.reload();
+          success: () => {
+            this.items.reviews.post().then(app.reload);
           }
         }
       );

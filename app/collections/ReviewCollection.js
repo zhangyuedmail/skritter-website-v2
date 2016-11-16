@@ -77,78 +77,86 @@ const ReviewCollection = BaseSkritterCollection.extend({
     this.trigger('state:' + this.state, this);
 
     const reviews = this.slice(0, -options.skip || this.length);
-    async.eachSeries(
-      _.chunk(reviews, 20),
-      (chunk, callback) => {
-        const data = _
-          .chain(chunk)
-          .map(
-            function (review) {
-              return review.get('data');
-            }
-          )
-          .flatten()
-          .uniqBy(
-            function (review) {
-              return [review.itemId, review.currentInterval, review.newInterval].join('');
-            }
-          )
-          .value();
 
-        $.ajax({
-          url: app.getApiUrl() + 'reviews',
-          async: options.async,
-          headers: app.user.session.getHeaders(),
-          type: 'POST',
-          data: JSON.stringify(data),
-          error: (error) => {
-            const items = _
-              .chain(error.responseJSON.errors)
-              .map('Item')
-              .without(undefined)
+    return new Promise(
+      (resolve) => {
+        async.eachSeries(
+          _.chunk(reviews, 20),
+          (chunk, callback) => {
+            const data = _
+              .chain(chunk)
+              .map(
+                function (review) {
+                  return review.get('data');
+                }
+              )
+              .flatten()
+              .uniqBy(
+                function (review) {
+                  return [review.itemId, review.currentInterval, review.newInterval].join('');
+                }
+              )
               .value();
 
-            if (items.length) {
-              Raygun.send(
-                new Error('Review Error: Items returned with errors'),
-                {
-                  data: data,
-                  error: error.responseJSON
+            $.ajax({
+              url: app.getApiUrl() + 'reviews',
+              async: options.async,
+              headers: app.user.session.getHeaders(),
+              type: 'POST',
+              data: JSON.stringify(data),
+              error: (error) => {
+                const items = _
+                  .chain(error.responseJSON.errors)
+                  .map('Item')
+                  .without(undefined)
+                  .value();
+
+                if (items.length) {
+                  Raygun.send(
+                    new Error('Review Error: Items returned with errors'),
+                    {
+                      data: data,
+                      error: error.responseJSON
+                    }
+                  );
+
+                  this.reset();
+
+                  callback(error);
+                } else {
+                  Raygun.send(
+                    new Error('Review Error: Unable to post chunk'),
+                    {
+                      data: data,
+                      error: error.responseJSON
+                    }
+                  );
+
+                  this.remove(chunk);
+
+                  callback();
                 }
-              );
-
-              this.reset();
-
-              callback(error);
-            } else {
-              Raygun.send(
-                new Error('Review Error: Unable to post chunk'),
-                {
-                  data: data,
-                  error: error.responseJSON
-                }
-              );
-
-              this.remove(chunk);
-
-              callback();
-            }
+              },
+              success: () => {
+                this.remove(chunk);
+                setTimeout(callback, 1000);
+              }
+            });
           },
-          success: () => {
-            this.remove(chunk);
-            setTimeout(callback, 1000);
+          (error) => {
+            this.state = 'standby';
+            this.trigger('state', self.state, self);
+            this.trigger('state:' + self.state, self);
+
+            if (error) {
+              console.error('REVIEW ERROR:', error);
+            } else {
+              console.log('REVIEWS POSTED:', reviews.length);
+            }
+
+            resolve();
           }
-        });
-      },
-      (error) => {
-        this.state = 'standby';
-        this.trigger('state', self.state, self);
-        this.trigger('state:' + self.state, self);
-        if (error) {
-          console.error('REVIEW ERROR:', error);
-        } else {
-          console.log('REVIEWS POSTED:', reviews.length);
-        }
+        );
       }
     );
   },
