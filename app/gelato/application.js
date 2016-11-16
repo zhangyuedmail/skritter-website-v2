@@ -196,6 +196,14 @@ const GelatoApplication = Backbone.View.extend({
   },
 
   /**
+   * @method isCordova
+   * @returns {Boolean}
+   */
+  isCordova: function () {
+    return !!window.cordova;
+  },
+
+  /**
    * @method isDevelopment
    * @returns {Boolean}
    */
