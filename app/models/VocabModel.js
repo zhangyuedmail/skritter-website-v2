@@ -26,19 +26,18 @@ const VocabModel = SkritterModel.extend({
    * @constructor
    */
   initialize: function() {
-    var audios = [];
+    const audios = [];
+
     _.forEach(
       this.getUniqueAudios(),
       function(data) {
         // Use proxy when accessing audio on google storage
-        var url = data.mp3.replace(
-          'http://storage.googleapis.com/skritter_audio/',
-          'https://skritter.com/audio/'
-        );
+        const url = data.mp3.replace('http://storage.googleapis.com/skritter_audio/', 'https://skritter.com/audio/');
 
-        audios.push(new Howl({src: [url]}));
+        audios.push(new Howl({src: [url], format: ['mp3'], html5: true}));
       }
     );
+
     this.audios = audios;
   },
 
@@ -96,12 +95,12 @@ const VocabModel = SkritterModel.extend({
    * @returns {Array}
    */
   getContained: function(excludeFillers) {
-    var containedVocabs = [];
-    var characters = this.getCharacters();
-    var lang = this.get('lang');
-    for (var i = 0, length = characters.length; i < length; i++) {
-      var base = app.fn.mapper.toBase(characters[i], {lang: lang});
-      var containedVocab = this.collection.get(base);
+    let containedVocabs = [];
+    let characters = this.getCharacters();
+    let lang = this.get('lang');
+    for (let i = 0, length = characters.length; i < length; i++) {
+      let base = app.fn.mapper.toBase(characters[i], {lang: lang});
+      let containedVocab = this.collection.get(base);
       if (!containedVocab) {
         containedVocab = new VocabModel({
           id: base,
@@ -127,7 +126,7 @@ const VocabModel = SkritterModel.extend({
    * @returns {Decomp}
    */
   getDecomp: function() {
-    var decomp = this.collection.decomps.get(this.get('writing'));
+    let decomp = this.collection.decomps.get(this.get('writing'));
     if (decomp && !decomp.get('atomic')) {
       return decomp;
     } else {
@@ -141,8 +140,8 @@ const VocabModel = SkritterModel.extend({
    * @returns {String}
    */
   getDefinition: function(ignoreFormat) {
-    var customDefinition = this.get('customDefinition');
-    var definition = this.get('definitions')[app.user.get('sourceLang')];
+    let customDefinition = this.get('customDefinition');
+    let definition = this.get('definitions')[app.user.get('sourceLang')];
     if (customDefinition && customDefinition !== '') {
       definition = this.get('customDefinition');
     } else if (!definition) {
@@ -185,10 +184,10 @@ const VocabModel = SkritterModel.extend({
    * @returns {Array}
    */
   getPromptCharacters: function() {
-    var characters = [];
-    var strokes = this.getStrokes();
-    for (var i = 0, length = strokes.length; i < length; i++) {
-      var stroke = strokes[i];
+    let characters = [];
+    let strokes = this.getStrokes();
+    for (let i = 0, length = strokes.length; i < length; i++) {
+      let stroke = strokes[i];
       if (stroke) {
         characters.push(strokes[i].getPromptCharacter());
       } else {
@@ -204,12 +203,12 @@ const VocabModel = SkritterModel.extend({
    * @returns {PromptItemCollection}
    */
   getPromptItems: function(part) {
-    var promptItems = new PromptItemCollection();
-    var containedVocabs = this.getContained();
-    var characters = [];
-    var now = Date.now();
-    var vocab = this;
-    var vocabs = [];
+    let promptItems = new PromptItemCollection();
+    let containedVocabs = this.getContained();
+    let characters = [];
+    let now = Date.now();
+    let vocab = this;
+    let vocabs = [];
     switch (part) {
       case 'rune':
         characters = vocab.getPromptCharacters();
@@ -222,9 +221,9 @@ const VocabModel = SkritterModel.extend({
       default:
         vocabs = [vocab];
     }
-    for (var i = 0, length = vocabs.length; i < length; i++) {
-      var childVocab = vocabs[i];
-      var promptItem = new PromptItemModel();
+    for (let i = 0, length = vocabs.length; i < length; i++) {
+      let childVocab = vocabs[i];
+      let promptItem = new PromptItemModel();
       promptItem.character = characters[i];
       promptItem.vocab = childVocab;
       promptItem.set('filler', childVocab.isFiller());
@@ -242,9 +241,9 @@ const VocabModel = SkritterModel.extend({
    * @returns {Array}
    */
   getPromptTones: function() {
-    var tones = [];
-    var strokes = this.getCharacters();
-    for (var i = 0, length = strokes.length; i < length; i++) {
+    let tones = [];
+    let strokes = this.getCharacters();
+    for (let i = 0, length = strokes.length; i < length; i++) {
       tones.push(this.collection.character.getPromptTones());
     }
     return tones;
@@ -264,8 +263,8 @@ const VocabModel = SkritterModel.extend({
    * @returns {Array}
    */
   getReadingObjects: function() {
-    var readings = [];
-    var reading = this.get('reading');
+    let readings = [];
+    let reading = this.get('reading');
     if (this.isChinese()) {
       if (reading.indexOf(', ') === -1) {
         readings = reading.match(/[a-z|A-Z]+[1-5]+|'| ... |\s/g);
@@ -296,10 +295,10 @@ const VocabModel = SkritterModel.extend({
    * @returns {Array}
    */
   getStrokes: function() {
-    var strokes = [];
-    var characters = this.getCharacters();
-    for (var i = 0, length = characters.length; i < length; i++) {
-      var stroke = this.collection.character.get(characters[i]);
+    let strokes = [];
+    let characters = this.getCharacters();
+    for (let i = 0, length = characters.length; i < length; i++) {
+      let stroke = this.collection.character.get(characters[i]);
       if (stroke) {
         if (this.isJapanese()) {
           if (!app.user.get('studyKana') && stroke.isKana()) {
@@ -323,15 +322,15 @@ const VocabModel = SkritterModel.extend({
    */
   getTones: function() {
     if (this.isChinese()) {
-      var tones = [];
-      var contained = this.get('containedVocabIds') ? this.getContained() : [this];
-      var readings = this.get('reading').split(', ');
-      for (var a = 0, lengthA = readings.length; a < lengthA; a++) {
-        var reading = readings[a].match(/[1-5]+/g);
-        for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
-          var tone = parseInt(reading[b], 10);
-          var containedWriting = contained[b].get('writing');
-          var wordWriting = this.get('writing');
+      let tones = [];
+      let contained = this.get('containedVocabIds') ? this.getContained() : [this];
+      let readings = this.get('reading').split(', ');
+      for (let a = 0, lengthA = readings.length; a < lengthA; a++) {
+        let reading = readings[a].match(/[1-5]+/g);
+        for (let b = 0, lengthB = reading.length; b < lengthB; b++) {
+          let tone = parseInt(reading[b], 10);
+          let containedWriting = contained[b].get('writing');
+          let wordWriting = this.get('writing');
           tones[b] = Array.isArray(tones[b]) ? tones[b].concat(tone) : [tone];
           //TODO: make tests to verify neutral tone wimps
           if (NeutralTones.isWimp(containedWriting, wordWriting, b)) {
@@ -379,10 +378,10 @@ const VocabModel = SkritterModel.extend({
       function(thisChar, otherChar) {
 
         // the simplified character
-        var idChar = vocabId.split('-')[1];
+        let idChar = vocabId.split('-')[1];
 
         // default case -- no difference
-        var res = null;
+        let res = null;
 
         if (thisChar === otherChar) {
 
@@ -470,7 +469,8 @@ const VocabModel = SkritterModel.extend({
    * @method play
    */
   play: function() {
-    var readingObjects = this.getReadingObjects();
+    let readingObjects = this.getReadingObjects();
+
     if (this.isChinese() && readingObjects.length === 1) {
       async.eachSeries(
         this.audios,
