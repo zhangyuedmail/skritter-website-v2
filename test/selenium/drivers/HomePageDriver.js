@@ -43,6 +43,13 @@ const HomePageDriver = {
 
   playPromoVideo: function() {
     // TODO
+  },
+
+  /**
+   * Shuts down selenium server. Should be called after all the tests are run.
+   */
+  after: function() {
+    browser.quit();
   }
 };
 
