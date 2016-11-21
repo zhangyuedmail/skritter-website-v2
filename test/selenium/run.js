@@ -71,6 +71,7 @@ function runTests(driver) {
   Config.driver = driver;
   chai.use(chaiWebdriver(driver));
   require('./test/HomePageTests');
+  require('./test/ContactPageTests');
 }
 
 after(function() {

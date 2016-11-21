@@ -11,13 +11,11 @@ describe('Home page tests', function() {
     });
   });
 
-  it('A user should be able to navigate to the home page', function() {
-    expect('#section-features').dom.to.be.visible();//.then(() => {
-      //done();
-    //});
+  it('A user should be able to navigate to the home page from /', function() {
+    expect('#section-features').dom.to.be.visible();
   });
 
-  it('Logged out user should be able to go to the signup page', function (done) {
+  it('Logged out user should be able to go to the signup page', function(done) {
     HomePage.goToSignupFromMenu().then(() => {
       expect('#signup-submit').dom.to.be.visible().then(() => {
         done();
@@ -25,7 +23,7 @@ describe('Home page tests', function() {
     });
   });
 
-  it('Logged out user should be able to go to the login page', function (done) {
+  it('Logged out user should be able to go to the login page', function(done) {
     HomePage.goToLoginFromMenu().then(() => {
       expect('#button-login').dom.to.be.visible().then(() => {
         done();
@@ -41,7 +39,7 @@ describe('Home page tests', function() {
     });
   });
 
-  it('User should be able to go to the about page', function(done) {
+  it('User should be able to go to the about page from the footer', function(done) {
     HomePage.goToAboutFromFooter().then(() => {
       expect('#about-title').dom.to.be.visible().then(() => {
         done();
@@ -49,7 +47,7 @@ describe('Home page tests', function() {
     });
   });
 
-  it('User should be able to go to the legal page', function (done) {
+  it('User should be able to go to the legal page from the footer', function(done) {
     HomePage.goToLegalFromFooter().then(() => {
       expect('#section-content').dom.to.be.visible().then(() => {
         done();
@@ -57,8 +55,11 @@ describe('Home page tests', function() {
     });
   });
 
-  after(function() {
-      HomePage.after();
+  it('User should be able to go to the contact page from the footer', function(done) {
+    HomePage.goToContactFromFooter().then(() => {
+      expect('#field-message').dom.to.be.visible().then(() => {
+        done();
+      });
     });
-
+  });
 });

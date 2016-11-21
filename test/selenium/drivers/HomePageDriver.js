@@ -11,6 +11,11 @@ const browser = Config.driver;
  * @type {Object<String, Function>}
  */
 const HomePageDriver = {
+  /**
+   * Logged out menu actions
+   * @todo refactor into a separate suite of menu tests
+   */
+
   goToSignupFromMenu: function() {
     browser.findElement(By.id('menu-sign-up-btn')).click();
     return browser.wait(until.titleIs('Signup - Skritter'));
@@ -26,15 +31,26 @@ const HomePageDriver = {
     return browser.wait(until.elementLocated(By.id('section-call-to-action')));
   },
 
+  /**
+   * Footer links
+   * @todo refactor into a separate suite of Footer tests
+   */
+
   goToAboutFromFooter: function() {
     browser.findElement(By.id('about-link')).click();
     return browser.wait(until.titleIs('About Us - Skritter'));
+  },
+
+  goToContactFromFooter: function() {
+    browser.findElement(By.id('contact-link')).click();
+    return browser.wait(until.titleIs('Contact - Skritter'));
   },
 
   goToLegalFromFooter: function() {
     browser.findElement(By.id('legal-link')).click();
     return browser.wait(until.titleIs('Legal - Skritter'));
   },
+
 
   navigate: function() {
     browser.get(Config.server);
