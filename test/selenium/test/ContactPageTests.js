@@ -11,14 +11,23 @@ describe('Contact page tests', function() {
     });
   });
 
-  it('Should be able to go to the contact page via /contact', function() {
-    expect('#field-message').dom.to.be.visible();
+  it('Should be able to go to the contact page via /contact', function(done) {
+    expect('#field-message').dom.to.be.visible().then(() => {
+      done();
+    });
   });
 
-  it('Can fill in and submit contact form request', function(done) {
-    ContactPage.fillInContactInfo("team@skritter.com", "feedback", "UITEST");
-    // TODO
-    done();
+  it('A user can successfully fill in and submit feedback in the contact form', function(done) {
+    ContactPage.fillInContactInfo("team@skritter.com", "feedback", "UITEST").then(() => {
+      ContactPage.submitContactForm();
+      ContactPage.waitForSubmissionFeedback().then(function(feedback) {
+        expect('#contact-message').dom.to.be.visible();
+        expect('#contact-message').dom.to.have.text(Config.strings.contactSubmitSuccess);
+        expect('#contact-message').dom.to.have.htmlClass('text-success').then(function() {
+          done();
+        });
+      });
+    });
   });
 
 });

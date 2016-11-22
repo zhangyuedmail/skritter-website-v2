@@ -11,8 +11,10 @@ describe('Home page tests', function() {
     });
   });
 
-  it('A user should be able to navigate to the home page from /', function() {
-    expect('#section-features').dom.to.be.visible();
+  it('A user should be able to navigate to the home page from /', function(done) {
+    expect('#section-features').dom.to.be.visible().then(() => {
+      done();
+    });
   });
 
   it('Logged out user should be able to go to the signup page', function(done) {

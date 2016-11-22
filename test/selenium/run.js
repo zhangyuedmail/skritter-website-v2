@@ -72,6 +72,7 @@ function runTests(driver) {
   chai.use(chaiWebdriver(driver));
   require('./test/HomePageTests');
   require('./test/ContactPageTests');
+  require('./test/InstitutionsPageTests');
 }
 
 after(function() {
