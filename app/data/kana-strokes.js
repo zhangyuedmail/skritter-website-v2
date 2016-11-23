@@ -2,7 +2,7 @@
  * @property data
  * @type {Array}
  */
-var data = [
+const data = [
   {
     "lang": "ja",
     "rune": "あ",
@@ -349,7 +349,6 @@ var data = [
         [628, 0.296, 0.124, 1, 1, 0],
         [706, 0.588, 0.238, 1, 1, 0],
         [706, 0.636, 0.19, 1, 1, 0]
-
       ]
     ]
   },
@@ -2223,6 +2222,56 @@ var data = [
 
 module.exports = {
   getData: function() {
-    return data;
+    return _.map(
+      data,
+      function (row) {
+        const strokeData = _
+          .chain(row.strokes)
+          .flatten()
+          .map(
+            function (stroke, index) {
+              return {
+                strokeId: index,
+                shapeId: stroke[0],
+                x: stroke[1],
+                y: stroke[2],
+                scaleX: stroke[3] / 500,
+                scaleY: stroke[4] / 500,
+                rotation: stroke[5]
+              };
+            }
+          )
+          .value();
+
+        let count = -1;
+        const strokeVariations = _
+          .chain(row.strokes)
+          .map(
+            function (stroke, index) {
+
+              return {
+                variationId: index,
+                strokeIds: _.map(
+                  stroke,
+                  function () {
+                    count++;
+
+                    return count;
+                  }
+                )
+              }
+            }
+          )
+          .value();
+
+        return {
+          kana: row.kana,
+          languageCode: row.lang,
+          strokeData: strokeData,
+          strokeVariations: strokeVariations,
+          writing: row.rune
+        };
+      }
+    );
   }
 };
