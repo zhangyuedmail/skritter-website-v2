@@ -298,7 +298,7 @@ const VocabModel = SkritterModel.extend({
     let strokes = [];
     let characters = this.getCharacters();
     for (let i = 0, length = characters.length; i < length; i++) {
-      let stroke = this.collection.character.get(characters[i]);
+      let stroke = app.user.characters.findWhere({writing: characters[i]});
       if (stroke) {
         if (this.isJapanese()) {
           if (!app.user.get('studyKana') && stroke.isKana()) {

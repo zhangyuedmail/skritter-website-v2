@@ -1,12 +1,9 @@
 const GelatoCollection = require('gelato/collection');
 const StrokeParamsCollection = require('collections/StrokeParamCollection');
 const KanaStrokes = require('data/kana-strokes');
+const ShapeData = require('data/shape-data');
 const ToneStrokes = require('data/tone-strokes');
 const CharacterModel = require('models/CharacterModel');
-
-//TODO: replace stroke shapes with a collection
-//var StrokeShapes = require('collections/stroke-shapes');
-const ShapeData = require('data/shape-data');
 
 /**
  * @class CharacterCollection
@@ -21,6 +18,12 @@ const CharacterCollection = GelatoCollection.extend({
   model: CharacterModel,
 
   /**
+   * @property url
+   * @type {String}
+   */
+  url: 'https://api.skritter.com/v2/characters',
+
+  /**
    * @method initialize
    * @constructor
    */
@@ -29,6 +32,14 @@ const CharacterCollection = GelatoCollection.extend({
     this.shapes = ShapeData;
     this.add(KanaStrokes.getData());
     this.add(ToneStrokes.getData());
+  },
+
+  /**
+   * @method getPromptTones
+   * @returns {PromptCharacter}
+   */
+  getPromptTones: function () {
+    return this.get('tones').getPromptCharacter();
   },
 
   /**
@@ -41,14 +52,6 @@ const CharacterCollection = GelatoCollection.extend({
     this.add(ToneStrokes.getData());
 
     return this;
-  },
-
-  /**
-   * @method getPromptTones
-   * @returns {PromptCharacter}
-   */
-  getPromptTones: function() {
-    return this.get('tones').getPromptCharacter();
   }
 });
 

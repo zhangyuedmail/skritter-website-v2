@@ -45,16 +45,16 @@ const PromptStrokeModel = GelatoModel.extend({
    */
   getParamPath: function() {
     //TODO: make sure to get the trace parameter
-    var matrix = this.getTargetShape().getMatrix();
-    var param = this.get('params')[0];
+    let matrix = this.getTargetShape().getMatrix();
+    let param = this.get('params')[0];
     if (!param) {
-      var params = this.get('params');
+      let params = this.get('params');
       param = params[params.length - 1];
     }
     param = param.clone();
-    var corners = _.cloneDeep(param.get('corners'));
-    for (var i = 0, length = corners.length; i < length; i++) {
-      var inflatedCorner = matrix.transformPoint(corners[i].x, corners[i].y);
+    let corners = _.cloneDeep(param.get('corners'));
+    for (let i = 0, length = corners.length; i < length; i++) {
+      let inflatedCorner = matrix.transformPoint(corners[i].x, corners[i].y);
       corners[i].x = inflatedCorner.x;
       corners[i].y = inflatedCorner.y;
     }
@@ -67,16 +67,16 @@ const PromptStrokeModel = GelatoModel.extend({
    * @returns {Array}
    */
   getParams: function() {
-    var inflatedParams = [];
-    var size = this.getSize();
-    var matrix = this.getTargetShape().getMatrix();
-    var params = this.get('params');
-    for (var a = 0, lengthA = params.length; a < lengthA; a++) {
-      var param = params[a].clone();
+    let inflatedParams = [];
+    let size = this.getSize();
+    let matrix = this.getTargetShape().getMatrix();
+    let params = this.get('params');
+    for (let a = 0, lengthA = params.length; a < lengthA; a++) {
+      let param = params[a].clone();
       if (!param.has('trace')) {
-        var corners = _.cloneDeep(param.get('corners'));
-        for (var b = 0, lengthB = corners.length; b < lengthB; b++) {
-          var inflatedCorner = matrix.transformPoint(corners[b].x, corners[b].y);
+        let corners = _.cloneDeep(param.get('corners'));
+        for (let b = 0, lengthB = corners.length; b < lengthB; b++) {
+          let inflatedCorner = matrix.transformPoint(corners[b].x, corners[b].y);
           corners[b].x = inflatedCorner.x;
           corners[b].y = inflatedCorner.y;
         }
@@ -101,26 +101,17 @@ const PromptStrokeModel = GelatoModel.extend({
    * @return {createjs.Shape}
    */
   getTargetShape: function() {
-    var data = this.inflateData();
-    var shape = this.get('shape').clone(true);
-    if (this.isKana()) {
-      shape.x = data.x;
-      shape.y = data.y;
-      shape.scaleX = data.w / 500;
-      shape.scaleY = data.h / 500;
-      shape.rotation = data.rot;
-    } else {
-      var ms = shape.getMatrix();
-      ms.appendMatrix(new createjs.Matrix2D().rotate(data.rot));
-      ms.appendMatrix(new createjs.Matrix2D().translate(-data.w / 2, -data.h / 2));
-      ms.appendMatrix(new createjs.Matrix2D().scale(data.scaleX, data.scaleY));
-      var t = ms.decompose();
-      shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
-      var finalBounds = shape.getTransformedBounds();
-      shape.x += finalBounds.width / 2 + data.x;
-      shape.y += finalBounds.height / 2 + data.y;
-    }
+    let data = this.inflateData();
+    let shape = this.get('shape').clone(true);
+
+    shape.x = data.x;
+    shape.y = data.y;
+    shape.scaleX = data.scaleX;
+    shape.scaleY = data.scaleY;
+    shape.rotation = data.rotation;
+
     shape.name = 'stroke-' + this.get('position');
+
     return shape;
   },
 
@@ -129,8 +120,8 @@ const PromptStrokeModel = GelatoModel.extend({
    * @returns {Object}
    */
   getUserRectangle: function() {
-    var size = this.getSize();
-    var corners = _.clone(this.get('corners'));
+    let size = this.getSize();
+    let corners = _.clone(this.get('corners'));
     return app.fn.getBoundingRectangle(corners, size, size, 18);
   },
 
@@ -140,12 +131,12 @@ const PromptStrokeModel = GelatoModel.extend({
    */
   getUserShape: function() {
     //TODO: improve stroke position and size
-    //var size = this.getSize();
+    //let size = this.getSize();
     //shape.scaleX = rect.width / bounds.width;
     //shape.scaleY = rect.height / bounds.height;
-    //var bounds = shape.getBounds();
-    var shape = this.getTargetShape();
-    var rect = this.getUserRectangle();
+    //let bounds = shape.getBounds();
+    let shape = this.getTargetShape();
+    let rect = this.getUserRectangle();
     shape.x = rect.x;
     shape.y = rect.y;
     shape.name = 'stroke-' + this.get('strokeId');
@@ -165,18 +156,15 @@ const PromptStrokeModel = GelatoModel.extend({
    * @return {Object}
    */
   inflateData: function() {
-    var size = this.getSize();
-    var bounds = this.get('shape').getBounds();
-    var data = this.get('data');
+    let size = this.getSize();
+    let data = this.get('data');
     return {
-      n: data[0],
-      x: data[1] * size,
-      y: data[2] * size,
-      w: data[3] * size,
-      h: data[4] * size,
-      scaleX: (data[3] * size) / bounds.width,
-      scaleY: (data[4] * size) / bounds.height,
-      rot: -data[5]
+      shapeId: data.shapeId,
+      x: data.x * size,
+      y: data.y * size,
+      scaleX: data.scaleX * size,
+      scaleY: data.scaleY * size,
+      rotation: data.rotation
     };
   },
 
@@ -193,7 +181,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @returns {PromptStrokeModel}
    */
   updateCorners: function() {
-    var points = _.clone(this.get('points'));
+    let points = _.clone(this.get('points'));
     this.set('corners', app.fn.shortstraw.process(points));
     return this;
   }

@@ -103,7 +103,7 @@ const StudyPage = GelatoPage.extend({
       },
       function(error, result) {
         if (!error) {
-          var added = result.numVocabsAdded;
+          let added = result.numVocabsAdded;
 
           if (added === 0) {
             if (silenceNoItems) {
@@ -154,9 +154,9 @@ const StudyPage = GelatoPage.extend({
    */
   checkRequirements: function() {
     ScreenLoader.post('Preparing study');
-    var self = this;
-    var hasItems = false;
-    var hasVocablists = false;
+    let self = this;
+    let hasItems = false;
+    let hasVocablists = false;
     async.parallel(
       [
         function(callback) {
@@ -206,7 +206,7 @@ const StudyPage = GelatoPage.extend({
         }
       ],
       function() {
-        var active = app.user.isSubscriptionActive();
+        let active = app.user.isSubscriptionActive();
 
         if (!hasItems && !hasVocablists) {
           self.prompt.render();
@@ -286,7 +286,7 @@ const StudyPage = GelatoPage.extend({
    * @method next
    */
   next: function() {
-    var items = this.items.getNext();
+    let items = this.items.getNext();
     if (this.previousPrompt) {
       this.prompt.$panelLeft.css('opacity', 1.0);
       this.prompt.reviewStatus.render();

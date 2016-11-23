@@ -50,7 +50,6 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.vocabs.add(response.Vocabs);
     this.vocabs.decomps.add(response.Decomps);
     this.vocabs.sentences.add(response.Sentences);
-    this.vocabs.character.add(response.Strokes);
     return response.Items.concat(response.ContainedItems || []);
   },
 
@@ -84,7 +83,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @param {Function} callback
    */
   addItem: function(options, callback) {
-    var self = this;
+    let self = this;
     if (this.addingState === 'standby') {
       this.addingState = 'adding';
     } else {
@@ -103,7 +102,6 @@ const ItemCollection = BaseSkritterCollection.extend({
         lang: app.getLanguage()
       },
       error: function(error) {
-        console.log(error);
         self.addingState = 'standby';
         callback(error);
       },
@@ -120,9 +118,9 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @param {Function} callback
    */
   addItems: function(options, callback) {
-    var self = this;
-    var count = 0;
-    var results = {items: [], numVocabsAdded: 0};
+    let self = this;
+    let count = 0;
+    let results = {items: [], numVocabsAdded: 0};
 
     options = options || {};
     options.limit = options.limit || 1;
@@ -183,8 +181,8 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @param {Function} [callback]
    */
   fetchNext: function(options, callback) {
-    var self = this;
-    var count = 0;
+    let self = this;
+    let count = 0;
 
     options = options || {};
     options.cursor = options.cursor || null;
@@ -215,7 +213,7 @@ const ItemCollection = BaseSkritterCollection.extend({
             include_decomps: true,
             include_heisigs: true,
             include_sentences: false,
-            include_strokes: true,
+            include_strokes: false,
             include_vocabs: true,
             parts: app.user.getFilteredParts().join(','),
             styles: app.user.getFilteredStyles().join(','),
@@ -234,9 +232,30 @@ const ItemCollection = BaseSkritterCollection.extend({
         });
       },
       function(error) {
-        self.updateDueCount();
-        self.fetchingState = 'standby';
-        _.isFunction(callback) && callback(error, self);
+        // filter out characters which have already been fetched
+        const filteredWritings = _.filter(
+          self.vocabs.getUniqueWritings(),
+          function (value) {
+            return !app.user.characters.findWhere({writing: value});
+          }
+        );
+
+        // fetch characters from server using new v2 api
+        app.user.characters.fetch({
+          data: {
+            languageCode: app.getLanguage(),
+            writings: filteredWritings.join('')
+          },
+          success: function () {
+            self.updateDueCount();
+            self.fetchingState = 'standby';
+
+            _.isFunction(callback) && callback(error, self);
+          },
+          error: function () {
+            _.isFunction(callback) && callback(error, self);
+          }
+        });
       }
     );
   },
@@ -246,10 +265,10 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @returns {Array}
    */
   getNext: function() {
-    var collection = this;
-    var history = _.flatten(this.history);
-    var parts = app.user.getFilteredParts().join(',');
-    var styles = app.user.getFilteredStyles().join(',');
+    let collection = this;
+    let history = _.flatten(this.history);
+    let parts = app.user.getFilteredParts().join(',');
+    let styles = app.user.getFilteredStyles().join(',');
     return _
       .chain(this.models)
       .filter(
@@ -271,7 +290,7 @@ const ItemCollection = BaseSkritterCollection.extend({
           }
 
           //exclude items with related characters from history
-          for (var i = 0, length = history.length; i < length; i++) {
+          for (let i = 0, length = history.length; i < length; i++) {
             if (_.includes(model.getBase(), history[i])) {
               return false;
             }
@@ -326,7 +345,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @method updateDueCount
    */
   updateDueCount: function() {
-    var self = this;
+    let self = this;
     if (this.dueCountState === 'fetching') {
       return;
     } else {
@@ -349,9 +368,9 @@ const ItemCollection = BaseSkritterCollection.extend({
         self.dueCountState = 'standby';
       },
       success: function(result) {
-        var count = 0;
-        for (var part in result.due) {
-          for (var style in result.due[part]) {
+        let count = 0;
+        for (let part in result.due) {
+          for (let style in result.due[part]) {
             count += result.due[part][style];
           }
         }

@@ -1,7 +1,6 @@
 const BaseSkritterCollection = require('base/BaseSkritterCollection');
 const DecompsCollection = require('collections/DecompsCollection');
 const SentenceCollection = require('collections/SentenceCollection');
-const CharacterCollection = require('collections/CharacterCollection');
 const VocabModel = require('models/VocabModel');
 
 /**
@@ -35,7 +34,6 @@ const VocabCollection = BaseSkritterCollection.extend({
     this.decomps = new DecompsCollection();
     this.items = options.items;
     this.sentences = new SentenceCollection();
-    this.character = new CharacterCollection();
   },
 
   /**
@@ -65,7 +63,6 @@ const VocabCollection = BaseSkritterCollection.extend({
     this.cursorContaining = response.containingCursor;
     this.decomps.add(response.Decomps);
     this.sentences.add(response.Sentences);
-    this.character.add(response.Strokes);
 
     return response.Vocabs.concat(response.ContainingVocabs || []);
   },
@@ -77,7 +74,6 @@ const VocabCollection = BaseSkritterCollection.extend({
   reset: function() {
     this.decomps.reset();
     this.sentences.reset();
-    this.character.reset();
 
     return BaseSkritterCollection.prototype.reset.call(this);
   }
