@@ -39,6 +39,23 @@ const VocabCollection = BaseSkritterCollection.extend({
   },
 
   /**
+   * @method getUniqueWritings
+   * @returns Array
+   */
+  getUniqueWritings: function () {
+    return _
+      .chain(this.models)
+      .map(
+        function (value) {
+          return value.get('writing').split('');
+        }
+      )
+      .flatten()
+      .uniq()
+      .value();
+  },
+
+  /**
    * @method parse
    * @param {Object} response
    * @returns Array
