@@ -24,7 +24,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
-    this.brushScale = 0.04;
+    this.brushScale = 0.025;
     this.defaultFadeEasing = createjs.Ease.sineOut;
     this.defaultFadeSpeed = 1000;
     this.defaultTraceFill = '#38240c';
