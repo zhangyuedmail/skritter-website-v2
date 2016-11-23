@@ -520,27 +520,32 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     var lineAngle = app.fn.getAngle(linePositionStart, linePositionEnd);
     var lineDistance = app.fn.getDistance(linePositionStart, linePositionEnd);
     var lineDuration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
+
     if (this.mouseLastUpEvent) {
       var lineLastPositionStart = {x: this.mouseLastDownEvent.stageX, y: this.mouseLastDownEvent.stageY};
       var lineLastPositionEnd = {x: this.mouseLastUpEvent.stageX, y: this.mouseLastUpEvent.stageY};
       var lineLastDistance = app.fn.getDistance(lineLastPositionStart, lineLastPositionEnd);
       var lineLastDuration = this.mouseUpEvent.timeStamp - this.mouseLastUpEvent.timeStamp;
-      if (lineLastDistance < 5 && lineLastDuration > 50 && lineLastDuration < 200) {
+
+      if (lineLastDistance < 5 && lineLastDuration > 50 && lineLastDuration < 275) {
         clearTimeout(this.mouseTapTimeout);
         this.trigger('doubletap', event);
         return;
       }
     }
+
     if (this.mouseDownEvent) {
       if (lineDistance > this.size / 2 && lineAngle < -70 && lineAngle > -110) {
         this.trigger('swipeup', event);
         return;
       }
+
       if (lineDuration > 1000) {
         this.trigger('clickhold', event);
         return;
       }
     }
+
     if (this.mouseUpEvent) {
       if (lineDistance < 5 && lineDuration < 1000) {
         this.mouseTapTimeout = setTimeout((function() {
@@ -548,6 +553,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
         }).bind(this), 200);
       }
     }
+
     this.trigger('click', event);
   },
 
