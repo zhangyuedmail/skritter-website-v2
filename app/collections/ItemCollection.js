@@ -246,6 +246,7 @@ const ItemCollection = BaseSkritterCollection.extend({
             languageCode: app.getLanguage(),
             writings: filteredWritings.join('')
           },
+          remove: false,
           success: function () {
             self.updateDueCount();
             self.fetchingState = 'standby';

@@ -244,7 +244,7 @@ const VocabModel = SkritterModel.extend({
     let tones = [];
     let strokes = this.getCharacters();
     for (let i = 0, length = strokes.length; i < length; i++) {
-      tones.push(this.collection.character.getPromptTones());
+      tones.push(app.user.characters.getPromptTones());
     }
     return tones;
   },

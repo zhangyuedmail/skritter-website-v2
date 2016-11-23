@@ -39,7 +39,7 @@ const CharacterCollection = GelatoCollection.extend({
    * @returns {PromptCharacter}
    */
   getPromptTones: function () {
-    return this.get('tones').getPromptCharacter();
+    return this.findWhere({writing: 'tones'}).getPromptCharacter();
   },
 
   /**
