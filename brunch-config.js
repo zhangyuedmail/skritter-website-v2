@@ -6,10 +6,10 @@ exports.config = {
   files: {
     javascripts: {
       joinTo: {
-        'js/application.js': /^app/,
-        'js/libraries.js': /^vendor/,
-        'js/startup.js': /^startup/,
-        'js/test.js': /^test/
+        'js/application.js': /^app[\\/]/,
+        'js/libraries.js': /^vendor[\\/]/,
+        'js/startup.js': /^startup[\\/]/,
+        'js/test.js': /^test[\\/]/
       },
       order: {
         before: [
@@ -43,16 +43,16 @@ exports.config = {
     },
     stylesheets: {
       joinTo: {
-        'styles/application.css': /^app/,
-        'styles/libraries.css': /^vendor/,
-        'styles/startup.css': /^startup/,
-        'styles/test.css': /^test/
+        'styles/application.css': /^app[\\/]/,
+        'styles/libraries.css': /^vendor[\\/]/,
+        'styles/startup.css': /^startup[\\/]/,
+        'styles/test.css': /^test[\\/]/
       }
     },
     templates: {
       joinTo: {
-        'js/application.js': /^app/,
-        'js/startup.js': /^startup/
+        'js/application.js': /^app[\\/]/,
+        'js/startup.js': /^startup[\\/]/
       }
     }
   },
@@ -65,10 +65,10 @@ exports.config = {
   },
   plugins: {
     autoReload: {
-      delay: 200
+      delay: 100
     },
     babel: {
-      ignore: [/^vendor/, 'app/data/*', 'app/utils/*'],
+      ignore: ['app/data/*', 'app/utils/*', 'vendor/*'],
       presets: ['es2015']
     },
     replace: {
