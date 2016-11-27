@@ -34,6 +34,10 @@ const StudyPromptVocabReadingComponent = GelatoComponent.extend({
    * @returns {StudyPromptVocabReadingComponent}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileStudyPromptVocabReadingComponent.jade')
+    }
+
     this.renderTemplate();
     return this;
   },
