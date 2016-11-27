@@ -73,16 +73,41 @@ gelato-component[data-name='mobile-study-prompt'] {
         }
       }
       #toolbar-action-container {
-        margin-top: 15px;
+        margin-top: 25px;
       }
 
       gelato-component[data-name='study-prompt-navigation'] {
+        font-size: 8vh;
         top: 30%;
         #navigate-next {
           right: 0;
         }
         #navigate-previous {
           left: 0;
+        }
+      }
+
+      gelato-component[data-name="study-prompt-part-defn"] {
+        .answer {
+          font-size: 4vh;
+        }
+        .question {
+          font-size: 4vh;
+        }
+        .writing {
+          font-size: 10vh;
+        }
+      }
+
+      gelato-component[data-name="mobile-study-prompt-part-rdng"] {
+        .answer {
+          font-size: 4vh;
+        }
+        .question {
+          font-size: 4vh;
+        }
+        .writing {
+          font-size: 10vh;
         }
       }
 
