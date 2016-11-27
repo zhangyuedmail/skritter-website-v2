@@ -14,9 +14,16 @@ const helpers = require('../helpers');
 const ContactPageDriver = {
 
   navigate: function() {
-    browser.get(Config.server + '/contact');
+    return new Promise(function(resolve, reject) {
+      browser.get(Config.server + '/contact');
+      browser.wait(until.titleIs('Contact - Skritter'), Config.TIMEOUT_DEFAULT).then(() => {
 
-    return browser.wait(until.titleIs('Contact - Skritter'), Config.TIMEOUT_DEFAULT);
+        // to avoid screenloader fadeout when testing for element visibility
+        setTimeout(() => {
+          resolve();
+        }, 50);
+      });
+    });
   },
 
   fillInContactInfo: function(email, topic, message) {
@@ -42,7 +49,6 @@ const ContactPageDriver = {
         }
       });
     });
-
   },
 
   /**

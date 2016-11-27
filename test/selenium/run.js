@@ -70,6 +70,7 @@ for (let d in drivers) {
 function runTests(driver) {
   Config.driver = driver;
   chai.use(chaiWebdriver(driver));
+
   require('./test/HomePageTests');
   require('./test/ContactPageTests');
   require('./test/InstitutionsPageTests');

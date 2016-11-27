@@ -5,7 +5,7 @@ const chai = require('chai');
 const expect = chai.expect;
 
 describe('Contact page tests', function() {
-  beforeEach(function (done) {
+  beforeEach(function(done) {
     ContactPage.navigate().then(() => {
       done();
     });

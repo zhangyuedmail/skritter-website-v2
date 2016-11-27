@@ -80,7 +80,7 @@ describe('Home page tests', function() {
       });
     });
   });
-/*
+
   it('User should be able to view the Skritter Facebook page from the footer', function(done) {
     HomePage.goToFbFromFooter().then(() => {
       expect('html').dom.to.have.attribute('id', 'facebook').then(() => {
@@ -96,10 +96,12 @@ describe('Home page tests', function() {
       });
     });
   });
-/*
+
   it('User should be able to view the Skritter Google Plus page from the footer', function(done) {
     HomePage.goToGPlusFromFooter().then(() => {
-      expect('#field-message').dom.to.be.visible().then(() => {
+
+      // hopefully this stays consistent? Testing external links is weird.
+      expect('.JZUAbb').dom.to.be.visible().then(() => {
         done();
       });
     });
@@ -107,7 +109,7 @@ describe('Home page tests', function() {
 
   it('User should be able to view the Resources page from the footer', function(done) {
     HomePage.goToResourcesFromFooter().then(() => {
-      expect('#field-message').dom.to.be.visible().then(() => {
+      expect('.h-landmark.entry-title span').dom.to.have.text('Partners and Resources').then(() => {
         done();
       });
     });
@@ -115,9 +117,9 @@ describe('Home page tests', function() {
 
   it('User should be able to view the FAQ page from the footer', function(done) {
     HomePage.goToFAQFromFooter().then(() => {
-      expect('#field-message').dom.to.be.visible().then(() => {
+      expect('#searchBar').dom.to.be.visible().then(() => {
         done();
       });
     });
-  });*/
+  });
 });

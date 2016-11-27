@@ -53,71 +53,68 @@ const HomePageDriver = {
   },
 
   goToBlogFromFooter: function() {
-    browser.findElement(By.id('blog-link')).click();
-    helpers.switchToMostRecentTab();
-
-
-    return browser.wait(until.titleIs(Config.strings.titleBlog));
+    return this._clickLinkByIdAndWaitForTitle('blog-link', 'titleBlog');
   },
 
   goToForumFromFooter: function() {
-    browser.findElement(By.id('forum-link')).click();
-    helpers.switchToMostRecentTab();
-
-    return browser.wait(until.titleIs(Config.strings.titleForum));
+    return this._clickLinkByIdAndWaitForTitle('forum-link', 'titleForum');
   },
 
   goToFbFromFooter: function() {
-    browser.findElement(By.id('fb-link')).click();
-    helpers.switchToMostRecentTab();
-
-    return browser.wait(until.titleIs(Config.strings.titleFb));
+    return this._clickLinkByIdAndWaitForTitle('fb-link', 'titleFb');
   },
 
   goToTwitterFromFooter: function() {
-    browser.findElement(By.id('twitter-link')).click();
-    helpers.switchToMostRecentTab();
-
-    return browser.wait(until.titleIs(Config.strings.titleTwitter));
+    return this._clickLinkByIdAndWaitForTitle('twitter-link', 'titleTwitter');
   },
 
   goToGPlusFromFooter: function() {
-    browser.findElement(By.id('gplus-link')).click();
-    helpers.switchToMostRecentTab();
-
-    return browser.wait(until.titleIs(Config.strings.titleGPlus));
+    return this._clickLinkByIdAndWaitForTitle('gplus-link', 'titleGPlus');
   },
 
   goToResourcesFromFooter: function() {
-    browser.findElement(By.id('resources-link')).click();
-    helpers.switchToMostRecentTab();
-
-    return browser.wait(until.titleIs(Config.strings.titleResources));
+    return this._clickLinkByIdAndWaitForTitle('resources-link', 'titleResources');
   },
 
   goToFAQFromFooter: function() {
-    browser.findElement(By.id('faq-link')).click();
-    helpers.switchToMostRecentTab();
+    return this._clickLinkByIdAndWaitForTitle('faq-link', 'titleFAQ');
+  },
 
-    return browser.wait(until.titleIs(Config.strings.titleFAQ));
+  /**
+   * Clicks a link on the current browser window, switches to a new tab
+   * (if it was opened), then waits until the title is the expected
+   * result to resolve.
+   * @param {String} id the id of the link element to click
+   * @param {String} title the key in the config strings dictionary of the expected page title
+   * @returns {Promise} resolves when the title matches
+   * @private
+   */
+  _clickLinkByIdAndWaitForTitle: function(id, title) {
+    return new Promise(function(resolve, reject) {
+      browser.findElement(By.id(id)).click().then(() => {
+        helpers.switchToMostRecentTab().then(() => {
+          browser.wait(until.titleIs(Config.strings[title])).then(resolve);
+        });
+      });
+    });
   },
 
   navigate: function() {
-    helpers.closeAllTabsExceptOne(0);
-
-    browser.get(Config.server);
-    return browser.wait(until.titleIs(Config.strings.titleHome), Config.TIMEOUT_DEFAULT);
-  },
-
-  playPromoVideo: function() {
-    // TODO
+    return new Promise(function(resolve, reject) {
+      helpers.closeAllTabsExceptOne(0).then(() => {
+        browser.get(Config.server);
+        browser.wait(until.titleIs(Config.strings.titleHome), Config.TIMEOUT_DEFAULT).then(resolve);
+      });
+    });
   },
 
   /**
    * Shuts down selenium server. Should be called after all the tests are run.
    */
-  after: function() {
-    browser.quit();
+  after: function(done) {
+    helpers.closeAllTabsExceptOne(0).then(() => {
+      done();
+    });
   }
 };
 

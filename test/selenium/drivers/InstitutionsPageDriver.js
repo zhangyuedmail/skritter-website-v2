@@ -14,8 +14,16 @@ const helpers = require('../helpers');
 const ContactPageDriver = {
 
   navigate: function() {
-    browser.get(Config.server + '/institutions');
-    return browser.wait(until.titleIs('Institutions - Skritter'), Config.TIMEOUT_DEFAULT);
+    return new Promise(function(resolve, reject) {
+      browser.get(Config.server + '/institutions');
+      browser.wait(until.titleIs('Institutions - Skritter'), Config.TIMEOUT_DEFAULT).then(() => {
+
+        // to avoid screenloader fadeout when testing for element visibility
+        setTimeout(() => {
+          resolve();
+        }, 50);
+      });
+    });
   },
 
   fillInInstitutionInfo: function(contactInfo) {
@@ -40,14 +48,6 @@ const ContactPageDriver = {
         }
       });
     });
-
-  },
-
-  /**
-   * Shuts down selenium server. Should be called after all the tests are run.
-   */
-  after: function() {
-    browser.quit();
   }
 };
 
