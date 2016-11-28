@@ -10,7 +10,12 @@ gelato-page > .container > .content-block {
   border-top-right-radius: 25px;
   color: $grey5;
   margin: -15px 0;
+  min-height: 500px;
   padding: 55px 40px;
+}
+
+.mobile .main-content {
+  min-height: 0;
 }
 
 .title {
