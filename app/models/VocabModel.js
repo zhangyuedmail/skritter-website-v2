@@ -26,19 +26,20 @@ const VocabModel = SkritterModel.extend({
    * @constructor
    */
   initialize: function() {
-    const audios = [];
-
-    _.forEach(
+    this.audios = _.map(
       this.getUniqueAudios(),
-      function(data) {
+      (data) => {
         // Use proxy when accessing audio on google storage
         const url = data.mp3.replace('http://storage.googleapis.com/skritter_audio/', 'https://skritter.com/audio/');
 
-        audios.push(new Howl({src: [url], format: ['mp3'], html5: true}));
+        return new Howl({
+          src: [url],
+          format: ['mp3'],
+          html5: true,
+          preload: this.collection && this.collection.preloadAudio
+        });
       }
     );
-
-    this.audios = audios;
   },
 
   /**
@@ -460,7 +461,6 @@ const VocabModel = SkritterModel.extend({
     if (this.collection) {
       this.collection.decomps.add(response.Decomp);
       this.collection.sentences.add(response.Sentence);
-      this.collection.character.add(response.Stroke);
     }
     return response.Vocab || response;
   },

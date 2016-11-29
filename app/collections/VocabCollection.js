@@ -25,14 +25,18 @@ const VocabCollection = BaseSkritterCollection.extend({
 
   /**
    * @method initialize
+   * @param {Array|Object} [models]
+   * @param {Object} [options]
    * @constructor
    */
   initialize: function(models, options) {
     options = options || {};
+
     this.cursor = null;
     this.cursorContaining = null;
     this.decomps = new DecompsCollection();
     this.items = options.items;
+    this.preloadAudio = _.defaultTo(options.preloadAudio, true);
     this.sentences = new SentenceCollection();
   },
 
