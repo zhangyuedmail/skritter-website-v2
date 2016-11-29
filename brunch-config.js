@@ -14,7 +14,7 @@ exports.config = {
       order: {
         before: [
           'vendor/jquery-2.2.3.js',
-          'vendor/lodash-4.12.0.js',
+          'vendor/lodash-4.17.2.js',
           'vendor/backbone-1.3.3.js',
           'vendor/async-1.5.2.js',
           'vendor/bootstrap-3.3.6.js',
