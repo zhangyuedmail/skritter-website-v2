@@ -84,13 +84,13 @@ gelato-page(data-name='account-settings-general')
                         option(value=timezone, selected="selected")= timezone.replace(/_/g, ' ')
                       else
                         option(value=timezone)= timezone.replace(/_/g, ' ')
-
-              a#reset-all-data.btn.btn-danger= app.locale('pages.accountGeneral.resetAllData')
               .form-group
                 .col-sm-12
                   #error-alert.alert.alert-danger.hidden
+
                   if user.state === 'standby'
                     button#button-save.btn.btn-fixed.btn-success(type="submit")= app.locale('common.save')
+                    button#reset-all-data.btn.btn-danger= app.locale('pages.accountGeneral.resetAllData')
                   else
                     button#button-save.btn.btn-fixed.btn-success(type="submit", disabled="disabled")
                       i.fa.fa-2x.fa-spinner.fa-pulse

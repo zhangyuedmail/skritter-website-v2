@@ -147,6 +147,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    */
   handleClickResetAllData: function(event) {
     event.preventDefault();
+    console.log('poop');
     this.dialog = new ResetAllDataDialog();
     this.dialog.render();
     this.dialog.open();
