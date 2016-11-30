@@ -46,7 +46,7 @@
     "chai-webdriver": "~1.2.0",
     "clean-css-brunch": "~2.0.0",
     "chromedriver": "~2.25.0",
-    "cordova": "~6.3.0",
+    "cordova": "~6.4.0",
     "css-brunch": "~2.6.0",
     "jade-brunch": "~2.8.0",
     "javascript-brunch": "~2.0.0",
