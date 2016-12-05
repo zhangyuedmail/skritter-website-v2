@@ -186,6 +186,7 @@ const ItemCollection = BaseSkritterCollection.extend({
           data: {
             languageCode: app.getLanguage(),
             limit: options.limit,
+            listId: options.listId,
             parts: app.user.getFilteredParts().join('|'),
             styles: app.user.getFilteredStyles().join('|'),
             user: app.user.id
