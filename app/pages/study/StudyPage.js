@@ -45,10 +45,13 @@ const StudyPage = GelatoPage.extend({
   initialize: function() {
     ScreenLoader.show();
 
+    this.currentItem = null;
     this.currentPromptItems = null;
-    this.items = new Items();
+    this.previousItem = null;
     this.previousPrompt = false;
     this.previousPromptItems = null;
+
+    this.items = new Items();
     this.prompt = new Prompt({page: this});
     this.toolbar = new Toolbar({page: this});
     this.vocablists = new Vocablists();
@@ -154,12 +157,12 @@ const StudyPage = GelatoPage.extend({
    */
   checkRequirements: function() {
     ScreenLoader.post('Preparing study');
-    let self = this;
-    let hasItems = false;
-    let hasVocablists = false;
+
+    this.items.updateDueCount();
+
     async.parallel(
       [
-        function(callback) {
+        (callback) => {
           app.user.subscription.fetch({
             error: function() {
               callback();
@@ -169,53 +172,38 @@ const StudyPage = GelatoPage.extend({
             }
           });
         },
-        function(callback) {
-          self.items.clearHistory();
-          self.items.updateDueCount();
-          self.items.fetchNext(
-            {
-              limit: 1
-            },
-            function(error, result) {
-              self.items.fetchNext({
-                cursor: result.cursor,
-                limit: 2,
-                loop: 5
-              });
-              hasItems = !error && result.length;
-              callback();
-            }
-          );
+        (callback) => {
+          this.items.fetchNext({limit: 50})
+            .catch(callback)
+            .then(callback);
         },
-        function(callback) {
-          self.vocablists.fetch({
+        (callback) => {
+          this.vocablists.fetch({
             data: {
               lang: app.getLanguage(),
               limit: 1,
               sort: 'adding'
             },
             error: function() {
-              hasVocablists = false;
               callback();
             },
-            success: function(result) {
-              hasVocablists = result.length > 0;
+            success: function() {
               callback();
             }
           });
         }
       ],
-      function() {
-        let active = app.user.isSubscriptionActive();
+      () => {
+        const active = app.user.isSubscriptionActive();
 
-        if (!hasItems && !hasVocablists) {
-          self.prompt.render();
-          self.prompt.$('#overlay').show();
+        if (!this.items.length && !this.vocablists.length) {
+          this.prompt.render();
+          this.prompt.$('#overlay').show();
           ScreenLoader.hide();
-        } else if (!hasItems && hasVocablists) {
+        } else if (!this.items.length && this.vocablists.length) {
           if (active) {
             ScreenLoader.post('Adding your first words');
-            self.items.addItems(
+            this.items.addItems(
               {
                 lang: app.getLanguage(),
                 limit: 5
@@ -225,24 +213,26 @@ const StudyPage = GelatoPage.extend({
               }
             );
           } else {
-            self.prompt.render();
-            self.prompt.$('#overlay').show();
+            this.prompt.render();
+            this.prompt.$('#overlay').show();
             ScreenLoader.hide();
           }
         } else {
+          this.stopListening(this.items);
+          this.listenTo(this.items, 'preload', this.handleItemPreload);
+
+          this.next();
+
           ScreenLoader.hide();
-          self.next();
-          self.stopListening(self.items);
-          self.listenTo(self.items, 'state', self.handleItemState);
         }
       }
     );
   },
 
   /**
-   * @method handleItemState
+   * @method handleItemPreload
    */
-  handleItemState: function() {
+  handleItemPreload: function() {
     if (!this.currentPromptItems) {
       this.next();
     }
@@ -250,31 +240,41 @@ const StudyPage = GelatoPage.extend({
 
   /**
    * @method handlePromptNext
-   * @param {PromptItems} promptItems
+   * @param {PromptItemCollection} promptItems
    */
   handlePromptNext: function(promptItems) {
     this.items.reviews.put(promptItems.getReview());
 
-    if (!this.previousPrompt) {
+    if (this.previousPrompt) {
+      this.previousPrompt = false;
+      this.next();
+
+      return;
+    }
+
+    if (this.currentPromptItems) {
+      if (this.items.reviews.length > 2) {
+        this.items.reviews.post({skip: 1});
+        this.items.updateDueCount();
+      }
+
       if (promptItems.readiness >= 1.0) {
         this.toolbar.dueCountOffset++;
       }
-      if (this.items.reviews.length > 2) {
-        this.items.reviews.post({skip: 1});
-      }
+
+      this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
+
+      this.currentItem._queue = false;
       this.currentPromptItems = null;
       this.previousPromptItems = promptItems;
-      this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
-      this.items.addHistory(promptItems.item);
-    }
 
-    this.previousPrompt = false;
-    this.next();
+      this.next();
+    }
   },
 
   /**
    * @method handlePromptPrevious
-   * @param {PromptItems} promptItems
+   * @param {PromptItemCollection} promptItems
    */
   handlePromptPrevious: function(promptItems) {
     this.previousPrompt = true;
@@ -286,29 +286,56 @@ const StudyPage = GelatoPage.extend({
    * @method next
    */
   next: function() {
-    let items = this.items.getNext();
+    const queue = this.items.getQueue();
+    const items = this.items.getNext();
+
+    if (!queue.length) {
+      this.prompt.$panelLeft.css('opacity', 0.4);
+      this.prompt.$panelLeft.css('pointer-events', 'none');
+      this.prompt.$panelRight.css('pointer-events', 'none');
+      this.items.reviews.post({skip: 1});
+      this.items.fetchNext({limit: 50});
+
+      return;
+    }
+
     if (this.previousPrompt) {
       this.prompt.$panelLeft.css('opacity', 1.0);
+      this.prompt.$panelLeft.css('pointer-events', 'auto');
+      this.prompt.$panelRight.css('pointer-events', 'auto');
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
-    } else if (items.length) {
+
+      return;
+    }
+
+    if (items.length) {
+      this.currentItem= items[0];
       this.currentPromptItems = items[0].getPromptItems();
       this.prompt.$panelLeft.css('opacity', 1.0);
+      this.prompt.$panelLeft.css('pointer-events', 'auto');
+      this.prompt.$panelRight.css('pointer-events', 'auto');
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
-      if (items.length < 5) {
-        this.items.fetchNext({limit: 2, loop: 5});
-      }
+
       if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
         this.addItem(true);
       }
-    } else {
-      this.prompt.$panelLeft.css('opacity', 0.2);
-      this.items.shortenHistory();
-      this.items.fetchNext({limit: 1});
+
+      if (items.length < 5) {
+        this.items.preloadNext();
+      }
+
+      return;
     }
+
+    // disable things while preloading
+    this.prompt.$panelLeft.css('opacity', 0.4);
+    this.prompt.$panelLeft.css('pointer-events', 'none');
+    this.prompt.$panelRight.css('pointer-events', 'none');
+    this.items.preloadNext();
   },
 
   /**
@@ -336,30 +363,34 @@ const StudyPage = GelatoPage.extend({
 
   /**
    * Shows a dialog that allows the user to adjust their study settings
+   * @method showStudySettings
    */
   showStudySettings: function() {
     const dialog = new StudySettings();
 
     dialog.open();
 
-    dialog.on('save', (settings) => {
-      ScreenLoader.show();
-      ScreenLoader.post('Saving study settings');
-      app.user.set(settings, {merge: true});
-      app.user.cache();
-      app.user.save(
-        null,
-        {
-          error: () => {
-            ScreenLoader.hide();
-            dialog.close();
-          },
-          success: () => {
-            this.items.reviews.post().then(app.reload);
+    dialog.on(
+      'save',
+      (settings) => {
+        ScreenLoader.show();
+        ScreenLoader.post('Saving study settings');
+        app.user.set(settings, {merge: true});
+        app.user.cache();
+        app.user.save(
+          null,
+          {
+            error: () => {
+              ScreenLoader.hide();
+              dialog.close();
+            },
+            success: () => {
+              this.items.reviews.post().then(app.reload);
+            }
           }
-        }
-      );
-    });
+        );
+      }
+    );
   }
 
 });

@@ -29,52 +29,17 @@ const ItemCollection = BaseSkritterCollection.extend({
    */
   initialize: function(models, options) {
     options = options || {};
-    this.cursor = null;
-    this.dueCount = 0;
-    this.history = [];
-    this.addingState = 'standby';
-    this.dueCountState = 'standby';
-    this.fetchingState = 'standby';
-    this.sorted = null;
+
     this.reviews = new ReviewCollection(null, {items: this});
     this.vocabs = new VocabCollection(null, {items: this});
-  },
 
-  /**
-   * @method parse
-   * @param {Object} response
-   * @returns {Object}
-   */
-  parse: function(response) {
-    this.cursor = response.cursor;
-    this.vocabs.add(response.Vocabs);
-    this.vocabs.decomps.add(response.Decomps);
-    this.vocabs.sentences.add(response.Sentences);
-    return response.Items.concat(response.ContainedItems || []);
-  },
-
-  /**
-   * @method reset
-   * @returns {Items}
-   */
-  reset: function() {
-    this.vocabs.reset();
-    return BaseSkritterCollection.prototype.reset.call(this);
-  },
-
-  /**
-   * @method addHistory
-   * @param {ItemModel} item
-   * @returns {ItemCollection}
-   */
-  addHistory: function(item) {
-    this.remove(item);
-    this.history.unshift(item.getBase().split(''));
-    if (this.history.length > 4) {
-      this.history.pop();
-    }
-
-    return this;
+    this.cursor = null;
+    this.addingState = 'standby';
+    this.dueCount = 0;
+    this.dueCountState = 'standby';
+    this.fetchingState = 'standby';
+    this.preloadingState = 'standby';
+    this.sorted = null;
   },
 
   /**
@@ -156,89 +121,26 @@ const ItemCollection = BaseSkritterCollection.extend({
   },
 
   /**
-   * @method clearHistory
-   * @returns {Items}
+   * @method fetchCharacters
+   * @returns {Promise}
    */
-  clearHistory: function() {
-    this.reset();
-    this.history = [];
+  fetchCharacters: function() {
+    return new Promise(
+      (resolve, reject) => {
 
-    return this;
-  },
-
-  /**
-   * @method comparator
-   * @param {Item} item
-   * @returns {Number}
-   */
-  comparator: function(item) {
-    return -item.getReadiness();
-  },
-
-  /**
-   * @method fetchNext
-   * @param {Object} options
-   * @param {Function} [callback]
-   */
-  fetchNext: function(options, callback) {
-    let self = this;
-    let count = 0;
-
-    options = options || {};
-    options.cursor = options.cursor || null;
-    options.limit = options.limit || 10;
-    options.listId = options.listId || null;
-    options.loop = options.loop || 1;
-
-    if (this.fetchingState === 'fetching') {
-      _.isFunction(callback) && callback(null, self);
-      return;
-    } else {
-      this.fetchingState = 'fetching';
-    }
-
-    async.whilst(
-      function() {
-        return count < options.loop;
-      },
-      function(callback) {
-        count++;
-        self.fetch({
-          data: {
-            sort: 'next',
-            cursor: options.cursor,
-            lang: app.getLanguage(),
-            limit: 2,
-            include_contained: true,
-            include_decomps: true,
-            include_heisigs: true,
-            include_sentences: false,
-            include_strokes: false,
-            include_vocabs: true,
-            parts: app.user.getFilteredParts().join(','),
-            styles: app.user.getFilteredStyles().join(','),
-            vocab_list: options.listId
-          },
-          merge: true,
-          remove: false,
-          sort: false,
-          error: function(error) {
-            callback(error);
-          },
-          success: function(items) {
-            options.cursor = items.cursor;
-            callback();
-          }
-        });
-      },
-      function(error) {
         // filter out characters which have already been fetched
         const filteredWritings = _.filter(
-          self.vocabs.getUniqueWritings(),
-          function (value) {
+          this.vocabs.getUniqueWritings(),
+          function(value) {
             return !app.user.characters.findWhere({writing: value});
           }
         );
+
+        // stop fetch when no writings needed
+        if (!filteredWritings.length) {
+          resolve();
+          return;
+        }
 
         // fetch characters from server using new v2 api
         app.user.characters.fetch({
@@ -247,14 +149,72 @@ const ItemCollection = BaseSkritterCollection.extend({
             writings: filteredWritings.join('')
           },
           remove: false,
-          success: function () {
-            self.updateDueCount();
-            self.fetchingState = 'standby';
-
-            _.isFunction(callback) && callback(error, self);
+          error: function(error) {
+            reject(error);
           },
-          error: function () {
-            _.isFunction(callback) && callback(error, self);
+          success: function() {
+            resolve();
+          }
+        });
+
+      }
+    );
+  },
+
+  /**
+   * @method fetchNext
+   * @param {Object} options
+   * @returns {Promise}
+   */
+  fetchNext: function(options) {
+    options = options || {};
+    options.limit = options.limit || 50;
+    options.listId = options.listId || null;
+
+    return new Promise(
+      (resolve, reject) => {
+        if (this.fetchingState === 'fetching') {
+          resolve();
+          return;
+        }
+
+        this.fetchingState = 'fetching';
+
+        $.ajax({
+          url: 'https://api.skritter.com/v2/queue',
+          type: 'GET',
+          data: {
+            languageCode: app.getLanguage(),
+            limit: options.limit,
+            parts: app.user.getFilteredParts().join('|'),
+            styles: app.user.getFilteredStyles().join('|'),
+            user: app.user.id
+          },
+          error: (error) => {
+            this.fetchingState = 'standby';
+            reject(error);
+          },
+          success: (result) => {
+            this.reset();
+
+            _.forEach(
+              this.add(result),
+              (model) => {
+                model._queue = true;
+              }
+            );
+
+            console.log('FETCHED:', result);
+
+            // preload stuff because we need it anyways
+            this.preloadNext({limit: 5})
+              .catch(reject)
+              .then(
+                () => {
+                  this.fetchingState = 'standby';
+                  resolve();
+                }
+              );
           }
         });
       }
@@ -266,118 +226,200 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @returns {Array}
    */
   getNext: function() {
-    let collection = this;
-    let history = _.flatten(this.history);
-    let parts = app.user.getFilteredParts().join(',');
-    let styles = app.user.getFilteredStyles().join(',');
-    return _
-      .chain(this.models)
-      .filter(
-        function(model) {
+    const now = moment().unix();
+    const parts = app.user.getFilteredParts().join(',');
+    const styles = app.user.getFilteredStyles().join(',');
 
-          //check if model has been removed from collection
+    return _
+      .chain(this.getQueue())
+      .filter(
+        (model) => {
+
+          // check if model has been removed from collection
           if (!model) {
             return false;
           }
 
-          //exclude part not including in user settings
+          // exclude part not including in user settings
           if (!_.includes(parts, model.get('part'))) {
             return false;
           }
 
-          //exclude style not including in user settings
+          // exclude style not including in user settings
           if (!_.includes(styles, model.get('style'))) {
             return false;
           }
 
-          //exclude items with related characters from history
-          for (let i = 0, length = history.length; i < length; i++) {
-            if (_.includes(model.getBase(), history[i])) {
-              return false;
-            }
+          // exclude items marked as banned in vocab
+          if (model.isBanned()) {
+            return false;
           }
 
           if (model.isJapanese()) {
-            //skip all kana writings when study kana disabled
+            // skip all kana writings when study kana disabled
             if (!app.user.get('studyKana') && model.isPartRune() && model.isKana()) {
-              //TODO: investigate why models unable to save
-              collection.remove(model);
+              model.set('active', false);
               model.bump();
               model.save();
               return false;
             }
           }
 
-          if (!model.isActive()) {
-            return false;
-          } else if (model.isBanned()) {
-            return false;
-          } else {
-            return model;
-          }
+          return model;
         }
       )
+      .sortBy(item => -item.getReadiness(now))
       .value();
   },
 
   /**
-   * @method shortenHistory
-   * @returns {Items}
+   * @method getQueue
+   * @returns {Array}
    */
-  shortenHistory: function() {
-    if (this.history.length > 1) {
-      this.history = [this.history[0]];
-    }
-
-    return this;
+  getQueue: function() {
+    return _.filter(this.models, model => model._queue);
   },
 
   /**
-   * @method sort
+   * @method parse
+   * @param {Object} response
+   * @returns {Object}
+   */
+  parse: function(response) {
+    this.cursor = response.cursor;
+    this.vocabs.add(response.Vocabs);
+    this.vocabs.decomps.add(response.Decomps);
+    this.vocabs.sentences.add(response.Sentences);
+    return response.Items.concat(response.ContainedItems || []);
+  },
+
+  /**
+   * @method preloadNext
+   * @param {Object} [options]
+   * @returns {Promise}
+   */
+  preloadNext: function(options) {
+    const now = moment().unix();
+
+    options = options || {};
+    options.limit = options.limit || 10;
+
+    // return list of active next item ids
+    const itemIds = _
+      .chain(this.getQueue())
+      .filter(model => !model._loaded)
+      .sortBy(item => -item.getReadiness(now))
+      .map(item => item.id)
+      .value()
+      .slice(0, options.limit);
+
+    console.log('PRELOADING:', itemIds);
+
+    return new Promise(
+      (resolve, reject) => {
+        // return successful when no item preloading needed
+        if (!itemIds.length) {
+          resolve();
+          return;
+        }
+
+        if (this.preloadingState === 'fetching') {
+          resolve();
+          return;
+        }
+
+        this.preloadingState = 'fetching';
+
+        this.fetch({
+          data: {
+            ids: itemIds.join('|'),
+            include_contained: true,
+            include_decomps: true,
+            include_heisigs: true,
+            include_sentences: false,
+            include_strokes: false,
+            include_vocabs: true
+          },
+          remove: false,
+          error: (error) => {
+            reject(error);
+          },
+          success: (result) => {
+            _.forEach(
+              itemIds,
+              (itemId) => {
+                const item = result.get(itemId);
+
+                if (item) {
+                  item._loaded = true;
+                } else {
+                  console.log('PRELOAD ERROR:', 'Unable to find preloaded item');
+                }
+              }
+            );
+
+            console.log('PRELOADED:', itemIds);
+
+            this.fetchCharacters()
+              .catch(reject)
+              .then(
+                () => {
+                  this.trigger('preload');
+                  this.preloadingState = 'standby';
+                  resolve();
+                }
+              );
+          }
+        });
+      }
+    );
+  },
+
+  /**
+   * @method reset
    * @returns {Items}
    */
-  sort: function() {
-    this.sorted = moment().unix();
-
-    return BaseSkritterCollection.prototype.sort.call(this);
+  reset: function() {
+    this.vocabs.reset();
+    return BaseSkritterCollection.prototype.reset.apply(this, arguments);
   },
 
   /**
    * @method updateDueCount
    */
   updateDueCount: function() {
-    let self = this;
     if (this.dueCountState === 'fetching') {
       return;
-    } else {
-      this.dueCountState = 'fetching';
     }
+
+    this.dueCountState = 'fetching';
 
     $.ajax({
       url: app.getApiUrl() + 'items/due',
       type: 'GET',
       headers: app.user.session.getHeaders(),
-      context: this,
       data: {
         lang: app.getLanguage(),
         parts: app.user.getFilteredParts().join(','),
         styles: app.user.getFilteredStyles().join(',')
       },
-      error: function(error) {
-        console.log(error);
-        self.dueCount = '-';
-        self.dueCountState = 'standby';
+      error: () => {
+        this.dueCount = '-';
+        this.dueCountState = 'standby';
+        this.trigger('update:due-count', this.dueCount);
       },
-      success: function(result) {
+      success: (result) => {
         let count = 0;
+
         for (let part in result.due) {
           for (let style in result.due[part]) {
             count += result.due[part][style];
           }
         }
-        self.dueCount =  count;
-        self.dueCountState = 'standby';
-        self.trigger('update:due-count', this.dueCount);
+
+        this.dueCount =  count;
+        this.dueCountState = 'standby';
+        this.trigger('update:due-count', this.dueCount);
       }
     });
   }

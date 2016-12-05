@@ -79,7 +79,7 @@ const VocabCollection = BaseSkritterCollection.extend({
     this.decomps.reset();
     this.sentences.reset();
 
-    return BaseSkritterCollection.prototype.reset.call(this);
+    return BaseSkritterCollection.prototype.reset.apply(this, arguments);
   }
 });
 

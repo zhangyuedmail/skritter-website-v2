@@ -49,7 +49,8 @@ const ItemModel = SkritterModel.extend({
    */
   defaults: function() {
     return {
-      vocabIds: []
+      vocabIds: [],
+      vocabListIds: []
     };
   },
 
@@ -66,15 +67,15 @@ const ItemModel = SkritterModel.extend({
    * @returns {Array}
    */
   getContainedItems: function() {
-    var containedItems = [];
-    var part = this.get('part');
+    let containedItems = [];
+    let part = this.get('part');
     if (['rune', 'tone'].indexOf(part) > -1) {
-      var containedVocabs = this.getContainedVocabs();
-      for (var i = 0, length = containedVocabs.length; i < length; i++) {
-        var vocabId = containedVocabs[i].id;
-        var splitId = vocabId.split('-');
-        var fallbackId = [app.user.id, splitId[0], splitId[1], 0, part].join('-');
-        var intendedId = [app.user.id, vocabId, part].join('-');
+      let containedVocabs = this.getContainedVocabs();
+      for (let i = 0, length = containedVocabs.length; i < length; i++) {
+        let vocabId = containedVocabs[i].id;
+        let splitId = vocabId.split('-');
+        let fallbackId = [app.user.id, splitId[0], splitId[1], 0, part].join('-');
+        let intendedId = [app.user.id, vocabId, part].join('-');
         if (this.collection.get(intendedId)) {
           containedItems.push(this.collection.get(intendedId));
         } else if (this.collection.get(fallbackId)) {
@@ -98,7 +99,7 @@ const ItemModel = SkritterModel.extend({
    * @returns {Array}
    */
   getContainedVocabs: function() {
-    var vocab = this.getVocab();
+    let vocab = this.getVocab();
     return vocab ? vocab.getContained() : [];
   },
 
@@ -107,15 +108,15 @@ const ItemModel = SkritterModel.extend({
    * @returns {PromptItemCollection}
    */
   getPromptItems: function() {
-    var promptItems = new PromptItemCollection();
-    var containedItems = this.getContainedItems();
-    var containedVocabs = this.getContainedVocabs();
-    var now = Date.now();
-    var part = this.get('part');
-    var vocab = this.getVocab();
-    var characters = [];
-    var items = [];
-    var vocabs = [];
+    let promptItems = new PromptItemCollection();
+    let containedItems = this.getContainedItems();
+    let containedVocabs = this.getContainedVocabs();
+    let now = Date.now();
+    let part = this.get('part');
+    let vocab = this.getVocab();
+    let characters = [];
+    let items = [];
+    let vocabs = [];
     switch (part) {
       case 'rune':
         characters = vocab.getPromptCharacters();
@@ -131,10 +132,10 @@ const ItemModel = SkritterModel.extend({
         items = [this];
         vocabs = [vocab];
     }
-    for (var i = 0, length = vocabs.length; i < length; i++) {
-      var childItem = items[i];
-      var childVocab = vocabs[i];
-      var promptItem = new PromptItemModel();
+    for (let i = 0, length = vocabs.length; i < length; i++) {
+      let childItem = items[i];
+      let childVocab = vocabs[i];
+      let promptItem = new PromptItemModel();
       promptItem.character = characters[i];
       promptItem.interval = childItem.get('interval');
       promptItem.item = childItem;
@@ -163,18 +164,19 @@ const ItemModel = SkritterModel.extend({
 
   /**
    * @method getReadiness
+   * @param {Number} [startingAt]
    * @returns {Number}
    */
-  getReadiness: function() {
-    if (this.get('vocabIds').length) {
-      var now = this.collection.sorted || moment().unix();
-      var itemLast = this.get('last');
-      var itemNext = this.get('next');
-      var actualAgo = now - itemLast;
-      var scheduledAgo = itemNext - itemLast;
-      return itemLast ? actualAgo / scheduledAgo : 9999;
+  getReadiness: function(startingAt) {
+    if (!this.get('last')) {
+      return 9999;
     }
-    return Number.NEGATIVE_INFINITY;
+
+    const now = startingAt || moment().unix();
+    const actualAgo = now - this.get('last');
+    const scheduledAgo = this.get('next') - this.get('last');
+
+    return actualAgo / scheduledAgo;
   },
 
   /**
@@ -190,7 +192,7 @@ const ItemModel = SkritterModel.extend({
    * @returns {Vocab}
    */
   getVocab: function() {
-    var vocabs = this.getVocabs();
+    let vocabs = this.getVocabs();
     return vocabs[this.get('reviews') % vocabs.length];
   },
 
@@ -199,14 +201,14 @@ const ItemModel = SkritterModel.extend({
    * @returns {Array}
    */
   getVocabs: function() {
-    var vocabs = [];
-    var vocabIds = this.get('vocabIds');
-    var reviewSimplified = app.user.get('reviewSimplified');
-    var reviewTraditional = app.user.get('reviewTraditional');
-    for (var i = 0, length = vocabIds.length; i < length; i++) {
-      var vocab = this.collection.vocabs.get(vocabIds[i]);
+    let vocabs = [];
+    let vocabIds = this.get('vocabIds');
+    let reviewSimplified = app.user.get('reviewSimplified');
+    let reviewTraditional = app.user.get('reviewTraditional');
+    for (let i = 0, length = vocabIds.length; i < length; i++) {
+      let vocab = this.collection.vocabs.get(vocabIds[i]);
       if (vocab) {
-        var vocabStyle = vocab.get('style');
+        let vocabStyle = vocab.get('style');
         if (vocab.isChinese()) {
           if (reviewSimplified && vocabStyle === 'simp') {
             vocabs.push(vocab);
@@ -269,23 +271,6 @@ const ItemModel = SkritterModel.extend({
    */
   isKana: function() {
     return app.fn.isKana(this.getBase());
-  },
-
-  /**
-   * @method isKosher
-   * @returns {Boolean}
-   */
-  isKosher: function() {
-    var vocab = this.getVocab();
-    if (!vocab) {
-      return false;
-    }
-    if (this.isPartRune()) {
-      if (!vocab.getStrokes().length) {
-        return false;
-      }
-    }
-    return true;
   },
 
   /**
