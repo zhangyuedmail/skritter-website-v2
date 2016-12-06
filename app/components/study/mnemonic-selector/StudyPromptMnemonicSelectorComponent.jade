@@ -1,0 +1,10 @@
+gelato-component(data-name='study-prompt-mnemonic-selector')
+  if view.collection.state === 'fetching'
+    p.text-center
+      i.fa.fa-3x.fa-spinner.fa-pulse
+  else
+    input#custom-mnemonic.mnemonic-input(placeholder="Write your own mnemonic here")
+    #save.btn.btn-fixed.btn-primary Save
+    if view.collection.length
+      div Or choose from one of these mnemonics:
+      #list-area

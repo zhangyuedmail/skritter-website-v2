@@ -1,6 +1,5 @@
 const GelatoComponent = require('gelato/component');
-const ViewDialog = require('dialogs1/view-dialog/view');
-const MnemonicSelector = require('components/study/mnemonic-selector/StudyPromptMnemonicSelectorComponent.js');
+const MnemonicCollection = require('collections/MnemonicCollection');
 
 /**
  * @class StudyPromptVocabMnemonicComponent
@@ -13,15 +12,14 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click #show-mnemonic': 'handleClickShowMnemonic',
-    'click #add-mnemonic': 'handleClickAddMnemonic'
+    'click #show-mnemonic': 'handleClickShowMnemonic'
   },
 
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./StudyPromptVocabMnemonicComponent.jade'),
+  template: require('./StudyPromptMnemonicSelectorComponent.jade'),
 
   /**
    * @method initialize
@@ -29,15 +27,13 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
+    this.listItemTemplate = require('./StudyPromptMnemonicListItemComponent.jade');
+
+    this.collection = new MnemonicCollection();
     this.editing = false;
     this.prompt = options.prompt;
 
-    this._views['selector'] = new ViewDialog({
-      showCloseButton: true,
-      showTitle: true,
-      dialogTitle: app.locale('pages.study.menmonicSelectorDialogTitle'),
-      content: MnemonicSelector
-    });
+    this.listenTo(this.collection, 'state', this.render);
   },
 
   /**
@@ -46,6 +42,10 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    */
   render: function() {
     this.renderTemplate();
+
+    if (this.collection.length) {
+      this.renderMnemonicList();
+    }
 
     return this;
   },
@@ -62,6 +62,15 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
     };
   },
 
+  setVocab: function(vocab) {
+    this.collection.setVocab(vocab);
+    this.collection.fetch({
+      success: function(collection, res) {
+        console.log(res);
+      }
+    });
+  },
+
   /**
    * @method handleClickShowMnemonic
    * @param {Event} event
@@ -72,12 +81,13 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
     this.render();
   },
 
-  /**
-   * Opens a popup that allows a user to add a mnemonic for a word
-   */
-  handleClickAddMnemonic: function() {
-    this._views['selector'].content.setVocab(this.prompt.reviews.vocab);
-    this._views['selector'].open();
+  renderMnemonicList: function() {
+    let listHTML = '';
+    this.collection.models.forEach((m) => {
+      listHTML += this.listItemTemplate({model: m});
+    });
+
+    this.$('#list-area').html(listHTML);
   }
 
 });
