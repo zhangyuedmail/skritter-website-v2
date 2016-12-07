@@ -602,10 +602,16 @@ module.exports = GelatoApplication.extend({
       ],
       function() {
         setTimeout(function() {
-          ScreenLoader.hide();
           app.loadHelpscout();
           app.router.start();
+
+          ScreenLoader.hide();
+
         }, 500);
+
+        if (app.isCordova()) {
+          setTimeout(navigator.splashscreen.hide, 1000);
+        }
       }
     );
   },
