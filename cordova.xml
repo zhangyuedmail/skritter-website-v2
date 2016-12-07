@@ -28,7 +28,7 @@
   <allow-intent href="mailto:*" />
   <allow-intent href="geo:*" />
 
-  <preference name="BackgroundColor" value="0xff4897d8" />
+  <preference name="BackgroundColor" value="0xffffffff" />
   <preference name="DisallowOverscroll" value="true" />
   <preference name="FadeSplashScreenDuration" value="100"/>
   <preference name="Fullscreen" value="false" />
@@ -39,10 +39,14 @@
   <platform name="android">
     <allow-intent href="market:*" />
     <preference name="Orientation" value="portrait"/>
-    <icon src="../res/{!application-language!}/android/ldpi.png" density="ldpi" />
-    <icon src="../res/{!application-language!}/android/mdpi.png" density="mdpi" />
-    <icon src="../res/{!application-language!}/android/hdpi.png" density="hdpi" />
-    <icon src="../res/{!application-language!}/android/xhdpi.png" density="xhdpi" />
+    <icon src="../res/{!application-language!}/android/icon/ldpi.png" density="ldpi" />
+    <icon src="../res/{!application-language!}/android/icon/mdpi.png" density="mdpi" />
+    <icon src="../res/{!application-language!}/android/icon/hdpi.png" density="hdpi" />
+    <icon src="../res/{!application-language!}/android/icon/xhdpi.png" density="xhdpi" />
+    <splash src="../res/{!application-language!}/android/screen/port-ldpi.png" density="port-ldpi"/>
+    <splash src="../res/{!application-language!}/android/screen/port-mdpi.png" density="port-mdpi"/>
+    <splash src="../res/{!application-language!}/android/screen/port-hdpi.png" density="port-hdpi"/>
+    <splash src="../res/{!application-language!}/android/screen/port-xhdpi.png" density="port-xhdpi"/>
   </platform>
 
   <platform name="ios">
