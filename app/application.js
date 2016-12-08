@@ -602,11 +602,10 @@ module.exports = GelatoApplication.extend({
       ],
       function() {
         setTimeout(function() {
-          app.loadHelpscout();
-          app.router.start();
-
           ScreenLoader.hide();
 
+          app.loadHelpscout();
+          app.router.start();
         }, 500);
 
         if (app.isCordova()) {
@@ -645,7 +644,7 @@ module.exports = GelatoApplication.extend({
 
       // delay hiding the right side until the sliding animation of the main container is complete
       // setTimeout(() => {
-        this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
+      this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
       // }, 250);
     }
 
