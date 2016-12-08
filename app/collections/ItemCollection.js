@@ -169,7 +169,8 @@ const ItemCollection = BaseSkritterCollection.extend({
   fetchNext: function(options) {
     options = options || {};
     options.limit = options.limit || 50;
-    options.listId = options.listId || null;
+    options.lists = options.lists || null;
+    options.sections = options.sections || null;
 
     return new Promise(
       (resolve, reject) => {
@@ -186,8 +187,9 @@ const ItemCollection = BaseSkritterCollection.extend({
           data: {
             languageCode: app.getLanguage(),
             limit: options.limit,
-            listId: options.listId,
+            lists: options.lists,
             parts: app.user.getFilteredParts().join('|'),
+            sections: options.sections,
             styles: app.user.getFilteredStyles().join('|'),
             user: app.user.id
           },
