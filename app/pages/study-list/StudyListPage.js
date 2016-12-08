@@ -175,7 +175,7 @@ const StudyListPage = GelatoPage.extend({
           });
         },
         (callback) => {
-          this.items.fetchNext({limit: 50, listId: this.vocablist.id})
+          this.items.fetchNext({limit: 50, lists: this.vocablist.id})
             .catch(callback)
             .then(callback);
         },
