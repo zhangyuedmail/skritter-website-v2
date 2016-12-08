@@ -1,5 +1,15 @@
 @import "../../../styles/_variables";
 
 gelato-component[data-name='study-prompt-mnemonic-selector'] {
+  margin: 10px;
 
+  .fa-spinner {
+    padding: 20px;
+
+  }
+
+  .select-instructions {
+    padding: 20px 0 10px;
+    font-size: 16px;
+  }
 }

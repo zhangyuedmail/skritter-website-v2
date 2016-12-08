@@ -12,7 +12,9 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click #show-mnemonic': 'handleClickShowMnemonic'
+    'click #show-mnemonic': 'handleClickShowMnemonic',
+    'click .add-mnemonic': 'handleClickAddMnemonic',
+    'click #save': 'handleClickSaveMnemonic'
   },
 
   /**
@@ -72,15 +74,35 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
   },
 
   /**
-   * @method handleClickShowMnemonic
+   * @method handleClickAddMnemonic
    * @param {Event} event
    */
-  handleClickShowMnemonic: function(event) {
+  handleClickAddMnemonic: function(event) {
     event.preventDefault();
-    this.prompt.review.set('showMnemonic', true);
-    this.render();
+    console.log($(event.target).data('user'));
+
+    // TODO: save!
   },
 
+  /**
+   * @method handleClickSaveMnemonic
+   * @param {Event} event
+   */
+  handleClickSaveMnemonic: function(event) {
+    event.preventDefault();
+    const mnemonic = this.$('#mnemonic-input').val().trim();
+
+    if (!mnemonic) {
+      return;
+    }
+
+    // TODO: save!
+  },
+
+  /**
+   * Renders a list of other user's mnemonics for the current word with the
+   * ability for a user to select one.
+   */
   renderMnemonicList: function() {
     let listHTML = '';
     this.collection.models.forEach((m) => {

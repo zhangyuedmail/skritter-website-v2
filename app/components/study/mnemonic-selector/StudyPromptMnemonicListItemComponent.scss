@@ -1,12 +1,19 @@
 @import "../../../styles/_variables";
 
 gelato-component[data-name='study-prompt-mnemonic-listitem'] {
-  padding: 10px;
+  padding-left: 60px;
+  position: relative;
+  min-height: 32px;
+  margin: 10px 0;
 
-  .add-btn {
-    margin-right: 10px;
+  .add-mnemonic {
+    float: left;
+    margin-left: -60px;
   }
+
   .mnemonic-text {
     display: inline-block;
+    float: left;
+    margin-top: 4px;
   }
 }

@@ -7,6 +7,7 @@ module.exports = {
 
   "common": {
     "areYouSure": "Are you sure?",
+    "add": "Add",
     "back": "Back",
     "confirm": "Confirm",
     "cancel": "Cancel",

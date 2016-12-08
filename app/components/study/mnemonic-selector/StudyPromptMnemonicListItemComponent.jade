@@ -1,4 +1,4 @@
-gelato-component(data-name='study-prompt-mnemonic-listitem')
+gelato-component.clearfix(data-name='study-prompt-mnemonic-listitem')
   if !model.selected
-    #add-mnemonic.btn.btn-primary.add-btn Add
+    .add-mnemonic.btn.btn-primary(data-user='#{model.id}')= app.locale('common.add')
   .mnemonic-text= model.getFormattedText()
