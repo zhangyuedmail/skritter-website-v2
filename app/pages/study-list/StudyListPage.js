@@ -294,7 +294,7 @@ const StudyListPage = GelatoPage.extend({
       this.prompt.$panelLeft.css('pointer-events', 'none');
       this.prompt.$panelRight.css('pointer-events', 'none');
       this.items.reviews.post({skip: 1});
-      this.items.fetchNext({limit: 50});
+      this.items.fetchNext({limit: 50, lists: this.vocablist.id});
 
       return;
     }
