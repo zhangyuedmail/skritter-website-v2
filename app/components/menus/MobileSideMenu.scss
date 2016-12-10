@@ -66,4 +66,15 @@ gelato-component.mobile-side-menu-component {
       background-color: $grey6;
     }
   }
+
+  .help-button-wrapper {
+    position: absolute;
+    bottom: 0px;
+  }
+
+  .fa-question-circle {
+    float: left;
+    margin-right: 10px;
+    margin-top: 6px;
+  }
 }
