@@ -270,7 +270,7 @@ const GelatoApplication = Backbone.View.extend({
     try {
       locale = require('locale/' + code || app.get('locale'));
     } catch (error) {
-      locale = require('locale/default');
+      locale = require('../locale/en');
     }
     return _.get(locale, path);
   },
