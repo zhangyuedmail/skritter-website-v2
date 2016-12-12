@@ -60,7 +60,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
   addRow: function(query) {
     var self = this;
     var queryVocabs = new Vocabs();
-    var row = {query: query, state: 'loading'};
+    var row = {lang: this.vocablist.get('lang'), query: query, state: 'loading'};
     this.rows.push(row);
     queryVocabs.fetch({
       data: {
@@ -105,7 +105,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
         } else {
           row.id = query;
           if (self.vocablist.isChinese()) {
-            row.lang = app.getLanguage() || 'zh';
+            row.lang = self.vocablist.get('lang');
             row.writing = app.fn.mapper.toSimplified(query);
             row.writingTrads = app.fn.mapper.toTraditional(query);
           } else {
@@ -162,6 +162,9 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
     var $row = $(event.target).closest('.row');
     var index = $row.data('index');
     var row = this.rows[parseInt(index, 10)];
+
+    console.log(row);
+
     this.dialog = new VocabCreatorDialog();
     this.dialog.open({row: row});
     this.dialog.on(

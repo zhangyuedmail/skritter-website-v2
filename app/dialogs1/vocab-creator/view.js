@@ -50,32 +50,47 @@ var VocabCreatorDialog = GelatoDialog.extend({
     var self = this;
     var formData = this.getFormData();
     event.preventDefault();
+
     this.$('#error-message').empty();
+
     if (_.isEmpty(formData.reading)) {
       this.$('#error-message').text('A reading is required.');
       return;
     }
+
     if (_.isEmpty(formData.definitions)) {
       this.$('#error-message').text('A definition is required.');
       return;
     }
-    new Vocab({
-      definitions: {
-        en: formData.definitions
-      },
-      lang: formData.lang,
-      reading: formData.reading,
-      writing: formData.writing,
-      writingTraditional: formData.writingTraditional
-    }).post(function(error, vocab) {
-      if (error) {
-        //TODO: display errors from server
-        console.error(error);
-      } else {
-        self.trigger('vocab', vocab);
-        self.close();
+
+    if (formData.lang === 'ja') {
+      if (!wanakana.isKana(formData.reading)) {
+        this.$('#error-message').text('Reading must be kana only.');
+        return;
       }
-    });
+    }
+
+    new Vocab(
+      {
+        definitions: {
+          en: formData.definitions
+        },
+        lang: formData.lang,
+        reading: formData.reading,
+        writing: formData.writing,
+        writingTraditional: formData.writingTraditional
+      }
+    )
+      .post(
+        function(error, vocab) {
+          if (error) {
+            self.$('#error-message').text(JSON.stringify(error));
+          } else {
+            self.trigger('vocab', vocab);
+            self.close();
+          }
+        }
+      );
   },
   /**
    * @method getFormData
