@@ -41,20 +41,6 @@ module.exports = GelatoApplication.extend({
     this.couponCode = null;
     this.checkAndSetReferralInfo();
 
-    Raygun.init(
-      'VF3L4HPYRvk1x0F5x3hGVg==',
-      {
-        disablePulse: true,
-        excludedHostnames: ['localhost'],
-        excludedUserAgents: ['PhantomJS'],
-        ignore3rdPartyErrors: true,
-        ignoreAjaxAbort: true,
-        ignoreAjaxError: true
-      }
-    ).attach();
-
-    Raygun.setVersion(this.config.version + '.' + this.config.timestamp);
-
     this.fn = Functions;
     this.mixpanel = Mixpanel;
     this.router = new Router();
@@ -525,8 +511,6 @@ module.exports = GelatoApplication.extend({
 
     //set raygun tracking for logged in user
     if (this.user.isLoggedIn()) {
-      Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
-      Raygun.withTags(this.user.getRaygunTags());
       mixpanel.register({
         'Client': 'Website',
         'Client Version': '2.0',
@@ -555,7 +539,6 @@ module.exports = GelatoApplication.extend({
       );
 
     } else {
-      Raygun.setUser('guest', true);
       mixpanel.register({
         'Client': 'Website',
         'Client Version': '2.0',

@@ -112,26 +112,10 @@ const ReviewCollection = BaseSkritterCollection.extend({
                   .value();
 
                 if (items.length) {
-                  Raygun.send(
-                    new Error('Review Error: Items returned with errors'),
-                    {
-                      data: data,
-                      error: error.responseJSON
-                    }
-                  );
-
                   this.reset();
 
                   callback(error);
                 } else {
-                  Raygun.send(
-                    new Error('Review Error: Unable to post chunk'),
-                    {
-                      data: data,
-                      error: error.responseJSON
-                    }
-                  );
-
                   this.remove(chunk);
 
                   callback();
@@ -196,14 +180,6 @@ const ReviewCollection = BaseSkritterCollection.extend({
 
         if (!_.isInteger(modelData.newInterval)) {
           console.error('REVIEW ERROR: Missing new interval value');
-
-          Raygun.send(
-            new Error('Review Error: Missing new interval value'),
-            {
-              data: modelData,
-              models: models
-            }
-          );
 
           modelData.newInterval = 86400;
         }
