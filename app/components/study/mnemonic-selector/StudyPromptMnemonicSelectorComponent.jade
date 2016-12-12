@@ -3,9 +3,18 @@ gelato-component(data-name='study-prompt-mnemonic-selector')
     p.text-center
       i.fa.fa-3x.fa-spinner.fa-pulse
   else
-    .user-mnemonic
-      input#custom-mnemonic.mnemonic-input(placeholder="Write your own mnemonic here")
-      #save.btn.btn-primary= app.locale('common.save')
+    .user-mnemonic.row
+      .col-md-10
+        input#custom-mnemonic.mnemonic-input(placeholder="Write your own mnemonic here")
+      .col-md-2
+        #save.btn.btn-primary.save-custom-btn= app.locale('common.save')
+    .formatting-instructions.row
+      .col-md-12 Formatting characters:
+        b.example-format *bold*
+        i.example-format _italics_
+
     if view.collection.length
-      .select-instructions Or choose from one of these mnemonics:
-      #list-area
+      .row.labels-wrapper
+        .select-instructions.col-md-9 Or choose from one of these mnemonics:
+        .text-right.col-md-3 Popularity
+      #list-area.add-margin

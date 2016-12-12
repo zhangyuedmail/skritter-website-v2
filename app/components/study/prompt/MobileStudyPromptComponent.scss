@@ -72,8 +72,22 @@ gelato-component[data-name='mobile-study-prompt'] {
           z-index: 5003;
         }
       }
+
+      #toolbar-stroke-order {
+        width: 96%;// [the original aspect ratio] 25/26 = 96%;
+        position: relative;
+        box-sizing: border-box;
+
+        i {
+          background-size: cover;
+          display: block;
+          padding: 0;
+          padding-bottom: 100%;
+        }
+      }
+
       #toolbar-action-container {
-        margin-top: 25px;
+        margin-top: 15px;
       }
 
       gelato-component[data-name='study-prompt-navigation'] {

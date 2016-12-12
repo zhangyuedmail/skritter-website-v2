@@ -228,7 +228,8 @@ module.exports = {
       "menmonicSelectorDialogTitle": "Select a mnemonic or write your own",
       "mnemonicLabel": "Mnemonic",
       "mnemonicAdd": "Add a mnemonic",
-      "mnemonicShow": "show"
+      "mnemonicShow": "show",
+      "mnemonicUpdated": "Mnemonic successfully updated"
     },
 
     "vocabLists": {

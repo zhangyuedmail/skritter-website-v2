@@ -1,15 +1,52 @@
 @import "../../../styles/_variables";
 
 gelato-component[data-name='study-prompt-mnemonic-selector'] {
-  margin: 10px;
 
   .fa-spinner {
     padding: 20px;
+  }
 
+  .user-mnemonic {
+    margin-top: 20px !important;
+  }
+
+  .example-format {
+    padding-left: 10px;
+    display: inline-block;
+  }
+
+  .mnemonic-input {
+    width: 100%;
+    font-size: 18px;
+  }
+  .save-custom-btn {
+    float: right;
+  }
+
+  .labels-wrapper {
+    padding: 20px 0 0;
   }
 
   .select-instructions {
-    padding: 20px 0 10px;
     font-size: 16px;
+  }
+
+  .text-right {
+    color: $grey3;
+  }
+
+  .add-margin {
+    margin: 10px;
+  }
+
+  gelato-component:nth-child(odd) {
+    background-color: $white3;
+  }
+  gelato-component:nth-child(even) {
+    background-color: $white1;
+  }
+
+  .row {
+    margin: 0;
   }
 }

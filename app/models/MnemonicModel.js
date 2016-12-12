@@ -1,4 +1,5 @@
 const SkritterModel = require('base/BaseSkritterModel');
+const MenomonicHelpers = require('utils/mnemonicHelpers');
 
 /**
  * @class CouponModel
@@ -13,10 +14,15 @@ const MnemonicModel = SkritterModel.extend({
   idAttribute: 'id',
 
   /**
-   * @method initialize
-   * @constructor
+   * Modifies the server's response data to fit the needs of the model
+   * @param {object} attrs the original response from the server
+   * @returns {object} the parsed attributes
+   * @method parse
    */
-  initialize: function() {
+  parse: function(attrs) {
+    attrs['author'] = attrs.id.split('-')[0];
+
+    return attrs;
   },
 
   /**
@@ -25,8 +31,7 @@ const MnemonicModel = SkritterModel.extend({
    * @method formatText
    */
   getFormattedText: function() {
-    // TODO:
-    return this.get('text');
+    return MenomonicHelpers.textToHTML(this.get('text'));
   }
 });
 

@@ -1,11 +1,12 @@
 const GelatoComponent = require('gelato/component');
 const MnemonicCollection = require('collections/MnemonicCollection');
+const MnemonicModel = require('models/MnemonicModel');
 
 /**
- * @class StudyPromptVocabMnemonicComponent
+ * @class StudyPromptMnemonicSelectorComponent
  * @extends {GelatoComponent}
  */
-const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
+const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
 
   /**
    * @property events
@@ -52,6 +53,15 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
     return this;
   },
 
+  displayMessage: function(msg, type) {
+
+  },
+
+  freezeInputs: function() {
+    this.$('.add-mnemonic').addClass('disabled');
+    this.$('#save').addClass('disabled');
+  },
+
   /**
    * @method getValue
    * @returns {Object}
@@ -62,15 +72,6 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
       public: false,
       text: this.$('textarea').val()
     };
-  },
-
-  setVocab: function(vocab) {
-    this.collection.setVocab(vocab);
-    this.collection.fetch({
-      success: function(collection, res) {
-        console.log(res);
-      }
-    });
   },
 
   /**
@@ -90,13 +91,17 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    */
   handleClickSaveMnemonic: function(event) {
     event.preventDefault();
-    const mnemonic = this.$('#mnemonic-input').val().trim();
+    const mnemonic = this.$('#custom-mnemonic').val().trim();
 
-    if (!mnemonic) {
+    if (!mnemonic || this.$('#save').hasClass('disabled')) {
       return;
     }
 
-    // TODO: save!
+    this.freezeInputs();
+    this.saveMnemonic(menmonic).then(() => {
+      this.unfreezeInputs();
+      this.displayMessage(app.locale('pages.study.mnemonicUpdated'));
+    });
   },
 
   /**
@@ -110,8 +115,31 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
     });
 
     this.$('#list-area').html(listHTML);
-  }
+  },
 
+  saveMnemonic: function(menemonic) {
+    return new Promise(function(resolve, reject) {
+      const model = new MnemonicModel({
+        creator: app.user.id,
+        public: false,
+        text: menemonic
+      });
+      resolve();
+    });
+  },
+
+  setVocab: function(vocab) {
+    this.collection.setVocab(vocab);
+    this.collection.fetch({
+      success: function(collection, res) {
+        console.log(res);
+      }
+    });
+  },
+
+  unfreezeInputs: function() {
+
+  }
 });
 
-module.exports = StudyPromptVocabMnemonicComponent;
+module.exports = StudyPromptMnemonicSelectorComponent;
