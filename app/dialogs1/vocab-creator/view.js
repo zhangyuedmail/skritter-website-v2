@@ -58,7 +58,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
       return;
     }
 
-    if (_.isEmpty(formData.definitions)) {
+    if (_.isEmpty(formData.definition)) {
       this.$('#error-message').text('A definition is required.');
       return;
     }
@@ -70,27 +70,27 @@ var VocabCreatorDialog = GelatoDialog.extend({
       }
     }
 
-    new Vocab(
-      {
+    $.ajax({
+      type: 'POST',
+      url: app.getApiUrl() + 'vocabs',
+      headers: app.user.session.getHeaders(),
+      data: JSON.stringify({
         definitions: {
-          en: formData.definitions
+          en: formData.definition
         },
         lang: formData.lang,
         reading: formData.reading,
         writing: formData.writing,
         writingTraditional: formData.writingTraditional
+      }),
+      error: function(error) {
+        self.$('#error-message').text(JSON.stringify(error));
+      },
+      success: function(result) {
+        self.trigger('vocab', new Vocab(result.Vocab));
+        self.close();
       }
-    )
-      .post(
-        function(error, vocab) {
-          if (error) {
-            self.$('#error-message').text(JSON.stringify(error));
-          } else {
-            self.trigger('vocab', vocab);
-            self.close();
-          }
-        }
-      );
+    });
   },
   /**
    * @method getFormData
@@ -98,7 +98,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
    */
   getFormData: function() {
     var formData = {
-      definitions: this.$('#word-definition-input textarea').val(),
+      definition: this.$('#word-definition-input textarea').val(),
       lang: this.row.lang,
       reading: this.$('#word-reading-input input').val(),
       writing: this.row.writing
