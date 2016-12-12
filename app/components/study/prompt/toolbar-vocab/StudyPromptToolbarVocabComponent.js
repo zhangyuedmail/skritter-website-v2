@@ -70,10 +70,9 @@ module.exports = GelatoComponent.extend({
   enableEditing: function() {
     this.prompt.editing = true;
     this.prompt.vocabDefinition.editing = true;
-    this.prompt.vocabMnemonic.editing = true;
     this.prompt.shortcuts.unregisterAll();
     this.prompt.vocabDefinition.render();
-    this.prompt.vocabMnemonic.render();
+
     return this;
   },
 

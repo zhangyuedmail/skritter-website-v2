@@ -15,7 +15,8 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
   events: {
     'click #show-mnemonic': 'handleClickShowMnemonic',
     'click .add-mnemonic': 'handleClickAddMnemonic',
-    'click #save': 'handleClickSaveMnemonic'
+    'click #save': 'handleClickSaveMnemonic',
+    'keydown #custom-mnemonic': 'handleKeydown'
   },
 
   /**
@@ -53,18 +54,30 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
     return this;
   },
 
+  /**
+   * Shows a message to the user
+   * @param {String} msg the message to the user
+   * @param {String} type class to add to the message box
+   */
   displayMessage: function(msg, type) {
-
+    this.$('#user-message').text(msg)
+      .removeClass('hidden alert-success alert-danger alert-warning')
+      .addClass(type || 'alert-success');
   },
 
-  freezeInputs: function() {
-    this.$('.add-mnemonic').addClass('disabled');
-    this.$('#save').addClass('disabled');
+  /**
+   * Prevents custom mnemonic input keydowns from being handled by prompt shortcuts.
+   * @param {jQuery.Event} e the keydown event to stop from propagating
+   * @method handleKeydown
+   */
+  handleKeydown: function(e) {
+    e.stopPropagation();
   },
 
   /**
    * @method getValue
    * @returns {Object}
+   * @method getValue
    */
   getValue: function() {
     return {
@@ -77,17 +90,26 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
   /**
    * @method handleClickAddMnemonic
    * @param {Event} event
+   * @method handleClickAddMnemonic
    */
   handleClickAddMnemonic: function(event) {
     event.preventDefault();
-    console.log($(event.target).data('user'));
+    const btn = $(event.target);
+    const author = btn.data('user');
+    console.log(author);
+
+    if (btn.hasClass('disabled')) {
+      return;
+    }
 
     // TODO: save!
   },
 
   /**
+   * Saves the user mnemonic and disables other inputs while that process
+   * is happening.
    * @method handleClickSaveMnemonic
-   * @param {Event} event
+   * @param {jQuery.Event} event click event
    */
   handleClickSaveMnemonic: function(event) {
     event.preventDefault();
@@ -97,9 +119,10 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
       return;
     }
 
-    this.freezeInputs();
-    this.saveMnemonic(menmonic).then(() => {
-      this.unfreezeInputs();
+    this.$('#user-message').addClass('hidden');
+    this._disableInputs();
+    this.saveCurrentUserMnemonic(mnemonic).then(() => {
+      this._enableInputs();
       this.displayMessage(app.locale('pages.study.mnemonicUpdated'));
     });
   },
@@ -117,17 +140,32 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
     this.$('#list-area').html(listHTML);
   },
 
-  saveMnemonic: function(menemonic) {
-    return new Promise(function(resolve, reject) {
-      const model = new MnemonicModel({
+  /**
+   * Saves a custom mnemonic written by the current user
+   * @param {String} menemonic new mnemonic text defined by the user
+   * @returns {Promise} resolves when the vocab has been updated with the new definition
+   */
+  saveCurrentUserMnemonic: function(menemonic) {
+    return new Promise((resolve, reject) => {
+      this.collection.vocab.save({menmonic: {
         creator: app.user.id,
         public: false,
         text: menemonic
+      }}, {
+        success: function() {
+          resolve();
+        },
+        error: function() {
+          reject();
+        }
       });
-      resolve();
     });
   },
 
+  /**
+   * Sets the current vocab to set the menmonic for
+   * @param {VocabModel} vocab the current vocab
+   */
   setVocab: function(vocab) {
     this.collection.setVocab(vocab);
     this.collection.fetch({
@@ -137,9 +175,25 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
     });
   },
 
-  unfreezeInputs: function() {
+  /**
+   * Enables UI inputs
+   * @private
+   */
+  _enableInputs: function() {
+    this.$('.add-mnemonic').removeClass('disabled');
+    this.$('#save').removeClass('disabled');
+    this.$('#custom-mnemonic').prop('disabled', false);
+  },
 
-  }
+  /**
+   * Disables UI inputs
+   * @private
+   */
+  _disableInputs: function() {
+    this.$('.add-mnemonic').addClass('disabled');
+    this.$('#save').addClass('disabled');
+    this.$('#custom-mnemonic').prop('disabled', true);
+  },
 });
 
 module.exports = StudyPromptMnemonicSelectorComponent;
