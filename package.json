@@ -24,8 +24,7 @@
     "monitor": "node ./scripts/npm-monitor",
     "prune": "node ./scripts/npm-prune",
     "start": "node ./scripts/npm-start",
-    "test": "node ./scripts/npm-test",
-    "uitest": "node ./scripts/npm-uitest"
+    "test": "node ./scripts/npm-uitest"
   },
   "dependencies": {
     "async": "~2.1.0",
