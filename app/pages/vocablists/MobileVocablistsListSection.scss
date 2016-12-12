@@ -1,0 +1,62 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='mobile-vocablists-list-section'] {
+
+  background: $background-primary;
+  padding-top: 75px;
+
+  #editing-buttons {
+    button {
+      margin-left: 15px;
+    }
+  }
+
+  #input-message {
+    margin: 15px 0;
+  }
+
+  #input-row {
+    input {
+      background-color: $white1;
+      border: none;
+      font-size: 18px;
+      outline: none;
+      padding: 10px 5px;
+      width: 50%;
+    }
+    margin: 15px 0;
+  }
+
+  .content {
+    background-color: $white1;
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+    margin: -15px 0;
+    padding-bottom: 25px;
+    padding-top: 55px;
+    min-height: 500px;
+  }
+
+  .content-details {
+    margin-bottom: 15px;
+  }
+
+  .list-name {
+    font-size: 14px;
+    font-weight: 300;
+    margin-bottom: 15px;
+  }
+
+  .loading-section {
+    font-size: 24px;
+    margin-bottom: 25px;
+    margin-top: 25px;
+  }
+
+  .section-name {
+    font-size: 24px;
+    font-weight: 400;
+    margin-top: 25px;
+  }
+
+}
