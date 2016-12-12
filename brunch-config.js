@@ -33,7 +33,8 @@ exports.config = {
       'bootstrap-daterangepicker': ['daterangepicker.css'],
       'bootstrap-switch': ['dist/css/bootstrap3/bootstrap-switch.css'],
       'cal-heatmap': ['cal-heatmap.css'],
-      'font-awesome': ['css/font-awesome.css']
+      'font-awesome': ['css/font-awesome.css'],
+      'jqueryui': ['css/jquery-ui.css']
     }
   },
   paths: {

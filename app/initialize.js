@@ -16,6 +16,7 @@ require('bootstrap-switch');
 require('d3');
 require('highcharts');
 require('howler');
+require('jqueryui');
 require('moment-timezone');
 
 const Application = require('./application');
