@@ -121,6 +121,20 @@ const GelatoApplication = Backbone.View.extend({
   },
 
   /**
+   * @method getCookie
+   * @param {string} name
+   * @returns {string}
+   */
+  getCookie: function(name) {
+    const value = '; ' + document.cookie;
+    const parts = value.split('; ' + name + '=');
+
+    if (parts.length == 2) {
+      return parts.pop().split(';').shift();
+    }
+  },
+
+  /**
    * @method getHeight
    * @returns {Number}
    */
@@ -173,7 +187,7 @@ const GelatoApplication = Backbone.View.extend({
     if (this._views['page']) {
 
       if (this._views['page'].dialog) {
-      this._views['page'].dialog.close();
+        this._views['page'].dialog.close();
       }
       // hack to remove bootstrap model backdrop
       $('.modal-backdrop').remove();
@@ -297,6 +311,25 @@ const GelatoApplication = Backbone.View.extend({
    */
   removeSetting: function(key) {
     localStorage.removeItem('application-' + key);
+  },
+
+  /**
+   * @method setCookie
+   * @param {string} name
+   * @param {number} value
+   * @param {number} [days]
+   */
+  setCookie: function(name, value, days) {
+    let expires = '';
+
+    if (days) {
+      const date = new Date();
+
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = '; expires=' + date.toGMTString();
+    }
+
+    document.cookie = name + '=' + value + expires + '; path=/';
   },
 
   /**
