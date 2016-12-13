@@ -14,14 +14,15 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
   events: {
     'click #title-sort': 'handleClickTitleSort',
     'click #popularity-sort': 'handleClickPopularitySort',
-    'click .add-to-queue-link': 'handleClickAddToQueueLink'
+    'click .add-to-queue-link': 'handleClickAddToQueueLink',
+    'error #grid img': 'handleLoadImageError'
   },
 
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./VocablistsBrowseTable'),
+  template: require('./VocablistsBrowseTable.jade'),
 
   /**
    * @method initialize
@@ -55,7 +56,6 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
   render: function() {
     this.update();
     this.renderTemplate();
-    this.$('#grid img').error(this.handleLoadImageError);
     this.delegateEvents();
     return this;
   },
@@ -100,7 +100,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @param {Event} event
    */
   handleLoadImageError: function(event) {
-    $(event.target).remove();
+    this.$(event.target).remove();
   },
 
   /**
