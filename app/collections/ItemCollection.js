@@ -181,37 +181,68 @@ const ItemCollection = BaseSkritterCollection.extend({
 
         this.fetchingState = 'fetching';
 
-        $.ajax({
-          url: 'https://api.skritter.com/v2/queue',
-          type: 'GET',
-          data: {
-            languageCode: app.getLanguage(),
-            limit: options.limit,
-            lists: options.lists,
-            parts: app.user.getFilteredParts().join('|'),
-            sections: options.sections,
-            styles: app.user.getFilteredStyles().join('|'),
-            user: app.user.id
-          },
-          error: (error) => {
-            this.fetchingState = 'standby';
-            reject(error);
-          },
-          success: (result) => {
-            this.reset();
+        async.series(
+          [
+            (callback) => {
+              $.ajax({
+                url: 'https://api.skritter.com/v2/queue/update',
+                type: 'GET',
+                headers: app.user.session.getHeaders(),
+                data: {
+                  languageCode: app.getLanguage()
+                },
+                error: (error) => callback(error),
+                success: () => callback()
+              });
+            },
+            (callback) => {
+              $.ajax({
+                url: 'https://api.skritter.com/v2/queue/next',
+                type: 'GET',
+                headers: app.user.session.getHeaders(),
+                data: {
+                  languageCode: app.getLanguage(),
+                  limit: options.limit,
+                  lists: options.lists,
+                  parts: app.user.getFilteredParts().join('|'),
+                  sections: options.sections,
+                  styles: app.user.getFilteredStyles().join('|')
+                },
+                error: (error) => {
+                  callback(error);
+                },
+                success: (result) => {
+                  this.reset();
 
-            _.forEach(
-              this.add(result),
-              (model) => {
-                model._queue = true;
-              }
-            );
+                  _.forEach(
+                    this.add(result),
+                    (model) => {
+                      model._queue = true;
+                    }
+                  );
 
-            console.log('FETCHED:', result);
+                  console.log('FETCHED:', result);
+
+                  callback();
+                }
+              });
+            }
+          ],
+          (error) => {
+            if (error) {
+              this.fetchingState = 'standby';
+              reject(error);
+              return;
+            }
 
             // preload stuff because we need it anyways
             this.preloadNext({limit: 5})
-              .catch(reject)
+              .catch(
+                (error) => {
+                  this.fetchingState = 'standby';
+                  reject(error);
+                }
+              )
               .then(
                 () => {
                   this.fetchingState = 'standby';
@@ -219,7 +250,9 @@ const ItemCollection = BaseSkritterCollection.extend({
                 }
               );
           }
-        });
+        );
+
+
       }
     );
   },

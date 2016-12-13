@@ -519,10 +519,6 @@ module.exports = GelatoApplication.extend({
       });
       mixpanel.identify(this.user.id);
 
-      //copy session token and user values as cookies
-      this.setCookie('skrit-token', this.user.session.get('access_token'));
-      this.setCookie('skrit-user', this.user.session.get('user_id'));
-
       //cleanup unused indexedDB instance
       if (window.indexedDB) {
         window.indexedDB.deleteDatabase(this.user.id + '-database');
