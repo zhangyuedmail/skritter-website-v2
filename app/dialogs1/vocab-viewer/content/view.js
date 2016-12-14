@@ -50,6 +50,10 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @returns {VocabViewerContentComponent}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./mobile.jade');
+    }
+
     this.renderTemplate();
     this.lookup.setElement('#lookup-container').render();
 
