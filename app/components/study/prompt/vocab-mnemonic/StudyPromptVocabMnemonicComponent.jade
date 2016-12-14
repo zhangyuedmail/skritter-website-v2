@@ -13,5 +13,6 @@ gelato-component(data-name='study-prompt-vocab-mnemonic')
         button#add-mnemonic.btn.btn-sm.btn-default= app.locale('pages.study.mnemonicAdd')
       else if prompt.review.get('showMnemonic') || prompt.reviews.isComplete()
         span!= app.fn.textToHTML(mnemonic.text)
+        button#add-mnemonic.btn.btn-sm.btn-default.push-right= app.locale('pages.study.mnemonicEdit')
       else
         button#show-mnemonic.btn.btn-sm.btn-default= app.locale('pages.study.mnemonicShow')

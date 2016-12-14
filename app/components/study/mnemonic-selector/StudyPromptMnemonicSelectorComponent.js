@@ -16,6 +16,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
     'click #show-mnemonic': 'handleClickShowMnemonic',
     'click .add-mnemonic': 'handleClickAddMnemonic',
     'click #save': 'handleClickSaveMnemonic',
+    'click #remove-mnem': 'handleClickRemoveMnemonic',
     'keydown #custom-mnemonic': 'handleKeydown'
   },
 
@@ -75,6 +76,18 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
   },
 
   /**
+   *
+   * @returns {string}
+   */
+  getCurrentMnemonicText: function() {
+    if (this.collection.vocab && this.collection.vocab.get('mnemonic')) {
+      return this.collection.vocab.get('mnemonic').text;
+    }
+
+    return '';
+  },
+
+  /**
    * @method getValue
    * @returns {Object}
    * @method getValue
@@ -102,7 +115,16 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
       return;
     }
 
+    this._disableInputs();
     // TODO: save!
+  },
+
+  handleClickRemoveMnemonic: function(event) {
+    event.preventDefault();
+    this._disableInputs();
+    this.saveCurrentUserMnemonic('').then(() => {
+      this.render();
+    });
   },
 
   /**
@@ -133,8 +155,18 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    */
   renderMnemonicList: function() {
     let listHTML = '';
+    const vocab = this.collection.vocab;
     this.collection.models.forEach((m) => {
-      listHTML += this.listItemTemplate({model: m});
+
+      // don't list the currenly selected mnemonic.
+      if (m.isCurrentForVocab(vocab)) {
+        return;
+      }
+
+      listHTML += this.listItemTemplate({
+        vocab: this.collection.vocab,
+        model: m
+      });
     });
 
     this.$('#list-area').html(listHTML);
@@ -142,15 +174,15 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
 
   /**
    * Saves a custom mnemonic written by the current user
-   * @param {String} menemonic new mnemonic text defined by the user
+   * @param {String} mnemonic new mnemonic text defined by the user
    * @returns {Promise} resolves when the vocab has been updated with the new definition
    */
-  saveCurrentUserMnemonic: function(menemonic) {
+  saveCurrentUserMnemonic: function(mnemonic) {
     return new Promise((resolve, reject) => {
-      this.collection.vocab.save({menmonic: {
+      this.collection.vocab.save({mnemonic: {
         creator: app.user.id,
         public: false,
-        text: menemonic
+        text: mnemonic
       }}, {
         success: function() {
           resolve();
@@ -180,6 +212,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * @private
    */
   _enableInputs: function() {
+    this.$('#remove-mnem').removeClass('disabled');
     this.$('.add-mnemonic').removeClass('disabled');
     this.$('#save').removeClass('disabled');
     this.$('#custom-mnemonic').prop('disabled', false);
@@ -190,6 +223,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * @private
    */
   _disableInputs: function() {
+    this.$('#remove-mnem').addClass('disabled');
     this.$('.add-mnemonic').addClass('disabled');
     this.$('#save').addClass('disabled');
     this.$('#custom-mnemonic').prop('disabled', true);
