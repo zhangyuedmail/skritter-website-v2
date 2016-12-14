@@ -603,6 +603,7 @@ module.exports = GelatoApplication.extend({
    * @param {Boolean} [show] whether to show the side element
    */
   toggleSideMenu: function(show) {
+    $('gelato-application').toggleClass('no-overflow', show);
     this.$('#main-app-container').toggleClass('push-right', show);
     this.$('#left-side-app-container').toggleClass('push-right', show);
     if (this._views['leftSide'].toggleVisibility) {
