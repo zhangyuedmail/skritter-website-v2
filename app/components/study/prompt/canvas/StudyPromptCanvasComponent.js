@@ -122,10 +122,10 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   createStage: function() {
     var canvas = this.$('#input-canvas').get(0);
     var stage = new createjs.Stage(canvas);
+    createjs.Ticker.setFPS(32);
     createjs.Ticker.removeEventListener('tick', stage);
     createjs.Ticker.addEventListener('tick', stage);
     createjs.Touch.enable(stage);
-    createjs.Ticker.setFPS(24);
     stage.autoClear = true;
     stage.enableDOMEvents(true);
     return stage;
@@ -405,6 +405,9 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
           object.graphics._fill = customFill;
           object.graphics._stroke = customStroke;
         }
+        if (object.cacheID) {
+          object.updateCache();
+        }
       }
     })(object);
     return this;
@@ -458,6 +461,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.$el.width(size);
     this.stage.canvas.height = size;
     this.stage.canvas.width = size;
+    this.stage.uncache();
     this.stage.update();
     this.size = size;
     if (this.grid) {
@@ -610,21 +614,34 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @returns {StudyPromptCanvasComponent}
    */
   tweenShape: function(layerName, fromShape, toShape, options, callback) {
-    this.getLayer(layerName).addChild(fromShape);
+    const bounds = fromShape.getBounds();
+    const layer = this.getLayer(layerName);
+
     options = options === undefined ? {} : options;
     options = options || {};
     options.easing = options.easing || createjs.Ease.quadIn;
     options.speed = options.speed || 200;
-    createjs.Tween.get(fromShape).to({
-      x: toShape.x,
-      y: toShape.y,
-      scaleX: toShape.scaleX,
-      scaleY: toShape.scaleY
-    }, options.speed, options.easing).call(function() {
-      if (typeof callback === 'function') {
-        callback();
-      }
-    });
+
+    fromShape.cache(0, 0, bounds.width, bounds.height);
+
+    layer.addChild(fromShape);
+
+    createjs.Tween
+      .get(fromShape)
+      .to({
+        x: toShape.x,
+        y: toShape.y,
+        scaleX: toShape.scaleX,
+        scaleY: toShape.scaleY
+      }, options.speed, options.easing)
+      .call(
+        function() {
+          if (typeof callback === 'function') {
+            callback();
+          }
+        }
+      );
+
     return this;
   }
 

@@ -110,34 +110,25 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   renderComplete: function() {
     this.prompt.review.stop();
     this.prompt.review.set('complete', true);
+    this.prompt.shortcuts.grading.listen();
     this.prompt.canvas.clearLayer('character-teach');
     this.prompt.canvas.disableInput();
-    if (!this.prompt.review.get('showTeaching')) {
+
+    if (this.prompt.review.get('showTeaching')) {
+      this.prompt.review.set('score', 1);
+    } else {
       this.prompt.canvas.injectLayerColor(
         'character',
         this.prompt.review.getGradingColor()
       );
-    } else {
-      this.prompt.review.set('score', 1);
     }
-    this.prompt.navigation.render();
-    this.prompt.shortcuts.grading.listen();
-    this.prompt.toolbarAction.render();
-    this.prompt.toolbarGrading.render({delayEvents: true});
-    this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
-    this.prompt.toolbarVocab.render();
-    this.prompt.vocabContained.render();
-    this.prompt.vocabDefinition.render();
-    this.prompt.vocabMnemonic.render();
-    this.prompt.vocabReading.render();
-    this.prompt.vocabSentence.render();
-    this.prompt.vocabStyle.render();
-    this.prompt.vocabWriting.render();
+
     if (app.user.isAudioEnabled() &&
       app.user.get('hideReading') &&
       this.prompt.reviews.isLast()) {
       this.prompt.reviews.vocab.play();
     }
+
     if (app.user.get('squigs')) {
       this.prompt.canvas.drawShape(
         'character-reveal',
@@ -145,8 +136,28 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
         {color: '#e8ded2'}
       );
     }
+
+    this.prompt.navigation.render();
+    this.prompt.toolbarAction.render();
+    this.prompt.toolbarGrading.render({delayEvents: true});
+    this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
+
+    setTimeout(
+      () => {
+        this.prompt.toolbarVocab.render();
+        this.prompt.vocabContained.render();
+        this.prompt.vocabDefinition.render();
+        this.prompt.vocabMnemonic.render();
+        this.prompt.vocabReading.render();
+        this.prompt.vocabSentence.render();
+        this.prompt.vocabStyle.render();
+        this.prompt.vocabWriting.render();
+      },
+      300
+    );
+
     this.prompt.trigger('character:complete');
-    this.renderTemplate();
+
     return this;
   },
 
@@ -157,9 +168,27 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   renderIncomplete: function() {
     this.prompt.review.start();
     this.prompt.review.set('complete', false);
-    this.prompt.canvas.enableInput();
-    this.prompt.navigation.render();
     this.prompt.shortcuts.grading.stop_listening();
+    this.prompt.canvas.enableInput();
+
+    if (app.user.isAudioEnabled() && !app.user.get('hideReading') &&
+      this.prompt.reviews.isFirst()) {
+      this.prompt.reviews.vocab.play();
+    }
+
+    if (this.prompt.reviews.isTeachable() || this.prompt.review.get('showTeaching')) {
+      this.teachCharacter();
+    }
+
+    if (this.prompt.review.item && this.prompt.review.item.isLeech()) {
+      this.prompt.$('#leech-ribbon').removeClass('hidden');
+      this.prompt.review.item.consecutiveWrong = 0;
+      this.teachCharacter();
+    } else {
+      this.prompt.$('#leech-ribbon').addClass('hidden');
+    }
+
+    this.prompt.navigation.render();
     this.prompt.toolbarAction.render();
     this.prompt.toolbarGrading.render();
     this.prompt.toolbarVocab.render();
@@ -170,21 +199,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.prompt.vocabSentence.render();
     this.prompt.vocabStyle.render();
     this.prompt.vocabWriting.render();
-    if (app.user.isAudioEnabled() && !app.user.get('hideReading') &&
-      this.prompt.reviews.isFirst()) {
-      this.prompt.reviews.vocab.play();
-    }
-    if (this.prompt.reviews.isTeachable() || this.prompt.review.get('showTeaching')) {
-      this.teachCharacter();
-    }
-    if (this.prompt.review.item && this.prompt.review.item.isLeech()) {
-      this.prompt.$('#leech-ribbon').removeClass('hidden');
-      this.prompt.review.item.consecutiveWrong = 0;
-      this.teachCharacter();
-    } else {
-      this.prompt.$('#leech-ribbon').addClass('hidden');
-    }
-    this.renderTemplate();
+
     return this;
   },
 
@@ -231,6 +246,13 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    */
   handleAttemptSuccess: function() {
     this.prompt.review.set('failedConsecutive', 0);
+
+    if (this.prompt.review.character.isComplete()) {
+      this.renderComplete();
+    }
+    if (this.prompt.review.get('showTeaching')) {
+      this.teachCharacter();
+    }
   },
 
   /**
@@ -262,12 +284,14 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    */
   handlePromptCanvasInputUp: function(points, shape) {
     if (app.fn.getLength(points) >= 5) {
-      var stroke = this.prompt.review.character.recognize(points, shape);
+      const stroke = this.prompt.review.character.recognize(points, shape);
+
       this._lastStrokeAttempt = Date.now();
 
       if (stroke) {
-        var targetShape = stroke.getTargetShape();
-        var userShape = stroke.getUserShape();
+        const targetShape = stroke.getTargetShape();
+        const userShape = stroke.getUserShape();
+
         if (app.user.get('squigs')) {
           this.prompt.canvas.drawShape(
             'character',
@@ -275,22 +299,17 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
           );
         } else {
           stroke.set('tweening', true);
+
           this.prompt.canvas.tweenShape(
             'character',
             userShape,
             targetShape
           );
         }
+
         this.trigger('attempt:success');
       } else {
         this.trigger('attempt:fail');
-      }
-      if (this.prompt.review.character.isComplete()) {
-        this.renderComplete();
-      } else {
-        if (this.prompt.review.get('showTeaching')) {
-          this.teachCharacter();
-        }
       }
     }
   },

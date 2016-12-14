@@ -18,7 +18,6 @@ const VocabReading = require('components/study/prompt/vocab-reading/StudyPromptV
 const VocabSentence = require('components/study/prompt/vocab-sentence/StudyPromptVocabSentenceComponent.js');
 const VocabStyle = require('components/study/prompt/vocab-style/StudyPromptVocabStyleComponent.js');
 const VocabWriting = require('components/study/prompt/vocab-writing/StudyPromptVocabWritingComponent.js');
-const VocabViewerDialog = require('dialogs1/vocab-viewer/view.js');
 
 const Shortcuts = require('components/study/prompt/StudyPromptShortcuts');
 const vent = require('vent');
@@ -160,14 +159,6 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
-   * @method isLoaded
-   * @returns {Boolean}
-   */
-  isLoaded: function() {
-    return this.reviews ? true : false;
-  },
-
-  /**
    * @method next
    * @param {Boolean} [skip]
    */
@@ -282,17 +273,8 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
-   * @method setSchedule
-   * @param {Items} schedule
-   * @returns {StudyPromptComponent}
+   * @method showVocabInfo
    */
-  setSchedule: function(schedule) {
-    this.navigation.setReviews(schedule.reviews);
-    this.reviewStatus.setReviews(schedule.reviews);
-
-    return this;
-  },
-
   showVocabInfo: function() {
     if (app.isMobile()) {
       vent.trigger('vocabInfo:toggle', this.reviews.vocab.id);
