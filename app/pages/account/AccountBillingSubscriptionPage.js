@@ -57,7 +57,7 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
    * @property title
    * @type {String}
    */
-  title: 'Billing Subscription - Account - Skritter',
+  title: 'Billing - Skritter',
 
   /**
    * @method initialize
