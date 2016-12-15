@@ -17,3 +17,4 @@ shell.exec('cordova platform add ios');
 shell.exec('cordova plugin add cordova-plugin-crosswalk-webview');
 shell.exec('cordova plugin add cordova-plugin-device');
 shell.exec('cordova plugin add cordova-plugin-splashscreen');
+shell.exec('cordova plugin add cordova-plugin-statusbar');
