@@ -14,9 +14,9 @@ gelato-component(data-name='mobile-vocablists-reviewing-table')
             i.glyphicon.glyphicon-pause
         if list.get('studyingMode') === 'finished'
           .col-xs-4 Finished
-        .col-xs-4.list-settings-span
+        .col-xs-4.list-settings-span.text-right
           i.glyphicon.glyphicon-cog
-        .col-xs-4.remove-list-span
+        .col-xs-4.remove-list-span.text-right
           i.glyphicon.glyphicon-remove
 
   if view.vocablists.state === 'fetching'
