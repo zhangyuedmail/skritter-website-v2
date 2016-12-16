@@ -83,6 +83,10 @@ module.exports = GelatoApplication.extend({
     }
   },
 
+  events: {
+    'click #main-app-container-overlay': 'handleOverlayClick'
+  },
+
   /**
    * @property defaults
    * @type {Object}
@@ -278,6 +282,15 @@ module.exports = GelatoApplication.extend({
     });
 
     return false;
+  },
+
+  /**
+   * Handles click on an overlay of the main app container.
+   * Hides the mobile menu when clicked.
+   * @param {jQuery.Event} e the click event
+   */
+  handleOverlayClick: function(e) {
+    this.toggleSideMenu(false);
   },
 
   /**
@@ -610,6 +623,9 @@ module.exports = GelatoApplication.extend({
     $('gelato-application').toggleClass('no-overflow', show);
     this.$('#main-app-container').toggleClass('push-right', show);
     this.$('#left-side-app-container').toggleClass('push-right', show);
+    this.$('#main-app-container-overlay').toggleClass('show', show);
+
+    // run an "onShow/onHide" cleanup/setup function every time the state changes, if it exists
     if (this._views['leftSide'].toggleVisibility) {
       this._views['leftSide'].toggleVisibility(this.$('#main-app-container').hasClass('push-right'));
     }
