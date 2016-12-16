@@ -4,26 +4,12 @@
 
 
   .navbar-header
-    button#toggle-menu.navbar-toggle.collapsed
-      span.sr-only Toggle navigation
-      span.icon-bar
-      span.icon-bar
-      span.icon-bar
+    if user.isLoggedIn()
+      button#toggle-menu.navbar-toggle.collapsed
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
     span#title-txt.title-txt Dashboard
 
   #navbar-collapse.collapse.navbar-collapse
-
-    if !user.isLoggedIn()
-      ul.nav.navbar-nav
-        li(class=currentSection === 'features' ? 'active' : '')
-          a(href="/features", target="_blank") Features
-        li
-          a(href="https://blog.skritter.com/", target="_blank") Blog
-        li
-          a(href="https://discourse.skritter.com/") Forum
-
-      ul.nav.navbar-nav.navbar-right
-        li(class=currentSection === 'signup' ? 'active' : '')
-          a(href="/signup")= app.locale('common.signUp')
-        li(class=currentSection === 'login' ? 'active' : '')
-          a(href="/login")= app.locale('common.logIn')
