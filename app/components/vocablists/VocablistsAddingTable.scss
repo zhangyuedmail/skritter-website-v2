@@ -2,12 +2,6 @@
 
 gelato-component[data-name='vocablists-adding-table'] {
 
-  .col-md-3 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
   a.action-link {
     color: $green5;
     cursor: pointer;

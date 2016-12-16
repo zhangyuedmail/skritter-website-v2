@@ -1,4 +1,4 @@
-gelato-component(data-name='vocablists-adding-table')
+gelato-component(data-name='mobile-vocablists-adding-table')
 
   for list in view.vocablists.getAdding()
     .row(data-list-id=list.id)
@@ -9,16 +9,12 @@ gelato-component(data-name='vocablists-adding-table')
         .progress
           .progress-bar(style="width:" + (list.getProgress().percent) + '%')
 
-      .col-md-2.text-center
-        .stop-adding-link
+      .col-md-4
+        .col-xs-4.stop-adding-link
           i.glyphicon.glyphicon-pause
-
-      .col-md-1.text-center
-        .list-settings-span
+        .col-xs-4.list-settings-span
           i.glyphicon.glyphicon-cog
-
-      .col-md-1.text-center
-        .remove-list-span
+        .col-xs-4.remove-list-span
           i.glyphicon.glyphicon-remove
 
   if view.vocablists.state === 'fetching'

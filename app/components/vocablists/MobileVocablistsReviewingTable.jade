@@ -1,4 +1,4 @@
-gelato-component(data-name='vocablists-reviewing-table')
+gelato-component(data-name='mobile-vocablists-reviewing-table')
 
   for list in view.vocablists.getReviewing()
     .row(data-list-id=list.id)
@@ -8,19 +8,15 @@ gelato-component(data-name='vocablists-reviewing-table')
         .progress
           .progress-bar(style="width:" + (list.getProgress().percent) + '%')
 
-      .col-md-2.text-center
+      .col-md-4
         if list.get('studyingMode') === 'reviewing'
-          .restart-adding-link
-            i.glyphicon.glyphicon-play
+          .col-xs-4.restart-adding-link
+            i.glyphicon.glyphicon-pause
         if list.get('studyingMode') === 'finished'
-          span Finished
-
-      .col-md-1.text-center
-        .list-settings-span
+          .col-xs-4 Finished
+        .col-xs-4.list-settings-span
           i.glyphicon.glyphicon-cog
-
-      .col-md-1.text-center
-        .remove-list-span
+        .col-xs-4.remove-list-span
           i.glyphicon.glyphicon-remove
 
   if view.vocablists.state === 'fetching'
