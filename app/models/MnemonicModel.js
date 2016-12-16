@@ -33,7 +33,7 @@ const MnemonicModel = SkritterModel.extend({
   isCurrentForVocab: function(vocab) {
     const vocabMnemonic = vocab.get('mnemonic');
 
-    return vocabMnemonic && this.get('text') === vocabMnemonic.text;
+    return vocabMnemonic && this.get('text') === vocabMnemonic.text && this.get('author') === vocabMnemonic.creator;
   },
 
   /**

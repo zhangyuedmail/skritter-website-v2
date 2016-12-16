@@ -10,6 +10,10 @@ gelato-component[data-name='study-prompt-mnemonic-selector'] {
     margin-top: 20px !important;
   }
 
+  .formatting-instructions {
+    padding: 0 0 20px;
+  }
+
   .example-format {
     padding-left: 10px;
     display: inline-block;
@@ -21,10 +25,6 @@ gelato-component[data-name='study-prompt-mnemonic-selector'] {
   }
   .save-custom-btn {
     float: right;
-  }
-
-  .labels-wrapper {
-    padding: 20px 0 0;
   }
 
   .select-instructions {

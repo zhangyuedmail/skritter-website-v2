@@ -1,6 +1,7 @@
 const GelatoComponent = require('gelato/component');
 const ViewDialog = require('dialogs1/view-dialog/view');
 const MnemonicSelector = require('components/study/mnemonic-selector/StudyPromptMnemonicSelectorComponent.js');
+const vent = require('vent');
 
 /**
  * @class StudyPromptVocabMnemonicComponent
@@ -38,6 +39,8 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
       dialogTitle: app.locale('pages.study.menmonicSelectorDialogTitle'),
       content: MnemonicSelector
     });
+
+    this.listenTo(vent, 'mnemonic:updated', this.render);
   },
 
   /**

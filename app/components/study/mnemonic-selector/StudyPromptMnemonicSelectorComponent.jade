@@ -27,7 +27,7 @@ gelato-component(data-name='study-prompt-mnemonic-selector')
           i.example-format _italics_
     #user-message.row.user-message.alert.hidden
 
-    if view.collection.length
+    if view.collection.getUnusedLength(currentMnemonic)
       .row.labels-wrapper
         .select-instructions.col-md-9 Or choose from one of these mnemonics:
         .text-right.col-md-3 Popularity

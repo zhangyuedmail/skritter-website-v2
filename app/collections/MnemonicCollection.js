@@ -29,6 +29,22 @@ const MnemonicCollection = GelatoCollection.extend({
   },
 
   /**
+   * Gets the number of unused mnemonics for a vocab, filtering out against
+   * the currently selected mnemonic for this vocab.
+   * @param {Object} [mnemonic] a current mnemonic to test against
+   * @return {Number} the number of unlinked mnemonics in the collection for the current user
+   */
+  getUnusedLength: function(mnemonic) {
+    if (!mnemonic) {
+      return this.models.length;
+    }
+
+    return this.models.filter(function(model) {
+      return model.get('text') !== mnemonic.text && model.get('author') !== mnemonic.creator;
+    }).length;
+  },
+
+  /**
    *
    * @param {VocabModel} vocab a vocab to fetch mnemonics by
    */

@@ -1,6 +1,7 @@
 const GelatoComponent = require('gelato/component');
 const MnemonicCollection = require('collections/MnemonicCollection');
 const MnemonicModel = require('models/MnemonicModel');
+const vent = require('vent');
 
 /**
  * @class StudyPromptMnemonicSelectorComponent
@@ -58,7 +59,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
   /**
    * Shows a message to the user
    * @param {String} msg the message to the user
-   * @param {String} type class to add to the message box
+   * @param {String} [type] class to add to the message box
    */
   displayMessage: function(msg, type) {
     this.$('#user-message').text(msg)
@@ -101,6 +102,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
   },
 
   /**
+   * Handles action when user wants to add a public mnemonic authored by another user.
    * @method handleClickAddMnemonic
    * @param {Event} event
    * @method handleClickAddMnemonic
@@ -108,22 +110,28 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
   handleClickAddMnemonic: function(event) {
     event.preventDefault();
     const btn = $(event.target);
-    const author = btn.data('user');
-    console.log(author);
+    const id = btn.data('user');
 
     if (btn.hasClass('disabled')) {
       return;
     }
 
+    const mnemonic = this.collection.get(id);
+
     this._disableInputs();
-    // TODO: save!
+    this.saveMnemonic(mnemonic.get('writing'), mnemonic.get('author'), true).then(() => {
+      this.render();
+      this.displayMessage(app.locale('pages.study.mnemonicUpdated'));
+      vent.trigger('mnemonic:updated', mnemonic);
+    });
   },
 
   handleClickRemoveMnemonic: function(event) {
     event.preventDefault();
     this._disableInputs();
-    this.saveCurrentUserMnemonic('').then(() => {
+    this.saveMnemonic('').then(() => {
       this.render();
+      vent.trigger('mnemonic:updated', null);
     });
   },
 
@@ -143,9 +151,11 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
 
     this.$('#user-message').addClass('hidden');
     this._disableInputs();
-    this.saveCurrentUserMnemonic(mnemonic).then(() => {
+
+    this.saveMnemonic(mnemonic).then(() => {
       this._enableInputs();
       this.displayMessage(app.locale('pages.study.mnemonicUpdated'));
+      vent.trigger('mnemonic:updated', mnemonic);
     });
   },
 
@@ -173,15 +183,17 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
   },
 
   /**
-   * Saves a custom mnemonic written by the current user
-   * @param {String} mnemonic new mnemonic text defined by the user
+   * Saves a custom mnemonic
+   * @param {String} mnemonic new mnemonic text
+   * @param {String} [creator] the author of the mnemonic
+   * @param {Boolean} [isPublic] whether the mnemonic is public
    * @returns {Promise} resolves when the vocab has been updated with the new definition
    */
-  saveCurrentUserMnemonic: function(mnemonic) {
+  saveMnemonic: function(mnemonic, creator, isPublic) {
     return new Promise((resolve, reject) => {
       this.collection.vocab.save({mnemonic: {
-        creator: app.user.id,
-        public: false,
+        creator: creator || app.user.id,
+        public: isPublic || false,
         text: mnemonic
       }}, {
         success: function() {
