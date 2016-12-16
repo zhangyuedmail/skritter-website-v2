@@ -385,7 +385,13 @@ const StudyPage = GelatoPage.extend({
               dialog.close();
             },
             success: () => {
-              this.items.reviews.post().then(app.reload);
+              this.items.reviews.post()
+                .then(
+                  () => {
+                    this.render();
+                    dialog.close();
+                  }
+                );
             }
           }
         );
