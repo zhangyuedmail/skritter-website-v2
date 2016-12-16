@@ -73,7 +73,7 @@ const StudyListPage = GelatoPage.extend({
    */
   render: function() {
     if (app.isMobile()) {
-      // TODO: make this mobile friendly
+      this.template = require('./MobileStudyListPage.jade');
     }
 
     this.renderTemplate();
