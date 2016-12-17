@@ -224,8 +224,8 @@
 
 .icon-study-stroke-order {
   background-image: url('#{$dir-assets}/vectors/study-stroke-order.svg');
-  height: 50px;
-  width: 52px;
+  background-position: 50%;
+
   &.disabled {
     background-image: url('#{$dir-assets}/vectors/study-stroke-order-disabled.svg');
   }
