@@ -49,6 +49,8 @@
     <splash src="../res/{!application-language!}/android/screen/port-mdpi.png" density="port-mdpi"/>
     <splash src="../res/{!application-language!}/android/screen/port-hdpi.png" density="port-hdpi"/>
     <splash src="../res/{!application-language!}/android/screen/port-xhdpi.png" density="port-xhdpi"/>
+    <splash src="../res/{!application-language!}/android/screen/port-xxhdpi.png" density="port-xxhdpi"/>
+    <splash src="../res/{!application-language!}/android/screen/port-xxxhdpi.png" density="port-xxxhdpi"/>
   </platform>
 
   <platform name="ios">
