@@ -163,8 +163,8 @@
 
 .icon-study-correct {
   background-image: url('#{$dir-assets}/vectors/study-correct.svg');
-  height: 44px;
-  width: 59px;
+  max-height: 44px;
+  max-width: 59px;
   &.disabled {
     background-image: url('#{$dir-assets}/vectors/study-correct-disabled.svg');
   }
@@ -172,8 +172,8 @@
 
 .icon-study-erase {
   background-image: url('#{$dir-assets}/vectors/study-erase.svg');
-  height: 48px;
-  width: 44px;
+  max-height: 48px;
+  max-width: 44px;
   &.disabled {
     background-image: url('#{$dir-assets}/vectors/study-erase-disabled.svg');
   }
@@ -215,8 +215,9 @@
 
 .icon-study-show {
   background-image: url('#{$dir-assets}/vectors/study-show.svg');
-  height: 34px;
-  width: 58px;
+  max-height: 34px;
+  max-width: 58px;
+
   &.disabled {
     background-image: url('#{$dir-assets}/vectors/study-show-disabled.svg');
   }
@@ -224,7 +225,8 @@
 
 .icon-study-stroke-order {
   background-image: url('#{$dir-assets}/vectors/study-stroke-order.svg');
-  background-position: 50%;
+  max-width: 52px;
+  max-height: 50px;
 
   &.disabled {
     background-image: url('#{$dir-assets}/vectors/study-stroke-order-disabled.svg');

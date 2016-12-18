@@ -83,6 +83,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.renderTemplate();
 
     this.$inputContainer = this.$('#input-container');
+    this.$toolbarContainer = this.$('#toolbar-action-container');
     this.$panelLeft = this.$('#panel-left');
     this.$panelRight = this.$('#panel-right');
 
@@ -242,17 +243,22 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
+   * Resizes the input container and the toolbar for the current resolution
    * @method resize
    * @returns {StudyPromptComponent}
    */
   resize: function() {
-    var inputSize = this.getInputSize();
+    const inputSize = this.getInputSize();
     this.$inputContainer.css({height: inputSize, width: inputSize});
+
     this.canvas.resize();
 
     if (app.isMobile()) {
       this.$el.height(this.page.getHeight());
     }
+    const toolbarHeight = this._getToolbarHeight();
+
+    this.$toolbarContainer.css({height: toolbarHeight});
 
     return this;
   },
@@ -282,8 +288,30 @@ const StudyPromptComponent = GelatoComponent.extend({
       app.dialogs.vocabViewer.load(this.reviews.vocab.id);
       app.dialogs.vocabViewer.open();
     }
-  }
+  },
 
+  /**
+   * Calculates the intended height of the toolbar based on the current screen
+   * resolution.
+   * @return {number} the height the toolbar should be
+   * @private
+   */
+  _getToolbarHeight: function() {
+    if (app.isMobile()) {
+      return $('#study-prompt-container').height() -
+        this.$('#panel-right').height() -
+        this.$('#input-container').height() -
+
+        // there's some padding somewhere
+        10;
+    } else {
+     return $('#study-prompt-container').height() -
+       (this.$('#input-container').height() +
+
+      // the margin-top property of #toolbar-action-container + the padding-top of #panel-left
+      40 + 62);
+    }
+  }
 });
 
 module.exports = StudyPromptComponent;

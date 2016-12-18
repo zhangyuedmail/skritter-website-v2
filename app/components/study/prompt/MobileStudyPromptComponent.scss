@@ -19,10 +19,12 @@ gelato-component[data-name='mobile-study-prompt'] {
     z-index: 7000;
 
     .btn {
+      height: 100%;
+      margin: 25px auto;
+
       i {
         margin: 0 5px;
       }
-      margin: 25px auto;
     }
   }
 
@@ -30,7 +32,7 @@ gelato-component[data-name='mobile-study-prompt'] {
     background-color: $white1;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    height: 50%;
+    height: 74%;
     padding: 10px;
 
     .content {
@@ -77,20 +79,26 @@ gelato-component[data-name='mobile-study-prompt'] {
       }
 
       #toolbar-stroke-order {
-        width: 96%;// [the original aspect ratio] 25/26 = 96%;
-        position: relative;
-        box-sizing: border-box;
-        padding: 0 10px;
+        width: 96%; // [the original aspect ratio] 25/26 = 96%;
+      }
 
-        i {
-          display: block;
-          padding: 0;
-          padding-bottom: 100%;
-        }
+      #toolbar-erase {
+        width: 91.6%;
+      }
+
+      #toolbar-show {
+        //height: 58.6%;
+        width: 100%;
+      }
+
+      #toolbar-correct {
+        width: 100%;
+        //height: 74.5%;
       }
 
       #toolbar-action-container {
-        margin-top: 0;
+        margin-top: 15px;
+        max-height: 63px;
       }
 
       gelato-component[data-name='study-prompt-navigation'] {
