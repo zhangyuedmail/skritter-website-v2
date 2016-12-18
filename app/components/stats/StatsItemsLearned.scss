@@ -106,16 +106,35 @@ gelato-component[data-name='stats-items-learned'] {
 
     .data-section {
       width: 50%;
-      margin-top: 0px;
+      margin-top: 0;
+    }
+
+    .characters {
+      .units-label {
+        text-align: left;
+      }
+    }
+
+    .chars-learned {
+      text-align: left;
+    }
+
+    .words {
+       .units-label {
+        text-align: right;
+      }
+    }
+    .words-learned {
+      text-align: right;
     }
 
     .words-learned-bg {
       right: auto;
-      left: 20%;
+      left: 15%;
     }
 
     .chars-learned-bg {
-      right: 20%;
+      right: 15%;
     }
 
     .top-data {
@@ -130,7 +149,7 @@ gelato-component[data-name='stats-items-learned'] {
     }
 
     .xs-pushup {
-      margin-top: -30px;
+      margin-top: -25px;
     }
   }
 }
