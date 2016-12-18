@@ -21,29 +21,15 @@ gelato-page(data-name='mobile-vocablists-browse')
     #expiration-container
     .content-block
       .row
-
-        .col-md-12.main-content
+        .col-md-12
           .title Browse Lists
           #table-options
             .row
-              .col-md-10
+              .col-md-12
                 .input-group.input-group-lg
                   span.input-group-addon
                     i.fa.fa-search
                   input#list-search-input.form-control(type="text", placeholder="Type to search by title")
-              .col-md-1
-                span#list-option.glyphicon.glyphicon-th-list.layout-selector.chosen
-              .col-md-1
-                span#grid-option.glyphicon.glyphicon-th-large.layout-selector
-            // TODO: support checkbox filters
-            //- .form-inline
-              label View only:
-              .checkbox
-                label
-                  input#textbooks(type="checkbox" name='textbooks')
-                  span Textbooks
-              .checkbox
-                label
-                  input#other-official-lists(type="checkbox" name='other-official')
-                  span Other official lists
+      .row
+        .col-md-12.main-content
           #vocablist-container

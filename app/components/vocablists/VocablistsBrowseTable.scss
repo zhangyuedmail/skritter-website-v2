@@ -10,6 +10,10 @@ gelato-component[data-name='vocablists-browse-table'] {
     cursor: pointer;
   }
 
+  .vocablist-title {
+    font-size: 16px;
+  }
+
   .row {
     clear: both;
 
@@ -156,5 +160,22 @@ gelato-component[data-name='vocablists-browse-table'] {
       cursor: pointer;
       color: $grey9;
     }
+  }
+}
+
+@media (max-width: 767px) {
+  .pull-right-xs {
+    float: right;
+  }
+
+  .main-content {
+    background: $white5;
+  }
+
+  .vocablist-wrapper {
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    background: $white1;
   }
 }
