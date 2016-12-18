@@ -519,19 +519,23 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.mouseLastDownEvent = this.mouseDownEvent;
     this.mouseLastUpEvent = this.mouseUpEvent;
     this.mouseUpEvent = event;
-    var linePositionStart = {x: this.mouseDownEvent.stageX, y: this.mouseDownEvent.stageY};
-    var linePositionEnd = {x: this.mouseUpEvent.stageX, y: this.mouseUpEvent.stageY};
-    var lineAngle = app.fn.getAngle(linePositionStart, linePositionEnd);
-    var lineDistance = app.fn.getDistance(linePositionStart, linePositionEnd);
-    var lineDuration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
+
+    const linePositionStart = {x: this.mouseDownEvent.stageX, y: this.mouseDownEvent.stageY};
+    const linePositionEnd = {x: this.mouseUpEvent.stageX, y: this.mouseUpEvent.stageY};
+    const lineAngle = app.fn.getAngle(linePositionStart, linePositionEnd);
+    const lineDistance = app.fn.getDistance(linePositionStart, linePositionEnd);
+    const lineDuration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
 
     if (this.mouseLastUpEvent) {
-      var lineLastPositionStart = {x: this.mouseLastDownEvent.stageX, y: this.mouseLastDownEvent.stageY};
-      var lineLastPositionEnd = {x: this.mouseLastUpEvent.stageX, y: this.mouseLastUpEvent.stageY};
-      var lineLastDistance = app.fn.getDistance(lineLastPositionStart, lineLastPositionEnd);
-      var lineLastDuration = this.mouseUpEvent.timeStamp - this.mouseLastUpEvent.timeStamp;
+      const lineLastPositionStart = {x: this.mouseLastDownEvent.stageX, y: this.mouseLastDownEvent.stageY};
+      const lineLastPositionEnd = {x: this.mouseLastUpEvent.stageX, y: this.mouseLastUpEvent.stageY};
+      const lineLastDistance = app.fn.getDistance(lineLastPositionStart, lineLastPositionEnd);
+      const lineLastDuration = this.mouseUpEvent.timeStamp - this.mouseLastUpEvent.timeStamp;
 
-      if (lineLastDistance < 5 && lineLastDuration > 50 && lineLastDuration < 275) {
+      // be more lenient for touch, less lenient for mouse
+      const maxDist = event.nativeEvent.type.indexOf('touch') > -1 ? 20 : 5;
+
+      if (lineLastDistance < maxDist && lineLastDuration > 50 && lineLastDuration < 275) {
         clearTimeout(this.mouseTapTimeout);
         this.trigger('doubletap', event);
         return;
