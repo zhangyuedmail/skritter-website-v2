@@ -69,6 +69,13 @@ html, body {
     transform: translate3d(250px, 0, 0);
     -webkit-transform: translate3d(250px, 0, 0);
   }
+
+  &.show-right {
+   z-index: 9999;
+    opacity: 0.3;
+    transform: translate3d(-90%, 0, 0);
+    -webkit-transform: translate3d(-90%, 0, 0);
+  }
 }
 
 #left-side-app-container {

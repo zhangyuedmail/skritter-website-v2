@@ -291,6 +291,7 @@ module.exports = GelatoApplication.extend({
    */
   handleOverlayClick: function(e) {
     this.toggleSideMenu(false);
+    this.toggleVocabInfo(null);
   },
 
   /**
@@ -628,6 +629,7 @@ module.exports = GelatoApplication.extend({
     $('gelato-application').toggleClass('no-overflow', show);
     this.$('#main-app-container').toggleClass('push-right', show);
     this.$('#left-side-app-container').toggleClass('push-right', show);
+    this.$('#main-app-container-overlay').removeClass('show-right');
     this.$('#main-app-container-overlay').toggleClass('show', show);
 
     // run an "onShow/onHide" cleanup/setup function every time the state changes, if it exists
@@ -650,12 +652,12 @@ module.exports = GelatoApplication.extend({
       this._views['rightSide'].loadVocab(vocabId); // or something like this
       this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
     } else {
-      // delay hiding the right side until the sliding animation of the main container is complete
-      // setTimeout(() => {
       this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
-      // }, 250);
     }
     $('gelato-application').toggleClass('no-overflow', !!vocabId);
     this.$('#main-app-container').toggleClass('push-left', !!vocabId);
+
+    this.$('#main-app-container-overlay').removeClass('show');
+    this.$('#main-app-container-overlay').toggleClass('show-right', !!vocabId);
   }
 });
