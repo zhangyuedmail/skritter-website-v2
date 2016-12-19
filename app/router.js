@@ -90,8 +90,10 @@ module.exports = Router.extend({
     if (this.page && this.page.dialog) {
       this.page.dialog.close();
     }
+
     // hack to remove bootstrap model backdrop
     $('.modal-backdrop').remove();
+
     return Router.prototype.go.call(this, path, options);
   },
 
@@ -186,7 +188,7 @@ module.exports = Router.extend({
     }
   },
 
-   /**
+  /**
    * @method navigateAdmin
    */
   navigateAdmin: function() {

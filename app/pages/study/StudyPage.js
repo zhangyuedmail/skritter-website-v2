@@ -64,6 +64,9 @@ const StudyPage = GelatoPage.extend({
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
     this.listenTo(vent, 'item:add', this.addItem);
     this.listenTo(vent, 'studySettings:show', this.showStudySettings);
+
+    // Handle specific cordova related events
+    document.addEventListener('pause', this.handlePauseEvent.bind(this), false);
   },
 
   /**
@@ -239,6 +242,13 @@ const StudyPage = GelatoPage.extend({
   },
 
   /**
+   * @method handlePauseEvent
+   */
+  handlePauseEvent: function() {
+    this.items.reviews.post(1);
+  },
+
+  /**
    * @method handlePromptNext
    * @param {PromptItemCollection} promptItems
    */
@@ -358,6 +368,9 @@ const StudyPage = GelatoPage.extend({
     this.prompt.remove();
     this.toolbar.remove();
     this.items.reviews.post();
+
+    document.removeEventListener('pause', this.handlePauseEvent.bind(this), false);
+
     return GelatoPage.prototype.remove.call(this);
   },
 
