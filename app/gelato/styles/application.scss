@@ -85,6 +85,7 @@ html, body {
   -webkit-transition: -webkit-transform .25s ease-out;
   transform: translate3d(112%, 0, 0);
   -webkit-transform: translate3d(112%, 0, 0);
+  overflow-y: auto;
   width: 90%;
 
   &.push-main {
@@ -147,6 +148,7 @@ gelato-application {
     #left-side-app-container {
       transform: translate3d(-250px, 0, 0);
       -webkit-transform: translate3d(-250px, 0, 0);
+      overflow-y: auto;
 
       &.push-right {
         transform: translate3d(0, 0, 0);
