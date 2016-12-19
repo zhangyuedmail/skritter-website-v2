@@ -61,6 +61,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
     var self = this;
     var queryVocabs = new Vocabs();
     var row = {lang: this.vocablist.get('lang'), query: query, state: 'loading'};
+
     this.rows.push(row);
     queryVocabs.fetch({
       data: {
@@ -91,7 +92,6 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
           }
         }
         if (results.length) {
-          row.lang = results[0].vocabs[0].get('lang');
           row.results = results;
           row.vocabs = results[0].vocabs;
           row.vocabId = results[0].vocabs[0].id;
@@ -105,7 +105,6 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
         } else {
           row.id = query;
           if (self.vocablist.isChinese()) {
-            row.lang = self.vocablist.get('lang');
             row.writing = app.fn.mapper.toSimplified(query);
             row.writingTrads = app.fn.mapper.toTraditional(query);
           } else {
