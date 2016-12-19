@@ -97,8 +97,11 @@ gelato-component[data-name='mobile-study-prompt'] {
       }
 
       #toolbar-action-container {
-        margin-top: 15px;
         max-height: 63px;
+
+        &.margin-top {
+          margin-top: 15px;
+        }
       }
 
       gelato-component[data-name='study-prompt-navigation'] {

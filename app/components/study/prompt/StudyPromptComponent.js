@@ -258,8 +258,12 @@ const StudyPromptComponent = GelatoComponent.extend({
     }
     const toolbarHeight = this._getToolbarHeight();
 
-    this.$toolbarContainer.css({height: toolbarHeight});
+    this.$toolbarContainer.css({height: toolbarHeight + 'px'});
 
+    // on larger screen
+    if (app.isMobile() && toolbarHeight > 66) {
+      this.$toolbarContainer.addClass('margin-top');
+    }
     return this;
   },
 
