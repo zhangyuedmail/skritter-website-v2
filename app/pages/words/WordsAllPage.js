@@ -1,9 +1,10 @@
-var GelatoPage = require('gelato/page');
-var Items = require('collections/ItemCollection');
-var Vocabs = require('collections/VocabCollection');
-var WordsSidebar = require('components/words/WordsSidebarComponent');
-var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
-var VocabActionMixin = require('mixins/vocab-action');
+const GelatoPage = require('gelato/page');
+const Items = require('collections/ItemCollection');
+const Vocabs = require('collections/VocabCollection');
+const WordsSidebar = require('components/words/WordsSidebarComponent');
+const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
+const VocabActionMixin = require('mixins/vocab-action');
+const vent = require('vent');
 
 /**
  * @class AllWords
@@ -102,7 +103,7 @@ module.exports = GelatoPage.extend({
    * @method fetchItemsForSearchVocabs
    */
   fetchItemsForSearchVocabs: function() {
-    var vocabs = this.vocabsToFetchItemsFor.slice(0, 5);
+    const vocabs = this.vocabsToFetchItemsFor.slice(0, 5);
 
     if (!vocabs.length) {
       return;
@@ -125,13 +126,13 @@ module.exports = GelatoPage.extend({
    * @method fetchItemsForSearchVocabsSync
    */
   fetchItemsForSearchVocabsSync: function(items, response) {
-    var vocabs = items.vocabs;
+    const vocabs = items.vocabs;
     _.forEach(vocabs, function(vocab) {
       // having gotten items for each vocab, assign each vocab
       // its last-studied and next-to-study item
-      var vocabItemKeys = response.vocabItemMap[vocab.id];
-      var vocabItems = _.map(vocabItemKeys, function(vocabItemKey) {
-        var item = items.get(vocabItemKey);
+      const vocabItemKeys = response.vocabItemMap[vocab.id];
+      let vocabItems = _.map(vocabItemKeys, function(vocabItemKey) {
+        const item = items.get(vocabItemKey);
         // TODO: Also filter out items which whose parts
         // or style are not being studied.
         if (!item || !(item.get('vocabIds') || []).length) {
@@ -158,15 +159,15 @@ module.exports = GelatoPage.extend({
    * @method handleChangeActionSelect
    */
   handleChangeActionSelect: function(e) {
-    var self = this;
-    var action = $(e.target).val();
+    const self = this;
+    const action = $(e.target).val();
     if (!action) {
       return;
     }
     $(e.target).val('');
-    var vocabs = new Vocabs();
+    const vocabs = new Vocabs();
     _.forEach(this.$('input:checked'), function(el) {
-      var vocabID = $(el).closest('tr').data('vocab-id');
+      const vocabID = $(el).closest('tr').data('vocab-id');
       if (!vocabID) {
         return;
       }
@@ -182,11 +183,11 @@ module.exports = GelatoPage.extend({
    * @param {Event} event
    */
   handleChangeCheckbox: function(event) {
-    var checkbox = $(event.target);
+    const checkbox = $(event.target);
     if (checkbox.attr('id') === 'all-checkbox') {
       this.$('input[type="checkbox"]').prop('checked', checkbox.prop('checked'));
     }
-    var anyChecked = this.$('input[type="checkbox"]:checked').length;
+    const anyChecked = this.$('input[type="checkbox"]:checked').length;
     this.$('#action-select').prop('disabled', !anyChecked);
   },
 
@@ -255,14 +256,19 @@ module.exports = GelatoPage.extend({
    */
   handleClickVocabRow: function(event) {
     event.preventDefault();
-    var row = $(event.target).parent('tr');
-    var vocabId = row.data('vocab-id');
-    var vocab = this.vocabMap[vocabId];
+
+    const row = $(event.target).parent('tr');
+    const vocabId = row.data('vocab-id');
+    const vocab = this.vocabMap[vocabId];
 
     if (vocabId) {
-      this.dialog = new VocabViewerDialog();
-      this.dialog.load(vocabId);
-      this.dialog.open();
+      if (app.isMobile()) {
+        vent.trigger('vocabInfo:toggle', vocabId);
+      } else {
+        this.dialog = new VocabViewerDialog();
+        this.dialog.load(vocabId);
+        this.dialog.open();
+      }
     }
   },
 
@@ -299,9 +305,9 @@ module.exports = GelatoPage.extend({
    * @method renderTable
    */
   renderTable: function() {
-    var context = require('globals');
+    const context = require('globals');
     context.view = this;
-    var rendering = $(this.template(context));
+    const rendering = $(this.template(context));
     this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
   }
 });

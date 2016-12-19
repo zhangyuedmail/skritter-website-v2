@@ -1,10 +1,12 @@
-var GelatoPage = require('gelato/page');
-var Vocabs = require('collections/VocabCollection');
-var WordsSidebar = require('components/words/WordsSidebarComponent');
-var ProgressDialog = require('dialogs/progress/view');
-var VocabActionMixin = require('mixins/vocab-action');
-var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
-var ConfirmDialog = require('dialogs1/confirm-generic/view');
+const GelatoPage = require('gelato/page');
+const Vocabs = require('collections/VocabCollection');
+const WordsSidebar = require('components/words/WordsSidebarComponent');
+const ProgressDialog = require('dialogs/progress/view');
+const VocabActionMixin = require('mixins/vocab-action');
+const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
+const ConfirmDialog = require('dialogs1/confirm-generic/view');
+const vent = require('vent');
+
 /**
  * @class StarredWords
  * @extends {GelatoPage}
@@ -141,12 +143,17 @@ module.exports = GelatoPage.extend({
    */
   handleClickVocabRow: function(event) {
     event.preventDefault();
-    var row = $(event.target).parent('tr');
-    var vocabId = row.data('vocab-id');
+    const row = $(event.target).parent('tr');
+    const vocabId = row.data('vocab-id');
+
     if (vocabId) {
-      this.dialog = new VocabViewerDialog();
-      this.dialog.load(vocabId);
-      this.dialog.open();
+      if (app.isMobile()) {
+        vent.trigger('vocabInfo:toggle', vocabId);
+      } else {
+        this.dialog = new VocabViewerDialog();
+        this.dialog.load(vocabId);
+        this.dialog.open();
+      }
     }
   },
 
