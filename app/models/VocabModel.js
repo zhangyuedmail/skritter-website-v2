@@ -404,7 +404,7 @@ const VocabModel = SkritterModel.extend({
    * @returns {Boolean}
    */
   isBanned: function() {
-    return this.get('bannedParts').length ? true : false;
+    return !!this.get('bannedParts').length;
   },
 
   /**
@@ -469,27 +469,19 @@ const VocabModel = SkritterModel.extend({
    * @method play
    */
   play: function() {
-    let readingObjects = this.getReadingObjects();
-
-    if (this.isChinese() && readingObjects.length === 1) {
-      async.eachSeries(
-        this.audios,
-        function(audio, callback) {
-          audio.once(
-            'end',
-            function () {
-              setTimeout(callback, 200);
-            }
-          );
-
-          audio.play();
-        }
-      );
-    } else {
-      if (this.has('audios')) {
-        this.audios[0].play();
-      }
+    // Return if no audio exists for playing
+    if (!this.audios.length) {
+      return;
     }
+
+    // Stop and remove existing audio
+    if (app.audio) {
+      app.audio.stop();
+      app.audio = null;
+    }
+
+    app.audio = this.audios[0];
+    app.audio.play();
   },
 
   /**
