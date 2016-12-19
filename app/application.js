@@ -650,13 +650,12 @@ module.exports = GelatoApplication.extend({
       this._views['rightSide'].loadVocab(vocabId); // or something like this
       this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
     } else {
-
       // delay hiding the right side until the sliding animation of the main container is complete
       // setTimeout(() => {
       this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
       // }, 250);
     }
-
+    $('gelato-application').toggleClass('no-overflow', !!vocabId);
     this.$('#main-app-container').toggleClass('push-left', !!vocabId);
   }
 });
