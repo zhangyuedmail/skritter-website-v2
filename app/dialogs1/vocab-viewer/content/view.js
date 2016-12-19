@@ -1,7 +1,7 @@
 const GelatoComponent = require('gelato/component');
 const VocabViewerLookup = require('dialogs1/vocab-viewer/lookup/view');
-var Items = require('collections/ItemCollection');
-var Vocabs = require('collections/VocabCollection');
+const Items = require('collections/ItemCollection');
+const Vocabs = require('collections/VocabCollection');
 const vent = require('vent');
 
 /**
@@ -17,7 +17,10 @@ const VocabViewerContentComponent = GelatoComponent.extend({
   events: {
     'click .item-ban': 'handleClickItemBan',
     'click .item-unban': 'handleClickItemUnban',
-    'click .fa-times-circle-o': 'handleClickClose'
+    'click #button-vocab-star': 'handleClickVocabStar',
+    'click #button-vocab-ban': 'handleClickVocabBan',
+    'click .fa-times-circle-o': 'handleClickClose',
+    'click #show-more-contained': 'handleClickShowMoreContained'
   },
 
   /**
@@ -241,6 +244,43 @@ const VocabViewerContentComponent = GelatoComponent.extend({
         }
       }
     );
+  },
+
+  /**
+   * Handles a touch to an icon. Toggles the star state of the vocab and
+   * rerenders the dialog.
+   * @method handleClickVocabStar
+   * @param {jQuery.Event} event the touch event to the icon
+   */
+  handleClickVocabStar: function(event) {
+    const vocab = this.vocabs.at(0);
+
+    vocab.toggleStarred();
+    vocab.save();
+
+    this.render();
+  },
+
+  handleClickShowMoreContained: function(event) {
+    this.$('#show-more-contained').hide();
+    this.$('#vocab-words-containing').addClass('show-all');
+  },
+
+  /**
+   * Handles a touch to an icon. Toggles the star state of the vocab and
+   * rerenders the dialog.
+   * @method handleClickVocabStar
+   * @param {jQuery.Event} event the touch event to the icon
+   */
+  handleClickVocabBan: function(event) {
+    event.preventDefault();
+
+    const self = this;
+    const vocab = this.vocabs.at(0);
+    vocab.banAll();
+    vocab.save();
+
+    this.render();
   }
 });
 

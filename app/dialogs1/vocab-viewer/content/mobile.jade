@@ -4,6 +4,7 @@ gelato-component(data-name='mobile-vocab-viewer-content')
     - var items = view.items;
     - var vocab = view.vocabs.at(0);
     - var altVocab = vocab.getWritingDifference();
+    - var differentAltVocab = altVocab && altVocab !== vocab;
     - var containingVocabs = view.getContainingCharacters();
     - var containingWords = view.getContainingWords();
     - var definition = vocab.getDefinition();
@@ -11,44 +12,82 @@ gelato-component(data-name='mobile-vocab-viewer-content')
     - var sentence = vocab.getSentence();
 
     #header-section
-      .block.separator
-        #vocab-writing(class=vocab.getFontClass() +　' vocab-writing')= vocab.get('writing')
-        #vocab-reading.vocab-reading= vocab.getReading()
-      if altVocab && altVocab !== vocab
-        .block
-          .vocab-writing(class=vocab.getFontClass())
-           span.alt-bracket 【
-           span.alt-writing= altVocab
-           span.alt-bracket 】
-          .vocab-reading &nbsp;
-
-      .block
-        #vocab-difficulty= vocab.get('toughnessString')
-        #vocab-difficulty-text LEVEL
-      .pull-right
-        a(href='#', data-dismiss='modal')
-          i.fa.fa-times-circle-o
-
-    #content-section
-      #panel-left
-        .block
-          .header Definition
+      .row
+        .col-xs-2
+          if vocab.isStarred()
+            i#button-vocab-star.icon.icon-study-word-star-filled
+          else
+            i#button-vocab-star.icon.icon-study-word-star
+        .col-xs-2
+          i#button-vocab-ban.icon.icon-study-ban(class=vocab.isBanned() ? 'banned' : '')
+            svg
+              path(d="M11.52 0C5.16 0 0 5.16 0 11.52 0 17.88 5.16 23.04 11.52 23.04 17.88 23.04 23.04 17.88 23.04 11.52 23.04 5.16 17.88 0 11.52 0L11.52 0ZM11.52 20.64C6.48 20.64 2.4 16.56 2.4 11.52 2.4 6.48 6.48 2.4 11.52 2.4 16.56 2.4 20.64 6.48 20.64 11.52 20.64 16.56 16.56 20.64 11.52 20.64L11.52 20.64Z" id="Shape" sketch:type="MSShapeGroup")
+              path(d="M18.63 4.38L4.62 18.38" id="Line" stroke-width="2" stroke-linecap="square" sketch:type="MSShapeGroup")
+        .col-xs-6.text-center
+          #vocab-difficulty-text.toughness-label LEVEL
+          #vocab-difficulty.toughness= vocab.get('toughnessString')
+        .col-xs-2.pull-right
+          a(href='#', data-dismiss='modal')
+            i.fa.fa-times-circle-o
+      .row(class=differentAltVocab ? '' : 'text-center')
+        div(class=differentAltVocab ? 'col-xs-6 separator' : 'col-xs-12')
+          #vocab-writing(class=vocab.getFontClass() +　' vocab-writing')= vocab.get('writing')
+        if differentAltVocab
+          .col-xs-6
+            .vocab-writing(class=vocab.getFontClass())
+             span.alt-bracket.alt-bracket-l 【
+             span.alt-writing= altVocab
+             span.alt-bracket.alt-bracket-r 】
+      .row
+        .col-xs-12
+          #vocab-reading.vocab-reading.text-center= vocab.getReading()
           .value
             #vocab-definition
               if definition
-                span!= definition
+                span.definition!= definition
+
+    #content-section
+      .row
+        if containingVocabs.length > 1
+          .block
+            .header.contained-header Characters contained #{vocab.get('writing')}
+            .value
+              #vocab-characters-contained
+                for model in containingVocabs
+                  if model.get('writing') != vocab.get('writing')
+                    div
+                      span.spr.writing.contained-writing(class=vocab.getFontClass())= model.get('writing')
+                      span.spr.reading= model.getReading()
+                      span.spr :
+                      span.definition= model.getDefinition()
+      .row
         .block
-          .header Sentence
+          .header Example sentence
           .value
             #vocab-sentence
               if sentence
                 span(class=vocab.getFontClass())!= sentence.getWriting()
-        .block
-          .header Mnemonic
-          .value
-            #vocab-mnemonic
-              if mnemonic
+        if mnemonic
+          .block
+            .header Mnemonic
+            .value
+              #vocab-mnemonic
                 span!= app.fn.textToHTML(mnemonic.text)
+        if containingWords.length > 1
+          .block
+            .header Words containing #{vocab.get('writing')}
+            .value
+              #vocab-words-containing.vocab-words-containing
+                for model in containingWords
+                  div
+                    span.spr.writing(class=model.getFontClass())= model.get('writing')
+                    span.spr.reading= model.getReading()
+                    span.spr :
+                    span.definition= model.getDefinition()
+              if containingWords.length > 3
+                - var remainingContainedWords = containingWords.length - 3;
+                #show-more-contained.text-center Show all #{remainingContainedWords} words
+
         .block
           .header Dictionary
           .value
@@ -76,30 +115,6 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                  else
                   td.item-ban
                     button.btn.btn-xs.btn-danger Ban
-      #panel-right
-        if containingWords.length > 1
-          .block
-            .header Words containing #{vocab.get('writing')}
-            .value
-              #vocab-words-containing
-                for model in containingWords
-                  div
-                    span.spr.writing(class=model.getFontClass())= model.get('writing')
-                    span.spr.reading= model.getReading()
-                    span.spr :
-                    span.definition= model.getDefinition()
-        if containingVocabs.length > 1
-          .block
-            .header Characters contained #{vocab.get('writing')}
-            .value
-              #vocab-characters-contained
-                for model in containingVocabs
-                  if model.get('writing') != vocab.get('writing')
-                    div
-                      span.spr.writing(class=vocab.getFontClass())= model.get('writing')
-                      span.spr.reading= model.getReading()
-                      span.spr :
-                      span.definition= model.getDefinition()
   else
     #header-section
       .block.separator

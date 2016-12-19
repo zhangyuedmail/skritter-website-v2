@@ -15,6 +15,7 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
         font-family: $font-ubuntu;
         font-size: 16px;
         font-weight: 400;
+        margin-top: 10px;
       }
 
       .value {
@@ -31,17 +32,19 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
       width: 60%;
     }
 
-    #panel-left {
-      width: 100%;
-    }
-
-    #panel-right {
+    .panel {
       width: 100%;
     }
 
     #vocab-sentence {
       font-size: 26px;
     }
+
+    .contained-writing {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
     #vocab-words-containing {
 
       .definition {
@@ -62,8 +65,6 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
 
   #header-section {
     background-color: $white3;
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
     padding: 20px;
 
     i {
@@ -80,22 +81,30 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
       border-right: 1px solid $white5;
     }
 
-    #vocab-difficulty {
+    .toughness {
+      display: inline-block;
       font-size: 16px;
       margin-bottom: 10px;
       text-transform: capitalize;
       text-align: center;
     }
 
-    #vocab-difficulty-text {
+    .toughness-label {
+      margin-right: 15px;
+      display: inline-block;
       color: $grey3;
       font-size: 14px;
       font-weight: 300;
     }
 
-    .vocab-reading {
-      font-size: 12px;
-      text-align: center;
+    .vocab-reading, .definition {
+      font-size: 16px;
+      color: $grey4;
+    }
+
+    .definition {
+      margin-top: 10px;
+      display: block;
     }
 
     .vocab-writing {
@@ -103,8 +112,28 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
       text-align: center;
     }
 
+    .icon-study-ban {
+      margin-top: -3px;
+    }
+
+    .icon-study-ban.banned svg {
+      fill: $gradeRed6;
+      #Line {
+        stroke: $gradeRed6;
+      }
+    }
+
     .alt-bracket {
       color: $grey1;
+      display: inline-block;
+    }
+
+    .alt-bracket-l {
+      width: 30px;
+    }
+
+    .alt-bracket-r {
+      width: 18px;
     }
 
     .alt-writing {
@@ -112,4 +141,13 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
     }
   }
 
+  .vocab-words-containing {
+    max-height: 115px;
+    overflow: hidden;
+
+    &.show-all {
+      max-height: none;
+      overflow: visible;
+    }
+  }
 }
