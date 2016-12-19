@@ -543,18 +543,16 @@ module.exports = GelatoApplication.extend({
         'shift a',
         function(event) {
           if ($(event.target).is('textarea')) {
-            return;
+            return true;
           }
 
           if ($(event.target).is('input') ) {
-            return;
+            return true;
           }
-
-          event.preventDefault();
 
           new AddVocabDialog().open();
 
-          return true;
+          return false;
         }
       );
 
