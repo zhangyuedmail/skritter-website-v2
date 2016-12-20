@@ -29,6 +29,7 @@ const UserModel = SkritterModel.extend({
     goals: {ja: {items: 20}, zh: {items: 20}},
     lastChineseItemUpdate: 0,
     lastJapaneseItemUpdate: 0,
+    spaceItems: false,
     studyKana: false,
     teachingMode: true,
     timezone: 'America/New_York',

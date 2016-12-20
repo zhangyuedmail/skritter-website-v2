@@ -99,7 +99,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
               .value();
 
             $.ajax({
-              url: app.getApiUrl() + 'reviews',
+              url: app.getApiUrl() + 'reviews?spaceItems=' + app.user.get('spaceItems'),
               async: options.async,
               headers: app.user.session.getHeaders(),
               type: 'POST',
