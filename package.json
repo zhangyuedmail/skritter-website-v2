@@ -18,6 +18,7 @@
   },
   "scripts": {
     "android": "node ./scripts/npm-android",
+    "android-release": "node ./scripts/npm-android-release",
     "build": "node ./scripts/npm-build",
     "install-cordova": "node ./scripts/npm-install-cordova",
     "ios": "node ./scripts/npm-ios",
