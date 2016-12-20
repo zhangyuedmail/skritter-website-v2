@@ -131,6 +131,9 @@ gelato-application {
 
 
   &.mobile {
+    * {
+      -webkit-user-select: none;
+    }
 
     .unselectable-text {
       -webkit-user-select: none;
