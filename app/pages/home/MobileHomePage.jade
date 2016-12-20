@@ -3,8 +3,8 @@ gelato-page(data-name='mobile-home')
   .welcome-panel
     .title
       .logo
-    .language.unselectable-text= app.getLanguageName()
-    .character.unselectable-text(class=app.getLanguage() === 'zh' ? 'text-chinese' : 'text-japanese') 字
+    .language.no-select= app.getLanguageName()
+    .character.no-select(class=app.getLanguage() === 'zh' ? 'text-chinese' : 'text-japanese') 字
 
   .welcome-options
     .row
@@ -13,3 +13,4 @@ gelato-page(data-name='mobile-home')
         // a.btn.btn-fixed.btn-success(href='/signup') Sign up
       .col-xs-12.text-center
         a.btn.btn-fixed.btn-success(href='/login')= app.locale('common.logIn')
+W
