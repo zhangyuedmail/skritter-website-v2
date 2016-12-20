@@ -152,17 +152,17 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
   },
 
   /**
+   * Handles when the user clicks the add entry button.
    * @method handleClickAddEntry
-   * @param {Event} event
+   * @param {Event} event the click event
    */
   handleClickAddEntry: function(event) {
-    var self = this;
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
-    var index = $row.data('index');
-    var row = this.rows[parseInt(index, 10)];
 
-    console.log(row);
+    const self = this;
+    const $row = $(event.target).closest('.row');
+    const index = $row.data('index');
+    const row = this.rows[parseInt(index, 10)];
 
     this.dialog = new VocabCreatorDialog();
     this.dialog.open({row: row});

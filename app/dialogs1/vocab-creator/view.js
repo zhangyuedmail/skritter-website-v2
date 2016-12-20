@@ -47,8 +47,8 @@ var VocabCreatorDialog = GelatoDialog.extend({
    * @param {Event} event
    */
   handleClickButtonAddWord: function(event) {
-    var self = this;
-    var formData = this.getFormData();
+    const self = this;
+    const formData = this.getFormData();
     event.preventDefault();
 
     this.$('#error-message').empty();
@@ -61,6 +61,12 @@ var VocabCreatorDialog = GelatoDialog.extend({
     if (_.isEmpty(formData.definition)) {
       this.$('#error-message').text('A definition is required.');
       return;
+    }
+
+    if (formData.lang === 'zh') {
+      if (app.fn.pinyin.hasToneMarks(formData.reading)) {
+        this.$('#error-message').text('Please convert all tone vowels to numbers. e.g. rén -> ren2');
+      }
     }
 
     if (formData.lang === 'ja') {

@@ -1,38 +1,38 @@
-var IntervalQuantifier = require('utils/interval-quantifier');
-var Mapper = require('utils/mapper');
-var PinyinConverter = require('utils/pinyin-converter');
-var Recognizer = require('utils/recognizer');
-var Shortstraw = require('utils/shortstraw');
+const IntervalQuantifier = require('utils/interval-quantifier');
+const Mapper = require('utils/mapper');
+const PinyinConverter = require('utils/pinyin-converter');
+const Recognizer = require('utils/recognizer');
+const Shortstraw = require('utils/shortstraw');
 
 /**
  * @property interval
  * @type {IntervalQuantifier}
  */
-var interval = new IntervalQuantifier();
+const interval = new IntervalQuantifier();
 
 /**
  * @property mapper
  * @typeof {Mapper}
  */
-var mapper = Mapper;
+const mapper = Mapper;
 
 /**
  * @property pinyin
  * @type {PinyinConverter}
  */
-var pinyin = PinyinConverter;
+const pinyin = PinyinConverter;
 
 /**
  * @property recognizer
  * @type {Recognizer}
  */
-var recognizer = new Recognizer();
+const recognizer = new Recognizer();
 
 /**
  * @property shortstraw
  * @type Shortstraw
  */
-var shortstraw = new Shortstraw();
+const shortstraw = new Shortstraw();
 
 /**
  * @method addAllObjectAttributes
