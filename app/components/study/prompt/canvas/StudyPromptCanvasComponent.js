@@ -41,6 +41,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.size = 450;
     this.stage = null;
     this.strokeColor = '#4b4b4b';
+    this.canvasSizeOverride = null;
 
     this.downListener = null;
     this.moveListener = null;
@@ -452,11 +453,20 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   },
 
   /**
+   * Resizes the canvas to a perfect square that takes up by default a
+   * perfect square 100% of the width of its container, or a smaller/larger
+   * defined size, if provided.
+   * @param {number} [size] a custom size for the canvas
    * @method resize
    * @returns {StudyPromptCanvasComponent}
    */
-  resize: function() {
-    var size = this.prompt.getInputSize();
+  resize: function(size) {
+    if (size) {
+      this.canvasSizeOverride = size;
+    }
+
+    size = this.canvasSizeOverride || this.prompt.getInputSize(size);
+
     this.$el.height(size);
     this.$el.width(size);
     this.stage.canvas.height = size;
@@ -464,11 +474,14 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.stage.uncache();
     this.stage.update();
     this.size = size;
+
     if (this.grid) {
       this.drawGrid();
     }
+
     //TODO: depreciate usage of global canvas size
     app.set('canvasSize', size);
+
     return this;
   },
 

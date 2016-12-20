@@ -243,7 +243,9 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
-   * Resizes the input container and the toolbar for the current resolution
+   * Resizes the input container and the toolbar for the current resolution.
+   * If the screen is small enough, sacrifices canvas size for button size
+   * so that things are still usable.
    * @method resize
    * @returns {StudyPromptComponent}
    */
@@ -260,10 +262,25 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     this.$toolbarContainer.css({height: toolbarHeight + 'px'});
 
-    // on larger screen
-    if (app.isMobile() && toolbarHeight > 66) {
-      this.$toolbarContainer.addClass('margin-top');
+    if (app.isMobile()) {
+
+      // on larger screen add some extra padding so things look nice
+      if (toolbarHeight > 66) {
+        this.$toolbarContainer.addClass('margin-top');
+      }
+
+      // on smaller screen sizes, force a smaller canvas for some minimum button height
+      if (toolbarHeight <= 40) {
+
+        // we subtract 50 instead of 40 so that there's a little padding at
+        // the bottom and it doesn't seem as cramped.
+        const newCanvasSize = this.canvas.$el.height() - (50 - toolbarHeight);
+        this.$toolbarContainer.css({height: '40px'});
+        this.$inputContainer.css({height: newCanvasSize, width: newCanvasSize});
+        this.canvas.resize(newCanvasSize);
+      }
     }
+
     return this;
   },
 

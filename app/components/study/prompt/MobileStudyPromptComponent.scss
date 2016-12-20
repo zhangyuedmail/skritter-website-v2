@@ -70,7 +70,7 @@ gelato-component[data-name='mobile-study-prompt'] {
         }
 
         #toolbar-grading-container {
-          bottom: -15px;
+          bottom: 0px;
           left: 0;
           position: absolute;
           width: 100%;
@@ -119,7 +119,8 @@ gelato-component[data-name='mobile-study-prompt'] {
 
       gelato-component[data-name="study-prompt-part-defn"] {
         .answer {
-          font-size: 4vh;
+          font-size: 3.5vh;
+          padding-top: 0;
         }
 
         .question {
