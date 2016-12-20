@@ -1,5 +1,8 @@
-# Directories #
+# Directories
 /build
 /cordova
 /node_modules
 /public
+
+# Files
+*.keystore
