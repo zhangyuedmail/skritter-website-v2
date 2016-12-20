@@ -1,0 +1,95 @@
+@import "../../styles/_variables";
+
+gelato-component[data-name='mobile-vocablists-mine-table'] {
+  color: #404851;
+  font-family: $font-ubuntu;
+  font-size: 16px;
+  font-weight: 300;
+  background: #f2f2f6;
+
+  a {
+    font-size: 2.5vh;
+    font-weight: bold;
+  }
+
+  .vocablist-item {
+    margin: 0 0 10px;
+    border-radius: 5px;
+  }
+
+  .study-mode {
+    margin-top: 17px;
+  }
+
+  .list-name {
+    padding: 15px 15px 0;
+  }
+
+  .finished, .unpublished {
+    color: $grey3;
+  }
+
+  .published {
+    padding: 0 15px 15px;
+  }
+
+  .changed-label {
+    font-size: 12px;
+    color: $grey3;
+  }
+
+  #header-row {
+    background: #f2f2f6;
+
+    .glyphicon {
+      margin-left: 10px;
+      font-size: 10px;
+    }
+
+    .table-sort.chosen {
+      font-weight: bold;
+    }
+
+    .table-sort {
+      cursor: pointer;
+      color: $grey9;
+    }
+  }
+
+  .row {
+    clear: both;
+
+    &.odd-row {
+      background-color: $white2;
+    }
+
+    &.even-row {
+      background-color: $white1;
+    }
+
+    .col-md-2, .col-md-3 {
+      white-space: nowrap;
+
+      .progress {
+        margin-bottom: 0;
+      }
+
+      .progress-bar {
+        background-color: $grey1;
+      }
+    }
+
+    .col-md-2, .col-md-3 {
+      padding-top: 8px;
+      padding-bottom: 14px;
+    }
+
+    .add-to-queue-link .glyphicon {
+      margin-right: 5px;
+    }
+  }
+
+  .add-to-queue-link {
+    cursor: pointer;
+  }
+}

@@ -20,7 +20,7 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./VocablistsMineTable'),
+  template: app.isMobile() ? require('./MobileVocablistsMineTable') : require('./VocablistsMineTable'),
 
   /**
    * @method initialize
