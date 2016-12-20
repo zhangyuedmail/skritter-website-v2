@@ -12,7 +12,8 @@ bootstrap-navbar(data-name='default')
           span.icon-bar
           span.icon-bar
         a.navbar-brand(href="/" title=app.user.isLoggedIn() ? "#{app.locale('navbar.betaTitle')}" : "")
-          span.skritter-logo Skritter
+          span.skritter-logo
+            img(src="/media/images/skrit-logo-white.png", alt="")
           if app.user.isLoggedIn()
             span.version 2
               span.point .0
