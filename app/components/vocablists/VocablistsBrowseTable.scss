@@ -36,10 +36,13 @@ gelato-component[data-name='vocablists-browse-table'] {
 
       .progress {
         margin-bottom: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
       }
 
       .progress-bar {
         background-color: $green3;
+        border-radius: 5px;
       }
     }
 
@@ -178,5 +181,13 @@ gelato-component[data-name='vocablists-browse-table'] {
     padding: 5px;
     border-radius: 5px;
     background: $white1;
+  }
+
+  gelato-component[data-name='vocablists-browse-table'] {
+    .row {
+      .col-md-6 {
+        padding: 14px;
+      }
+    }
   }
 }

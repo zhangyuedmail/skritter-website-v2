@@ -21,8 +21,8 @@ gelato-component(data-name='vocablists-browse-table')
           .col-md-6
             a.vocablist-title(href="/vocablists/view/" + list.id)= list.get('name')
           .col-md-3.col-xs-6.pull-right-xs
-            .progress(style="width:" + (100 * list.getPopularity()) + '%')
-              .progress-bar(style="width:100%")
+            .progress(style="width:100%")
+              .progress-bar(style="width:" + (100 * list.getPopularity()) + '%')
           .col-md-3.col-xs-6
             if list.get('studyingMode') === 'not studying' && app.user.isSubscriptionActive()
               span.add-to-queue-link(data-vocablist-id=list.id)

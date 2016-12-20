@@ -15,7 +15,14 @@ gelato-page[data-name='mobile-vocablists-deleted'] {
   }
 
   .main-content {
-    border-radius: 25px;
+    padding: 15px 17px;
+    border-radius: 5px;
   }
 
+  #vocablist-container {
+
+    .row {
+      margin: 0px 8px;
+    }
+  }
 }
