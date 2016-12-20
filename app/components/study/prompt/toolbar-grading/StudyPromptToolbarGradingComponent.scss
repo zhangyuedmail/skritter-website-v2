@@ -10,19 +10,7 @@ gelato-component[data-name="study-prompt-toolbar-grading"] {
     cursor: pointer;
     font-family: $font-slab;
     padding: 0;
-    .grade-text {
-      font-size: 16px;
-      font-weight: 300;
-    }
-    .grade-value {
-      font-size: 36px;
-      font-weight: 400;
-      line-height: 40px;
-    }
-    .teaching-text {
-      font-size: 22px;
-      font-weight: 300;
-    }
+
     &:active,
     &:focus,
     &:hover {
@@ -32,6 +20,7 @@ gelato-component[data-name="study-prompt-toolbar-grading"] {
       color: $grey2;
       outline: 0;
     }
+
     &.selected {
       color: $grey9;
       &.grade1 {
@@ -47,11 +36,27 @@ gelato-component[data-name="study-prompt-toolbar-grading"] {
         color: $grade4;
       }
     }
+
+    .grade-text {
+      font-size: 16px;
+      font-weight: 300;
+      text-shadow: -2px 0 $white1, 0 2px $white1, 2px 0 $white1, 0 -2px $white1;
+    }
+
+    .grade-value {
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 40px;
+    }
+
+    .teaching-text {
+      font-size: 22px;
+      font-weight: 300;
+    }
   }
 
   .btn-group {
     background: linear-gradient(0deg, rgba(251, 250, 252, 1), rgba(251, 250, 252, 0));
     padding-bottom: 5px;
   }
-
 }
