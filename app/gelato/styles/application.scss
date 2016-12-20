@@ -132,6 +132,10 @@ gelato-application {
 
   &.mobile {
 
+    .unselectable-text {
+      -webkit-user-select: none;
+    }
+
     #page-container {
       display: block;
       margin: 0;

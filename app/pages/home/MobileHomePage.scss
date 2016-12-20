@@ -1,23 +1,31 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='mobile-home'] {
-
   background: $background-primary;
   height: 100%;
   padding: 60px 30px 0 30px;
 
-  .welcome-options {
+  .logo {
+    background-image: url('#{$dir-assets}/images/skrit-logo-1.png');
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 6vh;
+  }
 
+  .language {
+    font-size: 20px;
+  }
+
+  .welcome-options {
     padding-top: 20%;
 
     .btn {
-      width: 100%;
+      width: 66%;
     }
-
   }
 
   .welcome-panel {
-
     background: $white;
     border-radius: 5px;
     height: 80%;
@@ -33,7 +41,5 @@ gelato-page[data-name='mobile-home'] {
       font-family: $font-slab;
       font-size: 10vw;
     }
-
   }
-
 }
