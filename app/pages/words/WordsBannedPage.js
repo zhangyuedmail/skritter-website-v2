@@ -32,7 +32,7 @@ module.exports = GelatoPage.extend({
    * @property title
    * @type {String}
    */
-  title: 'Starred Words - Skritter',
+  title: 'Banned Words - Skritter',
 
   /**
    * @method initialize
