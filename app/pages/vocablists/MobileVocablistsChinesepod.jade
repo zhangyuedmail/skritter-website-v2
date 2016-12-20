@@ -9,13 +9,20 @@ gelato-page(data-name='mobile-vocablists-chinesepod')
       .col-xs-6
         a(href='/vocablists/browse') Browse
 
-    .row.text-center
-      .col-xs-4
-        a(href='/vocablists/my-lists') My Lists
-      .col-xs-4
-        a(href='/vocablists/chinesepod') ChinesePod
-      .col-xs-4
-        a(href='/vocablists/deleted') Deleted
+    if app.getLanguage() === 'zh'
+      .row.text-center
+        .col-xs-4
+          a(href='/vocablists/my-lists') My Lists
+        .col-xs-4
+          a(href='/vocablists/chinesepod') ChinesePod
+        .col-xs-4
+          a(href='/vocablists/deleted') Deleted
+    else
+      .row.text-center
+        .col-xs-6
+          a(href='/vocablists/my-lists') My Lists
+        .col-xs-6
+          a(href='/vocablists/deleted') Deleted
 
   .container
     .content-block
