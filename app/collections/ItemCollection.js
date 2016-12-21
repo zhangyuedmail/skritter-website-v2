@@ -184,6 +184,8 @@ const ItemCollection = BaseSkritterCollection.extend({
         async.series(
           [
             (callback) => {
+              ScreenLoader.post('Updating cache');
+
               $.ajax({
                 url: 'https://api.skritter.com/v2/queue/update',
                 type: 'GET',
@@ -196,6 +198,8 @@ const ItemCollection = BaseSkritterCollection.extend({
               });
             },
             (callback) => {
+              ScreenLoader.post('Fetching next');
+
               $.ajax({
                 url: 'https://api.skritter.com/v2/queue/next',
                 type: 'GET',
