@@ -5,7 +5,7 @@ module.exports = {
    * @return {String} a HTML formatted string with correct bold, italics, newlines, and images
    */
   textToHTML: function(text) {
-    const html = text.replace(/img:(http:\/\/\S+)/gi, '<img src="$1"/>')  // img:http://...
+    var html = text.replace(/img:(http:\/\/\S+)/gi, '<img src="$1"/>')  // img:http://...
         .replace(/_([^ _][^_]*)_(?!\S{4})/gi, '<em>$1</em>')    // _italicizes_ it
         .replace(/\n/gi, '<br/>')                               // newlines
         .replace(/\*([^*]+)\*/gi, '<b>$1</b>');                  // *bolds* it

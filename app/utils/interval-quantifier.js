@@ -16,8 +16,8 @@ function IntervalQuantifier() {
  * @returns {Number}
  */
 IntervalQuantifier.prototype.quantify = function(item, score) {
-  let newInterval = 0;
-  let now = moment().unix();
+  var newInterval = 0;
+  var now = moment().unix();
 
   //return new items with randomized default config values
   if (!item.interval || !item.last) {
@@ -39,10 +39,10 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
   }
 
   //set values for further calculations
-  let actualInterval = now - item.last;
-  let factor = 0.9;
-  let pctRight = item.successes / item.reviews;
-  let scheduledInterval = item.next - item.last;
+  var actualInterval = now - item.last;
+  var factor = 0.9;
+  var pctRight = item.successes / item.reviews;
+  var scheduledInterval = item.next - item.last;
 
   //get the factor
   if (score === 2) {
@@ -50,10 +50,10 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
   } else if (score === 4) {
     factor = 3.5;
   } else {
-    let factorsList = (score === 1) ? this.wrongFactors : this.rightFactors;
-    let divisions = [2, 1200, 18000, 691200];
-    let index;
-    for (let i in divisions) {
+    var factorsList = (score === 1) ? this.wrongFactors : this.rightFactors;
+    var divisions = [2, 1200, 18000, 691200];
+    var index;
+    for (var i in divisions) {
       if (item.interval > divisions[i]) {
         index = i;
       }
