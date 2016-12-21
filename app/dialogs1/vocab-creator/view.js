@@ -66,6 +66,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
     if (formData.lang === 'zh') {
       if (app.fn.pinyin.hasToneMarks(formData.reading)) {
         this.$('#error-message').text('Please convert all tone vowels to numbers. e.g. rén -> ren2');
+        return;
       }
     }
 
