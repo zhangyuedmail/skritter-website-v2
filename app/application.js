@@ -12,7 +12,7 @@ const User = require('models/UserModel');
 const Functions = require('functions');
 const Mixpanel = require('mixpanel');
 const Router = require('router');
-const Config = require('config');
+const config = require('config');
 const vent = require('vent');
 
 /**
@@ -32,7 +32,15 @@ module.exports = GelatoApplication.extend({
   initialize: function(options) {
     GelatoApplication.prototype.initialize.apply(this, arguments);
 
-    this.config = Config;
+    this.config = config;
+
+    Raven.config(
+      config.sentryUrl,
+      {
+        ignoreUrls: [/localhost/],
+        release: this.config.apiVersion
+      }
+    ).install();
 
     /**
      * String to auto-populate signup form with
@@ -525,13 +533,18 @@ module.exports = GelatoApplication.extend({
 
     //set raygun tracking for logged in user
     if (this.user.isLoggedIn()) {
+      Raven.setUserContext({
+        id: this.user.id,
+        email: this.user.get('email')
+      });
+
+      mixpanel.identify(this.user.id);
       mixpanel.register({
         'Client': 'Website',
         'Client Version': '2.0',
         'Display Name': this.user.get('name'),
         'Language Code': app.getLanguage()
       });
-      mixpanel.identify(this.user.id);
 
       //cleanup unused indexedDB instance
       if (window.indexedDB) {
@@ -565,6 +578,12 @@ module.exports = GelatoApplication.extend({
         'Language Code': null
       });
     }
+
+    Raven.setTagsContext({
+      'language.code': this.getLanguage(),
+      'locale.code': this.config.locale,
+      'platform': this.getPlatform()
+    });
 
     //use async for cleaner loading code
     async.series(

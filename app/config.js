@@ -26,6 +26,8 @@ module.exports = {
 
   nodeApiRoot: 'https://api-dot-write-way.appspot.com',
 
+  sentryUrl: 'https://4aa61a5ed92f4aaf8a9ae79777b70843@sentry.io/123679',
+
   timestamp: '{!timestamp!}',
 
   title: '{!application-title!}',
