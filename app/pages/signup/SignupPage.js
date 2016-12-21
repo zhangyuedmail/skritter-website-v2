@@ -273,8 +273,8 @@ module.exports = GelatoPage.extend({
   },
 
   handleClickValidateSchoolEmail: function(event) {
-    var self = this;
-    var formData = this.getFormData();
+    const self = this;
+    const formData = this.getFormData();
 
     if (!this._validateEmail(formData.email)) {
       this.displayErrorMessage(app.locale('pages.signup.errorInvalidEmail'));
@@ -302,7 +302,7 @@ module.exports = GelatoPage.extend({
       ScreenLoader.hide();
 
       if (error) {
-        self._handleSubmittedProcessError(error);
+        self._handleSubmittedProcessError(error.responseJSON || error);
       } else {
         self.subscribing = false;
         self.$('#validation-sent-address').text(formData.email);
@@ -312,7 +312,7 @@ module.exports = GelatoPage.extend({
   },
 
   sendValidationEmail: function(email, callback) {
-     var validationUrl = app.getApiUrl() + 'email-validation/send';
+     const validationUrl = app.getApiUrl() + 'email-validation/send';
 
     $.ajax({
       url: validationUrl,
@@ -352,7 +352,7 @@ module.exports = GelatoPage.extend({
    * @param {Object} formData
    */
   subscribeCoupon: function(formData) {
-    var self = this;
+    const self = this;
 
     if (!this._validateUserData(formData)) {
       this.subscribing = false;
@@ -369,7 +369,7 @@ module.exports = GelatoPage.extend({
     ], function(error) {
       ScreenLoader.hide();
       if (error) {
-        self._handleSubmittedProcessError(error);
+        self._handleSubmittedProcessError(error.responseJSON || error);
       } else {
         self.coupon = null;
         app.removeSetting('coupon');
@@ -383,7 +383,7 @@ module.exports = GelatoPage.extend({
    * @param {Object} formData
    */
   subscribeCredit: function(formData) {
-    var self = this;
+    const self = this;
 
     if (!this._validateUserData(formData)) {
       this.subscribing = false;
@@ -426,7 +426,7 @@ module.exports = GelatoPage.extend({
     ], function(error) {
       ScreenLoader.hide();
       if (error) {
-        self._handleSubmittedProcessError(error);
+        self._handleSubmittedProcessError(error.responseJSON || error);
       } else {
         self._handleSubmittedProcessSuccess();
       }
@@ -455,7 +455,7 @@ module.exports = GelatoPage.extend({
     ], function(error) {
       ScreenLoader.hide();
       if (error) {
-        self._handleSubmittedProcessError(error);
+        self._handleSubmittedProcessError(error.responseJSON || error);
       } else {
         self._handleSubmittedProcessSuccess();
       }
