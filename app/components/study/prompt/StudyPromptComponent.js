@@ -18,7 +18,6 @@ const VocabReading = require('components/study/prompt/vocab-reading/StudyPromptV
 const VocabSentence = require('components/study/prompt/vocab-sentence/StudyPromptVocabSentenceComponent.js');
 const VocabStyle = require('components/study/prompt/vocab-style/StudyPromptVocabStyleComponent.js');
 const VocabWriting = require('components/study/prompt/vocab-writing/StudyPromptVocabWritingComponent.js');
-const VocabViewerDialog = require('dialogs1/vocab-viewer/view.js');
 
 const Shortcuts = require('components/study/prompt/StudyPromptShortcuts');
 const vent = require('vent');
@@ -84,6 +83,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.renderTemplate();
 
     this.$inputContainer = this.$('#input-container');
+    this.$toolbarContainer = this.$('#toolbar-action-container');
     this.$panelLeft = this.$('#panel-left');
     this.$panelRight = this.$('#panel-right');
 
@@ -157,14 +157,6 @@ const StudyPromptComponent = GelatoComponent.extend({
     } else {
       return 0;
     }
-  },
-
-  /**
-   * @method isLoaded
-   * @returns {Boolean}
-   */
-  isLoaded: function() {
-    return this.reviews ? true : false;
   },
 
   /**
@@ -251,16 +243,42 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
+   * Resizes the input container and the toolbar for the current resolution.
+   * If the screen is small enough, sacrifices canvas size for button size
+   * so that things are still usable.
    * @method resize
    * @returns {StudyPromptComponent}
    */
   resize: function() {
-    var inputSize = this.getInputSize();
+    const inputSize = this.getInputSize();
     this.$inputContainer.css({height: inputSize, width: inputSize});
+
     this.canvas.resize();
 
     if (app.isMobile()) {
       this.$el.height(this.page.getHeight());
+    }
+    const toolbarHeight = this._getToolbarHeight();
+
+    this.$toolbarContainer.css({height: toolbarHeight + 'px'});
+
+    if (app.isMobile()) {
+
+      // on larger screen add some extra padding so things look nice
+      if (toolbarHeight > 66) {
+        this.$toolbarContainer.addClass('margin-top');
+      }
+
+      // on smaller screen sizes, force a smaller canvas for some minimum button height
+      if (toolbarHeight <= 40) {
+
+        // we subtract 50 instead of 40 so that there's a little padding at
+        // the bottom and it doesn't seem as cramped.
+        const newCanvasSize = this.canvas.$el.height() - (50 - toolbarHeight);
+        this.$toolbarContainer.css({height: '40px'});
+        this.$inputContainer.css({height: newCanvasSize, width: newCanvasSize});
+        this.canvas.resize(newCanvasSize);
+      }
     }
 
     return this;
@@ -282,17 +300,8 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
-   * @method setSchedule
-   * @param {Items} schedule
-   * @returns {StudyPromptComponent}
+   * @method showVocabInfo
    */
-  setSchedule: function(schedule) {
-    this.navigation.setReviews(schedule.reviews);
-    this.reviewStatus.setReviews(schedule.reviews);
-
-    return this;
-  },
-
   showVocabInfo: function() {
     if (app.isMobile()) {
       vent.trigger('vocabInfo:toggle', this.reviews.vocab.id);
@@ -300,8 +309,30 @@ const StudyPromptComponent = GelatoComponent.extend({
       app.dialogs.vocabViewer.load(this.reviews.vocab.id);
       app.dialogs.vocabViewer.open();
     }
-  }
+  },
 
+  /**
+   * Calculates the intended height of the toolbar based on the current screen
+   * resolution.
+   * @return {number} the height the toolbar should be
+   * @private
+   */
+  _getToolbarHeight: function() {
+    if (app.isMobile()) {
+      return $('#study-prompt-container').height() -
+        this.$('#panel-right').height() -
+        this.$('#input-container').height() -
+
+        // there's some padding somewhere
+        10;
+    } else {
+     return $('#study-prompt-container').height() -
+       (this.$('#input-container').height() +
+
+      // the margin-top property of #toolbar-action-container + the padding-top of #panel-left
+      40 + 62);
+    }
+  }
 });
 
 module.exports = StudyPromptComponent;

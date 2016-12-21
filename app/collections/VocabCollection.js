@@ -1,7 +1,6 @@
 const BaseSkritterCollection = require('base/BaseSkritterCollection');
 const DecompsCollection = require('collections/DecompsCollection');
 const SentenceCollection = require('collections/SentenceCollection');
-const CharacterCollection = require('collections/CharacterCollection');
 const VocabModel = require('models/VocabModel');
 
 /**
@@ -26,16 +25,36 @@ const VocabCollection = BaseSkritterCollection.extend({
 
   /**
    * @method initialize
+   * @param {Array|Object} [models]
+   * @param {Object} [options]
    * @constructor
    */
   initialize: function(models, options) {
     options = options || {};
+
     this.cursor = null;
     this.cursorContaining = null;
     this.decomps = new DecompsCollection();
     this.items = options.items;
+    this.preloadAudio = _.defaultTo(options.preloadAudio, true);
     this.sentences = new SentenceCollection();
-    this.character = new CharacterCollection();
+  },
+
+  /**
+   * @method getUniqueWritings
+   * @returns Array
+   */
+  getUniqueWritings: function () {
+    return _
+      .chain(this.models)
+      .map(
+        function (value) {
+          return value.get('writing').split('');
+        }
+      )
+      .flatten()
+      .uniq()
+      .value();
   },
 
   /**
@@ -48,7 +67,6 @@ const VocabCollection = BaseSkritterCollection.extend({
     this.cursorContaining = response.containingCursor;
     this.decomps.add(response.Decomps);
     this.sentences.add(response.Sentences);
-    this.character.add(response.Strokes);
 
     return response.Vocabs.concat(response.ContainingVocabs || []);
   },
@@ -60,9 +78,8 @@ const VocabCollection = BaseSkritterCollection.extend({
   reset: function() {
     this.decomps.reset();
     this.sentences.reset();
-    this.character.reset();
 
-    return BaseSkritterCollection.prototype.reset.call(this);
+    return BaseSkritterCollection.prototype.reset.apply(this, arguments);
   }
 });
 

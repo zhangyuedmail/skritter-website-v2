@@ -34,6 +34,10 @@ module.exports = GelatoPage.extend({
    * @returns {VocablistDeleted}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileVocablistsDeleted.jade');
+    }
+
     this.renderTemplate();
     this.sidebar.setElement('#vocablist-sidebar-container').render();
     this.table.setElement('#vocablist-container').render();

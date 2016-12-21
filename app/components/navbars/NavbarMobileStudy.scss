@@ -17,13 +17,20 @@ bootstrap-navbar[data-name='mobile'] {
   }
 
   .buttons {
-    float: right;
     font-size: 24px;
     margin-top: 9px;
+    position: absolute;
+    right: 0;
 
     span {
+      display: inline-block;
       margin-left: 25px;
       cursor: pointer;
+    }
+
+    .icon-study-word-volume, .icon-study-info {
+      position: relative;
+      top: 3px;
     }
 
     .last {
@@ -33,6 +40,13 @@ bootstrap-navbar[data-name='mobile'] {
 
   .wrapper {
     display: inline-block;
+  }
+
+  .icon {
+
+    svg {
+      fill: $white2;
+    }
   }
 
   // h4x

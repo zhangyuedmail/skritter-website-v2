@@ -1,13 +1,13 @@
-var GelatoDialog = require('gelato/dialog');
-var Content = require('./content/view');
-var Vocab = require('models/VocabModel');
-var Vocablist = require('models/VocablistModel');
+const GelatoDialog = require('gelato/dialog');
+const Content = require('./content/view');
+const Vocabs = require('collections/VocabCollection');
+const Vocablist = require('models/VocablistModel');
 
 /**
  * @class ExportVocablist
  * @extends {GelatoDialog}
  */
-var ExportVocablist = GelatoDialog.extend({
+const ExportVocablist = GelatoDialog.extend({
   /**
    * @method initialize
    * @param {Object} options
@@ -37,7 +37,9 @@ var ExportVocablist = GelatoDialog.extend({
    */
   render: function() {
     this.renderTemplate();
+
     this.content.setElement('#content-container').render();
+
     return this;
   },
   /**
@@ -46,12 +48,16 @@ var ExportVocablist = GelatoDialog.extend({
    * @param {String} text
    */
   downloadFile: function(filename, text) {
-    var element = document.createElement('a');
+    const element = document.createElement('a');
+
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', filename);
     element.style.display = 'none';
+
     document.body.appendChild(element);
+
     element.click();
+
     document.body.removeChild(element);
   },
   /**
@@ -67,46 +73,71 @@ var ExportVocablist = GelatoDialog.extend({
    * @param {Event} event
    */
   handleClickButtonExport: function(event) {
-    var self = this;
-    var output = '';
-    var delimiter = '\t';
-    var rows = this.vocablist.getRows();
-    var rowsCompleted = 0;
     event.preventDefault();
+
+    let vocabs = new Vocabs(null, {preloadAudio: false});
+    let delimiter = '\t';
+    let rows = this.vocablist.getRows();
+    let groups = _.chunk(rows, 50);
+    let groupsCompleted = 0;
+    let languageCode = this.vocablist.get('lang');
+
     this.$('#button-export').hide();
     this.content.$('#download-progress').show();
     this.content.disableForm();
-    async.each(
-      rows,
-      function(row, callback) {
-        var vocab = new Vocab({id: row.vocabId});
-        vocab.fetch({
-          error: function(error) {
-            callback(error);
+
+    async.eachLimit(
+      groups,
+      10,
+      (group, callback) => {
+        const mapProperty = languageCode === 'zh' ? 'tradVocabId' : 'vocabId';
+        const vocabIds = _.map(group, mapProperty);
+
+        vocabs.fetch({
+          data: {
+            ids: vocabIds.join('|')
           },
-          success: function() {
-            rowsCompleted++;
-            self.content.$('#download-progress .progress-bar').css('width', (rowsCompleted / rows.length) * 100 + '%');
-            output += vocab.get('writing') + delimiter;
-            if (vocab.isChinese()) {
-              output += app.fn.mapper.fromBase(row.tradVocabId) + delimiter;
-            }
-            output += vocab.get('reading') + delimiter;
-            output += vocab.getDefinition();
-            output += '\n';
+          remove: false,
+          error: (error) => callback(error),
+          success: () => {
+            groupsCompleted++;
+
+            this.content.$('#download-progress .progress-bar')
+              .css('width', (groupsCompleted / groups.length) * 100 + '%');
+
             callback();
           }
-        })
+        });
       },
-      function(error) {
+      (error) => {
         if (error) {
-          //TODO: display some kind of error message
-          self.$('#button-export').show();
-          self.content.$('#download-progress').hide();
-          self.content.enableForm();
+          // TODO: display some kind of error message
+          this.$('#button-export').show();
+          this.content.$('#download-progress').hide();
+          this.content.enableForm();
         } else {
-          self.downloadFile('export-' + self.content.$('#export-name').val() + '.csv', output);
-          self.close();
+          const output = _.map(
+            vocabs.models,
+            function(vocab) {
+              let line = '';
+
+              if (vocab.isChinese()) {
+                line += app.fn.mapper.toSimplified(vocab.get('writing')) + delimiter;
+                line += app.fn.mapper.fromBase(vocab.id) + delimiter;
+              } else {
+                line += vocab.get('writing') + delimiter;
+              }
+
+              line += vocab.get('reading') + delimiter;
+              line += vocab.getDefinition();
+
+              return line;
+            }
+          );
+
+          this.downloadFile('export-' + this.content.$('#export-name').val() + '.csv', output.join('\n'));
+
+          this.close();
         }
       }
     )

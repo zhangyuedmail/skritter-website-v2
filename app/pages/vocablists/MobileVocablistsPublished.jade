@@ -1,0 +1,45 @@
+gelato-page(data-name='mobile-vocablists-published')
+
+  #dialog-container
+
+  section#vocablist-nav-links.container
+    .row.text-center
+      .col-xs-6
+        a(href='/vocablists/queue') Queue
+      .col-xs-6
+        a(href='/vocablists/browse') Browse
+
+    if app.getLanguage() === 'zh'
+      .row.text-center
+        .col-xs-4
+          a(href='/vocablists/my-lists') My Lists
+        .col-xs-4
+          a(href='/vocablists/chinesepod') ChinesePod
+        .col-xs-4
+          a(href='/vocablists/deleted') Deleted
+    else
+      .row.text-center
+        .col-xs-6
+          a(href='/vocablists/my-lists') My Lists
+        .col-xs-6
+          a(href='/vocablists/deleted') Deleted
+
+  section.container
+    #expiration-container
+    .content-block
+      .row
+
+        .col-md-12.main-content
+          .title Published Lists
+          #search-input.row
+            .col-md-12
+              .input-group.input-group-lg
+                span.input-group-addon
+                  i.fa.fa-search
+                input#list-search-input.form-control(type="text", placeholder="Type to search by title")
+                span#clear-search.clear-search.hidden &#10006;
+          .row
+            .col-xs-12#query-results-text.query-results-text.invisible Showing results for
+          .row
+            .col-xs-12
+              #vocablist-container

@@ -46,10 +46,13 @@ const StudyListPage = GelatoPage.extend({
   initialize: function(options) {
     ScreenLoader.show();
 
+    this.currentItem = null;
     this.currentPromptItems = null;
-    this.items = new Items();
+    this.previousItem = null;
     this.previousPrompt = false;
     this.previousPromptItems = null;
+
+    this.items = new Items();
     this.prompt = new Prompt({page: this});
     this.toolbar = new Toolbar({page: this});
     this.vocablist = new Vocablist({id: options.listId});
@@ -69,12 +72,20 @@ const StudyListPage = GelatoPage.extend({
    * @returns {StudyListPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileStudyListPage.jade');
+    }
+
     this.renderTemplate();
     this.prompt.setElement('#study-prompt-container').render();
     this.toolbar.setElement('#study-toolbar-container').render();
 
-    if (app.user.get('eccentric')) {
+    if (!app.isMobile() && app.user.get('eccentric')) {
       this._views['recipe'].setElement('#recipes-container').render();
+    }
+
+    if (!app.isMobile()) {
+      this.toolbar.hide();
     }
 
     this.checkRequirements();
@@ -97,7 +108,7 @@ const StudyListPage = GelatoPage.extend({
       },
       function(error, result) {
         if (!error) {
-          var added = result.numVocabsAdded;
+          let added = result.numVocabsAdded;
 
           if (added === 0) {
             if (silenceNoItems) {
@@ -148,12 +159,12 @@ const StudyListPage = GelatoPage.extend({
    */
   checkRequirements: function() {
     ScreenLoader.post('Preparing study');
-    var self = this;
-    var hasItems = false;
-    var hasVocablist = false;
+
+    this.items.updateDueCount();
+
     async.parallel(
       [
-        function(callback) {
+        (callback) => {
           app.user.subscription.fetch({
             error: function() {
               callback();
@@ -163,79 +174,65 @@ const StudyListPage = GelatoPage.extend({
             }
           });
         },
-        function(callback) {
-          self.items.clearHistory();
-          self.items.updateDueCount();
-          self.items.fetchNext(
-            {
-              limit: 1,
-              listId: self.vocablist.id
-            },
-            function(error, result) {
-              self.items.fetchNext({
-                cursor: result.cursor,
-                limit: 2,
-                listId: self.vocablist.id,
-                loop: 5
-              });
-              hasItems = !error && result.length;
-              callback();
-            }
-          );
+        (callback) => {
+          this.items.fetchNext({limit: 50, lists: this.vocablist.id})
+            .catch(callback)
+            .then(callback);
         },
-        function(callback) {
-          self.vocablist.fetch({
+        (callback) => {
+          this.vocablist.fetch({
             error: function() {
-              hasVocablist = false;
               callback();
             },
-            success: function(result) {
-              hasVocablist = result !== undefined;
+            success: function() {
               callback();
             }
           });
         }
       ],
-      function() {
-        var active = app.user.isSubscriptionActive();
+      () => {
+        const active = app.user.isSubscriptionActive();
 
-        if (!hasVocablist) {
+        if (!this.vocablist) {
           ScreenLoader.hide();
           app.router.navigate('', {trigger: true});
-        } else if (!hasItems) {
+        } else if (!this.items.length) {
           if (active) {
             ScreenLoader.post('Adding words from list');
-            document.title = self.vocablist.get('name') + ' - Skritter';
-            self.items.addItems(
+            document.title = this.vocablist.get('name') + ' - Skritter';
+            this.items.addItems(
               {
                 lang: app.getLanguage(),
                 limit: 5,
-                listId: self.vocablist.id
+                listId: this.vocablist.id
               },
               function() {
                 app.reload();
               }
             );
           } else {
-            self.prompt.render();
-            self.prompt.$('#overlay').show();
+            this.prompt.render();
+            this.prompt.$('#overlay').show();
             ScreenLoader.hide();
           }
         } else {
+          document.title = this.vocablist.get('name') + ' - Skritter';
+
+          this.stopListening(this.items);
+          this.listenTo(this.items, 'preload', this.handleItemPreload);
+
+          this.next();
+
           ScreenLoader.hide();
-          document.title = self.vocablist.get('name') + ' - Skritter';
-          self.next();
-          self.stopListening(self.items);
-          self.listenTo(self.items, 'state', self.handleItemState);
         }
       }
     );
   },
 
   /**
-   * @method handleItemState
+   * @method handleItemPreload
    */
-  handleItemState: function() {
+  handleItemPreload: function() {
     if (!this.currentPromptItems) {
       this.next();
     }
@@ -243,31 +240,41 @@ const StudyListPage = GelatoPage.extend({
 
   /**
    * @method handlePromptNext
-   * @param {PromptItems} promptItems
+   * @param {PromptItemCollection} promptItems
    */
   handlePromptNext: function(promptItems) {
     this.items.reviews.put(promptItems.getReview());
 
-    if (!this.previousPrompt) {
+    if (this.previousPrompt) {
+      this.previousPrompt = false;
+      this.next();
+
+      return;
+    }
+
+    if (this.currentPromptItems) {
+      if (this.items.reviews.length > 2) {
+        this.items.reviews.post({skip: 1});
+        this.items.updateDueCount();
+      }
+
       if (promptItems.readiness >= 1.0) {
         this.toolbar.dueCountOffset++;
       }
-      if (this.items.reviews.length > 2) {
-        this.items.reviews.post({skip: 1});
-      }
+
+      this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
+
+      this.currentItem._queue = false;
       this.currentPromptItems = null;
       this.previousPromptItems = promptItems;
-      this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
-      this.items.addHistory(promptItems.item);
-    }
 
-    this.previousPrompt = false;
-    this.next();
+      this.next();
+    }
   },
 
   /**
    * @method handlePromptPrevious
-   * @param {PromptItems} promptItems
+   * @param {PromptItemCollection} promptItems
    */
   handlePromptPrevious: function(promptItems) {
     this.previousPrompt = true;
@@ -279,29 +286,56 @@ const StudyListPage = GelatoPage.extend({
    * @method next
    */
   next: function() {
-    var items = this.items.getNext();
+    const queue = this.items.getQueue();
+    const items = this.items.getNext();
+
+    if (!queue.length) {
+      this.prompt.$panelLeft.css('opacity', 0.4);
+      this.prompt.$panelLeft.css('pointer-events', 'none');
+      this.prompt.$panelRight.css('pointer-events', 'none');
+      this.items.reviews.post({skip: 1});
+      this.items.fetchNext({limit: 50, lists: this.vocablist.id});
+
+      return;
+    }
+
     if (this.previousPrompt) {
       this.prompt.$panelLeft.css('opacity', 1.0);
+      this.prompt.$panelLeft.css('pointer-events', 'auto');
+      this.prompt.$panelRight.css('pointer-events', 'auto');
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
-    } else if (items.length) {
+
+      return;
+    }
+
+    if (items.length) {
+      this.currentItem= items[0];
       this.currentPromptItems = items[0].getPromptItems();
       this.prompt.$panelLeft.css('opacity', 1.0);
+      this.prompt.$panelLeft.css('pointer-events', 'auto');
+      this.prompt.$panelRight.css('pointer-events', 'auto');
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
-      if (items.length < 5) {
-        this.items.fetchNext({limit: 2, listId: this.vocablist.id, loop: 5});
-      }
+
       if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
         this.addItem(true);
       }
-    } else {
-      this.prompt.$panelLeft.css('opacity', 0.2);
-      this.items.shortenHistory();
-      this.items.fetchNext({limit: 1, listId: this.vocablist.id});
+
+      if (items.length < 5) {
+        this.items.preloadNext();
+      }
+
+      return;
     }
+
+    // disable things while preloading
+    this.prompt.$panelLeft.css('opacity', 0.4);
+    this.prompt.$panelLeft.css('pointer-events', 'none');
+    this.prompt.$panelRight.css('pointer-events', 'none');
+    this.items.preloadNext();
   },
 
   /**
@@ -331,12 +365,11 @@ const StudyListPage = GelatoPage.extend({
    * Shows a dialog that allows the user to adjust their study settings
    */
   showStudySettings: function() {
-    //post all reviews while changing settings
-    this.items.reviews.post();
-
     const dialog = new StudySettings();
+
     dialog.open();
-    dialog.on('save', function(settings) {
+
+    dialog.on('save', (settings) => {
       ScreenLoader.show();
       ScreenLoader.post('Saving study settings');
       app.user.set(settings, {merge: true});
@@ -344,12 +377,18 @@ const StudyListPage = GelatoPage.extend({
       app.user.save(
         null,
         {
-          error: function() {
+          error: () => {
             ScreenLoader.hide();
             dialog.close();
           },
-          success: function() {
-            app.reload();
+          success: () => {
+            this.items.reviews.post()
+              .then(
+                () => {
+                  this.render();
+                  dialog.close();
+                }
+              );
           }
         }
       );

@@ -71,6 +71,10 @@ module.exports = GelatoPage.extend({
    * @returns {VocablistsQueue}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileVocablistsQueue.jade');
+    }
+
     this.renderTemplate();
     this.addingTable.setElement('#adding-container').render();
     this.reviewingTable.setElement('#reviewing-container').render();

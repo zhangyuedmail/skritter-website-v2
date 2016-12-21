@@ -7,6 +7,7 @@ module.exports = {
 
   "common": {
     "areYouSure": "Are you sure?",
+    "add": "Add",
     "back": "Back",
     "confirm": "Confirm",
     "cancel": "Cancel",
@@ -96,6 +97,8 @@ module.exports = {
       "eccentricDescription": "Adds extra spice to Skritter",
       "emailLabel": "Email",
       "emailDescription": "The email address associated with your account",
+      "errorDuplicateDisplayName": "Another user has already chosen that display name. Please choose another one.",
+      "errorNoDisplayName": "You must enter a display name.",
       "passwordLabel": "Password",
       "passwordDescription": "The password you use to log in",
       "privateLabel": "Private Account",
@@ -186,6 +189,7 @@ module.exports = {
       "errorCCExpired": "The credit card has expired.",
       "errorDefault": "Unknown error while signing up. Please try again.",
       "errorDuplicateUsername": "Another person has taken the username #{username}. Please choose another one.",
+      "errorEmailTaken": "This email address has already been taken. Visit the <a href='https://skritter.com/login'>login page</a> to log in to the account.",
       "errorInvalidCCNumber": "Invalid credit card number entered.",
       "errorInvalidEmailValidationCode": "The email validation code entered is not valid.",
       "errorInvalidRecaptcha": "The reCAPTCHA must be answered correctly.",
@@ -220,7 +224,13 @@ module.exports = {
     },
 
     "study": {
-      "timerDescription": "The timer updates every time you complete a prompt, with a maximum time of 30 seconds per prompt."
+      "timerDescription": "The timer updates every time you complete a prompt, with a maximum time of 30 seconds per prompt.",
+      "menmonicSelectorDialogTitle": "Select a mnemonic or write your own",
+      "mnemonicLabel": "Mnemonic",
+      "mnemonicAdd": "Add a mnemonic",
+      "mnemonicEdit": "edit",
+      "mnemonicShow": "show",
+      "mnemonicUpdated": "Mnemonic successfully updated"
     },
 
     "vocabLists": {

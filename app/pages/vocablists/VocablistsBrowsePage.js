@@ -48,6 +48,10 @@ module.exports = GelatoPage.extend({
    * @returns {VocablistBrowse}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileVocablistsBrowse.jade');
+    }
+
     this.renderTemplate();
     this._views['sidebar'].setElement('#vocablist-sidebar-container').render();
     this._views['table'].setElement('#vocablist-container').render();

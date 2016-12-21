@@ -12,29 +12,37 @@ const CharacterModel = GelatoModel.extend({
    * @property idAttribute
    * @type {String}
    */
-  idAttribute: 'rune',
+  idAttribute: '_id',
+
+  /**
+   * @property url
+   * @type {String}
+   */
+  url: 'https://api.skritter.com/v2/characters',
 
   /**
    * @method getPromptCharacter
    * @returns {PromptStrokeCollection}
    */
   getPromptCharacter: function() {
-    var character = new PromptStrokeCollection();
-    var variations = this.clone().get('strokes');
-    var rune = this.get('rune');
-    var targets = [];
-    for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
-      var target = new PromptStrokeCollection();
-      var targetVariation = variations[a];
-      var strokePosition = 0;
+    let character = new PromptStrokeCollection();
+    let strokes = this.clone().get('strokeData');
+    let variations = this.clone().get('strokeVariations');
+    let rune = this.get('writing');
+    let targets = [];
+    for (let a = 0, lengthA = variations.length; a < lengthA; a++) {
+      let target = new PromptStrokeCollection();
+      let targetVariation = variations[a];
+      let targetStrokeIds = targetVariation.strokeIds;
+      let strokePosition = 0;
       target.position = a;
-      for (var b = 0, lengthB = targetVariation.length; b < lengthB; b++) {
-        var stroke = new PromptStrokeModel();
-        var strokeData = targetVariation[b];
-        var strokeId = strokeData[0];
-        var strokeParams = this.collection.params.filter({strokeId: strokeId});
-        var strokeContains = strokeParams[0].get('contains');
-        var strokeShape = this.collection.shapes.get(strokeId);
+      for (let b = 0, lengthB = targetStrokeIds.length; b < lengthB; b++) {
+        let stroke = new PromptStrokeModel();
+        let strokeData = _.find(strokes, {strokeId: targetStrokeIds[b]});
+        let strokeId = strokeData.shapeId;
+        let strokeParams = this.collection.params.filter({strokeId: strokeId});
+        let strokeContains = strokeParams[0].get('contains');
+        let strokeShape = this.collection.shapes.get(strokeId);
         stroke.set({
           contains: strokeContains,
           data: strokeData,

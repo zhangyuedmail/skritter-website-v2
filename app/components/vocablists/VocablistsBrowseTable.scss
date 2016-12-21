@@ -10,6 +10,11 @@ gelato-component[data-name='vocablists-browse-table'] {
     cursor: pointer;
   }
 
+  .vocablist-title {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
   .row {
     clear: both;
 
@@ -31,10 +36,13 @@ gelato-component[data-name='vocablists-browse-table'] {
 
       .progress {
         margin-bottom: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
       }
 
       .progress-bar {
         background-color: $green3;
+        border-radius: 5px;
       }
     }
 
@@ -155,6 +163,31 @@ gelato-component[data-name='vocablists-browse-table'] {
     .table-sort {
       cursor: pointer;
       color: $grey9;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .pull-right-xs {
+    float: right;
+  }
+
+  .main-content {
+    background: $white5;
+  }
+
+  .vocablist-wrapper {
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    background: $white1;
+  }
+
+  gelato-component[data-name='vocablists-browse-table'] {
+    .row {
+      .col-md-6 {
+        padding: 14px;
+      }
     }
   }
 }

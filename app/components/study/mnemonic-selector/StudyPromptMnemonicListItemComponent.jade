@@ -1,0 +1,10 @@
+- const isCurrentMnem = model.isCurrentForVocab(vocab);
+
+gelato-component.clearfix.table-striped(data-name='study-prompt-mnemonic-listitem' class=isCurrentMnem ? 'selected' : '')
+  if !isCurrentMnem
+    .add-mnemonic.btn.btn-primary(data-user='#{model.id}')= app.locale('common.add')
+  .mnemonic-text!= model.getFormattedText()
+    .author-wrapper
+      span by&nbsp;
+      span= model.get('author')
+  .popularity= model.get('popularity')

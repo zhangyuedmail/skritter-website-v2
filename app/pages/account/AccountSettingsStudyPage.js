@@ -1,6 +1,5 @@
 const GelatoPage = require('gelato/page');
 const AccountSidebar = require('components/account/AccountSidebarComponent');
-
 const ResetVocablistPositionDialog = require('dialogs1/reset-vocablist-position/view');
 
 /**
@@ -56,6 +55,14 @@ const AccountSettingsStudyPage = GelatoPage.extend({
   },
 
   /**
+   * Displays an error message to the user.
+   * @param {String} msg the message to display to the user
+   */
+  displayErrorMessage: function(msg) {
+    this.$('#error-alert').text(msg).removeClass('hidden');
+  },
+
+  /**
    * @method getSelectedParts
    * @returns {Array}
    */
@@ -83,12 +90,16 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    */
   handleClickButtonSave: function(event) {
     event.preventDefault();
+
+    let self = this;
+
     app.user.set({
       autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
       showHeisig: this.$('#field-heisig').is(':checked'),
       sourceLang: this.$('#field-source-language').val(),
       targetLang: this.$('#field-target-language').val()
     });
+
     if (app.isChinese()) {
       app.user.set({
         addSimplified: this.$('#field-styles [value="simp"]').is(':checked'),
@@ -103,12 +114,19 @@ const AccountSettingsStudyPage = GelatoPage.extend({
         studyAllListWritings: this.$('#field-study-all-list-writings').is(':checked')
       });
     }
+
     if (app.user.hasChanged('addSimplified') || app.user.hasChanged('addTraditional')) {
       this.dialog = new ResetVocablistPositionDialog();
       this.dialog.render();
       this.dialog.open();
     }
-    app.user.save();
+
+    app.user.save(null, {
+      error: function(req, error) {
+        let msg = error.responseJSON.message;
+        self.displayErrorMessage(msg);
+      }
+    });
   },
 
   /**

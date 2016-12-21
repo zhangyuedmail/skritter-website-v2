@@ -1,5 +1,11 @@
-# Directories #
+# Directories
 /build
 /cordova
 /node_modules
 /public
+
+# Files
+*.apk
+*.keystore
+*.build.json
+*.billing.json

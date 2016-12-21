@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-var shell = require('shelljs');
+const shell = require('shelljs');
 
-shell.rm('-rf', './public');
-shell.exec('brunch build --production');
-//TODO: run mocha test cases
+process.env.NODE_ENV = 'development';
+shell.exec('mocha ./test/selenium/run.js --timeout 15000', {async: true});

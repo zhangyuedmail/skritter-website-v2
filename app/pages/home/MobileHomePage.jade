@@ -1,13 +1,16 @@
 gelato-page(data-name='mobile-home')
 
   .welcome-panel
-    .title Skritter
-    .character(class=app.getLanguage() === 'zh' ? 'text-chinese' : 'text-japanese') 学
-
+    .title
+      .logo
+    .language.no-select= app.getLanguageName()
+    .character.no-select(class=app.getLanguage() === 'zh' ? 'text-chinese' : 'text-japanese') 字
 
   .welcome-options
     .row
-      .col-xs-6
-        a.btn.btn-fixed.btn-success(href='/signup') Sign up
-      .col-xs-6
-        a.btn.btn-fixed.btn-success(href='/login') Log in
+      // TODO: enable this when signup page ready
+      // .col-xs-6
+        // a.btn.btn-fixed.btn-success(href='/signup') Sign up
+      .col-xs-12.text-center
+        a.btn.btn-fixed.btn-success(href='/login')= app.locale('common.logIn')
+W

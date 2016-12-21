@@ -62,6 +62,10 @@ module.exports = GelatoPage.extend({
    * @returns {VocablistsChinesepodPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileVocablistsChinesepod.jade');
+    }
+
     this.renderTemplate();
     this.sidebar.setElement('#vocablist-sidebar-container').render();
     return this;

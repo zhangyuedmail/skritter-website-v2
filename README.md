@@ -1,11 +1,10 @@
 # Skritter 2.0
-[![Build Status](https://travis-ci.org/skritter/skritter-html5.svg?branch=master)](https://travis-ci.org/skritter/skritter-html5)
 
 Learn to write Chinese and Japanese characters.
 
 ## Requirements
 
-* [Node.js](https://nodejs.org/) >= 4.0
+* [Node.js](https://nodejs.org/) >= 6.0
 
 ## Setup
 

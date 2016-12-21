@@ -140,9 +140,19 @@
 
 /*** STUDY ***/
 .icon-study-ban {
-  background-image: url('#{$dir-assets}/vectors/study-ban.svg');
   height: 23px;
   width: 23px;
+
+  svg {
+    width: 23px;
+    height: 23px;
+    fill: $green5;
+    //stroke: $green5;
+
+    #Line {
+      stroke: $green5;
+    }
+  }
 }
 
 .icon-study-char-decomp {
@@ -153,8 +163,8 @@
 
 .icon-study-correct {
   background-image: url('#{$dir-assets}/vectors/study-correct.svg');
-  height: 44px;
-  width: 59px;
+  max-height: 44px;
+  max-width: 59px;
   &.disabled {
     background-image: url('#{$dir-assets}/vectors/study-correct-disabled.svg');
   }
@@ -162,8 +172,8 @@
 
 .icon-study-erase {
   background-image: url('#{$dir-assets}/vectors/study-erase.svg');
-  height: 48px;
-  width: 44px;
+  max-height: 48px;
+  max-width: 44px;
   &.disabled {
     background-image: url('#{$dir-assets}/vectors/study-erase-disabled.svg');
   }
@@ -173,15 +183,22 @@
   background-image: url('#{$dir-assets}/vectors/study-incorrect.svg');
   height: 44px;
   width: 59px;
+
   &.disabled {
     background-image: url('#{$dir-assets}/vectors/study-incorrect-disabled.svg');
   }
 }
 
 .icon-study-info {
-  background-image: url('#{$dir-assets}/vectors/study-info.svg');
+  //background-image: url('#{$dir-assets}/vectors/study-info.svg');
   height: 23px;
   width: 23px;
+
+  svg {
+    width: 23px;
+    height: 23px;
+    fill: $green5;
+  }
 }
 
 .icon-study-leech {
@@ -198,8 +215,9 @@
 
 .icon-study-show {
   background-image: url('#{$dir-assets}/vectors/study-show.svg');
-  height: 34px;
-  width: 58px;
+  max-height: 34px;
+  max-width: 58px;
+
   &.disabled {
     background-image: url('#{$dir-assets}/vectors/study-show-disabled.svg');
   }
@@ -207,17 +225,18 @@
 
 .icon-study-stroke-order {
   background-image: url('#{$dir-assets}/vectors/study-stroke-order.svg');
-  height: 50px;
-  width: 52px;
+  max-width: 52px;
+  max-height: 50px;
+
   &.disabled {
     background-image: url('#{$dir-assets}/vectors/study-stroke-order-disabled.svg');
   }
 }
 
 .icon-study-word-edit {
-  //background-image: url('#{$dir-assets}/vectors/study-word-edit.svg');
   height: 23px;
   width: 19px;
+
   svg {
     width: 24px;
     height: 24px;
@@ -244,9 +263,14 @@
 }
 
 .icon-study-word-volume {
-  background-image: url('#{$dir-assets}/vectors/study-word-volume.svg');
   height: 24px;
   width: 24px;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: $green5;
+  }
 }
 
 /*** STUDY: LIGHT ***/

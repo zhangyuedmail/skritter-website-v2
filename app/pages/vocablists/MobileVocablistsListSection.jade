@@ -1,0 +1,50 @@
+gelato-page(data-name='mobile-vocablists-list-section')
+  - var editor = view.editor;
+  - var vocablist = view.vocablist;
+  - var vocablistSection = view.vocablistSection;
+
+  section.container
+    .content-block
+      .row
+
+        .col-xs-12
+
+          if vocablist.state === 'fetching'
+
+            .loading-section.text-center
+              i.fa.fa-3x.fa-spinner.fa-pulse
+
+          else
+
+            .content-details
+              .row
+                .col-xs-12
+                  #editing-buttons.pull-right
+                    if vocablist.isEditable()
+                      if editor.editing
+                        button#discard-changes.btn.btn-primary
+                          i.fa.fa-close &nbsp;#{app.locale('common.cancel')}&nbsp;
+                        button#save-changes.btn.btn-success
+                          i.fa.fa-save &nbsp;#{app.locale('common.save')}&nbsp;
+                      else
+                        button#edit-section.btn.btn-success
+                          i.fa.fa-pencil &nbsp;Edit&nbsp;
+                  .list-name
+                    a#back-link(href='/vocablists/view/' + vocablist.id)
+                      i.fa.fa-angle-left
+                      | &nbsp;
+                      span= vocablist.get('name')
+                  if editor.editing
+                    input#section-name.section-name(value=vocablistSection.get('name'))
+                  else
+                    #section-name.section-name= vocablistSection.get('name') || '(empty)'
+
+
+            #editor-container
+
+            if editor.editing && vocablist.isEditable()
+              #input-row.row
+                .col-xs-12
+                  input#add-input(type='text', placeholder='Type a word and hit enter')
+              #input-message.row.text-danger
+                .value.col-xs-12

@@ -18,7 +18,8 @@ gelato-page(data-name='words-all')
                 .input-group.input-group-lg
                   span.input-group-addon
                     i.fa.fa-search
-                  input#word-search-input.form-control(type="text", placeholder="你, ni3, etc...")
+                  -var p = app.isChinese() ? '你, ni3, etc...' : 'がくせい, 学生, etc...'
+                  input#word-search-input.form-control(type="text", placeholder=p)
               .col-md-4
                 select#action-select.form-control.input-lg(disabled=true)
                   option(value="") Select words...

@@ -2,7 +2,7 @@
  * @property data
  * @type Object
  */
-var data = {
+const data = {
   "ba1": {"pinyin": "bā", "zhuyin": "ㄅㄚ"},
   "ba2": {"pinyin": "bá", "zhuyin": "ㄅㄚ"},
   "ba3": {"pinyin": "bǎ", "zhuyin": "ㄅㄚ"},
@@ -2125,7 +2125,7 @@ var data = {
  * @property syllables
  * @type Object
  */
-var syllables = {
+const syllables = {
   "ā": "a",
   "á": "a",
   "ǎ": "a",
@@ -2161,20 +2161,60 @@ var syllables = {
   "üà": "üa"
 };
 
-// var re1='(z)';	// Any Single Character 1
-//       var re2='(h)';	// Any Single Character 2
+/**
+ * @property syllables
+ * @type Object
+ */
+const numberSyllables = {
+  "ā": {letter: "a", tone: 1},
+  "á": {letter: "a", tone: 2},
+  "ǎ": {letter: "a", tone: 3},
+  "à": {letter: "a", tone: 4},
+  "ō": {letter: "o", tone: 1},
+  "ó": {letter: "o", tone: 2},
+  "ǒ": {letter: "o", tone: 3},
+  "ò": {letter: "o", tone: 4},
+  "ē": {letter: "e", tone: 1},
+  "é": {letter: "e", tone: 2},
+  "ě": {letter: "e", tone: 3},
+  "è": {letter: "e", tone: 4},
+  "ī": {letter: "i", tone: 1},
+  "í": {letter: "i", tone: 2},
+  "ǐ": {letter: "i", tone: 3},
+  "ì": {letter: "i", tone: 4},
+  "ū": {letter: "u", tone: 1},
+  "ú": {letter: "u", tone: 2},
+  "ǔ": {letter: "u", tone: 3},
+  "ù": {letter: "u", tone: 4},
+  "ǖ": {letter: "ü", tone: 1},
+  "ǘ": {letter: "ü", tone: 2},
+  "ǚ": {letter: "ü", tone: 3},
+  "ǜ": {letter: "ü", tone: 4},
+  "ü": {letter: "ü", tone: 5},
+  "üē": {letter: "üe", tone: 1},
+  "üé": {letter: "üe", tone: 2},
+  "üě": {letter: "üe", tone: 3},
+  "üè": {letter: "üe", tone: 4},
+  "üā": {letter: "üa", tone: 1},
+  "üá": {letter: "üa", tone: 2},
+  "üǎ": {letter: "üa", tone: 3},
+  "üà": {letter: "üa", tone: 4}
+};
+
+// let re1='(z)';	// Any Single Character 1
+//       let re2='(h)';	// Any Single Character 2
 //
-// var p = new RegExp(re1+re2,["i"]);
-// var m = p.exec(txt);
+// let p = new RegExp(re1+re2,["i"]);
+// let m = p.exec(txt);
 
 
 
 function analyzePinyinAnswer(answer, correctAnswer) {
   // regex uses a greedy algorithm, put larger initials first
-  var doubleInitials = /(zh)|(ch)|(sh)/;
-  var initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)/;
+  let doubleInitials = /(zh)|(ch)|(sh)/;
+  let initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)/;
 
-  var initial = answer.substr(0,2);
+  let initial = answer.substr(0,2);
 
   return {};
 }
@@ -2188,8 +2228,8 @@ function getData() {
 }
 
 function getPinyinArray() {
-  var pinyin = [];
-  for (var item in data) {
+  let pinyin = [];
+  for (let item in data) {
     pinyin.push(data[item].pinyin);
   }
   return pinyin;
@@ -2203,15 +2243,15 @@ function getPinyinArray() {
  */
 function pinyinToTone(text, includeSpaces) {
   text = text.toLowerCase();
-  var textArray = [];
+  let textArray = [];
   if (includeSpaces) {
     textArray = text.match(/[a-z|A-Z]+[0-9]+|\s|,\s|\s\.\.\.\s|'/g);
   } else {
     textArray = text.match(/[a-z|A-Z]+[0-9]+|,\s|\s\.\.\.\s|'/g);
   }
   if (textArray) {
-    for (var i = 0, length = textArray.length; i < length; i++) {
-      var textItem = textArray[i];
+    for (let i = 0, length = textArray.length; i < length; i++) {
+      let textItem = textArray[i];
       if (textItem !== ' ... ' &&
         textItem !== "'" &&
         textItem !== ", " &&
@@ -2234,12 +2274,12 @@ function pinyinToTone(text, includeSpaces) {
  */
 function pinyinToZhuyin(text) {
   text = text.toLowerCase();
-  var zhuyinArray = [];
-  var textArray = text.match(/[a-z|A-Z]+[0-9]+|,\s|'|\s\.\.\.\s/g);
+  let zhuyinArray = [];
+  let textArray = text.match(/[a-z|A-Z]+[0-9]+|,\s|'|\s\.\.\.\s/g);
   if (textArray) {
-    for (var i = 0, length = textArray.length; i < length; i++) {
-      var textItem = textArray[i];
-      var toneItem = textItem.match(/[0-9]+/g);
+    for (let i = 0, length = textArray.length; i < length; i++) {
+      let textItem = textArray[i];
+      let toneItem = textItem.match(/[0-9]+/g);
       if (textItem !== " ... " && textItem !== "'" && textItem !== ", ") {
         zhuyinArray.push(data[textItem].zhuyin);
         if (toneItem) {
@@ -2262,11 +2302,28 @@ function pinyinToZhuyin(text) {
  * @return {String}
  */
 function removeToneMarks(text) {
-  for (var syllable in syllables) {
-    var letter = syllables[syllable];
+  for (let syllable in syllables) {
+    let letter = syllables[syllable];
     text = text.replace(syllable, letter);
   }
   return text;
+}
+
+/**
+ * Analyzes a string of text to detect if any tone-marked vowels are contained.
+ * E.g. rén returns true, ren2 returns false.
+ * @param {String} text
+ * @return {Boolean} whether tone-marked vowels are contained.
+ */
+function hasToneMarks(text) {
+  for (let syllable in syllables) {
+    const letter = syllables[syllable];
+    if (text.replace(syllable, letter) !== text) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 /**
@@ -2291,6 +2348,7 @@ function removeToneNumbers(text) {
 
 module.exports = {
   getData: getData,
+  hasToneMarks: hasToneMarks,
   toTone: pinyinToTone,
   toZhuyin: pinyinToZhuyin,
   removeToneMarks: removeToneMarks,

@@ -1,4 +1,7 @@
 const GelatoComponent = require('gelato/component');
+const ViewDialog = require('dialogs1/view-dialog/view');
+const MnemonicSelector = require('components/study/mnemonic-selector/StudyPromptMnemonicSelectorComponent.js');
+const vent = require('vent');
 
 /**
  * @class StudyPromptVocabMnemonicComponent
@@ -11,7 +14,8 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click #show-mnemonic': 'handleClickShowMnemonic'
+    'click #show-mnemonic': 'handleClickShowMnemonic',
+    'click #add-mnemonic': 'handleClickAddMnemonic'
   },
 
   /**
@@ -28,6 +32,15 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
   initialize: function(options) {
     this.editing = false;
     this.prompt = options.prompt;
+
+    this._views['selector'] = new ViewDialog({
+      showCloseButton: true,
+      showTitle: true,
+      dialogTitle: app.locale('pages.study.menmonicSelectorDialogTitle'),
+      content: MnemonicSelector
+    });
+
+    this.listenTo(vent, 'mnemonic:updated', this.render);
   },
 
   /**
@@ -36,6 +49,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    */
   render: function() {
     this.renderTemplate();
+
     return this;
   },
 
@@ -59,6 +73,14 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
     event.preventDefault();
     this.prompt.review.set('showMnemonic', true);
     this.render();
+  },
+
+  /**
+   * Opens a popup that allows a user to add a mnemonic for a word
+   */
+  handleClickAddMnemonic: function() {
+    this._views['selector'].content.setVocab(this.prompt.reviews.vocab);
+    this._views['selector'].open();
   }
 
 });

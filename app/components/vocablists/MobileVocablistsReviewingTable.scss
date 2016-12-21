@@ -1,0 +1,28 @@
+@import "../../styles/_variables";
+
+gelato-component[data-name='mobile-vocablists-reviewing-table'] {
+
+  a.action-link {
+    color: $green5;
+    cursor: pointer;
+  }
+
+  .glyphicon {
+    color: $grey3;
+    cursor: pointer;
+    font-size: 2.5vh;
+    &:hover {
+      color: $grey5;
+    }
+  }
+
+  .progress {
+    margin-top: 15px;
+  }
+
+  .row {
+    font-size: 1.5vh;
+    margin-bottom: 15px;
+  }
+
+}

@@ -65,13 +65,17 @@ gelato-page[data-name='account-settings-general'] {
     }
 
     #reset-all-data {
-      position: absolute;
-      right: 50px;
+      float: right;
+      margin-top: 40px;
     }
   }
 
   .option-desc {
     color: $grey3;
+  }
+
+  .alert-danger {
+    margin-top: 50px;
   }
 
 }

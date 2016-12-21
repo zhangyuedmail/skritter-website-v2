@@ -3,6 +3,8 @@
 const lang = process.argv[2] || 'zh';
 const shell = require('shelljs');
 
+process.env.PROJECT_LANG = lang;
+
 shell.exec('brunch build');
 
 shell.cp('./cordova.xml', './cordova/config.xml');

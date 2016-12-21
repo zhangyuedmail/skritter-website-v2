@@ -3,4 +3,13 @@ gelato-dialog(data-name='view-dialog')
   .modal.fade(tabindex='-1', role='dialog')
     .modal-dialog
       .modal-content
+        if view.showCloseButton || view.showTitle
+          .modal-header
+            if view.showTitle
+              .pull-left
+                .modal-title!= view.dialogTitle
+            if view.showCloseButton
+              .pull-right
+                a(href='#', data-dismiss='modal')
+                  i.fa.fa-times-circle-o
         #content-container

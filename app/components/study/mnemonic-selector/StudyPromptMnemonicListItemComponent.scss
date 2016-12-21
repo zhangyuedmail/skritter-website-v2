@@ -1,0 +1,27 @@
+@import "../../../styles/_variables";
+
+gelato-component[data-name='study-prompt-mnemonic-listitem'] {
+  padding: 10px 50px 10px 70px;
+  position: relative;
+  min-height: 32px;
+
+  .add-mnemonic {
+    float: left;
+    margin-left: -60px;
+  }
+
+  .mnemonic-text {
+    display: inline-block;
+    float: left;
+    margin-top: 6px;
+    width: 100%;
+  }
+
+  .popularity {
+    display: inline-block;
+    width: 40px;
+    float: right;
+    margin-right: -50px;
+    margin-top: 6px;
+  }
+}

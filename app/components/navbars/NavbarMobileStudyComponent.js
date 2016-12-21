@@ -48,7 +48,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * @triggers item:add
    */
   handleAddClick: function(event) {
-    if (this.$('#add').hadClass('adding')) {
+    if (this.$('#add').hasClass('adding')) {
       return;
     }
 

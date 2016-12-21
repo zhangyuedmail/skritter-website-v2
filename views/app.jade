@@ -8,17 +8,15 @@ head
   meta(name='keywords', content='learn, chinese, japanese, language, study, flashcards, handwriting')
   meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
 
-  include ./includes/fonts
-
   link(href='/favicon.png', rel='apple-touch-icon')
   link(href='/styles/startup.css', rel='stylesheet')
   link(href='/styles/libraries.css', rel='stylesheet')
   link(href='/styles/application.css', rel='stylesheet')
 
 body
+  script(src='/js/libraries.js')
   script(src='/js/startup.js')
   script(src='/js/tracking.js')
-  script(src='/js/libraries.js')
   script(src='/js/application.js')
   script.
     require('initialize');

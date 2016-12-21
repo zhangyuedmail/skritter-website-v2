@@ -1,0 +1,28 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='mobile-vocablists-deleted'] {
+
+  background: $background-primary;
+  padding-top: 100px;
+
+  #vocablist-container {
+    margin-left: -25px;
+    margin-right: -25px;
+  }
+
+  .content-block {
+    margin-top: 50px;
+  }
+
+  .main-content {
+    padding: 15px 17px;
+    border-radius: 5px;
+  }
+
+  #vocablist-container {
+
+    .row {
+      margin: 0px 8px;
+    }
+  }
+}

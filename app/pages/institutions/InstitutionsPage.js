@@ -17,6 +17,13 @@ const InstitutionsPage = GelatoPage.extend({
   },
 
   /**
+   * Describes a CSS class name for what type of background this page should have.
+   * The class is applied higher up in the hierarchy than the page element.
+   * @type {String}
+   */
+  background: 'marketing',
+
+  /**
    * @property title
    * @type {String}
    */
@@ -42,7 +49,11 @@ const InstitutionsPage = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.$('#institution-datepicker').datetimepicker({format: 'YYYY-MM-DD'});
+    this.$('#institution-when').daterangepicker({
+      locale: {format: 'YYYY-MM-DD'},
+      singleDatePicker: true,
+      startDate: moment()
+    });
 
     return this;
   },
@@ -98,7 +109,7 @@ const InstitutionsPage = GelatoPage.extend({
           'Start Date': when
         }
       })
-    }).done(function() {
+    }).then(function() {
       self.$('#request-message').removeClass('text-danger');
       self.$('#request-message').addClass('text-success');
       self.$('#request-message').text('Your request has been successfully sent.');

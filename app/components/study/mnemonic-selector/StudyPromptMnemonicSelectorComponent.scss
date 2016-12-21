@@ -1,0 +1,62 @@
+@import "../../../styles/_variables";
+
+gelato-component[data-name='study-prompt-mnemonic-selector'] {
+
+  .fa-spinner {
+    padding: 20px;
+  }
+
+  .user-mnemonic {
+    margin-top: 20px !important;
+  }
+
+  .formatting-instructions {
+    padding: 0 0 20px;
+  }
+
+  .example-format {
+    padding-left: 10px;
+    display: inline-block;
+  }
+
+  .mnemonic-input {
+    width: 100%;
+    font-size: 18px;
+  }
+  .save-custom-btn {
+    float: right;
+  }
+
+  .select-instructions {
+    font-size: 16px;
+  }
+
+  .text-right {
+    color: $grey3;
+  }
+
+  .add-margin {
+    margin: 10px;
+  }
+
+  gelato-component:nth-child(odd) {
+    background-color: $white3;
+  }
+  gelato-component:nth-child(even) {
+    background-color: $white1;
+  }
+
+  .row {
+    margin: 0;
+  }
+
+  .user-message {
+    margin-top: 10px;
+  }
+
+  .author-wrapper {
+    margin-top: 10px;
+    color: $grey3;
+    font-size: 10px;
+  }
+}

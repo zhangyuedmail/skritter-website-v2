@@ -47,32 +47,53 @@ var VocabCreatorDialog = GelatoDialog.extend({
    * @param {Event} event
    */
   handleClickButtonAddWord: function(event) {
-    var self = this;
-    var formData = this.getFormData();
+    const self = this;
+    const formData = this.getFormData();
     event.preventDefault();
+
     this.$('#error-message').empty();
+
     if (_.isEmpty(formData.reading)) {
       this.$('#error-message').text('A reading is required.');
       return;
     }
-    if (_.isEmpty(formData.definitions)) {
+
+    if (_.isEmpty(formData.definition)) {
       this.$('#error-message').text('A definition is required.');
       return;
     }
-    new Vocab({
-      definitions: {
-        en: formData.definitions
+
+    if (formData.lang === 'zh') {
+      if (app.fn.pinyin.hasToneMarks(formData.reading)) {
+        this.$('#error-message').text('Please convert all tone vowels to numbers. e.g. rén -> ren2');
+      }
+    }
+
+    if (formData.lang === 'ja') {
+      if (!wanakana.isKana(formData.reading)) {
+        this.$('#error-message').text('Reading must be kana only.');
+        return;
+      }
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: app.getApiUrl() + 'vocabs',
+      headers: app.user.session.getHeaders(),
+      data: JSON.stringify({
+        definitions: {
+          en: formData.definition
+        },
+        lang: formData.lang,
+        reading: formData.reading,
+        writing: formData.writing,
+        writingTraditional: formData.writingTraditional
+      }),
+      error: function(error) {
+        self.$('#error-message').text(JSON.stringify(error));
       },
-      lang: formData.lang,
-      reading: formData.reading,
-      writing: formData.writing,
-      writingTraditional: formData.writingTraditional
-    }).post(function(error, vocab) {
-      if (error) {
-        //TODO: display errors from server
-        console.error(error);
-      } else {
-        self.trigger('vocab', vocab);
+      success: function(result) {
+        self.trigger('vocab', new Vocab(result.Vocab));
         self.close();
       }
     });
@@ -83,7 +104,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
    */
   getFormData: function() {
     var formData = {
-      definitions: this.$('#word-definition-input textarea').val(),
+      definition: this.$('#word-definition-input textarea').val(),
       lang: this.row.lang,
       reading: this.$('#word-reading-input input').val(),
       writing: this.row.writing

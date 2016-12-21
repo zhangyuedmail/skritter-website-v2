@@ -4,14 +4,15 @@ gelato-component(data-name='study-prompt-vocab-mnemonic')
   if prompt.reviews
     - var mnemonic = prompt.reviews.vocab.getMnemonic();
 
-    label Mnemonic
+    label= app.locale('pages.study.mnemonicLabel')
 
     .value
       if view.editing
         textarea= mnemonic ? mnemonic.text : ''
       else if !mnemonic || _.isEmpty(mnemonic.text)
-        em Click the 'edit' icon to add a mnemonic
+        button#add-mnemonic.btn.btn-sm.btn-default= app.locale('pages.study.mnemonicAdd')
       else if prompt.review.get('showMnemonic') || prompt.reviews.isComplete()
         span!= app.fn.textToHTML(mnemonic.text)
+        button#add-mnemonic.btn.btn-sm.btn-default.push-right= app.locale('pages.study.mnemonicEdit')
       else
-        button#show-mnemonic.btn.btn-sm.btn-default show
+        button#show-mnemonic.btn.btn-sm.btn-default= app.locale('pages.study.mnemonicShow')

@@ -17,14 +17,8 @@ gelato-page(data-name='mobile-account-settings-study')
 
         .col-xs-12
           #section-content
-            .title Study Settings
+
             form.form-horizontal
-              .form-group
-                label.col-sm-3.control-label(for="field-target-language") Target language
-                .col-sm-9
-                  select#field-target-language.form-control
-                    option(value="zh", selected=(app.getLanguage() === 'zh')) Chinese
-                    option(value="ja", selected=(app.getLanguage() === 'ja')) Japanese
               .form-group
                 label.col-sm-3.control-label(for="field-source-language") Source language
                 .col-sm-9
@@ -97,6 +91,7 @@ gelato-page(data-name='mobile-account-settings-study')
 
               .form-group
                 .col-sm-12.button-options
+                  #error-alert.alert.alert-danger.hidden
                   .text-center
                     if user.state === 'standby'
                       button#button-save.btn.btn-fixed.btn-success(type="submit") Save

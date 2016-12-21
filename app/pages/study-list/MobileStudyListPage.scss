@@ -1,0 +1,23 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='mobile-study-list'] {
+
+  background: $background-primary;
+  height: 100%;
+  padding-bottom: 10px !important;
+  padding-top: 60px;
+  position: absolute;
+  width: 100%;
+
+  #study-prompt-container {
+    height: 100%;
+    padding: 0 10px;
+    position: absolute;
+    width: 100%;
+  }
+
+  #study-toolbar-container {
+    display: none;
+  }
+
+}

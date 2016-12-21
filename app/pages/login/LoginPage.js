@@ -7,6 +7,13 @@ const GelatoPage = require('gelato/page');
 const LoginPage = GelatoPage.extend({
 
   /**
+   * Describes a CSS class name for what type of background this page should have.
+   * The class is applied higher up in the hierarchy than the page element.
+   * @type {String}
+   */
+  background: 'marketing',
+
+  /**
    * @property events
    * @type {Object}
    */
@@ -122,7 +129,7 @@ const LoginPage = GelatoPage.extend({
       formData.password.trim(),
       function(error) {
         if (error) {
-          self.$('#login-message').text(error.responseJSON.message);
+          self.$('#login-message').html(error.responseJSON.message);
           self.$('#login-form').prop('disabled', false);
           ScreenLoader.hide();
         } else {

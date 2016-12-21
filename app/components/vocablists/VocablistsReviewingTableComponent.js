@@ -23,7 +23,7 @@ const VocablistsReviewingTableComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./VocablistsReviewingTable'),
+  template: require('./VocablistsReviewingTable.jade'),
 
   /**
    * @method initialize
@@ -39,7 +39,12 @@ const VocablistsReviewingTableComponent = GelatoComponent.extend({
    * @returns {VocablistsReviewingTableComponent}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileVocablistsReviewingTable.jade');
+    }
+
     this.renderTemplate();
+
     return this;
   },
 

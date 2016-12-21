@@ -10,6 +10,13 @@ var User = require('models/UserModel');
 module.exports = GelatoPage.extend({
 
   /**
+   * Describes a CSS class name for what type of background this page should have.
+   * The class is applied higher up in the hierarchy than the page element.
+   * @type {String}
+   */
+  background: 'marketing',
+
+  /**
    * @property events
    * @type Object
    */
@@ -182,7 +189,7 @@ module.exports = GelatoPage.extend({
    * @param {String} message the error to show to the user
    */
   displayErrorMessage: function(message) {
-    this.$('#signup-error-alert').text(message).removeClass('hide');
+    this.$('#signup-error-alert').html(message).removeClass('hide');
   },
 
   /**
@@ -531,6 +538,9 @@ module.exports = GelatoPage.extend({
           break;
         case "IneligibleSchoolEmail":
           errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
+          break;
+        case "EmailTaken":
+          errorMsg = app.locale('pages.signup.errorEmailTaken');
           break;
         default:
           errorMsg = app.locale('pages.signup.errorDefault');

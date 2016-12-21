@@ -1,0 +1,32 @@
+gelato-page(data-name='mobile-vocablists-deleted')
+
+  #dialog-container
+
+  section#vocablist-nav-links.container
+    .row.text-center
+      .col-xs-6
+        a(href='/vocablists/queue') Queue
+      .col-xs-6
+        a(href='/vocablists/browse') Browse
+
+    if app.getLanguage() === 'zh'
+      .row.text-center
+        .col-xs-4
+          a(href='/vocablists/my-lists') My Lists
+        .col-xs-4
+          a(href='/vocablists/chinesepod') ChinesePod
+        .col-xs-4
+          a(href='/vocablists/deleted') Deleted
+    else
+      .row.text-center
+        .col-xs-6
+          a(href='/vocablists/my-lists') My Lists
+        .col-xs-6
+          a(href='/vocablists/deleted') Deleted
+
+  section.container
+    .content-block
+      .row
+        .col-md-12.main-content
+          .title My Deleted Lists
+          #vocablist-container

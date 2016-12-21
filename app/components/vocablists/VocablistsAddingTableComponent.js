@@ -22,7 +22,7 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./VocablistsAddingTable'),
+  template: require('./VocablistsAddingTable.jade'),
 
   /**
    * @method initialize
@@ -38,6 +38,10 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
    * @returns {VocablistsAddingTableComponent}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileVocablistsAddingTable.jade');
+    }
+
     this.renderTemplate();
 
     return this;
@@ -49,8 +53,12 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
    */
   handleClickStopAddingLink: function(event) {
     event.preventDefault();
-    var listID = $(event.target).closest('.row').data('list-id');
-    var list = this.vocablists.get(listID.toString());
+
+    console.log(event);
+
+    const listID = $(event.target).closest('.row').data('list-id');
+    const list = this.vocablists.get(listID.toString());
+
     list.save({'studyingMode': 'reviewing'}, {patch: true});
     this.render();
   },
@@ -61,8 +69,10 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
    */
   handleClickListSettingsSpan: function(event) {
     event.preventDefault();
-    var listID = $(event.target).closest('.row').data('list-id');
-    var list = this.vocablists.get(listID.toString());
+
+    const listID = $(event.target).closest('.row').data('list-id');
+    const list = this.vocablists.get(listID.toString());
+
     this.dialog = new VocablistSettings({vocablist: list});
     this.dialog.render().open();
   },
@@ -73,8 +83,10 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
    */
   handleClickRemoveListSpan: function(event) {
     event.preventDefault();
-    var listID = $(event.target).closest('.row').data('list-id');
-    var list = this.vocablists.get(listID.toString());
+
+    const listID = $(event.target).closest('.row').data('list-id');
+    const list = this.vocablists.get(listID.toString());
+
     this.dialog = new VocablistRemoveDialog({vocablist: list});
     this.dialog.render().open();
   }

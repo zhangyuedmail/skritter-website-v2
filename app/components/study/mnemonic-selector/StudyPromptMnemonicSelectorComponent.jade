@@ -1,0 +1,34 @@
+- const currentMnemonic = view.collection.vocab.getMnemonic();
+- const hasMnemFromAnotherUser = currentMnemonic && currentMnemonic.creator !== app.user.id;
+gelato-component(data-name='study-prompt-mnemonic-selector')
+  if view.collection.state === 'fetching'
+    p.text-center
+      i.fa.fa-3x.fa-spinner.fa-pulse
+  else
+    .user-mnemonic.row
+      .col-md-10
+        if hasMnemFromAnotherUser
+          .linked-mnem
+            .mnem-text= view.getCurrentMnemonicText()
+            .author-wrapper
+              span by&nbsp;
+              span= currentMnemonic.creator
+        else
+          input#custom-mnemonic.mnemonic-input(placeholder="Write your own mnemonic here" value=view.getCurrentMnemonicText())
+      .col-md-2
+        if hasMnemFromAnotherUser
+          #remove-mnem.btn.btn-danger Remove
+        else
+          #save.btn.btn-primary.save-custom-btn= app.locale('common.save')
+    if !hasMnemFromAnotherUser
+      .formatting-instructions.row
+        .col-md-12 Formatting characters:
+          b.example-format *bold*
+          i.example-format _italics_
+    #user-message.row.user-message.alert.hidden
+
+    if view.collection.getUnusedLength(currentMnemonic)
+      .row.labels-wrapper
+        .select-instructions.col-md-9 Or choose from one of these mnemonics:
+        .text-right.col-md-3 Popularity
+      #list-area.add-margin

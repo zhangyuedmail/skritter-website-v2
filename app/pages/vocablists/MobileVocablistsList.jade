@@ -1,0 +1,84 @@
+gelato-page(data-name='mobile-vocablists-list')
+  - var editor = view.editor;
+  - var vocablist = view.vocablist;
+
+  section.container
+    .content-block
+      .row
+
+        .col-md-12.content
+          if vocablist.state === 'fetching'
+
+            p.text-center
+              i.fa.fa-3x.fa-spinner.fa-pulse
+
+          else
+
+            .content-details
+
+              .row
+                .col-xs-12
+                  if vocablist.isEditable()
+                    #editing-buttons
+                      if editor.editing
+                        button#discard-changes.btn.btn-primary
+                          i.fa.fa-close
+                          | #{app.locale('common.cancel')}
+                        button#save-changes.btn.btn-success
+                          i.fa.fa-save
+                          | #{app.locale('common.save')}
+                      else
+                        button#edit-list.btn.btn-success
+                          i.fa.fa-pencil
+                          | Edit
+                .col-xs-12
+                  if view.editing
+                    input.list-name(value=vocablist.get('name'))
+                  else
+                    .list-name= vocablist.get('name')
+
+              .list-stats
+                span.spr Made by:
+                if vocablist.get('sort') === 'official'
+                  span Skritter
+                else if vocablist.get('sort') === 'chinesepod-lesson'
+                  span ChinesePod
+                else if vocablist.get('creator') === app.user.id
+                  span= app.user.get('name') || app.user.id
+                else
+                  if creator && creator.state === 'standby'
+                    span= creator.get('name') || creator.id
+                  else
+                    span(data-user-id=vocablist.get('creator')) Unknown
+                span.spl.spr |
+
+                if vocablist.get('published')
+                  span.spr Published:
+                  span= moment(vocablist.get('published') * 1000).format('LL')
+                  span.spl.spr |
+
+                if vocablist.get('published') && vocablist.get('peopleStudying')
+                  span.spr Studied by:
+                  span= vocablist.get('peopleStudying')
+                  span.spl.spr |
+
+                span.spr Words:
+                span= vocablist.getWordCount()
+
+              if view.editing
+                textarea.list-description(placeholder=app.locale('pages.vocabLists.enterDescription'))= vocablist.get('description')
+              else
+                .list-description !{vocablist.get('description')}
+
+              if vocablist.get('sections').length > 1
+                .list-sections-header Sections
+
+            #editor-container
+
+            if !vocablist.get('singleSect')
+              if vocablist.isEditable() && view.editing
+                #input-row.row
+                  .col-xs-12
+                    button#add-section.btn.btn-success
+                      i.fa.fa-plus
+                      | #{app.locale('pages.vocabLists.addSection')}

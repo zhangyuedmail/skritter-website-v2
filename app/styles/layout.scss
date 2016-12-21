@@ -10,7 +10,12 @@ gelato-page > .container > .content-block {
   border-top-right-radius: 25px;
   color: $grey5;
   margin: -15px 0;
+  min-height: 500px;
   padding: 55px 40px;
+}
+
+.mobile .main-content {
+  min-height: 0;
 }
 
 .title {
@@ -27,4 +32,20 @@ gelato-page > .container > .content-block {
   font-weight: 300;
   margin-bottom: 15px;
   margin-top: 40px;
+}
+
+#vocablist-nav-links {
+  background: $grey7;
+  margin-bottom: 15px;
+  margin-top: -50px;
+  overflow-x: scroll;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  position: fixed;
+  width: 100%;
+  z-index: 7002;
+}
+
+#vocablist-nav-links .row {
+  margin-bottom: 15px;
 }

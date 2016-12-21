@@ -92,6 +92,7 @@ gelato-page(data-name='mobile-account-settings-general')
 
               .form-group
                 .col-sm-12.option-buttons
+                  #error-alert.alert.alert-danger.hidden
                   .text-center
                     if user.state === 'standby'
                       button#button-save.btn.btn-fixed.btn-success(type="submit")= app.locale('common.save')

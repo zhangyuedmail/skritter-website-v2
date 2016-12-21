@@ -1,6 +1,7 @@
 const SkritterModel = require('base/BaseSkritterModel');
 const SessionModel = require('models/SessionModel');
 const SubscriptionModel = require('models/SubscriptionModel');
+const CharacterCollection = require('collections/CharacterCollection');
 const VocablistCollection = require('collections/VocablistCollection');
 const ProgressStatsCollection = require('collections/ProgressStatsCollection');
 
@@ -28,6 +29,7 @@ const UserModel = SkritterModel.extend({
     goals: {ja: {items: 20}, zh: {items: 20}},
     lastChineseItemUpdate: 0,
     lastJapaneseItemUpdate: 0,
+    spaceItems: false,
     studyKana: false,
     teachingMode: true,
     timezone: 'America/New_York',
@@ -60,6 +62,7 @@ const UserModel = SkritterModel.extend({
    * @constructor
    */
   initialize: function() {
+    this.characters = new CharacterCollection();
     this.session = new SessionModel(null, {user: this});
     this.subscription = new SubscriptionModel({id: this.id});
   },

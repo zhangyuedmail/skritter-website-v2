@@ -10,7 +10,7 @@ const loggy = require('loggy');
 const morgan = require('morgan');
 
 const app = express();
-app.set('port', 3333);
+app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(bodyParser.json());

@@ -1,7 +1,6 @@
 @import "../../../styles/_variables";
 
 gelato-component[data-name='mobile-study-prompt'] {
-
   background-color: $white1;
   border-radius: 5px;
   height: 100%;
@@ -18,11 +17,14 @@ gelato-component[data-name='mobile-study-prompt'] {
     position: absolute;
     width: 100%;
     z-index: 7000;
+
     .btn {
+      height: 100%;
+      margin: 25px auto;
+
       i {
         margin: 0 5px;
       }
-      margin: 25px auto;
     }
   }
 
@@ -30,13 +32,15 @@ gelato-component[data-name='mobile-study-prompt'] {
     background-color: $white1;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    height: 50%;
+    height: 74%;
     padding: 10px;
+
     .content {
       margin: 0 auto;
-      max-width: 450px;
+      max-width: 1000px;
       position: relative;
       width: 100%;
+
       #input-container {
         background-color: $white1;
         cursor: pointer;
@@ -64,16 +68,82 @@ gelato-component[data-name='mobile-study-prompt'] {
           top: 0;
           width: 100%;
         }
+
         #toolbar-grading-container {
-          bottom: -30px;
+          bottom: 0px;
           left: 0;
           position: absolute;
           width: 100%;
           z-index: 5003;
         }
       }
+
+      #toolbar-stroke-order {
+        width: 96%; // [the original aspect ratio] 25/26 = 96%;
+      }
+
+      #toolbar-erase {
+        width: 91.6%;
+      }
+
+      #toolbar-show {
+        //height: 58.6%;
+        width: 100%;
+      }
+
+      #toolbar-correct {
+        width: 100%;
+        //height: 74.5%;
+      }
+
       #toolbar-action-container {
-        margin-top: 15px;
+        max-height: 63px;
+
+        &.margin-top {
+          margin-top: 15px;
+        }
+      }
+
+      gelato-component[data-name='study-prompt-navigation'] {
+        font-size: 8vh;
+        top: 30%;
+
+        #navigate-next {
+          right: 0;
+        }
+
+        #navigate-previous {
+          left: 0;
+        }
+      }
+
+      gelato-component[data-name="study-prompt-part-defn"] {
+        .answer {
+          font-size: 3.5vh;
+          padding-top: 0;
+        }
+
+        .question {
+          font-size: 4vh;
+        }
+
+        .writing {
+          font-size: 10vh;
+        }
+      }
+
+      gelato-component[data-name="mobile-study-prompt-part-rdng"] {
+        .answer {
+          font-size: 4vh;
+        }
+
+        .question {
+          font-size: 4vh;
+        }
+
+        .writing {
+          font-size: 10vh;
+        }
       }
 
       gelato-component[data-name='study-prompt-part-tone'] {
@@ -82,8 +152,8 @@ gelato-component[data-name='mobile-study-prompt'] {
           margin-top: -20px;
         }
       }
-
     }
+
     .ribbon {
       left: 0;
       position: absolute;
@@ -100,30 +170,38 @@ gelato-component[data-name='mobile-study-prompt'] {
     margin: 0 1px 0 0;
     min-height: 150px;
     text-align: center;
+
     .content {
       height: 100%;
       overflow-y: auto;
       padding: 0 45px;
       width: 100%;
+
       #toolbar-vocab-container {
         display: none;
       }
+
       #vocab-definition-container {
         margin-top: 15px;
       }
+
       #vocab-mnemonic-container {
         margin-top: 30px;
       }
+
       #vocab-sentence-container {
         margin-top: 30px;
       }
+
       &::-webkit-scrollbar {
         background-color: transparent;
         width: 6px;
       }
+
       &::-webkit-scrollbar-thumb {
         background-color: $grey1;
       }
+
       &::-webkit-scrollbar-track {
         background-color: ($white5 - #030303);
       }
@@ -136,8 +214,8 @@ gelato-component[data-name='mobile-study-prompt'] {
       }
 
       gelato-component[data-name='study-prompt-vocab-style'] {
-        left: 5px;
         position: absolute;
+        right: 5px;
         top: 5px;
       }
 
@@ -146,6 +224,7 @@ gelato-component[data-name='mobile-study-prompt'] {
       }
 
     }
+
     #review-status-container {
       bottom: 15px;
       display: none;
@@ -159,5 +238,4 @@ gelato-component[data-name='mobile-study-prompt'] {
     margin-left: 10px;
     margin-right: 10px;
   }
-
 }

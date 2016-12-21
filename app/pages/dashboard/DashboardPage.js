@@ -14,6 +14,10 @@ const MobileNavbar = require('components/navbars/NavbarMobileDashboardComponent'
  */
 const DashboardPage = GelatoPage.extend({
 
+  /**
+   * @property mobileNavbar
+   * @type {MobileNavbar}
+   */
   mobileNavbar: MobileNavbar,
 
   /**
@@ -73,6 +77,7 @@ const DashboardPage = GelatoPage.extend({
 
     return this;
   }
+
 });
 
 module.exports = DashboardPage;

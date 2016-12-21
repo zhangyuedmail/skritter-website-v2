@@ -1,0 +1,25 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='mobile-vocablists-queue'] {
+  background: $background-primary;
+  padding-top: 100px;
+
+  .vocablist-title {
+    font-size: 2.5vh;
+  }
+
+  .status-text {
+    font-size: 2vh;
+    color: $grey3;
+  }
+
+  .content-block {
+    margin-top: 50px;
+  }
+
+  .main-content {
+    padding: 15px 17px;
+    border-radius: 5px;
+  }
+
+}

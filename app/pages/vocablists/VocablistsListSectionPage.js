@@ -85,6 +85,10 @@ module.exports = GelatoPage.extend({
    * @returns {VocablistsListSectionPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileVocablistsListSection.jade');
+    }
+
     this.renderTemplate();
     this.editor.setElement('#editor-container').render();
     if (this.vocablist.has('name')) {

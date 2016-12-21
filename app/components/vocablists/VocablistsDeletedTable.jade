@@ -12,9 +12,9 @@ gelato-component(data-name='vocablists-deleted-table')
   for list, i in view.vocablists.models
     if list.get('disabled')
       .row(class=i % 2 ? 'even-row' : 'odd-row')
-        .col-md-5
+        .col-md-5.col-xs-8
           a(href="/vocablists/view/" + list.id)= list.get('name')
-        .col-md-7.text-center
+        .col-md-7.col-xs-4.text-center
           span.restore-link(data-vocablist-id=list.id)
             button.btn.btn-sm.btn-default Restore
 

@@ -60,7 +60,8 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
   addRow: function(query) {
     var self = this;
     var queryVocabs = new Vocabs();
-    var row = {query: query, state: 'loading'};
+    var row = {lang: this.vocablist.get('lang'), query: query, state: 'loading'};
+
     this.rows.push(row);
     queryVocabs.fetch({
       data: {
@@ -91,7 +92,6 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
           }
         }
         if (results.length) {
-          row.lang = results[0].vocabs[0].get('lang');
           row.results = results;
           row.vocabs = results[0].vocabs;
           row.vocabId = results[0].vocabs[0].id;
@@ -105,7 +105,6 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
         } else {
           row.id = query;
           if (self.vocablist.isChinese()) {
-            row.lang = app.getLanguage() || 'zh';
             row.writing = app.fn.mapper.toSimplified(query);
             row.writingTrads = app.fn.mapper.toTraditional(query);
           } else {
@@ -153,15 +152,18 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
   },
 
   /**
+   * Handles when the user clicks the add entry button.
    * @method handleClickAddEntry
-   * @param {Event} event
+   * @param {Event} event the click event
    */
   handleClickAddEntry: function(event) {
-    var self = this;
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
-    var index = $row.data('index');
-    var row = this.rows[parseInt(index, 10)];
+
+    const self = this;
+    const $row = $(event.target).closest('.row');
+    const index = $row.data('index');
+    const row = this.rows[parseInt(index, 10)];
+
     this.dialog = new VocabCreatorDialog();
     this.dialog.open({row: row});
     this.dialog.on(

@@ -1,0 +1,46 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='mobile-vocablists-published'] {
+
+  background: $background-primary;
+  padding-top: 100px;
+
+  #search-input {
+    margin-bottom: 5px;
+  }
+
+  .clear-search {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    z-index: 3;
+    font-size: 26px;
+    padding: 4px 15px;
+    cursor: pointer;
+    color: $grey3;
+
+    &:hover {
+      color: $grey5;
+    }
+  }
+
+  .query-results-text {
+    margin: 10px 0px 15px;
+    font-size: 16px;
+    color: $grey3;
+  }
+
+  #vocablist-container {
+    margin-left: -25px;
+    margin-right: -25px;
+  }
+
+  .content-block {
+    margin-top: 50px;
+  }
+
+  .main-content {
+    border-radius: 25px;
+  }
+
+}

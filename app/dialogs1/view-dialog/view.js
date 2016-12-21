@@ -1,11 +1,16 @@
-var GelatoDialog = require('gelato/dialog');
+const GelatoDialog = require('gelato/dialog');
 
 /**
  * Generic dialog that shows a subview inside of it
  * @class ViewDialog
  * @extends {GelatoDialog}
  */
-var ViewDialog = GelatoDialog.extend({
+const ViewDialog = GelatoDialog.extend({
+
+  events: {
+    'click #button-cancel': 'handleClickButtonCancel'
+  },
+
   /**
    * @method initialize
    * @param {Object} options contains params needed to construct the subview to display
@@ -16,8 +21,12 @@ var ViewDialog = GelatoDialog.extend({
     if (!options || !options.content || typeof options.content !== 'function') {
       throw "View constructor function must be sent as option to dialog";
     }
-    
-    var contentOptions = _.extend(options.contentOptions || {}, {dialog: this});
+
+    this.showCloseButton = options.showCloseButton || false;
+    this.showTitle = options.showTitle || false;
+    this.dialogTitle = options.dialogTitle || '';
+
+    const contentOptions = _.extend(options.contentOptions || {}, {dialog: this});
 
     this.content = new options.content(contentOptions);
   },
@@ -37,6 +46,15 @@ var ViewDialog = GelatoDialog.extend({
     this.content.setElement('#content-container').render();
 
     return this;
+  },
+
+  /**
+   * @method handleClickButtonCancel
+   * @param {Event} event
+   */
+  handleClickButtonCancel: function(event) {
+    event.preventDefault();
+    this.close();
   }
 });
 

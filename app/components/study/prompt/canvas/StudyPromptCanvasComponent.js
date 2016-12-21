@@ -24,7 +24,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
-    this.brushScale = 0.04;
+    this.brushScale = 0.025;
     this.defaultFadeEasing = createjs.Ease.sineOut;
     this.defaultFadeSpeed = 1000;
     this.defaultTraceFill = '#38240c';
@@ -41,6 +41,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.size = 450;
     this.stage = null;
     this.strokeColor = '#4b4b4b';
+    this.canvasSizeOverride = null;
 
     this.downListener = null;
     this.moveListener = null;
@@ -122,10 +123,10 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   createStage: function() {
     var canvas = this.$('#input-canvas').get(0);
     var stage = new createjs.Stage(canvas);
+    createjs.Ticker.setFPS(32);
     createjs.Ticker.removeEventListener('tick', stage);
     createjs.Ticker.addEventListener('tick', stage);
     createjs.Touch.enable(stage);
-    createjs.Ticker.setFPS(24);
     stage.autoClear = true;
     stage.enableDOMEvents(true);
     return stage;
@@ -405,6 +406,9 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
           object.graphics._fill = customFill;
           object.graphics._stroke = customStroke;
         }
+        if (object.cacheID) {
+          object.updateCache();
+        }
       }
     })(object);
     return this;
@@ -449,22 +453,35 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   },
 
   /**
+   * Resizes the canvas to a perfect square that takes up by default a
+   * perfect square 100% of the width of its container, or a smaller/larger
+   * defined size, if provided.
+   * @param {number} [size] a custom size for the canvas
    * @method resize
    * @returns {StudyPromptCanvasComponent}
    */
-  resize: function() {
-    var size = this.prompt.getInputSize();
+  resize: function(size) {
+    if (size) {
+      this.canvasSizeOverride = size;
+    }
+
+    size = this.canvasSizeOverride || this.prompt.getInputSize(size);
+
     this.$el.height(size);
     this.$el.width(size);
     this.stage.canvas.height = size;
     this.stage.canvas.width = size;
+    this.stage.uncache();
     this.stage.update();
     this.size = size;
+
     if (this.grid) {
       this.drawGrid();
     }
+
     //TODO: depreciate usage of global canvas size
     app.set('canvasSize', size);
+
     return this;
   },
 
@@ -515,32 +532,41 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.mouseLastDownEvent = this.mouseDownEvent;
     this.mouseLastUpEvent = this.mouseUpEvent;
     this.mouseUpEvent = event;
-    var linePositionStart = {x: this.mouseDownEvent.stageX, y: this.mouseDownEvent.stageY};
-    var linePositionEnd = {x: this.mouseUpEvent.stageX, y: this.mouseUpEvent.stageY};
-    var lineAngle = app.fn.getAngle(linePositionStart, linePositionEnd);
-    var lineDistance = app.fn.getDistance(linePositionStart, linePositionEnd);
-    var lineDuration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
+
+    const linePositionStart = {x: this.mouseDownEvent.stageX, y: this.mouseDownEvent.stageY};
+    const linePositionEnd = {x: this.mouseUpEvent.stageX, y: this.mouseUpEvent.stageY};
+    const lineAngle = app.fn.getAngle(linePositionStart, linePositionEnd);
+    const lineDistance = app.fn.getDistance(linePositionStart, linePositionEnd);
+    const lineDuration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
+
     if (this.mouseLastUpEvent) {
-      var lineLastPositionStart = {x: this.mouseLastDownEvent.stageX, y: this.mouseLastDownEvent.stageY};
-      var lineLastPositionEnd = {x: this.mouseLastUpEvent.stageX, y: this.mouseLastUpEvent.stageY};
-      var lineLastDistance = app.fn.getDistance(lineLastPositionStart, lineLastPositionEnd);
-      var lineLastDuration = this.mouseUpEvent.timeStamp - this.mouseLastUpEvent.timeStamp;
-      if (lineLastDistance < 5 && lineLastDuration > 50 && lineLastDuration < 200) {
+      const lineLastPositionStart = {x: this.mouseLastDownEvent.stageX, y: this.mouseLastDownEvent.stageY};
+      const lineLastPositionEnd = {x: this.mouseLastUpEvent.stageX, y: this.mouseLastUpEvent.stageY};
+      const lineLastDistance = app.fn.getDistance(lineLastPositionStart, lineLastPositionEnd);
+      const lineLastDuration = this.mouseUpEvent.timeStamp - this.mouseLastUpEvent.timeStamp;
+
+      // be more lenient for touch, less lenient for mouse
+      const maxDist = event.nativeEvent.type.indexOf('touch') > -1 ? 20 : 5;
+
+      if (lineLastDistance < maxDist && lineLastDuration > 50 && lineLastDuration < 275) {
         clearTimeout(this.mouseTapTimeout);
         this.trigger('doubletap', event);
         return;
       }
     }
+
     if (this.mouseDownEvent) {
       if (lineDistance > this.size / 2 && lineAngle < -70 && lineAngle > -110) {
         this.trigger('swipeup', event);
         return;
       }
+
       if (lineDuration > 1000) {
         this.trigger('clickhold', event);
         return;
       }
     }
+
     if (this.mouseUpEvent) {
       if (lineDistance < 5 && lineDuration < 1000) {
         this.mouseTapTimeout = setTimeout((function() {
@@ -548,6 +574,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
         }).bind(this), 200);
       }
     }
+
     this.trigger('click', event);
   },
 
@@ -604,21 +631,34 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @returns {StudyPromptCanvasComponent}
    */
   tweenShape: function(layerName, fromShape, toShape, options, callback) {
-    this.getLayer(layerName).addChild(fromShape);
+    const bounds = fromShape.getBounds();
+    const layer = this.getLayer(layerName);
+
     options = options === undefined ? {} : options;
     options = options || {};
     options.easing = options.easing || createjs.Ease.quadIn;
     options.speed = options.speed || 200;
-    createjs.Tween.get(fromShape).to({
-      x: toShape.x,
-      y: toShape.y,
-      scaleX: toShape.scaleX,
-      scaleY: toShape.scaleY
-    }, options.speed, options.easing).call(function() {
-      if (typeof callback === 'function') {
-        callback();
-      }
-    });
+
+    fromShape.cache(0, 0, bounds.width, bounds.height);
+
+    layer.addChild(fromShape);
+
+    createjs.Tween
+      .get(fromShape)
+      .to({
+        x: toShape.x,
+        y: toShape.y,
+        scaleX: toShape.scaleX,
+        scaleY: toShape.scaleY
+      }, options.speed, options.easing)
+      .call(
+        function() {
+          if (typeof callback === 'function') {
+            callback();
+          }
+        }
+      );
+
     return this;
   }
 

@@ -161,6 +161,11 @@ gelato-component[data-name='stats-timeline'] {
   }
 
   @media all and (max-width: 1000px) {
+
+    .graph {
+      height: auto;
+    }
+
     .border-left {
       border-left: none;
     }
@@ -171,6 +176,18 @@ gelato-component[data-name='stats-timeline'] {
 
     .days-studied-container {
       margin-left: 0px;
+    }
+
+    .date-range-wrapper {
+      text-align: center;
+    }
+
+    .heading-block {
+      border-radius: 5px 5px 0 0;
+    }
+
+    .content {
+      border-radius: 0 0 5px 5px;
     }
   }
 }
