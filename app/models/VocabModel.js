@@ -480,8 +480,11 @@ const VocabModel = SkritterModel.extend({
       app.audio = null;
     }
 
-    app.audio = this.audios[0];
-    app.audio.play();
+    // Play audio when fully loaded
+    if (this.audios[0].state() === 'loaded') {
+      app.audio = this.audios[0];
+      app.audio.play();
+    }
   },
 
   /**
