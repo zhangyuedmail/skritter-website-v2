@@ -52,11 +52,17 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    * @method updateSubscriptionState
    */
   updateSubscriptionState: function() {
-    var sub = app.user.subscription;
-    var hide = app.getSetting('hideSubscriptionNotification');
-
+    const sub = app.user.subscription;
+    const hide = app.getSetting('hideSubscriptionNotification');
+    const hideNotification = sub.getStatus() !== 'Expired' || hide;
     if (sub.state === 'standby') {
-      this.$('gelato-component').toggleClass('hidden', sub.getStatus() !== 'Expired' || hide);
+      this.$('gelato-component').toggleClass('hidden', hideNotification);
+
+      // something somewhere is manually setting the CSS to
+      // display: hidden at runtime, don't know where, hack to fix it.
+      if (!hideNotification) {
+        this.$('gelato-component').css({display: 'block'});
+      }
     }
   }
 
