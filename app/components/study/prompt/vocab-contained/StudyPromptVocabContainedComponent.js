@@ -40,7 +40,7 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
     const hasContained = reviews &&
       ((_.includes(['rune', 'tone'], reviews.part) && vocabs.length > 0) ||
       vocabs.length === 1);
-    const vocab = vocabs[reviews.position];
+    const vocab = vocabs[reviews && reviews.position || 0];
 
     this.renderTemplate({
       prompt,
