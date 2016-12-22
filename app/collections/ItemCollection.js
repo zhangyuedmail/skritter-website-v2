@@ -435,7 +435,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.dueCountState = 'fetching';
 
     $.ajax({
-      url: app.getApiUrl(2) + 'items/due',
+      url: app.getApiUrl() + 'items/due',
       type: 'GET',
       headers: app.user.session.getHeaders(),
       data: {
