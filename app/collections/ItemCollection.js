@@ -187,7 +187,7 @@ const ItemCollection = BaseSkritterCollection.extend({
               ScreenLoader.post('Updating cache');
 
               $.ajax({
-                url: 'https://api.skritter.com/v2/queue/update',
+                url: app.getApiUrl(2) + 'queue/update',
                 type: 'GET',
                 headers: app.user.session.getHeaders(),
                 data: {
@@ -201,7 +201,7 @@ const ItemCollection = BaseSkritterCollection.extend({
               ScreenLoader.post('Fetching next');
 
               $.ajax({
-                url: 'https://api.skritter.com/v2/queue/next',
+                url: app.getApiUrl(2) + 'queue/next',
                 type: 'GET',
                 headers: app.user.session.getHeaders(),
                 data: {
@@ -435,7 +435,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.dueCountState = 'fetching';
 
     $.ajax({
-      url: app.getApiUrl() + 'items/due',
+      url: app.getApiUrl(2) + 'items/due',
       type: 'GET',
       headers: app.user.session.getHeaders(),
       data: {

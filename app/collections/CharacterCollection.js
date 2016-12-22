@@ -21,7 +21,9 @@ const CharacterCollection = GelatoCollection.extend({
    * @property url
    * @type {String}
    */
-  url: 'https://api.skritter.com/v2/characters',
+  url: function() {
+    return app.getApiUrl(2) + 'characters';
+  },
 
   /**
    * @method initialize

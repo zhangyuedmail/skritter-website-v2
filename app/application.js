@@ -153,9 +153,17 @@ module.exports = GelatoApplication.extend({
   /**
    * Gets the base URL for the API depending on the context in which the application is running.
    * @method getApiUrl
+   * @param {number} version the version of the API to get
    * @returns {String} the base URL for the API
    */
-  getApiUrl: function() {
+  getApiUrl: function(version) {
+    if (version) {
+      if (version === 2) {
+        // return 'http://localhost:3210/v2/';
+        return this.config.apiRootv2 + '/';
+      }
+    }
+
     if (!this.isProduction() && this.localBackend) {
       return 'http://localhost:8080' + '/api/v' + this.config.apiVersion + '/';
     }
