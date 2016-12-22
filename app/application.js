@@ -38,7 +38,7 @@ module.exports = GelatoApplication.extend({
       config.sentryUrl,
       {
         ignoreUrls: [/localhost/],
-        release: this.config.apiVersion
+        release: this.getVersionWithBuildTimestamp()
       }
     ).install();
 
@@ -274,6 +274,14 @@ module.exports = GelatoApplication.extend({
     this.removeSetting('referral');
 
     return null;
+  },
+
+  /**
+   * Returns the version number with an appended build timestamp.
+   * @returns {string}
+   */
+  getVersionWithBuildTimestamp: function() {
+    return this.config.version + '.' + moment().unix();
   },
 
   /**
