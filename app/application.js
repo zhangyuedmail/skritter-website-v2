@@ -160,7 +160,7 @@ module.exports = GelatoApplication.extend({
     if (version) {
       if (version === 2) {
         // return 'http://localhost:3210/v2/';
-        return this.config.apiRootv2 + '/';
+        return this.config.apiRootV2 + '/';
       }
     }
 

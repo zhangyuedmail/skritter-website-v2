@@ -7,7 +7,7 @@ module.exports = {
    * Root URL of the v2 API
    * @type {String}
    */
-  apiRootv2: 'https://api.skritter.com/v2',
+  apiRootV2: 'https://api.skritter.com/v2',
 
   apiVersion: 0,
 
