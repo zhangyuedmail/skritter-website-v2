@@ -5,9 +5,9 @@
   "author": {
     "name": "Inkren, Inc",
     "email": "team@skritter.com",
-    "url": "https://skritter.com/"
+    "url": "https://skritter.com"
   },
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "repository": {
     "type": "git",
