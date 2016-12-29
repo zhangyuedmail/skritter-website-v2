@@ -38,7 +38,7 @@ module.exports = GelatoApplication.extend({
       config.sentryUrl,
       {
         ignoreUrls: [/localhost/],
-        release: this.config.apiVersion
+        release: this.getVersionWithBuildTimestamp()
       }
     ).install();
 
@@ -139,7 +139,7 @@ module.exports = GelatoApplication.extend({
     let couponCode = Functions.getParameterByName('coupon') || this.getSetting('coupon');
 
     if (siteRef && typeof siteRef === 'string') {
-      let expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
+      let expiration = moment().add(2, 'weeks').format(config.dateFormatApp);
       this.setSetting('siteRef', {
         referer: siteRef,
         expiration: expiration,
@@ -153,9 +153,17 @@ module.exports = GelatoApplication.extend({
   /**
    * Gets the base URL for the API depending on the context in which the application is running.
    * @method getApiUrl
+   * @param {number} version the version of the API to get
    * @returns {String} the base URL for the API
    */
-  getApiUrl: function() {
+  getApiUrl: function(version) {
+    if (version) {
+      if (version === 2) {
+        // return 'http://localhost:3210/v2/';
+        return this.config.apiRootV2 + '/';
+      }
+    }
+
     if (!this.isProduction() && this.localBackend) {
       return 'http://localhost:8080' + '/api/v' + this.config.apiVersion + '/';
     }
@@ -175,7 +183,7 @@ module.exports = GelatoApplication.extend({
 
     // check for a coupon code as part of an affiliate referral
     if (couponCode && expiration) {
-      expiration = moment(expiration, Config.dateFormatApp);
+      expiration = moment(expiration, config.dateFormatApp);
 
       // if the referral is still valid, use that coupon code
       if (expiration.diff(moment().startOf('day'), 'days') > 0) {
@@ -230,7 +238,7 @@ module.exports = GelatoApplication.extend({
       return null;
     }
 
-    expiration = moment(expiration, Config.dateFormatApp);
+    expiration = moment(expiration, config.dateFormatApp);
 
     // if more time has passed than allowed for a referral
     if (expiration.diff(moment().startOf('day'), 'days') < 0) {
@@ -266,7 +274,7 @@ module.exports = GelatoApplication.extend({
     }
 
     let now = moment();
-    let expiration = moment(referral.expiration, Config.dateFormatApp);
+    let expiration = moment(referral.expiration, config.dateFormatApp);
 
     if (expiration.diff(now, 'days') > 0) {
       return referral.referrer;
@@ -274,6 +282,14 @@ module.exports = GelatoApplication.extend({
     this.removeSetting('referral');
 
     return null;
+  },
+
+  /**
+   * Returns the version number with an appended build timestamp.
+   * @returns {string}
+   */
+  getVersionWithBuildTimestamp: function() {
+    return this.config.version + '.' + moment().unix();
   },
 
   /**
@@ -460,7 +476,7 @@ module.exports = GelatoApplication.extend({
     }
 
     let now = moment();
-    let expiration = moment(referral.expiration, Config.dateFormatApp);
+    let expiration = moment(referral.expiration, config.dateFormatApp);
     let dfd = $.Deferred();
     let self = this;
 
@@ -508,7 +524,7 @@ module.exports = GelatoApplication.extend({
    * @method setUserReferral
    */
   setUserReferral: function(userId, processImmediately) {
-    let expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
+    let expiration = moment().add(2, 'weeks').format(config.dateFormatApp);
     this.setSetting('referral', {
       referrer: userId,
       expiration: expiration

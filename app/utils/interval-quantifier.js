@@ -16,8 +16,8 @@ function IntervalQuantifier() {
  * @returns {Number}
  */
 IntervalQuantifier.prototype.quantify = function(item, score) {
-  let newInterval = 0;
-  let now = moment().unix();
+  var newInterval = 0;
+  var now = moment().unix();
 
   //return new items with randomized default config values
   if (!item.interval || !item.last) {
@@ -35,14 +35,15 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
         newInterval = this.initialRightInterval * 4;
         break;
     }
+
     return this.randomizeInterval(newInterval);
   }
 
   //set values for further calculations
-  let actualInterval = now - item.last;
-  let factor = 0.9;
-  let pctRight = item.successes / item.reviews;
-  let scheduledInterval = item.next - item.last;
+  var actualInterval = now - item.last;
+  var factor = 0.9;
+  var pctRight = item.successes / item.reviews;
+  var scheduledInterval = item.next - item.last;
 
   //get the factor
   if (score === 2) {
@@ -50,14 +51,16 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
   } else if (score === 4) {
     factor = 3.5;
   } else {
-    let factorsList = (score === 1) ? this.wrongFactors : this.rightFactors;
-    let divisions = [2, 1200, 18000, 691200];
-    let index;
-    for (let i in divisions) {
+    var factorsList = (score === 1) ? this.wrongFactors : this.rightFactors;
+    var divisions = [2, 1200, 18000, 691200];
+    var index;
+
+    for (var i in divisions) {
       if (item.interval > divisions[i]) {
         index = i;
       }
     }
+
     factor = factorsList[index];
   }
 
@@ -74,10 +77,8 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
   }
 
   //decelerate hard items consistently marked wrong
-  if (item.reviews > 8) {
-    if (pctRight < 0.5) {
-      factor *= Math.pow(pctRight, 0.7);
-    }
+  if (item.reviews > 8 && pctRight < 0.5) {
+    factor *= Math.pow(pctRight, 0.7);
   }
 
   //multiple by the factor and randomize the interval
@@ -90,20 +91,14 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
     } else if (newInterval < 30) {
       newInterval = 30;
     }
-
   } else {
-    if (newInterval > 315569260) {
-      newInterval = 315569260;
+    if (newInterval > 31556952) {
+      newInterval = 31556952;
     } else if (score === 2 && newInterval < 300) {
       newInterval = 300;
     } else if (newInterval < 30) {
       newInterval = 30;
     }
-  }
-
-  //accelerate recently studied correct items
-  if (score > 2 && (item.next - item.last) < 7200) {
-    newInterval = this.randomizeInterval(43200 * factor);
   }
 
   return newInterval;

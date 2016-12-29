@@ -34,7 +34,22 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
    * @returns {StudyPromptVocabContainedComponent}
    */
   render: function() {
-    this.renderTemplate();
+    const prompt = this.prompt;
+    const reviews = prompt.reviews;
+    const vocabs = reviews ? reviews.vocab.getContained(true) : [];
+    const hasContained = reviews &&
+      ((_.includes(['rune', 'tone'], reviews.part) && vocabs.length > 0) ||
+      vocabs.length === 1);
+    const vocab = vocabs[reviews && reviews.position || 0];
+
+    this.renderTemplate({
+      prompt,
+      reviews,
+      vocabs,
+      vocab,
+      hasContained
+    });
+
     return this;
   },
 

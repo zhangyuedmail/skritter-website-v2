@@ -1,14 +1,8 @@
 gelato-component(data-name='study-prompt-vocab-contained')
-  - var prompt = view.prompt;
 
-  if prompt.reviews
-    - var reviews = prompt.reviews;
-    - var part = prompt.reviews.part;
-    - var position = prompt.reviews.position;
-    - var vocabs = reviews.vocab.getContained(true);
+  if reviews
 
-    if _.includes(['rune', 'tone'], part) || vocabs.length === 1
-      - var vocab = vocabs[position];
+    if hasContained
       - var decomp = vocab.getDecomp();
       - var definition = vocab.getDefinition();
       - var heisig = vocab.get('heisigDefinition');

@@ -19,7 +19,7 @@ const MnemonicCollection = GelatoCollection.extend({
    * @type {String}
    */
   url: function() {
-    return 'https://api.skritter.com/v2/mnemonics/?languageCode=' + app.user.get('targetLang') + '&vocab=' + this.vocab.id;
+    return app.getApiUrl(2) + 'mnemonics/?languageCode=' + app.user.get('targetLang') + '&vocab=' + this.vocab.id;
   },
 
   initialize: function(models, options) {

@@ -2,7 +2,7 @@
  * @property data
  * @type {Array}
  */
-const data = [
+var data = [
   {
     "lang": "ja",
     "rune": "あ",
@@ -2225,7 +2225,7 @@ module.exports = {
     return _.map(
       data,
       function (row) {
-        const strokeData = _
+        var strokeData = _
           .chain(row.strokes)
           .flatten()
           .map(
@@ -2243,8 +2243,8 @@ module.exports = {
           )
           .value();
 
-        let count = -1;
-        const strokeVariations = _
+        var count = -1;
+        var strokeVariations = _
           .chain(row.strokes)
           .map(
             function (stroke, index) {

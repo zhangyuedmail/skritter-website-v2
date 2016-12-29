@@ -4,6 +4,15 @@ html {
   overflow-x: hidden;
 }
 
+body {
+  &.modal-open {
+    #main-app-container {
+      transform: none;
+      -webkit-transform: none;
+    }
+  }
+}
+
 html, body {
   height: 100%;
   margin: 0;

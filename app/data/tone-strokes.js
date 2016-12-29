@@ -2,7 +2,7 @@
  * @property data
  * @type {Object}
  */
-const data = [
+var data = [
   {
     lang: 'zh',
     rune: 'tones',
@@ -21,7 +21,7 @@ module.exports = {
     return _.map(
       data,
       function (row) {
-        const strokeData = _
+        var strokeData = _
           .chain(row.strokes)
           .flatten()
           .map(
@@ -39,8 +39,8 @@ module.exports = {
           )
           .value();
 
-        let count = -1;
-        const strokeVariations = _
+        var count = -1;
+        var strokeVariations = _
           .chain(row.strokes)
           .map(
             function (stroke, index) {

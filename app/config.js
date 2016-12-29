@@ -3,6 +3,12 @@ module.exports = {
 
   apiRoot: 'https://legacy.skritter',
 
+  /**
+   * Root URL of the v2 API
+   * @type {String}
+   */
+  apiRootV2: 'https://api.skritter.com/v2',
+
   apiVersion: 0,
 
   /**

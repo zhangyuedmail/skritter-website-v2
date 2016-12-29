@@ -96,6 +96,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
       _.bind(function(callback) {
         this.fetch({
           data: {
+            lang: app.getLanguage(),
             start: moment(momentMonthEnd).subtract('11', 'days').format('YYYY-MM-DD'),
             end: moment(momentMonthEnd).format('YYYY-MM-DD')
           },
@@ -111,6 +112,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
       _.bind(function(callback) {
         this.fetch({
           data: {
+            lang: app.getLanguage(),
             start: moment(momentMonthEnd).subtract('23', 'days').format('YYYY-MM-DD'),
             end: moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
           },
@@ -126,6 +128,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
       _.bind(function(callback) {
         this.fetch({
           data: {
+            lang: app.getLanguage(),
             start: moment(momentMonthStart).format('YYYY-MM-DD'),
             end: moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
           },
@@ -202,6 +205,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
   _fetchRange: function(start, end, callbackSuccess, callbackError) {
     this.fetch({
       data: {
+        lang: app.getLanguage(),
         start: start,
         end: end
       },
@@ -227,6 +231,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
   fetchToday: function(callbackSuccess, callbackError) {
     this.fetch({
       data: {
+        lang: app.getLanguage(),
         start: moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD')
       },
       success: _.bind(function(model) {
