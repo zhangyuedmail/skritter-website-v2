@@ -32,11 +32,6 @@ html, body {
   &.push-left {
     transform: translate3d(-90%, 0, 0);
     -webkit-transform: translate3d(-90%, 0, 0);
-
-    #page-container {
-      -webkit-filter: blur(1px);
-      filter: blur(1px);
-    }
   }
 
   &.push-right {
