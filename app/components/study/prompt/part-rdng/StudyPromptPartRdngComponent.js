@@ -274,25 +274,40 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     }
   },
 
+  /**
+   * Runs the user answer through a Pinyin processor to determine if it is correct.
+   * @param {String} userReading the user's attempted response to a reading prompt
+   * @param {String} vocabReading a list of readings, separated by a comma and a space
+   * @return {Boolean} whether the user's response is correct
+   * @method isCorrectZH
+   */
   isCorrectZH: function(userReading, vocabReading) {
-    var finalAnswer = '';
-    var vocabReadings = [];
+    let finalAnswer = '';
+    let vocabReadings = [];
 
     if (this.zhInputType === 'pinyin') {
       finalAnswer = this._prepareFinalAnswerPinyin(userReading);
       vocabReadings = vocabReading.split(', ').map(function(r) {
-        return app.fn.pinyin.toTone(r).replace(' ... ', '');
+        return app.fn.pinyin.toTone(r)
+          .replace(' ... ', '')
+          .replace("'", '');
       });
     }
 
     return vocabReadings.indexOf(finalAnswer) > -1;
   },
 
+  /**
+   * Focuses the user's input on the prompt's text input.
+   * @methodSetReadingPromptFocus
+   */
   setReadingPromptFocus: function() {
-    var input = this.$('#reading-prompt');
-    var rawInputEl = input[0];
-    var textLength = input.val().length;
+    const input = this.$('#reading-prompt');
+    const rawInputEl = input[0];
+    const textLength = input.val().length;
+
     input.focus();
+
     if (rawInputEl.setSelectionRange) {
       rawInputEl.setSelectionRange(textLength, textLength);
     }
