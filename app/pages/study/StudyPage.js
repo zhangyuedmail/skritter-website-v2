@@ -196,7 +196,18 @@ const StudyPage = GelatoPage.extend({
           });
         }
       ],
-      () => {
+      (error) => {
+        if (error) {
+          let msg = 'Error fetching items. Please ';
+          if (app.isMobile()) {
+            msg += 'reload the application';
+          } else {
+            msg += 'refresh the page.';
+          }
+          ScreenLoader.post(msg);
+          return;
+        }
+
         const active = app.user.isSubscriptionActive();
 
         if (!this.items.length && !this.vocablists.length) {
