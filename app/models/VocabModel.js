@@ -75,6 +75,32 @@ const VocabModel = SkritterModel.extend({
     return this;
   },
 
+  fetchSentence: function() {
+
+    // let url = app.getApiUrl(2) + 'sentences?languageCode=' + app.getLanguage() + '&vocab=' + this.id + '&user=' + app.user.id,
+    let url = 'http://localhost:3210/v2/sentences?languageCode=' + app.getLanguage() + '&vocabId=' + this.id + '&user=' + app.user.id;
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        context: this,
+        url,
+        type: 'GET',
+        headers: app.user.session.getHeaders(),
+        error: function(error) {
+          console.log(error);
+          reject();
+        },
+        success: function(sentence) {
+          if (self.collection) {
+            self.collection.sentences.add(sentence);
+          }
+
+          resolve(sentence);
+        }
+      });
+    });
+  },
+
   /**
    * @method getBase
    * @returns {String}
@@ -288,7 +314,7 @@ const VocabModel = SkritterModel.extend({
    * @returns {Sentence}
    */
   getSentence: function() {
-    return this.collection.sentences.get(this.get('sentenceId'));
+    return this.collection.sentences.get(this.id);
   },
 
   /**

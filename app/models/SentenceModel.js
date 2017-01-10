@@ -1,4 +1,4 @@
-var GelatoModel = require('gelato/model');
+const GelatoModel = require('gelato/model');
 
 /**
  * @class SentenceModel
@@ -13,28 +13,45 @@ const SentenceModel = GelatoModel.extend({
   idAttribute: 'id',
 
   /**
+   * Gets the sentence definition based on the user's source language
    * @method getDefinition
-   * @param {Boolean} [ignoreFormat]
-   * @returns {String}
+   * @param {Boolean} [ignoreFormat] whether to return the un-HTML-ified
+   *                                  version of the definition without bold,
+   *                                  italics, etc.
+   * @returns {String} the definition in the user's language, or English if not available
    */
   getDefinition: function(ignoreFormat) {
-    var definition = this.get('definitions')[app.user.get('sourceLang')];
+    let definition = this.get('definitions')[app.user.get('sourceLang')];
+
     if (!definition) {
       definition = this.get('definitions').en;
     }
+
     return ignoreFormat === false ? definition : app.fn.textToHTML(definition);
   },
 
   /**
+   * Gets the rune writing for a sentence
    * @method getWriting
-   * @param {String} mask
+   * @param {String} [mask] portion of the writing to search and replace with underscores
    * @returns {String}
    */
   getWriting: function(mask) {
-    var writing = this.get('writing');
+    let writing = this.get('sentenceRune');
+
+    if (app.getLanguage() === 'zh') {
+
+      // TODO: better check based on the vocab in case user mixes and matches?
+      if (app.user.get('reviewTraditional')) {
+        writing = this.get('runeTraditional');
+      } else {
+        writing = this.get('runeSimplified');
+      }
+    }
+
     if (mask !== undefined) {
-      var pieces = mask.split('');
-      for (var i = 0, length = pieces.length; i < length; i++) {
+      const pieces = mask.split('');
+      for (let i = 0, length = pieces.length; i < length; i++) {
         writing = writing.replace(new RegExp(pieces[i], 'g'), '_');
       }
     }

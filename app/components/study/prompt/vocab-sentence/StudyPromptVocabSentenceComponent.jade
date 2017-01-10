@@ -8,7 +8,6 @@ gelato-component(data-name='study-prompt-vocab-sentence')
     label Sentence
 
     if vocab.state === 'fetching'
-
       i.fa.fa-2x.fa-spinner.fa-pulse.fa-fw
 
     else
@@ -31,7 +30,3 @@ gelato-component(data-name='study-prompt-vocab-sentence')
             .hint-definition= sentenceDefinition
       else if vocab.sentenceFetched
         .sentence-missing No example sentence found.
-
-      else
-
-        button.show-sentence.btn.btn-sm.btn-default show

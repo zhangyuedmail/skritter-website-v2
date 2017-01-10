@@ -295,6 +295,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.renderPart();
     this.navigation.render();
     this.reviewStatus.render();
+    this.trigger('reviews:set', reviews);
 
     return this;
   },
