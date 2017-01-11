@@ -324,8 +324,10 @@ const VocabModel = SkritterModel.extend({
   getStrokes: function() {
     let strokes = [];
     let characters = this.getCharacters();
+
     for (let i = 0, length = characters.length; i < length; i++) {
       let stroke = app.user.characters.findWhere({writing: characters[i]});
+
       if (stroke) {
         if (this.isJapanese()) {
           if (!app.user.get('studyKana') && stroke.isKana()) {
@@ -340,6 +342,7 @@ const VocabModel = SkritterModel.extend({
         strokes.push(null);
       }
     }
+
     return strokes;
   },
 

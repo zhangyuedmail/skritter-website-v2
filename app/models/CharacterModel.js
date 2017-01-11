@@ -32,12 +32,15 @@ const CharacterModel = GelatoModel.extend({
     let variations = this.clone().get('strokeVariations');
     let rune = this.get('writing');
     let targets = [];
+
     for (let a = 0, lengthA = variations.length; a < lengthA; a++) {
       let target = new PromptStrokeCollection();
       let targetVariation = variations[a];
       let targetStrokeIds = targetVariation.strokeIds;
       let strokePosition = 0;
+
       target.position = a;
+
       for (let b = 0, lengthB = targetStrokeIds.length; b < lengthB; b++) {
         let stroke = new PromptStrokeModel();
         let strokeData = _.find(strokes, {strokeId: targetStrokeIds[b]});
@@ -45,6 +48,7 @@ const CharacterModel = GelatoModel.extend({
         let strokeParams = this.collection.params.filter({strokeId: strokeId});
         let strokeContains = strokeParams[0].get('contains');
         let strokeShape = this.collection.shapes.get(strokeId);
+
         stroke.set({
           contains: strokeContains,
           data: strokeData,
@@ -55,13 +59,18 @@ const CharacterModel = GelatoModel.extend({
           strokeId: strokeId,
           tone: rune === 'tones' ? a + 1 : null
         });
+
         strokePosition += strokeContains.length || 1;
+
         target.add(stroke);
       }
+
       targets.push(target);
     }
+
     character.targets = targets;
     character.writing = rune;
+
     return character;
   },
 
@@ -70,7 +79,7 @@ const CharacterModel = GelatoModel.extend({
    * @returns {Boolean}
    */
   isKana: function() {
-    return app.fn.isKana(this.get('rune'));
+    return app.fn.isKana(this.get('writing'));
   }
 
 });
