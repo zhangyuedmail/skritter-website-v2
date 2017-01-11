@@ -6,11 +6,10 @@ gelato-component(data-name='study-prompt-vocab-sentence')
     - var vocab = prompt.reviews.vocab;
 
     label Sentence
+    .sentence-wrapper
 
-    if vocab.state === 'fetching'
-      i.fa.fa-2x.fa-spinner.fa-pulse.fa-fw
+      i.fa.fa-2x.fa-spinner.fa-pulse.fa-fw.hidden
 
-    else
       if sentence
         - var sentenceDefinition = sentence.getDefinition();
         - var sentenceReading = sentence.get('reading');

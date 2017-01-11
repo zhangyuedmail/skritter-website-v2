@@ -28,6 +28,8 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
   initialize: function(options) {
     this.prompt = options.prompt;
     this.listenTo(this.prompt, 'reviews:set', this.fetchAndShowSentence);
+
+    this.fetchingSentence = false;
   },
 
   /**
@@ -41,15 +43,16 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
 
   /**
    * @method fetchAndShowSentence
-   * @param {Event} event
+   * @param {ReviewCollection} [reviews]
    */
   fetchAndShowSentence: function(reviews) {
     if (!this.prompt.reviews) {
       return;
     }
 
-    const vocab = this.prompt.reviews.vocab;
+    this.toggleFetchingSpinner(true);
 
+    const vocab = this.prompt.reviews.vocab;
     vocab.sentenceFetched = true;
     vocab.fetchSentence().then((s) => {
       vocab.collection.sentences.add(s);
@@ -81,6 +84,10 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
       this.$('.hint').addClass('open');
       this.$('.hint').show('slide', {direction: 'up'}, '500');
     }
+  },
+
+  toggleFetchingSpinner: function(show) {
+    this.$('.fa-spinner').toggleClass('hidden', !show);
   }
 
 });
