@@ -34,13 +34,15 @@ module.exports = GelatoApplication.extend({
 
     this.config = config;
 
-    Raven.config(
-      config.sentryUrl,
-      {
-        ignoreUrls: [/localhost/],
-        release: this.getVersionWithBuildTimestamp()
-      }
-    ).install();
+    if (this.isProduction()) {
+      Raven.config(
+        config.sentryUrl,
+        {
+          ignoreUrls: [/localhost/],
+          release: this.getVersionWithBuildTimestamp()
+        }
+      ).install();
+    }
 
     /**
      * String to auto-populate signup form with
