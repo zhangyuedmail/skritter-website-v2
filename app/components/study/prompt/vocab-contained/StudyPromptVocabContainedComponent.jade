@@ -13,7 +13,7 @@ gelato-component(data-name='study-prompt-vocab-contained')
 
         div.value
 
-          if vocabs.length > 1
+          if contained.length > 1
 
             hr
 
@@ -31,7 +31,7 @@ gelato-component(data-name='study-prompt-vocab-contained')
           if decomp && vocab
 
             if decomp && !decomp.get('atomic')
-              .child-vocab-row(class= vocabs.length === 1 ? 'single-char' : 'multi-char')
+              .child-vocab-row(class= contained.length === 1 ? 'single-char' : 'multi-char')
                 for child in decomp.get('Children')
                   .child-decomp
                     span.decomp-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
@@ -52,7 +52,7 @@ gelato-component(data-name='study-prompt-vocab-contained')
 
         hr
 
-        for vocab in vocabs
+        for vocab in contained
           - var definition = vocab.getDefinition();
           - var heisig = vocab.get('heisigDefinition');
           - var reading = vocab.get('reading');
@@ -60,13 +60,13 @@ gelato-component(data-name='study-prompt-vocab-contained')
 
           div.value
 
-            if vocabs.length
+            if contained.length
               .child-vocab-row
                 span.child-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= writing
                 | &nbsp;
                 span.child-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
 
-            if vocabs.length && definition
+            if contained.length && definition
               .child-vocab-row
                 .child-definition
                   if app.user.get('showHeisig') && heisig
