@@ -95,26 +95,31 @@ const ItemCollection = BaseSkritterCollection.extend({
         return count < options.limit;
       },
       function(callback) {
-        app.user.isSubscriptionActive(function(active) {
-          if (active) {
-            count++;
-            self.addItem(
-              options,
-              function(error, result) {
-                if (!error && result) {
-                  results.items.push(result);
-                  results.numVocabsAdded += result.numVocabsAdded;
+        app.user.isSubscriptionActive(
+          function(active) {
+            if (active) {
+              count++;
+
+              self.addItem(
+                options,
+                function(error, result) {
+                  if (!error && result) {
+                    results.items.push(result);
+                    results.numVocabsAdded += result.numVocabsAdded;
+                  }
+
+                  callback();
                 }
-                callback();
-              }
-            );
-          } else {
-            callback(null, results);
+              );
+            } else {
+              callback(results);
+            }
           }
-        });
+        );
       },
       function() {
         self.updateDueCount();
+
         callback(null, results);
       }
     );

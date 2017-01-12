@@ -215,6 +215,7 @@ const UserModel = SkritterModel.extend({
     var self = this;
 
     if (this.subscription.isFetched) {
+
       if (_.isFunction(callback)) {
         callback(this.subscription.getStatus() !== 'Expired');
       }
