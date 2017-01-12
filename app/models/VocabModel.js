@@ -78,7 +78,7 @@ const VocabModel = SkritterModel.extend({
   fetchSentence: function() {
     const self = this;
 
-    let url = app.getApiUrl(2) + 'sentences?languageCode=' + app.getLanguage() + '&vocab=' + this.id + '&user=' + app.user.id;
+    let url = app.getApiUrl(2) + 'sentences?languageCode=' + app.getLanguage() + '&vocabId=' + this.id + '&user=' + app.user.id;
 
     this.state = 'fetching';
     return new Promise((resolve, reject) => {
