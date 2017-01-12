@@ -12,8 +12,9 @@ gelato-component(data-name="study-prompt-part-rdng" class='noclick')
     .writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
       span= prompt.reviews.vocab.get('writing')
 
-    .reading-prompt(class=view.showReadingPrompt ? '' : 'invisible')
-      input#reading-prompt.reading-prompt-input(value="#{view.userReading}", autocomplete="off" ,autocorrect="off" ,autocapitalize="off", spellcheck="false")
+    if view.showReadingPrompt
+      .reading-prompt
+        input#reading-prompt.reading-prompt-input(value="#{view.userReading}", autocomplete="off" ,autocorrect="off" ,autocapitalize="off", spellcheck="false")
 
     .answer(class=prompt.reviews.isComplete() ? '' : 'invisible')
       - var writing = prompt.reviews.vocab.get('writing');
