@@ -90,6 +90,12 @@ module.exports = GelatoApplication.extend({
       this.listenTo(vent, 'mobileNavMenu:toggle', this.toggleSideMenu);
       this.listenTo(vent, 'vocabInfo:toggle', this.toggleVocabInfo);
       this.listenTo(vent, 'page:switch', () => { this.toggleSideMenu(false); });
+
+      if (this.isAndroid()) {
+        this._backButtonStack = [];
+        document.addEventListener('menubutton', (e) => {this.handleAndroidMenuKeyPressed(e);}, false);
+        document.addEventListener('backbutton', (e) => {this.handleAndroidBackButtonPressed(e);}, false);
+      }
     }
   },
 
@@ -295,6 +301,33 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
+   * Responds to a back button press on Android. If an action is popped
+   * from the stack, it is triggered as a vent event and default back behavior
+   * is prevented. If nothing is found, default action happens (app exit).
+   * @param event
+   */
+  handleAndroidBackButtonPressed: function(event) {
+    const backAction = this._backButtonStack.pop();
+
+    if (backAction) {
+      event.preventDefault();
+      vent.trigger(backAction);
+
+      return false;
+    } else {
+      navigator.app.exitApp();
+    }
+  },
+
+  /**
+   * Toggles the main menu on Android when the menu key is pressed.
+   * @param event
+   */
+  handleAndroidMenuKeyPressed: function(event) {
+    this.toggleSideMenu();
+  },
+
+  /**
    * @method handleError
    * @param {String} message
    * @param {String} [url]
@@ -382,10 +415,12 @@ module.exports = GelatoApplication.extend({
    * @method loadHelpscout
    */
   loadHelpscout: function() {
-    let parent = document.getElementsByTagName('script')[0];
-    let script = document.createElement('script');
-    let HSCW = {config: {}};
-    let HS = {beacon: {readyQueue: [], user: this.user}};
+    const parent = document.getElementsByTagName('script')[0];
+    const script = document.createElement('script');
+    const HSCW = {config: {}};
+    const HS = {beacon: {readyQueue: [], user: this.user}};
+    const self = this;
+
     HSCW.config = {
       contact: {
         enabled: true,
@@ -410,13 +445,14 @@ module.exports = GelatoApplication.extend({
       zIndex: 9999
     };
     HS.beacon.ready(function(beacon) {
-      if (this.user.isLoggedIn()) {
+      if (self.user.isLoggedIn()) {
         this.identify({
-          email: this.user.get('email'),
-          name: this.user.get('name')
+          email: self.user.get('email'),
+          name: self.user.get('name')
         });
       }
     });
+
     script.async = true;
     script.src = 'https://djtflbt20bdde.cloudfront.net/';
     script.type = 'text/javascript';
@@ -673,6 +709,15 @@ module.exports = GelatoApplication.extend({
     if (this._views['leftSide'].toggleVisibility) {
       this._views['leftSide'].toggleVisibility(this.$('#main-app-container').hasClass('push-right'));
     }
+
+    if (this.isAndroid()) {
+      if (this.$('#left-side-app-container').hasClass('push-right')) {
+        this.$('#main-app-container-overlay').addClass('show-righter');
+        this._backButtonStack.push('mobileNavMenu:toggle');
+      } else {
+        this._backButtonStack.pop();
+      }
+    }
   },
 
   /**
@@ -688,8 +733,16 @@ module.exports = GelatoApplication.extend({
       // TODO: update vocab info view
       this._views['rightSide'].loadVocab(vocabId); // or something like this
       this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
+
+      if (this.isAndroid()) {
+        this._backButtonStack.push('vocabInfo:toggle');
+      }
     } else {
       this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
+
+      if (this.isAndroid()) {
+        this._backButtonStack.pop();
+      }
     }
     $('gelato-application').toggleClass('no-overflow', !!vocabId);
     this.$('#main-app-container').toggleClass('push-left', !!vocabId);
