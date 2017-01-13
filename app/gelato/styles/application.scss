@@ -159,6 +159,14 @@ gelato-application {
       }
     }
 
+    #main-app-container, #left-side-app-container, #right-side-app-container {
+      will-change: transform;
+    }
+
+    #main-app-container-overlay {
+      will-change: transform, opacity;
+    }
+
     #left-side-app-container {
       transform: translate3d(-250px, 0, 0);
       -webkit-transform: translate3d(-250px, 0, 0);
@@ -169,6 +177,5 @@ gelato-application {
         -webkit-transform: translate3d(0, 0, 0);
       }
     }
-
   }
 }
