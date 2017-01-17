@@ -300,6 +300,15 @@ const ItemCollection = BaseSkritterCollection.extend({
             return false;
           }
 
+          // exclude rune items without stroke data
+          if (model.isPartRune() && !model.isCharacterDataLoaded()) {
+            // TODO: bump the item into the future
+
+            model._queue = false;
+
+            return false;
+          }
+
           if (model.isJapanese()) {
             // skip all kana writings when study kana disabled
             if (!app.user.get('studyKana') && model.isPartRune() && model.isKana()) {

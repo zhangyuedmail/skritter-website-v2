@@ -117,6 +117,7 @@ const ItemModel = SkritterModel.extend({
     let characters = [];
     let items = [];
     let vocabs = [];
+
     switch (part) {
       case 'rune':
         characters = vocab.getPromptCharacters();
@@ -132,6 +133,7 @@ const ItemModel = SkritterModel.extend({
         items = [this];
         vocabs = [vocab];
     }
+
     for (let i = 0, length = vocabs.length; i < length; i++) {
       let childItem = items[i];
       let childVocab = vocabs[i];
@@ -152,6 +154,7 @@ const ItemModel = SkritterModel.extend({
       promptItem.set('kana', childVocab.isKana());
       promptItems.add(promptItem);
     }
+
     promptItems.created = now;
     promptItems.group = now + '_' + this.id;
     promptItems.interval = this.get('interval');
@@ -159,6 +162,7 @@ const ItemModel = SkritterModel.extend({
     promptItems.part = part;
     promptItems.readiness = this.getReadiness();
     promptItems.vocab = vocab;
+
     return promptItems;
   },
 
@@ -247,6 +251,17 @@ const ItemModel = SkritterModel.extend({
     }
 
     return false;
+  },
+
+  /**
+   * @method isCharacterDataLoaded
+   * @returns {Boolean}
+   */
+  isCharacterDataLoaded: function() {
+    let vocabCharacters = this.getVocab().getCharactersWithoutFillers();
+    let loadedCharacters = app.user.characters.pluck('writing');
+
+    return vocabCharacters.length === _.intersection(vocabCharacters, loadedCharacters).length;
   },
 
   /**

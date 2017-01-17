@@ -119,6 +119,14 @@ const VocabModel = SkritterModel.extend({
   },
 
   /**
+   * @method getCharactersWithoutFillers
+   * @returns {Array}
+   */
+  getCharactersWithoutFillers: function() {
+    return _.without(this.get('writing').split(''), app.config.writingFillers);
+  },
+
+  /**
    * @method getContained
    * @returns {Array}
    */
@@ -384,6 +392,11 @@ const VocabModel = SkritterModel.extend({
     }
     return [];
   },
+
+  /**
+   * @method getUniqueAudios
+   * @returns {Array}
+   */
   getUniqueAudios: function() {
     return _.uniqBy(this.get('audios'), 'reading');
   },
@@ -466,7 +479,8 @@ const VocabModel = SkritterModel.extend({
         return true;
       }
     }
-    return _.includes(['~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？'], this.get('writing'));
+
+    return _.includes(app.config.writingFillers, this.get('writing'));
   },
 
   /**

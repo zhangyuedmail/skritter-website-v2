@@ -332,7 +332,7 @@ const StudyPage = GelatoPage.extend({
     }
 
     if (items.length) {
-      this.currentItem= items[0];
+      this.currentItem = items[0];
       this.currentPromptItems = items[0].getPromptItems();
       this.prompt.$panelLeft.css('opacity', 1.0);
       this.prompt.$panelLeft.css('pointer-events', 'auto');
