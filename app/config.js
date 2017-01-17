@@ -38,5 +38,8 @@ module.exports = {
 
   title: '{!application-title!}',
 
-  version: '{!application-version!}'
+  version: '{!application-version!}',
+
+  writingFillers: ['~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？']
+
 };
