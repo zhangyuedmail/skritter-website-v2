@@ -296,7 +296,7 @@ const VocabModel = SkritterModel.extend({
 
     if (this.isChinese()) {
       if (app.fn.pinyin.hasToneMarks(reading)) {
-        Raven.captureMessage('PINYIN FORMAT ERROR:', this.id);
+        Raven.captureMessage('PINYIN FORMAT ERROR: ' + this.id);
 
         return [];
       }
