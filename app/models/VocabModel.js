@@ -293,7 +293,14 @@ const VocabModel = SkritterModel.extend({
   getReadingObjects: function() {
     let readings = [];
     let reading = this.get('reading');
+
     if (this.isChinese()) {
+      if (app.fn.pinyin.hasToneMarks(reading)) {
+        Raven.captureMessage('PINYIN FORMAT ERROR:', this.id);
+
+        return [];
+      }
+
       if (reading.indexOf(', ') === -1) {
         readings = reading.match(/[a-z|A-Z]+[1-5]+|'| ... |\s/g);
       } else {
@@ -302,12 +309,16 @@ const VocabModel = SkritterModel.extend({
     } else {
       readings = [reading];
     }
-    return readings.map(function(value) {
-      if ([' ', ' ... ', '\''].indexOf(value) > -1) {
-        return {type: 'filler', value: value};
+
+    return readings.map(
+      function(value) {
+        if ([' ', ' ... ', '\''].indexOf(value) > -1) {
+          return {type: 'filler', value: value};
+        }
+
+        return {type: 'character', value: value};
       }
-      return {type: 'character', value: value};
-    });
+    );
   },
 
   /**
