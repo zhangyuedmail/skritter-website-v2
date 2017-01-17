@@ -686,7 +686,7 @@ module.exports = GelatoApplication.extend({
         if (app.isCordova()) {
           setTimeout(navigator.splashscreen.hide, 1000);
 
-          if (cordova.platformId == 'android') {
+          if (app.isAndroid()) {
             StatusBar.backgroundColorByHexString("#262b30");
           }
         }
