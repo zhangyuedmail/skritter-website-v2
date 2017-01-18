@@ -384,14 +384,13 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
   _parsePinyinInput: function(input, event) {
     input = input || this.$('#reading-prompt').val();
 
-    var originalInput = input;
-    var toProcess = input;
-    var output = '';
+    const toProcess = input;
+    let output = '';
 
     if (toProcess.length > this.lastInput.length) {
-      output = this._processPinyinAddition(toProcess, event);
+      output = this._processPinyinAddition(toProcess);
     } else {
-      output = this._processPinyinDeletion(toProcess, event);
+      output = this._processPinyinDeletion(toProcess);
     }
 
     // console.log("lastInput: ", this.lastInput, "original input: ", originalInput, "new input: ", output);
@@ -400,17 +399,24 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     return output;
   },
 
-  _processPinyinAddition: function(input, event) {
-    var processed = [];
+  /**
+   * Processes the text when an additional character has been added.
+   * Adds vowel diacritical marks and formatted tone numbers where appropriate.
+   * @param {String} input the input string to process
+   * @return {string} the input with tone marks and numbers properly added
+   * @private
+   */
+  _processPinyinAddition: function(input) {
+    const processed = [];
 
     // regex helpers
-    var toneNumInput = /[1-5]/;
-    var toneSubscript = /([₁-₅][1-5]?)/;
+    const toneNumInput = /[1-5]/;
+    const toneSubscript = /([₁-₅][1-5]?)/;
 
     // used to detect if a user is attempting to change an existing tone
-    var changeToneNum = /[₁-₅][1-5]/;
+    const changeToneNum = /[₁-₅][1-5]/;
 
-    var subMap = {
+    const subMap = {
       '1': '₁',
       '2': '₂',
       '3': '₃',
@@ -418,7 +424,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
       '5': '₅'
     };
 
-    var revSubMap = {
+    const revSubMap = {
       '₁': '1',
       '₂': '2',
       '₃': '3',
@@ -426,24 +432,23 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
       '₅': '5'
     };
 
-    var doubleInitials = /(zh)|(ch)|(sh)/;
-    var initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)/;
+    const initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(r)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)/;
 
     // input will be split into a format like ["gōng", "₁", "zuo4"]
     input = input.split(toneSubscript);
     // console.log('split input: ', input);
-    var wordlike;
-    var wordlikeMinusEnd;
-    var lastChar;
-    var currTone;
-    var res;
-    var resMinusEnd;
-    var lastWordlikeCharIsN;
-    var resPotentialNeutral;
-    var nextWordlikeIsToneChange;
+    let wordlike;
+    let wordlikeMinusEnd;
+    let lastChar;
+    let currTone;
+    let res;
+    let resMinusEnd;
+    let lastWordlikeCharIsN;
+    let resPotentialNeutral;
+    let nextWordlikeIsToneChange;
 
     // loop through each part and perform the necessary mutations
-    for (var i = 0; i < input.length; i++) {
+    for (let i = 0; i < input.length; i++) {
 
       // setup our data
       wordlike = input[i];
@@ -471,8 +476,8 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
       // case 2: change the tone for an existing word's tone góng₂1 -> gōng₁
       else if ((changeToneNum.exec(wordlike) || []).length) {
 
-        var toChange = input[i-1];
-        var newTone = wordlike[1];
+        const toChange = input[i-1];
+        const newTone = wordlike[1];
         res = app.fn.pinyin.removeToneMarks(toChange);
 
         // need to replace 'ü' with 'v' before we run it through the converter again
@@ -515,7 +520,14 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     return processed.join('');
   },
 
-  _processPinyinDeletion: function(input, event) {
+  /**
+   * Processes the text when a character has been deleted.
+   * Removes vowel diacritical marks and formatted tone numbers where appropriate.
+   * @param {String} input the input string to process
+   * @return {string} the input with tone marks and numbers properly added
+   * @private
+   */
+  _processPinyinDeletion: function(input) {
     var processed = [];
 
     // regex helpers
