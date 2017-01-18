@@ -237,8 +237,10 @@ module.exports = {
       "titleBrowse": "Browse - Skritter",
       "titleCpod": "ChinesePod - Skritter",
       "titlePublished": "Published Lists - Skritter",
+      "titleQueue": "Queue - Skritter",
       "addSection": "Add section",
       "addToQueue": "Add to queue",
+      "addingWordsFrom": "Adding words from",
       "backToCpod": "back to ChinesePod lists",
       "backToMy": "back to my lists",
       "backToOfficial": "back to official lists",
@@ -250,6 +252,7 @@ module.exports = {
       "history": "History",
       "publish": "Publish",
       "quickAdd": "Quick Add",
+      "reviewingWordsFrom": "Reviewing words from",
       "status": "Status",
       "studyNow": "Study Now"
     }

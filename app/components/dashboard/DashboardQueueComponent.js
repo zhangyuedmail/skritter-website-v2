@@ -19,6 +19,7 @@ const DashboardQueueComponent = GelatoComponent.extend({
   initialize: function() {
     this.vocablists = app.user.vocablists;
     this.listenTo(this.vocablists, 'state', this.render);
+    this.vocablists.setSort('activeCompletion');
     this.vocablists.fetch({
       data: {
         limit: 10,

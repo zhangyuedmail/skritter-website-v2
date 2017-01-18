@@ -78,6 +78,40 @@ const VocablistCollection = BaseSkritterCollection.extend({
     );
 
     return this;
+  },
+
+  /**
+   * Changes the comparator for this instance of the collection
+   * @param {String} strategy the name of the sortStrategy to use
+   */
+  setSort: function(strategy) {
+    if (this.sortStrategies[strategy]) {
+      this.comparator = this.sortStrategies[strategy];
+    }
+  },
+
+  /**
+   * An object with different ways to sort this collection
+   */
+  sortStrategies: {
+
+    /**
+     * A sort function that gives active lists a higher order than inactive,
+     * and within those groups orders by progress.
+     * @param {VocablistModel} a
+     */
+    activeCompletion: function(a) {
+      const studyingModes = {
+        'adding': 0,
+        'active': 101,
+        'reviewing': 201,
+        'finished': 301
+      };
+
+      const aValue = studyingModes[a.get('studyingMode')] + a.get('percentDone');
+
+      return aValue;
+    }
   }
 });
 

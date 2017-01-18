@@ -1,11 +1,18 @@
 gelato-component(data-name='dashboard-queue')
 
-  if view.vocablists.state === 'fetching'
+  if view.vocablists.state === 'fetching' && !view.vocablists.length
     p.text-center
       i.fa.fa-3x.fa-spinner.fa-pulse
 
   else if view.vocablists.length
-    for list, i in view.vocablists.models
+    - var addingFrom = view.vocablists.getAdding();
+    - var reviewingFrom = view.vocablists.getReviewing();
+
+    if view.vocablists.state === 'fetching'
+      p.text-center.mini-spinner
+        i.fa.fa-3x.fa-spinner.fa-pulse
+
+    for list, i in addingFrom
       .row(data-list-id=list.id)
         .col-md-4
           a(href="/vocablists/view/" + list.id)= list.get('name')
@@ -14,6 +21,19 @@ gelato-component(data-name='dashboard-queue')
             .progress-bar(style="width:" + (list.getProgress().percent) + '%')
         .col-md-2.text-center
           a(href='/study/' + list.id) Study
+
+    if reviewingFrom.length
+      .reviewing-label.row
+        .col-xs-12= app.locale('pages.vocabLists.reviewingWordsFrom')
+      for list, j in reviewingFrom
+        .row(data-list-id=list.id)
+          .col-md-4
+            a(href="/vocablists/view/" + list.id)= list.get('name')
+          .col-md-6
+            .progress
+              .progress-bar(style="width:" + (list.getProgress().percent) + '%')
+          .col-md-2.text-center
+            a(href='/study/' + list.id) Study
     .text-center
       br
       a(href='/vocablists/queue').btn.btn-success Manage
