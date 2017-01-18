@@ -20,6 +20,11 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
   url: 'progstats',
 
   /**
+   * A map of metadata to keep track of what's already been fetched
+   */
+  cache: {},
+
+  /**
    * @method comparator
    * @param {ProgressStatModel} statA
    * @param {ProgressStatModel} statB
@@ -89,69 +94,32 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {Function} [callbackError]
    */
   fetchMonth: function(callbackSuccess, callbackError) {
-    var momentMonthStart = moment().subtract(4, 'hours').startOf('month');
-    var momentMonthEnd = moment().subtract(4, 'hours').endOf('month');
+    const momentMonthStart = moment().subtract(4, 'hours').startOf('month');
+    const momentMonthEnd = moment().subtract(4, 'hours').endOf('month');
 
-    async.series([
-      _.bind(function(callback) {
-        this.fetch({
-          data: {
-            lang: app.getLanguage(),
-            start: moment(momentMonthEnd).subtract('11', 'days').format('YYYY-MM-DD'),
-            end: moment(momentMonthEnd).format('YYYY-MM-DD')
-          },
-          remove: false,
-          success: function() {
-            callback();
-          },
-          error: function(model, error) {
-            callback(error, model);
-          }
-        });
-      }, this),
-      _.bind(function(callback) {
-        this.fetch({
-          data: {
-            lang: app.getLanguage(),
-            start: moment(momentMonthEnd).subtract('23', 'days').format('YYYY-MM-DD'),
-            end: moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
-          },
-          remove: false,
-          success: function() {
-            callback();
-          },
-          error: function(model, error) {
-            callback(error, model);
-          }
-        });
-      }, this),
-      _.bind(function(callback) {
-        this.fetch({
-          data: {
-            lang: app.getLanguage(),
-            start: moment(momentMonthStart).format('YYYY-MM-DD'),
-            end: moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
-          },
-          remove: false,
-          success: function() {
-            callback();
-          },
-          error: function(model, error) {
-            callback(error, model);
-          }
-        });
-      }, this)
-    ], _.bind(function(error) {
-      if (error) {
-        if (typeof callbackError === 'function') {
-          callbackError(error);
-        }
-      } else {
-        if (typeof callbackSuccess === 'function') {
+    // means we've already called this, we only need to possibly update today's value
+    if (this.cache['month']) {
+      if (this.cache['month'].start === momentMonthStart.format(app.config.dateFormatApp) &&
+        this.cache['month'].end === momentMonthEnd.format(app.config.dateFormatApp)) {
+        this.fetchToday(callbackSuccess, callbackError);
+        return;
+      }
+    }
+
+    this.fetchRange(momentMonthStart, momentMonthEnd, {
+      success: () => {
+        this.cache['month'] = {
+          start: momentMonthStart.format(app.config.dateFormatApp),
+          end: momentMonthEnd.format(app.config.dateFormatApp)
+        };
+
+        if (_.isFunction(callbackSuccess)) {
           callbackSuccess(this);
         }
-      }
-    }, this));
+      },
+      error: callbackError,
+      remove: false
+    });
   },
 
   /**
@@ -162,32 +130,60 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    *                        start of the date range
    * @param {String} end  a YYYY-MM-DD formatted string that specifies the
    *                      end of the date range
-   * @param {Function} [callbackSuccess] called when all of the fetches successfully complete
-   * @param {Function} [callbackError] called when any of the fetches fail
+   * @param {Object} [options] optional object with options
+   * @param {Function} [options.success] called when all of the fetches successfully complete
+   * @param {Function} [options.error] called when any of the fetches fail
+   * @param {Boolean} [options.remove] whether to remove other models in the collection after the fetch
    */
-  fetchRange: function(start, end, callbackSuccess, callbackError) {
+  fetchRange: function(start, end, options) {
     // TODO: look into changing granularity for ranges larger than a month
-    var momentEnd = moment(end, 'YYYY-MM-DD');
-    var momentStart = moment(start, 'YYYY-MM-DD');
-    var dates = this.divideDateRange(momentStart, momentEnd, 10);
-    var dfds = [];
-    var self = this;
+    const momentEnd = moment(end, app.config.dateFormatApp);
+    const momentStart = moment(start, app.config.dateFormatApp);
+    const dates = this.divideDateRange(momentStart, momentEnd, 10);
+    const dfds = [];
+    const self = this;
+
+    options = options || {};
+
+    // if we've already fetched this exact range, don't re-fetch it all again.
+    // If the end date is today, just re-fetch today in case the user studied
+    // since the last fetch.
+    if (this.cache['fetchRange']) {
+      if (this.cache['fetchRange'].start === momentStart.format(app.config.dateFormatApp) &&
+        this.cache['fetchRange'].end === momentEnd.format(app.config.dateFormatApp)) {
+
+        if (this.cache['fetchRange'] === moment().format(app.config.dateFormatApp)) {
+          this.fetchToday(options.success, options.error);
+        } else {
+          if (_.isFunction(options.success)) {
+            options.success(this);
+          }
+        }
+        return;
+      }
+    }
 
     dates.forEach(function(date) {
-      var dfd = $.Deferred();
+      const dfd = $.Deferred();
+
       self._fetchRange(date[0], date[1], dfd.resolve, function(error, model) {
         dfd.reject();
-        if (_.isFunction((callbackError))) {
-          callbackError(error, model);
+        if (_.isFunction((options.error))) {
+          options.error(error, model);
         }
       });
 
       dfds.push(dfd);
     });
 
-    $.when.apply(null, dfds).done(function() {
-      if (_.isFunction(callbackSuccess)) {
-        callbackSuccess();
+    $.when.apply(null, dfds).done(() => {
+      this.cache['fetchRange'] = {
+        start: momentStart.format(app.config.dateFormatApp),
+        end: momentEnd.format(app.config.dateFormatApp)
+      };
+
+      if (_.isFunction(options.success)) {
+        options.success(this);
       }
     });
   },
@@ -224,6 +220,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
   },
 
   /**
+   * Fetches today's stats
    * @method fetchToday
    * @param {Function} [callbackSuccess]
    * @param {Function} [callbackError]
@@ -234,16 +231,17 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
         lang: app.getLanguage(),
         start: moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD')
       },
-      success: _.bind(function(model) {
+      remove: false,
+      success: (model) => {
         if (typeof callbackSuccess === 'function') {
           callbackSuccess(model);
         }
-      }, this),
-      error: _.bind(function(model, error) {
+      },
+      error: (model, error) => {
         if (typeof callbackError === 'function') {
           callbackError(error, model);
         }
-      }, this)
+      }
     });
   },
 

@@ -208,12 +208,12 @@ const StatsTimelineComponent = GelatoComponent.extend({
    * @param {DateRangePicker} picker
    */
   onDatePickerUpdated: function(event, picker) {
-    var startDate = picker.startDate;
-    var endDate = picker.endDate;
-    var self = this;
+    const startDate = picker.startDate;
+    const endDate = picker.endDate;
+    const self = this;
 
-    var oldRangeStart = moment(this.range.start, config.dateFormatApp);
-    var oldRangeEnd = moment(this.range.end, config.dateFormatApp);
+    const oldRangeStart = moment(this.range.start, config.dateFormatApp);
+    const oldRangeEnd = moment(this.range.end, config.dateFormatApp);
 
     this.range.start = startDate.format(config.dateFormatApp);
     this.range.end = endDate.format(config.dateFormatApp);
@@ -226,15 +226,17 @@ const StatsTimelineComponent = GelatoComponent.extend({
     this.collection.fetchRange(
       startDate.format(config.dateFormatApp),
       endDate.format(config.dateFormatApp),
-      function() {
-        self.$('#start-date').removeClass('fetching');
-        self.$('#end-date').removeClass('fetching');
-      },
-      function() {
-        self.$('#start-date').text(oldRangeStart.format('MMM DD, YYYY')).removeClass('fetching');
-        self.$('#end-date').text(oldRangeEnd.format('MMM DD, YYYY')).removeClass('fetching');
-        self.range.start = oldRangeStart.format(config.dateFormatApp);
-        self.range.end = oldRangeEnd.format(config.dateFormatApp);
+      {
+        success: () => {
+          self.$('#start-date').removeClass('fetching');
+          self.$('#end-date').removeClass('fetching');
+        },
+        error: () => {
+          self.$('#start-date').text(oldRangeStart.format('MMM DD, YYYY')).removeClass('fetching');
+          self.$('#end-date').text(oldRangeEnd.format('MMM DD, YYYY')).removeClass('fetching');
+          self.range.start = oldRangeStart.format(config.dateFormatApp);
+          self.range.end = oldRangeEnd.format(config.dateFormatApp);
+        }
       }
     );
   },

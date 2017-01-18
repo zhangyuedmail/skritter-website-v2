@@ -1,7 +1,6 @@
-var GelatoPage = require('gelato/page');
-var StatsSummaryComponent = require('components/stats/StatsSummaryComponent');
-var StatsTimelineComponent = require('components/stats/StatsTimelineComponent');
-var ProgressStats = require('collections/ProgressStatsCollection');
+const GelatoPage = require('gelato/page');
+const StatsSummaryComponent = require('components/stats/StatsSummaryComponent');
+const StatsTimelineComponent = require('components/stats/StatsTimelineComponent');
 
 /**
  * @class StatsPage
@@ -34,18 +33,16 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
-    this.statsCollection = new ProgressStats();
+    const today = moment().format('YYYY-MM-DD');
+    const lastMonth = moment().subtract(1, 'month').format('YYYY-MM-DD');
 
-    var today = moment().format('YYYY-MM-DD');
-    var lastMonth = moment().subtract(1, 'month').format('YYYY-MM-DD');
-
-    this.statsCollection.fetchRange(lastMonth, today);
+    app.user.stats.fetchRange(lastMonth, today);
 
     this._views['summary'] = new StatsSummaryComponent({
-      collection: this.statsCollection
+      collection: app.user.stats
     });
     this._views['timeline'] = new StatsTimelineComponent({
-      collection: this.statsCollection
+      collection: app.user.stats
     });
 
     this.activeSection = 'summary';
@@ -53,7 +50,7 @@ module.exports = GelatoPage.extend({
 
   /**
    * @method render
-   * @returns {Home}
+   * @returns {StatsPage}
    */
   render: function() {
     this.renderTemplate();
@@ -74,7 +71,7 @@ module.exports = GelatoPage.extend({
 
     // event.preventDefault();
 
-    var newSection = event.target.id.split('-')[0];
+    const newSection = event.target.id.split('-')[0];
 
     if (newSection === this.activeSection) {
       return;
@@ -92,8 +89,8 @@ module.exports = GelatoPage.extend({
    * @param {String} [section] the section to show. Defaults to activeSection.
    */
   showStatsSection: function(section) {
-    var toShowSection = section || this.activeSection;
-    var toHideSection = toShowSection === 'summary' ? 'timeline' : 'summary';
+    const toShowSection = section || this.activeSection;
+    const toHideSection = toShowSection === 'summary' ? 'timeline' : 'summary';
 
     this._views[toHideSection].hide();
     this._views[toShowSection].show();

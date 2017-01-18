@@ -19,7 +19,7 @@ const DashboardMonthComponent = GelatoComponent.extend({
    */
   initialize: function() {
     this.heatmap = new CalHeatMap();
-    this.stats = new ProgressStats();
+    this.stats = app.user.stats;
     this.listenTo(this.stats, 'state:standby', this.updateHeatmap);
     this.listenTo(this.stats, 'state:standby', this.updateStreak);
     this.stats.fetchMonth();

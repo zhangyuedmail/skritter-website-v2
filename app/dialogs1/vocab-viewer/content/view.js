@@ -20,7 +20,20 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     'click #button-vocab-star': 'handleClickVocabStar',
     'click #button-vocab-ban': 'handleClickVocabBan',
     'click .fa-times-circle-o': 'handleClickClose',
-    'click #show-more-contained': 'handleClickShowMoreContained'
+    'click #show-more-contained': 'handleClickShowMoreContained',
+    'click #save-me': 'saveMe'
+  },
+
+  saveMe: function() {
+    const customDefinition = (this.$('#custom-definition-input').val() || '').trim();
+
+    // or if it equals the previous custom definition
+    if (!customDefinition) {
+      return;
+    }
+
+    this.vocabs.models[0].set('customDefinition', 'yolo');
+    this.vocabs.models[0].save();
   },
 
   /**
