@@ -111,7 +111,6 @@ module.exports = GelatoComponent.extend({
     event.preventDefault();
     if (this.prompt.editing) {
       this.prompt.reviews.vocab.set('customDefinition', this.prompt.vocabDefinition.getValue());
-      this.prompt.reviews.vocab.set('mnemonic', this.prompt.vocabMnemonic.getValue());
       this.disableEditing();
       this.prompt.reviews.vocab.save();
     } else {
