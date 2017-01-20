@@ -20,6 +20,12 @@ const DemoPage = GelatoPage.extend({
   },
 
   /**
+   * @property showFooter
+   * @type Boolean
+   */
+  showFooter: false,
+
+  /**
    * @property title
    * @type {String}
    */
@@ -40,7 +46,10 @@ const DemoPage = GelatoPage.extend({
     this.dialog = null;
     this.lang = 'zh';
     this.notify = null;
-    this.prompt = new Prompt({page: this});
+    this.prompt = new Prompt({
+      page: this,
+      isDemo: true
+    });
     this.promptItems = null;
     this.vocab = null;
     this.vocabs = new Vocabs();
@@ -53,7 +62,7 @@ const DemoPage = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.prompt.setElement('#demo-prompt-container').render().hide();
+    this.prompt.setElement('#demo-prompt-container').render();
     this.loadDemo();
 
     return this;
@@ -63,7 +72,7 @@ const DemoPage = GelatoPage.extend({
    * @method loadDemo
    */
   loadDemo: function() {
-    var self = this;
+    const self = this;
 
     async.waterfall(
       [
@@ -76,7 +85,7 @@ const DemoPage = GelatoPage.extend({
           ScreenLoader.show();
           ScreenLoader.post('Loading demo word');
           app.mixpanel.track('Started demo', {'Language': lang});
-
+          self.lang = lang;
           self.vocabs.fetch({
             data: {
               include_decomps: true,

@@ -3,10 +3,11 @@
 gelato-page[data-name='demo'] {
 
   background: $background-primary;
-  padding-top: 100px;
+  padding-top: 50px;
+  padding-bottom: 0;
 
   #demo-prompt-container {
-    margin-bottom: 100px;
+    margin-top: 50px;
   }
 
 }

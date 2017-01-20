@@ -1,5 +1,6 @@
 gelato-component(data-name='study-prompt-vocab-sentence')
   - var prompt = view.prompt;
+  - var isDemo = prompt.isDemo;
 
   if prompt.reviews
     - var sentence = prompt.reviews.vocab.getSentence();
@@ -21,7 +22,7 @@ gelato-component(data-name='study-prompt-vocab-sentence')
           else
             = sentence.getWriting()
 
-          .hint
+          .hint(class=isDemo ? 'open' : '', style=isDemo ? 'display: block;' : '')
             if prompt.reviews.isChinese()
               .hint-reading= app.fn.pinyin.toTone(sentenceReading, true)
             else

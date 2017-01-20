@@ -40,6 +40,8 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
+    options = options || {};
+
     //properties
     this.$inputContainer = null;
     this.$panelLeft = null;
@@ -48,6 +50,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.part = null;
     this.review = null;
     this.reviews = null;
+    this.isDemo = options.isDemo;
 
     //components
     this.canvas = new Canvas({prompt: this});
@@ -96,11 +99,14 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.tutorial.setElement('#tutorial-container').render().hide();
     this.vocabContained.setElement('#vocab-contained-container').render();
     this.vocabDefinition.setElement('#vocab-definition-container').render();
-    this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
     this.vocabReading.setElement('#vocab-reading-container').render();
     this.vocabSentence.setElement('#vocab-sentence-container').render();
     this.vocabStyle.setElement('#vocab-style-container').render();
     this.vocabWriting.setElement('#vocab-writing-container').render();
+
+    if (!this.isDemo) {
+      this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
+    }
 
     this.shortcuts.registerAll();
     this.resize();
@@ -319,15 +325,17 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @private
    */
   _getToolbarHeight: function() {
+    const outerContainer = this.isDemo ? $('#demo-prompt-container') : $('#study-prompt-container');
+
     if (app.isMobile()) {
-      return $('#study-prompt-container').height() -
+      return outerContainer.height() -
         this.$('#panel-right').height() -
         this.$('#input-container').height() -
 
         // there's some padding somewhere
         10;
     } else {
-     return $('#study-prompt-container').height() -
+     return outerContainer.height() -
        (this.$('#input-container').height() +
 
       // the margin-top property of #toolbar-action-container + the padding-top of #panel-left
