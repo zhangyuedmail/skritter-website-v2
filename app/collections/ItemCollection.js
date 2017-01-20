@@ -261,7 +261,6 @@ const ItemCollection = BaseSkritterCollection.extend({
           }
         );
 
-
       }
     );
   },
