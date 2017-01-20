@@ -45,6 +45,8 @@ const StudyPage = GelatoPage.extend({
   initialize: function() {
     ScreenLoader.show();
 
+    Howler.autoSuspend = false;
+
     this.currentItem = null;
     this.currentPromptItems = null;
     this.previousItem = null;
@@ -381,6 +383,8 @@ const StudyPage = GelatoPage.extend({
     this.items.reviews.post();
 
     document.removeEventListener('pause', this.handlePauseEvent.bind(this), false);
+
+    Howler.autoSuspend = true;
 
     return GelatoPage.prototype.remove.call(this);
   },
