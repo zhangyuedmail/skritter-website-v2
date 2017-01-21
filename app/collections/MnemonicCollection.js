@@ -15,13 +15,29 @@ const MnemonicCollection = GelatoCollection.extend({
   model: MnemonicModel,
 
   /**
+   * @method sync
+   * @param {String} method
+   * @param {Model} model
+   * @param {Object} options
+   */
+  sync: function(method, model, options) {
+    options.headers = app.user.session.getHeaders();
+
+    GelatoCollection.prototype.sync.call(this, method, model, options);
+  },
+
+  /**
    * @property url
    * @type {String}
    */
   url: function() {
-    return app.getApiUrl(2) + 'mnemonics/?languageCode=' + app.user.get('targetLang') + '&vocab=' + this.vocab.id;
+    return app.getApiUrl(2) + 'mnemonics/?languageCode=' + app.user.get('targetLang') + '&vocabId=' + this.vocab.id;
   },
 
+  /**
+   * @method initialize
+   * @constructor
+   */
   initialize: function(models, options) {
     options = options || {};
 
