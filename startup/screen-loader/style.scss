@@ -1,5 +1,4 @@
 screen-loader {
-
   background-color: #262b30;
   color: #fbfafc;
   height: 100%;
@@ -61,4 +60,10 @@ screen-loader {
     width: 100%;
   }
 
+  .skritter-logo {
+    img {
+      height: 32px;
+      margin-top: -8px;
+    }
+  }
 }

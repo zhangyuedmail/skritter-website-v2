@@ -23,10 +23,6 @@ html, body {
 
 #main-app-container {
   position: relative;
-   transition: transform .25s ease-out;
-  -webkit-transition: -webkit-transform .25s ease-out;
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
   height: 100%;
 
   &.push-left {
@@ -157,6 +153,13 @@ gelato-application {
         left: 0;
         right: 0;
       }
+    }
+
+    #main-app-container {
+      transition: transform .25s ease-out;
+      -webkit-transition: -webkit-transform .25s ease-out;
+      transform: translate3d(0, 0, 0);
+      -webkit-transform: translate3d(0, 0, 0);
     }
 
     #main-app-container, #left-side-app-container, #right-side-app-container {
