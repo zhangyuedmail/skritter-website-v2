@@ -18,9 +18,9 @@ gelato-component(data-name='study-prompt-vocab-sentence')
         .value(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
 
           if prompt.reviews.part === 'rune' && !prompt.reviews.isComplete()
-            = sentence.getWriting(prompt.reviews.vocab.get('writing'))
+            = sentence.getWriting(vocab.get('writing'), vocab)
           else
-            = sentence.getWriting()
+            = sentence.getWriting(null, vocab)
 
           .hint(class=isDemo ? 'open' : '', style=isDemo ? 'display: block;' : '')
             if prompt.reviews.isChinese()

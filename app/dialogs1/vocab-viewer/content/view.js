@@ -182,7 +182,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                   data: {
                     include_decomps: true,
                     include_heisigs: true,
-                    include_sentences: true,
+                    include_sentences: false,
                     include_top_mnemonics: true,
                     ids: vocabId
                   },
@@ -193,6 +193,12 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                     wordVocabs = vocabs;
                     callback();
                   }
+                });
+              },
+              function(callback) {
+                self.vocabs.at(0).fetchSentence().then((s) => {
+                  self.vocabs.sentences.add(s);
+                  callback();
                 });
               },
               function(callback) {

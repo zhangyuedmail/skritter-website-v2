@@ -66,7 +66,7 @@ gelato-component(data-name='mobile-vocab-viewer-content')
           .value
             #vocab-sentence
               if sentence
-                span(class=vocab.getFontClass())!= sentence.getWriting()
+                span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
         if mnemonic
           .block
             .header Mnemonic

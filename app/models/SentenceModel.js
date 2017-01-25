@@ -5,7 +5,6 @@ const GelatoModel = require('gelato/model');
  * @extends {GelatoModel}
  */
 const SentenceModel = GelatoModel.extend({
-
   /**
    * @property idAttribute
    * @type String
@@ -36,20 +35,20 @@ const SentenceModel = GelatoModel.extend({
    * @param {String} [mask] portion of the writing to search and replace with underscores
    * @returns {String}
    */
-  getWriting: function(mask) {
+  getWriting: function(mask, vocab) {
     let writing = this.get('sentenceRune');
 
     if (app.getLanguage() === 'zh') {
 
       // TODO: better check based on the vocab in case user mixes and matches?
-      if (app.user.get('reviewTraditional')) {
+      if (vocab && vocab.get('style') === 'trad') {
         writing = this.get('runeTraditional');
       } else {
         writing = this.get('runeSimplified');
       }
     }
 
-    if (mask !== undefined) {
+    if (mask !== undefined && typeof mask === 'string') {
       const pieces = mask.split('');
       for (let i = 0, length = pieces.length; i < length; i++) {
         writing = writing.replace(new RegExp(pieces[i], 'g'), '_');

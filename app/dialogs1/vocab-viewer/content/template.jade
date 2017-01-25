@@ -42,7 +42,7 @@ gelato-component(data-name='vocab-viewer-content')
           .value
             #vocab-sentence
               if sentence
-                span(class=vocab.getFontClass())!= sentence.getWriting()
+                span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
         .block
           .header Mnemonic
           .value

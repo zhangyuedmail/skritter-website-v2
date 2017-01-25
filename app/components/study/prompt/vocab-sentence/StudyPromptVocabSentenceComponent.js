@@ -28,8 +28,6 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
   initialize: function(options) {
     this.prompt = options.prompt;
     this.listenTo(this.prompt, 'reviews:set', this.fetchAndShowSentence);
-
-    this.fetchingSentence = false;
   },
 
   /**
@@ -58,17 +56,6 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
       vocab.collection.sentences.add(s);
       this.render();
     });
-
-    // this.prompt.reviews.vocab.fetch({
-    //   data: {
-    //     include_sentences: true
-    //   },
-    //   merge: true
-    // }, {
-    //   success: function() {
-    //     // console.log(self.prompt.reviews.vocab);
-    //   }
-    // });
   },
 
   /**
