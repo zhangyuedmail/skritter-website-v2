@@ -1,11 +1,11 @@
-var GelatoDialog = require('gelato/dialog');
-var Vocablists = require('collections/VocablistCollection');
+const GelatoDialog = require('gelato/dialog');
+const Vocablists = require('collections/VocablistCollection');
 
 /**
  * @class ResetVocablistPositionDialog
  * @extends {GelatoDialog}
  */
-var ResetVocablistPositionDialog = GelatoDialog.extend({
+const ResetVocablistPositionDialog = GelatoDialog.extend({
   /**
    * @method initialize
    * @param {Object} options
@@ -13,6 +13,7 @@ var ResetVocablistPositionDialog = GelatoDialog.extend({
   initialize: function(options) {
     this.vocablists = new Vocablists();
   },
+
   /**
    * @property events
    * @type {Object}
@@ -21,19 +22,23 @@ var ResetVocablistPositionDialog = GelatoDialog.extend({
     'click #button-cancel': 'handleClickButtonCancel',
     'click #button-reset': 'handleClickButtonReset'
   },
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @method render
    * @returns {ResetVocablistPositionDialog}
    */
   render: function() {
     this.renderTemplate();
+
     return this;
   },
+
   /**
    * @method handleClickButtonCancel
    * @param {Event} event
@@ -42,13 +47,18 @@ var ResetVocablistPositionDialog = GelatoDialog.extend({
     event.preventDefault();
     this.close();
   },
+
   /**
    * @method handleClickButtonReset
    * @param {Event} event
    */
   handleClickButtonReset: function(event) {
-    var self = this;
+    const self = this;
     event.preventDefault();
+
+    this.$('button').prop('disabled', true);
+    this.$('#button-reset').text(app.locale('pages.vocabLists.resetting'));
+
     async.series(
       [
         function(callback) {
@@ -63,11 +73,13 @@ var ResetVocablistPositionDialog = GelatoDialog.extend({
       }
     );
   },
+
   /**
    * @method loadVocablists
    */
   loadVocablists: function(callback) {
-    var self = this;
+    const self = this;
+
     async.parallel(
       [
         function(callback) {

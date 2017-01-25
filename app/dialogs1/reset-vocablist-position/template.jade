@@ -13,8 +13,8 @@ gelato-dialog(data-name='reset-vocablist-position')
 
         .modal-body
           p Your changes are not retroactive; words already added from My Lists to My Words will not automatically have their simplified or traditional items added.
-          p If you'd like to retroactively add simplified and traditional characters from existing lists please select the appropriate action below.
+          p If you'd like to retroactively add simplified or traditional characters from existing lists please select the appropriate action below.
 
         .modal-footer
-          button#button-reset.btn.btn-danger Reset Lists to Beginning
-          button#button-cancel.btn.btn-default Cancel
+          button#button-reset.btn.btn-danger= app.locale('pages.vocabLists.resetLists')
+          button#button-cancel.btn.btn-primary= app.locale('pages.vocabLists.dontResetLists')

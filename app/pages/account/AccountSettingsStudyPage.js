@@ -91,7 +91,8 @@ const AccountSettingsStudyPage = GelatoPage.extend({
   handleClickButtonSave: function(event) {
     event.preventDefault();
 
-    let self = this;
+    const self = this;
+    let zhStudyStyleChanged;
 
     app.user.set({
       autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
@@ -115,16 +116,19 @@ const AccountSettingsStudyPage = GelatoPage.extend({
       });
     }
 
-    if (app.user.hasChanged('addSimplified') || app.user.hasChanged('addTraditional')) {
-      this.dialog = new ResetVocablistPositionDialog();
-      this.dialog.render();
-      this.dialog.open();
-    }
+    zhStudyStyleChanged = (app.isChinese() && app.user.hasChanged('addSimplified') ||
+      app.user.hasChanged('addTraditional'));
 
     app.user.save(null, {
       error: function(req, error) {
         let msg = error.responseJSON.message;
         self.displayErrorMessage(msg);
+      }, success: () => {
+        if (zhStudyStyleChanged) {
+          this.dialog = new ResetVocablistPositionDialog();
+          this.dialog.render();
+          this.dialog.open();
+        }
       }
     });
   },
