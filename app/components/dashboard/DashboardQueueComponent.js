@@ -20,9 +20,28 @@ const DashboardQueueComponent = GelatoComponent.extend({
     this.vocablists = app.user.vocablists;
     this.listenTo(this.vocablists, 'state', this.render);
     this.vocablists.setSort('activeCompletion');
+
+    this.listenTo(
+      this.vocablists, 'state:standby',
+      function() {
+        if (this.vocablists.cursor && this.vocablists.length) {
+          this.vocablists.fetch({
+            data: {
+              cursor: this.vocablists.cursor,
+              limit: 10,
+              sort: 'studying',
+              include_percent_done: 'true',
+              lang: app.getLanguage()
+            },
+            remove: false
+          });
+        }
+      }
+    );
+
     this.vocablists.fetch({
       data: {
-        limit: 10,
+        limit: 12,
         sort: 'studying',
         include_percent_done: 'true',
         lang: app.getLanguage()
