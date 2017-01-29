@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="com.inkren.skritter.plugins.core"
+        version="0.0.1">
+
+    <name>Skritter Core</name>
+
+    <author>Joshua McFarland</author>
+    <description>Skritter Core Plugin</description>
+    <keywords>cordova,skritter,core,javascript</keywords>
+    <license>MIT</license>
+
+    <engines>
+        <engine name="cordova" version=">=3.5.0" />
+    </engines>
+
+    <js-module src="www/core.js" name="SkritterPlugin">
+        <clobbers target="plugins.core" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+        </config-file>
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="SkritterPlugin" >
+                <param name="android-package" value="com.inkren.skritter.plugins.core.SkritterPlugin"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/SkritterPlugin.java" target-dir="src/com/inkren/skritter/plugins/core" />
+
+    </platform>
+
+</plugin>
