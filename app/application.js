@@ -49,6 +49,7 @@ module.exports = GelatoApplication.extend({
      * @type {String}
      */
     this.couponCode = null;
+    this.dicts = {};
     this.checkAndSetReferralInfo();
 
     this.fn = Functions;
@@ -556,6 +557,67 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
+   * Gets an object with the install state of various dictionaries on Android.
+   * @method refreshAvailableDicts
+   */
+  refreshAvailableDicts: function() {
+    const dicts = {
+      pleco: false,
+      hanpingLite: false,
+      hanpingPro: false,
+      hanpingYue: false
+    };
+
+    if (!app.isAndroid()) {
+      return;
+    }
+
+    async.parallel(
+      [
+        (callback) => {
+          plugins.core.isPackageInstalled(
+            'com.pleco.chinesesystem',
+            (result) => {
+              dicts.pleco = result;
+              callback();
+            }
+          );
+        },
+        (callback) => {
+          plugins.core.isPackageInstalled(
+            'com.embermitre.hanping.app.lite',
+            (result) => {
+              dicts.hanpingLite = result;
+              callback();
+            }
+          );
+        },
+        (callback) => {
+          plugins.core.isPackageInstalled(
+            'com.embermitre.hanping.app.pro',
+            (result) => {
+              dicts.hanpingPro = result;
+              callback();
+            }
+          );
+        },
+        (callback) => {
+          plugins.core.isPackageInstalled(
+            'com.embermitre.hanping.cantodict.app.pro',
+            (result) => {
+              dicts.hanpingYue = result;
+              callback();
+            }
+          );
+        }
+      ],
+      () => {
+         this.dicts = dicts;
+      }
+    );
+  },
+
+  /**
    * Stores a user referral and optionally fires off the API request to process it
    * @param {String} userId the user id of the referrer
    * @param {Boolean} [processImmediately] whether to immediately fire off an API request
@@ -578,6 +640,9 @@ module.exports = GelatoApplication.extend({
    */
   start: function() {
     GelatoApplication.prototype.start.apply(this, arguments);
+
+    //sets a global app object with installed dictionary states
+    this.refreshAvailableDicts();
 
     //load cached user data if it exists
     this.user.set(this.getLocalStorage(this.user.id + '-user'));
@@ -642,7 +707,7 @@ module.exports = GelatoApplication.extend({
     //use async for cleaner loading code
     async.series(
       [
-        function(callback) {
+        (callback) => {
           //check for user authentication type
           if (app.user.id === 'application') {
             app.user.session.authenticate(
@@ -687,7 +752,7 @@ module.exports = GelatoApplication.extend({
           setTimeout(navigator.splashscreen.hide, 1000);
 
           if (app.isAndroid()) {
-            StatusBar.backgroundColorByHexString("#262b30");
+            StatusBar.backgroundColorByHexString('#262b30');
           }
         }
       }

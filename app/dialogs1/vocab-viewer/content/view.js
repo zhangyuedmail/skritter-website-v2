@@ -17,23 +17,15 @@ const VocabViewerContentComponent = GelatoComponent.extend({
   events: {
     'click .item-ban': 'handleClickItemBan',
     'click .item-unban': 'handleClickItemUnban',
+    'click .fa-times-circle-o': 'handleClickClose',
     'click #button-vocab-star': 'handleClickVocabStar',
     'click #button-vocab-ban': 'handleClickVocabBan',
-    'click .fa-times-circle-o': 'handleClickClose',
+    'click #hanping-lite-icon': 'handleClickHanpingLiteIcon',
+    'click #hanping-pro-icon': 'handleClickHanpingProIcon',
+    'click #hanping-yue-icon': 'handleClickHanpingYueIcon',
+    'click #pleco-icon': 'handleClickPlecoIcon',
     'click #show-more-contained': 'handleClickShowMoreContained',
     'click #save-me': 'saveMe'
-  },
-
-  saveMe: function() {
-    const customDefinition = (this.$('#custom-definition-input').val() || '').trim();
-
-    // or if it equals the previous custom definition
-    if (!customDefinition) {
-      return;
-    }
-
-    this.vocabs.models[0].set('customDefinition', 'yolo');
-    this.vocabs.models[0].save();
   },
 
   /**
@@ -117,6 +109,54 @@ const VocabViewerContentComponent = GelatoComponent.extend({
   },
 
   /**
+   * @method handleClickPlecoIcon
+   * @param event
+   */
+  handleClickPlecoIcon: function(event) {
+    event.preventDefault();
+
+    if (app.isCordova()) {
+      plugins.core.openPleco(this.vocab.get('writing'));
+    }
+  },
+
+  /**
+   * @method handleClickHanpingLiteIcon
+   * @param event
+   */
+  handleClickHanpingLiteIcon: function(event) {
+    event.preventDefault();
+
+    if (app.isCordova()) {
+      plugins.core.openHanpingLite(this.vocab.get('writing'));
+    }
+  },
+
+  /**
+   * @method handleClickHanpingProIcon
+   * @param event
+   */
+  handleClickHanpingProIcon: function(event) {
+    event.preventDefault();
+
+    if (app.isCordova()) {
+      plugins.core.openHanpingPro(this.vocab.get('writing'));
+    }
+  },
+
+  /**
+   * @method handleClickHanpingYueIcon
+   * @param event
+   */
+  handleClickHanpingYueIcon: function(event) {
+    event.preventDefault();
+
+    if (app.isCordova()) {
+      plugins.core.openHanpingYue(this.vocab.get('writing'));
+    }
+  },
+
+  /**
    * @method handleClickItemBan
    * @param {Event} event
    */
@@ -170,7 +210,12 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     if (vocab) {
       this.vocab = vocab;
+    } else {
+      this.vocab = null;
     }
+
+    this.vocabs.reset();
+    this.render();
 
     async.parallel(
       [
@@ -258,7 +303,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
         if (error) {
           console.error('WORD DIALOG LOAD ERROR:', error);
         } else {
-          wordVocabsContaining.remove(wordVocabs.at(0).id);
+          self.vocab = wordVocabs.at(0);
+          wordVocabsContaining.remove(self.vocab.id);
           self.set(wordVocabs, wordVocabsContaining, wordItems);
         }
       }
@@ -280,6 +326,10 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     this.render();
   },
 
+  /**
+   * @method handleClickShowMoreContained
+   * @param event
+   */
   handleClickShowMoreContained: function(event) {
     this.$('#show-more-contained').hide();
     this.$('#vocab-words-containing').addClass('show-all');
@@ -300,7 +350,23 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     vocab.save();
 
     this.render();
+  },
+
+  /**
+   * #method saveMe
+   */
+  saveMe: function() {
+    const customDefinition = (this.$('#custom-definition-input').val() || '').trim();
+
+    // or if it equals the previous custom definition
+    if (!customDefinition) {
+      return;
+    }
+
+    this.vocabs.models[0].set('customDefinition', 'yolo');
+    this.vocabs.models[0].save();
   }
+
 });
 
 module.exports = VocabViewerContentComponent;

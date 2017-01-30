@@ -2,8 +2,15 @@
 
 gelato-component[data-name='mobile-vocab-viewer-content'] {
 
+  background-color: $white1;
+  min-height: 100%;
+
+  .dict-icon {
+    margin: 15px 2vh 0 2vh;
+    width: 6vh;
+  }
+
   #content-section {
-    background-color: #ffffff;
     padding: 20px;
 
     .block {

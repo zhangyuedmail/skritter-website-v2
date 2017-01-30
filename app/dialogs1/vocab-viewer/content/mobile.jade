@@ -35,16 +35,29 @@ gelato-component(data-name='mobile-vocab-viewer-content')
         if differentAltVocab
           .col-xs-6
             .vocab-writing(class=vocab.getFontClass())
-             span.alt-bracket.alt-bracket-l 【
-             span.alt-writing= altVocab
-             span.alt-bracket.alt-bracket-r 】
-      .row
+              span.alt-bracket.alt-bracket-l 【
+              span.alt-writing= altVocab
+              span.alt-bracket.alt-bracket-r 】
+      .row.text-center
         .col-xs-12
-          #vocab-reading.vocab-reading.text-center= vocab.getReading()
+          #vocab-reading.vocab-reading= vocab.getReading()
           .value
             #vocab-definition
               if definition
                 span.definition!= definition
+      if app.isAndroid && vocab.isChinese()
+        .row.text-center
+          .block
+            if app.dicts.pleco
+              img#pleco-icon.dict-icon(src='media/images/icon-pleco.png')
+
+            if app.dicts.hanpingPro
+              img#hanping-pro-icon.dict-icon(src='media/images/icon-hanping-pro.png')
+            else if app.dicts.hanpingLite
+              img#hanping-lite-icon.dict-icon(src='media/images/icon-hanping-lite.png')
+
+            if app.dicts.hanpingYue
+              img#hanping-yue-icon.dict-icon(src='media/images/icon-hanping-yue.png')
 
     #content-section
       .row
@@ -104,17 +117,17 @@ gelato-component(data-name='mobile-vocab-viewer-content')
             tbody
               for item in items.models
                 tr.item-row(data-id=item.id, data-part=item.get('part'))
-                 //TODO: move this logic to the item model
-                 td= _.capitalize(item.get('part'))
-                 td= item.get('next') > moment().unix() ? moment(item.get('next') * 1000).from() : 'Ready'
-                 td= item.get('last') ? moment(item.get('last') * 1000).from() : '-'
-                 td= item.get('timeStudied') ? Math.round(item.get('timeStudied')) + ' seconds' : '-'
-                 if _.includes(vocab.get('bannedParts'), item.get('part'))
-                  td.item-unban
-                   button.btn.btn-xs.btn-default Unban
-                 else
-                  td.item-ban
-                    button.btn.btn-xs.btn-danger Ban
+                  //TODO: move this logic to the item model
+                  td= _.capitalize(item.get('part'))
+                  td= item.get('next') > moment().unix() ? moment(item.get('next') * 1000).from() : 'Ready'
+                  td= item.get('last') ? moment(item.get('last') * 1000).from() : '-'
+                  td= item.get('timeStudied') ? Math.round(item.get('timeStudied')) + ' seconds' : '-'
+                  if _.includes(vocab.get('bannedParts'), item.get('part'))
+                    td.item-unban
+                      button.btn.btn-xs.btn-default Unban
+                  else
+                    td.item-ban
+                      button.btn.btn-xs.btn-danger Ban
   else
     #header-section
       .block.separator
