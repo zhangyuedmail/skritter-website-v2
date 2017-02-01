@@ -19,7 +19,7 @@ head
 body
   script.
     if (localStorage && (localStorage.getItem('application-user') || '').replace(/"/g, '').length > 0) {
-      window.location = window.location.href + 'dashboard';
+      window.location = window.location.origin + '/dashboard' + window.location.search;
     }
   gelato-application
 
