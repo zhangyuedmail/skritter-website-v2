@@ -102,10 +102,8 @@ module.exports = Router.extend({
    */
   handleRoute: function() {
     if (window.ga && this.page) {
-      ga('send', 'pageview', {
-        page: document.location.pathname,
-        title: this.page.title
-      });
+      ga('set', 'page', document.location.pathname);
+      ga('send', 'pageview');
     }
   },
 
