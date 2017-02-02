@@ -33,6 +33,7 @@ const SentenceModel = GelatoModel.extend({
    * Gets the rune writing for a sentence
    * @method getWriting
    * @param {String} [mask] portion of the writing to search and replace with underscores
+   * @param {VocabModel} vocab the vocab for the sentence
    * @returns {String}
    */
   getWriting: function(mask, vocab) {
@@ -40,9 +41,13 @@ const SentenceModel = GelatoModel.extend({
 
     if (app.getLanguage() === 'zh') {
 
-      // TODO: better check based on the vocab in case user mixes and matches?
-      if (vocab && vocab.get('style') === 'trad') {
-        writing = this.get('runeTraditional');
+      if (vocab) {
+        if (vocab.get('style') === 'trad' ||
+          (vocab.get('style') === 'both' && !app.user.get('reviewSimplified'))) {
+          writing = this.get('runeTraditional');
+        } else {
+          writing = this.get('runeSimplified');
+        }
       } else {
         writing = this.get('runeSimplified');
       }
