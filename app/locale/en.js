@@ -332,7 +332,9 @@ module.exports = {
       {"quote": "I don't deserve this award, but I have arthritis and I don't deserve that either.", "source": "Jack Benny"},
       {"quote": "Never trust an atom. They make up everything."},
       {"quote": "What if this weren't a hypothetical question?"},
-      {"quote": "It’s not a bug/mistake, it’s a feature/easter egg", "source": "Scott"}
+      {"quote": "It’s not a bug/mistake, it’s a feature/easter egg", "source": "Scott"},
+      {"quote": "He's not pressing charges... That's gotta be the \"you shot me\" equivalent of not being mad.", "source": "Rick Sanchez, Rick and Morty"},
+      {"quote": "HI! I'M MR MEESEEKS! LOOK AT ME!", "source": "Mr. Meeseeks, Rick and Morty"}
     ],
 
     "ja": [
