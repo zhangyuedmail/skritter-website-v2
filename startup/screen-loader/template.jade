@@ -1,6 +1,9 @@
 .screen-title-container
   .screen-title
     span.skritter-logo
-      img(src="/media/images/skrit-logo-white.png", alt="")
+      if !!window.cordova
+        img(src="media/images/skrit-logo-white.png", alt="")
+      else
+        img(src="/media/images/skrit-logo-white.png", alt="")
   .screen-notice
 .screen-message-container
