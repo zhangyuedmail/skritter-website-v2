@@ -111,7 +111,6 @@ module.exports = GelatoComponent.extend({
     event.preventDefault();
     if (this.prompt.editing) {
       this.prompt.reviews.vocab.set('customDefinition', this.prompt.vocabDefinition.getValue());
-      this.prompt.reviews.vocab.set('mnemonic', this.prompt.vocabMnemonic.getValue());
       this.disableEditing();
       this.prompt.reviews.vocab.save();
     } else {
@@ -127,10 +126,7 @@ module.exports = GelatoComponent.extend({
    */
   handleClickButtonVocabInfo: function(event) {
     event.preventDefault();
-    vent.trigger('studyPromptVocabInfo:show');
-    this.dialog = new VocabViewerDialog();
-    this.dialog.load(this.prompt.reviews.vocab.id);
-    this.dialog.open();
+    vent.trigger('studyPromptVocabInfo:show', this.prompt.reviews.vocab.id);
   },
 
   /**

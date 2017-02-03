@@ -34,19 +34,22 @@ module.exports = GelatoApplication.extend({
 
     this.config = config;
 
-    Raven.config(
-      config.sentryUrl,
-      {
-        ignoreUrls: [/localhost/],
-        release: this.getVersionWithBuildTimestamp()
-      }
-    ).install();
+    if (this.isProduction()) {
+      Raven.config(
+        config.sentryUrl,
+        {
+          ignoreUrls: [/localhost/],
+          release: this.getVersionWithBuildTimestamp()
+        }
+      ).install();
+    }
 
     /**
      * String to auto-populate signup form with
      * @type {String}
      */
     this.couponCode = null;
+    this.dicts = {};
     this.checkAndSetReferralInfo();
 
     this.fn = Functions;
@@ -88,6 +91,12 @@ module.exports = GelatoApplication.extend({
       this.listenTo(vent, 'mobileNavMenu:toggle', this.toggleSideMenu);
       this.listenTo(vent, 'vocabInfo:toggle', this.toggleVocabInfo);
       this.listenTo(vent, 'page:switch', () => { this.toggleSideMenu(false); });
+
+      if (this.isAndroid()) {
+        this._backButtonStack = [];
+        document.addEventListener('menubutton', (e) => {this.handleAndroidMenuKeyPressed(e);}, false);
+        document.addEventListener('backbutton', (e) => {this.handleAndroidBackButtonPressed(e);}, false);
+      }
     }
   },
 
@@ -121,8 +130,11 @@ module.exports = GelatoApplication.extend({
   },
   set: function(key, value) { this.config[key] = value; },
 
+  /**
+   * A dictionary of app-level dialogs. Should be initialized after render.
+   */
   dialogs: {
-    vocabViewer: new VocabViewerDialog()
+    vocabViewer: null
   },
 
   /**
@@ -293,6 +305,33 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
+   * Responds to a back button press on Android. If an action is popped
+   * from the stack, it is triggered as a vent event and default back behavior
+   * is prevented. If nothing is found, default action happens (app exit).
+   * @param event
+   */
+  handleAndroidBackButtonPressed: function(event) {
+    const backAction = this._backButtonStack.pop();
+
+    if (backAction) {
+      event.preventDefault();
+      vent.trigger(backAction);
+
+      return false;
+    } else {
+      navigator.app.exitApp();
+    }
+  },
+
+  /**
+   * Toggles the main menu on Android when the menu key is pressed.
+   * @param event
+   */
+  handleAndroidMenuKeyPressed: function(event) {
+    this.toggleSideMenu();
+  },
+
+  /**
    * @method handleError
    * @param {String} message
    * @param {String} [url]
@@ -380,10 +419,12 @@ module.exports = GelatoApplication.extend({
    * @method loadHelpscout
    */
   loadHelpscout: function() {
-    let parent = document.getElementsByTagName('script')[0];
-    let script = document.createElement('script');
-    let HSCW = {config: {}};
-    let HS = {beacon: {readyQueue: [], user: this.user}};
+    const parent = document.getElementsByTagName('script')[0];
+    const script = document.createElement('script');
+    const HSCW = {config: {}};
+    const HS = {beacon: {readyQueue: [], user: this.user}};
+    const self = this;
+
     HSCW.config = {
       contact: {
         enabled: true,
@@ -408,13 +449,14 @@ module.exports = GelatoApplication.extend({
       zIndex: 9999
     };
     HS.beacon.ready(function(beacon) {
-      if (this.user.isLoggedIn()) {
+      if (self.user.isLoggedIn()) {
         this.identify({
-          email: this.user.get('email'),
-          name: this.user.get('name')
+          email: self.user.get('email'),
+          name: self.user.get('name')
         });
       }
     });
+
     script.async = true;
     script.src = 'https://djtflbt20bdde.cloudfront.net/';
     script.type = 'text/javascript';
@@ -518,6 +560,67 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
+   * Gets an object with the install state of various dictionaries on Android.
+   * @method refreshAvailableDicts
+   */
+  refreshAvailableDicts: function() {
+    const dicts = {
+      pleco: false,
+      hanpingLite: false,
+      hanpingPro: false,
+      hanpingYue: false
+    };
+
+    if (!app.isAndroid()) {
+      return;
+    }
+
+    async.parallel(
+      [
+        (callback) => {
+          plugins.core.isPackageInstalled(
+            'com.pleco.chinesesystem',
+            (result) => {
+              dicts.pleco = result;
+              callback();
+            }
+          );
+        },
+        (callback) => {
+          plugins.core.isPackageInstalled(
+            'com.embermitre.hanping.app.lite',
+            (result) => {
+              dicts.hanpingLite = result;
+              callback();
+            }
+          );
+        },
+        (callback) => {
+          plugins.core.isPackageInstalled(
+            'com.embermitre.hanping.app.pro',
+            (result) => {
+              dicts.hanpingPro = result;
+              callback();
+            }
+          );
+        },
+        (callback) => {
+          plugins.core.isPackageInstalled(
+            'com.embermitre.hanping.cantodict.app.pro',
+            (result) => {
+              dicts.hanpingYue = result;
+              callback();
+            }
+          );
+        }
+      ],
+      () => {
+         this.dicts = dicts;
+      }
+    );
+  },
+
+  /**
    * Stores a user referral and optionally fires off the API request to process it
    * @param {String} userId the user id of the referrer
    * @param {Boolean} [processImmediately] whether to immediately fire off an API request
@@ -540,6 +643,9 @@ module.exports = GelatoApplication.extend({
    */
   start: function() {
     GelatoApplication.prototype.start.apply(this, arguments);
+
+    //sets a global app object with installed dictionary states
+    this.refreshAvailableDicts();
 
     //load cached user data if it exists
     this.user.set(this.getLocalStorage(this.user.id + '-user'));
@@ -604,7 +710,7 @@ module.exports = GelatoApplication.extend({
     //use async for cleaner loading code
     async.series(
       [
-        function(callback) {
+        (callback) => {
           //check for user authentication type
           if (app.user.id === 'application') {
             app.user.session.authenticate(
@@ -648,8 +754,8 @@ module.exports = GelatoApplication.extend({
         if (app.isCordova()) {
           setTimeout(navigator.splashscreen.hide, 1000);
 
-          if (cordova.platformId == 'android') {
-            StatusBar.backgroundColorByHexString("#262b30");
+          if (app.isAndroid()) {
+            StatusBar.backgroundColorByHexString('#262b30');
           }
         }
       }
@@ -671,28 +777,62 @@ module.exports = GelatoApplication.extend({
     if (this._views['leftSide'].toggleVisibility) {
       this._views['leftSide'].toggleVisibility(this.$('#main-app-container').hasClass('push-right'));
     }
+
+    if (this.isAndroid()) {
+      if (this.$('#left-side-app-container').hasClass('push-right')) {
+        this.$('#main-app-container-overlay').addClass('show-righter');
+        this._backButtonStack.push('mobileNavMenu:toggle');
+      } else {
+        this._backButtonStack.pop();
+      }
+    }
   },
 
   /**
    * Shows a vocab info side view on mobile devices.
    * @param {String} vocabId the vocab id
    */
-  toggleVocabInfo: function(vocabId) {
+  toggleVocabInfo: function(vocabId, vocab) {
     if (!this.isMobile()) {
-      return;
+      return this.openDesktopVocabViewer(vocabId, vocab);
     }
 
     if (vocabId) {
       // TODO: update vocab info view
       this._views['rightSide'].loadVocab(vocabId); // or something like this
       this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
+
+      if (this.isAndroid()) {
+        this._backButtonStack.push('vocabInfo:toggle');
+      }
     } else {
       this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
+
+      if (this.isAndroid()) {
+        this._backButtonStack.pop();
+      }
     }
     $('gelato-application').toggleClass('no-overflow', !!vocabId);
     this.$('#main-app-container').toggleClass('push-left', !!vocabId);
 
     this.$('#main-app-container-overlay').removeClass('show');
     this.$('#main-app-container-overlay').toggleClass('show-right', !!vocabId);
+  },
+
+  /**
+   * Shows a vocab info side view on mobile devices.
+   * @param {String} vocabId the vocab id
+   */
+  openDesktopVocabViewer: function(vocabId, vocab) {
+    if (this.isMobile()) {
+      return;
+    }
+
+    if (!this.dialogs.vocabViewer) {
+      this.dialogs.vocabViewer = new VocabViewerDialog();
+    }
+
+    app.dialogs.vocabViewer.load(vocabId, vocab);
+    app.dialogs.vocabViewer.open();
   }
 });

@@ -1,7 +1,6 @@
 @import "../../styles/_variables";
 
 gelato-component[data-name='dashboard-queue'] {
-
   font-family: $font-ubuntu;
   font-weight: 300;
   margin: 30px 10px 0 10px;
@@ -15,10 +14,25 @@ gelato-component[data-name='dashboard-queue'] {
     color: $green5;
   }
 
+  .reviewing-label {
+    font-family: $font-slab;
+    font-size: 12px;
+    font-weight: 400;
+    color: $grey2;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    margin-top: 10px;
+  }
+
+  .mini-spinner {
+    position: absolute;
+    right: 0px;
+    top: -35px;
+  }
+
   @media (max-width: 992px) {
     .progress {
       height: 10px;
     }
   }
-
 }

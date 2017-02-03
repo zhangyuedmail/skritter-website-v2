@@ -517,8 +517,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   triggerCanvasMouseDown: function(event) {
     event.preventDefault();
-    this.trigger('mousedown', event);
     this.mouseDownEvent = event;
+    this.trigger('mousedown', event);
   },
 
   /**
@@ -528,10 +528,10 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   triggerCanvasMouseUp: function(event) {
     event.preventDefault();
 
-    this.trigger('mouseup', event);
     this.mouseLastDownEvent = this.mouseDownEvent;
     this.mouseLastUpEvent = this.mouseUpEvent;
     this.mouseUpEvent = event;
+    this.trigger('mouseup', event);
 
     const linePositionStart = {x: this.mouseDownEvent.stageX, y: this.mouseDownEvent.stageY};
     const linePositionEnd = {x: this.mouseUpEvent.stageX, y: this.mouseUpEvent.stageY};

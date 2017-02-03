@@ -11,7 +11,6 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click .show-sentence': 'handleClickShowSentence',
     'click .value': 'handleClickValue'
   },
 
@@ -28,6 +27,7 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
    */
   initialize: function(options) {
     this.prompt = options.prompt;
+    this.listenTo(this.prompt, 'reviews:set', this.fetchAndShowSentence);
   },
 
   /**
@@ -40,20 +40,21 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
   },
 
   /**
-   * @method handleClickShowSentence
-   * @param {Event} event
+   * @method fetchAndShowSentence
+   * @param {ReviewCollection} [reviews]
    */
-  handleClickShowSentence: function(event) {
-    event.preventDefault();
+  fetchAndShowSentence: function(reviews) {
+    if (!this.prompt.reviews) {
+      return;
+    }
 
-    this.stopListening();
-    this.listenTo(this.prompt.reviews.vocab, 'state', this.render);
-    this.prompt.reviews.vocab.sentenceFetched = true;
-    this.prompt.reviews.vocab.fetch({
-      data: {
-        include_sentences: true
-      },
-      merge: true
+    this.toggleFetchingSpinner(true);
+
+    const vocab = this.prompt.reviews.vocab;
+    vocab.sentenceFetched = true;
+    vocab.fetchSentence().then((s) => {
+      vocab.collection.sentences.add(s);
+      this.render();
     });
   },
 
@@ -70,6 +71,10 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
       this.$('.hint').addClass('open');
       this.$('.hint').show('slide', {direction: 'up'}, '500');
     }
+  },
+
+  toggleFetchingSpinner: function(show) {
+    this.$('.fa-spinner').toggleClass('hidden', !show);
   }
 
 });

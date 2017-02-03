@@ -1,4 +1,9 @@
 .screen-title-container
-  .screen-title Skritter
+  .screen-title
+    span.skritter-logo
+      if !!window.cordova
+        img(src="media/images/skrit-logo-white.png", alt="")
+      else
+        img(src="/media/images/skrit-logo-white.png", alt="")
   .screen-notice
 .screen-message-container

@@ -237,19 +237,25 @@ module.exports = {
       "titleBrowse": "Browse - Skritter",
       "titleCpod": "ChinesePod - Skritter",
       "titlePublished": "Published Lists - Skritter",
+      "titleQueue": "Queue - Skritter",
       "addSection": "Add section",
       "addToQueue": "Add to queue",
+      "addingWordsFrom": "Adding words from",
       "backToCpod": "back to ChinesePod lists",
       "backToMy": "back to my lists",
       "backToOfficial": "back to official lists",
       "backToPublished": "back to published lists",
       "complete": "complete",
       "deleted": "deleted",
+      "dontResetLists": "Don't Reset Lists",
       "enterDescription": "Enter a description here",
       "export": "Export",
       "history": "History",
       "publish": "Publish",
       "quickAdd": "Quick Add",
+      "resetLists": "Reset Lists to Beginning",
+      "resetting": "Resetting lists...",
+      "reviewingWordsFrom": "Reviewing words from",
       "status": "Status",
       "studyNow": "Study Now"
     }
@@ -326,7 +332,9 @@ module.exports = {
       {"quote": "I don't deserve this award, but I have arthritis and I don't deserve that either.", "source": "Jack Benny"},
       {"quote": "Never trust an atom. They make up everything."},
       {"quote": "What if this weren't a hypothetical question?"},
-      {"quote": "It’s not a bug/mistake, it’s a feature/easter egg", "source": "Scott"}
+      {"quote": "It’s not a bug/mistake, it’s a feature/easter egg", "source": "Scott"},
+      {"quote": "He's not pressing charges... That's gotta be the \"you shot me\" equivalent of not being mad.", "source": "Rick Sanchez, Rick and Morty"},
+      {"quote": "HI! I'M MR MEESEEKS! LOOK AT ME!", "source": "Mr. Meeseeks, Rick and Morty"}
     ],
 
     "ja": [

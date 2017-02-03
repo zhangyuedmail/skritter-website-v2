@@ -35,7 +35,7 @@ const VocabModel = SkritterModel.extend({
         return new Howl({
           src: [url],
           format: ['mp3'],
-          html5: true,
+          html5: app.isMobile(), // we want true for mobile, false for desktop
           preload: this.collection && this.collection.preloadAudio
         });
       }
@@ -75,6 +75,33 @@ const VocabModel = SkritterModel.extend({
     return this;
   },
 
+  fetchSentence: function() {
+    const self = this;
+
+    let url = app.getApiUrl(2) + 'sentences?languageCode=' + app.getLanguage() + '&vocabId=' + this.id + '&user=' + app.user.id;
+
+    this.state = 'fetching';
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        context: this,
+        url,
+        type: 'GET',
+        headers: app.user.session.getHeaders(),
+        error: function(error) {
+          console.log(error);
+          reject();
+        },
+        success: function(sentence) {
+          if (self.collection) {
+            self.collection.sentences.add(sentence);
+          }
+          self.state = 'standby';
+          resolve(sentence);
+        }
+      });
+    });
+  },
+
   /**
    * @method getBase
    * @returns {String}
@@ -89,6 +116,14 @@ const VocabModel = SkritterModel.extend({
    */
   getCharacters: function() {
     return this.get('writing').split('');
+  },
+
+  /**
+   * @method getCharactersWithoutFillers
+   * @returns {Array}
+   */
+  getCharactersWithoutFillers: function() {
+    return _.without(this.get('writing').split(''), app.config.writingFillers);
   },
 
   /**
@@ -266,7 +301,14 @@ const VocabModel = SkritterModel.extend({
   getReadingObjects: function() {
     let readings = [];
     let reading = this.get('reading');
+
     if (this.isChinese()) {
+      if (app.fn.pinyin.hasToneMarks(reading)) {
+        Raven.captureMessage('PINYIN FORMAT ERROR: ' + this.id);
+
+        return [];
+      }
+
       if (reading.indexOf(', ') === -1) {
         readings = reading.match(/[a-z|A-Z]+[1-5]+|'| ... |\s/g);
       } else {
@@ -275,12 +317,16 @@ const VocabModel = SkritterModel.extend({
     } else {
       readings = [reading];
     }
-    return readings.map(function(value) {
-      if ([' ', ' ... ', '\''].indexOf(value) > -1) {
-        return {type: 'filler', value: value};
+
+    return readings.map(
+      function(value) {
+        if ([' ', ' ... ', '\''].indexOf(value) > -1) {
+          return {type: 'filler', value: value};
+        }
+
+        return {type: 'character', value: value};
       }
-      return {type: 'character', value: value};
-    });
+    );
   },
 
   /**
@@ -288,7 +334,7 @@ const VocabModel = SkritterModel.extend({
    * @returns {Sentence}
    */
   getSentence: function() {
-    return this.collection.sentences.get(this.get('sentenceId'));
+    return this.collection.sentences.get(this.id);
   },
 
   /**
@@ -298,8 +344,10 @@ const VocabModel = SkritterModel.extend({
   getStrokes: function() {
     let strokes = [];
     let characters = this.getCharacters();
+
     for (let i = 0, length = characters.length; i < length; i++) {
       let stroke = app.user.characters.findWhere({writing: characters[i]});
+
       if (stroke) {
         if (this.isJapanese()) {
           if (!app.user.get('studyKana') && stroke.isKana()) {
@@ -314,6 +362,7 @@ const VocabModel = SkritterModel.extend({
         strokes.push(null);
       }
     }
+
     return strokes;
   },
 
@@ -343,6 +392,11 @@ const VocabModel = SkritterModel.extend({
     }
     return [];
   },
+
+  /**
+   * @method getUniqueAudios
+   * @returns {Array}
+   */
   getUniqueAudios: function() {
     return _.uniqBy(this.get('audios'), 'reading');
   },
@@ -425,7 +479,8 @@ const VocabModel = SkritterModel.extend({
         return true;
       }
     }
-    return _.includes(['~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？'], this.get('writing'));
+
+    return _.includes(app.config.writingFillers, this.get('writing'));
   },
 
   /**
@@ -466,24 +521,36 @@ const VocabModel = SkritterModel.extend({
   },
 
   /**
+   * Plays the associated audio with the vocab when it is loaded, if it exists.
    * @method play
+   * @return {Boolean} whether the audio played when the function was called
    */
   play: function() {
     // Return if no audio exists for playing
     if (!this.audios.length) {
-      return;
+      return false;
     }
+
+    // console.log('audio play requested: ' + moment().format('h:mm:ss.SS'));
 
     // Stop and remove existing audio
     if (app.audio) {
       app.audio.stop();
+      app.audio.off();
       app.audio = null;
     }
 
     // Play audio when fully loaded
     if (this.audios[0].state() === 'loaded') {
       app.audio = this.audios[0];
+      app.audio.rate(0.999);
       app.audio.play();
+
+      return true;
+    } else {
+      this.audios[0].once('load', () => {
+        this.play();
+      });
     }
   },
 

@@ -20,6 +20,8 @@ const StatsHeatmapComponent = GelatoComponent.extend({
   initialize: function() {
     this.heatmap = new CalHeatMap();
     this.listenTo(this.collection, 'state:standby', this.update);
+
+    this.collection.fetchMonth();
   },
 
   /**
@@ -57,11 +59,11 @@ const StatsHeatmapComponent = GelatoComponent.extend({
     this.$('#current-streak').text(this.collection.getMonthlyStreak(true));
     this.$('#longest-streak').text(this.collection.getMonthlyStreak());
 
-    var avgTimeStudied = this.collection.getAverageTimeStudied();
+    const avgTimeStudied = this.collection.getAverageTimeStudied();
     this.$('#avg-time-studied-amount').text(avgTimeStudied.amount);
     this.$('#avg-time-studied-units').text(avgTimeStudied.units);
 
-    var itemsLearned = this.collection.getItemsLearnedForPeriod('word', 'month') +
+    const itemsLearned = this.collection.getItemsLearnedForPeriod('word', 'month') +
       this.collection.getItemsLearnedForPeriod('char', 'month');
     this.$('#items-studied').text(itemsLearned)
       .toggleClass('bad', itemsLearned < 0);

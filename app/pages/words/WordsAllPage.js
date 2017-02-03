@@ -90,6 +90,7 @@ module.exports = GelatoPage.extend({
     this.items.fetch({
       data: {
         sort: this.sort,
+        lang: app.getLanguage(),
         limit: this.limit,
         include_vocabs: true,
         cursor: cursor || ''

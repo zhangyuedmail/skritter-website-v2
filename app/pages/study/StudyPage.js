@@ -45,6 +45,8 @@ const StudyPage = GelatoPage.extend({
   initialize: function() {
     ScreenLoader.show();
 
+    Howler.autoSuspend = false;
+
     this.currentItem = null;
     this.currentPromptItems = null;
     this.previousItem = null;
@@ -196,7 +198,18 @@ const StudyPage = GelatoPage.extend({
           });
         }
       ],
-      () => {
+      (error) => {
+        if (error) {
+          let msg = 'Error fetching items. Please ';
+          if (app.isMobile()) {
+            msg += 'reload the application';
+          } else {
+            msg += 'refresh the page.';
+          }
+          ScreenLoader.post(msg);
+          return;
+        }
+
         const active = app.user.isSubscriptionActive();
 
         if (!this.items.length && !this.vocablists.length) {
@@ -321,7 +334,7 @@ const StudyPage = GelatoPage.extend({
     }
 
     if (items.length) {
-      this.currentItem= items[0];
+      this.currentItem = items[0];
       this.currentPromptItems = items[0].getPromptItems();
       this.prompt.$panelLeft.css('opacity', 1.0);
       this.prompt.$panelLeft.css('pointer-events', 'auto');
@@ -370,6 +383,8 @@ const StudyPage = GelatoPage.extend({
     this.items.reviews.post();
 
     document.removeEventListener('pause', this.handlePauseEvent.bind(this), false);
+
+    Howler.autoSuspend = true;
 
     return GelatoPage.prototype.remove.call(this);
   },

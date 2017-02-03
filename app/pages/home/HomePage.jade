@@ -1,10 +1,6 @@
 gelato-page(data-name='home')
 
   #hero-slider.carousel.slide(data-ride="carousel", data-interval="false")
-    //TODO: enable indicators and navigation with more hero images
-    //ol.carousel-indicators
-      li.active(data-target="#hero-slider", data-slide-to="0")
-      li(data-target="#hero-slider", data-slide-to="1")
     .carousel-inner(role="listbox")
       .item.active
         img(src="/media/images/marketing_hero1_phone.jpg", alt="")
@@ -13,12 +9,6 @@ gelato-page(data-name='home')
             .motto-text= app.locale('pages.home.motto1')
             .motto-text= app.locale('pages.home.motto2')
             a.btn.btn-lg.btn-danger.hidden-xs(href='/demo')= app.locale('pages.home.demoLink')
-      //.item
-        img(src="/media/images/home_hero2.png", alt="")
-    //a.left.carousel-control(href="#hero-slider", role="button", data-ignore="true", data-slide="prev")
-      span.glyphicon.glyphicon-chevron-left
-    //a.right.carousel-control(href="#hero-slider", role="button", data-ignore="true", data-slide="next")
-      span.glyphicon.glyphicon-chevron-right
 
   section#section-features.light
     .container

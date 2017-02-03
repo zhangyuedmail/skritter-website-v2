@@ -1,17 +1,16 @@
 gelato-component(data-name='study-prompt-vocab-sentence')
   - var prompt = view.prompt;
+  - var isDemo = prompt.isDemo;
 
   if prompt.reviews
     - var sentence = prompt.reviews.vocab.getSentence();
     - var vocab = prompt.reviews.vocab;
 
     label Sentence
+    .sentence-wrapper
 
-    if vocab.state === 'fetching'
+      i.fa.fa-2x.fa-spinner.fa-pulse.fa-fw.hidden
 
-      i.fa.fa-2x.fa-spinner.fa-pulse.fa-fw
-
-    else
       if sentence
         - var sentenceDefinition = sentence.getDefinition();
         - var sentenceReading = sentence.get('reading');
@@ -19,11 +18,11 @@ gelato-component(data-name='study-prompt-vocab-sentence')
         .value(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
 
           if prompt.reviews.part === 'rune' && !prompt.reviews.isComplete()
-            = sentence.getWriting(prompt.reviews.vocab.get('writing'))
+            = sentence.getWriting(vocab.get('writing'), vocab)
           else
-            = sentence.getWriting()
+            = sentence.getWriting(null, vocab)
 
-          .hint
+          .hint(class=isDemo ? 'open' : '', style=isDemo ? 'display: block;' : '')
             if prompt.reviews.isChinese()
               .hint-reading= app.fn.pinyin.toTone(sentenceReading, true)
             else
@@ -31,7 +30,3 @@ gelato-component(data-name='study-prompt-vocab-sentence')
             .hint-definition= sentenceDefinition
       else if vocab.sentenceFetched
         .sentence-missing No example sentence found.
-
-      else
-
-        button.show-sentence.btn.btn-sm.btn-default show

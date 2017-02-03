@@ -122,6 +122,7 @@ module.exports = GelatoPage.extend({
     this.starredVocabs.fetch({
       data: {
         sort: 'starred',
+        lang: app.getLanguage(),
         limit: this.limit,
         cursor: cursor || ''
       },

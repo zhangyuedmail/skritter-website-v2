@@ -18,3 +18,4 @@ shell.exec('cordova plugin add cordova-plugin-crosswalk-webview');
 shell.exec('cordova plugin add cordova-plugin-device');
 shell.exec('cordova plugin add cordova-plugin-splashscreen');
 shell.exec('cordova plugin add cordova-plugin-statusbar');
+shell.exec('cordova plugin add ../plugins/core');

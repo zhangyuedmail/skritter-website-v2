@@ -20,6 +20,12 @@ const DemoPage = GelatoPage.extend({
   },
 
   /**
+   * @property showFooter
+   * @type Boolean
+   */
+  showFooter: false,
+
+  /**
    * @property title
    * @type {String}
    */
@@ -40,7 +46,10 @@ const DemoPage = GelatoPage.extend({
     this.dialog = null;
     this.lang = 'zh';
     this.notify = null;
-    this.prompt = new Prompt({page: this});
+    this.prompt = new Prompt({
+      page: this,
+      isDemo: true
+    });
     this.promptItems = null;
     this.vocab = null;
     this.vocabs = new Vocabs();
@@ -53,7 +62,7 @@ const DemoPage = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.prompt.setElement('#demo-prompt-container').render().hide();
+    this.prompt.setElement('#demo-prompt-container').render();
     this.loadDemo();
 
     return this;
@@ -63,62 +72,81 @@ const DemoPage = GelatoPage.extend({
    * @method loadDemo
    */
   loadDemo: function() {
-    var self = this;
-    async.waterfall([
-      function(callback) {
-        self.dialog = new DemoLanguageSelectDialog();
-        self.dialog.open();
-        self.dialog.once('select', callback);
-      },
-      function(lang, callback) {
-        ScreenLoader.show();
-        ScreenLoader.post('Loading demo word');
-        app.mixpanel.track('Started demo', {'Language': lang});
-        self.vocabs.fetch({
-          data: {
-            include_decomps: true,
-            include_sentences: true,
-            include_strokes: true,
-            ids: lang === 'zh' ? 'zh-你好-0' : 'ja-元気-0'
-          },
-          error: function(vocabs, error) {
-            callback(error);
-          },
-          success: function(vocabs) {
-            app.set('demoLang', lang);
-            self.vocab = vocabs.at(0);
-            callback(null, self.vocab);
-          }
-        });
-      },
-      function(vocab, callback) {
-        if (vocab.has('containedVocabIds')) {
+    const self = this;
+
+    async.waterfall(
+      [
+        function(callback) {
+          self.dialog = new DemoLanguageSelectDialog();
+          self.dialog.open();
+          self.dialog.once('select', callback);
+        },
+        function(lang, callback) {
+          ScreenLoader.show();
+          ScreenLoader.post('Loading demo word');
+          app.mixpanel.track('Started demo', {'Language': lang});
+          self.lang = lang;
           self.vocabs.fetch({
             data: {
               include_decomps: true,
               include_sentences: true,
-              include_strokes: true,
-              ids: vocab.get('containedVocabIds').join('|')
+              ids: lang === 'zh' ? 'zh-你好-0' : 'ja-元気-0'
             },
-            remove: false,
-            error: function(error) {
+            error: function(vocabs, error) {
               callback(error);
             },
-            success: function() {
-              callback(null, vocab);
+            success: function(vocabs) {
+              app.set('demoLang', lang);
+              self.vocab = vocabs.at(0);
+              callback(null, self.vocab);
             }
           });
-        } else {
-          callback(null, vocab);
+        },
+        function(vocab, callback) {
+          if (vocab.has('containedVocabIds')) {
+            self.vocabs.fetch({
+              data: {
+                include_decomps: true,
+                include_sentences: true,
+                ids: vocab.get('containedVocabIds').join('|')
+              },
+              remove: false,
+              error: function(error) {
+                callback(error);
+              },
+              success: function() {
+                callback(null, vocab);
+              }
+            });
+          } else {
+            callback(null, vocab);
+          }
+        },
+        function(vocab, callback) {
+          app.user.characters.fetch({
+              data: {
+                languageCode: vocab.get('lang'),
+                writings: vocab.get('writing')
+              },
+              remove: false,
+              error: function(error) {
+                callback(error);
+              },
+              success: function() {
+                callback(null, vocab);
+              }
+            }
+          );
         }
+      ],
+      function(error, vocab) {
+        ScreenLoader.hide();
+        self.prompt.show();
+        self.promptItems = vocab.getPromptItems('rune');
+        self.promptItems.teachAll();
+        self.step1();
       }
-    ], function(error, vocab) {
-      ScreenLoader.hide();
-      self.prompt.show();
-      self.promptItems = vocab.getPromptItems('rune');
-      self.promptItems.teachAll();
-      self.step1();
-    });
+    );
   },
 
   /**

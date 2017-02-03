@@ -23,10 +23,12 @@ gelato-component[data-name='study-prompt-vocab-sentence'] {
   .hint {
     display: none;
     font-family: $font-ubuntu;
+
     .hint-definition {
       font-size: 14px;
       font-weight: 300;
     }
+
     .hint-reading {
       font-size: 14px;
       font-weight: 400;
@@ -39,6 +41,10 @@ gelato-component[data-name='study-prompt-vocab-sentence'] {
     font-size: 14px;
     font-style: italic;
     font-weight: 300;
+  }
+
+  .sentence-wrapper {
+    min-height: 29px;
   }
 
   .value {

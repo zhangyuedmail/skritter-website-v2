@@ -78,6 +78,7 @@ module.exports = GelatoPage.extend({
     this.bannedVocabs.fetch({
       data: {
         sort: 'banned',
+        lang: app.getLanguage(),
         limit: this.limit,
         cursor: cursor || ''
       },

@@ -52,7 +52,8 @@ gelato-component[data-name='study-prompt-vocab-contained'] {
       }
 
       .decomp-writing {
-        color: $grey4;
+        cursor: pointer;
+        color: $green4;
         margin-right: 5px;
         font-size: 24px;
       }
@@ -66,7 +67,8 @@ gelato-component[data-name='study-prompt-vocab-contained'] {
     }
 
     .child-writing {
-      color: $grey5;
+      cursor: pointer;
+      color: $green4;
       font-size: 26px;
       font-weight: 400;
     }

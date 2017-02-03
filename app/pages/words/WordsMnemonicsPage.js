@@ -79,6 +79,7 @@ module.exports = GelatoPage.extend({
     this.mnemonicVocabs.fetch({
       data: {
         sort: 'mnemonic',
+        lang: app.getLanguage(),
         limit: this.limit,
         cursor: cursor || ''
       },

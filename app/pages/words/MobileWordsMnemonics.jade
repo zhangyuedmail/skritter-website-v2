@@ -42,7 +42,7 @@ gelato-page(data-name='mobile-words-mnemonics')
                       input(type="checkbox")
                     td.vocab-row.writing-td= vocab.getWriting()
                     td.vocab-row.reading-td= vocab.getReading()
-                    td.vocab-row.mnemonic-td!= mnemonic.text
+                    td.vocab-row.mnemonic-td!= app.fn.textToHTML(mnemonic.text)
 
             if view.mnemonicVocabs.state === 'fetching'
               p.text-center

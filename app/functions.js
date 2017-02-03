@@ -215,7 +215,7 @@ function getParameterByName(name, url) {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, "\\$&");
   var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-          results = regex.exec(url);
+    results = regex.exec(url);
   if (!results) return null;
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, " "));
@@ -247,14 +247,18 @@ function hasKana(text) {
  */
 function isKana(text) {
   var chars = text.split('');
+
   if (chars.length > 0) {
     for (var i = 0, length = chars.length; i < length; i++) {
       var charCode = text.charCodeAt(i);
-      if (!(charCode >= 12353 && charCode <= 12436) && !(charCode >= 12449 && charCode <= 12540)) {
+
+      if (!(charCode >= 12353 && charCode <= 12436) &&
+        !(charCode >= 12449 && charCode <= 12540)) {
         return false;
       }
     }
   }
+
   return true;
 }
 

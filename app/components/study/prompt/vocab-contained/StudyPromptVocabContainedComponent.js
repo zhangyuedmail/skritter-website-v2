@@ -1,4 +1,5 @@
 const GelatoComponent = require('gelato/component');
+const vent = require('vent');
 
 /**
  * @class StudyPromptVocabContainedComponent
@@ -11,7 +12,9 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click #show-contained': 'handleClickShowContained'
+    'click #show-contained': 'handleClickShowContained',
+    'click .child-writing': 'handleClickChildWriting',
+    'click .decomp-writing': 'handleClickChildWriting'
   },
 
   /**
@@ -36,21 +39,26 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
   render: function() {
     const prompt = this.prompt;
     const reviews = prompt.reviews;
-    const vocabs = reviews ? reviews.vocab.getContained(true) : [];
+    const contained = reviews ? reviews.vocab.getContained(true) : [];
     const hasContained = reviews &&
-      ((_.includes(['rune', 'tone'], reviews.part) && vocabs.length > 0) ||
-      vocabs.length === 1);
-    const vocab = vocabs[reviews && reviews.position || 0];
+      ((_.includes(['rune', 'tone'], reviews.part) && contained.length > 0) ||
+      contained.length === 1);
+    const vocab = contained[reviews && reviews.position || 0];
 
     this.renderTemplate({
       prompt,
       reviews,
-      vocabs,
+      contained,
       vocab,
       hasContained
     });
 
     return this;
+  },
+
+  handleClickChildWriting: function(event) {
+    const id = $(event.target).data('vocabid');
+    vent.trigger('studyPromptVocabInfo:show', id);
   },
 
   /**
