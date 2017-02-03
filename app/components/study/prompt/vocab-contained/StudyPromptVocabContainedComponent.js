@@ -1,4 +1,5 @@
 const GelatoComponent = require('gelato/component');
+const vent = require('vent');
 
 /**
  * @class StudyPromptVocabContainedComponent
@@ -11,7 +12,9 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click #show-contained': 'handleClickShowContained'
+    'click #show-contained': 'handleClickShowContained',
+    'click .child-writing': 'handleClickChildWriting',
+    'click .decomp-writing': 'handleClickChildWriting'
   },
 
   /**
@@ -51,6 +54,11 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
     });
 
     return this;
+  },
+
+  handleClickChildWriting: function(event) {
+    const id = $(event.target).data('vocabid');
+    vent.trigger('studyPromptVocabInfo:show', id);
   },
 
   /**

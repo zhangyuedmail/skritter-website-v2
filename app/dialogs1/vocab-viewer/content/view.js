@@ -47,6 +47,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     this.vocabsContaining = null;
 
     this.vocab = options.vocab;
+    this.vocabWriting = null;
 
     this.items = new Items();
     this.vocabs = new Vocabs();
@@ -208,6 +209,10 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     let wordVocabs = null;
     let wordVocabsContaining = null;
 
+    if (vocabId) {
+      this.vocabWriting = vocabId.split("-")[1];
+    }
+
     if (vocab) {
       this.vocab = vocab;
     } else {
@@ -304,7 +309,9 @@ const VocabViewerContentComponent = GelatoComponent.extend({
           console.error('WORD DIALOG LOAD ERROR:', error);
         } else {
           self.vocab = wordVocabs.at(0);
-          wordVocabsContaining.remove(self.vocab.id);
+          if (self.vocab) {
+            wordVocabsContaining.remove(self.vocab.id);
+          }
           self.set(wordVocabs, wordVocabsContaining, wordItems);
         }
       }

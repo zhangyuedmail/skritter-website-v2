@@ -126,10 +126,7 @@ module.exports = GelatoComponent.extend({
    */
   handleClickButtonVocabInfo: function(event) {
     event.preventDefault();
-    vent.trigger('studyPromptVocabInfo:show');
-    this.dialog = new VocabViewerDialog();
-    this.dialog.load(this.prompt.reviews.vocab.id);
-    this.dialog.open();
+    vent.trigger('studyPromptVocabInfo:show', this.prompt.reviews.vocab.id);
   },
 
   /**

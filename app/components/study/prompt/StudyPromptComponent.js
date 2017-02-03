@@ -308,13 +308,14 @@ const StudyPromptComponent = GelatoComponent.extend({
 
   /**
    * @method showVocabInfo
+   * @param {String} id the id of the vocab to show
+   * @param {VocabModel} [vocab] the vocab object
    */
-  showVocabInfo: function() {
+  showVocabInfo: function(id, vocab) {
     if (app.isMobile()) {
-      vent.trigger('vocabInfo:toggle', this.reviews.vocab.id);
+      vent.trigger('vocabInfo:toggle', id || this.reviews.vocab.id, vocab);
     } else {
-      app.dialogs.vocabViewer.load(this.reviews.vocab.id);
-      app.dialogs.vocabViewer.open();
+      app.openDesktopVocabViewer(id || this.reviews.vocab.id, vocab);
     }
   },
 

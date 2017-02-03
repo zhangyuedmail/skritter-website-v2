@@ -3,7 +3,11 @@
 gelato-component[data-name='vocab-viewer-content'] {
 
   #content-section {
-    padding: 20px;
+    padding: 0px 20px 20px;
+
+    .fa-spinner {
+      margin-top: 20px;
+    }
 
     .block {
       margin-bottom: 20px;
@@ -98,7 +102,7 @@ gelato-component[data-name='vocab-viewer-content'] {
     }
 
     .vocab-reading {
-      font-size: 12px;
+      font-size: 14px;
       text-align: center;
     }
 

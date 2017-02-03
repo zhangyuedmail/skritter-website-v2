@@ -130,8 +130,11 @@ module.exports = GelatoApplication.extend({
   },
   set: function(key, value) { this.config[key] = value; },
 
+  /**
+   * A dictionary of app-level dialogs. Should be initialized after render.
+   */
   dialogs: {
-    vocabViewer: new VocabViewerDialog()
+    vocabViewer: null
   },
 
   /**
@@ -789,9 +792,9 @@ module.exports = GelatoApplication.extend({
    * Shows a vocab info side view on mobile devices.
    * @param {String} vocabId the vocab id
    */
-  toggleVocabInfo: function(vocabId) {
+  toggleVocabInfo: function(vocabId, vocab) {
     if (!this.isMobile()) {
-      return;
+      return this.openDesktopVocabViewer(vocabId, vocab);
     }
 
     if (vocabId) {
@@ -814,5 +817,22 @@ module.exports = GelatoApplication.extend({
 
     this.$('#main-app-container-overlay').removeClass('show');
     this.$('#main-app-container-overlay').toggleClass('show-right', !!vocabId);
+  },
+
+  /**
+   * Shows a vocab info side view on mobile devices.
+   * @param {String} vocabId the vocab id
+   */
+  openDesktopVocabViewer: function(vocabId, vocab) {
+    if (this.isMobile()) {
+      return;
+    }
+
+    if (!this.dialogs.vocabViewer) {
+      this.dialogs.vocabViewer = new VocabViewerDialog();
+    }
+
+    app.dialogs.vocabViewer.load(vocabId, vocab);
+    app.dialogs.vocabViewer.open();
   }
 });

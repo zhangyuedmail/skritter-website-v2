@@ -103,8 +103,7 @@ gelato-component(data-name='vocab-viewer-content')
   else
     #header-section
       .block.separator
-        if view.vocab
-          .vocab-writing= view.vocab.getWriting ? view.vocab.getWriting() : view.vocab
+        .vocab-writing(class= app.isChinese() ? 'text-chinese' : 'text-japanese')= view.vocabWriting
       .pull-right
         a(href='#', data-dismiss='modal')
           i.fa.fa-times-circle-o
