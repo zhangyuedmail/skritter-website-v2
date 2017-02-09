@@ -51,8 +51,9 @@ bootstrap-navbar(data-name='default')
                   a(href="http://classroom.skritter.com", target="_blank") Classroom
                 li
                   a(href="https://discourse.skritter.com/", target="_blank") Forum
-                li
-                  a#refer-link(href="/refer", data-ignore) Get Free Skritter
+                if app.user.getAccountAgeBy('days') > 3
+                  li
+                    a#refer-link(href="/refer", data-ignore) Get Free Skritter
                 li.divider(role="separator")
                 li
                   a#button-logout(href="/logout")= app.locale('common.logOut')
