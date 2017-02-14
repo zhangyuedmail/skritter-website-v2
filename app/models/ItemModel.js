@@ -346,6 +346,17 @@ const ItemModel = SkritterModel.extend({
   },
 
   /**
+   * @method skip
+   */
+  skip: function() {
+    $.ajax({
+      url: app.getApiUrl(2) + 'queue/skip/' + this.id,
+      type: 'POST',
+      headers: app.user.session.getHeaders()
+    });
+  },
+
+  /**
    * @method unban
    */
   unban: function() {

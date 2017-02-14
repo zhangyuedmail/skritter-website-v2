@@ -238,8 +238,6 @@ const StudyPage = GelatoPage.extend({
           this.listenTo(this.items, 'preload', this.handleItemPreload);
 
           this.next();
-
-          ScreenLoader.hide();
         }
       }
     );
@@ -309,18 +307,8 @@ const StudyPage = GelatoPage.extend({
    * @method next
    */
   next: function() {
-    const queue = this.items.getQueue();
     const items = this.items.getNext();
-
-    if (!queue.length) {
-      this.prompt.$panelLeft.css('opacity', 0.4);
-      this.prompt.$panelLeft.css('pointer-events', 'none');
-      this.prompt.$panelRight.css('pointer-events', 'none');
-      this.items.reviews.post({skip: 1});
-      this.items.fetchNext({limit: 50});
-
-      return;
-    }
+    const queue = this.items.getQueue();
 
     if (this.previousPrompt) {
       this.prompt.$panelLeft.css('opacity', 1.0);
@@ -351,6 +339,23 @@ const StudyPage = GelatoPage.extend({
         this.items.preloadNext();
       }
 
+      ScreenLoader.hide();
+
+      return;
+    }
+
+    if (!queue.length) {
+      this.prompt.$panelLeft.css('opacity', 0.4);
+      this.prompt.$panelLeft.css('pointer-events', 'none');
+      this.prompt.$panelRight.css('pointer-events', 'none');
+      this.items.reviews.post({skip: 1});
+      this.items.fetchNext({limit: 50});
+      return;
+    }
+
+    if (this.items.skipped) {
+      this.items.preloadNext();
+      this.items.skipped = false;
       return;
     }
 

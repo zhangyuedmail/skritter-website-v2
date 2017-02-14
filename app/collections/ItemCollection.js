@@ -39,6 +39,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.dueCountState = 'standby';
     this.fetchingState = 'standby';
     this.preloadingState = 'standby';
+    this.skipped = false;
     this.sorted = null;
   },
 
@@ -301,9 +302,15 @@ const ItemCollection = BaseSkritterCollection.extend({
 
           // exclude rune items without stroke data
           if (model.isPartRune() && !model.isCharacterDataLoaded()) {
-            // TODO: bump the item into the future
+            console.log('SKIPPING ITEM:', model.id);
 
+            this.skipped = true;
+
+            // exclude the rune item from the local queue
             model._queue = false;
+
+            // request to skip item on the server
+            model.skip();
 
             return false;
           }
@@ -353,13 +360,15 @@ const ItemCollection = BaseSkritterCollection.extend({
    */
   preloadNext: function(options) {
     const now = moment().unix();
+    const queue = this.getQueue();
 
     options = options || {};
     options.limit = options.limit || 10;
+    options.silent = options.silent || false;
 
     // return list of active next item ids
     const itemIds = _
-      .chain(this.getQueue())
+      .chain(queue)
       .filter(model => !model._loaded)
       .sortBy(item => -item.getReadiness(now))
       .map(item => item.id)
@@ -398,6 +407,7 @@ const ItemCollection = BaseSkritterCollection.extend({
             reject(error);
           },
           success: (result) => {
+            // mark items that have successfully been loaded from the server
             _.forEach(
               itemIds,
               (itemId) => {
@@ -405,20 +415,23 @@ const ItemCollection = BaseSkritterCollection.extend({
 
                 if (item) {
                   item._loaded = true;
-                } else {
-                  console.log('PRELOAD ERROR:', 'Unable to find preloaded item');
                 }
               }
             );
 
             console.log('PRELOADED:', itemIds);
 
+            // preload characters for items just added
             this.fetchCharacters()
               .catch(reject)
               .then(
                 () => {
-                  this.trigger('preload');
                   this.preloadingState = 'standby';
+
+                  if (!options.silent) {
+                    this.trigger('preload');
+                  }
+
                   resolve();
                 }
               );
