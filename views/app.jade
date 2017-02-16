@@ -13,10 +13,11 @@ head
   link(href='/styles/libraries.css', rel='stylesheet')
   link(href='/styles/application.css', rel='stylesheet')
 
+  include ./includes/tracking
+
 body
   script(src='/js/libraries.js')
   script(src='/js/startup.js')
-  script(src='/js/tracking.js')
   script(src='/js/application.js')
   script.
     require('initialize');

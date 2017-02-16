@@ -16,6 +16,9 @@ head
 
   link(rel='canonical', href='https://skritter.com/')
 
+  include ./includes/scripts
+  include ./includes/tracking
+
 body
   script.
     if (localStorage && (localStorage.getItem('application-user') || '').replace(/"/g, '').length > 0) {
@@ -201,9 +204,6 @@ body
           a.btn.btn-success(href='/signup') Start your 7-day free trial
 
     include ./includes/StaticMarketingFooter
-
-  include ./includes/scripts
-  include ./includes/tracking
 
   script.
     if (mixpanel) {
