@@ -312,7 +312,7 @@ module.exports = GelatoPage.extend({
   },
 
   sendValidationEmail: function(email, callback) {
-     const validationUrl = app.getApiUrl() + 'email-validation/send';
+    const validationUrl = app.getApiUrl() + 'email-validation/send';
 
     $.ajax({
       url: validationUrl,
@@ -555,6 +555,11 @@ module.exports = GelatoPage.extend({
    * @private
    */
   _handleSubmittedProcessSuccess: function() {
+    // track facebook pixel registration events
+    if (window.fbq && app.isWebsite()) {
+      fbq('track', 'CompleteRegistration');
+    }
+
     app.router.navigate('account/setup', {trigger: true});
   },
 
@@ -573,12 +578,12 @@ module.exports = GelatoPage.extend({
       dfd.done(function(subscription) {
         callback();
       })
-      .fail(function(error) {
-        app.notifyUser({
-          message: app.locale('common.errorUserReferralFailed')
+        .fail(function(error) {
+          app.notifyUser({
+            message: app.locale('common.errorUserReferralFailed')
+          });
+          callback();
         });
-        callback();
-      });
     } else {
 
       // no user referral to process
