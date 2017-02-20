@@ -161,7 +161,10 @@ module.exports = GelatoPage.extend({
             if (error) {
               callback(error);
             } else {
+              // set mixpanel alias before signup
               mixpanel.alias(self.user.id);
+
+              // track mixpanel signup event
               app.mixpanel.track(
                 'Signup',
                 {
@@ -170,6 +173,11 @@ module.exports = GelatoPage.extend({
                   'Plan': formData.plan
                 }
               );
+
+              // track facebook pixel registration events
+              if (window.fbq && app.isWebsite()) {
+                window.fbq('track', 'CompleteRegistration');
+              }
 
               // coupon's been used, clear it from cache
               app.couponCode = null;
@@ -555,11 +563,6 @@ module.exports = GelatoPage.extend({
    * @private
    */
   _handleSubmittedProcessSuccess: function() {
-    // track facebook pixel registration events
-    if (window.fbq && app.isWebsite()) {
-      fbq('track', 'CompleteRegistration');
-    }
-
     app.router.navigate('account/setup', {trigger: true});
   },
 

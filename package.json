@@ -38,7 +38,7 @@
     "bootstrap-switch": "=3.3.2",
     "cal-heatmap": "~3.6",
     "cors": "~2.8",
-    "d3": "~4.5",
+    "d3": "~4.6",
     "dexie": "~1.5",
     "express": "~4.14",
     "font-awesome": "~4.7",
