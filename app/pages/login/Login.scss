@@ -7,7 +7,8 @@ gelato-page[data-name='login'] {
   &.mobile {
     background: $background-primary;
 
-    button {
+    button,
+    a.btn {
       margin-top: 30px;
       width: 45%;
     }
