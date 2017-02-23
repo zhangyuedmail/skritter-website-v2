@@ -1,0 +1,21 @@
+gelato-page(data-name='signup').mobile
+  section.container
+    .wrapper
+      form#login-form.push-bottom
+        #signup-error-alert.text-danger
+        .form-group
+          label(for="signup-email") Email
+          input#signup-email.form-control.large-input(type="text", placeholder="user@google.com")
+        .form-group
+          label(for="signup-username") Username
+          input#signup-username.form-control.large-input(type="text", placeholder="user")
+        .form-group
+          label(for="signup-password1") Password
+          input#signup-password1.form-control.large-input(type="password", placeholder="abc123")
+        .form-group.text-center
+          a#back-button.btn.btn-fixed.btn-default(type="button", href="/")= app.locale('common.back')
+          | &nbsp;&nbsp;
+          button#signup-submit.btn.btn-fixed.btn-primary.btn-success(type="button")= app.locale('common.signUp')
+
+      .text-center
+        a#password-reset(href="/password-reset") Forgot your password?

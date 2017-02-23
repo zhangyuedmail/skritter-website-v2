@@ -65,7 +65,7 @@ module.exports = GelatoPage.extend({
    * The template to render
    * @type {Function}
    */
-  template: require('./Signup'),
+  template: require('./Signup.jade'),
 
   /**
    * The page title to display
@@ -95,6 +95,10 @@ module.exports = GelatoPage.extend({
    * @returns {SignupPage}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileSignup.jade');
+    }
+
     this.renderTemplate();
 
     if (app.isDevelopment()) {
@@ -270,6 +274,12 @@ module.exports = GelatoPage.extend({
     if (!this.subscribing) {
       this.subscribing = true;
       var formData = this.getFormData();
+
+      if (app.isMobile()) {
+        this.subscribeAndroid(formData);
+        return;
+      }
+
       if (formData.method === 'credit') {
         this.subscribeCredit(formData);
       } else if (formData.method === 'coupon') {
@@ -353,6 +363,39 @@ module.exports = GelatoPage.extend({
     this.$('#signup-coupon-code').val(this.couponCode);
     this.$('#method-credit').prop('checked', false);
     this.$('#method-coupon').prop('checked', true);
+  },
+
+  /**
+   * @method subscribeAndroid
+   * @param {Object} formData
+   */
+  subscribeAndroid: function(formData) {
+    const self = this;
+
+    formData.coupon = 'SKRITTERANDROID'; // use coupon code to bypass signup restriction
+    formData.password2 = formData.password1; // skip requiring repeating password input
+
+    if (!this._validateUserData(formData)) {
+      this.subscribing = false;
+      ScreenLoader.hide();
+      return;
+    }
+    async.series([
+      function(callback) {
+        ScreenLoader.show();
+        ScreenLoader.post('Creating a new user');
+        self.createUser(formData, callback);
+      }
+    ], function(error) {
+      ScreenLoader.hide();
+      if (error) {
+        self._handleSubmittedProcessError(error.responseJSON || error);
+      } else {
+        self.coupon = null;
+        app.removeSetting('coupon');
+        self._handleSubmittedProcessSuccess();
+      }
+    });
   },
 
   /**
@@ -563,6 +606,12 @@ module.exports = GelatoPage.extend({
    * @private
    */
   _handleSubmittedProcessSuccess: function() {
+    if (app.isMobile()) {
+      app.router.navigate('dashboard');
+      app.reload();
+      return;
+    }
+
     app.router.navigate('account/setup', {trigger: true});
   },
 

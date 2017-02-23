@@ -1,0 +1,98 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='signup'] {
+  background: $background-marketing;
+  padding-top: 50px;
+
+  &.mobile {
+    background: $background-primary;
+
+    button,
+    a.btn {
+      margin-top: 30px;
+      width: 45%;
+    }
+
+    input {
+      color: $wood5;
+
+      &::-webkit-input-placeholder {
+        color: $wood3;
+      }
+      &:-moz-placeholder {
+        color: $wood3;
+        opacity: 1;
+      }
+      &::-moz-placeholder {
+        color: $wood3;
+        opacity: 1;
+      }
+      &:-ms-input-placeholder {
+        color: $wood3;
+      }
+    }
+
+    label {
+      color: $wood5;
+      font-size: 18px;
+      font-weight: 300;
+    }
+
+    .wrapper {
+      background: none;
+      margin: auto;
+      margin-top: 50px;
+      max-width: 400px;
+    }
+
+  }
+
+  label {
+    font-size: 16px;
+  }
+
+  .large-label {
+    font-size: 20px;
+  }
+
+  input {
+    height: auto;
+    font-size: 18px;
+  }
+
+  .large-input {
+    padding: 12px 12px;
+    font-size: 20px;
+    line-height: normal;
+    margin-bottom: 20px;
+  }
+
+  .content-block {
+    margin: 100px auto;
+    max-width: 400px;
+  }
+
+  .pad-top {
+    margin-top: 25px;
+    display: inline-block;
+  }
+
+  .push-bottom {
+    margin-bottom: 25px;
+  }
+
+  #signup-error-alert {
+    margin-bottom: 25px;
+  }
+
+  @media (max-width: 500px) {
+    .content-block {
+      margin: 50px auto;
+      max-width: 400px;
+    }
+    #footer-container {
+      position: relative;
+    }
+  }
+
+}
