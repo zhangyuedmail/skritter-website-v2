@@ -35,6 +35,8 @@ const DashboardQueueComponent = GelatoComponent.extend({
             },
             remove: false
           });
+        } else {
+          this.trigger('component:loaded', 'queue');
         }
       }
     );

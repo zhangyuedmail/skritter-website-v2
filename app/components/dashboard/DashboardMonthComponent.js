@@ -20,8 +20,7 @@ const DashboardMonthComponent = GelatoComponent.extend({
   initialize: function() {
     this.heatmap = new CalHeatMap();
     this.stats = app.user.stats;
-    this.listenTo(this.stats, 'state:standby', this.updateHeatmap);
-    this.listenTo(this.stats, 'state:standby', this.updateStreak);
+    this.listenTo(this.stats, 'state:standby', this.statsFetched);
     this.stats.fetchMonth();
   },
 
@@ -59,6 +58,18 @@ const DashboardMonthComponent = GelatoComponent.extend({
     return GelatoComponent.prototype.remove.call(this);
   },
 
+
+  /**
+   * Reacts to the stats being loaded and triggers an event that the loading
+   * of all the component's data has completed.
+   */
+  statsFetched: function() {
+    this.updateHeatmap();
+    this.updateStreak();
+
+    this.trigger('component:loaded', 'month');
+  },
+
   /**
    * @method updateHeatmap
    */
@@ -74,7 +85,6 @@ const DashboardMonthComponent = GelatoComponent.extend({
       this.$('#streak .value').text(this.stats.getMonthlyStreak());
     }
   }
-
 });
 
 module.exports = DashboardMonthComponent;
