@@ -34,12 +34,23 @@ module.exports = {
 
   sentryUrl: 'https://4aa61a5ed92f4aaf8a9ae79777b70843@sentry.io/123679',
 
+  /**
+   * Whether app page load times should be stored to app.loadTimes
+   * @type {Boolean}
+   */
+  recordLoadTimes: true && window.performance,
+
   timestamp: '{!timestamp!}',
 
   title: '{!application-title!}',
 
+  /**
+   * Whether to use new API v2 GET endpoints
+   * @type {Boolean}
+   */
+  useV2Gets: false,
+
   version: '{!application-version!}',
 
   writingFillers: ['~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？']
-
 };

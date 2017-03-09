@@ -83,6 +83,46 @@ module.exports = GelatoApplication.extend({
       window.onerror = this.handleError;
     }
 
+    if (config.recordLoadTimes) {
+      this.loadTimes = {
+        _loading: {
+          pages: {
+            app: null
+          },
+          api: {}
+        },
+        pages: {
+          app: null,
+          dashboard: [],
+          stats: [],
+          study: [],
+          vocablists: [],
+          vocabInfoViewer: [],
+          words: []
+        },
+        api: {},
+        report: function() {
+          if (!this.pages.app) {
+            console.log('Nothing to report yet, sir!');
+          }
+          console.log('The app took ' + parseInt(this.pages.app, 10) + ' ms to load');
+          ["dashboard", "stats", "study", "vocablists", "vocabInfoViewer", "words"].forEach((section) => {
+            if (this.pages[section].length) {
+              let avgTime = this.pages[section].reduce(function(n, val) {
+              return n + val;}, 0) / this.pages[section].length;
+              console.log('The ' + section + ' averaged ' +
+                parseInt(avgTime, 10) + ' ms across ' +
+                this.pages[section].length + ' loads.');
+            }
+          });
+        }
+      };
+
+      if (window._appLoadStartTime) {
+        this.loadTimes._loading.pages.app = window._appLoadStartTime;
+      }
+    }
+
     this.initNavbar();
     this.initFooter();
     this.initSideViews();
@@ -122,6 +162,19 @@ module.exports = GelatoApplication.extend({
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
     version: '{!application-version!}'
+  },
+
+  render: function() {
+    GelatoApplication.prototype.render.apply(this, arguments);
+
+    if (config.recordLoadTimes) {
+      const loadEnd = window.performance.now();
+      const loadStart = this.loadTimes._loading.pages.app;
+      this.loadTimes.pages.app = loadEnd - loadStart;
+      this.loadTimes._loading.pages.app = null;
+    }
+
+    return this;
   },
 
   // temporary hacks until code is refactored more
