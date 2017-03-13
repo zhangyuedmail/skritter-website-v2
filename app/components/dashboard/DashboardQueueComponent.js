@@ -31,7 +31,8 @@ const DashboardQueueComponent = GelatoComponent.extend({
               limit: 10,
               sort: 'studying',
               include_percent_done: 'true',
-              lang: app.getLanguage()
+              lang: app.getLanguage(),
+              languageCode: app.getLanguage()
             },
             remove: false
           });
@@ -46,7 +47,8 @@ const DashboardQueueComponent = GelatoComponent.extend({
         limit: 12,
         sort: 'studying',
         include_percent_done: 'true',
-        lang: app.getLanguage()
+        lang: app.getLanguage(),
+        languageCode: app.getLanguage()
       }
     });
   },

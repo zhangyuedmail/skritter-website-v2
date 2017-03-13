@@ -47,7 +47,8 @@ module.exports = GelatoPage.extend({
               limit: 10,
               sort: 'studying',
               include_percent_done: 'true',
-              lang: app.getLanguage()
+              lang: app.getLanguage(),
+              languageCode: app.getLanguage()
             },
             remove: false
           });
@@ -60,7 +61,8 @@ module.exports = GelatoPage.extend({
         limit: 10,
         sort: 'studying',
         include_percent_done: 'true',
-        lang: app.getLanguage()
+        lang: app.getLanguage(),
+        languageCode: app.getLanguage()
       }
     });
 

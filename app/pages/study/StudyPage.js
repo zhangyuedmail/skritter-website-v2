@@ -186,6 +186,7 @@ const StudyPage = GelatoPage.extend({
           this.vocablists.fetch({
             data: {
               lang: app.getLanguage(),
+              languageCode: app.getLanguage(),
               limit: 1,
               sort: 'adding'
             },

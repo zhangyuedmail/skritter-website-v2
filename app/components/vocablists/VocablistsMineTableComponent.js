@@ -33,7 +33,8 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
       data: {
         limit: 10,
         sort: 'custom',
-        lang: app.getLanguage()
+        lang: app.getLanguage(),
+        languageCode: app.getLanguage()
       }
     });
   },
@@ -76,7 +77,8 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
         cursor: this.vocablists.cursor,
         limit: 10,
         sort: 'custom',
-        lang: app.getLanguage()
+        lang: app.getLanguage(),
+        languageCode: app.getLanguage()
       },
       remove: false
     });
