@@ -1,5 +1,6 @@
 const BaseSkritterCollection = require('base/BaseSkritterCollection');
 const ProgressStatModel = require('models/ProgressStatModel');
+const GelatoCollection = require('gelato/collection');
 
 /**
  * @class ProgressStatsCollection
@@ -18,6 +19,26 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @type {String}
    */
   url: 'progstats',
+
+  /**
+   * @method sync
+   * @param {String} method
+   * @param {Model} model
+   * @param {Object} options
+   */
+  sync: function(method, model, options) {
+    options.headers = _.result(this, 'headers');
+
+    if (!options.url) {
+      options.url = app.getApiUrl() + _.result(this, 'url');
+    }
+
+    if (app.config.useV2Gets) {
+      options.url = 'https://api.skritter.com/v2/gae/progstats';
+    }
+
+    GelatoCollection.prototype.sync.call(this, method, model, options);
+  },
 
   /**
    * A map of metadata to keep track of what's already been fetched
@@ -59,6 +80,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * Given a range of dates, splits it into an array of evenly-ranged chunks.
    * E.g. for a range spanning 30 days, will return 3 sequential ranges each
    * spanning 10 days.
+   * For API v2 calls, this doesn't split the date range.
    * @method divideDateRange
    * @param {Moment} momentStart start date of the range
    * @param {Moment} momentEnd end date of the range
@@ -72,7 +94,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
     var dates = [];
     var diff = momentEnd.diff(momentStart, 'days');
 
-    if (diff <= chunkSize) {
+    if (diff <= chunkSize || app.config.useV2Gets) {
       return [
         [momentStart.format('YYYY-MM-DD'), momentEnd.format('YYYY-MM-DD')]
       ];
@@ -202,6 +224,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
     this.fetch({
       data: {
         lang: app.getLanguage(),
+        languageCode: app.getLanguage(),
         start: start,
         end: end
       },
@@ -229,6 +252,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
     this.fetch({
       data: {
         lang: app.getLanguage(),
+        languageCode: app.getLanguage(),
         start: moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD')
       },
       remove: false,
