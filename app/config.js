@@ -24,6 +24,8 @@ module.exports = {
 
   canvasSize: 450,
 
+  cordovaAudioUrl: 'cdvfile://localhost/persistent/audios/',
+
   language: '{!application-language!}',
 
   lastItemChanged: 0,

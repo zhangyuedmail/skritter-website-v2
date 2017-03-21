@@ -29,15 +29,16 @@ const VocabModel = SkritterModel.extend({
     this.audios = _.map(
       this.getUniqueAudios(),
       (data) => {
-        // Use proxy when accessing audio on google storage
+        const name = data.id + '.mp3';
         const url = data.mp3.replace('http://storage.googleapis.com/skritter_audio/', 'https://skritter.com/audio/');
 
-        return new Howl({
-          src: [url],
-          format: ['mp3'],
-          html5: app.isMobile(), // we want true for mobile, false for desktop
-          preload: this.collection && this.collection.preloadAudio
-        });
+        if (app.isCordova()) {
+          resolveLocalFileSystemURL(app.config.cordovaAudioUrl + name, null, function() {
+            new FileTransfer().download(url, app.config.cordovaAudioUrl + name);
+          });
+        }
+
+        return {name: name, url: url};
       }
     );
   },
@@ -526,32 +527,28 @@ const VocabModel = SkritterModel.extend({
    * @return {Boolean} whether the audio played when the function was called
    */
   play: function() {
-    // Return if no audio exists for playing
     if (!this.audios.length) {
       return false;
     }
 
-    // console.log('audio play requested: ' + moment().format('h:mm:ss.SS'));
+    let audio = this.audios[0];
 
-    // Stop and remove existing audio
-    if (app.audio) {
-      app.audio.stop();
-      app.audio.off();
-      app.audio = null;
-    }
-
-    // Play audio when fully loaded
-    if (this.audios[0].state() === 'loaded') {
-      app.audio = this.audios[0];
-      app.audio.rate(0.999);
-      app.audio.play();
-
-      return true;
+    if (app.isCordova()) {
+      resolveLocalFileSystemURL(app.config.cordovaAudioUrl + audio.name,
+        function(entry) {
+          new Media(entry.toURL()).play();
+        },
+        function() {
+          new FileTransfer().download(audio.url, app.config.cordovaAudioUrl + audio.name, function(entry) {
+            new Media(entry.toURL()).play();
+          });
+        }
+      );
     } else {
-      this.audios[0].once('load', () => {
-        this.play();
-      });
+      new Howl({src: [audio.url], format: ['mp3']}).play();
     }
+
+    return true;
   },
 
   /**
