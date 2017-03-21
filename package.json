@@ -75,7 +75,7 @@
     "sass-brunch": "~2.10",
     "selenium-webdriver": "~2.53",
     "shelljs": "~0.7",
-    "sinon": "~2.0",
+    "sinon": "~2.1",
     "uglify-js-brunch": "~2.10"
   }
 }
