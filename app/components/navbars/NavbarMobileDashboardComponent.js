@@ -20,7 +20,15 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
   handleToggleMenuClick: function(event) {
     event.preventDefault();
     vent.trigger('mobileNavMenu:toggle');
-  }
+  },
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    app.user.stats.fetchToday();
+  },
 });
 
 module.exports = NavbarMobileComponent;
