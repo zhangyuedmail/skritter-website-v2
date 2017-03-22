@@ -73,6 +73,23 @@ gelato-page(data-name='mobile-vocablists-list')
               if vocablist.get('sections').length > 1
                 .list-sections-header Sections
 
+            .list-options
+              if vocablist.copyable()
+                a#copy-link
+                  div.action
+                    span.glyphicon.glyphicon-duplicate
+                    span= app.locale('common.copy')
+              if vocablist.publishable()
+                a#publish-link
+                  div.action
+                    span.glyphicon.glyphicon-share
+                    span= app.locale('pages.vocabLists.publish')
+              if vocablist.deletable()
+                a#delete-link.pull-right
+                  div.action
+                    span.glyphicon.glyphicon-trash
+                    span= app.locale('common.delete')
+
             #editor-container
 
             if !vocablist.get('singleSect')
