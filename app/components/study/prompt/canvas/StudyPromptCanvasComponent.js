@@ -273,6 +273,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   enableInput: function() {
     var self = this;
     var oldPoint, oldMidPoint, points, marker;
+    var strokeSize = this.size * self.brushScale;
 
     this.disableInput();
     this.downListener = self.stage.addEventListener('stagemousedown', onInputDown);
@@ -280,13 +281,15 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     function onInputDown(event) {
       points = [];
       marker = new createjs.Shape();
-      marker.graphics.setStrokeStyle(self.size * self.brushScale, 'round', 'round');
+      marker.graphics.setStrokeStyle(strokeSize, 'round', 'round');
       marker.stroke = marker.graphics.beginStroke(self.strokeColor).command;
 
       points.push(new createjs.Point(event.stageX, event.stageY));
       oldPoint = oldMidPoint = points[0];
       self.triggerInputDown(oldPoint);
       self.getLayer('input').addChild(marker);
+
+      marker.graphics.moveTo(oldPoint.x, oldPoint.y);
 
       self.moveListener = self.stage.addEventListener('stagemousemove', onInputMove);
       self.upListener = self.stage.addEventListener('stagemouseup', onInputUp);
@@ -297,16 +300,14 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       var point = new createjs.Point(event.stageX, event.stageY);
       var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
 
-      if (app.fn.getDistance(oldPoint, point) > 3.0) {
-        marker.graphics
-          .setStrokeStyle(self.size * self.brushScale, 'round', 'round')
-          .moveTo(midPoint.x, midPoint.y)
-          .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
-        oldPoint = point.clone();
-        oldMidPoint = midPoint.clone();
-        points.push(point);
-        self.stage.update();
-      }
+      marker.graphics
+        .setStrokeStyle(strokeSize, 'round', 'round')
+        .moveTo(midPoint.x, midPoint.y)
+        .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
+      oldPoint = point;
+      oldMidPoint = midPoint;
+      points.push(point);
+      self.stage.update();
     }
 
     function onInputLeave(event) {
@@ -318,8 +319,9 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       self.stage.removeEventListener('stagemouseup', onInputUp);
       self.stage.removeEventListener('mouseleave', onInputLeave);
 
-      marker.graphics.endStroke();
       points.push(new createjs.Point(event.stageX, event.stageY));
+      marker.graphics.lineTo(event.stageX, event.stageY);
+      marker.graphics.endStroke();
 
       var clonedMarker = marker.clone(true);
       clonedMarker.stroke = marker.stroke;
