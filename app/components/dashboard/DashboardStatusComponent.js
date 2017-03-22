@@ -19,7 +19,7 @@ const DashboardStatusComponent = GelatoComponent.extend({
   initialize: function() {
     this.dueCount = null;
     this.vocablists = app.user.vocablists;
-    this.listenTo(this.vocablists, 'state', this.vocabListsFetched);
+    this.listenTo(this.vocablists, 'state', this.render);
     this.updateDueCount();
   },
 
