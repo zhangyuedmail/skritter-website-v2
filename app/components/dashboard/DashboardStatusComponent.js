@@ -52,14 +52,15 @@ const DashboardStatusComponent = GelatoComponent.extend({
         this.render();
       },
       success: function(result) {
-        var count = 0;
-        for (var part in result.due) {
-          for (var style in result.due[part]) {
+        let count = 0;
+        for (let part in result.due) {
+          for (let style in result.due[part]) {
             count += result.due[part][style];
           }
         }
-        this.dueCount =  count;
+        this.dueCount = count;
         this.render();
+        this.trigger('component:loaded', 'goal');
       }
     });
   }

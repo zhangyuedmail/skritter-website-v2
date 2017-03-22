@@ -1,4 +1,5 @@
 const GelatoComponent = require('gelato/component');
+const vent = require('vent');
 
 /**
  * @class StudyPromptPartRdngComponent
@@ -55,6 +56,11 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
 
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptToolbarGradingMouseup);
+
+    // for testing
+    this.listenTo(vent, 'test:processpinyin', () => {
+      this.handleReadingPromptInput($.Event('input', {keyCode: 97}));
+    });
   },
 
   /**
@@ -432,7 +438,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
       '₅': '5'
     };
 
-    const initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(r)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)/;
+    const initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(r)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)|(y)|(w)/;
 
     // input will be split into a format like ["gōng", "₁", "zuo4"]
     input = input.split(toneSubscript);

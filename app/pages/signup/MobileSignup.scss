@@ -1,6 +1,6 @@
 @import "../../styles/_variables";
 
-gelato-page[data-name='password-reset'] {
+gelato-page[data-name='signup'] {
   background: $background-marketing;
   padding-top: 50px;
 
@@ -37,11 +37,14 @@ gelato-page[data-name='password-reset'] {
       font-size: 18px;
       font-weight: 300;
     }
-  }
 
-  .content-block, .wrapper {
-    margin: 100px auto;
-    max-width: 400px;
+    .wrapper {
+      background: none;
+      margin: auto;
+      margin-top: 50px;
+      max-width: 400px;
+    }
+
   }
 
   label {
@@ -61,27 +64,25 @@ gelato-page[data-name='password-reset'] {
     padding: 12px 12px;
     font-size: 20px;
     line-height: normal;
-    margin: auto;
-    height: auto;
     margin-bottom: 20px;
   }
 
-  #footer-container {
-    bottom: 0;
-    position: absolute;
-    width: 100%;
+  .content-block {
+    margin: 100px auto;
+    max-width: 400px;
   }
 
-  #password-reset-message {
-    margin-bottom: 15px;
+  .pad-top {
+    margin-top: 25px;
+    display: inline-block;
   }
 
-  #password-reset-form {
-    margin-bottom: 15px;
+  .push-bottom {
+    margin-bottom: 25px;
   }
 
-  .alert {
-    margin-top: 20px;
+  #signup-error-alert {
+    margin-bottom: 25px;
   }
 
   @media (max-width: 500px) {

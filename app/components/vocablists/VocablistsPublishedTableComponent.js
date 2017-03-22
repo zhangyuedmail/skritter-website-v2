@@ -33,6 +33,7 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
       data: {
         include_user_names: 'true',
         lang: app.getLanguage(),
+        languageCode: app.getLanguage(),
         limit: 20,
         sort: 'published'
       }
@@ -77,6 +78,7 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
         cursor: this.vocablists.cursor,
         include_user_names: 'true',
         lang: app.getLanguage(),
+        languageCode: app.getLanguage(),
         limit: 20,
         sort: 'published'
       },
@@ -95,6 +97,7 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
         data: {
           include_user_names: 'true',
           lang: app.getLanguage(),
+          languageCode: app.getLanguage(),
           sort: 'search',
           q: value
         },
@@ -105,6 +108,7 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
         data: {
           include_user_names: 'true',
           lang: app.getLanguage(),
+          languageCode: app.getLanguage(),
           limit: 20,
           sort: 'published'
         },

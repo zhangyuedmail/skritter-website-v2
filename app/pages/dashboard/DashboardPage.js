@@ -43,6 +43,9 @@ const DashboardPage = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
+    if (app.config.recordLoadTimes) {
+      this.loadStart = window.performance.now();
+    }
 
     if (!app.isMobile()) {
       this._views['month'] = new DashboardMonth();
@@ -52,6 +55,19 @@ const DashboardPage = GelatoPage.extend({
     this._views['goal'] = new DashboardGoal();
     this._views['queue'] = new DashboardQueue();
     this._views['expiration'] = new ExpiredNotification();
+
+    if (app.config.recordLoadTimes) {
+      this.componentsLoaded = {
+        goal: false,
+        month: false,
+        queue: false
+      };
+      this.loadAlreadyTimed = false;
+
+      this.listenTo(this._views['goal'], 'component:loaded', this.onComponentLoaded);
+      this.listenTo(this._views['month'], 'component:loaded', this.onComponentLoaded);
+      this.listenTo(this._views['queue'], 'component:loaded', this.onComponentLoaded);
+    }
 
     app.mixpanel.track('Viewed dashboard page');
   },
@@ -76,8 +92,31 @@ const DashboardPage = GelatoPage.extend({
     this._views['expiration'].setElement('#subscription-notice').render();
 
     return this;
-  }
+  },
 
+  /**
+   *
+   * @param {String} component the name/key of the component loaded
+   */
+  onComponentLoaded: function(component) {
+    this.componentsLoaded[component] = true;
+
+    if (this.loadAlreadyTimed) {
+      return;
+    }
+
+    if (app.config.recordLoadTimes) {
+      for (let key in this.componentsLoaded) {
+        if (this.componentsLoaded[key] !== true) {
+          return;
+        }
+      }
+
+      this.loadAlreadyTimed = true;
+      const loadTime = window.performance.now() - this.loadStart;
+      app.loadTimes.pages.dashboard.push(loadTime);
+    }
+  }
 });
 
 module.exports = DashboardPage;

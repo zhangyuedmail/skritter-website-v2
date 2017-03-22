@@ -19,7 +19,8 @@ var AddVocabConfirm = GelatoDialog.extend({
       data: {
         limit: 10,
         sort: 'custom',
-        lang: app.getLanguage()
+        lang: app.getLanguage(),
+        languageCode: app.getLanguage()
       }
     });
   },

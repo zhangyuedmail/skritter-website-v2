@@ -4,6 +4,7 @@ const SubscriptionModel = require('models/SubscriptionModel');
 const CharacterCollection = require('collections/CharacterCollection');
 const VocablistCollection = require('collections/VocablistCollection');
 const ProgressStatsCollection = require('collections/ProgressStatsCollection');
+const GelatoCollection = require('gelato/collection');
 
 /**
  * A model that represents a Skritter user.
@@ -65,6 +66,27 @@ const UserModel = SkritterModel.extend({
     this.characters = new CharacterCollection();
     this.session = new SessionModel(null, {user: this});
     this.subscription = new SubscriptionModel({id: this.id});
+  },
+
+  /**
+   * @method sync
+   * @param {String} method
+   * @param {Model} model
+   * @param {Object} options
+   */
+  sync: function(method, model, options) {
+    options.headers = _.result(this, 'headers');
+
+    if (!options.url) {
+      options.url = app.getApiUrl() + _.result(this, 'url');
+    }
+
+    if (app.config.useV2Gets) {
+      options.url = 'https://api.skritter.com/v2/gae/users/';
+      // options.url = 'http://localhost:3210/v2/gae/users/';
+    }
+
+    GelatoCollection.prototype.sync.call(this, method, model, options);
   },
 
   /**

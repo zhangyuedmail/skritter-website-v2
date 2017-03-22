@@ -5,6 +5,13 @@ gelato-page[data-name='mobile-vocablists-list'] {
   background: $background-primary;
   padding-top: 75px;
 
+  gelato-component[data-name='vocablists-list-section-editor'] {
+    .row {
+      padding: 10px 0;
+
+    }
+  }
+
   #editing-buttons {
     margin-top: 10px;
     button {
@@ -30,7 +37,7 @@ gelato-page[data-name='mobile-vocablists-list'] {
 
   .content {
     background-color: $white1;
-    border-radius: 25px;
+    border-radius: 5px;
     margin: -15px 0;
     padding-bottom: 15px;
     padding-top: 15px;
@@ -38,14 +45,27 @@ gelato-page[data-name='mobile-vocablists-list'] {
   }
 
   .content-details {
-    padding-left: 25px;
-    padding-right: 25px;
     input {
       width: 100%;
     }
     textarea {
       min-height: 200px;
       width: 100%;
+    }
+  }
+
+  .list-options {
+    padding-bottom: 30px;
+
+    a {
+      display: inline-block;
+      margin-right: 25px;
+    }
+    .glyphicon {
+      margin-right: 5px;
+    }
+    .pull-right {
+      margin-right: 0;
     }
   }
 

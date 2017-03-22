@@ -38,7 +38,8 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
     this.listenTo(this.vocablists, 'state', this.render);
     var data = {
       sort: 'official',
-      lang: app.getLanguage()
+      lang: app.getLanguage(),
+      languageCode: app.getLanguage()
     };
     this.vocablists.fetch({data: data});
     this.listenTo(this.vocablists, 'sync', function() {

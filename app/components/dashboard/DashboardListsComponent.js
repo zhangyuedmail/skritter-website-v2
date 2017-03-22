@@ -35,7 +35,8 @@ const DashboardListsComponent = GelatoComponent.extend({
         limit: 10,
         sort: 'adding',
         include_percent_done: 'true',
-        lang: app.getLanguage()
+        lang: app.getLanguage(),
+        languageCode: app.getLanguage()
       }
     });
   },

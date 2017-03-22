@@ -35,6 +35,10 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
+    if (app.user.getAccountAgeBy('days') < 4) {
+      app.router.navigate('dashboard');
+    }
+
     app.mixpanel.track('Viewed refer page');
   },
 

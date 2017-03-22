@@ -1,7 +1,7 @@
-var GelatoPage = require('gelato/page');
-var Table = require('components/vocablists/VocablistsPublishedTableComponent');
-var Sidebar = require('components/vocablists/VocablistsSidebarComponent');
-var ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
+const GelatoPage = require('gelato/page');
+const Table = require('components/vocablists/VocablistsPublishedTableComponent');
+const Sidebar = require('components/vocablists/VocablistsSidebarComponent');
+const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 
 /**
  * Page that allows a user to search for user-published lists of words and
@@ -79,10 +79,11 @@ module.exports = GelatoPage.extend({
    */
   handleKeypressListSearchInput: function(event) {
     if (event.which === 13 || event.keyCode === 13) {
-      var needle = ($(event.target).val() || '').trim().toLowerCase().split(' ');
-      this._views['table'].searchFor(needle[0]);
+      const needle = ($(event.target).val() || '').trim().toLowerCase();
+      const searchTerm = app.config.useV2Gets ? needle : needle.split(' ')[0];
+      this._views['table'].searchFor(searchTerm);
       this.$('#clear-search').removeClass('hidden');
-      this.updateQueryResultsText(needle);
+      this.updateQueryResultsText(needle.split(' '));
     }
   },
 
@@ -91,10 +92,14 @@ module.exports = GelatoPage.extend({
    * @method updateQueryResultsText
    */
   updateQueryResultsText: function(needle) {
-    var multiWordSearch = (needle.length > 1),
-      s = "Showing results for <i>" + needle[0] + "</i>.";
+    const multiWordSearch = (needle.length > 1);
+    let s = "Showing results for <i>" + needle[0] + "</i>.";
 
-    if (multiWordSearch) {
+    if (app.config.useV2Gets) {
+      s = "Showing results for <i>" + needle.join(' ') + "</i>.";
+    }
+
+    if (multiWordSearch && !app.config.useV2Gets) {
       s += " Search currently only supports one-word queries, sorry!";
     }
 

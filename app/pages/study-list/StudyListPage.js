@@ -286,8 +286,8 @@ const StudyListPage = GelatoPage.extend({
    * @method next
    */
   next: function() {
-    const queue = this.items.getQueue();
     const items = this.items.getNext();
+    const queue = this.items.getQueue();
 
     if (!queue.length) {
       this.prompt.$panelLeft.css('opacity', 0.4);
@@ -328,6 +328,21 @@ const StudyListPage = GelatoPage.extend({
         this.items.preloadNext();
       }
 
+      return;
+    }
+
+    if (!queue.length) {
+      this.prompt.$panelLeft.css('opacity', 0.4);
+      this.prompt.$panelLeft.css('pointer-events', 'none');
+      this.prompt.$panelRight.css('pointer-events', 'none');
+      this.items.reviews.post({skip: 1});
+      this.items.fetchNext({limit: 50});
+      return;
+    }
+
+    if (this.items.skipped) {
+      this.items.preloadNext();
+      this.items.skipped = false;
       return;
     }
 

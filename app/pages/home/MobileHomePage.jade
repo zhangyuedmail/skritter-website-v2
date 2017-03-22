@@ -8,9 +8,7 @@ gelato-page(data-name='mobile-home')
 
   .welcome-options
     .row
-      // TODO: enable this when signup page ready
-      // .col-xs-6
-        // a.btn.btn-fixed.btn-success(href='/signup') Sign up
-      .col-xs-12.text-center
+      .col-xs-6
+        a.btn.btn-fixed.btn-success(href='/signup')= app.locale('common.signUp')
+      .col-xs-6.text-center
         a.btn.btn-fixed.btn-success(href='/login')= app.locale('common.logIn')
-W

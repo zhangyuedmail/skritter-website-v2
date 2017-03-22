@@ -1,5 +1,6 @@
 const BaseSkritterCollection = require('base/BaseSkritterCollection');
 const VocablistModel = require('models/VocablistModel');
+const GelatoCollection = require('gelato/collection');
 
 /**
  * @class VocablistCollection
@@ -18,6 +19,27 @@ const VocablistCollection = BaseSkritterCollection.extend({
    * @type {String}
    */
   url: 'vocablists',
+
+  /**
+   * @method sync
+   * @param {String} method
+   * @param {Model} model
+   * @param {Object} options
+   */
+  sync: function(method, model, options) {
+    options.headers = _.result(this, 'headers');
+
+    if (!options.url) {
+      options.url = app.getApiUrl() + _.result(this, 'url');
+    }
+
+    if (app.config.useV2Gets) {
+      // options.url = 'https://api.skritter.com/v2/gae/vocablists';
+      options.url = 'http://localhost:3210/v2/gae/vocablists';
+    }
+
+    GelatoCollection.prototype.sync.call(this, method, model, options);
+  },
 
   /**
    * @method initialize

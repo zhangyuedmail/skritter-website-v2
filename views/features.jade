@@ -16,6 +16,9 @@ head
 
   link(rel='canonical', href='https://skritter.com/features/')
 
+  include ./includes/scripts
+  include ./includes/tracking
+
 body
   gelato-application
 
@@ -177,9 +180,6 @@ body
                   .media-subtext Draw the tone marks for each character to enhance your comprehension.
 
     include ./includes/StaticMarketingFooter
-
-  include ./includes/scripts
-  include ./includes/tracking
 
   script.
     if (mixpanel) {
