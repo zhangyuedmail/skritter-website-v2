@@ -9,13 +9,16 @@ shell.sed('-i', '{!application-id!}', 'com.inkren.skritter', './cordova/config.x
 shell.sed('-i', '{!application-name!}', 'Skritter', './cordova/config.xml');
 shell.cd('./cordova');
 
-//platforms
+// platforms
 shell.exec('cordova platform add android');
 shell.exec('cordova platform add ios');
 
-//plugins
+// plugins
 shell.exec('cordova plugin add cordova-plugin-crosswalk-webview');
 shell.exec('cordova plugin add cordova-plugin-device');
+shell.exec('cordova plugin add cordova-plugin-file');
+shell.exec('cordova plugin add cordova-plugin-file-transfer');
+shell.exec('cordova plugin add cordova-plugin-media');
 shell.exec('cordova plugin add cordova-plugin-splashscreen');
 shell.exec('cordova plugin add cordova-plugin-statusbar');
 shell.exec('cordova plugin add https://github.com/mcfarljw/cordova-plugin-billing.git');

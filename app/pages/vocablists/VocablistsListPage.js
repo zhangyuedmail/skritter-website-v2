@@ -4,6 +4,10 @@ var Sidebar = require('components/vocablists/VocablistsListSidebarComponent');
 var Vocablist = require('models/VocablistModel');
 var VocablistSection = require('models/VocablistSectionModel');
 
+var ConfirmDialog = require('dialogs/confirm/view');
+var PublishDialog = require('dialogs1/publish-vocablist/content/view');
+var ViewDialog = require('dialogs1/view-dialog/view');
+
 /**
  * @class VocablistsListPage
  * @extends {GelatoPage}
@@ -18,7 +22,11 @@ module.exports = GelatoPage.extend({
     'click #add-section': 'handleClickAddSection',
     'click #discard-changes': 'handleClickDiscardChanges',
     'click #edit-list': 'handleClickEditList',
-    'click #save-changes': 'handleClickSaveChanges'
+    'click #save-changes': 'handleClickSaveChanges',
+
+    'click #copy-link': 'handleClickCopyLink',
+    'click #delete-link': 'handleClickDeleteLink',
+    'click #publish-link': 'handleClickPublishLink'
   },
 
   /**
@@ -43,6 +51,10 @@ module.exports = GelatoPage.extend({
     this.vocablistSection = new VocablistSection({vocablistId: options.vocablistId});
     this.editor = new EditorSections({vocablist: this.vocablist, vocablistSection: this.vocablistSection});
     this.sidebar = new Sidebar({vocablist: this.vocablist});
+
+    this._views['publishDialog'] = new ViewDialog({
+      content: PublishDialog
+    });
 
     this.fetchList();
   },
@@ -134,6 +146,55 @@ module.exports = GelatoPage.extend({
   },
 
   /**
+   * @method handleClickCopyLink
+   * @param {Event} event
+   */
+  handleClickCopyLink: function(event) {
+    event.preventDefault();
+    var confirmDialog = new ConfirmDialog({
+      title: 'Confirm Copy',
+      body: 'Are you sure you want to make a copy of this list?',
+      okText: 'Yes - Copy!',
+      onConfirm: 'show-spinner'
+    });
+    this.listenTo(confirmDialog, 'confirm', function() {
+      var copyUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/copy';
+      $.ajax({
+        url: copyUrl,
+        method: 'POST',
+        headers: app.user.headers(),
+        success: function(response) {
+          app.router.navigate('/vocablists/view/' + response.VocabList.id, {trigger: true});
+          confirmDialog.close();
+        }
+      });
+    });
+    confirmDialog.render().open();
+  },
+
+  /**
+   * @method handleClickDeleteLink
+   * @param {Event} event
+   */
+  handleClickDeleteLink: function(event) {
+    event.preventDefault();
+    var confirmDialog = new ConfirmDialog({
+      title: 'Confirm Delete',
+      body: 'Are you sure you want to delete this list?',
+      okText: 'Yes - Delete!',
+      onConfirm: 'show-spinner'
+    });
+    this.listenTo(confirmDialog, 'confirm', function() {
+      this.vocablist.save({disabled: true, studyingMode: 'not studying'}, {patch: true});
+      this.listenToOnce(this.vocablist, 'state', function() {
+        app.router.navigate('/vocablists/my-lists', {trigger: true});
+        confirmDialog.close();
+      });
+    });
+    confirmDialog.render().open();
+  },
+
+  /**
    * @method handleClickDiscardChanges
    * @param {Event} event
    */
@@ -153,6 +214,15 @@ module.exports = GelatoPage.extend({
     this.editing = true;
     this.editor.editing = true;
     this.render();
+  },
+
+  /**
+   * Handles the functionality for when the user pushes a button to publish the vocablist.
+   * @method handleClickPublishLink
+   * @param {Event} event
+   */
+  handleClickPublishLink: function(event) {
+    this._views['publishDialog'].open();
   },
 
   /**

@@ -109,7 +109,7 @@ module.exports = GelatoApplication.extend({
           ["dashboard", "stats", "study", "vocablists", "vocabInfoViewer", "words"].forEach((section) => {
             if (this.pages[section].length) {
               let avgTime = this.pages[section].reduce(function(n, val) {
-              return n + val;}, 0) / this.pages[section].length;
+                  return n + val;}, 0) / this.pages[section].length;
               console.log('The ' + section + ' averaged ' +
                 parseInt(avgTime, 10) + ' ms across ' +
                 this.pages[section].length + ' loads.');
@@ -668,7 +668,7 @@ module.exports = GelatoApplication.extend({
         }
       ],
       () => {
-         this.dicts = dicts;
+        this.dicts = dicts;
       }
     );
   },
