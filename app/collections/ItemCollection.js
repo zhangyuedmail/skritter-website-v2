@@ -459,13 +459,19 @@ const ItemCollection = BaseSkritterCollection.extend({
     }
 
     this.dueCountState = 'fetching';
+    let url = app.getApiUrl() + 'items/due';
+
+    if (app.config.useV2Gets) {
+      url = app.getApiUrl(2) + 'gae/items/due';
+    }
 
     $.ajax({
-      url: app.getApiUrl() + 'items/due',
+      url,
       type: 'GET',
       headers: app.user.session.getHeaders(),
       data: {
         lang: app.getLanguage(),
+        languageCode: app.getLanguage(),
         parts: app.user.getFilteredParts().join(','),
         styles: app.user.getFilteredStyles().join(',')
       },
