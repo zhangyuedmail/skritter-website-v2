@@ -80,7 +80,7 @@ module.exports = GelatoPage.extend({
   handleKeypressListSearchInput: function(event) {
     if (event.which === 13 || event.keyCode === 13) {
       const needle = ($(event.target).val() || '').trim().toLowerCase();
-      const searchTerm = app.config.useV2Gets ? needle : needle.split(' ')[0];
+      const searchTerm = app.config.useV2Gets.vocablists ? needle : needle.split(' ')[0];
       this._views['table'].searchFor(searchTerm);
       this.$('#clear-search').removeClass('hidden');
       this.updateQueryResultsText(needle.split(' '));
@@ -95,11 +95,11 @@ module.exports = GelatoPage.extend({
     const multiWordSearch = (needle.length > 1);
     let s = "Showing results for <i>" + needle[0] + "</i>.";
 
-    if (app.config.useV2Gets) {
+    if (app.config.useV2Gets.vocablists) {
       s = "Showing results for <i>" + needle.join(' ') + "</i>.";
     }
 
-    if (multiWordSearch && !app.config.useV2Gets) {
+    if (multiWordSearch && !app.config.useV2Gets.vocablists) {
       s += " Search currently only supports one-word queries, sorry!";
     }
 

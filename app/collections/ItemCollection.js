@@ -461,7 +461,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.dueCountState = 'fetching';
     let url = app.getApiUrl() + 'items/due';
 
-    if (app.config.useV2Gets) {
+    if (app.config.useV2Gets.itemsdue) {
       url = app.getApiUrl(2) + 'gae/items/due';
     }
 

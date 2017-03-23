@@ -50,7 +50,12 @@ module.exports = {
    * Whether to use new API v2 GET endpoints
    * @type {Boolean}
    */
-  useV2Gets: false,
+  useV2Gets: {
+    itemsdue: false,
+    progstats: false,
+    users: true,
+    vocablists: false
+  },
 
   version: '{!application-version!}',
 
