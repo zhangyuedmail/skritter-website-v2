@@ -49,8 +49,27 @@ bootstrap-navbar[data-name='mobile'] {
     }
   }
 
+  .timer-duecount-wrapper {
+    display: inline-block;
+    max-width: 54px;
+    margin-top: 5px;
+  }
+
+  .due-count, .due-label {
+    display: inline-block;
+  }
+
+  .due-label {
+    font-variant: small-caps;
+    float: right;
+    margin-top: 3px;
+  }
   // h4x
-  gelato-component[data-name='study-toolbar-timer'] .hover-tooltip .tooltip-text {
-    left: 0;
+  gelato-component[data-name='study-toolbar-timer'] .hover-tooltip {
+    letter-spacing: 2px;
+
+    .tooltip-text {
+      left: 0;
+    }
   }
 }

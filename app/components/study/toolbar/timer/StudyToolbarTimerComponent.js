@@ -38,7 +38,10 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function(options) {
+    options = options || {};
+
+    this.showIcon = options.showIcon;
     this.interval = null;
     this.localOffset = 0;
     this.seconds = 0;
