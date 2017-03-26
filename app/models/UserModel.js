@@ -246,7 +246,9 @@ const UserModel = SkritterModel.extend({
     } else {
       this.subscription.fetch({
         success: function() {
-          callback(self.subscription.getStatus() !== 'Expired');
+          if (_.isFunction(callback)) {
+            callback(self.subscription.getStatus() !== 'Expired');
+          }
         }
       });
     }
