@@ -99,7 +99,9 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
   searchFor: function(value) {
     if (value) {
       if (app.config.recordLoadTimes) {
-       const searchStartTime = window.performance.now();
+
+       // we actually want var here because of block scoping stuff.
+       var searchStartTime = window.performance.now();
       }
 
       this.vocablists.fetch({
