@@ -53,7 +53,7 @@ module.exports = {
   useV2Gets: {
     itemsdue: false,
     progstats: false,
-    users: true,
+    users: false,
     vocablists: false
   },
 
