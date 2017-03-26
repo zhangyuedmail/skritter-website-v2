@@ -93,6 +93,7 @@ module.exports = GelatoApplication.extend({
         },
         pages: {
           app: null,
+          appScreenloaderHide: null,
           dashboard: [],
           stats: [],
           study: [],
@@ -108,7 +109,8 @@ module.exports = GelatoApplication.extend({
           if (!this.pages.app) {
             console.log('Nothing to report yet, sir!');
           }
-          console.log('The app took ' + parseInt(this.pages.app, 10) + ' ms to load');
+          console.log('The app took ' + parseInt(this.pages.app, 10) + ' ms to load until application.js rendered.');
+          console.log('And the app took ' + parseInt(this.pages.appScreenloaderHide, 10) + ' ms to load until the screenloader disappeared.');
           ["dashboard", "stats", "study", "vocablistsBrowse",
             "vocablistsPublished", "vocablistsQueue", "vocablistsSearch",
             "vocabInfoViewer", "words"].forEach((section) => {
@@ -118,7 +120,7 @@ module.exports = GelatoApplication.extend({
               console.log('The ' + section + ' averaged ' +
                 parseInt(avgTime, 10) + ' ms across ' +
                 this.pages[section].length + ' loads.');
-              console.log('Section data: ' + this.pages[section]);
+              console.log('\tdata: ' + this.pages[section].map(v => {return parseInt(v, 10);}));
             }
           });
         }
@@ -804,6 +806,11 @@ module.exports = GelatoApplication.extend({
       ],
       function() {
         setTimeout(function() {
+          if (app.config.recordLoadTimes) {
+            const loadTime = window.performance.now() - window._appLoadStartTime;
+            app.loadTimes.pages.appScreenloaderHide = loadTime;
+          }
+
           ScreenLoader.hide();
 
           app.loadHelpscout();
