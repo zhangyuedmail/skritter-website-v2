@@ -41,7 +41,10 @@ module.exports = GelatoPage.extend({
     const today = moment().format('YYYY-MM-DD');
     const lastMonth = moment().subtract(1, 'month').format('YYYY-MM-DD');
 
-    app.user.stats.fetchRange(lastMonth, today);
+    const self = this;
+    app.user.stats.fetchRange(lastMonth, today, {success: function() {
+      self._recordLoadTime();
+    }});
 
     this._views['summary'] = new StatsSummaryComponent({
       collection: app.user.stats
@@ -50,13 +53,13 @@ module.exports = GelatoPage.extend({
       collection: app.user.stats
     });
 
-    if (app.config.recordLoadTimes) {
-      this.componentsLoaded = {};
-      for (let view in this._views) {
-        this.componentsLoaded[view] = false;
-        this.listenTo(this._views[view], 'component:loaded', this._onComponentLoaded);
-      }
-    }
+    // if (app.config.recordLoadTimes) {
+    //   this.componentsLoaded = {};
+    //   for (let view in this._views) {
+    //     this.componentsLoaded[view] = false;
+    //     this.listenTo(this._views[view], 'component:loaded', this._onComponentLoaded);
+    //   }
+    // }
 
     this.activeSection = 'summary';
   },
@@ -120,19 +123,19 @@ module.exports = GelatoPage.extend({
    * @param {String} component the name of the component that was loaded
    * @private
    */
-  _onComponentLoaded: function(component) {
-    this.componentsLoaded[component] = true;
-
-    // return if any component is still not loaded
-    for (let component in this.componentsLoaded) {
-      if (this.componentsLoaded[component] !== true) {
-        return;
-      }
-    }
-
-    // but if everything's loaded, since this is a page, log the time
-    this._recordLoadTime();
-  },
+  // _onComponentLoaded: function(component) {
+  //   this.componentsLoaded[component] = true;
+  //
+  //   // return if any component is still not loaded
+  //   for (let component in this.componentsLoaded) {
+  //     if (this.componentsLoaded[component] !== true) {
+  //       return;
+  //     }
+  //   }
+  //
+  //   // but if everything's loaded, since this is a page, log the time
+  //   this._recordLoadTime();
+  // },
 
   /**
    * Records the load time for this page once.
