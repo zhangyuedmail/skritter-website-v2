@@ -36,16 +36,22 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
     this._sortType = 'popularity';
     this.vocablists = new Vocablists();
     this.listenTo(this.vocablists, 'state', this.render);
-    var data = {
+
+    const data = {
       sort: 'official',
       lang: app.getLanguage(),
       languageCode: app.getLanguage()
     };
-    this.vocablists.fetch({data: data});
+
+    this.vocablists.fetch({
+      data: data
+    });
     this.listenTo(this.vocablists, 'sync', function() {
       if (this.vocablists.cursor) {
         data.cursor = this.vocablists.cursor;
         this.vocablists.fetch({data: data, remove: false})
+      } else {
+        this.trigger('component:loaded', 'table');
       }
     });
   },

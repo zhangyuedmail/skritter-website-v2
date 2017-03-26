@@ -29,6 +29,11 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
+    if (app.config.recordLoadTimes) {
+      this.loadStart = window.performance.now();
+      this.loadAlreadyTimed = false;
+    }
+
     this.vocablists = app.user.vocablists;
     this.addingTable = new AddingTable({vocablists: this.vocablists});
     this.reviewingTable = new ReviewingTable({vocablists: this.vocablists});
@@ -52,6 +57,10 @@ module.exports = GelatoPage.extend({
             },
             remove: false
           });
+        } else {
+          if (app.config.recordLoadTimes) {
+            this._recordLoadTime();
+          }
         }
       }
     );
@@ -95,6 +104,20 @@ module.exports = GelatoPage.extend({
     this.sidebar.remove();
 
     return GelatoPage.prototype.remove.call(this);
+  },
+
+  /**
+   * Records the load time for this page once.
+   * @private
+   */
+  _recordLoadTime: function() {
+    if (this.loadAlreadyTimed || !app.config.recordLoadTimes) {
+      return;
+    }
+
+    this.loadAlreadyTimed = true;
+    const loadTime = window.performance.now() - this.loadStart;
+    app.loadTimes.pages.vocablistsQueue.push(loadTime);
   }
 
 });

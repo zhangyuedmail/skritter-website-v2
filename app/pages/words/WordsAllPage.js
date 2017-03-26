@@ -43,6 +43,11 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
+    if (app.config.recordLoadTimes) {
+      this.loadStart = window.performance.now();
+      this.loadAlreadyTimed = false;
+    }
+
     this.dialog = null;
     this.sidebar = new WordsSidebar();
     this.items = new Items();
@@ -87,6 +92,8 @@ module.exports = GelatoPage.extend({
    * @param {string} [cursor]
    */
   fetchItems: function(cursor) {
+    const self = this;
+
     this.items.fetch({
       data: {
         sort: this.sort,
@@ -96,7 +103,12 @@ module.exports = GelatoPage.extend({
         cursor: cursor || ''
       },
       remove: false,
-      sort: false
+      sort: false,
+      success: function() {
+        if (app.config.recordLoadTimes) {
+          self._recordLoadTime();
+        }
+      }
     });
   },
 
@@ -310,6 +322,20 @@ module.exports = GelatoPage.extend({
     context.view = this;
     const rendering = $(this.template(context));
     this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
+  },
+
+  /**
+   * Records the load time for this page once.
+   * @private
+   */
+  _recordLoadTime: function() {
+    if (this.loadAlreadyTimed) {
+      return;
+    }
+
+    this.loadAlreadyTimed = true;
+    const loadTime = window.performance.now() - this.loadStart;
+    app.loadTimes.pages.words.push(loadTime);
   }
 });
 

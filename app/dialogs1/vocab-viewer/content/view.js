@@ -204,6 +204,10 @@ const VocabViewerContentComponent = GelatoComponent.extend({
   },
 
   loadVocab: function(vocabId, vocab) {
+    if (app.config.recordLoadTimes) {
+      this.loadStart = window.performance.now();
+    }
+
     const self = this;
     let wordItems = null;
     let wordVocabs = null;
@@ -313,6 +317,11 @@ const VocabViewerContentComponent = GelatoComponent.extend({
             wordVocabsContaining.remove(self.vocab.id);
           }
           self.set(wordVocabs, wordVocabsContaining, wordItems);
+
+          if (app.config.recordLoadTimes) {
+            const loadTime = window.performance.now() - self.loadStart;
+            app.loadTimes.pages.vocabInfoViewer.push(loadTime);
+          }
         }
       }
     );

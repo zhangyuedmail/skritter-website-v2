@@ -267,9 +267,14 @@ const StatsTimelineComponent = GelatoComponent.extend({
    * Updates the amount of time studied. Child graphs should update themselves independently of this method.
    */
   update: function() {
-    var timeStudied = this.getTimeStudied();
+    const timeStudied = this.getTimeStudied();
     this.$('#time-studied').text(timeStudied.amount);
     this.$('#time-studied-units-label').text(timeStudied.units);
+
+    if (app.config.recordLoadTimes && !this.loaded) {
+      this.loaded = true;
+      this.trigger('component:loaded', 'timeline');
+    }
   }
 
 });
