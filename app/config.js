@@ -57,11 +57,13 @@ module.exports = {
    * @type {Boolean}
    */
   useV2Gets: {
+    items: false,
     itemsdue: false,
     progstats: false,
     subscriptions: false,
     users: false,
-    vocablists: false
+    vocablists: false,
+    vocabs: false
   },
 
   version: '{!application-version!}',
