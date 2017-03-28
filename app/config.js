@@ -42,6 +42,12 @@ module.exports = {
    */
   recordLoadTimes: true && window.performance,
 
+  /**
+   * Whether to use a local backend instead of production
+   * @type {Boolean}
+   */
+  thinkLocally: '{!application-thinkLocally!}',
+
   timestamp: '{!timestamp!}',
 
   title: '{!application-title!}',

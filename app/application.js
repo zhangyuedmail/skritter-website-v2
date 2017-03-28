@@ -57,7 +57,7 @@ module.exports = GelatoApplication.extend({
     this.router = new Router();
     this.user = new User({id: this.getSetting('user') || 'application'});
 
-    this.localBackend = this.fn.getParameterByName('thinkLocally');
+    this.localBackend = this.fn.getParameterByName('thinkLocally') || this.defaults.thinkLocally;
     if (this.localBackend) {
       console.warn('NOTICE:', 'Using localhost backend');
     }
@@ -167,6 +167,7 @@ module.exports = GelatoApplication.extend({
     language: null,
     lastItemChanged: 0,
     locale: 'en',
+    thinkLocally: '{!application-thinkLocally!}' === 'true',
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
     version: '{!application-version!}'

@@ -2,6 +2,7 @@
 
 const application = require('./package.json');
 
+
 exports.config = {
   files: {
     javascripts: {
@@ -54,9 +55,11 @@ exports.config = {
         'application-description': application.description,
         'application-language': process.env.PROJECT_LANG || '',
         'application-title': application.title,
-        'application-version': application.version
+        'application-version': application.version,
+        'application-thinkLocally': process.env.THINK_LOCALLY
       },
       paths: [
+        'public/js/config.js',
         'public/js/application.js',
         'public/js/libraries.js',
         'public/js/startup.js',
