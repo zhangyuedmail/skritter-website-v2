@@ -71,6 +71,33 @@ const SubscriptionModel = SkritterModel.extend({
     }
 
     return 'Expired';
+  },
+
+  /**
+   * @method isExpired
+   * @returns {boolean}
+   */
+  isExpired: function() {
+    return this.getStatus() === 'Expired';
+  },
+
+  /**
+   * @method restoreSubscription
+   */
+  restoreSubscription: function() {
+    if (app.isAndroid() && plugins.billing) {
+      plugins.billing.getPurchases('subs')
+        .then(result => {
+          if (result && result.length) {
+              this.set('gplay_subscription', {
+                subscription: result[0].productId,
+                package: result[0].packageName,
+                token: result[0].purchaseToken
+              }).save();
+            }
+          }
+        );
+    }
   }
 
 });

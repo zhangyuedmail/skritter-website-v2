@@ -47,4 +47,13 @@ gelato-page(data-name='mobile-account-billing-subscription')
                       | Never
 
 
-
+              if view.subscription.isExpired()
+                div
+                  button.subscribe-android.btn.btn-success(data-type='one.month.sub')
+                    | Subscribe: monthly ($9.99 USD)
+                div
+                  button.subscribe-android.btn.btn-success(data-type='one.year.sub')
+                    | Subscribe: yearly ($99.99 USD)
+                div
+                  button.restore-android.btn.btn-warning
+                    | Restore
