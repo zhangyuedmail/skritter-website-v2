@@ -30,11 +30,9 @@ shell.cp('-r', './public/*', './cordova/www');
 shell.cd('./cordova');
 
 if (lang === 'ja') {
-  shell.exec('cordova plugin add cc.fovea.cordova.purchase --variable BILLING_KEY=' + billing.skritter_chinese);
   shell.cp('../skritter-japanese.build.json', './build.json');
 
 } else {
-  shell.exec('cordova plugin add cc.fovea.cordova.purchase --variable BILLING_KEY=' + billing.skritter_japanese);
   shell.cp('../skritter-chinese.build.json', './build.json');
 }
 
