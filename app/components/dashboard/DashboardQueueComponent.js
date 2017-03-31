@@ -44,7 +44,7 @@ const DashboardQueueComponent = GelatoComponent.extend({
 
     this.vocablists.fetch({
       data: {
-        limit: 12,
+        limit: app.config.useV2Gets.vocablists ? null : 12,
         sort: 'studying',
         include_percent_done: 'true',
         lang: app.getLanguage(),
