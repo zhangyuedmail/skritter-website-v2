@@ -13,7 +13,7 @@ gelato-component(data-name='vocablists-mine-table')
         .col-md-5
           a(href="/vocablists/view/" + list.id)= list.get('name')
         .col-md-2= list.get('creatorName') || list.get('creator')
-        .col-md-2= moment(list.get('published') * 1000).format('l')
+        .col-md-2= list.getFormattedPublishedDate()
         .col-md-3
           if list.get('studyingMode') === 'not studying' && app.user.isSubscriptionActive()
             span.add-to-queue-link(data-vocablist-id=list.id)

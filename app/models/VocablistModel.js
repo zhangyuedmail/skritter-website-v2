@@ -40,6 +40,26 @@ const VocablistModel = SkritterModel.extend({
   },
 
   /**
+   * @method sync
+   * @param {String} method
+   * @param {Model} model
+   * @param {Object} options
+   */
+  sync: function(method, model, options) {
+    options.headers = _.result(this, 'headers');
+
+    if (!options.url) {
+      options.url = app.getApiUrl() + _.result(this, 'url');
+    }
+
+    if (app.config.useV2Gets.vocablists) {
+      options.url = app.getApiUrl(2) + 'gae/vocablists/' + this.id;
+    }
+
+    SkritterModel.prototype.sync.call(this, method, model, options);
+  },
+
+  /**
    * @method deletable
    * @returns {Boolean}
    */
@@ -61,6 +81,20 @@ const VocablistModel = SkritterModel.extend({
       !this.get('disabled'),
       this.get('sort') !== 'chinesepod-lesson'
     ]);
+  },
+
+  /**
+   * Gets the publish date and presents it in a nice format.
+   * @returns {String} a UI-printable representation of the publish date
+   */
+  getFormattedPublishedDate: function() {
+    let published = moment(this.get('published') * 1000);
+
+    if (app.config.useV2Gets.vocablists) {
+      published = moment(this.get('published'));
+    }
+
+    return published.format('l');
   },
 
   /**
@@ -109,6 +143,8 @@ const VocablistModel = SkritterModel.extend({
     var sections = this.get('sections') || [];
     if (this.get('studyingMode') === 'finished') {
       return {percent: 100};
+    } else if (this.get('percentDone')) {
+      return {percent: this.get('percentDone')};
     } else if (sections.length) {
       var currentIndex = this.get('currentIndex') || 0;
       var currentSection = this.get('currentSection') || sections[0].id;
@@ -118,6 +154,7 @@ const VocablistModel = SkritterModel.extend({
         if (section.id === currentSection) {
           added += currentIndex;
           passed = true;
+
         }
         if (_.includes(sectionsSkipping, section.id)) {
           continue;
@@ -132,8 +169,6 @@ const VocablistModel = SkritterModel.extend({
         total: total,
         percent: total ? Math.round(100 * added / total) : 0
       };
-    } else if (this.get('percentDone')) {
-      return {percent: this.get('percentDone')};
     } else {
       return {percent: 0};
     }
