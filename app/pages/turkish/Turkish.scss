@@ -1,0 +1,128 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='turkish'] {
+
+  background: $background-marketing;
+  padding-top: 50px;
+
+  .author {
+    font-size: 20px;
+    color: $grey2;
+    margin-top: 13px;
+  }
+
+  header {
+    font-family: "Ubuntu", "Arial Unicode MS", "Arial", sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 40px 0px 20px 0px;
+  }
+
+  .story-header {
+    margin: 0px 0px 15px;
+  }
+
+  .row {
+    margin: 0px;
+  }
+
+  .story-wrapper, .team-wrapper {
+    padding: 15px;
+  }
+
+  .story-wrapper {
+    background: #FFF;
+    border-radius: 15px 15px 0px 0px;
+    padding: 20px 40px;
+
+    p {
+      color: $grey3;
+      font-size: 16px;
+    }
+
+    img {
+      margin: auto;
+      display: block;
+    }
+
+    .breakdown {
+      margin-top: 30px;
+    }
+  }
+
+  .content-block {
+    padding: 0px;
+    margin-bottom: 60px;
+  }
+
+  .team-wrapper {
+    padding: 18px 30px 30px 30px;
+  }
+
+  .team-header {
+    margin-top: 0px;
+    margin-bottom: 30px;
+  }
+
+  .employee-name {
+    font-size: 16px;
+    color: $grey5;
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .employee-subtext {
+    font-size: 16px;
+    color: $grey3;
+    padding: 0px 20px;
+    text-align: center;
+  }
+
+  .picture-row {
+    padding-bottom: 45px;
+  }
+
+  .divider {
+    width: 90%;
+    margin: 0px auto 30px;
+    height: 1px;
+    background: #bebdbe;
+  }
+
+  .cofounders-header {
+    margin: 0px 0px 20px 0px;
+  }
+
+  .media {
+    margin-bottom: 20px;
+  }
+
+  .media-object {
+    max-width: 80%;
+  }
+
+  li {
+    font-size: 16px;
+  }
+
+  #about-title {
+    color: $grey4;
+    font-family: $font-slab;
+    font-size: 36px;
+    font-weight: 400;
+    margin-bottom: 60px;
+    margin-top: 30px;
+  }
+
+  .profile-picture {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+  }
+
+  .zh-ja-name {
+    margin-left: 15px;
+    position: absolute;
+    color: $grey2;
+  }
+}

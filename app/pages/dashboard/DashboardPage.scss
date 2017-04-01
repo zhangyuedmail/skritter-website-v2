@@ -9,6 +9,18 @@ gelato-page[data-name='dashboard'] {
     height: 300px;
   }
 
+  #turkish-notice {
+    background: $grey7;
+    color: $white5;
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+
+    a {
+      float: right;
+    }
+  }
+
   .content-block {
     padding-top: 30px;
     .options {

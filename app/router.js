@@ -48,6 +48,7 @@ module.exports = Router.extend({
     'stats': 'navigateStats',
     'study(/:listId)(/:sectionId)': 'navigateStudy',
     'test': 'navigateTest',
+    'turkish': 'navigateTurkish',
     'vocab(/:vocabId)': 'navigateVocab',
     'vocablists': 'navigateVocablistsQueue',
     'vocablists/browse': 'navigateVocablistsBrowse',
@@ -388,6 +389,13 @@ module.exports = Router.extend({
    */
   navigateTest: function() {
     this.go('pages/test/TestPage');
+  },
+
+  /**
+  * @method navigateTurkish
+  */
+  navigateTurkish: function() {
+  this.go('pages/turkish/TurkishPage');
   },
 
   /**
