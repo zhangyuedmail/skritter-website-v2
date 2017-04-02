@@ -638,8 +638,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
 
     options = options === undefined ? {} : options;
     options = options || {};
-    options.easing = options.easing || createjs.Ease.quadIn;
-    options.speed = options.speed || 200;
+    options.easing = options.easing || createjs.Ease.backOut;
+    options.speed = options.speed || 400;
 
     fromShape.cache(0, 0, bounds.width, bounds.height);
 

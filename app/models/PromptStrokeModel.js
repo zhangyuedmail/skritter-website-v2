@@ -132,13 +132,13 @@ const PromptStrokeModel = GelatoModel.extend({
   getUserShape: function() {
     //TODO: improve stroke position and size
     //let size = this.getSize();
-    //shape.scaleX = rect.width / bounds.width;
-    //shape.scaleY = rect.height / bounds.height;
-    //let bounds = shape.getBounds();
     let shape = this.getTargetShape();
+    let bounds = shape.getBounds();
     let rect = this.getUserRectangle();
     shape.x = rect.x;
     shape.y = rect.y;
+    shape.scaleX = rect.width / bounds.width;
+    shape.scaleY = rect.height / bounds.height;
     shape.name = 'stroke-' + this.get('strokeId');
     return shape;
   },
