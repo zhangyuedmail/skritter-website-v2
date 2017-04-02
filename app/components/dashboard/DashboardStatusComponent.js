@@ -53,7 +53,6 @@ const DashboardStatusComponent = GelatoComponent.extend({
         styles: app.user.getFilteredStyles().join(',')
       },
       error: function(error) {
-        console.log(error);
         this.dueCount = '-';
         this.render();
       },

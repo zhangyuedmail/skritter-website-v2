@@ -1,7 +1,5 @@
 .navbar-mobile-dashboard-component
   - var user = app.user;
-  - var currentSection = view.getCurrentSection();
-
 
   .navbar-header
     if user.isLoggedIn()
@@ -10,6 +8,7 @@
         span.icon-bar
         span.icon-bar
         span.icon-bar
+
     span#title-txt.title-txt Dashboard
 
   #navbar-collapse.collapse.navbar-collapse
