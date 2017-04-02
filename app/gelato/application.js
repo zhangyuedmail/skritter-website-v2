@@ -249,7 +249,7 @@ const GelatoApplication = Backbone.View.extend({
    * @returns {Boolean}
    */
   isMobile: function() {
-    return this.isAndroid() || this.isIOS() || this.getWidth() < 768;
+    return this.isAndroid() || this.isIOS() || (this.isDevelopment() && this.getWidth() < 801);
   },
 
   /**
