@@ -203,9 +203,14 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     return GelatoComponent.prototype.remove.call(this);
   },
 
-  loadVocab: function(vocabId, vocab) {
+  loadVocab: function(vocabId, vocabInfo) {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
+    }
+
+    if (vocabInfo) {
+      this.set(vocabInfo.vocabs, vocabInfo.vocabsContaining, vocabInfo.items);
+      return;
     }
 
     const self = this;
@@ -215,12 +220,6 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     if (vocabId) {
       this.vocabWriting = vocabId.split("-")[1];
-    }
-
-    if (vocab) {
-      this.vocab = vocab;
-    } else {
-      this.vocab = null;
     }
 
     this.vocabs.reset();
@@ -313,9 +312,11 @@ const VocabViewerContentComponent = GelatoComponent.extend({
           console.error('WORD DIALOG LOAD ERROR:', error);
         } else {
           self.vocab = wordVocabs.at(0);
+
           if (self.vocab) {
             wordVocabsContaining.remove(self.vocab.id);
           }
+
           self.set(wordVocabs, wordVocabsContaining, wordItems);
 
           if (app.config.recordLoadTimes) {

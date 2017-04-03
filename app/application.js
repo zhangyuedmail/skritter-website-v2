@@ -858,15 +858,16 @@ module.exports = GelatoApplication.extend({
   /**
    * Shows a vocab info side view on mobile devices.
    * @param {String} vocabId the vocab id
+   * @param {Object} [vocabInfo] data required for displaying dialog
    */
-  toggleVocabInfo: function(vocabId, vocab) {
+  toggleVocabInfo: function(vocabId, vocabInfo) {
     if (!this.isMobile()) {
-      return this.openDesktopVocabViewer(vocabId, vocab);
+      return this.openDesktopVocabViewer(vocabId, vocabInfo);
     }
 
     if (vocabId) {
       // TODO: update vocab info view
-      this._views['rightSide'].loadVocab(vocabId); // or something like this
+      this._views['rightSide'].loadVocab(vocabId, vocabInfo); // or something like this
       this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
 
       if (this.isAndroid()) {
