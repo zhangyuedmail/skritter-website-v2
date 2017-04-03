@@ -72,6 +72,16 @@ const ItemCollection = BaseSkritterCollection.extend({
         callback(error);
       },
       success: function(result) {
+        if (result.Items.length) {
+          const item = new ItemModel(result.Items[0]);
+
+          item._loaded = false;
+          item._queue = true;
+
+          self.unshift(item);
+          self.preloadNext();
+        }
+
         self.addingState = 'standby';
         callback(null, result);
       }
