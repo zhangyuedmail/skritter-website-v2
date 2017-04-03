@@ -58,10 +58,10 @@ module.exports = {
    */
   useV2Gets: {
     items: false,
-    itemsdue: false,
-    progstats: false,
-    subscriptions: false,
-    users: false,
+    itemsdue: true,
+    progstats: true,
+    subscriptions: true,
+    users: true,
     vocablists: false,
     vocabs: false
   },
