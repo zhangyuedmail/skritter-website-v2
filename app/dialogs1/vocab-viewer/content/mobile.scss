@@ -10,6 +10,11 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
     width: 6vh;
   }
 
+  .edit-textbox {
+    margin-top: 15px;
+    width: 100%;
+  }
+
   #content-section {
     padding: 20px;
 
@@ -73,6 +78,7 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
   #header-section {
     background-color: $white3;
     padding: 20px;
+    position: relative;
 
     i {
       font-size: 24px;
@@ -86,6 +92,12 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
 
     .separator {
       border-right: 1px solid $white5;
+    }
+
+    .edit-row {
+      bottom: 10px;
+      position: absolute;
+      width: 100%;
     }
 
     .toughness {
@@ -110,7 +122,8 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
     }
 
     .definition {
-      margin-top: 10px;
+      margin-bottom: 30px;
+      margin-top: 15px;
       display: block;
     }
 

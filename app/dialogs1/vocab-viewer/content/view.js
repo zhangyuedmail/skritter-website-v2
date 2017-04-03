@@ -25,7 +25,27 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     'click #hanping-yue-icon': 'handleClickHanpingYueIcon',
     'click #pleco-icon': 'handleClickPlecoIcon',
     'click #show-more-contained': 'handleClickShowMoreContained',
-    'click #save-me': 'saveMe'
+    'click #save-me': 'saveMe',
+
+    'click #edit-vocab': 'handleClickEditVocab',
+    'click #save-vocab': 'handleClickSaveVocab'
+  },
+
+  handleClickEditVocab: function(event) {
+    event.preventDefault();
+
+    this.editing = true;
+    this.render();
+  },
+
+  handleClickSaveVocab: function(event) {
+    event.preventDefault();
+
+    this.vocab.set('customDefinition', this.$('#vocab-definition .definition').val());
+    this.vocab.save();
+
+    this.editing = false;
+    this.render();
   },
 
   /**
@@ -45,6 +65,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     this.items = null;
     this.vocabs = null;
     this.vocabsContaining = null;
+    this.editing = false;
 
     this.vocab = options.vocab;
     this.vocabWriting = null;
@@ -190,6 +211,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    */
   set: function(vocabs, vocabsContaining, items) {
     this.items = items || null;
+    this.vocab = vocabs.at(0) || null;
     this.vocabs = vocabs || null;
     this.vocabsContaining = vocabsContaining || null;
     this.lookup.set(vocabs);

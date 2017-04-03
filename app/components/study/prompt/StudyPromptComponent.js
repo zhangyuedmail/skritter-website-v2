@@ -112,7 +112,12 @@ const StudyPromptComponent = GelatoComponent.extend({
       this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
     }
 
-    this.shortcuts.registerAll();
+    if (app.isMobile()) {
+      this.shortcuts.unregisterAll();
+    } else {
+      this.shortcuts.registerAll();
+    }
+
     this.resize();
 
     return this;

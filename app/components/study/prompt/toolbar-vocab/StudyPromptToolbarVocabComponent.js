@@ -55,7 +55,11 @@ module.exports = GelatoComponent.extend({
     this.prompt.vocabDefinition.editing = false;
     this.prompt.vocabMnemonic.editing = false;
     if (this.prompt.part.registerShortcuts) {
-      this.prompt.shortcuts.registerAll();
+      if (app.isMobile()) {
+        this.prompt.shortcuts.unregisterAll();
+      } else {
+        this.prompt.shortcuts.registerAll();
+      }
     }
     this.prompt.review.set('showMnemonic', false);
     this.prompt.vocabDefinition.render();
