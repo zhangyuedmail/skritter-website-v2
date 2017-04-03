@@ -7,7 +7,7 @@
     "email": "team@skritter.com",
     "url": "https://skritter.com"
   },
-  "version": "2.0.7",
+  "version": "2.0.8",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
     "test": "node ./scripts/npm-uitest"
   },
   "dependencies": {
-    "async": "~2.2",
+    "async": "~2.3",
     "backbone": "~1.3",
     "body-parser": "~1.17",
     "bootstrap": "~3.3",
