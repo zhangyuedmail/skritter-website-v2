@@ -38,7 +38,7 @@ const SubscriptionModel = SkritterModel.extend({
       options.url = app.getApiUrl() + _.result(this, 'url');
     }
 
-    if (app.config.useV2Gets.subscriptions) {
+    if (method === 'read' && app.config.useV2Gets.subscriptions) {
       options.url = app.getApiUrl(2) + 'gae/subscriptions/' + app.user.id;
     }
 

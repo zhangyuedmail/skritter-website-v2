@@ -320,7 +320,7 @@ const ItemCollection = BaseSkritterCollection.extend({
             model._queue = false;
 
             // request to skip item on the server
-            model.skip();
+            // model.skip();
 
             return false;
           }
@@ -331,6 +331,7 @@ const ItemCollection = BaseSkritterCollection.extend({
               model.set('active', false);
               model.bump();
               model.save();
+
               return false;
             }
           }
