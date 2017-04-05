@@ -62,7 +62,7 @@ module.exports = {
     progstats: true,
     subscriptions: true,
     users: true,
-    vocablists: false,
+    vocablists: true,
     vocabs: false
   },
 
