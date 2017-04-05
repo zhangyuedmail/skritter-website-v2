@@ -92,15 +92,19 @@ module.exports = GelatoPage.extend({
 
 
   /**
-   * Fetches the vocablist and associated data
+   * Fetches the vocablist and sections.
+   * Adds event listeners and re-renders the page when finished.
    * @method fetchList
    */
   fetchList: function() {
-    var self = this;
+    const self = this;
 
     async.series([
       function(callback) {
         self.vocablist.fetch({
+          data: {
+            include_user_names: 'true'
+          },
           error: function() {
             callback();
           },

@@ -87,14 +87,15 @@ const VocablistModel = SkritterModel.extend({
    * Gets the publish date and presents it in a nice format.
    * @returns {String} a UI-printable representation of the publish date
    */
-  getFormattedPublishedDate: function() {
+  getFormattedPublishedDate: function(format) {
+    format = format || 'l';
     let published = moment(this.get('published') * 1000);
 
     if (app.config.useV2Gets.vocablists) {
       published = moment(this.get('published'));
     }
 
-    return published.format('l');
+    return published.format(format);
   },
 
   /**
@@ -172,6 +173,24 @@ const VocablistModel = SkritterModel.extend({
     } else {
       return {percent: 0};
     }
+  },
+
+  /**
+   * Gets a UI-printable version of the publisher of the list
+   * @return {string}
+   */
+  getPublisherName: function() {
+    if (this.get('sort') === 'official') {
+      return 'Skritter';
+    } else if (this.get('sort') === 'chinesepod-lesson') {
+      return 'ChinesePod';
+    } else if (this.get('creator') === app.user.id) {
+      return app.user.get('name') || app.user.id;
+    } else if (this.get('creator')) {
+      return this.get('creator');
+    }
+
+    return 'Unknown';
   },
 
   /**
