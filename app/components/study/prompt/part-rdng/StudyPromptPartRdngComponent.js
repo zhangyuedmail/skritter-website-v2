@@ -183,7 +183,12 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
 
     // TODO: this will cause problems if user submits an answer,
     // then goes back and wants to change it
-    this.prompt.shortcuts.registerAll();
+    if (app.isMobile()) {
+      this.prompt.shortcuts.unregisterAll();
+    } else {
+      this.prompt.shortcuts.registerAll();
+    }
+
   },
 
   /**

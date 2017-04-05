@@ -160,11 +160,11 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
    * Updates display of graph and data when the collection changes.
    */
   update: function() {
-    var totalCharactersLearned = this.getCharactersLearned();
-    var totalWordsLearned = this.getWordsLearned();
-    var totalItemsLearned = Math.max(totalCharactersLearned, 0) + Math.max(totalWordsLearned, 0);
+    const totalCharactersLearned = this.getCharactersLearned();
+    const totalWordsLearned = this.getWordsLearned();
+    const totalItemsLearned = Math.max(totalCharactersLearned, 0) + Math.max(totalWordsLearned, 0);
 
-    var chartData = this.$('#items-learned').highcharts().series[0].points;
+    const chartData = this.$('#items-learned').highcharts().series[0].points;
     chartData[0].update(Math.max(totalWordsLearned, 0));
     chartData[1].update(Math.max(totalCharactersLearned, 0));
 
@@ -173,13 +173,18 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
     this.$('#num-items-learned').text(totalItemsLearned);
 
     if (this.showTimeStudied) {
-      var totalTimeData = this.collection.getAllTimeTimeStudied();
+      const totalTimeData = this.collection.getAllTimeTimeStudied();
       this.$('#total-time-studied-num').text(totalTimeData.amount);
       this.$('#units-total-label').text(totalTimeData.units);
     }
 
     if (this.showNumReviews) {
       this.$('.total-reviews-num').text(this.collection.getCountAllTimeReviews());
+    }
+
+    if (!this.loaded) {
+      this.loaded = true;
+      this.trigger('component:loaded', 'allTime');
     }
   }
 

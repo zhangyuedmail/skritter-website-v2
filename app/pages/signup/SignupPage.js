@@ -136,6 +136,7 @@ module.exports = GelatoPage.extend({
       recaptcha: formData.recaptcha,
       siteRef: siteRef
     });
+
     if (formData.method === 'credit') {
       this.user.set({
         plan: formData.plan,
@@ -148,6 +149,7 @@ module.exports = GelatoPage.extend({
     } else {
       this.user.set('validationCode', formData.validationCode);
     }
+
     if (app.isDevelopment()) {
       this.user.unset('avatar');
     }
@@ -530,8 +532,6 @@ module.exports = GelatoPage.extend({
       error = error.responseJSON;
     }
 
-    console.error(error.message);
-
     // stripe errors
     if (error.code === 'invalid_expiry_month' ||
       error.code === 'invalid_expiry_year' ||
@@ -701,7 +701,7 @@ module.exports = GelatoPage.extend({
       return false;
     }
 
-    if (!formData.recaptcha && !app.isDevelopment()) {
+    if (!formData.recaptcha && !app.isCordova() && !app.isDevelopment()) {
       this.displayErrorMessage(app.locale('pages.signup.errorInvalidRecaptcha'));
       return false;
     }

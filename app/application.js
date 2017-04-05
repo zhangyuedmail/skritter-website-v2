@@ -57,7 +57,7 @@ module.exports = GelatoApplication.extend({
     this.router = new Router();
     this.user = new User({id: this.getSetting('user') || 'application'});
 
-    this.localBackend = this.fn.getParameterByName('thinkLocally');
+    this.localBackend = this.fn.getParameterByName('thinkLocally') || this.defaults.thinkLocally;
     if (this.localBackend) {
       console.warn('NOTICE:', 'Using localhost backend');
     }
@@ -93,10 +93,14 @@ module.exports = GelatoApplication.extend({
         },
         pages: {
           app: null,
+          appScreenloaderHide: null,
           dashboard: [],
           stats: [],
           study: [],
-          vocablists: [],
+          vocablistsBrowse: [],
+          vocablistsPublished: [],
+          vocablistsQueue: [],
+          vocablistsSearch: [],
           vocabInfoViewer: [],
           words: []
         },
@@ -105,14 +109,18 @@ module.exports = GelatoApplication.extend({
           if (!this.pages.app) {
             console.log('Nothing to report yet, sir!');
           }
-          console.log('The app took ' + parseInt(this.pages.app, 10) + ' ms to load');
-          ["dashboard", "stats", "study", "vocablists", "vocabInfoViewer", "words"].forEach((section) => {
+          console.log('The app took ' + parseInt(this.pages.app, 10) + ' ms to load until application.js rendered.');
+          console.log('And the app took ' + parseInt(this.pages.appScreenloaderHide, 10) + ' ms to load until the screenloader disappeared.');
+          ["dashboard", "stats", "study", "vocablistsBrowse",
+            "vocablistsPublished", "vocablistsQueue", "vocablistsSearch",
+            "vocabInfoViewer", "words"].forEach((section) => {
             if (this.pages[section].length) {
               let avgTime = this.pages[section].reduce(function(n, val) {
                   return n + val;}, 0) / this.pages[section].length;
               console.log('The ' + section + ' averaged ' +
                 parseInt(avgTime, 10) + ' ms across ' +
                 this.pages[section].length + ' loads.');
+              console.log('\tdata: ' + this.pages[section].map(v => {return parseInt(v, 10);}));
             }
           });
         }
@@ -159,6 +167,7 @@ module.exports = GelatoApplication.extend({
     language: null,
     lastItemChanged: 0,
     locale: 'en',
+    thinkLocally: '{!application-thinkLocally!}' === 'true',
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
     version: '{!application-version!}'
@@ -798,6 +807,11 @@ module.exports = GelatoApplication.extend({
       ],
       function() {
         setTimeout(function() {
+          if (app.config.recordLoadTimes) {
+            const loadTime = window.performance.now() - window._appLoadStartTime;
+            app.loadTimes.pages.appScreenloaderHide = loadTime;
+          }
+
           ScreenLoader.hide();
 
           app.loadHelpscout();
@@ -844,15 +858,16 @@ module.exports = GelatoApplication.extend({
   /**
    * Shows a vocab info side view on mobile devices.
    * @param {String} vocabId the vocab id
+   * @param {Object} [vocabInfo] data required for displaying dialog
    */
-  toggleVocabInfo: function(vocabId, vocab) {
+  toggleVocabInfo: function(vocabId, vocabInfo) {
     if (!this.isMobile()) {
-      return this.openDesktopVocabViewer(vocabId, vocab);
+      return this.openDesktopVocabViewer(vocabId, vocabInfo);
     }
 
     if (vocabId) {
       // TODO: update vocab info view
-      this._views['rightSide'].loadVocab(vocabId); // or something like this
+      this._views['rightSide'].loadVocab(vocabId, vocabInfo); // or something like this
       this.$('#right-side-app-container').toggleClass('push-main', !!vocabId);
 
       if (this.isAndroid()) {

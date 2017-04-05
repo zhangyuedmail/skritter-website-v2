@@ -19,6 +19,9 @@ const VocabSentence = require('components/study/prompt/vocab-sentence/StudyPromp
 const VocabStyle = require('components/study/prompt/vocab-style/StudyPromptVocabStyleComponent.js');
 const VocabWriting = require('components/study/prompt/vocab-writing/StudyPromptVocabWritingComponent.js');
 
+const Items = require('collections/ItemCollection.js');
+const Vocabs = require('collections/VocabCollection.js');
+
 const Shortcuts = require('components/study/prompt/StudyPromptShortcuts');
 const vent = require('vent');
 
@@ -50,6 +53,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.part = null;
     this.review = null;
     this.reviews = null;
+    this.vocabInfo = null;
     this.isDemo = options.isDemo;
 
     //components
@@ -108,7 +112,12 @@ const StudyPromptComponent = GelatoComponent.extend({
       this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
     }
 
-    this.shortcuts.registerAll();
+    if (app.isMobile()) {
+      this.shortcuts.unregisterAll();
+    } else {
+      this.shortcuts.registerAll();
+    }
+
     this.resize();
 
     return this;
@@ -303,19 +312,21 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.reviewStatus.render();
     this.trigger('reviews:set', reviews);
 
+    this._preloadVocabInfo();
+
     return this;
   },
 
   /**
    * @method showVocabInfo
-   * @param {String} id the id of the vocab to show
-   * @param {VocabModel} [vocab] the vocab object
+   * @param {String} [id] id of the vocab to show
+   * @param {Object} [info] info for displaying dialog
    */
-  showVocabInfo: function(id, vocab) {
+  showVocabInfo: function(id, info) {
     if (app.isMobile()) {
-      vent.trigger('vocabInfo:toggle', id || this.reviews.vocab.id, vocab);
+      vent.trigger('vocabInfo:toggle', id || this.reviews.vocab.id, info || this.vocabInfo);
     } else {
-      app.openDesktopVocabViewer(id || this.reviews.vocab.id, vocab);
+      app.openDesktopVocabViewer(id || this.reviews.vocab.id, info || this.vocabInfo);
     }
   },
 
@@ -336,12 +347,129 @@ const StudyPromptComponent = GelatoComponent.extend({
         // there's some padding somewhere
         10;
     } else {
-     return outerContainer.height() -
-       (this.$('#input-container').height() +
+      return outerContainer.height() -
+        (this.$('#input-container').height() +
 
-      // the margin-top property of #toolbar-action-container + the padding-top of #panel-left
-      40 + 62);
+        // the margin-top property of #toolbar-action-container + the padding-top of #panel-left
+        40 + 62);
     }
+  },
+
+  /**
+   * Preloads vocab information for popup dialog.
+   * @private
+   */
+  _preloadVocabInfo: function () {
+    const self = this;
+    const vocabId = this.reviews.vocab.id;
+    const items = new Items();
+    const vocabs = new Vocabs();
+    const vocabsContaining = new Vocabs();
+
+    let wordItems = null;
+    let wordVocabs = null;
+    let wordVocabsContaining = null;
+
+    this.vocabInfo = null;
+
+    async.parallel(
+      [
+        function(callback) {
+          async.series(
+            [
+              function(callback) {
+                vocabs.fetch({
+                  data: {
+                    include_decomps: true,
+                    include_heisigs: true,
+                    include_sentences: false,
+                    include_top_mnemonics: true,
+                    ids: vocabId
+                  },
+                  error: function(error) {
+                    callback(error);
+                  },
+                  success: function(vocabs) {
+                    wordVocabs = vocabs;
+                    callback();
+                  }
+                });
+              },
+              function(callback) {
+                vocabs.at(0).fetchSentence().then(sentence => {
+                  vocabs.sentences.add(sentence);
+                  callback();
+                });
+              },
+              function(callback) {
+                if (vocabs.at(0).has('containedVocabIds')) {
+                  vocabs.fetch({
+                    data: {
+                      ids: vocabs.at(0).get('containedVocabIds').join('|')
+                    },
+                    remove: false,
+                    error: function(error) {
+                      callback(error);
+                    },
+                    success: function(vocabs) {
+                      wordVocabs = vocabs;
+                      callback(null);
+                    }
+                  });
+                } else {
+                  callback();
+                }
+              },
+              function(callback) {
+                items.fetch({
+                  data: {
+                    vocab_ids: vocabId
+                  },
+                  error: function(error) {
+                    callback(error);
+                  },
+                  success: function(items) {
+                    wordItems = items;
+                    callback(null);
+                  }
+                });
+              }
+            ],
+            callback
+          )
+        },
+        function(callback) {
+          vocabsContaining.fetch({
+            data: {
+              include_containing: true,
+              q: vocabId
+            },
+            error: function(error) {
+              callback(error);
+            },
+            success: function(vocabs) {
+              wordVocabsContaining = vocabs;
+              callback();
+            }
+          });
+        }
+      ],
+      function(error) {
+        if (error) {
+          console.error('WORD DIALOG LOAD ERROR:', error);
+        } else {
+          const vocabInfo = {
+            items: wordItems,
+            vocabs: wordVocabs,
+            vocabsContaining: wordVocabsContaining
+          };
+
+          vocabInfo.vocabsContaining.remove(vocabId);
+
+          self.vocabInfo = vocabInfo;
+        }
+      }
+    );
   }
 });
 

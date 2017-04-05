@@ -1,6 +1,6 @@
 @import "../../styles/_variables";
 
-bootstrap-navbar[data-name='mobile'] {
+.navbar-mobile-dashboard-component {
 
   img {
     height: 30px;
@@ -14,6 +14,7 @@ bootstrap-navbar[data-name='mobile'] {
   }
 
   .navbar-toggle {
+    display: block;
     float: left;
   }
 
@@ -109,4 +110,5 @@ bootstrap-navbar[data-name='mobile'] {
     padding-bottom: 12px;
     padding-top: 16px;
   }
+
 }

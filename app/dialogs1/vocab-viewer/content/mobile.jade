@@ -41,10 +41,18 @@ gelato-component(data-name='mobile-vocab-viewer-content')
       .row.text-center
         .col-xs-12
           #vocab-reading.vocab-reading= vocab.getReading()
-          .value
-            #vocab-definition
-              if definition
-                span.definition!= definition
+          #vocab-definition
+            if view.editing
+              textarea.definition.edit-textbox= definition
+            else
+              span.definition!= definition || '[ no definition ]'
+
+      .row.edit-row
+        .col-xs-12.text-right
+          if view.editing
+            button#save-vocab.btn.btn-sm.btn-success Save
+          else
+            button#edit-vocab.btn.btn-sm.btn-default Edit
       if app.isAndroid && vocab.isChinese()
         .row.text-center
           .block

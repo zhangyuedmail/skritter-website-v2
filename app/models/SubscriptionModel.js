@@ -1,4 +1,4 @@
-var SkritterModel = require('base/BaseSkritterModel');
+const SkritterModel = require('base/BaseSkritterModel');
 
 /**
  * @class SubscriptionModel
@@ -26,10 +26,31 @@ const SubscriptionModel = SkritterModel.extend({
   },
 
   /**
+   * @method sync
+   * @param {String} method
+   * @param {Model} model
+   * @param {Object} options
+   */
+  sync: function(method, model, options) {
+    options.headers = _.result(this, 'headers');
+
+    if (!options.url) {
+      options.url = app.getApiUrl() + _.result(this, 'url');
+    }
+
+    if (method === 'read' && app.config.useV2Gets.subscriptions) {
+      options.url = app.getApiUrl(2) + 'gae/subscriptions/' + app.user.id;
+    }
+
+    SkritterModel.prototype.sync.call(this, method, model, options);
+  },
+
+  /**
    * @method getStatus
    */
   getStatus: function() {
-    var subscribed = this.get('subscribed');
+    const subscribed = this.get('subscribed');
+
     if (subscribed === 'gplay') {
       return 'Subscribed through Google Play';
     }
@@ -48,7 +69,35 @@ const SubscriptionModel = SkritterModel.extend({
     if (new Date(this.get('expires')).getTime() > new Date().getTime()) {
       return 'Active';
     }
+
     return 'Expired';
+  },
+
+  /**
+   * @method isExpired
+   * @returns {boolean}
+   */
+  isExpired: function() {
+    return this.getStatus() === 'Expired';
+  },
+
+  /**
+   * @method restoreSubscription
+   */
+  restoreSubscription: function() {
+    if (app.isAndroid() && plugins.billing) {
+      plugins.billing.getPurchases('subs')
+        .then(result => {
+          if (result && result.length) {
+              this.set('gplay_subscription', {
+                subscription: result[0].productId,
+                package: result[0].packageName,
+                token: result[0].purchaseToken
+              }).save();
+            }
+          }
+        );
+    }
   }
 
 });

@@ -33,9 +33,9 @@ const VocablistCollection = BaseSkritterCollection.extend({
       options.url = app.getApiUrl() + _.result(this, 'url');
     }
 
-    if (app.config.useV2Gets) {
+    if (method === 'read' && app.config.useV2Gets.vocablists) {
       // options.url = 'https://api.skritter.com/v2/gae/vocablists';
-      options.url = 'http://localhost:3210/v2/gae/vocablists';
+      options.url = app.getApiUrl(2) + 'gae/vocablists';
     }
 
     GelatoCollection.prototype.sync.call(this, method, model, options);

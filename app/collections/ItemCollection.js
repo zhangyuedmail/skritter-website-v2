@@ -72,6 +72,16 @@ const ItemCollection = BaseSkritterCollection.extend({
         callback(error);
       },
       success: function(result) {
+        if (result.Items.length) {
+          const item = new ItemModel(result.Items[0]);
+
+          item._loaded = false;
+          item._queue = true;
+
+          self.unshift(item);
+          self.preloadNext();
+        }
+
         self.addingState = 'standby';
         callback(null, result);
       }
@@ -310,7 +320,7 @@ const ItemCollection = BaseSkritterCollection.extend({
             model._queue = false;
 
             // request to skip item on the server
-            model.skip();
+            // model.skip();
 
             return false;
           }
@@ -321,6 +331,7 @@ const ItemCollection = BaseSkritterCollection.extend({
               model.set('active', false);
               model.bump();
               model.save();
+
               return false;
             }
           }
@@ -459,13 +470,19 @@ const ItemCollection = BaseSkritterCollection.extend({
     }
 
     this.dueCountState = 'fetching';
+    let url = app.getApiUrl() + 'items/due';
+
+    if (app.config.useV2Gets.itemsdue) {
+      url = app.getApiUrl(2) + 'gae/items/due';
+    }
 
     $.ajax({
-      url: app.getApiUrl() + 'items/due',
+      url,
       type: 'GET',
       headers: app.user.session.getHeaders(),
       data: {
         lang: app.getLanguage(),
+        languageCode: app.getLanguage(),
         parts: app.user.getFilteredParts().join(','),
         styles: app.user.getFilteredStyles().join(',')
       },

@@ -43,6 +43,11 @@ const StudyPage = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
+    if (app.config.recordLoadTimes) {
+      this.loadStart = window.performance.now();
+      this.loadAlreadyTimed = false;
+    }
+
     ScreenLoader.show();
 
     Howler.autoSuspend = false;
@@ -342,6 +347,10 @@ const StudyPage = GelatoPage.extend({
 
       ScreenLoader.hide();
 
+      if (app.config.recordLoadTimes) {
+        this._recordLoadTime();
+      }
+
       return;
     }
 
@@ -431,6 +440,20 @@ const StudyPage = GelatoPage.extend({
         );
       }
     );
+  },
+
+  /**
+   * Records the load time for this page once.
+   * @private
+   */
+  _recordLoadTime: function() {
+    if (this.loadAlreadyTimed) {
+      return;
+    }
+
+    this.loadAlreadyTimed = true;
+    const loadTime = window.performance.now() - this.loadStart;
+    app.loadTimes.pages.study.push(loadTime);
   }
 
 });

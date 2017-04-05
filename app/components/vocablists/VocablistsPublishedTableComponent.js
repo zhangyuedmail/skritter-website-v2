@@ -27,6 +27,8 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
    * @constructor
    */
   initialize: function() {
+    const self = this;
+
     this.vocablists = new Vocablists();
     this.listenTo(this.vocablists, 'state', this.render);
     this.vocablists.fetch({
@@ -36,6 +38,9 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
         languageCode: app.getLanguage(),
         limit: 20,
         sort: 'published'
+      },
+      success: function() {
+        self.trigger('component:loaded', 'table');
       }
     });
   },
@@ -93,6 +98,12 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
    */
   searchFor: function(value) {
     if (value) {
+      if (app.config.recordLoadTimes) {
+
+       // we actually want var here because of block scoping stuff.
+       var searchStartTime = window.performance.now();
+      }
+
       this.vocablists.fetch({
         data: {
           include_user_names: 'true',
@@ -101,7 +112,13 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
           sort: 'search',
           q: value
         },
-        remove: true
+        remove: true,
+        success: function() {
+          if (app.config.recordLoadTimes) {
+            const loadTime = window.performance.now() - searchStartTime;
+            app.loadTimes.pages.vocablistsSearch.push(loadTime);
+          }
+        }
       });
     } else {
       this.vocablists.fetch({

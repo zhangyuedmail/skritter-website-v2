@@ -42,6 +42,12 @@ module.exports = {
    */
   recordLoadTimes: true && window.performance,
 
+  /**
+   * Whether to use a local backend instead of production
+   * @type {Boolean}
+   */
+  thinkLocally: '{!application-thinkLocally!}',
+
   timestamp: '{!timestamp!}',
 
   title: '{!application-title!}',
@@ -50,7 +56,15 @@ module.exports = {
    * Whether to use new API v2 GET endpoints
    * @type {Boolean}
    */
-  useV2Gets: false,
+  useV2Gets: {
+    items: false,
+    itemsdue: true,
+    progstats: true,
+    subscriptions: true,
+    users: true,
+    vocablists: false,
+    vocabs: false
+  },
 
   version: '{!application-version!}',
 

@@ -29,7 +29,9 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
     'click #unsubscribe-btn': 'handleClickUnsubscribeButton',
     'click #subscribe-paypal-btn': 'handleClickSubscribePaypalButton',
     'click #send-validation-email-btn': 'handleClickValidationEmailButton',
-    'click #update-school-subscription-btn': 'handleClickSubscribeSchoolButton'
+    'click #update-school-subscription-btn': 'handleClickSubscribeSchoolButton',
+    'click .restore-android': 'handleClickRestoreAndroid',
+    'click .subscribe-android': 'handleClickSubscribeAndroid'
   },
 
   /**
@@ -560,7 +562,7 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
    * @param {Function} callback called when the email has been sent
    */
   sendValidationEmail: function(email, callback) {
-     var validationUrl = app.getApiUrl() + 'email-validation/send';
+    var validationUrl = app.getApiUrl() + 'email-validation/send';
 
     $.ajax({
       url: validationUrl,
@@ -599,6 +601,36 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
     button.attr('disabled', disabled);
     button.find('span').toggleClass('hide', disabled);
     button.find('i').toggleClass('hide', !disabled);
+  },
+
+  handleClickRestoreAndroid: function(event) {
+    var $element = $(event.target);
+
+    if (app.isAndroid()) {
+      app.user.subscription.restoreSubscription();
+    }
+  },
+
+  handleClickSubscribeAndroid: function(event) {
+    var $element = $(event.target);
+    var type = $element.data('type');
+
+    if (app.isAndroid()) {
+      plugins.billing.makePurchase(type, 'subs')
+        .then(
+          function(sub) {
+            if (sub && sub.orderId) {
+              app.user.subscription.set('gplay_subscription', {
+                  subscription: sub.productId,
+                  package: sub.packageName,
+                  token: sub.purchaseToken
+              });
+
+              app.user.subscription.save();
+            }
+          }
+        );
+    }
   },
 
   _handleValidationError: function(error) {

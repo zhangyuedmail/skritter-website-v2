@@ -33,7 +33,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
       options.url = app.getApiUrl() + _.result(this, 'url');
     }
 
-    if (app.config.useV2Gets) {
+    if (method === 'read' && app.config.useV2Gets.progstats) {
       options.url = 'https://api.skritter.com/v2/gae/progstats';
     }
 
@@ -94,7 +94,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
     var dates = [];
     var diff = momentEnd.diff(momentStart, 'days');
 
-    if (diff <= chunkSize || app.config.useV2Gets) {
+    if (diff <= chunkSize || app.config.useV2Gets.progstats) {
       return [
         [momentStart.format('YYYY-MM-DD'), momentEnd.format('YYYY-MM-DD')]
       ];

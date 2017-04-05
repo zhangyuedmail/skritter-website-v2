@@ -36,18 +36,23 @@ const DashboardStatusComponent = GelatoComponent.extend({
    * @method updateDueCount
    */
   updateDueCount: function() {
+    let url = app.getApiUrl() + 'items/due';
+
+    if (app.config.useV2Gets.itemsdue) {
+      url = app.getApiUrl(2) + 'gae/items/due';
+    }
     $.ajax({
-      url: app.getApiUrl() + 'items/due',
+      url: url,
       type: 'GET',
       headers: app.user.session.getHeaders(),
       context: this,
       data: {
         lang: app.getLanguage(),
+        languageCode: app.getLanguage(),
         parts: app.user.getFilteredParts().join(','),
         styles: app.user.getFilteredStyles().join(',')
       },
       error: function(error) {
-        console.log(error);
         this.dueCount = '-';
         this.render();
       },

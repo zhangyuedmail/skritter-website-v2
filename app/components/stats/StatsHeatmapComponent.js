@@ -67,6 +67,11 @@ const StatsHeatmapComponent = GelatoComponent.extend({
       this.collection.getItemsLearnedForPeriod('char', 'month');
     this.$('#items-studied').text(itemsLearned)
       .toggleClass('bad', itemsLearned < 0);
+
+    if (!this.loaded) {
+      this.loaded = true;
+      this.trigger('component:loaded', 'heatmap');
+    }
   }
 
 });

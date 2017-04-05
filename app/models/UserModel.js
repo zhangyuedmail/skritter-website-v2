@@ -81,8 +81,8 @@ const UserModel = SkritterModel.extend({
       options.url = app.getApiUrl() + _.result(this, 'url');
     }
 
-    if (app.config.useV2Gets) {
-      options.url = 'https://api.skritter.com/v2/gae/users/';
+    if (method === 'read' && app.config.useV2Gets.users) {
+      options.url = app.getApiUrl(2) + 'gae/users/';
       // options.url = 'http://localhost:3210/v2/gae/users/';
     }
 
@@ -246,7 +246,9 @@ const UserModel = SkritterModel.extend({
     } else {
       this.subscription.fetch({
         success: function() {
-          callback(self.subscription.getStatus() !== 'Expired');
+          if (_.isFunction(callback)) {
+            callback(self.subscription.getStatus() !== 'Expired');
+          }
         }
       });
     }

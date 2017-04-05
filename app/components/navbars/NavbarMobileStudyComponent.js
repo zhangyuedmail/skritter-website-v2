@@ -19,9 +19,16 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
 
   initialize: function(options) {
     NavbarDefaultComponent.prototype.initialize.apply(this, arguments);
-    this._views['timer'] = new StudyToolbarTimerComponent();
+    this._views['timer'] = new StudyToolbarTimerComponent({
+      showIcon: true
+    });
+    this.page = options.page;
+
+    // todo: fix this
+    this.dueCountOffset = 0;
 
     this.listenTo(vent, 'item:added', this.handleItemAdded);
+    this.listenTo(this.page.items, 'update:due-count', this.handleDueCountUpdated);
   },
 
   /**
@@ -54,6 +61,13 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
 
     vent.trigger('item:add');
     this.$('#add').addClass('adding');
+  },
+
+  /**
+   * Updates the UI to show the due count
+   */
+  handleDueCountUpdated: function() {
+    this.$('.due-count').text(this.page.items.dueCount);
   },
 
   handleItemAdded: function() {
