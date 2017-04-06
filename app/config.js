@@ -60,9 +60,9 @@ module.exports = {
     items: false,
     itemsdue: true,
     progstats: true,
-    subscriptions: true,
+    subscriptions: false, // TODO: https://skritter.atlassian.net/browse/SKRIT-440
     users: true,
-    vocablists: true,
+    vocablists: false, // TODO: https://skritter.atlassian.net/browse/SKRIT-441
     vocabs: false
   },
 
