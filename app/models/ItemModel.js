@@ -261,7 +261,7 @@ const ItemModel = SkritterModel.extend({
     let vocabCharacters = this.getVocab().getCharactersWithoutFillers();
     let loadedCharacters = app.user.characters.pluck('writing');
 
-    return vocabCharacters.length === _.intersection(vocabCharacters, loadedCharacters).length;
+    return _.every(vocabCharacters, character => _.includes(loadedCharacters, character));
   },
 
   /**
