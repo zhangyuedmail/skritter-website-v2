@@ -124,7 +124,9 @@ const VocabModel = SkritterModel.extend({
    * @returns {Array}
    */
   getCharactersWithoutFillers: function() {
-    return _.without(this.get('writing').split(''), app.config.writingFillers);
+    return _.filter(this.get('writing').split(''), writing => {
+      return !_.includes(app.config.writingFillers, writing);
+    });
   },
 
   /**
