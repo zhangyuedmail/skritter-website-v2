@@ -55,10 +55,12 @@ const SentenceModel = GelatoModel.extend({
 
     if (mask !== undefined && typeof mask === 'string') {
       const pieces = mask.split('');
+
       for (let i = 0, length = pieces.length; i < length; i++) {
-        writing = writing.replace(new RegExp(pieces[i], 'g'), '_');
+        writing = writing.replace(new RegExp(_.escapeRegExp(pieces[i]), 'g'), '_');
       }
     }
+
     return writing.replace(/\s+/g, '');
   }
 
