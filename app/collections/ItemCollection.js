@@ -39,7 +39,6 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.dueCountState = 'standby';
     this.fetchingState = 'standby';
     this.preloadingState = 'standby';
-    this.skipped = false;
     this.sorted = null;
   },
 
@@ -314,13 +313,11 @@ const ItemCollection = BaseSkritterCollection.extend({
           if (model.isPartRune() && !model.isCharacterDataLoaded()) {
             console.log('SKIPPING ITEM:', model.id);
 
-            this.skipped = true;
-
             // exclude the rune item from the local queue
             model._queue = false;
 
-            // request to skip item on the server
-            // model.skip();
+            // move the item into future on the server
+            model.bump();
 
             return false;
           }
@@ -328,9 +325,12 @@ const ItemCollection = BaseSkritterCollection.extend({
           if (model.isJapanese()) {
             // skip all kana writings when study kana disabled
             if (!app.user.get('studyKana') && model.isPartRune() && model.isKana()) {
-              model.set('active', false);
+
+              // exclude the rune item from the local queue
+              model._queue = false;
+
+              // move the item into future on the server
               model.bump();
-              model.save();
 
               return false;
             }

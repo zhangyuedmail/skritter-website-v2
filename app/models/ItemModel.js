@@ -39,7 +39,22 @@ const ItemModel = SkritterModel.extend({
    * @returns {ItemModel}
    */
   bump: function() {
-    this.set('next', moment(this.get('next')).add(2, 'weeks').unix());
+    const update = {id: this.id};
+
+    if (!this.get('next') || this.get('next') < moment().unix()) {
+      update.next = moment().add(2, 'weeks').unix();
+    } else {
+      update.next = moment(this.get('next') * 1000).add(2, 'weeks').unix();
+    }
+
+    $.ajax({
+      url: app.getApiUrl() + 'items/' + this.id,
+      type: 'PUT',
+      headers: app.user.session.getHeaders(),
+      data: JSON.stringify(update),
+      success: result => this.set(result.Item, {merge: true})
+    });
+
     return this;
   },
 
