@@ -1,7 +1,6 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='dashboard'] {
-
   background: $background-primary;
   padding-top: 75px;
 
@@ -9,16 +8,20 @@ gelato-page[data-name='dashboard'] {
     height: 300px;
   }
 
-  #turkish-notice {
-    background: $grey7;
-    color: $white5;
-    padding: 15px 25px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-
-    a {
-      float: right;
-    }
+  .feedback-btn {
+    display: inline-block;
+    position: absolute;
+    left: 0px;
+    top: 55px;
+    writing-mode: vertical-lr;
+    text-orientation: inherit;
+    transform: rotate(-180deg);
+    letter-spacing: 1px;
+    padding: 20px 10px;
+    background: #262b30;
+    cursor: pointer;
+    margin-top: 60px;
+    color: #fbfafc;
   }
 
   .content-block {

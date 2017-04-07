@@ -1,6 +1,8 @@
 const GelatoApplication = require('gelato/application');
 const AddVocabDialog = require('dialogs1/add-vocab/view');
 const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
+const ViewDialog = require('dialogs1/view-dialog/view');
+const FeedbackComponent = require('components/common/FeedbackComponent');
 
 const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
 const MobileNavbar = require('components/navbars/NavbarMobileComponent');
@@ -698,6 +700,22 @@ module.exports = GelatoApplication.extend({
     if (processImmediately) {
       this.processUserReferral();
     }
+  },
+
+  /**
+   * Shows a simple dialog the user can send us feedback through.
+   */
+  showFeedbackDialog: function() {
+    if (!this.feedbackDialog) {
+      this.feedbackDailog = new ViewDialog({
+        content: FeedbackComponent,
+        showCloseButton: true,
+        showTitle: true,
+        dialogTitle: 'Leave us feedback'
+      });
+    }
+
+    this.feedbackDailog.open();
   },
 
   /**
