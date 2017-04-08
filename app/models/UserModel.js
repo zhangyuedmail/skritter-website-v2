@@ -23,6 +23,7 @@ const UserModel = SkritterModel.extend({
     allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     allJapaneseParts: ['defn', 'rdng', 'rune'],
     dailyItemAddingLimit: 20,
+    disabled: false,
     filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     filteredJapaneseParts: ['defn', 'rdng', 'rune'],
     hideDefinition: false,
@@ -87,6 +88,14 @@ const UserModel = SkritterModel.extend({
     }
 
     GelatoCollection.prototype.sync.call(this, method, model, options);
+  },
+
+  validate: function() {
+
+    // because the backend checks for data it didn't
+    if (typeof this.get('disabled') !== 'boolean') {
+      this.set('disabled', Boolean(this.get('disabled')));
+    }
   },
 
   /**

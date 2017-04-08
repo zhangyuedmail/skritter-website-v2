@@ -52,7 +52,7 @@ const VocablistModel = SkritterModel.extend({
       options.url = app.getApiUrl() + _.result(this, 'url');
     }
 
-    if (app.config.useV2Gets.vocablists) {
+    if (method === 'read' && app.config.useV2Gets.vocablists) {
       options.url = app.getApiUrl(2) + 'gae/vocablists/' + this.id;
     }
 
@@ -68,7 +68,7 @@ const VocablistModel = SkritterModel.extend({
       !this.get('disabled'),
       !this.get('published'),
       this.get('sort') === 'custom',
-      this.get('user') === app.user.id
+      (this.get('user') || this.get('creator')) === app.user.id
     ]);
   },
 
@@ -81,6 +81,21 @@ const VocablistModel = SkritterModel.extend({
       !this.get('disabled'),
       this.get('sort') !== 'chinesepod-lesson'
     ]);
+  },
+
+  /**
+   * Gets the changed date and presents it in a nice format.
+   * @returns {String} a UI-printable representation of the publish date
+   */
+  getFormattedChangedDate: function(format) {
+    format = format || 'l';
+    let changed = moment(this.get('changed') * 1000);
+
+    if (app.config.useV2Gets.vocablists) {
+      changed = moment(this.get('changed'));
+    }
+
+    return changed.format(format);
   },
 
   /**

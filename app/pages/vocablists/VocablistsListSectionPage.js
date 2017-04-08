@@ -1,8 +1,8 @@
-var GelatoPage = require('gelato/page');
-var EditorRows = require('components/vocablists/VocablistsRowEditorComponent');
-var Vocablist = require('models/VocablistModel');
-var VocablistSection = require('models/VocablistSectionModel');
-var ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
+const GelatoPage = require('gelato/page');
+const EditorRows = require('components/vocablists/VocablistsRowEditorComponent');
+const Vocablist = require('models/VocablistModel');
+const VocablistSection = require('models/VocablistSectionModel');
+const ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
 
 /**
  * @class VocablistsListSectionPage
@@ -39,10 +39,21 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function(options) {
-    this.editing = false;
+    this.editing = options.editMode || false;
+
     this.vocablist = new Vocablist({id: options.vocablistId});
-    this.vocablistSection = new VocablistSection({vocablistId: options.vocablistId, id: options.sectionId});
-    this.editor = new EditorRows({vocablist: this.vocablist, vocablistSection: this.vocablistSection});
+
+    this.vocablistSection = new VocablistSection({
+      vocablistId: options.vocablistId,
+      id: options.sectionId
+    });
+
+    this.editor = new EditorRows({
+      vocablist: this.vocablist,
+      vocablistSection: this.vocablistSection,
+      editing: this.editing
+    });
+
     async.series([
       _.bind(function(callback) {
         this.vocablist.fetch({
