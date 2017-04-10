@@ -60,9 +60,9 @@ module.exports = {
     items: false,
     itemsdue: true,
     progstats: true,
-    subscriptions: true,
+    subscriptions: false,
     users: true,
-    vocablists: true,
+    vocablists: false,
     vocabs: false
   },
 
