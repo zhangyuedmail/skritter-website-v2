@@ -60,6 +60,8 @@ const LoginPage = GelatoPage.extend({
 
     this.renderTemplate();
 
+    this.$('#login-username').focus();
+
     return this;
   },
 
