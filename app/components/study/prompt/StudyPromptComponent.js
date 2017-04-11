@@ -158,6 +158,8 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     this.toolbarVocab.disableEditing();
 
+    vent.trigger('prompt-part:rendered', this.reviews);
+
     return this;
   },
 
@@ -189,6 +191,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     } else {
       this.reviews.next();
       this.trigger('reviews:next', this.reviews);
+      vent.trigger('reviews:next', this.reviews);
       this.renderPart();
     }
   },

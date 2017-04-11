@@ -289,8 +289,6 @@ const StudyPage = GelatoPage.extend({
         this.toolbar.dueCountOffset++;
       }
 
-      this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
-
       this.currentItem._queue = false;
       this.currentPromptItems = null;
       this.previousPromptItems = promptItems;

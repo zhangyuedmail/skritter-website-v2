@@ -1,4 +1,5 @@
 const GelatoModel = require('gelato/model');
+const vent = require('vent');
 
 /**
  * @class PromptItemModel
@@ -166,13 +167,17 @@ const PromptItemModel = GelatoModel.extend({
    * @returns {PromptItemModel}
    */
   start: function() {
+    const now = Date.now();
+
     if (this.get('reviewingStart') === 0) {
-      var now = Date.now();
       this.set({
         reviewingStart: now,
         submitTime: now / 1000
       });
     }
+
+    vent.trigger('item:start', this, now);
+
     return this;
   },
 
@@ -181,9 +186,13 @@ const PromptItemModel = GelatoModel.extend({
    * @returns {PromptItemModel}
    */
   stop: function() {
-    var timestamp = new Date().getTime();
+    const timestamp = new Date().getTime();
+
     this.stopReviewing(timestamp);
     this.stopThinking(timestamp);
+
+    vent.trigger('item:stop', this, timestamp);
+
     return this;
   },
 

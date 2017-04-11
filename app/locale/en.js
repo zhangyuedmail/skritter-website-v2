@@ -224,7 +224,7 @@ module.exports = {
     },
 
     "study": {
-      "timerDescription": "The timer updates every time you complete a prompt, with a maximum time of 30 seconds per prompt.",
+      "timerDescription": "The timer has a time limit of 30 seconds per prompt.",
       "menmonicSelectorDialogTitle": "Select a mnemonic or write your own",
       "mnemonicLabel": "Mnemonic",
       "mnemonicAdd": "Add a mnemonic",
