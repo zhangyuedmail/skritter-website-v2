@@ -7,6 +7,7 @@ gelato-component(data-name='mobile-vocab-viewer-content')
     - var differentAltVocab = altVocab && altVocab !== vocab;
     - var containingVocabs = view.getContainingCharacters();
     - var containingWords = view.getContainingWords();
+    - var decomp = vocab.getDecomp();
     - var definition = vocab.getDefinition();
     - var mnemonic = vocab.getMnemonic();
     - var sentence = vocab.getSentence();
@@ -68,6 +69,20 @@ gelato-component(data-name='mobile-vocab-viewer-content')
               img#hanping-yue-icon.dict-icon(src='media/images/icon-hanping-yue.png')
 
     #content-section
+      .row
+        if decomp
+          .block
+            .header Decomposition of #{vocab.get('writing')}
+            .value
+              #vocab-decomps
+                for child in decomp.get('Children')
+                  div
+                    span.spr= child.writing
+                    span.spr= vocab.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                    span.spr :
+                    if app.user.get('showHeisig') && child.heisigDefinition
+                      em= child.heisigDefinition + ' - '
+                    span= child.definitions.en
       .row
         if containingVocabs.length > 1
           .block

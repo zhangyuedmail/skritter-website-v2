@@ -6,6 +6,7 @@ gelato-component(data-name='vocab-viewer-content')
     - var altVocab = vocab.getWritingDifference();
     - var containingVocabs = view.getContainingCharacters();
     - var containingWords = view.getContainingWords();
+    - var decomp = vocab.getDecomp();
     - var definition = vocab.getDefinition();
     - var mnemonic = vocab.getMnemonic();
     - var sentence = vocab.getSentence();
@@ -77,6 +78,19 @@ gelato-component(data-name='vocab-viewer-content')
                   td.item-ban
                     button.btn.btn-xs.btn-danger Ban
       #panel-right
+        if decomp
+          .block
+            .header Decomposition of #{vocab.get('writing')}
+            .value
+              #vocab-decomps
+                for child in decomp.get('Children')
+                  div
+                    span.spr= child.writing
+                    span.spr= vocab.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                    span.spr :
+                    if app.user.get('showHeisig') && child.heisigDefinition
+                      em= child.heisigDefinition + ' - '
+                    span= child.definitions.en
         if containingWords.length > 1
           .block
             .header Words containing #{vocab.get('writing')}
