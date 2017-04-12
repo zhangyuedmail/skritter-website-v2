@@ -41,10 +41,18 @@ const VocabViewerContentComponent = GelatoComponent.extend({
   handleClickSaveVocab: function(event) {
     event.preventDefault();
 
-    this.vocab.set('customDefinition', this.$('#vocab-definition .definition').val());
+    const definitionText = this.$('#vocab-definition .definition').val() || '';
+    const mnemonicText = this.$('#vocab-mnemonic .mnemonic').val() || '';
+
+    this.vocab.set({
+      customDefinition: definitionText,
+      mnemonic: {public: false, text: mnemonicText}
+    });
+
     this.vocab.save();
 
     this.editing = false;
+
     this.render();
   },
 

@@ -46,14 +46,17 @@ gelato-component(data-name='mobile-vocab-viewer-content')
             if view.editing
               textarea.definition.edit-textbox= definition
             else
-              span.definition!= definition || '[ no definition ]'
+              if definition
+                span.definition!= definition
+              else
+                em.defintion Click the 'edit' icon to add a definition
 
       .row.edit-row
         .col-xs-12.text-right
           if view.editing
-            button#save-vocab.btn.btn-sm.btn-success Save
+            i#save-vocab.fa.fa-2x.fa-save
           else
-            button#edit-vocab.btn.btn-sm.btn-default Edit
+            i#edit-vocab.fa.fa-2x.fa-pencil-square-o
       if app.isAndroid && vocab.isChinese()
         .row.text-center
           .block
@@ -70,8 +73,30 @@ gelato-component(data-name='mobile-vocab-viewer-content')
 
     #content-section
 
+      if sentence
+        .row
+          .block
+            .header Example sentence
+            .value
+              #vocab-sentence
+                if sentence
+                  span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
+
       .row
-        if decomp
+        .block
+          .header Mnemonic
+          .value
+            #vocab-mnemonic
+              if view.editing
+                textarea.mnemonic.edit-textbox= mnemonic ? mnemonic.text : ''
+              else
+                if mnemonic && mnemonic.text != ''
+                  span!= app.fn.textToHTML(mnemonic.text)
+                else
+                  em Click the 'edit' icon to add a mnemonic
+
+      if decomp
+        .row
           .block
             .header Decomposition of #{vocab.get('writing')}
             .value
@@ -85,8 +110,8 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                       em= child.heisigDefinition + ' - '
                     span= child.definitions.en
 
-      .row
-        if containingVocabs.length > 1
+      if containingVocabs.length > 1
+        .row
           .block
             .header.contained-header Characters contained #{vocab.get('writing')}
             .value
@@ -99,36 +124,20 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                       span.spr :
                       span.definition= model.getDefinition()
 
-      if sentence
-        .row
-          .block
-            .header Example sentence
-            .value
-              #vocab-sentence
-                if sentence
-                  span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
-
-        if mnemonic
-          .block
-            .header Mnemonic
-            .value
-              #vocab-mnemonic
-                span!= app.fn.textToHTML(mnemonic.text)
-
-        if containingWords.length > 1
-          .block
-            .header Words containing #{vocab.get('writing')}
-            .value
-              #vocab-words-containing.vocab-words-containing
-                for model in containingWords
-                  div
-                    span.spr.writing(class=model.getFontClass())= model.get('writing')
-                    span.spr.reading= model.getReading()
-                    span.spr :
-                    span.definition= model.getDefinition()
-              if containingWords.length > 3
-                - var remainingContainedWords = containingWords.length - 3;
-                #show-more-contained.text-center Show all #{remainingContainedWords} words
+      if containingWords.length > 1
+        .block
+          .header Words containing #{vocab.get('writing')}
+          .value
+            #vocab-words-containing.vocab-words-containing
+              for model in containingWords
+                div
+                  span.spr.writing(class=model.getFontClass())= model.get('writing')
+                  span.spr.reading= model.getReading()
+                  span.spr :
+                  span.definition= model.getDefinition()
+            if containingWords.length > 3
+              - var remainingContainedWords = containingWords.length - 3;
+              #show-more-contained.text-center Show all #{remainingContainedWords} words
 
         .block
           .header Dictionary

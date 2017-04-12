@@ -11,7 +11,6 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
   }
 
   .edit-textbox {
-    margin-top: 15px;
     width: 100%;
   }
 
@@ -96,6 +95,8 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
 
     .edit-row {
       bottom: 10px;
+      color: $green5;
+      padding-right: 15px;
       position: absolute;
       width: 100%;
     }
@@ -123,7 +124,7 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
 
     .definition {
       margin-bottom: 30px;
-      margin-top: 15px;
+      margin-top: 30px;
       display: block;
     }
 
@@ -158,6 +159,10 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
 
     .alt-writing {
       color: $grey3;
+    }
+
+    #vocab-definition {
+      margin-top: 15px;
     }
   }
 
