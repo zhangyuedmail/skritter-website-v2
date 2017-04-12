@@ -1,10 +1,10 @@
-var GelatoDialog = require('gelato/dialog');
+const GelatoDialog = require('gelato/dialog');
 
 /**
  * @class ConfirmGenericConfirm
  * @extends {GelatoDialog}
  */
-var ConfirmGenericConfirm = GelatoDialog.extend({
+const ConfirmGenericConfirm = GelatoDialog.extend({
 
   /**
    * @method initialize
@@ -13,6 +13,7 @@ var ConfirmGenericConfirm = GelatoDialog.extend({
   initialize: function(options) {
     options = options || {};
     this.dialogBody = options.body || '';
+    this.showButtonCancel = !_.isUndefined(options.showButtonCancel) ? options.showButtonCancel : true;
     this.dialogButtonCancel = options.buttonCancel || app.locale('common.cancel');
     this.dialogButtonConfirm = options.buttonConfirm || app.locale('common.confirm');
     this.dialogButtonConfirmClass = options.buttonConfirmClass || 'btn-danger';

@@ -118,7 +118,8 @@ const AccountSetupPage = GelatoPage.extend({
           ScreenLoader.hide();
         },
         success: function() {
-          app.router.navigate('dashboard');
+          app.setSetting('newuser-' + app.user.id, true);
+          app.router.navigate('vocablists/browse');
           app.reload();
         }
       }

@@ -238,6 +238,7 @@ module.exports = {
       "titleCpod": "ChinesePod - Skritter",
       "titlePublished": "Published Lists - Skritter",
       "titleQueue": "Queue - Skritter",
+      "adding": "Adding...",
       "addSection": "Add section",
       "addToQueue": "Add to queue",
       "addingWordsFrom": "Adding words from",
@@ -249,6 +250,7 @@ module.exports = {
       "deleted": "deleted",
       "dontResetLists": "Don't Reset Lists",
       "enterDescription": "Enter a description here",
+      "errorAddingList": "Something went wrong and the list couldn't be added. Please try again.",
       "export": "Export",
       "history": "History",
       "publish": "Publish",
@@ -257,7 +259,16 @@ module.exports = {
       "resetting": "Resetting lists...",
       "reviewingWordsFrom": "Reviewing words from",
       "status": "Status",
-      "studyNow": "Study Now"
+      "studyNow": "Study Now",
+      "newUserBrowseDialogTitle": "Get started: Add a list",
+      "newUserBrowseDialogWelcomezh": "<p>欢迎! ",
+      "newUserBrowseDialogWelcomezhTrad": "<p>歡迎! ",
+      "newUserBrowseDialogWelcomeja": "<p>ようこそ! ",
+      "newUserBrowseDialogDescription": "Welcome! Skritter works by helping you to learn words from lists you are studying. Just pick a list you want to study and press the <b>Add to queue</b> button to start learning from it.</p><p>In this section, you'll see lists the Skritter team has curated, which cover some of our most popular learning resources, like ",
+      "newUserBrowseDialogDescriptionTextbooksja": "<b>Genki</b> or <b>JLPT</b>.",
+      "newUserBrowseDialogDescriptionTextbookszh": "<b>Integrated Chinese</b>, <b>HSK</b>, or <b>TOCFL</b>.</p>",
+      "newUserBrowseDialogDescription2": "<p>Additionally, other users like you have published thousands of lists on every topic imaginable! Go to the 'Published Lists' section to take a look.</p>",
+      "newUserBrowseDialogConfirm": "Got it!",
     }
   },
 
