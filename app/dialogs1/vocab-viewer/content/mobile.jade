@@ -69,6 +69,7 @@ gelato-component(data-name='mobile-vocab-viewer-content')
               img#hanping-yue-icon.dict-icon(src='media/images/icon-hanping-yue.png')
 
     #content-section
+
       .row
         if decomp
           .block
@@ -83,6 +84,7 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                     if app.user.get('showHeisig') && child.heisigDefinition
                       em= child.heisigDefinition + ' - '
                     span= child.definitions.en
+
       .row
         if containingVocabs.length > 1
           .block
@@ -96,19 +98,23 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                       span.spr.reading= model.getReading()
                       span.spr :
                       span.definition= model.getDefinition()
-      .row
-        .block
-          .header Example sentence
-          .value
-            #vocab-sentence
-              if sentence
-                span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
+
+      if sentence
+        .row
+          .block
+            .header Example sentence
+            .value
+              #vocab-sentence
+                if sentence
+                  span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
+
         if mnemonic
           .block
             .header Mnemonic
             .value
               #vocab-mnemonic
                 span!= app.fn.textToHTML(mnemonic.text)
+
         if containingWords.length > 1
           .block
             .header Words containing #{vocab.get('writing')}
