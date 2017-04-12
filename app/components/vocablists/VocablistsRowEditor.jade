@@ -95,14 +95,13 @@ gelato-component(data-name='vocablists-list-editor-rows')
             | &nbsp;&nbsp;
             span= 'searching for ' + row.query
 
-  if vocablistSection.state === 'standby'
-    .row
-      .col-xs-1.row-header
-      .col-xs-2.row-header.writing Writing
-      .col-xs-2.row-header
-      .col-xs-2.row-header.reading Reading
-      .col-xs-3.row-header.definition Definition
-      .col-xs-2.row-header
-    #vocablist-section-rows
-      for row, index in rows
-        +wordRow(row, index)
+  .row
+    .col-xs-1.row-header
+    .col-xs-2.row-header.writing Writing
+    .col-xs-2.row-header
+    .col-xs-2.row-header.reading Reading
+    .col-xs-3.row-header.definition Definition
+    .col-xs-2.row-header
+  #vocablist-section-rows
+    for row, index in rows
+      +wordRow(row, index)

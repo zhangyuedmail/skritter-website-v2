@@ -87,6 +87,7 @@ module.exports = GelatoPage.extend({
       }, this)
     ], _.bind(function(error) {
       this.listenTo(this.vocablist, 'state:standby', this.handleVocablistState);
+      this.listenTo(this.vocablistSection, 'state:standby', this.handleVocablistSectionState);
       this.render();
     }, this));
   },
@@ -225,6 +226,13 @@ module.exports = GelatoPage.extend({
    * @method handleVocablistState
    */
   handleVocablistState: function() {
+    this.render();
+  },
+
+  /**
+   * @method handleVocablistState
+   */
+  handleVocablistSectionState: function() {
     this.render();
   },
 
