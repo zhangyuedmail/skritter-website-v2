@@ -218,6 +218,8 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
       this.time = totalRunningTime;
       this.seconds = totalRunningSeconds;
 
+      console.log(this.time);
+
       this.$('#time').text(app.fn.convertTimeToClock(this.time));
     }
   }

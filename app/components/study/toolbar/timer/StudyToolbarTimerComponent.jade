@@ -1,11 +1,7 @@
 gelato-component(data-name='study-toolbar-timer')
 
-  if view.time
-    span.hover-tooltip
-      span#time= app.fn.convertTimeToClock(view.time)
-      span.tooltip-text= app.locale('pages.study.timerDescription')
-  else
-    span.hover-tooltip 00:00
-      span.tooltip-text= app.locale('pages.study.timerDescription')
+  span#time.hover-tooltip 00:00
+    span.tooltip-text= app.locale('pages.study.timerDescription')
+
   if view.showIcon
     span.fa.fa-clock-o
