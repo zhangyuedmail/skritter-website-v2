@@ -104,6 +104,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
     const target = $(event.currentTarget);
     const listId = target.data('vocablist-id');
     const vocablist = this.vocablists.get(listId);
+
     if (vocablist.get('studyingMode') === 'not studying' && !this._adding) {
       this._adding = true;
       vocablist.justAdded = true;
@@ -114,7 +115,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
         success: function() {
           if (app.getSetting('newuser-' + app.user.id)) {
             app.getSetting('newuser-' + app.user.id, false);
-            app.router.navigate('study');
+            app.router.navigateStudy();
           } else {
             self.render();
           }
@@ -126,7 +127,6 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
           });
         }
       });
-
     }
   },
 
