@@ -43,6 +43,8 @@ module.exports = GelatoPage.extend({
   render: function() {
     this.renderTemplate();
 
+    this.$('#name').focus();
+
     return this;
   },
 

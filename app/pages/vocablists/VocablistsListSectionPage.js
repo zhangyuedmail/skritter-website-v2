@@ -86,6 +86,10 @@ module.exports = GelatoPage.extend({
         });
       }, this)
     ], _.bind(function(error) {
+      if (!this.vocablistSection.get('rows').length) {
+        this.editor.editing = true;
+      }
+
       this.listenTo(this.vocablist, 'state:standby', this.handleVocablistState);
       this.listenTo(this.vocablistSection, 'state:standby', this.handleVocablistSectionState);
       this.render();
@@ -103,9 +107,15 @@ module.exports = GelatoPage.extend({
 
     this.renderTemplate();
     this.editor.setElement('#editor-container').render();
+
     if (this.vocablist.has('name')) {
       document.title = this.vocablist.get('name') + ' - Vocablist - Skritter';
     }
+
+    if (!app.isMobile() && this.editor.editing) {
+      this.$('#add-input').focus();
+    }
+
     return this;
   },
 
@@ -134,17 +144,30 @@ module.exports = GelatoPage.extend({
   },
 
   /**
+   * Handles when the user clicks the cancel button. If there are rows,
+   * shows a confirmation popup.
    * @method handleClickDiscardChanges
    * @param {Event} event
    */
   handleClickDiscardChanges: function(event) {
-    var self = this;
+    const self = this;
     event.preventDefault();
+
+    const rows = this.editor.getRows();
+
+    if (!rows.length) {
+      this.editor.editing = false;
+      this.editor.discardChanges();
+      this.render();
+      return;
+    }
+
     this.dialog = new ConfirmGenericDialog({
       body: 'This will discard all unsaved changes this current list section.',
       buttonConfirm: 'Discard',
       title: 'Discard all changes?'
     });
+
     this.dialog.once(
       'confirm',
       function() {
@@ -174,16 +197,44 @@ module.exports = GelatoPage.extend({
   },
 
   /**
+   * Handles when the user clicks on the save button.
+   * Gets the rows and saves them to the server. Disables input while doing so.
    * @method handleClickSaveChanges
    * @param {Event} event
    */
   handleClickSaveChanges: function(event) {
     event.preventDefault();
-    this.editor.editing = false;
-    this.editor.rows = this.editor.getRows();
+    const self = this;
+
+    const rows = this.editor.getRows();
+    this.editor.rows = rows;
+
+    if (!rows.length) {
+      this.editor.editing = false;
+      this.render();
+      return;
+    }
+
     this.vocablistSection.set('name', this.$('#section-name').val());
     this.vocablistSection.set('rows', this.editor.rows);
-    this.vocablistSection.save();
+
+    this.toggleInputs();
+    this.vocablistSection.save(null, {
+      success: function() {
+        self.editor.editing = false;
+        self.render();
+        app.notifyUser({
+          message: self.vocablistSection.get('name') + ' ' + app.locale('pages.vocabLists.successSavingSection'),
+          type: 'pastel-success'
+        });
+      },
+      error: function() {
+        self.toggleInputs(true);
+        app.notifyUser({
+          message: app.locale('pages.vocabLists.errorSavingSection')
+        });
+      }
+    });
 
     //remove all results button
     _.forEach(
@@ -192,8 +243,6 @@ module.exports = GelatoPage.extend({
         delete row.results;
       }
     );
-
-    this.render();
   },
 
   /**
@@ -243,6 +292,18 @@ module.exports = GelatoPage.extend({
   remove: function() {
     this.editor.remove();
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 
+  /**
+   * Toggles the enabled/disabled state of the inputs and buttons on the editor
+   * @param {boolean} [enabled] whether to enable the inputs
+   */
+  toggleInputs: function(enabled) {
+    this.$('button').prop('disabled', !enabled);
+    this.$('#section-name').prop('disabled', !enabled);
+    this.$('#add-input').prop('disabled', !enabled);
+
+    // always leave the cancel button enabled to make the user feel good
+    this.$('#discard-changes').prop('disabled', false);
+  }
 });

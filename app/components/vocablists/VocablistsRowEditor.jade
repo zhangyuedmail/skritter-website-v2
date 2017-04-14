@@ -105,3 +105,5 @@ gelato-component(data-name='vocablists-list-editor-rows')
   #vocablist-section-rows
     for row, index in rows
       +wordRow(row, index)
+    if !view.editing && !rows.length
+      div.empty-msg= app.locale('pages.vocabLists.sectionEmptyMsg')
