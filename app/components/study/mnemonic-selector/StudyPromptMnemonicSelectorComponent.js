@@ -212,11 +212,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    */
   setVocab: function(vocab) {
     this.collection.setVocab(vocab);
-    this.collection.fetch({
-      success: function(collection, res) {
-        console.log(res);
-      }
-    });
+    this.collection.fetch();
   },
 
   /**

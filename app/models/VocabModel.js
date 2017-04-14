@@ -89,7 +89,6 @@ const VocabModel = SkritterModel.extend({
         type: 'GET',
         headers: app.user.session.getHeaders(),
         error: function(error) {
-          console.log(error);
           reject();
         },
         success: function(sentence) {
