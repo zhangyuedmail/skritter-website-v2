@@ -65,6 +65,16 @@ gelato-page(data-name='mobile-vocablists-list')
                 span.spr Words:
                 span= vocablist.getWordCount()
 
+              .study-options
+                if vocablist.get('studyingMode') === 'not studying'
+                  a#add-to-queue(href="#")
+                    i.glyphicon.glyphicon-plus-sign
+                    span.spl Add to queue
+                else
+                  a(href="/study/" + vocablist.id)
+                    i.glyphicon.glyphicon-play-circle
+                    span.spl Study
+
               if view.editing
                 textarea.list-description(placeholder=app.locale('pages.vocabLists.enterDescription'))= vocablist.get('description')
               else

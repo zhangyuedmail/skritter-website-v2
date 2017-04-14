@@ -19,6 +19,7 @@ module.exports = GelatoPage.extend({
    * @type {Object}
    */
   events: {
+    'click #add-to-queue': 'handleClickAddToQueue',
     'click #add-section': 'handleClickAddSection',
     'click #discard-changes': 'handleClickDiscardChanges',
     'click #edit-list': 'handleClickEditList',
@@ -137,6 +138,18 @@ module.exports = GelatoPage.extend({
       });
     } else {
       callback();
+    }
+  },
+
+  /**
+   * @method handleClickAddToQueue
+   * @param {Event} event
+   */
+  handleClickAddToQueue: function(event) {
+    event.preventDefault();
+    if (this.vocablist.get('studyingMode') === 'not studying') {
+      this.vocablist.save({'studyingMode': 'adding'}, {patch: true});
+      this.render();
     }
   },
 
