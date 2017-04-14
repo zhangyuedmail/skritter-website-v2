@@ -9,9 +9,12 @@ gelato-component(data-name='vocablists-adding-table')
         .progress
           .progress-bar(style="width:" + (list.getProgress().percent) + '%')
 
-      .col-md-2.text-center
+      .col-md-1.text-center
         .stop-adding-link
           i.glyphicon.glyphicon-pause
+
+      .col-md-1.text-center
+        a(href="/study/" + list.id) Study
 
       .col-md-1.text-center
         .list-settings-span
