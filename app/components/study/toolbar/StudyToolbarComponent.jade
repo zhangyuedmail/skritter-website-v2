@@ -2,14 +2,18 @@ gelato-component(data-name='study-toolbar')
   - var page = view.page;
 
   .row
+
     .col-xs-4.text-left
       if page.vocablist
         .vocablist-name= page.vocablist.get('name')
+        #due-count.vocablist-due= view.getDueCountWithOffset() + ' items due'
       else
         span#due-count= view.getDueCountWithOffset()
         span.spl items due
+
     .col-xs-4.text-center
       #timer-container
+
     .col-xs-4.text-right
       if page.items
         i#button-add-item.fa.fa-plus-circle.hover-enlarge

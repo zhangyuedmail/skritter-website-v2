@@ -160,6 +160,7 @@ const StudyListPage = GelatoPage.extend({
   checkRequirements: function() {
     ScreenLoader.post('Preparing study');
 
+    this.items.listId = this.vocablist.id;
     this.items.updateDueCount();
 
     async.parallel(

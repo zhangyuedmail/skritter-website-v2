@@ -38,6 +38,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.dueCount = 0;
     this.dueCountState = 'standby';
     this.fetchingState = 'standby';
+    this.listId = null;
     this.preloadingState = 'standby';
     this.sorted = null;
   },
@@ -470,6 +471,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     }
 
     this.dueCountState = 'fetching';
+
     let url = app.getApiUrl() + 'items/due';
 
     if (app.config.useV2Gets.itemsdue) {
@@ -483,6 +485,7 @@ const ItemCollection = BaseSkritterCollection.extend({
       data: {
         lang: app.getLanguage(),
         languageCode: app.getLanguage(),
+        lists: this.listId,
         parts: app.user.getFilteredParts().join(','),
         styles: app.user.getFilteredStyles().join(',')
       },
@@ -494,11 +497,7 @@ const ItemCollection = BaseSkritterCollection.extend({
       success: (result) => {
         let count = 0;
 
-        for (let part in result.due) {
-          for (let style in result.due[part]) {
-            count += result.due[part][style];
-          }
-        }
+        _.forIn(result.due, part => _.forIn(part, style => count += style));
 
         this.dueCount =  count;
         this.dueCountState = 'standby';
