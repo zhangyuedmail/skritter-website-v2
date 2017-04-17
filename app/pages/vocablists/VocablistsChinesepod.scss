@@ -18,7 +18,21 @@ gelato-page[data-name='vocablists-chinesepod'] {
     margin-bottom: 20px;
 
     label {
+      cursor: pointer;
       margin-right: 20px;
+    }
+  }
+
+  .title-wrapper {
+    margin-bottom: 25px;
+
+    .title {
+      margin-bottom: 0px;
+    }
+
+    .explaination {
+      color: $grey3;
+      font-size: 16px;
     }
   }
 

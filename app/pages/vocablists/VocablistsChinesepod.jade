@@ -6,8 +6,11 @@ gelato-page(data-name='vocablists-chinesepod')
         .col-md-3.sidebar
           #vocablist-sidebar-container
         .col-md-9.main-content
-          .title ChinesePod
-
+          .title-wrapper
+            .title ChinesePod Lists
+            .explaination These are vocab lists to accompany specific
+              a(href="https://chinesepod.com/", target="_blank") &nbsp;ChinesePod&nbsp;
+              | lessons
           if view.chinesepodSession.state === 'fetching'
             p.text-center
               i.fa.fa-5x.fa-spinner.fa-pulse
