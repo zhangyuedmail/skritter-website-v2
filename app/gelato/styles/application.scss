@@ -156,6 +156,10 @@ gelato-application {
 
         .container {
           padding: 0;
+
+          .content-block {
+            border-radius: 0;
+          }
         }
       }
     }
