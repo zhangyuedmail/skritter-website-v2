@@ -176,7 +176,7 @@ const StudyListPage = GelatoPage.extend({
           });
         },
         (callback) => {
-          this.items.fetchNext({limit: 50, lists: this.vocablist.id})
+          this.items.fetchNext({limit: 30, lists: this.vocablist.id})
             .catch(callback)
             .then(callback);
         },
@@ -295,7 +295,7 @@ const StudyListPage = GelatoPage.extend({
       this.prompt.$panelLeft.css('pointer-events', 'none');
       this.prompt.$panelRight.css('pointer-events', 'none');
       this.items.reviews.post({skip: 1});
-      this.items.fetchNext({limit: 50, lists: this.vocablist.id});
+      this.items.fetchNext({limit: 30, lists: this.vocablist.id});
 
       return;
     }
@@ -337,7 +337,7 @@ const StudyListPage = GelatoPage.extend({
       this.prompt.$panelLeft.css('pointer-events', 'none');
       this.prompt.$panelRight.css('pointer-events', 'none');
       this.items.reviews.post({skip: 1});
-      this.items.fetchNext({limit: 50});
+      this.items.fetchNext({limit: 30});
       return;
     }
 
