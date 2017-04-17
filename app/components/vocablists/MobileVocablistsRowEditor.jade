@@ -1,0 +1,109 @@
+gelato-component(data-name='vocablists-list-editor-rows')
+  - var rows = view.rows;
+  - var vocablist = view.vocablist;
+  - var vocablistSection = view.vocablistSection;
+  - var onlyStudyingTradChinese = app.isChinese() && app.user.get('reviewTraditional') && !app.user.get('reviewSimplified');
+
+  mixin wordRow(row, index)
+    - var classes = [];
+
+    if row.banned
+      - classes.push('banned');
+
+    if index % 2
+      - classes.push('even');
+    else
+      - classes.push('odd');
+
+    if view.editing
+      - classes.push('editing')
+
+    .row(class=classes.join(' '), data-index=index, data-row-id=row.id)
+      case row.state
+
+        when 'loaded'
+          if row.vocabs.length
+            - var vocab1 = row.vocabs[0];
+            - var vocab2 = row.vocabs[1];
+            - var hasWritingDiff = vocab1.getWritingDifference(vocab2.id);
+
+            .col-xs-1
+              if view.editing && vocablist.isEditable()
+                i.fa.fa-ellipsis-v.ellipse-icon
+
+            .col-xs-2.vocab-writing
+              if onlyStudyingTradChinese && hasWritingDiff
+                span(class=vocab1.getFontClass())= vocab1.getWritingDifference(vocab2.id)
+              else
+                span(class=vocab1.getFontClass())= vocab1.get('writing')
+
+            .col-xs-2.vocab-writing
+              if vocab1.isChinese()
+                if onlyStudyingTradChinese
+                  if hasWritingDiff
+                    span(class=vocab1.getFontClass())= vocab1.get('writing')
+                  else
+                    span(class=vocab1.getFontClass()) -
+                else
+                  span(class=vocab1.getFontClass())= vocab1.getWritingDifference(vocab2.id) || '-'
+              if vocab1.isJapanese()
+                span.study-writing(class=row.studyWriting ? 'active' : '') W
+
+            .col-xs-2.vocab-reading= vocab1.getReading()
+
+            .col-xs-3.vocab-definition!= vocab1.getDefinition()
+
+            .col-xs-2.vocab-options.text-right
+              if row.results && row.results.length > 1
+                button.show-results.btn.btn-sm.btn-info All Results
+                | &nbsp;&nbsp;
+              if !view.editing && row.banned
+                i.unban-row.fa.fa-ban
+              if view.editing && vocablist.isEditable()
+                i.remove-row.fa.fa-trash
+
+            if row.results
+              .result-rows.hidden
+                for result, index in row.results
+                  - var vocab1 = result.vocabs[0];
+                  - var vocab2 = result.vocabs[1];
+
+                  .result-row(data-index=index)
+
+                    .vocab-writing(class=vocab1.getFontClass())
+                      span= vocab1.get('writing')
+                      if vocab1.get('writing') !== vocab2.get('writing')
+                        | &nbsp;&nbsp;&nbsp;
+                        span= '(' + vocab2.get('writing') + ')'
+
+                    .vocab-reading= vocab1.getReading()
+
+                    .vocab-definition!= vocab1.getDefinition()
+
+        when 'not-found'
+          .col-xs-1
+          .col-xs-7= row.query + ' not found.'
+          .col-xs-4.text-right
+            button.add-entry.btn.btn-sm.btn-warning Add Entry
+            | &nbsp;&nbsp;&nbsp;
+            i.remove-row.fa.fa-trash
+
+        default
+          .col-xs-1
+          .col-xs-11.loading-row
+            i.fa.fa-refresh.fa-spin
+            | &nbsp;&nbsp;
+            span= 'searching for ' + row.query
+
+  .row
+    .col-xs-1.row-header
+    .col-xs-2.row-header.writing Writing
+    .col-xs-2.row-header
+    .col-xs-2.row-header.reading Reading
+    .col-xs-3.row-header.definition Definition
+    .col-xs-2.row-header
+  #vocablist-section-rows
+    for row, index in rows
+      +wordRow(row, index)
+    if !view.editing && !rows.length
+      div.empty-msg= app.locale('pages.vocabLists.sectionEmptyMsg')

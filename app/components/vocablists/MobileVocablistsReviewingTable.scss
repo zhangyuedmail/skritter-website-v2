@@ -10,19 +10,23 @@ gelato-component[data-name='mobile-vocablists-reviewing-table'] {
   .glyphicon {
     color: $grey3;
     cursor: pointer;
-    font-size: 2.5vh;
+    font-size: 2.25vh;
     &:hover {
       color: $grey5;
     }
   }
 
+  .progress-wrapper {
+    height: 45px;
+  }
+
   .progress {
-    margin-top: 15px;
+    margin-top: 10px;
   }
 
   .row {
     font-size: 1.5vh;
-    margin-bottom: 15px;
+    margin-bottom: 30px;
   }
 
 }
