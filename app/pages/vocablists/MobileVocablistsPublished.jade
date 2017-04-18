@@ -4,11 +4,11 @@ gelato-page(data-name='mobile-vocablists-published')
 
   section#vocablist-nav-links.container
     .row.text-center
-      .col-xs-6
+      .col-xs-4
         a(href='/vocablists/queue') Queue
-      .col-xs-6
+      .col-xs-4
         a(href='/vocablists/browse') Browse
-
+      .col-xs-4.selected Published
     if app.getLanguage() === 'zh'
       .row.text-center
         .col-xs-4
@@ -30,7 +30,6 @@ gelato-page(data-name='mobile-vocablists-published')
       .row
 
         .col-md-12.main-content
-          .title Published Lists
           #search-input.row
             .col-md-12
               .input-group.input-group-lg

@@ -4,8 +4,7 @@ gelato-page(data-name='mobile-vocablists-queue')
 
   section#vocablist-nav-links.container
     .row.text-center
-      .col-xs-6
-        a(href='/vocablists/queue') Queue
+      .col-xs-6.selected Queue
       .col-xs-6
         a(href='/vocablists/browse') Browse
 
@@ -27,9 +26,11 @@ gelato-page(data-name='mobile-vocablists-queue')
   section.container
     .content-block
       .row
+        .header= app.locale('pages.vocabLists.addingWordsFrom').toUpperCase()
         .col-md-12.main-content
-          .title Study Queue
-          .header= app.locale('pages.vocabLists.addingWordsFrom')
           #adding-container
-          .header= app.locale('pages.vocabLists.reviewingWordsFrom')
+    .content-block.reviewing-wrapper
+      .row
+        .header= app.locale('pages.vocabLists.reviewingWordsFrom').toUpperCase()
+        .col-md-12.main-content
           #reviewing-container

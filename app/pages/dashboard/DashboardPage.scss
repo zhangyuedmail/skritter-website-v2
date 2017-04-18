@@ -55,3 +55,9 @@ gelato-page[data-name='dashboard'] {
     margin-top: 50px;
   }
 }
+
+.mobile {
+  gelato-page[data-name='dashboard'] {
+    padding-top: 65px;
+  }
+}

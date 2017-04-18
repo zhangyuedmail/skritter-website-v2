@@ -6,9 +6,7 @@ gelato-page(data-name='mobile-vocablists-browse')
     .row.text-center
       .col-xs-6
         a(href='/vocablists/queue') Queue
-      .col-xs-6
-        a(href='/vocablists/browse') Browse
-
+      .col-xs-6.selected Browse
     if app.getLanguage() === 'zh'
       .row.text-center
         .col-xs-4
@@ -29,7 +27,6 @@ gelato-page(data-name='mobile-vocablists-browse')
     .content-block
       .row
         .col-md-12
-          .title Browse Lists
           #table-options
             .row
               .col-md-12

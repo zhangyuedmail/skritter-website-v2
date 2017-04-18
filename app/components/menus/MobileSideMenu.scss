@@ -60,7 +60,8 @@ gelato-component.mobile-side-menu-component {
 
   a {
     color: $grey1;
-    font-size: 24px;
+    font-size: 22px;
+    padding: 4px 15px;
 
     &:hover, &:focus {
       background-color: $grey6;

@@ -13,8 +13,7 @@ gelato-page(data-name='mobile-vocablists-chinesepod')
       .row.text-center
         .col-xs-4
           a(href='/vocablists/my-lists') My Lists
-        .col-xs-4
-          a(href='/vocablists/chinesepod') ChinesePod
+        .col-xs-4.selected ChinesePod
         .col-xs-4
           a(href='/vocablists/deleted') Deleted
     else
@@ -29,7 +28,6 @@ gelato-page(data-name='mobile-vocablists-chinesepod')
       .row
 
         .col-md-12.main-content
-          .title ChinesePod
 
           if view.chinesepodSession.state === 'fetching'
             p.text-center
