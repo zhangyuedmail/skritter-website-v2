@@ -54,6 +54,7 @@ module.exports = BootstrapDialog.extend({
         filteredJapaneseParts: this.getSelectedParts(),
         hideDefinition: this.$('#field-hide-definition input').is(':checked'),
         hideReading: this.$('#field-hide-reading input').is(':checked'),
+        readingJapanese: this.$('#field-romaji input').is(':checked') ? 'romaji' : 'kana',
         squigs: this.$('#field-squigs input').is(':checked'),
         teachingMode: this.$('#field-teaching-mode input').is(':checked'),
         volume: this.$('#field-audio input').is(':checked') ? 1 : 0
@@ -66,6 +67,7 @@ module.exports = BootstrapDialog.extend({
         filteredChineseParts: this.getSelectedParts(),
         hideDefinition: this.$('#field-hide-definition input').is(':checked'),
         hideReading: this.$('#field-hide-reading input').is(':checked'),
+        readingChinese: this.$('#field-bopomofo input').is(':checked') ? 'zhuyin' : 'pinyin',
         squigs: this.$('#field-squigs input').is(':checked'),
         teachingMode: this.$('#field-teaching-mode input').is(':checked'),
         volume: this.$('#field-audio input').is(':checked') ? 1 : 0
