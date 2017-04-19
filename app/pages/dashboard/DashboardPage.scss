@@ -59,5 +59,16 @@ gelato-page[data-name='dashboard'] {
 .mobile {
   gelato-page[data-name='dashboard'] {
     padding-top: 65px;
+
+    #first-row {
+      .content-block {
+        padding-top: 15px;
+        height: auto;
+
+        gelato-component {
+          margin-top: 0;
+        }
+      }
+    }
   }
 }
