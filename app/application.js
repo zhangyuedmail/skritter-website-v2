@@ -413,12 +413,28 @@ module.exports = GelatoApplication.extend({
 
   /**
    * Handles click on an overlay of the main app container.
-   * Hides the mobile menu when clicked.
+   * Hides the mobile menus when clicked.
    * @param {jQuery.Event} e the click event
    */
   handleOverlayClick: function(e) {
-    this.toggleSideMenu(false);
-    this.toggleVocabInfo(null);
+    this.hideAllMenus();
+  },
+
+  /**
+   * Hides all the side menus in the app
+   * @param {String[]} [exceptions] an optional array of menus not to hide
+   * @method hideAllMenus
+   */
+  hideAllMenus: function(exceptions) {
+    exceptions = exceptions || [];
+
+    if (exceptions.indexOf('left-side-app-container') === -1) {
+      this.toggleSideMenu(false);
+    }
+
+    if (exceptions.indexOf('right-side-app-container') === -1) {
+      this.toggleVocabInfo(null);
+    }
   },
 
   /**
@@ -848,10 +864,11 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
-   * Shows the side container of the application
+   * Hides all other menus and shows the side container of the application
    * @param {Boolean} [show] whether to show the side element
    */
   toggleSideMenu: function(show) {
+    this.hideAllMenus(['left-side-app-container']);
     $('gelato-application').toggleClass('no-overflow', show);
     this.$('#main-app-container').toggleClass('push-right', show);
     this.$('#left-side-app-container').toggleClass('push-right', show);

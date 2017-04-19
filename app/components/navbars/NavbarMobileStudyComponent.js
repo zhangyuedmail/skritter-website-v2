@@ -84,11 +84,12 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
   },
 
   /**
-   *
+   * Hides any other open menus, then opens the
    * @param {jQuery.ClickEvent} event
    * @method handleInfoClick
    */
   handleInfoClick: function(event) {
+    app.hideAllMenus();
     vent.trigger('studyPromptVocabInfo:show');
   },
 
