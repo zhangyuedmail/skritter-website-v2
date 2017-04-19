@@ -2,7 +2,7 @@
 
 gelato-component[data-name='mobile-study-prompt'] {
   background-color: $white1;
-  border-radius: 5px;
+  border-radius: 0px;
   height: 100%;
   margin: 0 auto;
   overflow: hidden;
@@ -68,16 +68,15 @@ gelato-component[data-name='mobile-study-prompt'] {
           top: 0;
           width: 100%;
         }
-
-        #toolbar-grading-container {
-          bottom: 0px;
-          left: 0;
-          position: absolute;
-          width: 100%;
-          z-index: 5003;
-        }
       }
 
+      #toolbar-grading-container {
+        bottom: -12px;
+        left: 0;
+        position: absolute;
+        width: 100%;
+        z-index: 5003;
+      }
       #toolbar-stroke-order {
         width: 96%; // [the original aspect ratio] 25/26 = 96%;
       }
@@ -164,8 +163,8 @@ gelato-component[data-name='mobile-study-prompt'] {
 
   #panel-right {
     background-color: $white3;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
     height: 20%;
     margin: 0 1px 0 0;
     min-height: 150px;
