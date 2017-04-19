@@ -18,6 +18,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     'click .item-ban': 'handleClickItemBan',
     'click .item-unban': 'handleClickItemUnban',
     'click .fa-times-circle-o': 'handleClickClose',
+    'click .fa-chevron-left': 'handleClickClose',
     'click #button-vocab-star': 'handleClickVocabStar',
     'click #button-vocab-ban': 'handleClickVocabBan',
     'click #hanping-lite-icon': 'handleClickHanpingLiteIcon',

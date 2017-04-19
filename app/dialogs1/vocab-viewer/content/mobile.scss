@@ -1,9 +1,9 @@
 @import "../../../styles/_variables";
 
 gelato-component[data-name='mobile-vocab-viewer-content'] {
-
   background-color: $white1;
   min-height: 100%;
+  overflow-x: hidden;
 
   .dict-icon {
     margin: 15px 2vh 0 2vh;
@@ -19,15 +19,16 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
 
     .block {
       margin-bottom: 20px;
-      padding-left: 20px;
-      padding-right: 20px;
+      padding-left: 10px;
+      padding-right: 10px;
 
       .header {
         color: #404851;
         font-family: $font-ubuntu;
         font-size: 16px;
         font-weight: 400;
-        margin-top: 10px;
+        margin-top: 0;
+        margin-bottom: 5px;
       }
 
       .value {
@@ -76,7 +77,7 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
 
   #header-section {
     background-color: $white3;
-    padding: 20px;
+    padding: 15px;
     position: relative;
 
     i {
@@ -117,15 +118,19 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
       font-weight: 300;
     }
 
-    .vocab-reading, .definition {
+    .vocab-reading {
+      text-align: left;
+      margin-top: 15px;
       font-size: 16px;
       color: $grey4;
     }
 
     .definition {
-      margin-bottom: 30px;
-      margin-top: 30px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      margin-left: -10px;
       display: block;
+      color: $grey3;
     }
 
     .vocab-writing {
@@ -162,7 +167,7 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
     }
 
     #vocab-definition {
-      margin-top: 15px;
+      margin-top: 5px;
     }
   }
 
