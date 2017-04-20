@@ -61,3 +61,62 @@ gelato-page > .container > .content-block {
 #vocablist-nav-links .row {
   margin-bottom: 0px;
 }
+
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+}
+
+/* Mobile toggle switch stuff */
+.toggle-switch input {display:none;}
+
+/* The slider */
+.toggle-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .1s;
+  transition: .1s;
+}
+
+.toggle-switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .1s;
+  transition: .1s;
+}
+
+input:checked + .toggle-switch-slider {
+  background-color: $green5;
+}
+
+input:focus + .toggle-switch-slider {
+  box-shadow: 0 0 1px $green5;
+}
+
+input:checked + .toggle-switch-slider:before {
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
+}
+
+/* Rounded toggle-switch-sliders */
+.toggle-switch-slider.round {
+  border-radius: 24px;
+}
+
+.toggle-switch-slider.round:before {
+  border-radius: 50%;
+}
