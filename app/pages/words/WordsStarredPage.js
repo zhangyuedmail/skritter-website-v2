@@ -90,22 +90,26 @@ module.exports = GelatoPage.extend({
           title: 'Loading starred words',
           showBar: false
         });
+
         this.getAllVocabsDialog.render().open();
         this.getAllVocabsDialog.setProgress(100);
       }
+
       this.fetchStarredVocabs(this.starredVocabs.cursor);
       this.listenToOnce(this.starredVocabs, 'sync', this.fetchAllStarredVocabsThenRemoveThem);
-    }
-    else {
+    } else {
       // TODO: Make BootstrapDialog able to hide immediately so that
       // this process of hiding one then showing another doesn't have
       // to be convoluted.
       if (this.getAllVocabsDialog) {
+        const removeAllStars = _.bind(this.removeAllStars, this);
+
         this.getAllVocabsDialog.close();
-        var removeAllStars = _.bind(this.removeAllStars, this);
+
         this.listenToOnce(this.getAllVocabsDialog, 'hidden', function() {
           _.defer(removeAllStars);
         });
+
         this.getAllVocabsDialog = null;
       }
       else {
@@ -179,7 +183,7 @@ module.exports = GelatoPage.extend({
    * @method removeAllStars
    */
   removeAllStars: function() {
-    this.beginVocabAction('remove-star', this.starredVocabs);
+    this.beginVocabAction('remove-star', this.starredVocabs.clone());
     this.starredVocabs.reset();
     this.renderTable();
   },
