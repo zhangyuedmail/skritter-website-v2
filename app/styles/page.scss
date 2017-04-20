@@ -2,6 +2,10 @@ gelato-page {
   display: block;
   margin: 0;
   padding: 0;
+}
 
-
+.mobile {
+  gelato-page {
+    overflow-x: hidden;
+  }
 }
