@@ -4,48 +4,44 @@ gelato-page(data-name='mobile-account-billing-history')
 
   section#nav-links.container
     .row.text-center
-      .col-xs-4
+      .nav-option.col-xs-4
         a(href='/account/settings/general') General
-      .col-xs-4
+      .nav-option.col-xs-4
         a(href='/account/settings/study') Study
-      .col-xs-4
-        a(href='/account/billing') Billing
+      .nav-option.col-xs-4.selected
+        a(href='/account/billing/subscription') Billing
 
   .container
     .content-block
-      .row
+      .main-content
 
-        .col-xs-12.main-content
+        .billing-links
+          a(href='/account/billing/subscription') Subscription
+          span &nbsp;-&nbsp;
+          a(href='/account/billing/history') History
 
-          .billing-links
-            a(href='/account/billing/subscription') Subscription
-            span &nbsp;-&nbsp;
-            a(href='/account/billing/history') History
+        .table-oversized-wrapper
+          table.table.table-striped
+            tr
+              td.date-td Date
+              td.service-td Service
+              td.length-td Length purchased
+              td.charged-td Amount charged
 
-          .table-oversized-wrapper
-            table.table.table-striped
+            for payment in view.payments.models
               tr
-                td.date-td Date
-                td.service-td Service
-                td.length-td Length purchased
-                td.charged-td Amount charged
+                td.date-td= moment(payment.get('created') * 1000).format('LL')
+                td.service-td
+                  if user.get('isAdmin') && payment.get('stripeID')
+                    a(href="https://dashboard.stripe.com/payments/" + payment.get('stripeID'))
+                      | Stripe
+                  else
+                    | #{payment.get('service')}
+                td.length-td= payment.get('name')
+                td.charged-td= payment.getChargedAmount()
 
-              for payment in view.payments.models
-                tr
-                  td.date-td= moment(payment.get('created') * 1000).format('LL')
-                  td.service-td
-                    if user.get('isAdmin') && payment.get('stripeID')
-                      a(href="https://dashboard.stripe.com/payments/" + payment.get('stripeID'))
-                        | Stripe
-                    else
-                      | #{payment.get('service')}
-                  td.length-td= payment.get('name')
-                  td.charged-td= payment.getChargedAmount()
-
-            if view.payments.state === 'fetching'
-              p.text-center
-                i.fa.fa-3x.fa-spinner.fa-pulse
-            else if view.payments.cursor
-              button#load-more-btn.btn.btn-primary.btn-block Load More
-
-
+          if view.payments.state === 'fetching'
+            p.text-center
+              i.fa.fa-3x.fa-spinner.fa-pulse
+          else if view.payments.cursor
+            button#load-more-btn.btn.btn-primary.btn-block Load More

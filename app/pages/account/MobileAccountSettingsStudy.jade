@@ -4,97 +4,100 @@ gelato-page(data-name='mobile-account-settings-study')
 
     section#nav-links.container
       .row.text-center
-        .col-xs-4
+        .nav-option.col-xs-4
           a(href='/account/settings/general') General
-        .col-xs-4
+        .nav-option.col-xs-4.selected
           a(href='/account/settings/study') Study
-        .col-xs-4
+        .nav-option.col-xs-4
           a(href='/account/billing/subscription') Billing
 
   section.container
     .content-block
-      .row
+      .header LANGUAGE
+      #section-content
 
-        .col-xs-12
-          #section-content
-
-            form.form-horizontal
-              .form-group
-                label.col-sm-3.control-label(for="field-source-language") Source language
-                .col-sm-9
-                  select#field-source-language.form-control
-                    for lang in view.sourceLanguages
-                      - var langCode = lang[0][0];
-                      - var langString = lang[0][1];
-                      option(value=langCode, selected=(app.user.get('sourceLang') === langCode))= langString
+        form.form-horizontal
+          .form-group
+            label.col-xs-3.control-label(for="field-source-language") Source language
+            .col-xs-9
+              select#field-source-language.form-control
+                for lang in view.sourceLanguages
+                  - var langCode = lang[0][0];
+                  - var langString = lang[0][1];
+                  option(value=langCode, selected=(app.user.get('sourceLang') === langCode))= langString
+          if (app.getLanguage() === 'zh')
+            .form-group
+              label.col-xs-3.control-label(for="field-styles") Character styles
+              .col-xs-9#field-styles
+                label.checkbox-inline
+                  input(type="checkbox", name="styles", value="simp", checked=user.get('addSimplified'))
+                  | Simplified
+                label.checkbox-inline
+                  input(type="checkbox", name="styles", value="trad", checked=user.get('addTraditional'))
+                  | Traditional
+          .form-group
+            label.col-xs-4.control-label(for="field-parts") Parts studying
+            .col-xs-8#field-parts
+              .checkbox-inline
+                label
+                  input(type="checkbox", name="parts", value="rune", checked=user.isAddingPart('rune'))
+                  | Writing
               if (app.getLanguage() === 'zh')
-                .form-group
-                  label.col-sm-3.control-label(for="field-styles") Character styles
-                  .col-sm-9#field-styles
-                    label.checkbox-inline
-                      input(type="checkbox", name="styles", value="simp", checked=user.get('addSimplified'))
-                      | Simplified
-                    label.checkbox-inline
-                      input(type="checkbox", name="styles", value="trad", checked=user.get('addTraditional'))
-                      | Traditional
-              .form-group
-                label.col-sm-3.control-label(for="field-parts") Parts studying
-                .col-sm-9#field-parts
-                  .checkbox-inline
-                    label
-                      input(type="checkbox", name="parts", value="rune", checked=user.isAddingPart('rune'))
-                      | Writing
-                  if (app.getLanguage() === 'zh')
-                    .checkbox-inline
-                      label
-                        input(type="checkbox", name="parts", value="tone", checked=user.isAddingPart('tone'))
-                        | Tone
-                  .checkbox-inline
-                    label
-                      input(type="checkbox", name="parts", value="rdng", checked=user.isAddingPart('rdng'))
-                      | Reading
-                  .checkbox-inline
-                    label
-                      input(type="checkbox", name="parts", value="defn", checked=user.isAddingPart('defn'))
-                      | Definition
-              if (app.getLanguage() === 'ja')
-                .form-group
-                  label.col-sm-3.control-label(for="field-study-kana") Study kana
-                  .col-sm-9
-                    .checkbox
-                      label
-                        input#field-study-kana(type="checkbox", checked=user.get('studyKana'))
-                .form-group
-                  label.col-sm-3.control-label(for="field-study-rare-writings") Study uncommon kanji
-                  .col-sm-9
-                    .checkbox
-                      label
-                        input#field-study-all-list-writings(type="checkbox", checked=user.get('studyAllListWritings'))
-                .form-group
-                  label.col-sm-3.control-label(for="field-study-all-list-writings") Study all kanji in lists
-                  .col-sm-9
-                    .checkbox
-                      label
-                        input#field-study-rare-writings(type="checkbox", checked=user.get('studyRareWritings'))
-              .form-group
-                label.col-sm-3.control-label(for="field-heisig") Include Heisig keywords
-                .col-sm-9
-                  .checkbox
-                    label
-                      input#field-heisig(type="checkbox", checked=user.get('showHeisig'))
-              .form-group
-                label.col-sm-3.control-label(for="field-add-contained") Also add characters when adding words
-                .col-sm-9
-                  .checkbox
-                    label
-                      input#field-add-contained(type="checkbox", checked=user.get('autoAddComponentCharacters'))
+                .checkbox-inline
+                  label
+                    input(type="checkbox", name="parts", value="tone", checked=user.isAddingPart('tone'))
+                    | Tone
+              .checkbox-inline
+                label
+                  input(type="checkbox", name="parts", value="rdng", checked=user.isAddingPart('rdng'))
+                  | Reading
+              .checkbox-inline
+                label
+                  input(type="checkbox", name="parts", value="defn", checked=user.isAddingPart('defn'))
+                  | Definition
+          if (app.getLanguage() === 'ja')
+            .form-group
+              label.col-xs-9.control-label(for="field-study-kana") Study kana
+              .col-xs-3
+                .checkbox
+                  label.toggle-switch
+                    input#field-study-kana(type="checkbox", checked=user.get('studyKana'))
+                    .toggle-switch-slider.round
+            .form-group
+              label.col-xs-9.control-label(for="field-study-rare-writings") Study uncommon kanji
+              .col-xs-3
+                .checkbox
+                  label.toggle-switch
+                    input#field-study-all-list-writings(type="checkbox", checked=user.get('studyAllListWritings'))
+                    .toggle-switch-slider.round
+            .form-group
+              label.col-xs-9.control-label(for="field-study-all-list-writings") Study all kanji in lists
+              .col-xs-3
+                .checkbox
+                  label.toggle-switch
+                    input#field-study-rare-writings(type="checkbox", checked=user.get('studyRareWritings'))
+                    .toggle-switch-slider.round
+          .form-group
+            label.col-xs-9.control-label(for="field-heisig") Include Heisig keywords
+            .col-xs-3
+              .checkbox
+                label.toggle-switch
+                  input#field-heisig(type="checkbox", checked=user.get('showHeisig'))
+                  .toggle-switch-slider.round
+          .form-group
+            label.col-xs-9.control-label(for="field-add-contained") Also add characters when adding words
+            .col-xs-3
+              .checkbox
+                label.toggle-switch
+                  input#field-add-contained(type="checkbox", checked=user.get('autoAddComponentCharacters'))
+                  .toggle-switch-slider.round
 
-              .form-group
-                .col-sm-12.button-options
-                  #error-alert.alert.alert-danger.hidden
-                  .text-center
-                    if user.state === 'standby'
-                      button#button-save.btn.btn-fixed.btn-success(type="submit") Save
-                    else
-                      button#button-save.btn.btn-fixed.btn-success(type="submit", disabled="disabled")
-                        i.fa.fa-2x.fa-spinner.fa-pulse
+          .form-group
+            .col-xs-12.button-options
+              #error-alert.alert.alert-danger.hidden
+              .text-center
+                if user.state === 'standby'
+                  button#button-save.btn.btn-fixed.btn-success(type="submit") Save
+                else
+                  button#button-save.btn.btn-fixed.btn-success(type="submit", disabled="disabled")
+                    i.fa.fa-2x.fa-spinner.fa-pulse
