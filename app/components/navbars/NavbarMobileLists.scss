@@ -7,8 +7,6 @@ bootstrap-navbar[data-name='mobile'] {
   }
 
   nav {
-    background-color: #262b30;
-    border-color: #262b30;
     box-shadow: 0 1px 10px rgba(38, 43, 48, .15);
     z-index: 7001;
   }
@@ -18,12 +16,7 @@ bootstrap-navbar[data-name='mobile'] {
   }
 
   .title-txt {
-    color: $white1;
-    font-size: 24px;
-    font-weight: 700;
-    text-decoration: none;
     display: inline-block;
-    margin-top: 8px;
   }
 
   .navbar-nav {

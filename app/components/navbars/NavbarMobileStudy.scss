@@ -1,19 +1,15 @@
 @import "../../styles/_variables";
 
 bootstrap-navbar[data-name='mobile'] {
-  color: $white2;
+  color: $sand2;
 
   .navbar-toggle {
     float: left;
   }
 
   .title-txt {
-    color: $white1;
-    font-size: 24px;
-    font-weight: 700;
     text-decoration: none;
     display: inline-block;
-    margin-top: 8px;
   }
 
   .buttons {

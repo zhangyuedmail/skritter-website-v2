@@ -34,8 +34,8 @@ gelato-page > .container > .content-block {
   margin-top: 40px;
 }
 
-#vocablist-nav-links {
-  background: $grey7;
+ #vocablist-nav-links {
+  background: $wood7;
   margin-top: -58px;
   overflow-x: scroll;
   padding-bottom: 10px;
@@ -48,12 +48,12 @@ gelato-page > .container > .content-block {
     padding-bottom: 5px;
     margin-bottom: 4px;
     display: inline-block;
-
+    color: $sand2;
   }
 
   .selected {
     margin-bottom: 0px;
-    color: $white;
+    color: $sand1;
     border-bottom: 4px solid $green5;
   }
 }
