@@ -17,7 +17,7 @@ bootstrap-navbar[data-name='mobile'] {
   }
 
   .buttons {
-    font-size: 24px;
+    font-size: 20px;
     margin-top: 9px;
     position: absolute;
     right: 0;
@@ -34,7 +34,7 @@ bootstrap-navbar[data-name='mobile'] {
     }
 
     .last {
-      margin-right: 25px;
+      margin-right: 10px;
     }
   }
 
@@ -45,7 +45,9 @@ bootstrap-navbar[data-name='mobile'] {
   .icon {
 
     svg {
-      fill: $white2;
+      fill: $sand2;
+      height: 20px;
+      width: 20px;
     }
   }
 
@@ -57,16 +59,43 @@ bootstrap-navbar[data-name='mobile'] {
 
   .due-count, .due-label {
     display: inline-block;
+    font-size: 13px;
+  }
+
+  #duecount-container {
+    margin-top: -2px;
+    min-width: 55px;
+  }
+
+  .timer-wrapper {
+    min-width: 55px;
+    position: relative;
+  }
+
+  #timer-container {
+    display: inline-block;
+
+    gelato-component {
+      margin-right: 15px;
+    }
+  }
+
+  .timer-label {
+    position: absolute;
+    top: 4px;
+    right: 0px;
   }
 
   .due-label {
     font-variant: small-caps;
     float: right;
-    margin-top: 3px;
+    margin-top: 4px;
+    margin-left: 5px;
   }
   // h4x
   gelato-component[data-name='study-toolbar-timer'] .hover-tooltip {
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    font-size: 13px;
 
     .tooltip-text {
       left: 0;
