@@ -2,6 +2,7 @@ gelato-component(data-name="study-prompt-part-rdng" class='noclick')
   - var prompt = view.prompt;
 
   if prompt.reviews.part === 'rdng' && prompt.reviews
+    - var vocab = prompt.reviews.vocab;
 
     .question(class=prompt.reviews.isComplete() ? 'invisible' : '')
       if prompt.reviews.isChinese()
@@ -10,15 +11,15 @@ gelato-component(data-name="study-prompt-part-rdng" class='noclick')
         span What's the pronunciation?
 
     .writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
-      span= prompt.reviews.vocab.get('writing')
+      span(style="font-size: " + vocab.getWritingFontSize() + 'px')= vocab.get('writing')
 
     if view.showReadingPrompt
       .reading-prompt
         input#reading-prompt.reading-prompt-input(value="#{view.userReading}", autocomplete="off" ,autocorrect="off" ,autocapitalize="off", spellcheck="false")
 
     .answer(class=prompt.reviews.isComplete() ? '' : 'invisible')
-      - var writing = prompt.reviews.vocab.get('writing');
-      - var reading = prompt.reviews.vocab.get('reading');
+      - var writing = vocab.get('writing');
+      - var reading = vocab.get('reading');
       if app.fn.isKana(writing)
         span!= kana.toRomaji(reading)
       else

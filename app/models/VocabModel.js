@@ -456,6 +456,23 @@ const VocabModel = SkritterModel.extend({
   },
 
   /**
+   * Return a scaled pixel value based on length of the writing.
+   * @method getWritingFontSize
+   * @returns {number}
+   */
+  getWritingFontSize: function() {
+    const characterLength = this.getCharacters().length;
+
+    if (characterLength > 10) {
+      return 32;
+    } else if (characterLength > 5) {
+      return 48;
+    } else {
+      return 64;
+    }
+  },
+
+  /**
    * @method isBanned
    * @returns {Boolean}
    */
