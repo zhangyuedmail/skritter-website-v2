@@ -123,6 +123,18 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
   },
 
   /**
+   * Gets the total running time of the timer in seconds
+   * @param {Boolean} [printable] whether to return a user-friendly string representation of the time spent
+   * @return {number|string} number of seconds the timer has been running, or a formatted string of that value
+   */
+  getTotalRunningTime: function(printable) {
+    const totalRunningTime = this.stopwatch.time() + this.getOffset();
+    const totalRunningSeconds = totalRunningTime / 1000 >> 0;
+
+    return printable ? app.fn.convertTimeToClock(totalRunningTime) : totalRunningSeconds;
+  },
+
+  /**
    * @method isStarted
    * @returns {Boolean}
    */
