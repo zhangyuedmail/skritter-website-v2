@@ -367,13 +367,17 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   handlePromptToolbarActionCorrect: function() {
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
+
     if (this.prompt.review.isComplete()) {
       this.prompt.canvas.injectLayerColor(
         'character',
         this.prompt.review.getGradingColor()
       );
+      this.prompt.toolbarAction.render();
+    } else {
+      this.completeCharacter();
     }
-    this.prompt.toolbarAction.render();
+
   },
 
   /**

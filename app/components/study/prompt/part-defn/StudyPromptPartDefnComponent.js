@@ -131,7 +131,8 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
   handlePromptToolbarActionCorrect: function() {
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
-    this.prompt.toolbarAction.render();
+    this.prompt.review.set('complete', true);
+    this.render();
   },
 
   /**
