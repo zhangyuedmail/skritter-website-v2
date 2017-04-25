@@ -97,6 +97,7 @@ module.exports = {
       "eccentricDescription": "Adds extra spice to Skritter",
       "emailLabel": "Email",
       "emailDescription": "The email address associated with your account",
+      "errorBadAvatarFormat": "The selected avatar is in an unsupported format.",
       "errorDuplicateDisplayName": "Another user has already chosen that display name. Please choose another one.",
       "errorNoDisplayName": "You must enter a display name.",
       "passwordLabel": "Password",

@@ -89,6 +89,16 @@ const UserModel = SkritterModel.extend({
       // options.url = 'http://localhost:3210/v2/gae/users/';
     }
 
+    // TODO: figure out why null values crash the legacy api
+    if (model.get('aboutMe') === null) {
+      model.unset('aboutMe');
+    }
+
+    // TODO: figure out why null values crash the legacy api
+    if (model.get('wordDictionary') === null) {
+      model.unset('wordDictionary');
+    }
+
     GelatoCollection.prototype.sync.call(this, method, model, options);
   },
 
