@@ -32,11 +32,7 @@ screen-loader {
   }
 
   .screen-message-container {
-    height: 200px;
-    position: relative;
-    text-align: center;
-    top: 45%;
-    transform: translateY(-45%);
+    position: absolute;
     width: 100%;
   }
 
@@ -52,7 +48,7 @@ screen-loader {
     font-weight: 400;
   }
 
-  .screen-title-container {
+  .screen-container {
     position: relative;
     text-align: center;
     top: 35%;
