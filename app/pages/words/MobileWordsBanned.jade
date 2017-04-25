@@ -4,13 +4,13 @@ gelato-page(data-name='mobile-words-banned')
 
     section#nav-links.container
       .row.text-center
-        .col-xs-2
+        .col-xs-2.nav-option
           a(href='/words/all') All
-        .col-xs-3
+        .col-xs-3.nav-option
           a(href='/words/starred') Starred
-        .col-xs-3
+        .col-xs-3.nav-option.selected
           a(href='/words/banned') Banned
-        .col-xs-4
+        .col-xs-4.nav-option
           a(href='/words/mnemonics') Mnemonics
 
   section.container
@@ -24,7 +24,7 @@ gelato-page(data-name='mobile-words-banned')
           #table-options
             .row
               .col-md-12
-                button#unban-vocabs-btn.btn.btn-fixed.btn-success(disabled=true)
+                button#unban-vocabs-btn.btn.btn-success(disabled=true)
                   | Unban vocabs
 
           .table-oversized-wrapper

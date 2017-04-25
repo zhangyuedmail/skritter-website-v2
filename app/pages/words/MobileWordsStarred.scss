@@ -1,7 +1,6 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='mobile-words-starred'] {
-
   background: $background-primary;
   padding-top: 100px;
 
@@ -42,7 +41,7 @@ gelato-page[data-name='mobile-words-starred'] {
   }
 
   .main-content {
-    border-radius: 25px;
+    border-radius: 0px;
     padding: 20px 40px;
   }
 
@@ -70,7 +69,7 @@ gelato-page[data-name='mobile-words-starred'] {
   }
 
   #nav-links {
-    background: $grey7;
+    background: $wood7;
     margin-bottom: 15px;
     margin-top: -50px;
     padding-bottom: 10px;
@@ -78,6 +77,24 @@ gelato-page[data-name='mobile-words-starred'] {
     position: fixed;
     width: 100%;
     z-index: 7002;
+
+    .nav-option {
+      padding: 4px 0;
+      margin-bottom: 4px;
+
+      a {
+        color: $sand1;
+      }
+
+      &.selected {
+        margin-bottom: 0;
+        border-bottom: 4px solid $green4;
+
+        a {
+          color: $white;
+        }
+      }
+    }
   }
 
 }
