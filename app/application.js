@@ -378,12 +378,11 @@ module.exports = GelatoApplication.extend({
     const backAction = this._backButtonStack.pop();
 
     if (backAction) {
-      event.preventDefault();
       vent.trigger(backAction);
-
-      return false;
-    } else {
+    } else if (_.includes(['', 'dashboard'], Backbone.history.fragment)) {
       navigator.app.exitApp();
+    } else {
+      window.history.back();
     }
   },
 

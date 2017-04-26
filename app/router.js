@@ -392,10 +392,10 @@ module.exports = Router.extend({
   },
 
   /**
-  * @method navigateTurkish
-  */
+   * @method navigateTurkish
+   */
   navigateTurkish: function() {
-  this.go('pages/turkish/TurkishPage');
+    this.go('pages/turkish/TurkishPage');
   },
 
   /**
