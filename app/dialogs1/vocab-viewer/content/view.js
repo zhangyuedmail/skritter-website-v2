@@ -280,8 +280,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                 });
               },
               function(callback) {
-                self.vocabs.at(0).fetchSentence().then((s) => {
-                  self.vocabs.sentences.add(s);
+                self.vocabs.at(0).fetchSentence().then(sentence => {
+                  self.vocabs.sentences.add(sentence);
                   callback();
                 });
               },
@@ -326,7 +326,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
           self.vocabsContaining.fetch({
             data: {
               include_containing: true,
-              q: vocabId
+              q: app.fn.mapper.fromBase(vocabId)
             },
             error: function(error) {
               callback(error);
