@@ -1,6 +1,6 @@
 gelato-page(data-name='login').mobile
   section.container
-    .wrapper
+    .wrapper.content-block
       form#login-form.push-bottom
         #login-message.text-danger
         .form-group
@@ -10,8 +10,6 @@ gelato-page(data-name='login').mobile
           label(for="login-password") Password
           input#login-password.form-control.large-input(type="password", placeholder="Password")
         .form-group.text-center
-          a#back-button.btn.btn-fixed.btn-default(type="button", href="/") Back
-          | &nbsp;&nbsp;
           button#button-login.btn.btn-fixed.btn-primary.btn-success(type="button")= app.locale('common.logIn')
 
         if app.isDevelopment()
@@ -19,4 +17,4 @@ gelato-page(data-name='login').mobile
             button#button-skeleton.btn.btn-fixed.btn-info(type="button") Skeleton
 
       .text-center
-        a#password-reset(href="/password-reset") Forgot your password?
+        a#password-reset.btn.btn-default(href="/password-reset") Forgot your password?

@@ -6,6 +6,7 @@ gelato-page[data-name='login'] {
 
   &.mobile {
     background: $background-primary;
+    padding-bottom: 0 !important;
 
     button,
     a.btn {
@@ -13,35 +14,30 @@ gelato-page[data-name='login'] {
       width: 45%;
     }
 
-    input {
-      color: $wood5;
+    #password-reset {
+      width: auto;
+    }
 
+    input {
       &::-webkit-input-placeholder {
-        color: $wood3;
       }
       &:-moz-placeholder {
-        color: $wood3;
         opacity: 1;
       }
       &::-moz-placeholder {
-        color: $wood3;
         opacity: 1;
-      }
-      &:-ms-input-placeholder {
-        color: $wood3;
       }
     }
 
     label {
-      color: $wood5;
       font-size: 18px;
       font-weight: 300;
     }
 
     .wrapper {
-      background: none;
+      background: $white1;
       margin: auto;
-      margin-top: 50px;
+      margin-top: 10px;
       max-width: 400px;
     }
 
