@@ -30,7 +30,7 @@ gelato-component(data-name='vocab-viewer-content')
         if view.editing
           a#save-vocab(href='#')
             i.fa.fa-2x.fa-save
-        else
+        else if app.user.isLoggedIn()
           a#edit-vocab(href='#')
             i.fa.fa-2x.fa-pencil-square-o
         a(href='#', data-dismiss='modal')
@@ -77,29 +77,30 @@ gelato-component(data-name='vocab-viewer-content')
           .value
             #lookup-container
 
-        .block
-          table.table
-            thead
-              tr
-                th Part
-                th Next
-                th Last
-                th Time
-                th
-            tbody
-              for item in items.models
-                tr.item-row(data-id=item.id, data-part=item.get('part'))
-                  //TODO: move this logic to the item model
-                  td= _.capitalize(item.get('part'))
-                  td= item.get('next') > moment().unix() ? moment(item.get('next') * 1000).from() : 'Ready'
-                  td= item.get('last') ? moment(item.get('last') * 1000).from() : '-'
-                  td= item.get('timeStudied') ? Math.round(item.get('timeStudied')) + ' seconds' : '-'
-                  if _.includes(vocab.get('bannedParts'), item.get('part'))
-                    td.item-unban
-                      button.btn.btn-xs.btn-default Unban
-                  else
-                    td.item-ban
-                      button.btn.btn-xs.btn-danger Ban
+        if items
+          .block
+            table.table
+              thead
+                tr
+                  th Part
+                  th Next
+                  th Last
+                  th Time
+                  th
+              tbody
+                for item in items.models
+                  tr.item-row(data-id=item.id, data-part=item.get('part'))
+                    //TODO: move this logic to the item model
+                    td= _.capitalize(item.get('part'))
+                    td= item.get('next') > moment().unix() ? moment(item.get('next') * 1000).from() : 'Ready'
+                    td= item.get('last') ? moment(item.get('last') * 1000).from() : '-'
+                    td= item.get('timeStudied') ? Math.round(item.get('timeStudied')) + ' seconds' : '-'
+                    if _.includes(vocab.get('bannedParts'), item.get('part'))
+                      td.item-unban
+                        button.btn.btn-xs.btn-default Unban
+                    else
+                      td.item-ban
+                        button.btn.btn-xs.btn-danger Ban
 
       #panel-right
         if decomp

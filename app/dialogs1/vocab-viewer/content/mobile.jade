@@ -55,7 +55,7 @@ gelato-component(data-name='mobile-vocab-viewer-content')
         .col-xs-12.text-right
           if view.editing
             i#save-vocab.fa.fa-2x.fa-save
-          else
+          else if app.user.isLoggedIn()
             i#edit-vocab.fa.fa-2x.fa-pencil-square-o
       if (app.isAndroid() || app.isIOS()) && vocab.isChinese()
         .row.text-center
