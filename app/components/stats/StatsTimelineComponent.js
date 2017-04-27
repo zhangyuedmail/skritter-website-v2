@@ -25,7 +25,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./StatsTimeline'),
+  template: app.isMobile() ? require('./MobileStatsTimeline.jade') : require('./StatsTimeline.jade'),
 
   /**
    * @method initialize
@@ -79,6 +79,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
 
     this._views['lineCharWriting'] = new StudyPartLinegraphComponent({
       collection: this.collection,
+      graphTitle: app.isMobile() ? 'Characters' : '',
       range: this.range,
       type: 'char',
       part: 'rune'
@@ -86,6 +87,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
 
     this._views['lineCharDefinition'] = new StudyPartLinegraphComponent({
       collection: this.collection,
+      graphTitle: app.isMobile() ? 'Characters' : '',
       range: this.range,
       type: 'char',
       part: 'defn'
@@ -93,6 +95,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
 
     this._views['lineCharReading'] = new StudyPartLinegraphComponent({
       collection: this.collection,
+      graphTitle: app.isMobile() ? 'Characters' : '',
       range: this.range,
       type: 'char',
       part: 'rdng'
@@ -100,6 +103,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
 
     this._views['lineWordWriting'] = new StudyPartLinegraphComponent({
       collection: this.collection,
+      graphTitle: app.isMobile() ? 'Words' : '',
       range: this.range,
       type: 'word',
       part: 'rune'
@@ -107,6 +111,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
 
     this._views['lineWordDefinition'] = new StudyPartLinegraphComponent({
       collection: this.collection,
+      graphTitle: app.isMobile() ? 'Words' : '',
       range: this.range,
       type: 'word',
       part: 'defn'
@@ -114,6 +119,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
 
     this._views['lineWordReading'] = new StudyPartLinegraphComponent({
       collection: this.collection,
+      graphTitle: app.isMobile() ? 'Words' : '',
       range: this.range,
       type: 'word',
       part: 'rdng'
@@ -122,6 +128,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
     if (app.isChinese()) {
       this._views['lineCharTone'] = new StudyPartLinegraphComponent({
         collection: this.collection,
+        graphTitle: app.isMobile() ? 'Characters' : '',
         range: this.range,
         type: 'char',
         part: 'tone'
@@ -129,6 +136,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
 
       this._views['lineWordTone'] = new StudyPartLinegraphComponent({
         collection: this.collection,
+        graphTitle: app.isMobile() ? 'Words' : '',
         range: this.range,
         type: 'word',
         part: 'tone'

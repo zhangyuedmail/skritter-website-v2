@@ -22,7 +22,7 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
    */
   initialize: function(options) {
     options = options || {};
-
+    this.graphTitle = options.graphTitle;
     this.range = options.range || false;
     this.type = options.type || 'char';
     this.part = options.part || 'rune';

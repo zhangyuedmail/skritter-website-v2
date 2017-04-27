@@ -1,0 +1,54 @@
+gelato-component(data-name='mobile-stats-timeline')
+
+  .content-block
+    .heading-block
+      .row
+        .col-md-4.granularity-selector-wrapper
+        .col-md-4#hours-studied-container
+          #time-studied.time-studied ..:..
+          .units-label
+            span#time-studied-units-label #{view.granularity === 'minutes' ? 'minutes' : 'hours'}
+            span &nbsp;studied
+        .col-md-4.col-xs-12.date-range-wrapper
+          #date-range-picker.date-range-picker
+            span#start-date #{moment().subtract(6, 'days').format('MMM DD, YYYY')}
+            span &nbsp;-&nbsp;
+            span#end-date #{moment().format('MMM DD, YYYY')}
+            span.down-arrow &#x25BE;
+    .content
+      #time-studied-bar-graph-container
+      .items-leaned-days-studied-wrapper
+        .row
+          .col-md-6.middle-graph-wrapper-l
+            #items-learned-container.items-learned-container
+          .col-md-6.middle-graph-wrapper-r
+            #days-studied-container.days-studied-container
+      - var lineGraphColSize = app.isChinese() ? 3 : 4;
+      .rwdt-graphs-wrapper
+
+        .row.border-bottom
+          .graph-label.text-center Writing
+          .col-xs-6.col-sm-6.border-right
+              #line-char-writing-container.graph
+          .col-xs-6.col-sm-6
+            #line-word-writing-container.graph
+        .row.border-bottom
+          .graph-label.text-center Definition
+          .col-xs-6.col-sm-6.border-right
+            #line-char-definition-container.graph
+          .col-xs-6.col-sm-6
+            #line-word-definition-container.graph
+        .row.border-bottom
+          .graph-label.text-center Reading
+          .col-xs-6.col-sm-6.border-right
+            #line-char-reading-container.graph
+          .col-xs-6.col-sm-6
+            #line-word-reading-container.graph
+
+        if app.isChinese()
+          .row
+            .graph-label.text-center Tone
+            .col-xs-6.col-sm-6.border-right
+              #line-char-tone-container.graph
+            .col-xs-6.col-sm-6
+              #line-word-tone-container.graph
