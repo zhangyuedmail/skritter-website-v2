@@ -6,12 +6,20 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
   overflow-x: hidden;
 
   .dict-icon {
-    margin: 15px 2vh 0 2vh;
+    margin-right: 2vh;
+    margin-top: -5px;
     width: 6vh;
   }
 
   .edit-textbox {
     width: 100%;
+  }
+
+  .header-writing {
+    color: $green5;
+    display: inline-block;
+    font-size: 24px;
+    margin-left: 25px;
   }
 
   #content-section {
@@ -95,11 +103,9 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
     }
 
     .edit-row {
-      bottom: 10px;
       color: $green5;
-      padding-right: 15px;
-      position: absolute;
-      width: 100%;
+      margin-bottom: -10px;
+      padding-right: 5px;
     }
 
     .toughness {
