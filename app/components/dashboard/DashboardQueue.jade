@@ -18,7 +18,7 @@ gelato-component(data-name='dashboard-queue')
           a(href="/vocablists/view/" + list.id)= list.get('name')
         .col-md-6
           .progress
-            .progress-bar(style="width:" + (list.getProgress().percent) + '%')
+            .progress-bar(style="width:" + progress.percent + '%')= progress.percent + '%'
         .col-md-2.text-center
           a(href='/study/' + list.id) Study
 
@@ -26,12 +26,14 @@ gelato-component(data-name='dashboard-queue')
       .reviewing-label.row
         .col-xs-12= app.locale('pages.vocabLists.reviewingWordsFrom')
       for list, j in reviewingFrom
+        - var progress = list.getProgress();
+
         .row(data-list-id=list.id)
           .col-md-4
             a(href="/vocablists/view/" + list.id)= list.get('name')
           .col-md-6
             .progress
-              .progress-bar(style="width:" + (list.getProgress().percent) + '%')
+              .progress-bar(style="width: " + progress.percent + '%')= progress.percent + '%'
           .col-md-2.text-center
             a(href='/study/' + list.id) Study
     .text-center
