@@ -108,11 +108,12 @@ const StudyPage = GelatoPage.extend({
    * @param {Boolean} [silenceNoItems]
    * whether to suppress messages to the user about the items added if nothing was added.
    */
-  addItem: function(silenceNoItems) {
+  addItem: function(silenceNoItems, numToAdd) {
+    numToAdd = numToAdd || 1;
     this.items.addItems(
       {
         lang: app.getLanguage(),
-        limit: 1
+        limit: numToAdd
       },
       function(error, result) {
         if (!error) {
@@ -122,7 +123,7 @@ const StudyPage = GelatoPage.extend({
             if (silenceNoItems) {
               return;
             }
-            // TODO: this should respond to vent item:added in a separate
+            // TODO: this should respond to vent items:added in a separate
             // function--"app-level" notification?
             // Could be added from lists or vocab info dialog...
             $.notify(
@@ -157,7 +158,7 @@ const StudyPage = GelatoPage.extend({
             }
           );
         }
-        vent.trigger('item:added', !error ? result : null);
+        vent.trigger('items:added', !error ? result : null);
       }
     );
   },

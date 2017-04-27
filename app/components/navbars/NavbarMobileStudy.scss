@@ -88,6 +88,15 @@ bootstrap-navbar[data-name='mobile'] {
     margin-top: 4px;
     margin-left: 5px;
   }
+
+  .adding {
+    -webkit-animation: spin 2s ease-out infinite;
+    -moz-animation: spin 2s ease-out infinite;
+    animation: spin 2s ease-out infinite;
+    cursor: default;
+    color: $green6;
+  }
+
   // h4x
   gelato-component[data-name='study-toolbar-timer'] .hover-tooltip {
     letter-spacing: 1px;

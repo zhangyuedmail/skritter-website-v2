@@ -114,7 +114,7 @@ const StudyListPage = GelatoPage.extend({
             if (silenceNoItems) {
               return;
             }
-            // TODO: this should respond to vent item:added in a separate
+            // TODO: this should respond to vent items:added in a separate
             // function--"app-level" notification?
             // Could be added from lists or vocab info dialog...
             $.notify(
@@ -149,7 +149,7 @@ const StudyListPage = GelatoPage.extend({
             }
           );
         }
-        vent.trigger('item:added', !error ? result : null);
+        vent.trigger('items:added', !error ? result : null);
       }
     );
   },

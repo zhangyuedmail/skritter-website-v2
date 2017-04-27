@@ -31,12 +31,17 @@ const StudyToolbarComponent = GelatoComponent.extend({
   initialize: function(options) {
     this.dueCountOffset = 0;
     this.page = options.page;
+
+    this._adding = false;
+
     this.stats = new ProgressStats();
     this.timer = new StudyToolbarTimerComponent();
+
     this.listenTo(this.page.items, 'update:due-count', this.handleUpdateDueCount);
     this.listenTo(this.stats, 'state:standby', this.updateTimerOffset);
-    this.stats.fetchToday();
+    this.listenTo(vent, 'items:added', this.updateAddButton);
 
+    this.stats.fetchToday();
   },
 
   /**
@@ -84,7 +89,12 @@ const StudyToolbarComponent = GelatoComponent.extend({
    */
   handleClickAddItem: function(event) {
     event.preventDefault();
+    if (this._adding) {
+      return;
+    }
+
     vent.trigger('item:add');
+    this.updateAddButton(true);
   },
 
   /**
@@ -114,6 +124,18 @@ const StudyToolbarComponent = GelatoComponent.extend({
   remove: function() {
     this.timer.remove();
     return this;
+  },
+
+  /**
+   * Updates the adding state and UI to reflect whether items are currently
+   * being added.
+   * @param {Boolean} [adding] whether items are currently being added
+   */
+  updateAddButton: function(adding) {
+    adding = adding || false;
+
+    this._adding = adding;
+    this.$('#button-add-item').toggleClass('adding', adding);
   },
 
   /**

@@ -1,7 +1,6 @@
 @import "../../../styles/_variables";
 
 gelato-component[data-name='study-toolbar'] {
-
   font-family: $font-slab;
   font-size: 24px;
   font-weight: 300;
@@ -54,4 +53,81 @@ gelato-component[data-name='study-toolbar'] {
     }
   }
 
+  .adding {
+    -webkit-animation: spin 2s ease-out infinite;
+    -moz-animation: spin 2s ease-out infinite;
+    animation: spin 2s ease-out infinite;
+    cursor: default;
+    color: $green6;
+  }
+
+}
+
+@-moz-keyframes spin {
+   100% {
+    color: $green4;
+    -moz-transform: rotate(0deg);
+  }
+  75% {
+    -moz-transform: rotate(20deg);
+  }
+  50% {
+    color: $green6;
+    -moz-transform: rotate(0deg);
+  }
+  25% {
+    -moz-transform: rotate(-20deg);
+  }
+  0% {
+    color: $green4;
+    -moz-transform: rotate(0deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  100% {
+    color: $green4;
+    -webkit-transform: rotate(0deg);
+  }
+  75% {
+    -webkit-transform: rotate(20deg);
+  }
+  50% {
+    color: $green6;
+    -webkit-transform: rotate(0deg);
+  }
+  25% {
+    -webkit-transform: rotate(-20deg);
+  }
+  0% {
+    color: $green4;
+    -webkit-transform: rotate(0deg);
+  }
+}
+
+@keyframes spin {
+  100% {
+    color: $green4;
+    -webkit-transform: rotate(0deg);
+    transform:rotate(0deg);
+  }
+  75% {
+    color: $green6;
+    -webkit-transform: rotate(20deg);
+    transform:rotate(20deg);
+  }
+  50% {
+
+    -webkit-transform: rotate(0deg);
+    transform:rotate(0deg);
+  }
+  25% {
+    -webkit-transform: rotate(-20deg);
+    transform:rotate(-20deg);
+  }
+  0% {
+    color: $green4;
+    -webkit-transform: rotate(0deg);
+    transform:rotate(0deg);
+  }
 }

@@ -24,10 +24,12 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
     });
     this.page = options.page;
 
+    this._adding = false;
+
     // todo: fix this
     this.dueCountOffset = 0;
 
-    this.listenTo(vent, 'item:added', this.handleItemAdded);
+    this.listenTo(vent, 'items:added', this.handleItemAdded);
     this.listenTo(this.page.items, 'update:due-count', this.handleDueCountUpdated);
   },
 
@@ -55,12 +57,12 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * @triggers item:add
    */
   handleAddClick: function(event) {
-    if (this.$('#add').hasClass('adding')) {
+    if (this._adding) {
       return;
     }
 
     vent.trigger('item:add');
-    this.$('#add').addClass('adding');
+    this.updateAddButton(true);
   },
 
   /**
@@ -101,7 +103,19 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    */
   handleOptionsClick: function(event) {
     vent.trigger('studySettings:show');
-  }
+  },
+
+  /**
+   * Updates the adding state and UI to reflect whether items are currently
+   * being added.
+   * @param {Boolean} [adding] whether items are currently being added
+   */
+  updateAddButton: function(adding) {
+    adding = adding || false;
+
+    this._adding = adding;
+    this.$('#add').toggleClass('adding', adding);
+  },
 });
 
 module.exports = NavbarMobileStudyComponent;
