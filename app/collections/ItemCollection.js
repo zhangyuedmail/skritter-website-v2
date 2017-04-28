@@ -409,9 +409,10 @@ const ItemCollection = BaseSkritterCollection.extend({
             ids: itemIds.join('|'),
             include_contained: true,
             include_decomps: true,
-            include_heisigs: true,
+            include_heisigs: app.user.get('showHeisig') || false,
             include_sentences: false,
             include_strokes: false,
+            include_top_mnemonics: true,
             include_vocabs: true
           },
           remove: false,
