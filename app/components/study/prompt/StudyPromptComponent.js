@@ -49,6 +49,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.$inputContainer = null;
     this.$panelLeft = null;
     this.$panelRight = null;
+    this.editing = false;
     this.page = options.page;
     this.part = null;
     this.review = null;
@@ -187,6 +188,10 @@ const StudyPromptComponent = GelatoComponent.extend({
       if (skip) {
         this.reviews.skip = true;
       }
+      if (this.editing) {
+        this.reviews.vocab.set('customDefinition', this.vocabDefinition.getValue());
+        this.reviews.vocab.save();
+      }
       this.trigger('next', this.reviews);
     } else {
       this.reviews.next();
@@ -211,6 +216,10 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.review.stop();
 
     if (this.reviews.isFirst()) {
+      if (this.editing) {
+        this.reviews.vocab.set('customDefinition', this.vocabDefinition.getValue());
+        this.reviews.vocab.save();
+      }
       this.trigger('previous', this.reviews);
     } else {
       this.reviews.previous();
