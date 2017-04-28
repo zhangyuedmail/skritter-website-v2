@@ -133,7 +133,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
       this.prompt.canvas.drawShape(
         'character-reveal',
         this.prompt.review.character.getTargetShape(),
-        {color: '#e8ded2'}
+        {color: '#2c261b'}
       );
     }
 
