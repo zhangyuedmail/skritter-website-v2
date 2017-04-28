@@ -16,10 +16,12 @@ gelato-component[data-name="study-prompt-navigation"] {
       opacity: 0.6;
     }
     &#navigate-next {
+      padding-left: 15px;
       right: -50px;
     }
     &#navigate-previous {
       left: -50px;
+      padding-right: 15px;
     }
   }
 
