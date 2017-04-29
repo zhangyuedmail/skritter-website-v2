@@ -97,6 +97,19 @@ bootstrap-navbar[data-name='mobile'] {
     color: $green6;
   }
 
+  #add-popup {
+    position: absolute;
+    top: 35px;
+    right: 100px;
+    background: $white1;
+    color: $grey6;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+
+    .label {
+      color: $grey4;
+    }
+  }
+
   // h4x
   gelato-component[data-name='study-toolbar-timer'] .hover-tooltip {
     letter-spacing: 1px;

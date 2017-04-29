@@ -69,7 +69,7 @@ const StudyPage = GelatoPage.extend({
 
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
-    this.listenTo(vent, 'item:add', this.addItem);
+    this.listenTo(vent, 'items:add', this.addItems);
     this.listenTo(vent, 'studySettings:show', this.showStudySettings);
 
     // Handle specific cordova related events
@@ -103,13 +103,15 @@ const StudyPage = GelatoPage.extend({
   },
 
   /**
-   * Adds an item to the study queue
+   * Adds items to the study queue
    * @method addItem
-   * @param {Boolean} [silenceNoItems]
+   * @param {Boolean} [silenceNoItems] whether to hide a popup if no items are added
+   * @param {Number} [numToAdd] the number of items to add. Defaults to 1.
    * whether to suppress messages to the user about the items added if nothing was added.
    */
-  addItem: function(silenceNoItems, numToAdd) {
+  addItems: function(silenceNoItems, numToAdd) {
     numToAdd = numToAdd || 1;
+
     this.items.addItems(
       {
         lang: app.getLanguage(),
@@ -126,37 +128,16 @@ const StudyPage = GelatoPage.extend({
             // TODO: this should respond to vent items:added in a separate
             // function--"app-level" notification?
             // Could be added from lists or vocab info dialog...
-            $.notify(
-              {
-                message: 'No more words to add. <a href="/vocablists/browse">Add a new list</a>'
-              },
-              {
-                type: 'pastel-info',
-                animate: {
-                  enter: 'animated fadeInDown',
-                  exit: 'animated fadeOutUp'
-                },
-                delay: 5000,
-                icon_type: 'class'
-              }
-            );
-            return;
+            app.notifyUser({
+              message: 'No more words to add. <br><a href="/vocablists/browse">Add a new list</a>',
+              type: 'pastel-info'
+            });
+          } else {
+            app.notifyUser({
+              message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.',
+              type: 'pastel-success'
+            });
           }
-
-          $.notify(
-            {
-              message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.'
-            },
-            {
-              type: 'pastel-success',
-              animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
-              },
-              delay: 5000,
-              icon_type: 'class'
-            }
-          );
         }
         vent.trigger('items:added', !error ? result : null);
       }
@@ -337,7 +318,7 @@ const StudyPage = GelatoPage.extend({
       this.toolbar.render();
 
       if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
-        this.addItem(true);
+        this.addItems(true);
       }
 
       if (items.length < 5) {

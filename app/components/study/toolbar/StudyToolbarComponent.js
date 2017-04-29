@@ -14,6 +14,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
+    'click .add-amt': 'handleAddWordAmountClick',
     'click #button-add-item': 'handleClickAddItem',
     'click #button-study-settings': 'handleClickStudySettings'
   },
@@ -36,6 +37,8 @@ const StudyToolbarComponent = GelatoComponent.extend({
 
     this.stats = new ProgressStats();
     this.timer = new StudyToolbarTimerComponent();
+
+    _.bindAll(this, 'toggleAddWordsPopup');
 
     this.listenTo(this.page.items, 'update:due-count', this.handleUpdateDueCount);
     this.listenTo(this.stats, 'state:standby', this.updateTimerOffset);
@@ -82,20 +85,35 @@ const StudyToolbarComponent = GelatoComponent.extend({
   },
 
   /**
+   * Handles when the user clicks an amount of words to add.
+   * Triggers an event to start the add item process for that amount.
+   * @param {jQuery.Event} event the click event
+   */
+  handleAddWordAmountClick: function(event) {
+    const numItemsToAdd = $(event.target).data('amt');
+
+    this.toggleAddWordsPopup();
+    this.updateAddButton(true);
+    vent.trigger('items:add', null, numItemsToAdd);
+  },
+
+  /**
    * Triggers an event to add an item from the user's lists
    * @method handleClickAddItem
    * @param {jQuery.ClickEvent} event
-   * @triggers item:add
+   * @triggers items:add
    */
   handleClickAddItem: function(event) {
-    event.preventDefault();
     if (this._adding) {
       return;
     }
 
-    vent.trigger('item:add');
-    this.updateAddButton(true);
+    event.stopPropagation();
+
+    this.toggleAddWordsPopup(null, true);
   },
+
+
 
   /**
    * Triggers an event to show a study settings popup.
@@ -123,7 +141,27 @@ const StudyToolbarComponent = GelatoComponent.extend({
    */
   remove: function() {
     this.timer.remove();
+    $(document).off('click', this.toggleAddWordsPopup);
+
     return this;
+  },
+
+  /**
+   * Shows a popup that allows the user to select the number of words they want to add
+   * @param event
+   * @param show
+   */
+  toggleAddWordsPopup: function(event, show) {
+    if (event && event.stopPropagation()) {
+      event.stopPropagation()
+    }
+
+    this.$('#add-popup').toggleClass('hidden', !show);
+    $(document).off('click', this.toggleAddWordsPopup);
+
+    if (show) {
+      $(document).on('click', this.toggleAddWordsPopup);
+    }
   },
 
   /**

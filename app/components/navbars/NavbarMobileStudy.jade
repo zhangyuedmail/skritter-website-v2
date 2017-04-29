@@ -16,6 +16,20 @@
       #duecount-container.duecount-text
         .due-count 0
         .due-label.fa.fa-inbox
+    #add-popup.hidden
+      .label Add how many items?
+      .row.text-center
+        .col-xs-6.col-sm-6.add-amt(data-amt="1") 1
+        .col-xs-6.col-sm-6.add-amt(data-amt="5") 5
+      .row.text-center
+        if user.get('eccentric')
+          .col-xs-6.col-sm-6.add-amt(data-amt="11") 11
+        else
+          .col-xs-6.col-sm-6.add-amt(data-amt="10") 10
+        if user.get('eccentric')
+          .col-xs-6.col-sm-6.add-amt(data-amt="23") 23
+        else
+          .col-xs-6.col-sm-6.add-amt(data-amt="25") 25
 
     .buttons.wrapper.float-right
       span#add.fa.fa-plus-circle
