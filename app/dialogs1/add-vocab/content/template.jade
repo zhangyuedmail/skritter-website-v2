@@ -38,7 +38,7 @@ gelato-component(data-name='add-vocab-content')
       else
         label(for='vocab-input') Word
         -var p = app.isChinese() ? 'nihao, ni3hao3, 你好, etc...' : 'がくせい, 学生, etc...'
-        input#vocab-input(placeholder=p).form-control
+        input#vocab-input(placeholder=p, autofocus).form-control
 
     else
       .text-center
