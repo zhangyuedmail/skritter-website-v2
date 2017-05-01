@@ -1,6 +1,15 @@
 @import "../../styles/_variables";
 
 gelato-component[data-name='vocablists-list-editor-rows'] {
+  padding-bottom: 15px;
+
+  .empty-msg {
+    color: $grey5;
+    font-size: 16px;
+    font-weight: 300;
+    padding: 30px 0px 20px;
+    text-align: center;
+  }
 
   .row {
     color: $grey5;
@@ -42,6 +51,12 @@ gelato-component[data-name='vocablists-list-editor-rows'] {
 
     .row-header {
       font-weight: 400;
+    }
+
+    .rare-kanji {
+      color: $gradeRed4;
+      font-size: 14px;
+      margin-left: 15px;
     }
 
     .study-writing {

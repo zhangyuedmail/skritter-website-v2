@@ -74,6 +74,11 @@ body {
   }
 }
 
+.progress {
+  background: $white5;
+  box-shadow: none;
+}
+
 @media (max-width: 767px) {
   .content-block {
     border-radius: 5px;

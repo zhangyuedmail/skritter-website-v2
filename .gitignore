@@ -2,6 +2,7 @@
 /build
 /cordova
 /node_modules
+/output
 /public
 
 # Files

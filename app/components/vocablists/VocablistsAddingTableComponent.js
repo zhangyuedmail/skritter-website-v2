@@ -54,8 +54,6 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
   handleClickStopAddingLink: function(event) {
     event.preventDefault();
 
-    console.log(event);
-
     const listID = $(event.target).closest('.row').data('list-id');
     const list = this.vocablists.get(listID.toString());
 

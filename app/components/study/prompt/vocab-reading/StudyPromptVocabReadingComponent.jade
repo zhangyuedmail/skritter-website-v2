@@ -15,7 +15,16 @@ gelato-component(data-name='study-prompt-vocab-reading')
               if !prompt.reviews.isComplete() && review.isReadingHidden()
                 button.show-reading.btn.btn-sm.btn-default show
               else
-                span= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading.value) : reading.value
+                if prompt.reviews.isChinese()
+                  if app.user.get('readingChinese') === 'zhuyin'
+                    span= app.fn.pinyin.toZhuyin(reading.value)
+                  else
+                    span= app.fn.pinyin.toTone(reading.value)
+                else
+                  if app.user.get('readingJapanese') === 'romaji'
+                    span= wanakana.toRomaji(reading.value)
+                  else
+                    span= reading.value
             - index++
           else
             div.filler
@@ -34,9 +43,15 @@ gelato-component(data-name='study-prompt-vocab-reading')
                   button.show-reading.btn.btn-sm.btn-default show
                 else
                   if review.isComplete()
-                    span= app.fn.pinyin.toTone(reading.value)
+                    if app.user.get('readingChinese') === 'zhuyin'
+                      span= app.fn.pinyin.toZhuyin(reading.value)
+                    else
+                      span= app.fn.pinyin.toTone(reading.value)
                   else
-                    span= app.fn.pinyin.removeToneNumbers(reading.value)
+                    if app.user.get('readingChinese') === 'zhuyin'
+                      span= app.fn.pinyin.toZhuyin(reading.value, true)
+                    else
+                      span= app.fn.pinyin.removeToneNumbers(reading.value)
               else
                 span= reading.value
             - index++
@@ -51,6 +66,15 @@ gelato-component(data-name='study-prompt-vocab-reading')
           if prompt.reviews.part === 'defn' && review.isReadingHidden()
             button.show-reading.btn.btn-sm.btn-default show
           else if prompt.reviews.part === 'rdng' && !review.isComplete()
-            //hide reading
+            // hide reading
           else
-            span= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+            if prompt.reviews.isChinese()
+              if app.user.get('readingChinese') === 'zhuyin'
+                span= app.fn.pinyin.toZhuyin(reading)
+              else
+                span= app.fn.pinyin.toTone(reading)
+            else
+              if app.user.get('readingJapanese') === 'romaji'
+                span= wanakana.toRomaji(reading)
+              else
+                span= reading

@@ -2270,9 +2270,10 @@ function pinyinToTone(text, includeSpaces) {
 /**
  * @method pinyinToZhuyin
  * @param {String} text
+ * @param {Boolean} [excludeTones]
  * @returns {String}
  */
-function pinyinToZhuyin(text) {
+function pinyinToZhuyin(text, excludeTones) {
   text = text.toLowerCase();
   var zhuyinArray = [];
   var textArray = text.match(/[a-z|A-Z]+[0-9]+|,\s|'|\s\.\.\.\s/g);
@@ -2282,7 +2283,7 @@ function pinyinToZhuyin(text) {
       var toneItem = textItem.match(/[0-9]+/g);
       if (textItem !== " ... " && textItem !== "'" && textItem !== ", ") {
         zhuyinArray.push(data[textItem].zhuyin);
-        if (toneItem) {
+        if (!excludeTones && toneItem) {
           zhuyinArray.push(data[toneItem].zhuyin);
         }
       }

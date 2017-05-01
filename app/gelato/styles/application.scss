@@ -26,13 +26,13 @@ html, body {
   height: 100%;
 
   &.push-left {
-    transform: translate3d(-90%, 0, 0);
-    -webkit-transform: translate3d(-90%, 0, 0);
+    //transform: translate3d(-90%, 0, 0);
+    //-webkit-transform: translate3d(-90%, 0, 0);
   }
 
   &.push-right {
-    transform: translate3d(250px, 0, 0);
-    -webkit-transform: translate3d(250px, 0, 0);
+    //transform: translate3d(250px, 0, 0);
+    //-webkit-transform: translate3d(250px, 0, 0);
   }
 
   &.default {
@@ -141,6 +141,10 @@ gelato-application {
       user-select: none;
     }
 
+    .progress {
+      height: 6px;
+    }
+
     #page-container {
       display: block;
       margin: 0;
@@ -153,17 +157,26 @@ gelato-application {
         position: absolute;
         left: 0;
         right: 0;
+
+        .container {
+          padding: 0;
+
+          .content-block {
+            border-radius: 0;
+          }
+        }
       }
     }
 
     #main-app-container {
-      transition: transform .25s ease-out;
-      -webkit-transition: -webkit-transform .25s ease-out;
-      transform: translate3d(0, 0, 0);
-      -webkit-transform: translate3d(0, 0, 0);
+      //transition: transform .25s ease-out;
+      //-webkit-transition: -webkit-transform .25s ease-out;
+      //transform: translate3d(0, 0, 0);
+      //-webkit-transform: translate3d(0, 0, 0);
+      z-index: 0;
     }
 
-    #main-app-container, #left-side-app-container, #right-side-app-container {
+    #left-side-app-container, #right-side-app-container {
       will-change: transform;
     }
 
@@ -179,6 +192,27 @@ gelato-application {
       &.push-right {
         transform: translate3d(0, 0, 0);
         -webkit-transform: translate3d(0, 0, 0);
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+
+  gelato-application.mobile {
+    font-size: 18px;
+
+    #page-container {
+
+      gelato-page {
+
+        .container {
+          padding: 0px 10px;
+
+          .content-block {
+            border-radius: 3px;
+          }
+        }
       }
     }
   }

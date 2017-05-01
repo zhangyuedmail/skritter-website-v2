@@ -1,23 +1,19 @@
 @import "../../styles/_variables";
 
 bootstrap-navbar[data-name='mobile'] {
-  color: $white2;
+  color: $sand2;
 
   .navbar-toggle {
     float: left;
   }
 
   .title-txt {
-    color: $white1;
-    font-size: 24px;
-    font-weight: 700;
     text-decoration: none;
     display: inline-block;
-    margin-top: 8px;
   }
 
   .buttons {
-    font-size: 24px;
+    font-size: 20px;
     margin-top: 9px;
     position: absolute;
     right: 0;
@@ -34,7 +30,7 @@ bootstrap-navbar[data-name='mobile'] {
     }
 
     .last {
-      margin-right: 25px;
+      margin-right: 10px;
     }
   }
 
@@ -45,7 +41,9 @@ bootstrap-navbar[data-name='mobile'] {
   .icon {
 
     svg {
-      fill: $white2;
+      fill: $sand2;
+      height: 20px;
+      width: 20px;
     }
   }
 
@@ -57,16 +55,65 @@ bootstrap-navbar[data-name='mobile'] {
 
   .due-count, .due-label {
     display: inline-block;
+    font-size: 13px;
+  }
+
+  #duecount-container {
+    margin-top: -2px;
+    min-width: 55px;
+  }
+
+  .timer-wrapper {
+    min-width: 55px;
+    position: relative;
+  }
+
+  #timer-container {
+    display: inline-block;
+
+    gelato-component {
+      margin-right: 15px;
+    }
+  }
+
+  .timer-label {
+    position: absolute;
+    top: 4px;
+    right: 0px;
   }
 
   .due-label {
     font-variant: small-caps;
     float: right;
-    margin-top: 3px;
+    margin-top: 4px;
+    margin-left: 5px;
   }
+
+  .adding {
+    -webkit-animation: spin 2s ease-out infinite;
+    -moz-animation: spin 2s ease-out infinite;
+    animation: spin 2s ease-out infinite;
+    cursor: default;
+    color: $green6;
+  }
+
+  #add-popup {
+    position: absolute;
+    top: 35px;
+    right: 100px;
+    background: $white1;
+    color: $grey6;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+
+    .label {
+      color: $grey4;
+    }
+  }
+
   // h4x
   gelato-component[data-name='study-toolbar-timer'] .hover-tooltip {
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    font-size: 13px;
 
     .tooltip-text {
       left: 0;

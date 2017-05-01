@@ -2,6 +2,7 @@ const GelatoPage = require('gelato/page');
 const Table = require('components/vocablists/VocablistsBrowseTableComponent');
 const Sidebar = require('components/vocablists/VocablistsSidebarComponent');
 const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
+const ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
 
 /**
  * A page that allows a user to browse different categories of vocablists they can study.
@@ -69,6 +70,10 @@ module.exports = GelatoPage.extend({
     this._views['table'].setElement('#vocablist-container').render();
     this._views['expiration'].setElement('#expiration-container').render();
 
+    if (app.getSetting('newuser-' + app.user.id) && !app.getSetting('newuser-' + app.user.id + '-seen-browsevocablist')) {
+      this.showAddListsTooltip();
+    }
+
     return this;
   },
 
@@ -116,6 +121,40 @@ module.exports = GelatoPage.extend({
    */
   handleKeypressListSearchInput: function(event) {
     this._views['table'].setFilterString(event.target.value);
+  },
+
+  /**
+   * Shows a popup to new users who just created an account
+   * that informs them what the lists are and how to add one.
+   */
+  showAddListsTooltip: function() {
+    const self = this;
+
+    let welcome = app.locale('pages.vocabLists.newUserBrowseDialogWelcome' + app.getLanguage());
+    if (app.isChinese() && app.user.get('reviewTraditional') && !app.user.get('reviewSimplified')) {
+      welcome = app.locale('pages.vocabLists.newUserBrowseDialogWelcomezhTrad');
+    }
+
+    let dialogBody = welcome + app.locale('pages.vocabLists.newUserBrowseDialogDescription');
+    dialogBody += app.locale('pages.vocabLists.newUserBrowseDialogDescriptionTextbooks' + app.getLanguage());
+    dialogBody += app.locale('pages.vocabLists.newUserBrowseDialogDescription2');
+
+    this._views['dialog'] = new ConfirmGenericDialog({
+      body: dialogBody,
+      showButtonCancel: false,
+      buttonConfirm: app.locale('pages.vocabLists.newUserBrowseDialogConfirm'),
+      buttonConfirmClass: 'btn-primary',
+      title: app.locale('pages.vocabLists.newUserBrowseDialogTitle')
+    });
+    this._views['dialog'].once(
+      'confirm',
+      function() {
+        self._views['dialog'].close();
+      }
+    );
+
+    this._views['dialog'].open();
+    app.setSetting('newuser-' + app.user.id + '-seen-browsevocablist', true);
   },
 
   /**

@@ -1,6 +1,6 @@
 gelato-component(data-name='stats-study-part-linegraph')
   .row.hidden-md.hidden-lg
-    - var title = app.locale('common.parts.' + view.part +'Capital');
+    - var title = view.graphTitle || app.locale('common.parts.' + view.part +'Capital');
     #graph-title.graph-title #{title}
   .row
     .col-md-9.col-xs-9

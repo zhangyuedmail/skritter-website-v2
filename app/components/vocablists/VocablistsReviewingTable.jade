@@ -8,12 +8,15 @@ gelato-component(data-name='vocablists-reviewing-table')
         .progress
           .progress-bar(style="width:" + (list.getProgress().percent) + '%')
 
-      .col-md-2.text-center
+      .col-md-1.text-center
         if list.get('studyingMode') === 'reviewing'
           .restart-adding-link
             i.glyphicon.glyphicon-play
         if list.get('studyingMode') === 'finished'
           span Finished
+
+      .col-md-1.text-center
+        a(href="/study/" + list.id) Study
 
       .col-md-1.text-center
         .list-settings-span

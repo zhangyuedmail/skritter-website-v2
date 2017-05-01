@@ -5,7 +5,7 @@ gelato-component(data-name="study-prompt-part-defn")
     - var vocab = prompt.reviews.vocab;
 
     .writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
-      span= vocab.get('writing')
+      span(style="font-size: " + vocab.getWritingFontSize() + 'px')= vocab.get('writing')
 
     if prompt.reviews.isComplete()
       .answer

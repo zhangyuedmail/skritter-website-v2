@@ -89,7 +89,6 @@ const VocabModel = SkritterModel.extend({
         type: 'GET',
         headers: app.user.session.getHeaders(),
         error: function(error) {
-          console.log(error);
           reject();
         },
         success: function(sentence) {
@@ -124,7 +123,9 @@ const VocabModel = SkritterModel.extend({
    * @returns {Array}
    */
   getCharactersWithoutFillers: function() {
-    return _.without(this.get('writing').split(''), app.config.writingFillers);
+    return _.filter(this.get('writing').split(''), writing => {
+      return !_.includes(app.config.writingFillers, writing);
+    });
   },
 
   /**
@@ -452,6 +453,23 @@ const VocabModel = SkritterModel.extend({
 
         return res;
       }).join('');
+  },
+
+  /**
+   * Return a scaled pixel value based on length of the writing.
+   * @method getWritingFontSize
+   * @returns {number}
+   */
+  getWritingFontSize: function() {
+    const characterLength = this.getCharacters().length;
+
+    if (characterLength > 10) {
+      return 32;
+    } else if (characterLength > 5) {
+      return 48;
+    } else {
+      return 64;
+    }
   },
 
   /**

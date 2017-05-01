@@ -1,7 +1,7 @@
 gelato-component(data-name="study-prompt-toolbar-action")
   - var prompt = view.prompt;
 
-  if prompt.review
+  if prompt.review && !(app.isMobile() && prompt.review.isComplete())
     .btn-wrapper(role="group")
       button#toolbar-stroke-order.btn.btn-default(type="button")
         i.icon.icon-study-stroke-order(class=view.buttonTeach ? '' : 'disabled')

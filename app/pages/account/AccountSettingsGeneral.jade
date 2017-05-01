@@ -26,7 +26,7 @@ gelato-page(data-name='account-settings-general')
                 label.col-sm-3.control-label(for="field-id")= app.locale('pages.accountGeneral.userIdLabel')
                   .option-desc= app.locale('pages.accountGeneral.userIdDescription')
                 .col-sm-9
-                  input#field-id.form-control(type="text", disabled="disabled", value=user.id)
+                  #field-id=user.id
               .form-group
                 label.col-sm-3.control-label(for="field-name")= app.locale('pages.accountGeneral.displayNameLabel')
                   .option-desc= app.locale('pages.accountGeneral.displayNameDescription')

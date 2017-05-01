@@ -4,100 +4,100 @@ gelato-page(data-name='mobile-account-settings-general')
 
   section#nav-links.container
     .row.text-center
-      .col-xs-4
+      .nav-option.col-xs-4.selected
         a(href='/account/settings/general') General
-      .col-xs-4
+      .nav-option.col-xs-4
         a(href='/account/settings/study') Study
-      .col-xs-4
+      .nav-option.col-xs-4
         a(href='/account/billing/subscription') Billing
 
   section.container
     .content-block
-      .row
+      .header PROFILE
+      #section-content
+        form#general-settings-form.form-horizontal
+          .row.form-group
+            label.col-xs-3.control-label(for="field-avatar")= app.locale('pages.accountGeneral.avatarLabel')
+            //.option-desc= app.locale('pages.accountGeneral.avatarDescription')
+            .col-xs-9
+              img#field-avatar(src="data:image/png;base64, " + user.get('avatar'), alt="")
+              input#avatar-upload-input.hide(type="file", accept="image/*")
+              br
+              br
+              button#change-avatar.btn.btn-sm.btn-primary= app.locale('pages.accountGeneral.changeAvatar')
+          .form-group
+            label.col-xs-3.control-label(for="field-id")= app.locale('pages.accountGeneral.userIdLabel')
+            //.option-desc= app.locale('pages.accountGeneral.userIdDescription')
+            .col-xs-9
+              #field-id=user.id
+          .form-group
+            label.col-xs-3.control-label(for="field-name")= app.locale('pages.accountGeneral.displayNameLabel')
+            //.option-desc= app.locale('pages.accountGeneral.displayNameDescription')
+            .col-xs-9
+              input#field-name.form-control(type="text", value=user.get('name'))
+          .form-group
+            label.col-xs-3.control-label(for="field-email")= app.locale('pages.accountGeneral.emailLabel')
+            //.option-desc= app.locale('pages.accountGeneral.emailDescription')
+            .col-xs-9
+              input#field-email.form-control(type="email", value=user.get('email'))
+          .form-group
+            label.col-xs-3.control-label(for="field-change-password")= app.locale('pages.accountGeneral.passwordLabel')
+            //.option-desc= app.locale('pages.accountGeneral.passwordDescription')
+            .col-xs-9.text-center
+              a#field-change-password(href="#")= app.locale('pages.accountGeneral.changePassword')
+          .form-group
+            label.col-xs-3.control-label(for="field-about")= app.locale('pages.accountGeneral.aboutMeLabel')
+            //.option-desc= app.locale('pages.accountGeneral.aboutMeDescription')
+            .col-xs-9
+              textarea#field-about.form-control(rows="5")= user.get('aboutMe')
+          .form-group
+            label.col-xs-3.control-label(for="field-private")= app.locale('pages.accountGeneral.privateLabel')
+            //.option-desc= app.locale('pages.accountGeneral.privateDescription')
+            .col-xs-9
+              .checkbox
+                label.toggle-switch
+                  input#field-private(type="checkbox", checked=user.get('private'))
+                  .toggle-switch-slider.round
+          .form-group
+            label.col-xs-3.control-label(for="field-eccentric")= app.locale('pages.accountGeneral.eccentricLabel')
+            //.option-desc= app.locale('pages.accountGeneral.eccentricDescription')
+            .col-xs-9
+              .checkbox
+                label.toggle-switch
+                  input#field-eccentric(type="checkbox", checked=user.get('eccentric'))
+                  .toggle-switch-slider.round
 
-        .col-xs-12
-          #section-content
-            form#general-settings-form.form-horizontal
-              .form-group
-                label.col-sm-3.control-label(for="field-avatar")= app.locale('pages.accountGeneral.avatarLabel')
-                .option-desc= app.locale('pages.accountGeneral.avatarDescription')
-                .col-sm-9
-                  img#field-avatar(src="data:image/png;base64, " + user.get('avatar'), alt="")
-                  input#avatar-upload-input.hide(type="file", accept="image/*")
-                  br
-                  br
-                  button#change-avatar.btn.btn-sm.btn-primary= app.locale('pages.accountGeneral.changeAvatar')
-              .form-group
-                label.col-sm-3.control-label(for="field-id")= app.locale('pages.accountGeneral.userIdLabel')
-                .option-desc= app.locale('pages.accountGeneral.userIdDescription')
-                .col-sm-9
-                  input#field-id.form-control(type="text", disabled="disabled", value=user.id)
-              .form-group
-                label.col-sm-3.control-label(for="field-name")= app.locale('pages.accountGeneral.displayNameLabel')
-                .option-desc= app.locale('pages.accountGeneral.displayNameDescription')
-                .col-sm-9
-                  input#field-name.form-control(type="text", value=user.get('name'))
-              .form-group
-                label.col-sm-3.control-label(for="field-email")= app.locale('pages.accountGeneral.emailLabel')
-                .option-desc= app.locale('pages.accountGeneral.emailDescription')
-                .col-sm-9
-                  input#field-email.form-control(type="email", value=user.get('email'))
-              .form-group
-                label.col-sm-3.control-label(for="field-change-password")= app.locale('pages.accountGeneral.passwordLabel')
-                .option-desc= app.locale('pages.accountGeneral.passwordDescription')
-                .col-sm-9
-                  a#field-change-password(href="#")= app.locale('pages.accountGeneral.changePassword')
-              .form-group
-                label.col-sm-3.control-label(for="field-about")= app.locale('pages.accountGeneral.aboutMeLabel')
-                .option-desc= app.locale('pages.accountGeneral.aboutMeDescription')
-                .col-sm-9
-                  textarea#field-about.form-control(rows="5")= user.get('aboutMe')
-              .form-group
-                label.col-sm-3.control-label(for="field-private")= app.locale('pages.accountGeneral.privateLabel')
-                .option-desc= app.locale('pages.accountGeneral.privateDescription')
-                .col-sm-9
-                  .checkbox
-                    label
-                      input#field-private(type="checkbox", checked=user.get('private'))
-              .form-group
-                label.col-sm-3.control-label(for="field-eccentric")= app.locale('pages.accountGeneral.eccentricLabel')
-                .option-desc= app.locale('pages.accountGeneral.eccentricDescription')
-                .col-sm-9
-                  .checkbox
-                    label
-                      input#field-eccentric(type="checkbox", checked=user.get('eccentric'))
+          hr
 
-              hr
+          .form-group
+            label.col-xs-3.control-label(for="field-country")= app.locale('pages.accountGeneral.countryLabel')
+            //.option-desc= app.locale('pages.accountGeneral.countryDescription')
+            .col-xs-9
+              select#field-country.form-control
+                for name, code in view.countries
+                  if code === view.getSelectedCountryCode()
+                    option(value=code, selected="selected")= name
+                  else
+                    option(value=code)= name
+          .form-group
+            label.col-xs-3.control-label(for="field-timezone")= app.locale('pages.accountGeneral.timezoneLabel')
+            //.option-desc= app.locale('pages.accountGeneral.timezoneDescription')
+            .col-xs-9
+              select#field-timezone.form-control
+                for timezone, code in view.timezones[view.getSelectedCountryCode()]
+                  if timezone === user.get('timezone')
+                    option(value=timezone, selected="selected")= timezone.replace(/_/g, ' ')
+                  else
+                    option(value=timezone)= timezone.replace(/_/g, ' ')
 
-              .form-group
-                label.col-sm-3.control-label(for="field-country")= app.locale('pages.accountGeneral.countryLabel')
-                .option-desc= app.locale('pages.accountGeneral.countryDescription')
-                .col-sm-9
-                  select#field-country.form-control
-                    for name, code in view.countries
-                      if code === view.getSelectedCountryCode()
-                        option(value=code, selected="selected")= name
-                      else
-                        option(value=code)= name
-              .form-group
-                label.col-sm-3.control-label(for="field-timezone")= app.locale('pages.accountGeneral.timezoneLabel')
-                .option-desc= app.locale('pages.accountGeneral.timezoneDescription')
-                .col-sm-9
-                  select#field-timezone.form-control
-                    for timezone, code in view.timezones[view.getSelectedCountryCode()]
-                      if timezone === user.get('timezone')
-                        option(value=timezone, selected="selected")= timezone.replace(/_/g, ' ')
-                      else
-                        option(value=timezone)= timezone.replace(/_/g, ' ')
+          .form-group
+            .col-xs-12.option-buttons
+              #error-alert.alert.alert-danger.hidden
+              .text-center
+                if user.state === 'standby'
+                  button#button-save.btn.btn-fixed.btn-success(type="submit")= app.locale('common.save')
+                else
+                  button#button-save.btn.btn-fixed.btn-success(type="submit", disabled="disabled")
+                    i.fa.fa-2x.fa-spinner.fa-pulse
 
-              .form-group
-                .col-sm-12.option-buttons
-                  #error-alert.alert.alert-danger.hidden
-                  .text-center
-                    if user.state === 'standby'
-                      button#button-save.btn.btn-fixed.btn-success(type="submit")= app.locale('common.save')
-                    else
-                      button#button-save.btn.btn-fixed.btn-success(type="submit", disabled="disabled")
-                        i.fa.fa-2x.fa-spinner.fa-pulse
-
-                    button#reset-all-data.btn.btn-danger= app.locale('pages.accountGeneral.resetAllData')
+                button#reset-all-data.btn.btn-danger= app.locale('pages.accountGeneral.resetAllData')

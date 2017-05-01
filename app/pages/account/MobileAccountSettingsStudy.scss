@@ -6,7 +6,7 @@ gelato-page[data-name='mobile-account-settings-study'] {
   padding-top: 100px;
 
   #nav-links {
-    background: $grey7;
+    background: $wood7;
     margin-bottom: 15px;
     margin-top: -50px;
     padding-bottom: 10px;
@@ -14,18 +14,44 @@ gelato-page[data-name='mobile-account-settings-study'] {
     position: fixed;
     width: 100%;
     z-index: 7002;
+
+    .nav-option {
+      padding: 4px 0;
+      margin-bottom: 4px;
+
+      a {
+        color: $sand1;
+      }
+
+      &.selected {
+        margin-bottom: 0;
+        border-bottom: 4px solid $green4;
+
+        a {
+          color: $white;
+        }
+      }
+    }
+  }
+
+  .header {
+    margin-top: 0;
+    margin-bottom: 0px;
+    font-size: 12px;
+    padding: 15px;
   }
 
   .content-block {
     background-color: #f2f2f6;
+    padding: 0;
   }
 
   #section-content {
     background-color: $white1;
-    border-radius: 25px;
+    border-radius: 0px;
     color: #404851;
-    margin: -15px;
-    padding: 25px;
+    margin: 0;
+    padding: 15px;
 
     input {
       border-radius: 0;

@@ -1,0 +1,120 @@
+@import "../../styles/_variables";
+
+gelato-component[data-name='mobile-vocablists-list-editor-rows'] {
+  padding-bottom: 15px;
+
+  .empty-msg {
+    color: $grey5;
+    font-size: 16px;
+    font-weight: 300;
+    padding: 30px 0px 20px;
+    text-align: center;
+  }
+
+  .labels {
+
+  }
+
+  .row {
+    color: $grey5;
+    font-size: 16px;
+    font-weight: 300;
+    padding: 10px 0px;
+    border-top: 1px solid $white5;
+
+    &.editing {
+      cursor: pointer;
+    }
+
+    &.banned {
+      color: $grade1 !important;
+    }
+
+    &.odd {
+      background-color: $white2;
+    }
+
+    &.even {
+      background-color: $white1;
+    }
+
+    img {
+      width: 100%;
+    }
+
+    .ellipse-icon {
+      //color: $grey3;
+      font-size: 18px;
+    }
+
+    .loading-row {
+      font-size: 18px;
+      padding-bottom: 5px;
+      padding-top: 5px;
+    }
+
+    .row-header {
+      font-weight: 400;
+    }
+
+    .study-writing {
+      background-color: $grey1;
+      border: 1px solid $grey3;
+      color: $grey3;
+      font-size: 14px;
+      padding: 2px 5px;
+
+      &.active {
+        background-color: $green3;
+      }
+    }
+
+    .vocab-definition {
+      margin-top: 6px;
+    }
+
+    .vocab-options {
+      margin-top: 6px;
+    }
+
+    .vocab-reading {
+      margin-top: 6px;
+    }
+
+    .vocab-writing {
+      font-size: 18px;
+    }
+  }
+
+  .result-rows {
+    clear: both;
+    padding-top: 15px;
+
+    .result-row {
+      background-color: white;
+      border-top: none;
+      font-size: 14px;
+      padding: 5px 30px;
+
+      &:hover {
+        background-color: $white5;
+      }
+
+      .vocab-definition {
+        display: inline-block;
+        width: 60%;
+      }
+
+      .vocab-reading {
+        display: inline-block;
+        width: 20%;
+      }
+
+      .vocab-writing {
+        display: inline-block;
+        width: 20%;
+      }
+    }
+  }
+
+}

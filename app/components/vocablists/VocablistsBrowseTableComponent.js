@@ -54,6 +54,13 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
         this.trigger('component:loaded', 'table');
       }
     });
+
+    /**
+     * Stores state of whether a list is currently being added
+     * @type {boolean}
+     * @private
+     */
+    this._adding = false;
   },
 
   /**
@@ -93,12 +100,33 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    */
   handleClickAddToQueueLink: function(event) {
     event.preventDefault();
-    var listId = $(event.currentTarget).data('vocablist-id');
-    var vocablist = this.vocablists.get(listId);
-    if (vocablist.get('studyingMode') === 'not studying') {
+    const self = this;
+    const target = $(event.currentTarget);
+    const listId = target.data('vocablist-id');
+    const vocablist = this.vocablists.get(listId);
+
+    if (vocablist.get('studyingMode') === 'not studying' && !this._adding) {
+      this._adding = true;
       vocablist.justAdded = true;
-      vocablist.save({'studyingMode': 'adding'}, {patch: true});
-      this.render();
+      target.text(app.locale('pages.vocabLists.adding')).removeClass('add-to-queue-link');
+
+      vocablist.save({'studyingMode': 'adding'}, {
+        patch: true,
+        success: function() {
+          if (app.getSetting('newuser-' + app.user.id)) {
+            app.getSetting('newuser-' + app.user.id, false);
+            app.router.navigateStudy();
+          } else {
+            self.render();
+          }
+        },
+        error: function() {
+          self.render();
+          app.notifyUser({
+            message: app.locale('pages.vocabLists.errorAddingList')
+          });
+        }
+      });
     }
   },
 

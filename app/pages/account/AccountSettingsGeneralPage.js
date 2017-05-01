@@ -2,6 +2,7 @@ const GelatoPage = require('gelato/page');
 const AccountSidebar = require('components/account/AccountSidebarComponent');
 const ChangePasswordDialog = require('dialogs1/change-password/view');
 const ResetAllDataDialog = require('dialogs1/reset-all-data/view');
+const defaultAvatar = require('data/default-avatar');
 
 /**
  * @class AccountSettingsGeneralPage
@@ -114,6 +115,13 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
 
         if (msg.indexOf('Another user goes by that name.') > -1) {
           msg = app.locale('pages.accountGeneral.errorDuplicateDisplayName');
+        }
+
+        if (msg.indexOf('avatar') > -1) {
+          msg = app.locale('pages.accountGeneral.errorBadAvatarFormat');
+
+          app.user.set('avatar', defaultAvatar);
+          app.user.save();
         }
 
         self.displayErrorMessage(msg);

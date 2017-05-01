@@ -11,7 +11,7 @@ gelato-component(data-name='mobile-vocablists-mine-table')
         a(href="/vocablists/view/" + list.id)= list.get('name')
       .col-md-2.col-xs-5.changed-date
         .changed-label Updated on:
-        div=moment(list.get('changed') * 1000).format('l')
+        div=list.getFormattedChangedDate()
       .col-md-3.col-xs-7.study-mode
         if list.get('studyingMode') === 'not studying'
           span.add-to-queue-link(data-vocablist-id=list.id)
@@ -23,7 +23,7 @@ gelato-component(data-name='mobile-vocablists-mine-table')
       if list.get('published')
         .col-xs-12.published
           span.changed-label Published on:
-          .published-date= moment(list.get('published') * 1000).format('l')
+          .published-date= list.getFormattedPublishedDate()
 
 
   if view.vocablists.state === 'standby' && view.vocablists.cursor

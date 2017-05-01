@@ -67,7 +67,8 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
 
     this._views['subNavbar'] = new navbar({
       page: page,
-      rootMenu: this
+      rootMenu: this,
+      viewOptions: page.navbarOptions
     });
 
     this.renderSubNavbar();

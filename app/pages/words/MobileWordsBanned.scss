@@ -1,7 +1,6 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='mobile-words-banned'] {
-
   background: $background-primary;
   padding-top: 100px;
 
@@ -10,7 +9,7 @@ gelato-page[data-name='mobile-words-banned'] {
   }
 
   .table-oversized-wrapper {
-    margin-top: 30px;
+    margin: 15px -15px 0;
   }
 
   .checkbox-td {
@@ -38,8 +37,8 @@ gelato-page[data-name='mobile-words-banned'] {
   }
 
   .main-content {
-    border-radius: 25px;
-    padding: 20px 40px;
+    border-radius: 0;
+    padding: 15px;
   }
 
   .vocab-row {
@@ -52,7 +51,7 @@ gelato-page[data-name='mobile-words-banned'] {
   }
 
   #nav-links {
-    background: $grey7;
+    background: $wood7;
     margin-bottom: 15px;
     margin-top: -50px;
     padding-bottom: 10px;
@@ -60,6 +59,23 @@ gelato-page[data-name='mobile-words-banned'] {
     position: fixed;
     width: 100%;
     z-index: 7002;
-  }
 
+    .nav-option {
+      padding: 4px 0;
+      margin-bottom: 4px;
+
+      a {
+        color: $sand1;
+      }
+
+      &.selected {
+        margin-bottom: 0;
+        border-bottom: 4px solid $green4;
+
+        a {
+          color: $white;
+        }
+      }
+    }
+  }
 }

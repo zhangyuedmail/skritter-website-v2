@@ -38,8 +38,8 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.dueCount = 0;
     this.dueCountState = 'standby';
     this.fetchingState = 'standby';
+    this.listId = null;
     this.preloadingState = 'standby';
-    this.skipped = false;
     this.sorted = null;
   },
 
@@ -314,13 +314,11 @@ const ItemCollection = BaseSkritterCollection.extend({
           if (model.isPartRune() && !model.isCharacterDataLoaded()) {
             console.log('SKIPPING ITEM:', model.id);
 
-            this.skipped = true;
-
             // exclude the rune item from the local queue
             model._queue = false;
 
-            // request to skip item on the server
-            // model.skip();
+            // move the item into future on the server
+            model.bump();
 
             return false;
           }
@@ -328,9 +326,12 @@ const ItemCollection = BaseSkritterCollection.extend({
           if (model.isJapanese()) {
             // skip all kana writings when study kana disabled
             if (!app.user.get('studyKana') && model.isPartRune() && model.isKana()) {
-              model.set('active', false);
+
+              // exclude the rune item from the local queue
+              model._queue = false;
+
+              // move the item into future on the server
               model.bump();
-              model.save();
 
               return false;
             }
@@ -408,9 +409,10 @@ const ItemCollection = BaseSkritterCollection.extend({
             ids: itemIds.join('|'),
             include_contained: true,
             include_decomps: true,
-            include_heisigs: true,
+            include_heisigs: app.user.get('showHeisig') || false,
             include_sentences: false,
             include_strokes: false,
+            include_top_mnemonics: true,
             include_vocabs: true
           },
           remove: false,
@@ -470,6 +472,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     }
 
     this.dueCountState = 'fetching';
+
     let url = app.getApiUrl() + 'items/due';
 
     if (app.config.useV2Gets.itemsdue) {
@@ -483,6 +486,7 @@ const ItemCollection = BaseSkritterCollection.extend({
       data: {
         lang: app.getLanguage(),
         languageCode: app.getLanguage(),
+        lists: this.listId,
         parts: app.user.getFilteredParts().join(','),
         styles: app.user.getFilteredStyles().join(',')
       },
@@ -494,11 +498,7 @@ const ItemCollection = BaseSkritterCollection.extend({
       success: (result) => {
         let count = 0;
 
-        for (let part in result.due) {
-          for (let style in result.due[part]) {
-            count += result.due[part][style];
-          }
-        }
+        _.forIn(result.due, part => _.forIn(part, style => count += style));
 
         this.dueCount =  count;
         this.dueCountState = 'standby';

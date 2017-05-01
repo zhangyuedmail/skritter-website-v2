@@ -27,6 +27,8 @@ gelato-component(data-name='vocablists-list-editor-rows')
             - var vocab2 = row.vocabs[1];
             - var hasWritingDiff = vocab1.getWritingDifference(vocab2.id);
 
+            - console.log(vocab1)
+
             .col-xs-1
               if view.editing && vocablist.isEditable()
                 i.fa.fa-ellipsis-v.ellipse-icon
@@ -48,6 +50,8 @@ gelato-component(data-name='vocablists-list-editor-rows')
                   span(class=vocab1.getFontClass())= vocab1.getWritingDifference(vocab2.id) || '-'
               if vocab1.isJapanese()
                 span.study-writing(class=row.studyWriting ? 'active' : '') W
+                if vocab1.get('rareKanji')
+                  span.rare-kanji Uncommon
 
             .col-xs-2.vocab-reading= vocab1.getReading()
 
@@ -95,14 +99,15 @@ gelato-component(data-name='vocablists-list-editor-rows')
             | &nbsp;&nbsp;
             span= 'searching for ' + row.query
 
-  if vocablistSection.state === 'standby'
-    .row
-      .col-xs-1.row-header
-      .col-xs-2.row-header.writing Writing
-      .col-xs-2.row-header
-      .col-xs-2.row-header.reading Reading
-      .col-xs-3.row-header.definition Definition
-      .col-xs-2.row-header
-    #vocablist-section-rows
-      for row, index in rows
-        +wordRow(row, index)
+  .row
+    .col-xs-1.row-header
+    .col-xs-2.row-header.writing Writing
+    .col-xs-2.row-header
+    .col-xs-2.row-header.reading Reading
+    .col-xs-3.row-header.definition Definition
+    .col-xs-2.row-header
+  #vocablist-section-rows
+    for row, index in rows
+      +wordRow(row, index)
+    if !view.editing && !rows.length
+      div.empty-msg= app.locale('pages.vocabLists.sectionEmptyMsg')

@@ -49,6 +49,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.$inputContainer = null;
     this.$panelLeft = null;
     this.$panelRight = null;
+    this.editing = false;
     this.page = options.page;
     this.part = null;
     this.review = null;
@@ -158,6 +159,8 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     this.toolbarVocab.disableEditing();
 
+    vent.trigger('prompt-part:rendered', this.reviews);
+
     return this;
   },
 
@@ -185,10 +188,15 @@ const StudyPromptComponent = GelatoComponent.extend({
       if (skip) {
         this.reviews.skip = true;
       }
+      if (this.editing) {
+        this.reviews.vocab.set('customDefinition', this.vocabDefinition.getValue());
+        this.reviews.vocab.save();
+      }
       this.trigger('next', this.reviews);
     } else {
       this.reviews.next();
       this.trigger('reviews:next', this.reviews);
+      vent.trigger('reviews:next', this.reviews);
       this.renderPart();
     }
   },
@@ -208,6 +216,10 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.review.stop();
 
     if (this.reviews.isFirst()) {
+      if (this.editing) {
+        this.reviews.vocab.set('customDefinition', this.vocabDefinition.getValue());
+        this.reviews.vocab.save();
+      }
       this.trigger('previous', this.reviews);
     } else {
       this.reviews.previous();
@@ -421,18 +433,25 @@ const StudyPromptComponent = GelatoComponent.extend({
                 }
               },
               function(callback) {
-                items.fetch({
-                  data: {
-                    vocab_ids: vocabId
-                  },
-                  error: function(error) {
-                    callback(error);
-                  },
-                  success: function(items) {
-                    wordItems = items;
-                    callback(null);
-                  }
-                });
+                if (app.router.page.title.indexOf('Demo') === -1) {
+                  items.fetch({
+                    data: {
+                      vocab_ids: vocabId
+                    },
+                    error: function(error) {
+                      callback(error);
+                    },
+                    success: function(items) {
+                      wordItems = items;
+                      callback(null);
+                    }
+                  });
+                } else {
+
+                  // skip fetch for the demo--user isn't logged in and
+                  // doesn't have items to fetch
+                  callback();
+                }
               }
             ],
             callback

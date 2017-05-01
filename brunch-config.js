@@ -9,8 +9,9 @@ exports.config = {
       joinTo: {
         'js/application.js': /^app[\\/]/,
         'js/libraries.js': /^(node_modules|vendor)[\\/]/,
+        'js/mobilelibs.js': /^mobilevendor[\\/]/,
         'js/startup.js': /^startup[\\/]/
-      }
+      },
     },
     stylesheets: {
       joinTo: {

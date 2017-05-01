@@ -62,11 +62,33 @@ bootstrap-dialog(data-name='study-settings')
                   label
                     input(type="checkbox", checked=user.get('teachingMode'))
             .form-group
+              label.col-sm-3.control-label(for="field-auto-adding") Auto Adding
+              .col-sm-9#field-auto-adding
+                .checkbox
+                  label
+                    input(type="checkbox", checked=user.get('addFrequency') > 0)
+            .form-group
               label.col-sm-3.control-label(for="field-audio") Audio
               .col-sm-9#field-audio
                 .checkbox
                   label
                     input(type="checkbox", checked=user.isAudioEnabled())
+
+            if app.isChinese()
+              .form-group
+                label.col-sm-3.control-label(for="field-bopomofo") Bopomofo
+                .col-sm-9#field-bopomofo
+                  .checkbox
+                    label
+                      input(type="checkbox", checked=user.get('readingChinese') === 'zhuyin')
+
+            if app.isJapanese()
+              .form-group
+                label.col-sm-3.control-label(for="field-romaji") Romaji
+                .col-sm-9#field-rromaji
+                  .checkbox
+                    label
+                      input(type="checkbox", checked=user.get('readingJapanese') === 'romaji')
 
             if app.isChinese() && !app.isMobile()
               .form-group

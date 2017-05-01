@@ -32,6 +32,17 @@ module.exports = {
 
   locale: 'en',
 
+  /**
+   * The max amount of time for the timer to increase
+   * for a certain prompt type
+   */
+  maxPromptTimes: {
+    rune: 30,
+    rdng: 30,
+    defn: 30,
+    tone: 15
+  },
+
   nodeApiRoot: 'https://api-dot-write-way.appspot.com',
 
   sentryUrl: 'https://4aa61a5ed92f4aaf8a9ae79777b70843@sentry.io/123679',
@@ -60,7 +71,7 @@ module.exports = {
     items: false,
     itemsdue: true,
     progstats: true,
-    subscriptions: true,
+    subscriptions: false,
     users: true,
     vocablists: false,
     vocabs: false

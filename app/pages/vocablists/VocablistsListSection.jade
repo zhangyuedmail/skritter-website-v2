@@ -31,14 +31,18 @@ gelato-page(data-name='vocablists-list-section')
                 .col-xs-6.text-right
                   #editing-buttons
                     if vocablist.isEditable()
-                      if editor.editing
-                        button#discard-changes.btn.btn-primary
-                          i.fa.fa-close &nbsp;#{app.locale('common.cancel')}&nbsp;
-                        button#save-changes.btn.btn-success
-                          i.fa.fa-save &nbsp;#{app.locale('common.save')}&nbsp;
+                      if vocablistSection.state === 'standby'
+                        if editor.editing
+                          button#discard-changes.btn.btn-primary
+                            i.fa.fa-close &nbsp;#{app.locale('common.cancel')}&nbsp;
+                          button#save-changes.btn.btn-success
+                            i.fa.fa-save &nbsp;#{app.locale('common.save')}&nbsp;
+                        else
+                          button#edit-section.btn.btn-success
+                            i.fa.fa-pencil &nbsp;Edit&nbsp;
                       else
-                        button#edit-section.btn.btn-success
-                          i.fa.fa-pencil &nbsp;Edit&nbsp;
+                        i.fa.fa-2x.fa-spinner.fa-pulse
+
 
             #editor-container
 

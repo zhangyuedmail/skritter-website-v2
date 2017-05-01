@@ -24,7 +24,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./VocablistsRowEditor'),
+  template: app.isMobile() ? require('./MobileVocablistsRowEditor') : require('./VocablistsRowEditor'),
 
   /**
    * @method initialize
@@ -33,7 +33,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    */
   initialize: function(options) {
     this.changed = false;
-    this.editing = false;
+    this.editing = options.editing || false;
     this.rows = [];
     this.saved = [];
     this.vocablist = options.vocablist;

@@ -42,22 +42,12 @@ gelato-page(data-name='vocablists-list')
 
               .list-stats
                 span.spr Made by:
-                if vocablist.get('sort') === 'official'
-                  span Skritter
-                else if vocablist.get('sort') === 'chinesepod-lesson'
-                  span ChinesePod
-                else if vocablist.get('creator') === app.user.id
-                  span= app.user.get('name') || app.user.id
-                else
-                  if creator && creator.state === 'standby'
-                    span= creator.get('name') || creator.id
-                  else
-                    span(data-user-id=vocablist.get('creator')) Unknown
+                span= vocablist.getPublisherName()
                 span.spl.spr |
 
                 if vocablist.get('published')
                   span.spr Published:
-                  span= moment(vocablist.get('published') * 1000).format('LL')
+                  span= vocablist.getFormattedPublishedDate('LL')
                   span.spl.spr |
 
                 if vocablist.get('published') && vocablist.get('peopleStudying')

@@ -3,9 +3,9 @@
 gelato-component.mobile-side-menu-component {
   width: 250px;
   height: 100%;
-  background-color: $grey8;
+  background-color: $wood9;
   position: fixed;
-  color: $grey1;
+  color: $sand2;
   font-size: 16px;
 
   .actions-wrapper {
@@ -18,7 +18,7 @@ gelato-component.mobile-side-menu-component {
 
   .username {
     font-size: 18px;
-    color: $grey2;
+    color: $sand2;
     margin-bottom: 10px;
   }
 
@@ -59,11 +59,12 @@ gelato-component.mobile-side-menu-component {
   }
 
   a {
-    color: $grey1;
-    font-size: 24px;
+    color: $sand1;
+    font-size: 22px;
+    padding: 4px 15px;
 
     &:hover, &:focus {
-      background-color: $grey6;
+      background-color: $sand6;
     }
   }
 

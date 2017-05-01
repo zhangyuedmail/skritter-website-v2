@@ -1,7 +1,6 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='vocablists-browse'] {
-
   background: $background-primary;
   padding-top: 75px;
 
@@ -40,6 +39,19 @@ gelato-page[data-name='vocablists-browse'] {
         margin-right: 10px;
         margin-left: 20px;
       }
+    }
+  }
+
+  .title-wrapper {
+    margin-bottom: 25px;
+
+    .title {
+      margin-bottom: 0px;
+    }
+
+    .explaination {
+      color: $grey3;
+      font-size: 16px;
     }
   }
 

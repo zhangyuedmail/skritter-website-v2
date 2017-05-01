@@ -58,11 +58,12 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
    */
   handleClickShowDefinition: function(event) {
     event.preventDefault();
-    console.log('show');
+
     this.prompt.reviews.showDefinition = true;
     this.prompt.reviews.forEach(function(review) {
       review.set('showDefinition', true);
     });
+
     this.render();
   }
 

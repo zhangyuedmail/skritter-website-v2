@@ -60,6 +60,7 @@ const CouponModel = SkritterModel.extend({
   useError: function(model, jqxhr) {
     this.error = jqxhr.responseJSON.message;
     this.stopListening(this, 'sync', this.useSync);
+    this.trigger('state', this);
   },
 
   /**
@@ -69,6 +70,7 @@ const CouponModel = SkritterModel.extend({
     this.subscriptionAttributes = response.Subscription;
     this.wasUsed = true;
     this.stopListening(this, 'error', this.useError);
+    this.trigger('state', this);
   }
 
 });

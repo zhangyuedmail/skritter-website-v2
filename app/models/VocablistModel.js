@@ -52,7 +52,7 @@ const VocablistModel = SkritterModel.extend({
       options.url = app.getApiUrl() + _.result(this, 'url');
     }
 
-    if (app.config.useV2Gets.vocablists) {
+    if (method === 'read' && app.config.useV2Gets.vocablists) {
       options.url = app.getApiUrl(2) + 'gae/vocablists/' + this.id;
     }
 
@@ -68,7 +68,7 @@ const VocablistModel = SkritterModel.extend({
       !this.get('disabled'),
       !this.get('published'),
       this.get('sort') === 'custom',
-      this.get('user') === app.user.id
+      (this.get('user') || this.get('creator')) === app.user.id
     ]);
   },
 
@@ -84,17 +84,33 @@ const VocablistModel = SkritterModel.extend({
   },
 
   /**
+   * Gets the changed date and presents it in a nice format.
+   * @returns {String} a UI-printable representation of the publish date
+   */
+  getFormattedChangedDate: function(format) {
+    format = format || 'l';
+    let changed = moment(this.get('changed') * 1000);
+
+    if (app.config.useV2Gets.vocablists) {
+      changed = moment(this.get('changed'));
+    }
+
+    return changed.format(format);
+  },
+
+  /**
    * Gets the publish date and presents it in a nice format.
    * @returns {String} a UI-printable representation of the publish date
    */
-  getFormattedPublishedDate: function() {
+  getFormattedPublishedDate: function(format) {
+    format = format || 'l';
     let published = moment(this.get('published') * 1000);
 
     if (app.config.useV2Gets.vocablists) {
       published = moment(this.get('published'));
     }
 
-    return published.format('l');
+    return published.format(format);
   },
 
   /**
@@ -172,6 +188,24 @@ const VocablistModel = SkritterModel.extend({
     } else {
       return {percent: 0};
     }
+  },
+
+  /**
+   * Gets a UI-printable version of the publisher of the list
+   * @return {string}
+   */
+  getPublisherName: function() {
+    if (this.get('sort') === 'official') {
+      return 'Skritter';
+    } else if (this.get('sort') === 'chinesepod-lesson') {
+      return 'ChinesePod';
+    } else if (this.get('creator') === app.user.id) {
+      return app.user.get('name') || app.user.id;
+    } else if (this.get('creator')) {
+      return this.get('creator');
+    }
+
+    return 'Unknown';
   },
 
   /**

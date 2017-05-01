@@ -139,7 +139,7 @@ module.exports = GelatoPage.extend({
    * @method fetchItemsForSearchVocabsSync
    */
   fetchItemsForSearchVocabsSync: function(items, response) {
-    const vocabs = items.vocabs;
+    const vocabs = this.searchVocabs.models;
     _.forEach(vocabs, function(vocab) {
       // having gotten items for each vocab, assign each vocab
       // its last-studied and next-to-study item
@@ -164,7 +164,6 @@ module.exports = GelatoPage.extend({
     }, this);
     this.vocabsToFetchItemsFor.remove(vocabs);
     this.renderTable();
-    this.fetchItemsForSearchVocabs();
   },
 
   /**

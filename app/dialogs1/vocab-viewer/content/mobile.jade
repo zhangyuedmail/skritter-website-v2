@@ -7,12 +7,19 @@ gelato-component(data-name='mobile-vocab-viewer-content')
     - var differentAltVocab = altVocab && altVocab !== vocab;
     - var containingVocabs = view.getContainingCharacters();
     - var containingWords = view.getContainingWords();
+    - var decomp = vocab.getDecomp();
     - var definition = vocab.getDefinition();
     - var mnemonic = vocab.getMnemonic();
     - var sentence = vocab.getSentence();
 
     #header-section
       .row
+        .col-xs-2.pull-left
+          a(href='#', data-dismiss='modal')
+            i.fa.fa-close
+        .col-xs-6.text-center
+          #vocab-difficulty-text.toughness-label LEVEL
+          #vocab-difficulty.toughness= vocab.get('toughnessString')
         .col-xs-2
           if vocab.isStarred()
             i#button-vocab-star.icon.icon-study-word-star-filled
@@ -23,12 +30,6 @@ gelato-component(data-name='mobile-vocab-viewer-content')
             svg
               path(d="M11.52 0C5.16 0 0 5.16 0 11.52 0 17.88 5.16 23.04 11.52 23.04 17.88 23.04 23.04 17.88 23.04 11.52 23.04 5.16 17.88 0 11.52 0L11.52 0ZM11.52 20.64C6.48 20.64 2.4 16.56 2.4 11.52 2.4 6.48 6.48 2.4 11.52 2.4 16.56 2.4 20.64 6.48 20.64 11.52 20.64 16.56 16.56 20.64 11.52 20.64L11.52 20.64Z" id="Shape" sketch:type="MSShapeGroup")
               path(d="M18.63 4.38L4.62 18.38" id="Line" stroke-width="2" stroke-linecap="square" sketch:type="MSShapeGroup")
-        .col-xs-6.text-center
-          #vocab-difficulty-text.toughness-label LEVEL
-          #vocab-difficulty.toughness= vocab.get('toughnessString')
-        .col-xs-2.pull-right
-          a(href='#', data-dismiss='modal')
-            i.fa.fa-times-circle-o
       .row(class=differentAltVocab ? '' : 'text-center')
         div(class=differentAltVocab ? 'col-xs-6 separator' : 'col-xs-12')
           #vocab-writing(class=vocab.getFontClass() +　' vocab-writing')= vocab.get('writing')
@@ -45,18 +46,15 @@ gelato-component(data-name='mobile-vocab-viewer-content')
             if view.editing
               textarea.definition.edit-textbox= definition
             else
-              span.definition!= definition || '[ no definition ]'
+              if definition
+                span.definition!= definition
+              else
+                em.defintion Click the 'edit' icon to add a definition
 
       .row.edit-row
-        .col-xs-12.text-right
-          if view.editing
-            button#save-vocab.btn.btn-sm.btn-success Save
-          else
-            button#edit-vocab.btn.btn-sm.btn-default Edit
-      if app.isAndroid && vocab.isChinese()
-        .row.text-center
-          .block
-            if app.dicts.pleco
+        .col-xs-6.text-left
+          if app.isMobile() && vocab.isChinese()
+            if !app.dicts.pleco
               img#pleco-icon.dict-icon(src='media/images/icon-pleco.png')
 
             if app.dicts.hanpingPro
@@ -66,10 +64,31 @@ gelato-component(data-name='mobile-vocab-viewer-content')
 
             if app.dicts.hanpingYue
               img#hanping-yue-icon.dict-icon(src='media/images/icon-hanping-yue.png')
+        .col-xs-6.text-right
+          if view.editing
+            i#save-vocab.fa.fa-2x.fa-save
+          else if app.user.isLoggedIn()
+            i#edit-vocab.fa.fa-2x.fa-pencil-square-o
+
 
     #content-section
-      .row
-        if containingVocabs.length > 1
+      if decomp
+        .row
+          .block
+            .header Decomposition of #{vocab.get('writing')}
+            .value
+              #vocab-decomps
+                for child in decomp.get('Children')
+                  div
+                    span.spr= child.writing
+                    span.spr= vocab.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                    span.spr :
+                    if app.user.get('showHeisig') && child.heisigDefinition
+                      em= child.heisigDefinition + ' - '
+                    span= child.definitions.en
+
+      if containingVocabs.length > 1
+        .row
           .block
             .header.contained-header Characters contained #{vocab.get('writing')}
             .value
@@ -81,20 +100,9 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                       span.spr.reading= model.getReading()
                       span.spr :
                       span.definition= model.getDefinition()
-      .row
-        .block
-          .header Example sentence
-          .value
-            #vocab-sentence
-              if sentence
-                span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
-        if mnemonic
-          .block
-            .header Mnemonic
-            .value
-              #vocab-mnemonic
-                span!= app.fn.textToHTML(mnemonic.text)
-        if containingWords.length > 1
+
+      if containingWords.length > 1
+        .row
           .block
             .header Words containing #{vocab.get('writing')}
             .value
@@ -109,6 +117,30 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                 - var remainingContainedWords = containingWords.length - 3;
                 #show-more-contained.text-center Show all #{remainingContainedWords} words
 
+      if sentence
+        .row
+          .block
+            .header Example sentence
+            .value
+              #vocab-sentence
+                if sentence
+                  span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
+
+      .row
+        .block
+          .header Mnemonic
+          .value
+            #vocab-mnemonic
+              if view.editing
+                textarea.mnemonic.edit-textbox= mnemonic ? mnemonic.text : ''
+              else
+                if mnemonic && mnemonic.text != ''
+                  span!= app.fn.textToHTML(mnemonic.text)
+                else
+                  em Click the 'edit' icon to add a mnemonic
+
+
+
         .block
           .header Dictionary
           .value
@@ -120,7 +152,7 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                 th Part
                 th Next
                 th Last
-                th Time
+                //th Time
                 th
             tbody
               for item in items.models
@@ -129,7 +161,7 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                   td= _.capitalize(item.get('part'))
                   td= item.get('next') > moment().unix() ? moment(item.get('next') * 1000).from() : 'Ready'
                   td= item.get('last') ? moment(item.get('last') * 1000).from() : '-'
-                  td= item.get('timeStudied') ? Math.round(item.get('timeStudied')) + ' seconds' : '-'
+                  //td= item.get('timeStudied') ? Math.round(item.get('timeStudied')) + ' seconds' : '-'
                   if _.includes(vocab.get('bannedParts'), item.get('part'))
                     td.item-unban
                       button.btn.btn-xs.btn-default Unban
@@ -138,11 +170,22 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                       button.btn.btn-xs.btn-danger Ban
   else
     #header-section
-      .block.separator
-        if view.vocab
-          .vocab-writing= view.vocab.getWriting ? view.vocab.getWriting() : view.vocab
-      .pull-right
-        a(href='#', data-dismiss='modal')
-          i.fa.fa-times-circle-o
+      .row
+        .col-xs-6
+          a(href='#', data-dismiss='modal')
+            i.fa.fa-close
+          .header-writing= view.vocabWriting || ''
+        .col-xs-6.text-right
+          if app.isMobile() && app.isChinese()
+            if !app.dicts.pleco
+              img#pleco-icon.dict-icon(src='media/images/icon-pleco.png')
+
+            if !app.dicts.hanpingPro
+              img#hanping-pro-icon.dict-icon(src='media/images/icon-hanping-pro.png')
+            else if app.dicts.hanpingLite
+              img#hanping-lite-icon.dict-icon(src='media/images/icon-hanping-lite.png')
+
+            if app.dicts.hanpingYue
+              img#hanping-yue-icon.dict-icon(src='media/images/icon-hanping-yue.png')
     #content-section.text-center
       i.fa.fa-3x.fa-spinner.fa-pulse

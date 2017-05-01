@@ -198,8 +198,24 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    */
   handlePromptToolbarActionCorrect: function() {
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
-    this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
-    this.prompt.toolbarAction.render();
+    this.prompt.review.set('complete', true);
+
+    if (this.prompt.review.character.isComplete()) {
+      this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
+      this.prompt.toolbarAction.render();
+      this.prompt.canvas.injectLayerColor(
+        'character',
+        this.prompt.review.getGradingColor()
+      );
+    } else {
+      const possibleTones = this.prompt.review.getTones();
+      const expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
+      this.prompt.canvas.drawShape(
+        'character',
+        expectedTone.getTargetShape()
+      );
+      this.renderComplete();
+    }
   },
 
   /**

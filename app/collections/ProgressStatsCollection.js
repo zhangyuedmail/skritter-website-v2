@@ -295,16 +295,25 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
       return {amount: '0', units: 'seconds'};
     }
 
-    var timeStudied = this.at(0).get('timeStudied');
-    var allStudied = Math.floor(timeStudied.all);
-    var seconds = Math.floor(allStudied) % 60;
-    var minutes = Math.floor(allStudied / 60) % 60;
-    var hours = Math.floor(allStudied / 3600);
+    let timeStudied = this.at(0).get('timeStudied');
+    let allStudied = Math.floor(timeStudied.all);
+    let seconds = Math.floor(allStudied) % 60;
+    let minutes = Math.floor(allStudied / 60) % 60;
+    let hours = Math.floor(allStudied / 3600);
 
-    var largestUnit = hours ? 'hours' :
+    if (seconds < 10) {
+      seconds = '0' + seconds;
+    }
+
+    let largestUnit = hours ? 'hours' :
       minutes ? 'minutes' :
         'seconds';
-    var amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
+
+    if (largestUnit === 'hours' && minutes && minutes < 10) {
+      minutes = '0' + minutes;
+    }
+
+    let amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
       minutes ? minutes + ':' + seconds :
         seconds;
     return {

@@ -6,6 +6,7 @@ gelato-component(data-name='vocab-viewer-content')
     - var altVocab = vocab.getWritingDifference();
     - var containingVocabs = view.getContainingCharacters();
     - var containingWords = view.getContainingWords();
+    - var decomp = vocab.getDecomp();
     - var definition = vocab.getDefinition();
     - var mnemonic = vocab.getMnemonic();
     - var sentence = vocab.getSentence();
@@ -17,17 +18,23 @@ gelato-component(data-name='vocab-viewer-content')
       if altVocab && altVocab !== vocab
         .block
           .vocab-writing(class=vocab.getFontClass())
-           span.alt-bracket 【
-           span.alt-writing= altVocab
-           span.alt-bracket 】
+            span.alt-bracket 【
+            span.alt-writing= altVocab
+            span.alt-bracket 】
           .vocab-reading &nbsp;
 
       .block
         #vocab-difficulty= vocab.get('toughnessString')
         #vocab-difficulty-text LEVEL
       .pull-right
+        if view.editing
+          a#save-vocab(href='#')
+            i.fa.fa-2x.fa-save
+        else if app.user.isLoggedIn()
+          a#edit-vocab(href='#')
+            i.fa.fa-2x.fa-pencil-square-o
         a(href='#', data-dismiss='modal')
-          i.fa.fa-times-circle-o
+          i.fa.fa-2x.fa-times-circle-o
 
     #content-section
       #panel-left
@@ -35,48 +42,80 @@ gelato-component(data-name='vocab-viewer-content')
           .header Definition
           .value
             #vocab-definition
-              if definition
-                span!= definition
-        .block
-          .header Sentence
-          .value
-            #vocab-sentence
-              if sentence
-                span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
+              if view.editing
+                textarea.definition= definition
+              else
+                if definition
+                  if app.user.get('showHeisig') && vocab.has('heisigDefinition')
+                    em!= vocab.get('heisigDefinition') + ' - '
+                  span!= definition
+                else
+                  em Click the 'edit' icon to add a definition
+
+        if sentence
+          .block
+            .header Sentence
+            .value
+              #vocab-sentence
+                if sentence
+                  span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
+
         .block
           .header Mnemonic
           .value
             #vocab-mnemonic
-              if mnemonic
-                span!= app.fn.textToHTML(mnemonic.text)
+              if view.editing
+                textarea.mnemonic= mnemonic ? mnemonic.text : ''
+              else
+                if mnemonic && mnemonic.text != ''
+                  span!= app.fn.textToHTML(mnemonic.text)
+                else
+                  em Click the 'edit' icon to add a mnemonic
+
         .block
           .header Dictionary
           .value
             #lookup-container
-        .block
-          table.table
-            thead
-              tr
-                th Part
-                th Next
-                th Last
-                th Time
-                th
-            tbody
-              for item in items.models
-                tr.item-row(data-id=item.id, data-part=item.get('part'))
-                 //TODO: move this logic to the item model
-                 td= _.capitalize(item.get('part'))
-                 td= item.get('next') > moment().unix() ? moment(item.get('next') * 1000).from() : 'Ready'
-                 td= item.get('last') ? moment(item.get('last') * 1000).from() : '-'
-                 td= item.get('timeStudied') ? Math.round(item.get('timeStudied')) + ' seconds' : '-'
-                 if _.includes(vocab.get('bannedParts'), item.get('part'))
-                  td.item-unban
-                   button.btn.btn-xs.btn-default Unban
-                 else
-                  td.item-ban
-                    button.btn.btn-xs.btn-danger Ban
+
+        if items
+          .block
+            table.table
+              thead
+                tr
+                  th Part
+                  th Next
+                  th Last
+                  th Time
+                  th
+              tbody
+                for item in items.models
+                  tr.item-row(data-id=item.id, data-part=item.get('part'))
+                    //TODO: move this logic to the item model
+                    td= _.capitalize(item.get('part'))
+                    td= item.get('next') > moment().unix() ? moment(item.get('next') * 1000).from() : 'Ready'
+                    td= item.get('last') ? moment(item.get('last') * 1000).from() : '-'
+                    td= item.get('timeStudied') ? Math.round(item.get('timeStudied')) + ' seconds' : '-'
+                    if _.includes(vocab.get('bannedParts'), item.get('part'))
+                      td.item-unban
+                        button.btn.btn-xs.btn-default Unban
+                    else
+                      td.item-ban
+                        button.btn.btn-xs.btn-danger Ban
+
       #panel-right
+        if decomp
+          .block
+            .header Decomposition of #{vocab.get('writing')}
+            .value
+              #vocab-decomps
+                for child in decomp.get('Children')
+                  div
+                    span.spr= child.writing
+                    span.spr= vocab.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                    span.spr :
+                    if app.user.get('showHeisig') && child.heisigDefinition
+                      em= child.heisigDefinition + ' - '
+                    span= child.definitions.en
         if containingWords.length > 1
           .block
             .header Words containing #{vocab.get('writing')}
@@ -106,6 +145,6 @@ gelato-component(data-name='vocab-viewer-content')
         .vocab-writing(class= app.isChinese() ? 'text-chinese' : 'text-japanese')= view.vocabWriting
       .pull-right
         a(href='#', data-dismiss='modal')
-          i.fa.fa-times-circle-o
+          i.fa.fa-2x.fa-times-circle-o
     #content-section.text-center
       i.fa.fa-3x.fa-spinner.fa-pulse

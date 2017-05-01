@@ -1,6 +1,8 @@
 const GelatoApplication = require('gelato/application');
 const AddVocabDialog = require('dialogs1/add-vocab/view');
 const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
+const ViewDialog = require('dialogs1/view-dialog/view');
+const FeedbackComponent = require('components/common/FeedbackComponent');
 
 const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
 const MobileNavbar = require('components/navbars/NavbarMobileComponent');
@@ -376,12 +378,11 @@ module.exports = GelatoApplication.extend({
     const backAction = this._backButtonStack.pop();
 
     if (backAction) {
-      event.preventDefault();
       vent.trigger(backAction);
-
-      return false;
-    } else {
+    } else if (_.includes(['', 'dashboard'], Backbone.history.fragment)) {
       navigator.app.exitApp();
+    } else {
+      window.history.back();
     }
   },
 
@@ -411,12 +412,28 @@ module.exports = GelatoApplication.extend({
 
   /**
    * Handles click on an overlay of the main app container.
-   * Hides the mobile menu when clicked.
+   * Hides the mobile menus when clicked.
    * @param {jQuery.Event} e the click event
    */
   handleOverlayClick: function(e) {
-    this.toggleSideMenu(false);
-    this.toggleVocabInfo(null);
+    this.hideAllMenus();
+  },
+
+  /**
+   * Hides all the side menus in the app
+   * @param {String[]} [exceptions] an optional array of menus not to hide
+   * @method hideAllMenus
+   */
+  hideAllMenus: function(exceptions) {
+    exceptions = exceptions || [];
+
+    if (exceptions.indexOf('left-side-app-container') === -1) {
+      this.toggleSideMenu(false);
+    }
+
+    if (exceptions.indexOf('right-side-app-container') === -1) {
+      this.toggleVocabInfo(null);
+    }
   },
 
   /**
@@ -701,6 +718,22 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
+   * Shows a simple dialog the user can send us feedback through.
+   */
+  showFeedbackDialog: function() {
+    if (!this.feedbackDialog) {
+      this.feedbackDailog = new ViewDialog({
+        content: FeedbackComponent,
+        showCloseButton: true,
+        showTitle: true,
+        dialogTitle: 'Leave us feedback'
+      });
+    }
+
+    this.feedbackDailog.open();
+  },
+
+  /**
    * @method start
    */
   start: function() {
@@ -822,7 +855,7 @@ module.exports = GelatoApplication.extend({
           setTimeout(navigator.splashscreen.hide, 1000);
 
           if (app.isAndroid()) {
-            StatusBar.backgroundColorByHexString('#262b30');
+            StatusBar.backgroundColorByHexString('#1c1206');
           }
         }
       }
@@ -830,10 +863,11 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
-   * Shows the side container of the application
+   * Hides all other menus and shows the side container of the application
    * @param {Boolean} [show] whether to show the side element
    */
   toggleSideMenu: function(show) {
+    this.hideAllMenus(['left-side-app-container']);
     $('gelato-application').toggleClass('no-overflow', show);
     this.$('#main-app-container').toggleClass('push-right', show);
     this.$('#left-side-app-container').toggleClass('push-right', show);

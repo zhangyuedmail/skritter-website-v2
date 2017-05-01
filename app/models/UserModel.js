@@ -23,6 +23,7 @@ const UserModel = SkritterModel.extend({
     allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     allJapaneseParts: ['defn', 'rdng', 'rune'],
     dailyItemAddingLimit: 20,
+    disabled: false,
     filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     filteredJapaneseParts: ['defn', 'rdng', 'rune'],
     hideDefinition: false,
@@ -30,6 +31,8 @@ const UserModel = SkritterModel.extend({
     goals: {ja: {items: 20}, zh: {items: 20}},
     lastChineseItemUpdate: 0,
     lastJapaneseItemUpdate: 0,
+    readingChinese: 'pinyin',
+    readingJapanese: 'kana',
     spaceItems: false,
     studyKana: false,
     teachingMode: true,
@@ -86,7 +89,25 @@ const UserModel = SkritterModel.extend({
       // options.url = 'http://localhost:3210/v2/gae/users/';
     }
 
+    // TODO: figure out why null values crash the legacy api
+    if (model.get('aboutMe') === null) {
+      model.unset('aboutMe');
+    }
+
+    // TODO: figure out why null values crash the legacy api
+    if (model.get('wordDictionary') === null) {
+      model.unset('wordDictionary');
+    }
+
     GelatoCollection.prototype.sync.call(this, method, model, options);
+  },
+
+  validate: function() {
+
+    // because the backend checks for data it didn't
+    if (typeof this.get('disabled') !== 'boolean') {
+      this.set('disabled', Boolean(this.get('disabled')));
+    }
   },
 
   /**

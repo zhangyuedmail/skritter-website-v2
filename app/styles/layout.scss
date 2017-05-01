@@ -34,18 +34,89 @@ gelato-page > .container > .content-block {
   margin-top: 40px;
 }
 
-#vocablist-nav-links {
-  background: $grey7;
-  margin-bottom: 15px;
-  margin-top: -50px;
-  overflow-x: scroll;
+ #vocablist-nav-links {
+  background: $wood7;
+  margin-top: -60px;
+  overflow-x: hidden;
   padding-bottom: 10px;
   padding-top: 10px;
   position: fixed;
   width: 100%;
   z-index: 7002;
+
+  a, .selected {
+    padding-bottom: 5px;
+    margin-bottom: 4px;
+    display: inline-block;
+    color: $sand2;
+  }
+
+  .selected {
+    margin-bottom: 0px;
+    color: $sand1;
+    border-bottom: 4px solid $green5;
+  }
 }
 
 #vocablist-nav-links .row {
-  margin-bottom: 15px;
+  margin-bottom: 0px;
+}
+
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+}
+
+/* Mobile toggle switch stuff */
+.toggle-switch input {display:none;}
+
+/* The slider */
+.toggle-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .1s;
+  transition: .1s;
+}
+
+.toggle-switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .1s;
+  transition: .1s;
+}
+
+input:checked + .toggle-switch-slider {
+  background-color: $green5;
+}
+
+input:focus + .toggle-switch-slider {
+  box-shadow: 0 0 1px $green5;
+}
+
+input:checked + .toggle-switch-slider:before {
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
+}
+
+/* Rounded toggle-switch-sliders */
+.toggle-switch-slider.round {
+  border-radius: 24px;
+}
+
+.toggle-switch-slider.round:before {
+  border-radius: 50%;
 }

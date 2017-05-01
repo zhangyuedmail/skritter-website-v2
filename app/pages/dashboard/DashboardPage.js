@@ -14,6 +14,10 @@ const MobileNavbar = require('components/navbars/NavbarMobileDashboardComponent'
  */
 const DashboardPage = GelatoPage.extend({
 
+  events: {
+    'click #feedback-btn': 'onFeedbackBtnClicked'
+  },
+
   /**
    * @property mobileNavbar
    * @type {MobileNavbar}
@@ -116,6 +120,13 @@ const DashboardPage = GelatoPage.extend({
       const loadTime = window.performance.now() - this.loadStart;
       app.loadTimes.pages.dashboard.push(loadTime);
     }
+  },
+
+  /**
+   * Opens a dialog the user can leave app feedback in.
+   */
+  onFeedbackBtnClicked: function() {
+    app.showFeedbackDialog();
   }
 });
 

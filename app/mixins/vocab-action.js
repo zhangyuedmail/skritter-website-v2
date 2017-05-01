@@ -17,7 +17,9 @@ module.exports = {
     if (vocab.isBanned()) {
       return null;
     }
+
     vocab.banAll();
+
     return {bannedParts: vocab.get('bannedParts')};
   },
 
@@ -29,15 +31,14 @@ module.exports = {
    */
   beginVocabAction: function(action, vocabs) {
     if (!_.includes(availableVocabActions, action)) {
-      throw new Error('Invalid action, must be one of: '
-        + availableVocabActions.join(', '));
+      throw new Error('Invalid action, must be one of: ' + availableVocabActions.join(', '));
     }
+
     if (!vocabs.size()) {
       return;
     }
 
-    var progressDialog = new ProgressDialog();
-    progressDialog.render().open();
+    const progressDialog = new ProgressDialog().render().open();
 
     this.action = {
       name: action,
@@ -45,6 +46,7 @@ module.exports = {
       total: vocabs.size(),
       dialog: progressDialog
     };
+
     this.runVocabAction();
   },
 
@@ -54,10 +56,12 @@ module.exports = {
    * @returns {Object|null} Vocab attrs to be saved, if any
    */
   deleteVocabMnemonicAction: function(vocab) {
-    var mnemonic = vocab.get('mnemonic') || {};
+    const mnemonic = vocab.get('mnemonic') || {};
+
     if (!mnemonic.text) {
       return null;
     }
+
     return {mnemonic: {text: ''}};
   },
 
@@ -67,9 +71,10 @@ module.exports = {
    * @returns {Object|null} Vocab attrs to be saved, if any
    */
   removeStarVocabAction: function(vocab) {
-    if (!vocab.get('starred')) {
+    if (!vocab.has('starred')) {
       return null;
     }
+
     return {starred: false};
   },
 
@@ -77,28 +82,36 @@ module.exports = {
    * @method runVocabAction
    */
   runVocabAction: function() {
-    var vocab = this.action.queue.shift();
+    const vocab = this.action.queue.shift();
+
     if (!vocab) {
       return this.finishVocabAction();
     }
-    var vocabAttrs = null;
-    if (this.action.name === 'ban') {
-      vocabAttrs = this.banVocabAction(vocab);
+
+    let vocabAttrs = null;
+
+    switch (this.action.name) {
+      case 'ban':
+        vocabAttrs = this.banVocabAction(vocab);
+        break;
+      case 'unban':
+        vocabAttrs = this.unbanVocabAction(vocab);
+        break;
+      case 'delete-mnemonic':
+        vocabAttrs = this.deleteVocabMnemonicAction(vocab);
+        break;
+      case 'remove-star':
+        vocabAttrs = this.removeStarVocabAction(vocab);
+        break;
     }
-    if (this.action.name === 'unban') {
-      vocabAttrs = this.unbanVocabAction(vocab);
-    }
-    if (this.action.name === 'delete-mnemonic') {
-      vocabAttrs = this.deleteVocabMnemonicAction(vocab);
-    }
-    if (this.action.name === 'remove-star') {
-      vocabAttrs = this.removeStarVocabAction(vocab);
-    }
+
     if (!vocabAttrs) {
       return this.finishVocabAction();
     }
+
     vocabAttrs.id = vocab.id;
-    vocab.save(vocabAttrs, {patch: true, 'method': 'PUT'});
+    vocab.save(vocabAttrs, {method: 'PUT', patch: true});
+
     this.listenToOnce(vocab, 'sync', function() {
       this.action.dialog.setProgress(100 * (this.action.total - this.action.queue.size()) / this.action.total);
       this.runVocabAction();
@@ -123,7 +136,9 @@ module.exports = {
     if (!vocab.isBanned()) {
       return null;
     }
+
     vocab.unbanAll();
+
     return {bannedParts: vocab.get('bannedParts')};
   }
 }

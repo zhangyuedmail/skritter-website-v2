@@ -16,10 +16,12 @@ gelato-component(data-name='vocablists-mine-table')
     .row(class=i % 2 ? 'even-row' : 'odd-row')
       .col-md-5
         a(href="/vocablists/view/" + list.id)= list.get('name')
-      .col-md-2= moment(list.get('changed') * 1000).format('l')
+      .col-md-2= list.getFormattedChangedDate()
       .col-md-2
         if list.get('published')
-          span= moment(list.get('published') * 1000).format('l')
+          span= list.getFormattedPublishedDate()
+        else
+          .light-text —
       .col-md-3
         if list.get('studyingMode') === 'not studying'
           span.add-to-queue-link(data-vocablist-id=list.id)

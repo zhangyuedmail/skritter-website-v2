@@ -23,6 +23,10 @@ const LoginPage = GelatoPage.extend({
     'click #button-skeleton': 'handleClickSkeleton'
   },
 
+  navbarOptions: {
+    showBackBtn: true
+  },
+
   /**
    * Whether to show the footer. On mobile, it should be hidden
    * @type {String}
@@ -59,6 +63,8 @@ const LoginPage = GelatoPage.extend({
     }
 
     this.renderTemplate();
+
+    this.$('#login-username').focus();
 
     return this;
   },

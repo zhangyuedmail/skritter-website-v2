@@ -18,6 +18,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     'click .item-ban': 'handleClickItemBan',
     'click .item-unban': 'handleClickItemUnban',
     'click .fa-times-circle-o': 'handleClickClose',
+    'click .fa-close': 'handleClickClose',
     'click #button-vocab-star': 'handleClickVocabStar',
     'click #button-vocab-ban': 'handleClickVocabBan',
     'click #hanping-lite-icon': 'handleClickHanpingLiteIcon',
@@ -41,10 +42,18 @@ const VocabViewerContentComponent = GelatoComponent.extend({
   handleClickSaveVocab: function(event) {
     event.preventDefault();
 
-    this.vocab.set('customDefinition', this.$('#vocab-definition .definition').val());
+    const definitionText = this.$('#vocab-definition .definition').val() || '';
+    const mnemonicText = this.$('#vocab-mnemonic .mnemonic').val() || '';
+
+    this.vocab.set({
+      customDefinition: definitionText,
+      mnemonic: {public: false, text: mnemonicText}
+    });
+
     this.vocab.save();
 
     this.editing = false;
+
     this.render();
   },
 
@@ -138,7 +147,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     event.preventDefault();
 
     if (app.isCordova()) {
-      plugins.core.openPleco(this.vocab.get('writing'));
+      plugins.core.openPleco(this.vocabWriting);
     }
   },
 
@@ -150,7 +159,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     event.preventDefault();
 
     if (app.isCordova()) {
-      plugins.core.openHanpingLite(this.vocab.get('writing'));
+      plugins.core.openHanpingLite(this.vocabWriting);
     }
   },
 
@@ -162,7 +171,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     event.preventDefault();
 
     if (app.isCordova()) {
-      plugins.core.openHanpingPro(this.vocab.get('writing'));
+      plugins.core.openHanpingPro(this.vocabWriting);
     }
   },
 
@@ -174,7 +183,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     event.preventDefault();
 
     if (app.isCordova()) {
-      plugins.core.openHanpingYue(this.vocab.get('writing'));
+      plugins.core.openHanpingYue(this.vocabWriting);
     }
   },
 
@@ -241,7 +250,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     let wordVocabsContaining = null;
 
     if (vocabId) {
-      this.vocabWriting = vocabId.split("-")[1];
+      this.vocabWriting = app.fn.mapper.fromBase(vocabId);
     }
 
     this.vocabs.reset();
@@ -271,8 +280,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                 });
               },
               function(callback) {
-                self.vocabs.at(0).fetchSentence().then((s) => {
-                  self.vocabs.sentences.add(s);
+                self.vocabs.at(0).fetchSentence().then(sentence => {
+                  self.vocabs.sentences.add(sentence);
                   callback();
                 });
               },
@@ -296,18 +305,25 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                 }
               },
               function(callback) {
-                self.items.fetch({
-                  data: {
-                    vocab_ids: vocabId
-                  },
-                  error: function(error) {
-                    callback(error);
-                  },
-                  success: function(items) {
-                    wordItems = items;
-                    callback(null);
-                  }
-                });
+                if (app.router.page.title.indexOf('Demo') === -1) {
+                  self.items.fetch({
+                    data: {
+                      vocab_ids: vocabId
+                    },
+                    error: function(error) {
+                      callback(error);
+                    },
+                    success: function(items) {
+                      wordItems = items;
+                      callback(null);
+                    }
+                  });
+                } else {
+
+                  // skip fetch for the demo--user isn't logged in and
+                  // doesn't have items to fetch
+                  callback();
+                }
               }
             ],
             callback
@@ -317,7 +333,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
           self.vocabsContaining.fetch({
             data: {
               include_containing: true,
-              q: vocabId
+              q: app.fn.mapper.fromBase(vocabId)
             },
             error: function(error) {
               callback(error);
