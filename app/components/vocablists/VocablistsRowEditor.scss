@@ -53,6 +53,12 @@ gelato-component[data-name='vocablists-list-editor-rows'] {
       font-weight: 400;
     }
 
+    .rare-kanji {
+      color: $gradeRed4;
+      font-size: 14px;
+      margin-left: 15px;
+    }
+
     .study-writing {
       background-color: $grey1;
       border: 1px solid $grey3;
