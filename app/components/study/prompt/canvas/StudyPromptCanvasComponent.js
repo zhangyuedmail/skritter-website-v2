@@ -122,7 +122,14 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   createStage: function() {
     var canvas = this.$('#input-canvas').get(0);
-    var stage = new createjs.Stage(canvas);
+    let stage;
+
+    if (app.isDevelopment()) {
+      stage = new createjs.Stage(canvas);
+      stage._clearColor = {r: 255, g: 255, b: 255, a: 0};
+    } else {
+      stage = new createjs.Stage(canvas);
+    }
     createjs.Ticker.setFPS(32);
     createjs.Ticker.removeEventListener('tick', stage);
     createjs.Ticker.addEventListener('tick', stage);
@@ -297,9 +304,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     }
 
     function onInputMove(event) {
-      var point = new createjs.Point(event.stageX, event.stageY);
-      var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
-
+      const point = new createjs.Point(event.stageX, event.stageY);
+      const midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
       marker.graphics
         .setStrokeStyle(strokeSize, 'round', 'round')
         .moveTo(midPoint.x, midPoint.y)
@@ -307,7 +313,6 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       oldPoint = point;
       oldMidPoint = midPoint;
       points.push(point);
-      self.stage.update();
     }
 
     function onInputLeave(event) {
@@ -440,6 +445,11 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   reset: function() {
     clearTimeout(this.mouseTapTimeout);
+
+    // this.stage.children.forEach((layer) => {
+    //   layer.removeAllChildren();
+    // });
+
     this.getLayer('character-grid').removeAllChildren();
     this.getLayer('character-background').removeAllChildren();
     this.getLayer('character-hint').removeAllChildren();
@@ -450,6 +460,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.getLayer('input-background1').removeAllChildren();
     this.getLayer('stroke-hint').removeAllChildren();
     this.getLayer('input').removeAllChildren();
+
     this.resize();
     return this;
   },
