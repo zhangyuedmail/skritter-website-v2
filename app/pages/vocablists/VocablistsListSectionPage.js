@@ -134,6 +134,17 @@ module.exports = GelatoPage.extend({
         });
       }
     ], (error) => {
+      const sections = this.vocablist.get('sections');
+      const sectionIndex = _.findIndex(sections, {id: this.vocablistSection.id});
+
+      if (sectionIndex > 0) {
+        this.sectionPrevious = sections[sectionIndex - 1];
+      }
+
+      if (sections.length > sectionIndex) {
+        this.sectionNext = sections[sectionIndex + 1];
+      }
+
       this.listDataLoaded(error);
     });
   },

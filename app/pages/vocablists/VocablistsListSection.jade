@@ -15,15 +15,23 @@ gelato-page(data-name='vocablists-list-section')
             .content-details
               .row
                 .col-xs-6
+                  - var categoryInfo = vocablist.getCategoryAndUrl()
+
                   .list-name
-                    a#back-link(href='/vocablists/view/' + vocablist.id)
+                    a#back-list-link(href='/vocablists/view/' + vocablist.id)
                       i.fa.fa-angle-left
                       | &nbsp;
                       span= vocablist.get('name')
-                    .breadcrumb-spacer |
-                  .list-name
-                    - var categoryInfo = vocablist.getCategoryAndUrl()
-                    a#back-link(href=categoryInfo.url)
+                      .breadcrumb-spacer |
+
+                    if view.sectionPrevious
+                      a#next-section-link(href='/vocablists/view/' + vocablist.id + '/' + view.sectionPrevious.id)
+                        i.fa.fa-angle-left
+                        | &nbsp;
+                        span Previous Section
+                      .breadcrumb-spacer |
+
+                    a#back-parent-link(href=categoryInfo.url)
                       span= categoryInfo.label
 
                   if editor.editing
@@ -31,6 +39,12 @@ gelato-page(data-name='vocablists-list-section')
                   else
                     #section-name.section-name= vocablistSection.get('name') || '(empty)'
                 .col-xs-6.text-right
+                  if view.sectionNext
+                    a#next-section-link(href='/vocablists/view/' + vocablist.id + '/' + view.sectionNext.id)
+                      span Next section
+                      | &nbsp;
+                      i.fa.fa-angle-right
+
                   #editing-buttons
                     if vocablist.isEditable()
                       if vocablistSection.state === 'standby'

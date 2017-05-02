@@ -6,7 +6,7 @@ gelato-page[data-name='vocablists-list-section'] {
   padding-top: 75px;
 
   #editing-buttons {
-    margin-top: 35px;
+    margin-top: 15px;
     button {
       margin-right: 15px;
     }
@@ -45,16 +45,16 @@ gelato-page[data-name='vocablists-list-section'] {
   }
 
   .list-name {
-    font-size: 14px;
-    font-weight: 300;
-    margin-bottom: 15px;
-    max-width: 50%;
     display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 15px;
   }
+
   .breadcrumb-spacer {
-    float: right;
-    margin: 0 10px;
     color: $grey3;
+    display: inline-block;
+    margin: 0 10px;
   }
 
   .loading-section {
@@ -64,6 +64,7 @@ gelato-page[data-name='vocablists-list-section'] {
   }
 
   .section-name {
+    display: block;
     font-size: 24px;
     font-weight: 400;
   }
