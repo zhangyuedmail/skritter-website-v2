@@ -40,13 +40,20 @@ module.exports = GelatoPage.extend({
    */
   initialize: function(options) {
     this.editing = options.editMode || false;
+    this.fetching = false;
 
-    this.vocablist = new Vocablist({id: options.vocablistId});
+    this.vocablist = options.vocabList || new Vocablist({id: options.vocablistId});
 
-    this.vocablistSection = new VocablistSection({
+    let sectionData = {
       vocablistId: options.vocablistId,
       id: options.sectionId
-    });
+    };
+
+    if (options.vocabListSection) {
+      sectionData = _.extend(options.vocabListSection, {vocablistId: this.vocablist.id});
+    }
+
+    this.vocablistSection = new VocablistSection(sectionData);
 
     this.editor = new EditorRows({
       vocablist: this.vocablist,
@@ -54,46 +61,7 @@ module.exports = GelatoPage.extend({
       editing: this.editing
     });
 
-    async.series([
-      _.bind(function(callback) {
-        this.vocablist.fetch({
-          error: function(error) {
-            callback(error);
-          },
-          success: function() {
-            callback();
-          }
-        });
-      }, this),
-      _.bind(function(callback) {
-        this.vocablistSection.fetch({
-          error: function(error) {
-            callback(error);
-          },
-          success: function() {
-            callback();
-          }
-        });
-      }, this),
-      _.bind(function(callback) {
-        this.editor.loadRows({
-          error: function(error) {
-            callback(error);
-          },
-          success: function() {
-            callback();
-          }
-        });
-      }, this)
-    ], _.bind(function(error) {
-      if (!this.vocablistSection.get('rows').length) {
-        this.editor.editing = true;
-      }
-
-      this.listenTo(this.vocablist, 'state:standby', this.handleVocablistState);
-      this.listenTo(this.vocablistSection, 'state:standby', this.handleVocablistSectionState);
-      this.render();
-    }, this));
+    this.fetchListData();
   },
 
   /**
@@ -120,11 +88,89 @@ module.exports = GelatoPage.extend({
   },
 
   /**
+   * Fetches all the necessary list data to show the view to the user
+   * @method fetchListData
+   */
+  fetchListData: function() {
+    this.fetching = true;
+    async.series([
+      (callback) => {
+        if (this.vocablist.isFetched) {
+          callback();
+          return;
+        }
+
+        this.vocablist.fetch({
+          error: function(error) {
+            callback(error);
+          },
+          success: function() {
+            callback();
+          }
+        });
+      },
+      (callback) => {
+        if (this.vocablistSection.get('name')) {
+          callback();
+          return;
+        }
+        this.vocablistSection.fetch({
+          error: function(error) {
+            callback(error);
+          },
+          success: function() {
+            callback();
+          }
+        });
+      },
+      (callback) => {
+        this.editor.loadRows({
+          error: function(error) {
+            callback(error);
+          },
+          success: function() {
+            callback();
+          }
+        });
+      }
+    ], (error) => {
+      this.listDataLoaded(error);
+    });
+  },
+
+  /**
+   * Finalizes the view after data has been fetched. Checks for errors, hooks up events,
+   * and finally re-renders the page.
+   * @param {Object} [error]
+   */
+  listDataLoaded: function(error) {
+    this.fetching = false;
+
+    if (error) {
+      app.notifyUser({
+        message: app.locale('There was a problem loading the section. Please try again.')
+      });
+    }
+
+    if (!this.vocablistSection.get('rows').length) {
+      this.editor.editing = true;
+    }
+
+    this.listenTo(this.vocablist, 'state:standby', this.handleVocablistState);
+    this.listenTo(this.vocablistSection, 'state:standby', this.handleVocablistSectionState);
+
+    this.render();
+  },
+
+  /**
+   * Handles the user clicking on the back link. Checks if the view is currently being edited,
+   * and if so, shows a confirmation popup before navigating away.
    * @method handleClickBackLink
    * @param {Event} event
    */
   handleClickBackLink: function(event) {
-    var self = this;
+    const self = this;
+
     if (this.editor.editing) {
       event.preventDefault();
       this.dialog = new ConfirmGenericDialog({
@@ -140,6 +186,8 @@ module.exports = GelatoPage.extend({
         }
       );
       this.dialog.open();
+    } else {
+      app.router.navigate('vocablists/view/' + self.vocablist.id, {trigger: true});
     }
   },
 

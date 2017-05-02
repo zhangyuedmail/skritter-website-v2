@@ -6,19 +6,22 @@ gelato-page(data-name='vocablists-list-section')
   section.container
     .content-block
       .row
-
         .col-xs-12
-
-          if vocablist.state === 'fetching'
-
+          if view.fetching
             .loading-section.text-center
               i.fa.fa-3x.fa-spinner.fa-pulse
 
           else
-
             .content-details
               .row
                 .col-xs-6
+                  .list-name
+                    - var categoryInfo = vocablist.getCategoryAndUrl()
+                    a#back-link(href=categoryInfo.url)
+                      i.fa.fa-angle-left
+                      | &nbsp;
+                      span Back to #{categoryInfo.label}
+                    .breadcrumb-spacer |
                   .list-name
                     a#back-link(href='/vocablists/view/' + vocablist.id)
                       i.fa.fa-angle-left
@@ -42,7 +45,6 @@ gelato-page(data-name='vocablists-list-section')
                             i.fa.fa-pencil &nbsp;Edit&nbsp;
                       else
                         i.fa.fa-2x.fa-spinner.fa-pulse
-
 
             #editor-container
 

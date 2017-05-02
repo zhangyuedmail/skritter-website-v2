@@ -16,6 +16,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
     'click .add-entry': 'handleClickAddEntry',
     'click .remove-row': 'handleClickRemoveRow',
     'click .result-row': 'handleClickResultRow',
+    'click .section-link': 'handleClickSectionLink',
     'click .show-results': 'handleClickShowResults',
     'click .study-writing': 'handleClickStudyWriting'
   },
@@ -181,8 +182,10 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    */
   handleClickRemoveRow: function(event) {
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
+
+    const $row = $(event.target).closest('.row');
     this.removeRow($row.data('index'));
+
     this.render();
   },
 
@@ -192,13 +195,16 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    */
   handleClickResultRow: function(event) {
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
-    var $result = $(event.target).closest('.result-row');
-    var row = this.rows[parseInt($row.data('index'), 10)];
-    var result = row.results[parseInt($result.data('index'), 10)];
+
+    const $row = $(event.target).closest('.row');
+    const $result = $(event.target).closest('.result-row');
+    const row = this.rows[parseInt($row.data('index'), 10)];
+    const result = row.results[parseInt($result.data('index'), 10)];
+
     row.vocabs = result.vocabs;
     row.vocabId = result.vocabs[0].id;
     row.tradVocabId = result.vocabs[1].id;
+
     this.render();
   },
 

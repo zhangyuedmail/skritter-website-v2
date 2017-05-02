@@ -48,6 +48,13 @@ gelato-page[data-name='vocablists-list-section'] {
     font-size: 14px;
     font-weight: 300;
     margin-bottom: 15px;
+    max-width: 50%;
+    display: inline-block;
+  }
+  .breadcrumb-spacer {
+    float: right;
+    margin: 0 10px;
+    color: $grey3;
   }
 
   .loading-section {

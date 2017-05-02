@@ -2,6 +2,7 @@ const SkritterModel = require('base/BaseSkritterModel');
 const VocablistHistoryCollection = require('collections/VocablistHistoryCollection');
 
 /**
+ * A model that represents a VocabList with sections and words a user can study
  * @class VocablistModel
  * @extends {SkritterModel}
  */
@@ -60,6 +61,7 @@ const VocablistModel = SkritterModel.extend({
   },
 
   /**
+   * Determines whether the user has permission to delete a list
    * @method deletable
    * @returns {Boolean}
    */
@@ -73,6 +75,7 @@ const VocablistModel = SkritterModel.extend({
   },
 
   /**
+   * Determines whether the list can be copied by a user
    * @method copyable
    * @returns {Boolean}
    */
@@ -81,6 +84,33 @@ const VocablistModel = SkritterModel.extend({
       !this.get('disabled'),
       this.get('sort') !== 'chinesepod-lesson'
     ]);
+  },
+
+  /**
+   * Gets information on what category this list belongs to
+   * @method getCategoryUrl
+   * @returns {Object} contains a label attribute with the section name
+   *                    and a url attribute with the URL to the category.
+   */
+  getCategoryAndUrl: function() {
+    const publisher = this.getPublisherName();
+
+    if (publisher === 'Skritter') {
+      return {label: 'Official Lists', url: '/vocablists/browse'};
+    }
+
+    if (publisher === 'ChinesePod') {
+      return {label: 'ChinesePod Lists', url: '/vocablists/chinesepod'};
+    }
+
+    if (publisher === app.user.get('name')) {
+      if (this.get('deleted')) {
+        return {label: 'Deleted Lists', url: '/vocablists/deleted'};
+      }
+      return {label: 'My Lists', url: '/vocablists/my-lists'};
+    }
+
+    return {label: 'Published Lists', url: '/vocablists/published'};
   },
 
   /**
@@ -114,6 +144,7 @@ const VocablistModel = SkritterModel.extend({
   },
 
   /**
+   *
    * @method getNormalizedStudyingMode
    * @returns {String}
    */
@@ -126,16 +157,18 @@ const VocablistModel = SkritterModel.extend({
   },
 
   /**
+   * Gets the URL for the list's image
    * @method getImageUrl
-   * @returns {String}
+   * @returns {String} the URL to the image
    */
   getImageUrl: function() {
     return app.getApiUrl() + 'vocablists/' + this.id + '/image';
   },
 
   /**
+   * Gets a number based on how popular a list is
    * @method getPopularity
-   * @returns {Number}
+   * @returns {Number} the popularity of the list
    */
   getPopularity: function() {
     var peopleStudying = this.get('peopleStudying');

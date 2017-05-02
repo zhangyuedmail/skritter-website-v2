@@ -427,14 +427,16 @@ module.exports = Router.extend({
    * @method navigateVocablist
    * @param {String} listId
    * @param {String} [sectionId]
-   * @param {Boolean} editMode
+   * @param {Boolean} [editMode]
+   * @param {VocabListModel} [vocabList]
+   * @param {Object} [vocabListSection]
    */
-  navigateVocablist: function(listId, sectionId, editMode) {
+  navigateVocablist: function(listId, sectionId, editMode, vocabList, vocabListSection) {
     if (app.user.isLoggedIn()) {
       if (sectionId) {
-        this.go('pages/vocablists/VocablistsListSectionPage', {vocablistId: listId, sectionId: sectionId, editMode});
+        this.go('pages/vocablists/VocablistsListSectionPage', {vocablistId: listId, sectionId, editMode, vocabList, vocabListSection});
       } else {
-        this.go('pages/vocablists/VocablistsListPage', {vocablistId: listId, editMode});
+        this.go('pages/vocablists/VocablistsListPage', {vocablistId: listId, editMode, vocabList});
       }
     } else {
       this.navigateLogin();

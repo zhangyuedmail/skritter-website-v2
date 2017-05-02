@@ -16,6 +16,11 @@ gelato-component[data-name='vocablists-list-section-editor'] {
     }
   }
 
+  .section-link {
+    cursor: pointer;
+    color: $green5;
+  }
+
   .row-header {
     font-weight: 400;
   }

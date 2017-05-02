@@ -11,6 +11,7 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
+    'click .section-link': 'handleClickSectionLink',
     'click #restore-section': 'handleClickRestoreSection',
     'click #remove-section': 'handleClickRemoveSection',
     'keyup .last-section': 'handleKeyupLastSection'
@@ -73,6 +74,22 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
     var $row = $(event.target).closest('.row');
     this.vocablist.get('sections')[$row.data('index')].deleted = false;
     this.render();
+  },
+
+  /**
+   *
+   * @param event
+   */
+  handleClickSectionLink: function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const url = $(event.currentTarget).attr('href').split('/');
+    const listId = this.vocablist.id;
+    const sectionId = url[url.length - 1];
+    const section = (this.vocablist.get('sections').filter(s => s.id === sectionId) || [])[0];
+    app.router.navigateVocablist(listId, sectionId, false, this.vocablist, section);
+    app.router.navigate('vocablists/view/' + this.vocablist.id + '/' + sectionId, {trigger: false});
   },
 
   /**
