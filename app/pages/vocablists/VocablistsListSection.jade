@@ -16,17 +16,16 @@ gelato-page(data-name='vocablists-list-section')
               .row
                 .col-xs-6
                   .list-name
-                    - var categoryInfo = vocablist.getCategoryAndUrl()
-                    a#back-link(href=categoryInfo.url)
-                      i.fa.fa-angle-left
-                      | &nbsp;
-                      span Back to #{categoryInfo.label}
-                    .breadcrumb-spacer |
-                  .list-name
                     a#back-link(href='/vocablists/view/' + vocablist.id)
                       i.fa.fa-angle-left
                       | &nbsp;
                       span= vocablist.get('name')
+                    .breadcrumb-spacer |
+                  .list-name
+                    - var categoryInfo = vocablist.getCategoryAndUrl()
+                    a#back-link(href=categoryInfo.url)
+                      span= categoryInfo.label
+
                   if editor.editing
                     input#section-name.section-name(value=vocablistSection.get('name'))
                   else
