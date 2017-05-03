@@ -152,9 +152,11 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     var possibleTones = this.prompt.review.getTones();
     var expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
     var stroke = this.prompt.review.character.recognize(points, shape);
+
     if (stroke && app.fn.getLength(points) > 30) {
       var targetShape = stroke.getTargetShape();
       var userShape = stroke.getUserShape();
+
       if (possibleTones.indexOf(stroke.get('tone')) > -1) {
         this.prompt.review.set('score', 3);
         this.prompt.canvas.tweenShape(
@@ -170,10 +172,11 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
           'character',
           expectedTone.getTargetShape()
         );
-
       }
     } else {
+      this.prompt.review.character.reset();
       this.prompt.review.character.add(expectedTone);
+
       if (possibleTones.indexOf(5) > -1) {
         this.prompt.review.set('score', 3);
         this.prompt.canvas.drawShape(
@@ -188,6 +191,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
         );
       }
     }
+
     if (this.prompt.review.character.isComplete()) {
       this.renderComplete();
     }
@@ -253,9 +257,9 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
   handlePromptToolbarGradingMouseup: function(score) {
     this.prompt.review.set('score', score);
     this.prompt.canvas.injectLayerColor(
-        'character',
-        this.prompt.review.getGradingColor()
-      );
+      'character',
+      this.prompt.review.getGradingColor()
+    );
   },
 
   /**
