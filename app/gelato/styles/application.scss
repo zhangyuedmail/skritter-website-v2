@@ -132,6 +132,8 @@ gelato-application {
 
 
   &.mobile {
+    overflow-x: hidden;
+
     * {
       -webkit-touch-callout: none;
       -webkit-user-select: none;
