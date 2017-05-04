@@ -60,13 +60,10 @@ const ItemCollection = BaseSkritterCollection.extend({
     options.listId = options.listId || '';
 
     $.ajax({
-      url: app.getApiUrl() + 'items/add?lists=' + options.listId,
+      url: app.getApiUrl() + 'items/add?lists=' + options.listId + '&lang=' + app.getLanguage(),
       type: 'POST',
       headers: app.user.session.getHeaders(),
       context: this,
-      data: {
-        lang: app.getLanguage()
-      },
       error: function(error) {
         self.addingState = 'standby';
         callback(error);

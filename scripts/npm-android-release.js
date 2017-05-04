@@ -32,7 +32,6 @@ shell.cd('./cordova');
 
 if (lang === 'ja') {
   shell.cp('../skritter-japanese.build.json', './build.json');
-
 } else {
   shell.cp('../skritter-chinese.build.json', './build.json');
 }
