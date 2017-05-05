@@ -31,10 +31,13 @@ gelato-component(data-name='mobile-vocab-viewer-content')
               path(d="M11.52 0C5.16 0 0 5.16 0 11.52 0 17.88 5.16 23.04 11.52 23.04 17.88 23.04 23.04 17.88 23.04 11.52 23.04 5.16 17.88 0 11.52 0L11.52 0ZM11.52 20.64C6.48 20.64 2.4 16.56 2.4 11.52 2.4 6.48 6.48 2.4 11.52 2.4 16.56 2.4 20.64 6.48 20.64 11.52 20.64 16.56 16.56 20.64 11.52 20.64L11.52 20.64Z" id="Shape" sketch:type="MSShapeGroup")
               path(d="M18.63 4.38L4.62 18.38" id="Line" stroke-width="2" stroke-linecap="square" sketch:type="MSShapeGroup")
       .row(class=differentAltVocab ? '' : 'text-center')
-        div(class=differentAltVocab ? 'col-xs-6 separator' : 'col-xs-12')
+        div(class=differentAltVocab && vocab.get('writing').length < 3 ? 'col-xs-6 separator' : 'col-xs-12')
           #vocab-writing(class=vocab.getFontClass() +　' vocab-writing')= vocab.get('writing')
         if differentAltVocab
-          .col-xs-6
+
+          // if it's 1 or two characters, it can fit on the same line. If not, it needs to go on a new one.
+          - var altVocabColSize = altVocab.length > 2 ? 12 : 6;
+          div(class="col-xs-" + altVocabColSize)
             .vocab-writing(class=vocab.getFontClass())
               span.alt-bracket.alt-bracket-l 【
               span.alt-writing= altVocab
@@ -113,9 +116,10 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                     span.spr.reading= model.getReading()
                     span.spr :
                     span.definition= model.getDefinition()
-              if containingWords.length > 3
-                - var remainingContainedWords = containingWords.length - 3;
-                #show-more-contained.text-center Show all #{remainingContainedWords} words
+              if containingWords.length > 5
+                - var remainingContainedWords = containingWords.length;
+                .text-center
+                  #show-more-contained.btn.btn-success Show all #{remainingContainedWords} words
 
       if sentence
         .row
@@ -139,35 +143,24 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                 else
                   em Click the 'edit' icon to add a mnemonic
 
-
-
-        .block
-          .header Dictionary
-          .value
-            #lookup-container
-        .block
-          table.table
-            thead
-              tr
-                th Part
-                th Next
-                th Last
-                //th Time
-                th
-            tbody
-              for item in items.models
-                tr.item-row(data-id=item.id, data-part=item.get('part'))
-                  //TODO: move this logic to the item model
-                  td= _.capitalize(item.get('part'))
-                  td= item.get('next') > moment().unix() ? moment(item.get('next') * 1000).from() : 'Ready'
-                  td= item.get('last') ? moment(item.get('last') * 1000).from() : '-'
-                  //td= item.get('timeStudied') ? Math.round(item.get('timeStudied')) + ' seconds' : '-'
-                  if _.includes(vocab.get('bannedParts'), item.get('part'))
-                    td.item-unban
-                      button.btn.btn-xs.btn-default Unban
-                  else
-                    td.item-ban
-                      button.btn.btn-xs.btn-danger Ban
+        if items && items.length
+          .block
+            table.table
+              thead
+                tr
+                  th Part
+                  th Next
+                  th Last
+                  //th Time
+                  th
+              tbody
+                for item in items.models
+                  tr.item-row(data-id=item.id, data-part=item.get('part'))
+                    //TODO: move this logic to the item model
+                    td= _.capitalize(item.get('part'))
+                    td= item.get('next') > moment().unix() ? moment(item.get('next') * 1000).from() : 'Ready'
+                    td= item.get('last') ? moment(item.get('last') * 1000).from() : '-'
+                    //td= item.get('timeStudied') ? Math.round(item.get('timeStudied')) + ' seconds' : '-'
   else
     #header-section
       .row
