@@ -260,6 +260,10 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
       'character',
       this.prompt.review.getGradingColor()
     );
+
+    setTimeout(() => {
+      this.prompt.next();
+    }, 100);
   },
 
   /**

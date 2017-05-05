@@ -140,6 +140,10 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    */
   handlePromptToolbarGradingMouseup: function(value) {
     this.prompt.review.set('score', value);
+
+    setTimeout(() => {
+      this.prompt.next();
+    }, 100);
   }
 
 });
