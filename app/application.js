@@ -510,7 +510,7 @@ module.exports = GelatoApplication.extend({
         formId: '34a3fef0-62f6-11e5-8846-0e599dc12a51'
       },
       docs: {
-        enabled: true,
+        enabled: !app.isMobile(),
         baseUrl: 'https://skritter.helpscoutdocs.com/'
       }
     };
