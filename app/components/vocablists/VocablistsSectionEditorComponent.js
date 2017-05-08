@@ -45,13 +45,23 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
   },
 
   /**
+   * Adds a new section to the list and gives it a name.
+   * If no name is provided, a default one will be generated.
    * @method addSection
-   * @param {String} [name]
+   * @param {String} [name] the name of the new section
    */
   addSection: function(name) {
     this.updateVocablist();
-    this.vocablist.get('sections').push({name: name, rows: []});
-    this.render().$('.last-section').find('input').focus();
+    const sections = this.vocablist.get('sections');
+    const sectionsLength = sections.length;
+
+    if (!name) {
+      name = app.locale('pages.vocabLists.newSection').replace('#{num}', sectionsLength + 1);
+    }
+    sections.push({name: name, rows: []});
+
+    this.render();
+    this.$('.last-section').find('input').focus().select();
   },
 
   /**

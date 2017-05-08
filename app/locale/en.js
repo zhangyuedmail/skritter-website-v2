@@ -255,6 +255,7 @@ module.exports = {
       "errorSavingSection": "Something went wrong and the changes couldn't be saved. Please try again.",
       "export": "Export",
       "history": "History",
+      "newSection": "Section #{num}",
       "publish": "Publish",
       "quickAdd": "Quick Add",
       "resetLists": "Reset Lists to Beginning",
