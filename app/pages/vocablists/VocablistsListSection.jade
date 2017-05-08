@@ -16,23 +16,23 @@ gelato-page(data-name='vocablists-list-section')
               .row
                 .col-xs-6
                   - var categoryInfo = vocablist.getCategoryAndUrl()
+                  a#back-parent-link(href=categoryInfo.url)
+                    span= categoryInfo.label
+                    .breadcrumb-spacer |
 
                   .list-name
                     a#back-list-link(href='/vocablists/view/' + vocablist.id)
                       i.fa.fa-angle-left
                       | &nbsp;
                       span= vocablist.get('name')
-                      .breadcrumb-spacer |
+                      if view.sectionPrevious
+                        .breadcrumb-spacer |
 
                     if view.sectionPrevious
                       a#next-section-link(href='/vocablists/view/' + vocablist.id + '/' + view.sectionPrevious.id)
                         i.fa.fa-angle-left
                         | &nbsp;
                         span Previous Section
-                      .breadcrumb-spacer |
-
-                    a#back-parent-link(href=categoryInfo.url)
-                      span= categoryInfo.label
 
                   if editor.editing
                     input#section-name.section-name(value=vocablistSection.get('name'))
