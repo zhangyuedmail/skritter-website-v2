@@ -7,7 +7,13 @@ gelato-component[data-name='study-prompt-mnemonic-selector'] {
   }
 
   .user-mnemonic {
-    margin-top: 20px !important;
+    margin: 10px !important;
+    padding: 10px;
+  }
+
+  .linked {
+    background-color: $white1;
+    border: 2px solid $white3;
   }
 
   .formatting-instructions {
@@ -39,6 +45,8 @@ gelato-component[data-name='study-prompt-mnemonic-selector'] {
     margin: 10px;
   }
 
+
+
   gelato-component:nth-child(odd) {
     background-color: $white3;
   }
@@ -48,6 +56,10 @@ gelato-component[data-name='study-prompt-mnemonic-selector'] {
 
   .row {
     margin: 0;
+  }
+
+  .other-mnemonics-section {
+    margin-top: 15px;
   }
 
   .user-message {
