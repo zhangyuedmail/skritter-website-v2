@@ -51,7 +51,7 @@ gelato-component(data-name='study-prompt-vocab-reading')
                     if app.user.get('readingChinese') === 'zhuyin'
                       span= app.fn.pinyin.toZhuyin(reading.value, true)
                     else
-                      span= app.fn.pinyin.removeToneNumbers(reading.value)
+                      span= app.fn.pinyin.removeToneNumbers(reading.value).replace(/v/g, 'ü')
               else
                 span= reading.value
             - index++
