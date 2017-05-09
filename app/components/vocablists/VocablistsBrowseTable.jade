@@ -29,7 +29,10 @@ gelato-component(data-name='vocablists-browse-table')
                 span.glyphicon.glyphicon-plus-sign.text-success
                 span= app.locale('pages.vocabLists.addToQueue')
             else
-              span= _.capitalize(list.getNormalizedStudyingMode())
+              if list.getNormalizedStudyingMode() === 'studying' && app.user.isSubscriptionActive()
+                a.btn.btn-success(href='/study/' + list.id) Study
+              else
+                span= _.capitalize(list.getNormalizedStudyingMode())
 
   else if view._layout === 'grid'
     #grid
@@ -53,7 +56,10 @@ gelato-component(data-name='vocablists-browse-table')
                     span.glyphicon.glyphicon-ok-sign
                     span Added
                   else
-                    span= _.capitalize(list.getNormalizedStudyingMode())
+                    if list.getNormalizedStudyingMode() === 'studying' && app.user.isSubscriptionActive()
+                      a.btn.btn-success(href='/study/' + list.id) Study
+                    else
+                      span= _.capitalize(list.getNormalizedStudyingMode())
           if i % 4 === 3
             .clearfix
         .clearfix
