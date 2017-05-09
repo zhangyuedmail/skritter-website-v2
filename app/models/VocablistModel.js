@@ -149,7 +149,7 @@ const VocablistModel = SkritterModel.extend({
    * @returns {String}
    */
   getNormalizedStudyingMode: function() {
-    if (_.includes(['adding', 'studing'], this.get('studyingMode'))) {
+    if (_.includes(['adding', 'studing', 'studying'], this.get('studyingMode'))) {
       return 'studying';
     } else {
       return this.get('studyingMode');
