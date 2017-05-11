@@ -137,9 +137,10 @@ module.exports = GelatoApplication.extend({
     this.initFooter();
     this.initSideViews();
 
+    this.listenTo(vent, 'vocabInfo:toggle', this.toggleVocabInfo);
+
     if (this.isMobile()) {
       this.listenTo(vent, 'mobileNavMenu:toggle', this.toggleSideMenu);
-      this.listenTo(vent, 'vocabInfo:toggle', this.toggleVocabInfo);
       this.listenTo(vent, 'page:switch', () => { this.toggleSideMenu(false); });
 
       if (this.isAndroid()) {
