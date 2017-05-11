@@ -1,5 +1,5 @@
 const GelatoDialog = require('gelato/dialog');
-const Content = require('dialogs1/vocab-viewer/content/view');
+const Content = require('components/vocab/vocab-viewer/VocabViewerContentComponent');
 
 /**
  * @class VocabViewer

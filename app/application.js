@@ -8,7 +8,7 @@ const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
 const MobileNavbar = require('components/navbars/NavbarMobileComponent');
 const MarketingFooter = require('components/footers/MarketingFooterComponent');
 const MobileSideMenuComponent = require('components/menus/MobileSideMenuComponent');
-const VocabInfoContent = require('dialogs1/vocab-viewer/content/view');
+const VocabInfoContent = require('components/vocab/vocab-viewer/VocabViewerContentComponent');
 
 const User = require('models/UserModel');
 const Functions = require('functions');

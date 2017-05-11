@@ -61,7 +61,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./VocabViewerContent'),
 
   /**
    * @method initialize
@@ -90,7 +90,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    */
   render: function() {
     if (app.isMobile()) {
-      this.template = require('./mobile.jade');
+      this.template = require('./MobileVocabViewerContent.jade');
     }
 
     this.renderTemplate();
