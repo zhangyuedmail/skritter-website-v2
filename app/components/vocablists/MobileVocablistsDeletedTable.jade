@@ -1,7 +1,5 @@
 gelato-component(data-name='vocablists-deleted-table')
 
-
-
   if (view.vocablists.state === 'standby' || view.vocablists.cursor) && view.vocablists.length > 0
     #header-row.row
       .col-md-5 Title
@@ -9,8 +7,8 @@ gelato-component(data-name='vocablists-deleted-table')
 
   if view.vocablists.state === 'standby' && view.vocablists.length === 0
     .row.text-center.no-lists
-      .col-md-12.col-xs-12.empty(class=app.isChinese() ? 'text-chinese' : 'text-japanese')= app.user.getPreferredCharSet('无', '無')
-      .col-md-12.col-xs-12
+      .col-sm-12.col-xs-12.empty(class=app.isChinese() ? 'text-chinese' : 'text-japanese')= app.user.getPreferredCharSet('无', '無')
+      .col-sm-12.col-xs-12
         span You have not deleted any lists.
 
   for list, i in view.vocablists.models

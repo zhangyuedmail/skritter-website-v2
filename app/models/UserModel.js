@@ -177,6 +177,25 @@ const UserModel = SkritterModel.extend({
   },
 
   /**
+   * Gets the preferred version of a string of characters given the current user's preferences
+   * @param {String} simp the simplified zh version of the string
+   * @param {String} [trad] the traditional zh version of the string. Defaults to simp if not provided
+   * @param {String} [ja] the ja version of the string. Defaults to trad zh or simp if not provided
+   * @return {String} the variant that the user prefers
+   */
+  getPreferredCharSet: function(simp, trad, ja) {
+    if (app.isChinese()) {
+      if (this.get('reviewTraditional') && !this.get('reviewSimplified')) {
+        return trad || simp;
+      }
+
+      return simp;
+    }
+
+    return ja || trad || simp;
+  },
+
+  /**
    * @method getStudyParts
    * @returns {Array}
    */

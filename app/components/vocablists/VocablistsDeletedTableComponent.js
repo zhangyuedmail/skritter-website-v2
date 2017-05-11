@@ -20,7 +20,7 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./VocablistsDeletedTable'),
+  template: app.isMobile() ? require('./MobileVocablistsDeletedTable') : require('./VocablistsDeletedTable'),
 
   /**
    * @method initialize
