@@ -61,12 +61,15 @@ bootstrap-dialog(data-name='study-settings')
                 .checkbox
                   label
                     input(type="checkbox", checked=user.get('teachingMode'))
-            .form-group
-              label.col-sm-3.control-label(for="field-auto-adding") Auto Adding
-              .col-sm-9#field-auto-adding
-                .checkbox
-                  label
-                    input(type="checkbox", checked=user.get('addFrequency') > 0)
+
+            // TODO: fix automatic item adding
+            //.form-group
+            //  label.col-sm-3.control-label(for="field-auto-adding") Auto Adding
+            //  .col-sm-9#field-auto-adding
+            //    .checkbox
+            //      label
+            //        input(type="checkbox", checked=user.get('addFrequency') > 0, disabled)
+
             .form-group
               label.col-sm-3.control-label(for="field-audio") Audio
               .col-sm-9#field-audio

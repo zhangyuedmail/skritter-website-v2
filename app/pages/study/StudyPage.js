@@ -317,9 +317,10 @@ const StudyPage = GelatoPage.extend({
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
 
-      if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
-        this.addItems(true);
-      }
+      // TODO: fix automatic item adding
+      // if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
+      //   this.addItems(true);
+      // }
 
       if (items.length < 5) {
         this.items.preloadNext();
