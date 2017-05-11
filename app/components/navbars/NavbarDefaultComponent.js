@@ -126,13 +126,12 @@ module.exports = GelatoComponent.extend({
     app.user.save({
       targetLang: toSwitchCode
     }, {
-      error: function(user) {
-        if (user.get('targetLang') === toSwitchCode) {
-          app.reload(false);
-        } else {
-          //TODO: show some kind of error message
-          ScreenLoader.hide();
-        }
+      error: function(model, error) {
+        ScreenLoader.hide();
+
+        app.notifyUser({
+          message: error.responseJSON.message
+        });
       },
       success: function() {
         app.reload(false);
