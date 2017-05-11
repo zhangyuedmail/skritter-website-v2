@@ -79,6 +79,16 @@ gelato-component[data-name='vocab-viewer-content'] {
     }
   }
 
+  .mnemonic-wrapper {
+    .header {
+      margin-top: 20px;
+    }
+  }
+
+  #sentence-container {
+    min-height: 95px;
+  }
+
   #header-section {
     background-color: $white3;
     border-top-left-radius: 25px;

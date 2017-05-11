@@ -2,6 +2,7 @@ const GelatoComponent = require('gelato/component');
 const VocabViewerLookup = require('dialogs1/vocab-viewer/lookup/view');
 const Items = require('collections/ItemCollection');
 const Vocabs = require('collections/VocabCollection');
+const VocabSentence = require('../vocab-sentence/VocabSentenceComponent');
 const vent = require('vent');
 
 /**
@@ -26,35 +27,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     'click #hanping-yue-icon': 'handleClickHanpingYueIcon',
     'click #pleco-icon': 'handleClickPlecoIcon',
     'click #show-more-contained': 'handleClickShowMoreContained',
-    'click #save-me': 'saveMe',
-
     'click #edit-vocab': 'handleClickEditVocab',
     'click #save-vocab': 'handleClickSaveVocab'
-  },
-
-  handleClickEditVocab: function(event) {
-    event.preventDefault();
-
-    this.editing = true;
-    this.render();
-  },
-
-  handleClickSaveVocab: function(event) {
-    event.preventDefault();
-
-    const definitionText = this.$('#vocab-definition .definition').val() || '';
-    const mnemonicText = this.$('#vocab-mnemonic .mnemonic').val() || '';
-
-    this.vocab.set({
-      customDefinition: definitionText,
-      mnemonic: {public: false, text: mnemonicText}
-    });
-
-    this.vocab.save();
-
-    this.editing = false;
-
-    this.render();
   },
 
   /**
@@ -70,7 +44,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    */
   initialize: function(options) {
     options = options || {};
-    this.lookup = new VocabViewerLookup();
+    this._views['sentence'] = new VocabSentence();
+    this._views['lookup'] = new VocabViewerLookup();
     this.items = null;
     this.vocabs = null;
     this.vocabsContaining = null;
@@ -94,7 +69,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     }
 
     this.renderTemplate();
-    this.lookup.setElement('#lookup-container').render();
+    this._views['lookup'].setElement('#lookup-container').render();
+    this._views['sentence'].setElement('#sentence-container').render();
 
     return this;
   },
@@ -140,15 +116,15 @@ const VocabViewerContentComponent = GelatoComponent.extend({
   },
 
   /**
-   * @method handleClickPlecoIcon
+   * Handles when the user clicks on an edit icon. Sets the editing state to
+   * true and rerenders the component.
    * @param event
    */
-  handleClickPlecoIcon: function(event) {
+  handleClickEditVocab: function(event) {
     event.preventDefault();
 
-    if (app.isCordova()) {
-      plugins.core.openPleco(this.vocabWriting);
-    }
+    this.editing = true;
+    this.render();
   },
 
   /**
@@ -187,7 +163,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     }
   },
 
-  /**
+   /**
    * @method handleClickItemBan
    * @param {Event} event
    */
@@ -212,6 +188,41 @@ const VocabViewerContentComponent = GelatoComponent.extend({
   },
 
   /**
+   * @method handleClickPlecoIcon
+   * @param event
+   */
+  handleClickPlecoIcon: function(event) {
+    event.preventDefault();
+
+    if (app.isCordova()) {
+      plugins.core.openPleco(this.vocabWriting);
+    }
+  },
+
+  /**
+   * Handles when the user clicks the save button. Saves the vocab,
+   * resets the editing state and then rerenders the component.
+   * @param event
+   */
+  handleClickSaveVocab: function(event) {
+    event.preventDefault();
+
+    const definitionText = this.$('#vocab-definition .definition').val() || '';
+    const mnemonicText = this.$('#vocab-mnemonic .mnemonic').val() || '';
+
+    this.vocab.set({
+      customDefinition: definitionText,
+      mnemonic: {public: false, text: mnemonicText}
+    });
+
+    this.vocab.save();
+
+    this.editing = false;
+
+    this.render();
+  },
+
+  /**
    * @method set
    * @param {Vocabs} vocabs
    * @param {Vocabs} vocabsContaining
@@ -223,7 +234,9 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     this.vocab = vocabs.at(0) || null;
     this.vocabs = vocabs || null;
     this.vocabsContaining = vocabsContaining || null;
-    this.lookup.set(vocabs);
+
+    this._views['lookup'].set(vocabs);
+    this._views['sentence'].fetchAndShowSentence(null, this.vocab);
 
     return this.render();
   },
@@ -234,6 +247,53 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     return GelatoComponent.prototype.remove.call(this);
   },
 
+  /**
+   * Handles a touch to an icon. Toggles the star state of the vocab and
+   * rerenders the dialog.
+   * @method handleClickVocabStar
+   * @param {jQuery.Event} event the touch event to the icon
+   */
+  handleClickVocabStar: function(event) {
+    const vocab = this.vocabs.at(0);
+
+    vocab.toggleStarred();
+    vocab.save();
+
+    this.render();
+  },
+
+  /**
+   * @method handleClickShowMoreContained
+   * @param event
+   */
+  handleClickShowMoreContained: function(event) {
+    this.$('#show-more-contained').hide();
+    this.$('#vocab-words-containing').addClass('show-all');
+  },
+
+  /**
+   * Handles a touch to an icon. Toggles the star state of the vocab and
+   * rerenders the dialog.
+   * @method handleClickVocabStar
+   * @param {jQuery.Event} event the touch event to the icon
+   */
+  handleClickVocabBan: function(event) {
+    event.preventDefault();
+
+    const self = this;
+    const vocab = this.vocabs.at(0);
+    vocab.banAll();
+    vocab.save();
+
+    this.render();
+  },
+
+  /**
+   * Loads a specified vocab. Fetches required missing information, if needed,
+   * or loads it from a VocabModel sent in.
+   * @param {String} vocabId the id of the vocab to fetch data for
+   * @param {VocabModel} [vocabInfo] the vocab model that would otherwise be fetched by id
+   */
   loadVocab: function(vocabId, vocabInfo) {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
@@ -280,10 +340,15 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                 });
               },
               function(callback) {
-                self.vocabs.at(0).fetchSentence().then(sentence => {
-                  self.vocabs.sentences.add(sentence);
+
+                if (!self.vocabs.at(0).sentenceFetched) {
+                  self.vocabs.at(0).fetchSentence().then(sentence => {
+                    self.vocabs.sentences.add(sentence);
+                    callback();
+                  });
+                } else {
                   callback();
-                });
+                }
               },
               function(callback) {
                 if (self.vocabs.at(0).has('containedVocabIds')) {
@@ -364,64 +429,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
         }
       }
     );
-  },
-
-  /**
-   * Handles a touch to an icon. Toggles the star state of the vocab and
-   * rerenders the dialog.
-   * @method handleClickVocabStar
-   * @param {jQuery.Event} event the touch event to the icon
-   */
-  handleClickVocabStar: function(event) {
-    const vocab = this.vocabs.at(0);
-
-    vocab.toggleStarred();
-    vocab.save();
-
-    this.render();
-  },
-
-  /**
-   * @method handleClickShowMoreContained
-   * @param event
-   */
-  handleClickShowMoreContained: function(event) {
-    this.$('#show-more-contained').hide();
-    this.$('#vocab-words-containing').addClass('show-all');
-  },
-
-  /**
-   * Handles a touch to an icon. Toggles the star state of the vocab and
-   * rerenders the dialog.
-   * @method handleClickVocabStar
-   * @param {jQuery.Event} event the touch event to the icon
-   */
-  handleClickVocabBan: function(event) {
-    event.preventDefault();
-
-    const self = this;
-    const vocab = this.vocabs.at(0);
-    vocab.banAll();
-    vocab.save();
-
-    this.render();
-  },
-
-  /**
-   * #method saveMe
-   */
-  saveMe: function() {
-    const customDefinition = (this.$('#custom-definition-input').val() || '').trim();
-
-    // or if it equals the previous custom definition
-    if (!customDefinition) {
-      return;
-    }
-
-    this.vocabs.models[0].set('customDefinition', 'yolo');
-    this.vocabs.models[0].save();
   }
-
 });
 
 module.exports = VocabViewerContentComponent;

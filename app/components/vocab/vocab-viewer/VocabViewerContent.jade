@@ -52,15 +52,11 @@ gelato-component(data-name='vocab-viewer-content')
                 else
                   em Click the 'edit' icon to add a definition
 
-        if sentence
-          .block
-            .header Sentence
-            .value
-              #vocab-sentence
-                if sentence
-                  span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
-
         .block
+          #sentence-container
+
+
+        .block.mnemonic-wrapper
           .header Mnemonic
           .value
             #vocab-mnemonic

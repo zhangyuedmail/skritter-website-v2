@@ -13,14 +13,14 @@ const VocabSentenceComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click .value': 'handleClickValue'
+    'click .sentence-writing': 'handleClickValue'
   },
 
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./VocabSentenceComponent.jade'),
+  template: require('./VocabSentence.jade'),
 
   /**
    * @method initialize
@@ -28,8 +28,14 @@ const VocabSentenceComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
+    options = options || {};
+
     this.prompt = options.prompt;
-    this.listenTo(this.prompt, 'reviews:set', this.fetchAndShowSentence);
+    this.vocab = options.vocab || null;
+
+    if (this.prompt) {
+      this.listenTo(this.prompt, 'reviews:set', this.fetchAndShowSentence);
+    }
   },
 
   /**
@@ -43,21 +49,49 @@ const VocabSentenceComponent = GelatoComponent.extend({
 
   /**
    * @method fetchAndShowSentence
-   * @param {ReviewCollection} [reviews]
+   * @param [reviews]
+   * @param {VocabModel} [vocab] the VocabModel to fetch a sentence for
    */
-  fetchAndShowSentence: function(reviews) {
-    if (!this.prompt.reviews) {
+  fetchAndShowSentence: function(reviews, vocab) {
+    if (this.prompt && !this.prompt.reviews && !this.vocab && !vocab) {
       return;
     }
 
     this.toggleFetchingSpinner(true);
 
-    const vocab = this.prompt.reviews.vocab;
-    vocab.sentenceFetched = true;
-    vocab.fetchSentence().then((s) => {
-      vocab.collection.sentences.add(s);
+    vocab = vocab || this.prompt.reviews.vocab;
+
+    this.vocab = vocab;
+
+    if (!vocab.sentenceFetched) {
+      vocab.sentenceFetched = true;
+
+      vocab.fetchSentence().then((s) => {
+        vocab.collection.sentences.add(s);
+        this.render();
+      });
+    } else {
       this.render();
-    });
+    }
+  },
+
+  /**
+   * Gets the sentence for the current vocab
+   * @return {SentenceModel} the sentence for the vocab
+   */
+  getSentence: function() {
+    const vocab = this.getVocab() || {};
+    const sentence = vocab.getSentence ? vocab.getSentence() : null;
+
+    return sentence;
+  },
+
+  /**
+   * Gets the view's vocab model
+   * @return {VocabModel}
+   */
+  getVocab: function() {
+    return this.prompt && this.prompt.reviews ? this.prompt.reviews.vocab : this.vocab;
   },
 
   /**
@@ -75,6 +109,10 @@ const VocabSentenceComponent = GelatoComponent.extend({
     }
   },
 
+  /**
+   * Shows or hides the the component's content and a loading spinner
+   * @param {Boolean} [show] whether to show the spinner and hide the content
+   */
   toggleFetchingSpinner: function(show) {
     this.$('.fa-spinner').toggleClass('hidden', !show);
   }

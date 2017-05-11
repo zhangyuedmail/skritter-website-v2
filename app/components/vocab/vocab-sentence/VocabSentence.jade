@@ -1,11 +1,10 @@
 gelato-component(data-name='vocab-sentence')
   - var prompt = view.prompt;
-  - var isDemo = prompt.isDemo;
+  - var isDemo = prompt && prompt.isDemo;
+  - var sentence = view.getSentence();
+  - var vocab = view.getVocab();
 
-  if prompt.reviews
-    - var sentence = prompt.reviews.vocab.getSentence();
-    - var vocab = prompt.reviews.vocab;
-
+  if vocab
     label Sentence
     .sentence-wrapper
 
@@ -15,15 +14,15 @@ gelato-component(data-name='vocab-sentence')
         - var sentenceDefinition = sentence.getDefinition();
         - var sentenceReading = sentence.get('reading');
 
-        .value(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
+        .sentence-writing(class=vocab.getFontClass())
 
-          if prompt.reviews.part === 'rune' && !prompt.reviews.isComplete()
+          if prompt && prompt.reviews.part === 'rune' && !prompt.reviews.isComplete()
             = sentence.getWriting(vocab.get('writing'), vocab)
           else
             = sentence.getWriting(null, vocab)
 
           .hint(class=isDemo ? 'open' : '', style=isDemo ? 'display: block;' : '')
-            if prompt.reviews.isChinese()
+            if prompt && prompt.reviews.isChinese() || app.isChinese()
               .hint-reading= app.fn.pinyin.toTone(sentenceReading, true)
             else
               .hint-reading= sentenceReading

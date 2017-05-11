@@ -121,14 +121,8 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                 .text-center
                   #show-more-contained.btn.btn-success Show all #{remainingContainedWords} words
 
-      if sentence
-        .row
-          .block
-            .header Example sentence
-            .value
-              #vocab-sentence
-                if sentence
-                  span(class=vocab.getFontClass())!= sentence.getWriting(null, vocab)
+      .row
+        .block#sentence-container
 
       .row
         .block
