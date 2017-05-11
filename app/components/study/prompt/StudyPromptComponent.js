@@ -15,7 +15,7 @@ const VocabContained = require('components/study/prompt/vocab-contained/StudyPro
 const VocabDefinition = require('components/study/prompt/vocab-definition/StudyPromptVocabDefinitionComponent.js');
 const VocabMnemonic = require('components/study/prompt/vocab-mnemonic/StudyPromptVocabMnemonicComponent.js');
 const VocabReading = require('components/study/prompt/vocab-reading/StudyPromptVocabReadingComponent.js');
-const VocabSentence = require('components/study/prompt/vocab-sentence/StudyPromptVocabSentenceComponent.js');
+const VocabSentence = require('components/vocab/vocab-sentence/VocabSentenceComponent.js');
 const VocabStyle = require('components/study/prompt/vocab-style/StudyPromptVocabStyleComponent.js');
 const VocabWriting = require('components/study/prompt/vocab-writing/StudyPromptVocabWritingComponent.js');
 

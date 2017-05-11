@@ -1,10 +1,12 @@
 const GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptVocabSentenceComponent
+ * A component that displays a vocab's sentence with its definition and reading
+ * to the user.
+ * @class
  * @extends {GelatoComponent}
  */
-const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
+const VocabSentenceComponent = GelatoComponent.extend({
 
   /**
    * @property events
@@ -18,7 +20,7 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./StudyPromptVocabSentenceComponent.jade'),
+  template: require('./VocabSentenceComponent.jade'),
 
   /**
    * @method initialize
@@ -32,7 +34,7 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
 
   /**
    * @method render
-   * @returns {StudyPromptVocabSentenceComponent}
+   * @returns {VocabSentenceComponent}
    */
   render: function() {
     this.renderTemplate();
@@ -79,4 +81,4 @@ const StudyPromptVocabSentenceComponent = GelatoComponent.extend({
 
 });
 
-module.exports = StudyPromptVocabSentenceComponent;
+module.exports = VocabSentenceComponent;
