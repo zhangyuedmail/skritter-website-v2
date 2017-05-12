@@ -59,7 +59,13 @@ const VocabSentenceComponent = GelatoComponent.extend({
 
     this.toggleFetchingSpinner(true);
 
-    vocab = vocab || this.prompt.reviews.vocab;
+    if (!vocab && this.prompt) {
+      vocab = this.prompt.reviews.vocab;
+    }
+
+    if (!vocab) {
+      return;
+    }
 
     this.vocab = vocab;
 
