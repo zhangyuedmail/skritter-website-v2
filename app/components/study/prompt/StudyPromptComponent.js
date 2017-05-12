@@ -24,6 +24,7 @@ const Vocabs = require('collections/VocabCollection.js');
 
 const Shortcuts = require('components/study/prompt/StudyPromptShortcuts');
 const vent = require('vent');
+const config = require('config');
 
 /**
  * @class StudyPromptComponent
@@ -43,6 +44,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
+    _.bindAll(this, 'stopAutoAdvance');
     options = options || {};
 
     //properties
@@ -73,6 +75,14 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.vocabSentence = new VocabSentence({prompt: this});
     this.vocabStyle = new VocabStyle({prompt: this});
     this.vocabWriting = new VocabWriting({prompt: this});
+
+    /**
+     * Timeout id for when auto-advance currently has a timeout set
+     * @type {String}
+     * @private
+     */
+    this._autoAdvanceListenerId = null;
+
     this.on('resize', this.resize);
 
     this.listenTo(vent, 'vocab:play', this.playVocabAudio);
@@ -340,6 +350,35 @@ const StudyPromptComponent = GelatoComponent.extend({
     } else {
       app.openDesktopVocabViewer(id || this.reviews.vocab.id, info || this.vocabInfo);
     }
+  },
+
+  /**
+   * Starts a timer to auto-advance to the next prompt if the user has it enabled
+   */
+  startAutoAdvance: function() {
+    if (this._autoAdvanceListenerId || !app.user.get('autoAdvancePrompts')) {
+      return;
+    }
+
+    $(document).one('click', this.stopAutoAdvance);
+    this._autoAdvanceListenerId = setTimeout(() => {
+      this._autoAdvanceListenerId = null;
+      $(document).off('click', this.stopAutoAdvance);
+      this.next();
+    }, config.autoAdvanceDelay);
+  },
+
+  /**
+   * Clears the prompt auto-advance timeout and any animations
+   * @method stopAutoAdvance
+   */
+  stopAutoAdvance: function(event) {
+    if (!this._autoAdvanceListenerId) {
+      return;
+    }
+
+    clearTimeout(this._autoAdvanceListenerId);
+    this._autoAdvanceListenerId = null;
   },
 
   /**

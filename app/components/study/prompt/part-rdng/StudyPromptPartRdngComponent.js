@@ -1,5 +1,6 @@
 const GelatoComponent = require('gelato/component');
 const vent = require('vent');
+const config = require('config');
 
 /**
  * @class StudyPromptPartRdngComponent
@@ -224,7 +225,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
 
     setTimeout(() => {
       this.prompt.next();
-    }, 100);
+    }, config.gradingBarClickAdvanceDelay);
   },
 
   /**

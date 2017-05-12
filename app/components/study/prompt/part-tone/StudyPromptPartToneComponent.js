@@ -1,4 +1,5 @@
 const GelatoComponent = require('gelato/component');
+const config = require('config');
 
 /**
  * @class StudyPromptPartToneComponent
@@ -194,6 +195,14 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
 
     if (this.prompt.review.character.isComplete()) {
       this.renderComplete();
+
+      if (app.user.get('autoAdvancePrompts')) {
+
+        // wait until events finish firing and call stack is cleared
+        _.defer(() => {
+          this.prompt.startAutoAdvance();
+        });
+      }
     }
   },
 
@@ -263,7 +272,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
 
     setTimeout(() => {
       this.prompt.next();
-    }, 100);
+    }, config.gradingBarClickAdvanceDelay);
   },
 
   /**
