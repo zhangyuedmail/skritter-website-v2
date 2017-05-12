@@ -45,7 +45,7 @@ module.exports = {
    * clicks a grading button
    * @type {Number}
    */
-  gradingBarClickAdvanceDelay: 100,
+  gradingBarClickAdvanceDelay: 200,
 
   /**
    * Target language of the application, either "zh"|"ja"
