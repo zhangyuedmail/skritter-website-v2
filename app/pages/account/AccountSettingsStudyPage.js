@@ -76,13 +76,17 @@ const AccountSettingsStudyPage = GelatoPage.extend({
     return parts;
   },
 
+  /**
+   * Responds to the user changing a checkbox input's value
+   * @param {jQuery.Event} event
+   */
   handleChangeCheckbox: function(event) {
     this.handleClickButtonSave(event);
   },
 
   /**
-   *
-   * @param event
+   * Responds to the user changing a select input's value
+   * @param {jQuery.Event} event
    */
   handleChangeSelect: function(event) {
     this.handleClickButtonSave(event);
@@ -146,7 +150,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
         }
 
         app.notifyUser({
-          message: 'Settings updated.',
+          message: 'Settings saved.',
           type: 'pastel-success'
         });
       }
