@@ -102,10 +102,10 @@ gelato-page(data-name='institutions')
         .form-group
           .row
             .col-xs-4
-              label.control-label School name
+              label.control-label School name *
               input#institution-name.form-control(type='text', name='name')
             .col-xs-8
-              label.control-label School address
+              label.control-label School address *
               input#institution-address.form-control(type='text', name='address')
         .form-group
           .row
@@ -135,10 +135,10 @@ gelato-page(data-name='institutions')
         .form-group
           .row
             .col-xs-4
-              label.control-label Contact name
+              label.control-label Contact name *
               input#institution-contact-name.form-control(type='text', name='contact-name')
             .col-xs-4
-              label.control-label Contact email
+              label.control-label Contact email *
               input#institution-contact-email.form-control(type='email', name='contact-email')
             .col-xs-4.selectContainer
               label.control-label Language
@@ -149,6 +149,9 @@ gelato-page(data-name='institutions')
         .form-group
           label.control-label Message (optional)
           textarea#institution-message.form-control(name='review', rows='8')
+
+        .text-center.text-muted Fields with asterisks (*) are required.
+
         .text-center
           #institution-request-type.form-group
             label.radio-inline
