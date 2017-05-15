@@ -449,6 +449,8 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
       this.prompt.review.getGradingColor()
     );
 
+    this.prompt.stopAutoAdvance();
+
     setTimeout(() => {
       this.prompt.next();
     }, config.gradingBarClickAdvanceDelay);
