@@ -96,6 +96,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
 
     app.user.set({
       autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
+      autoAdvancePrompts: this.$('#field-auto-advance').is(':checked'),
       showHeisig: this.$('#field-heisig').is(':checked'),
       sourceLang: this.$('#field-source-language').val(),
       targetLang: this.$('#field-target-language').val()

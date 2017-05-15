@@ -20,7 +20,10 @@ gelato-component(data-name='vocablists-published-table')
               span.glyphicon.glyphicon-plus-sign.text-success
               span= app.locale('pages.vocabLists.addToQueue')
           else
-            span= _.capitalize(list.getNormalizedStudyingMode())
+            if list.getNormalizedStudyingMode() === 'studying' && app.user.isSubscriptionActive()
+              a.btn.btn-success(href='/study/' + list.id) Study
+            else
+              span= _.capitalize(list.getNormalizedStudyingMode())
 
   if view.vocablists.state === 'standby' && view.vocablists.cursor
     button#load-more-btn.btn.btn-primary.btn-block Load More

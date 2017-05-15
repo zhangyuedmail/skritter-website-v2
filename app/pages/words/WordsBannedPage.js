@@ -1,7 +1,6 @@
 const GelatoPage = require('gelato/page');
 const Vocabs = require('collections/VocabCollection');
 const WordsSidebar = require('components/words/WordsSidebarComponent');
-const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 const VocabActionMixin = require('mixins/vocab-action');
 const vent = require('vent');
 
@@ -136,13 +135,7 @@ module.exports = GelatoPage.extend({
     const vocabId = row.data('vocab-id');
 
     if (vocabId) {
-      if (app.isMobile()) {
-        vent.trigger('vocabInfo:toggle', vocabId);
-      } else {
-        this.dialog = new VocabViewerDialog();
-        this.dialog.load(vocabId);
-        this.dialog.open();
-      }
+      vent.trigger('vocabInfo:toggle', vocabId);
     }
   },
 

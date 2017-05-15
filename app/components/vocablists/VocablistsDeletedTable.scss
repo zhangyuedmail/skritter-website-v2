@@ -61,4 +61,15 @@ gelato-component[data-name='vocablists-deleted-table'] {
     cursor: pointer;
   }
 
+  .no-lists {
+    padding: 20px;
+
+    .empty {
+      color: $grey1;
+      font-weight: bold;
+      font-size: 7vh;
+      padding: 20px;
+    }
+  }
+
 }

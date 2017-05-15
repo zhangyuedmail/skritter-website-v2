@@ -1,6 +1,6 @@
-@import "../../../../styles/_variables";
+@import "../../../styles/_variables";
 
-gelato-component[data-name='study-prompt-vocab-sentence'] {
+gelato-component[data-name='vocab-sentence'] {
 
   button {
     background-color: $grey1;
@@ -47,7 +47,7 @@ gelato-component[data-name='study-prompt-vocab-sentence'] {
     min-height: 29px;
   }
 
-  .value {
+  .sentence-writing {
     color: $grey3;
     cursor: pointer;
     font-size: 20px;

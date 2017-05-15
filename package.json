@@ -7,7 +7,7 @@
     "email": "team@skritter.com",
     "url": "https://skritter.com"
   },
-  "version": "2.2.3",
+  "version": "2.2.5",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -44,7 +44,7 @@
     "dexie": "~1.5",
     "express": "~4.15",
     "font-awesome": "~4.7",
-    "helmet": "~3.5",
+    "helmet": "~3.6",
     "highcharts": "~5.0",
     "howler": "~2.0",
     "jade": "~1.11",
@@ -67,17 +67,17 @@
     "chai-webdriver": "~1.2",
     "clean-css-brunch": "~2.10",
     "chromedriver": "~2.29",
-    "cordova": "~6.5",
+    "cordova": "~7.0",
     "css-brunch": "~2.10",
     "jade-brunch": "~2.8",
     "javascript-brunch": "~2.10",
-    "mocha": "~3.3",
+    "mocha": "~3.4",
     "nodemon": "~1.11",
     "replace-brunch": "~2.0",
     "sass-brunch": "~2.10",
     "selenium-webdriver": "~2.53",
     "shelljs": "~0.7",
-    "sinon": "~2.1",
+    "sinon": "~2.2",
     "uglify-js-brunch": "~2.10"
   }
 }

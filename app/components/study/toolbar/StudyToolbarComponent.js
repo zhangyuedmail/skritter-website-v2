@@ -93,7 +93,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
     const numItemsToAdd = $(event.target).data('amt');
 
     this.toggleAddWordsPopup();
-    this.updateAddButton(true);
+    this.updateAddButton(null, true);
     vent.trigger('items:add', null, numItemsToAdd);
   },
 
@@ -167,9 +167,10 @@ const StudyToolbarComponent = GelatoComponent.extend({
   /**
    * Updates the adding state and UI to reflect whether items are currently
    * being added.
+   * @param {Number} [num] the number of items added
    * @param {Boolean} [adding] whether items are currently being added
    */
-  updateAddButton: function(adding) {
+  updateAddButton: function(num, adding) {
     adding = adding || false;
 
     this._adding = adding;

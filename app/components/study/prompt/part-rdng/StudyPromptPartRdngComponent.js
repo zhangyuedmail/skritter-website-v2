@@ -1,5 +1,6 @@
 const GelatoComponent = require('gelato/component');
 const vent = require('vent');
+const config = require('config');
 
 /**
  * @class StudyPromptPartRdngComponent
@@ -221,6 +222,10 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    */
   handlePromptToolbarGradingMouseup: function(value) {
     this.prompt.review.set('score', value);
+
+    setTimeout(() => {
+      this.prompt.next();
+    }, config.gradingBarClickAdvanceDelay);
   },
 
   /**

@@ -94,17 +94,24 @@ var GelatoView = Backbone.View.extend({
   },
 
   /**
+   * Creates an object of variables accessible to the template when it renders
    * @method getContext
-   * @param {Object} [context]
-   * @returns {Object}
+   * @param {Object} [context] additional variables to supply along
+   *                            with the default globals
+   * @returns {Object} a merged, unique object that holds all variables
+   *                    available to a template at render time.
    */
   getContext: function(context) {
-    var globals = require('globals') || {};
-    globals.app = window.app;
-    globals.locale = window.app.locale;
-    globals.view = this;
-    globals = Backbone.$.extend(true, globals, context || {});
-    return globals;
+    const globals = require('globals') || {};
+    const appState = {
+      app: window.app,
+      locale: window.app.locale,
+      view: this
+    };
+
+    const renderContext = Backbone.$.extend(true, {}, globals, appState, context || {});
+
+    return renderContext;
   },
 
   /**

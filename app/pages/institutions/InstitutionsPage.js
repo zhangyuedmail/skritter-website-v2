@@ -77,6 +77,8 @@ const InstitutionsPage = GelatoPage.extend({
    */
   handleClickRequestSubmit: function(event) {
     event.preventDefault();
+
+    var self = this;
     var email = this.$('#institution-contact-email').val();
     var language = this.$('#institution-language option:selected').text();
     var message = this.$('#institution-message').val();
@@ -87,12 +89,28 @@ const InstitutionsPage = GelatoPage.extend({
     var schoolType = this.$('#institution-type option:selected').text();
     var schoolStudents = this.$('#institution-number option:selected').text();
     var when = this.$('#institution-when').val();
-    var self = this;
+
+    if (_.isEmpty(schoolName)) {
+      return this._setRequestError('School name is required.');
+    }
+
+    if (_.isEmpty(schoolAddress)) {
+      return this._setRequestError('School address is required.');
+    }
+
+    if (_.isEmpty(name)) {
+      return this._setRequestError('Contact name is required.');
+    }
+
+    if (_.isEmpty(email)) {
+      return this._setRequestError('Contact email is required.');
+    }
+
     this.disableForm('form');
+
     $.ajax({
       url: app.getApiUrl() + 'institution-contact',
       headers: app.user.session.getHeaders(),
-      context: this,
       type: 'POST',
       data: JSON.stringify({
         email: email,
@@ -110,14 +128,10 @@ const InstitutionsPage = GelatoPage.extend({
         }
       })
     }).then(function() {
-      self.$('#request-message').removeClass('text-danger');
-      self.$('#request-message').addClass('text-success');
-      self.$('#request-message').text('Your request has been successfully sent.');
+      self._setRequestSuccess();
       self.$('form').hide(500);
-    }).error(function(error) {
-      self.$('#request-message').removeClass('text-success');
-      self.$('#request-message').addClass('text-danger');
-      self.$('#request-message').text(JSON.stringify(error));
+    }).fail(function(error) {
+      self._setRequestError(JSON.stringify(error));
       self.enableForm('form');
     });
   },
@@ -131,6 +145,27 @@ const InstitutionsPage = GelatoPage.extend({
     var section = this.$('#section-request');
     $('html, body').animate({scrollTop: section.offset().top}, 1000);
     this.$('#institution-request-type [value="trial"]').prop('checked', 'checked');
+  },
+
+  /**
+   * Set error message with bad institutional requests.
+   * @param error
+   * @private
+   */
+  _setRequestError: function(error) {
+    this.$('#request-message').removeClass('text-success');
+    this.$('#request-message').addClass('text-danger');
+    this.$('#request-message').text(error);
+  },
+
+  /**
+   * Set success message with good institutional requests.
+   * @private
+   */
+  _setRequestSuccess: function() {
+    this.$('#request-message').removeClass('text-danger');
+    this.$('#request-message').addClass('text-success');
+    this.$('#request-message').text('Your request has been successfully sent.');
   }
 });
 

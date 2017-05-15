@@ -25,7 +25,7 @@ gelato-component(data-name='vocablists-list-section-editor')
           if view.editing
             input#section-name.section-name(value=section.name)
           else
-            a(href="/vocablists/view/" + vocablist.id + "/" + section.id)
+            .section-link(href="/vocablists/view/" + vocablist.id + "/" + section.id, data-section-id=section.id)
               span= section.name || 'Section ' + (index + 1)
 
         .col-xs-3
@@ -34,7 +34,7 @@ gelato-component(data-name='vocablists-list-section-editor')
           else if section.rows.length === 1
             span= section.rows.length + ' word'
           else if !view.editing
-            a(href="/vocablists/view/" + view.vocablist.id + "/" + section.id) (click to add words)
+            a.section-link(href="/vocablists/view/" + view.vocablist.id + "/" + section.id) (click to add words)
         .col-xs-2
           if section.completed
             span.spr Completed

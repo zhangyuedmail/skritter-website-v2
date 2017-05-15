@@ -1,6 +1,5 @@
 const GelatoComponent = require('gelato/component');
 const ConfirmItemBanDialog = require('dialogs1/confirm-item-ban/view');
-const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 const vent = require('vent');
 
 /**

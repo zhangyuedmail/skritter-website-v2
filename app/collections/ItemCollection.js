@@ -44,96 +44,119 @@ const ItemCollection = BaseSkritterCollection.extend({
   },
 
   /**
+   * Adds a single item for a user to study
+   * @param {Object} [options] options for the add operation
+   * @param {String} [options.listId] a list id from which to add items
+   * @return {Promise<Object>} resolves when the item has been added
    * @method addItem
-   * @param {Object} [options]
-   * @param {Function} callback
    */
-  addItem: function(options, callback) {
-    let self = this;
-    if (this.addingState === 'standby') {
-      this.addingState = 'adding';
-    } else {
-      _.isFunction(callback) && callback();
-      return;
-    }
+  addItem: function(options) {
+    const self = this;
 
-    options.listId = options.listId || '';
-
-    $.ajax({
-      url: app.getApiUrl() + 'items/add?lists=' + options.listId,
-      type: 'POST',
-      headers: app.user.session.getHeaders(),
-      context: this,
-      data: {
-        lang: app.getLanguage()
-      },
-      error: function(error) {
-        self.addingState = 'standby';
-        callback(error);
-      },
-      success: function(result) {
-        if (result.Items.length) {
-          const item = new ItemModel(result.Items[0]);
-
-          item._loaded = false;
-          item._queue = true;
-
-          self.unshift(item);
-          self.preloadNext();
-        }
-
-        self.addingState = 'standby';
-        callback(null, result);
+    return new Promise((resolve, reject) => {
+      if (this.addingState === 'standby') {
+        this.addingState = 'adding';
+      } else {
+        resolve();
+        return;
       }
+
+      options.listId = options.listId || '';
+
+      $.ajax({
+        url: app.getApiUrl() + 'items/add?lists=' + options.listId + '&lang=' + app.getLanguage(),
+        type: 'POST',
+        headers: app.user.session.getHeaders(),
+        context: this,
+        error: function(error) {
+          self.addingState = 'standby';
+
+          reject(error);
+        },
+        success: function(result) {
+          if (result.Items.length) {
+            const item = new ItemModel(result.Items[0]);
+
+            item._loaded = false;
+            item._queue = true;
+
+            self.add(item);
+
+            self.unshift(item);
+            self.preloadNext();
+          }
+
+          self.addingState = 'standby';
+
+          resolve(result);
+        }
+      });
     });
   },
 
   /**
+   * Adds an arbitrary number of new items. Defaults to 1 if a limit is not
+   * sent in through the options.
+   * @param {Object} [options] object that contains options for the add operation
+   * @param {Number} [options.limit] the number of items to attempt to add
+   * @param {String} [options.listId] a list id from which to add items
+   * @param {Function} [callback] an optional callback that will be called when
+   *                              the limit has been reached.
    * @method addItems
-   * @param {Object} [options]
-   * @param {Function} callback
    */
   addItems: function(options, callback) {
     let self = this;
     let count = 0;
-    let results = {items: [], numVocabsAdded: 0};
+    let results = {items: [], numVocabsAdded: 0, itemsFailed: 0};
 
     options = options || {};
     options.limit = options.limit || 1;
 
-    async.whilst(
-      function() {
-        return count < options.limit;
-      },
-      function(callback) {
-        app.user.isSubscriptionActive(
-          function(active) {
-            if (active) {
-              count++;
-
-              self.addItem(
-                options,
-                function(error, result) {
-                  if (!error && result) {
-                    results.items.push(result);
-                    results.numVocabsAdded += result.numVocabsAdded;
-                  }
-
-                  callback();
-                }
-              );
-            } else {
-              callback(results);
-            }
-          }
-        );
-      },
-      function() {
-        self.updateDueCount();
-
-        callback(null, results);
+    app.user.isSubscriptionActive((active) => {
+      if (!active) {
+        this.itemsAdded(results, callback);
       }
-    );
+
+      async.whilst(() => { return count < options.limit}, function(whilstCb) {
+        count++;
+
+        self.addItem(options).then((result) => {
+          if (result) {
+            results.items.push(result);
+            results.numVocabsAdded += result.numVocabsAdded;
+          }
+
+          whilstCb();
+        }, (error) => {
+          results.itemsFailed++;
+
+          // TODO: retry?
+          whilstCb();
+        });
+      }, () => {
+        this.itemsAdded(results, callback);
+      });
+    });
+  },
+
+  /**
+   * Finalizes the adding of items. Updates the due counts and
+   * calls any necessary callbacks.
+   * @param {Object} [results] an object containing which items were added,
+   *                            the number of items, and the number of failed
+   *                            attempts to add items
+   * @param {Function} [callback] an optional callback to the original function
+   *                              that called addItems
+   * @return {Object} the results object
+   */
+  itemsAdded: function(results, callback) {
+    this.updateDueCount();
+
+    if (_.isFunction(callback)) {
+      callback(null, results);
+    }
+
+    return results;
   },
 
   /**

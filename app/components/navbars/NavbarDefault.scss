@@ -51,6 +51,9 @@ bootstrap-navbar[data-name='default'] {
       .dropdown-menu {
         z-index: 8000;
       }
+      .text-muted {
+        color: #777777;
+      }
     }
     .open > a {
       &:hover {

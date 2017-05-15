@@ -122,7 +122,14 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   createStage: function() {
     var canvas = this.$('#input-canvas').get(0);
-    var stage = new createjs.Stage(canvas);
+    let stage;
+
+    if (app.isDevelopment()) {
+      stage = new createjs.Stage(canvas);
+      stage._clearColor = {r: 255, g: 255, b: 255, a: 0};
+    } else {
+      stage = new createjs.Stage(canvas);
+    }
     createjs.Ticker.setFPS(32);
     createjs.Ticker.removeEventListener('tick', stage);
     createjs.Ticker.addEventListener('tick', stage);
@@ -175,24 +182,27 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @returns {createjs.Shape}
    */
   drawCircle: function(layerName, x, y, radius, options) {
-    var circle = new createjs.Shape();
+    const circle = new createjs.Shape();
     options = options ? options : {};
     circle.graphics.beginFill(options.fill || '#000000');
     circle.graphics.drawCircle(x, y, radius);
+
     if (options.alpha) {
       circle.alpha = options.alpha;
     }
     this.getLayer(layerName).addChild(circle);
-    this.stage.update();
+
     return circle;
   },
 
   /**
+   * Draws a grid background on the canvas
+   * to help users draw proportional characters
    * @method drawGrid
    * @returns {StudyPromptCanvasComponent}
    */
   drawGrid: function() {
-    var grid = new createjs.Shape();
+    const grid = new createjs.Shape();
     this.clearLayer('character-grid');
     grid.graphics.beginStroke(this.gridColor).setStrokeStyle(this.gridLineWidth, 'round', 'round');
     grid.graphics.dashedLineTo(this.size / 2, 0, this.size / 2, this.size, this.gridDashLength);
@@ -202,7 +212,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     grid.graphics.endStroke();
     grid.cache(0, 0, this.size, this.size);
     this.getLayer('character-grid').addChild(grid);
-    this.stage.update();
+
     return this;
   },
 
@@ -218,10 +228,12 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     options.color = options.color || '#000000';
     options.font = options.font || 'Arial';
     options.size = options.size || this.size;
-    var font = options.size + 'px ' + options.font;
-    var text = new createjs.Text(character, font, options.color);
+
+    const font = options.size + 'px ' + options.font;
+    const text = new createjs.Text(character, font, options.color);
+
     this.getLayer(layerName).addChild(text);
-    this.stage.update();
+
     return text;
   },
 
@@ -238,7 +250,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       this.injectColor(shape, options.color);
     }
     this.getLayer(layerName).addChild(shape);
-    this.stage.update();
+
     return shape;
   },
 
@@ -297,9 +309,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     }
 
     function onInputMove(event) {
-      var point = new createjs.Point(event.stageX, event.stageY);
-      var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
-
+      const point = new createjs.Point(event.stageX, event.stageY);
+      const midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
       marker.graphics
         .setStrokeStyle(strokeSize, 'round', 'round')
         .moveTo(midPoint.x, midPoint.y)
@@ -307,7 +318,6 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       oldPoint = point;
       oldMidPoint = midPoint;
       points.push(point);
-      self.stage.update();
     }
 
     function onInputLeave(event) {
@@ -440,6 +450,11 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   reset: function() {
     clearTimeout(this.mouseTapTimeout);
+
+    // this.stage.children.forEach((layer) => {
+    //   layer.removeAllChildren();
+    // });
+
     this.getLayer('character-grid').removeAllChildren();
     this.getLayer('character-background').removeAllChildren();
     this.getLayer('character-hint').removeAllChildren();
@@ -450,6 +465,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.getLayer('input-background1').removeAllChildren();
     this.getLayer('stroke-hint').removeAllChildren();
     this.getLayer('input').removeAllChildren();
+
     this.resize();
     return this;
   },

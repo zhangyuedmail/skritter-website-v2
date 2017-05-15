@@ -12,6 +12,14 @@ gelato-component.mobile-side-menu-component {
     padding-top: 15px;
   }
 
+  .app-version {
+    bottom: 5px;
+    color: $sand7;
+    font-size: 18px;
+    position: absolute;
+    right: 10px;
+  }
+
   .user-info-wrapper {
     margin-top: -15px;
   }
@@ -70,7 +78,7 @@ gelato-component.mobile-side-menu-component {
 
   .help-button-wrapper {
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
   }
 
   .fa-question-circle {

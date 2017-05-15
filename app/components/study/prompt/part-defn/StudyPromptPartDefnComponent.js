@@ -1,4 +1,5 @@
 const GelatoComponent = require('gelato/component');
+const config = require('config');
 
 /**
  * @class StudyPromptPartDefnComponent
@@ -140,6 +141,10 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    */
   handlePromptToolbarGradingMouseup: function(value) {
     this.prompt.review.set('score', value);
+
+    setTimeout(() => {
+      this.prompt.next();
+    }, config.gradingBarClickAdvanceDelay);
   }
 
 });

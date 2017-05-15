@@ -49,8 +49,8 @@ module.exports = BootstrapDialog.extend({
   getSettings: function() {
     if (app.isJapanese()) {
       return {
-        //dailyItemAddingLimit: this.$('#field-daily-item-adding-limit input').val(),
-        addFrequency: this.$('#field-auto-adding').is(':checked') ? 80 : 0,
+        // dailyItemAddingLimit: this.$('#field-daily-item-adding-limit input').val(),
+        // addFrequency: this.$('#field-auto-adding').is(':checked') ? 80 : 0,
         filteredJapaneseParts: this.getSelectedParts(),
         hideDefinition: this.$('#field-hide-definition input').is(':checked'),
         hideReading: this.$('#field-hide-reading input').is(':checked'),
@@ -61,8 +61,8 @@ module.exports = BootstrapDialog.extend({
       };
     } else {
       return {
-        //dailyItemAddingLimit: this.$('#field-daily-item-adding-limit input').val(),
-        addFrequency: this.$('#field-auto-adding').is(':checked') ? 80 : 0,
+        // dailyItemAddingLimit: this.$('#field-daily-item-adding-limit input').val(),
+        // addFrequency: this.$('#field-auto-adding').is(':checked') ? 80 : 0,
         disablePinyinReadingPromptInput: this.$('#field-pinyin-input').is(':checked'),
         filteredChineseParts: this.getSelectedParts(),
         hideDefinition: this.$('#field-hide-definition input').is(':checked'),

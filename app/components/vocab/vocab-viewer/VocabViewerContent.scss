@@ -54,22 +54,39 @@ gelato-component[data-name='vocab-viewer-content'] {
     #vocab-sentence {
       font-size: 26px;
     }
+
     #vocab-words-containing {
+      max-height: 190px;
+      overflow: hidden;
 
-      .definition {
-        font-size: 16px;
+      &.show-all {
+        max-height: none;
+        overflow: visible;
       }
-
-      .reading {
-        font-size: 16px;
-      }
-
-      .writing {
-        color: $grey5;
-        font-size: 26px;
-      }
-
     }
+
+    .definition {
+      font-size: 16px;
+    }
+
+    .reading {
+      font-size: 16px;
+    }
+
+    .writing {
+      color: $grey5;
+      font-size: 26px;
+    }
+  }
+
+  .mnemonic-wrapper {
+    .header {
+      margin-top: 20px;
+    }
+  }
+
+  #sentence-container {
+    min-height: 95px;
   }
 
   #header-section {

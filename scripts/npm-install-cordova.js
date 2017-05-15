@@ -7,8 +7,8 @@ shell.exec('cordova create cordova com.inkren.skritter "Skritter"');
 shell.cd('./cordova');
 
 // platforms
-shell.exec('cordova platform add android@6.2.1');
-shell.exec('cordova platform add ios@4.3.1');
+shell.exec('cordova platform add android@6.2.3');
+shell.exec('cordova platform add ios@4.4.0');
 
 // plugins
 shell.exec('cordova plugin add cordova-plugin-device');
