@@ -39,6 +39,14 @@ const StudyPromptComponent = GelatoComponent.extend({
   template: require('./StudyPromptComponent.jade'),
 
   /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click .dropdown-toggle': 'handleClickDropdownToggle'
+  },
+
+  /**
    * @method initialize
    * @param {Object} options
    * @constructor
@@ -184,6 +192,35 @@ const StudyPromptComponent = GelatoComponent.extend({
       return $content.width();
     } else {
       return 0;
+    }
+  },
+
+  /**
+   * @method handleClickDropdownToggle
+   * @param {Event} event
+   */
+  handleClickDropdownToggle: function(event) {
+    const content = this.$('.content');
+    const contentDropdown = this.$('.content-dropdown');
+    const contentExtra = this.$('.content-extra');
+    const contentToggleDown = contentDropdown.find('.toggle-down');
+    const contentToggleUp = contentDropdown.find('.toggle-up');
+
+    event.preventDefault();
+
+    // force reveal the mnemonic on toggle
+    this.vocabMnemonic.reveal();
+
+    if (contentExtra.hasClass('hidden')) {
+      contentDropdown.css('position', 'relative');
+      contentExtra.removeClass('hidden');
+      contentToggleDown.addClass('hidden');
+      contentToggleUp.removeClass('hidden');
+    } else {
+      contentDropdown.css('position', 'absolute');
+      contentExtra.addClass('hidden');
+      contentToggleDown.removeClass('hidden');
+      contentToggleUp.addClass('hidden');
     }
   },
 

@@ -71,8 +71,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    */
   handleClickShowMnemonic: function(event) {
     event.preventDefault();
-    this.prompt.review.set('showMnemonic', true);
-    this.render();
+    this.reveal();
   },
 
   /**
@@ -81,6 +80,14 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
   handleClickAddMnemonic: function() {
     this._views['selector'].content.setVocab(this.prompt.reviews.vocab);
     this._views['selector'].open();
+  },
+
+  /**
+   * @method reveal
+   */
+  reveal: function() {
+    this.prompt.review.set('showMnemonic', true);
+    this.render();
   }
 
 });

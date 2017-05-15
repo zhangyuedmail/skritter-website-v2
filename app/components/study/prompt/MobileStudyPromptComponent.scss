@@ -168,7 +168,9 @@ gelato-component[data-name='mobile-study-prompt'] {
     height: 20%;
     margin: 0 1px 0 0;
     min-height: 150px;
+    position: relative;
     text-align: center;
+    z-index: 6000;
 
     .content {
       height: 100%;
@@ -222,6 +224,32 @@ gelato-component[data-name='mobile-study-prompt'] {
         font-size: 5vh;
       }
 
+    }
+
+    .content-dropdown {
+      position: absolute;
+      width: 100%;
+
+      .content-extra {
+        background-color: $white3;
+        padding-bottom: 15px;
+
+        > div {
+          margin-bottom: 15px;
+        }
+      }
+
+      .dropdown-toggle {
+        bottom: -14px;
+        position: absolute;
+        width: 100%;
+
+        i {
+          color: $green5;
+          cursor: pointer;
+          font-size: 21px;
+        }
+      }
     }
 
     #review-status-container {

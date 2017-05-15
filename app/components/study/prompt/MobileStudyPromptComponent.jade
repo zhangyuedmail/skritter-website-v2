@@ -17,13 +17,18 @@ gelato-component(data-name='mobile-study-prompt')
 
   #panel-right
     .content
-      #tutorial-container
-      #toolbar-vocab-container
       #vocab-style-container
       #vocab-writing-container
       #vocab-reading-container
       #vocab-definition-container
-    #review-status-container
+
+    .content-dropdown
+      .content-extra.hidden
+        #vocab-sentence-container
+        #vocab-mnemonic-container
+      .dropdown-toggle
+        i.toggle-down.fa.fa-arrow-circle-down
+        i.toggle-up.fa.fa-arrow-circle-up.hidden
 
   #panel-left.no-select
     #leech-ribbon.ribbon.hidden
