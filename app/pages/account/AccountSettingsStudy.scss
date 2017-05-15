@@ -1,7 +1,6 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='account-settings-study'] {
-
   background: $background-primary;
   padding-top: 75px;
 
@@ -16,40 +15,52 @@ gelato-page[data-name='account-settings-study'] {
     color: #404851;
     margin: -15px;
     padding: 55px 40px;
+
     input {
       border-radius: 0;
       height: 50px;
+
       &[type="checkbox"] {
         height: auto;
       }
+
       &[type="email"],
       &[type="text"] {
         max-width: 300px;
       }
     }
+
     label {
       font-family: $font-ubuntu;
       font-weight: 300;
       text-align: left;
     }
+
     select {
       background-color: white;
       border: 0;
       max-width: 300px;
       outline: 1px solid #cccccc;
     }
+
     textarea {
       border-radius: 0;
       max-width: 300px;
     }
+
     .title {
       font-family: $font-ubuntu;
       font-size: 24px;
       font-weight: 400;
       margin-bottom: 30px;
     }
+
     #button-save {
       margin-top: 30px;
     }
+  }
+
+  .option-desc {
+    color: $grey3;
   }
 }
