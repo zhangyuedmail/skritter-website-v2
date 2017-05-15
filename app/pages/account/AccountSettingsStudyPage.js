@@ -13,6 +13,8 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * @type {Object}
    */
   events: {
+    'change select': 'handleChangeSelect',
+    'change input[type="checkbox"]': 'handleChangeCheckbox',
     'change #field-target-language': 'handleChangeTargetLanguage',
     'click #button-save': 'handleClickButtonSave'
   },
@@ -74,6 +76,18 @@ const AccountSettingsStudyPage = GelatoPage.extend({
     return parts;
   },
 
+  handleChangeCheckbox: function(event) {
+    this.handleClickButtonSave(event);
+  },
+
+  /**
+   *
+   * @param event
+   */
+  handleChangeSelect: function(event) {
+    this.handleClickButtonSave(event);
+  },
+
   /**
    * @method handleChangeTargetLanguage
    * @param {Event} event
@@ -130,6 +144,11 @@ const AccountSettingsStudyPage = GelatoPage.extend({
           this.dialog.render();
           this.dialog.open();
         }
+
+        app.notifyUser({
+          message: 'Settings updated.',
+          type: 'pastel-success'
+        });
       }
     });
   },
