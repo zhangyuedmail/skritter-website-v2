@@ -75,7 +75,10 @@ gelato-page(data-name='account-settings-study')
                         input#field-study-rare-writings(type="checkbox", checked=user.get('studyRareWritings'))
               .form-group
                 label.col-sm-3.control-label(for="field-auto-advance") Auto advance prompts (beta)
-                  .option-desc Has a 1 second delay before advancing
+                  if (app.getLanguage() === 'zh')
+                    .option-desc Has a 1 second delay before advancing on tone and writing prompts
+                  else
+                    .option-desc Has a 1 second delay before advancing on writing prompts
                 .col-sm-9
                   .checkbox
                     label
