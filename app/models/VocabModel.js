@@ -464,19 +464,31 @@ const VocabModel = SkritterModel.extend({
     const screenWidth = app.getWidth();
     const characterLength = this.getCharacters().length;
 
+    if (app.isMobile()) {
+      if (characterLength > 10) {
+        return screenWidth / 12;
+      }
+
+      if (characterLength > 6) {
+        return screenWidth / 8;
+      }
+
+      if (characterLength > 2) {
+        return screenWidth / 6;
+      }
+
+      return screenWidth / 4;
+    }
+
     if (characterLength > 10) {
-      return screenWidth / 12;
+      return 32;
     }
 
-    if (characterLength > 6) {
-      return screenWidth / 8;
+    if (characterLength > 5) {
+      return 48;
     }
 
-    if (characterLength > 2) {
-      return screenWidth / 6;
-    }
-
-    return screenWidth / 4;
+    return 64;
   },
 
   /**
