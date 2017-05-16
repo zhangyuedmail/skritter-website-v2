@@ -17,3 +17,12 @@ gelato-component[data-name="study-prompt-part-tone"] {
   }
 
 }
+
+.mobile {
+  gelato-component[data-name="study-prompt-part-tone"] {
+
+  .tone-message {
+    padding-top: 20px;
+    }
+  }
+}
