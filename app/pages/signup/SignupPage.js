@@ -581,6 +581,9 @@ module.exports = GelatoPage.extend({
         case 'Property "name" must be no longer than 20 characters long.':
           errorMsg = app.locale('pages.signup.errorUsernameTooLong');
           break;
+        case 'Property "password" must be no longer than 20 characters long.':
+          errorMsg = app.locale('pages.signup.errorPasswordLengthTooLong');
+          break;
         case "InvalidValidationCode":
           errorMsg = app.locale('pages.signup.errorInvalidEmailValidationCode');
           break;
@@ -698,6 +701,11 @@ module.exports = GelatoPage.extend({
 
     if (formData.password1.length < 6) {
       this.displayErrorMessage(app.locale('pages.signup.errorInvalidPasswordLength'));
+      return false;
+    }
+
+    if (formData.password1.length > 20) {
+      this.displayErrorMessage(app.locale('pages.signup.errorInvalidPasswordLengthTooLong'));
       return false;
     }
 

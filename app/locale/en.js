@@ -202,6 +202,7 @@ module.exports = {
       "errorNotSchoolEmail": "The email entered is not an eligible school email.",
       "errorSchoolCantAddTime": "School validation cannot add time to this account or the time has already been added.",
       "errorSchoolEmailAlreadyUsed": "A user already exists with that email who has a school subscription.",
+      "errorPasswordLengthTooLong": "Password length must be shorter than 20 characters.",
       "errorUsernameTooLong": "Your username is too long. It cannot be longer than 20 characters.",
       "errorValidationCodeNotEntered": "You must enter a validation code from your school email.",
       "refundPolicy": "Refund Policy",
