@@ -29,16 +29,31 @@ gelato-page(data-name='mobile-vocablists-list-section')
                       else
                         button#edit-section.btn.btn-success
                           i.fa.fa-pencil &nbsp;Edit&nbsp;
+
                   .list-name
                     a#back-link(href='/vocablists/view/' + vocablist.id)
                       i.fa.fa-angle-left
                       | &nbsp;
                       span= vocablist.get('name')
-                  if editor.editing
-                    input#section-name.section-name(value=vocablistSection.get('name'))
-                  else
-                    #section-name.section-name= vocablistSection.get('name') || '(empty)'
 
+                  .row.section-title-row
+                    .col-xs-4.text-left
+                      if view.sectionPrevious
+                        a#next-section-link(href='/vocablists/view/' + vocablist.id + '/' + view.sectionPrevious.id)
+                          i.fa.fa-angle-left
+                          | &nbsp;
+                          span Previous
+                    .col-xs-4.text-center
+                      if editor.editing
+                        input#section-name.section-name(value=vocablistSection.get('name'))
+                      else
+                        #section-name.section-name= vocablistSection.get('name') || '(empty)'
+                    .col-xs-4.text-right
+                      if view.sectionNext
+                        a#next-section-link(href='/vocablists/view/' + vocablist.id + '/' + view.sectionNext.id)
+                          span Next
+                          | &nbsp;
+                          i.fa.fa-angle-right
 
             #editor-container
 
