@@ -16,6 +16,11 @@ gelato-component(data-name='mobile-study-prompt')
           span.spl= app.locale('components.studyPrompt.emptyButton')
 
   #panel-right
+    #leech-ribbon.ribbon.hidden
+      .icon.icon-study-leech
+    #new-ribbon.ribbon.hidden
+      .icon.icon-study-new-character
+
     .content
       #vocab-style-container
       #vocab-writing-container
@@ -31,10 +36,6 @@ gelato-component(data-name='mobile-study-prompt')
         i.toggle-up.fa.fa-arrow-circle-up.hidden
 
   #panel-left.no-select
-    #leech-ribbon.ribbon.hidden
-      .icon.icon-study-leech
-    #new-ribbon.ribbon.hidden
-      .icon.icon-study-new-character
     .content
       #navigation-container
       #input-container

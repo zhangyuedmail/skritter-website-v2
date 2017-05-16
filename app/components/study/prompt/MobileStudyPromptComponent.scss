@@ -152,13 +152,6 @@ gelato-component[data-name='mobile-study-prompt'] {
         }
       }
     }
-
-    .ribbon {
-      left: 0;
-      position: absolute;
-      top: 0;
-      z-index: 6000;
-    }
   }
 
   #panel-right {
@@ -250,6 +243,13 @@ gelato-component[data-name='mobile-study-prompt'] {
           font-size: 21px;
         }
       }
+    }
+
+    .ribbon {
+      left: 0;
+      position: absolute;
+      top: 0;
+      z-index: 6000;
     }
 
     #review-status-container {
