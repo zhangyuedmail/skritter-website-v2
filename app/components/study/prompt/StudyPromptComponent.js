@@ -353,9 +353,9 @@ const StudyPromptComponent = GelatoComponent.extend({
 
         // we subtract 50 instead of 40 so that there's a little padding at
         // the bottom and it doesn't seem as cramped.
-        const newCanvasSize = this.canvas.$el.height() - (50 - toolbarHeight);
+        // const newCanvasSize = this.canvas.$el.height() - (50 - toolbarHeight);
         this.$toolbarContainer.css({height: '40px'});
-        this.$inputContainer.css({height: newCanvasSize, width: newCanvasSize});
+        // this.$inputContainer.css({height: newCanvasSize, width: newCanvasSize});
         // this.canvas.resize(newCanvasSize);
       }
     }

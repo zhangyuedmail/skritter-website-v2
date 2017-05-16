@@ -16,21 +16,30 @@ gelato-component[data-name="study-prompt-part-defn"] {
     font-family: $font-ubuntu;
     font-size: 18px;
     font-weight: 300;
-    padding-top: 10%;
+    margin: 0 10%;
+
+    .definition {
+      border: 1px solid $grey5;
+      padding: 10px;
+    }
+
+    .reading {
+      color: $white6;
+      margin-bottom: 15px;
+    }
   }
 
   .question {
-    color: #b2b3b4;
+    color: $grey5;
     font-family: $font-slab;
     font-size: 28px;
     font-weight: 300;
-    padding-top: 10%;
+    margin: 10% 10% 0 10%;
   }
 
   .writing {
     color: #333950;
     font-size: 64px;
-    padding-top: 20%;
   }
 
 }
