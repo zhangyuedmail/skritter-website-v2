@@ -704,7 +704,7 @@ module.exports = GelatoPage.extend({
       return false;
     }
 
-    if (formData.password1.length > 20) {
+    if (formData.password1.length > 256) {
       this.displayErrorMessage(app.locale('pages.signup.errorInvalidPasswordLengthTooLong'));
       return false;
     }
