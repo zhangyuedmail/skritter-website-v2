@@ -33,7 +33,8 @@ gelato-component[data-name='mobile-study-prompt'] {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     height: 74%;
-    padding: 10px;
+    padding: 0;
+    position: relative;
 
     .content {
       margin: 0 auto;
@@ -44,7 +45,6 @@ gelato-component[data-name='mobile-study-prompt'] {
       #input-container {
         background-color: $white1;
         cursor: pointer;
-        margin: 0 auto;
         position: relative;
         z-index: 5000;
 
@@ -70,13 +70,6 @@ gelato-component[data-name='mobile-study-prompt'] {
         }
       }
 
-      #toolbar-grading-container {
-        bottom: 0;
-        left: 0;
-        position: absolute;
-        width: 100%;
-        z-index: 5003;
-      }
       #toolbar-stroke-order {
         width: 96%; // [the original aspect ratio] 25/26 = 96%;
       }
@@ -95,24 +88,16 @@ gelato-component[data-name='mobile-study-prompt'] {
         //height: 74.5%;
       }
 
-      #toolbar-action-container {
-        max-height: 63px;
-
-        &.margin-top {
-          margin-top: 15px;
-        }
-      }
-
       gelato-component[data-name='study-prompt-navigation'] {
         font-size: 8vh;
-        top: 30%;
+        top: 40%;
 
         #navigate-next {
-          right: 0;
+          right: 5px;
         }
 
         #navigate-previous {
-          left: 0;
+          left: 5px;
         }
       }
 
@@ -120,20 +105,6 @@ gelato-component[data-name='mobile-study-prompt'] {
         .answer {
           font-size: 3.5vh;
           padding-top: 0;
-        }
-
-        .question {
-          font-size: 4vh;
-        }
-
-        .writing {
-          font-size: 10vh;
-        }
-      }
-
-      gelato-component[data-name="mobile-study-prompt-part-rdng"] {
-        .answer {
-          font-size: 4vh;
         }
 
         .question {
@@ -258,6 +229,24 @@ gelato-component[data-name='mobile-study-prompt'] {
       position: absolute;
       right: 15px;
     }
+  }
+
+  #toolbar-action-container {
+    bottom: 5px;
+    max-height: 63px;
+    position: absolute;
+    width: 100%;
+
+    &.margin-top {
+      margin-top: 15px;
+    }
+  }
+
+  #toolbar-grading-container {
+    bottom: -5px;
+    position: absolute;
+    width: 100%;
+    z-index: 5003;
   }
 
   .icon-margin {

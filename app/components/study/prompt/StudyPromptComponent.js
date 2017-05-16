@@ -188,6 +188,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    */
   getInputSize: function() {
     var $content = this.$panelLeft.find('.content');
+
     if ($content.length) {
       return $content.width();
     } else {
@@ -355,7 +356,7 @@ const StudyPromptComponent = GelatoComponent.extend({
         const newCanvasSize = this.canvas.$el.height() - (50 - toolbarHeight);
         this.$toolbarContainer.css({height: '40px'});
         this.$inputContainer.css({height: newCanvasSize, width: newCanvasSize});
-        this.canvas.resize(newCanvasSize);
+        // this.canvas.resize(newCanvasSize);
       }
     }
 
