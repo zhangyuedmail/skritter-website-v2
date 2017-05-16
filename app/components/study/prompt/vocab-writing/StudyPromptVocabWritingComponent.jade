@@ -1,7 +1,6 @@
 gelato-component(data-name='study-prompt-vocab-writing')
-  - var prompt = view.prompt;
-
-  if prompt.reviews
+  if view.visible
+    - var prompt = view.prompt;
     - var reviews = prompt.reviews;
     - var classes = [];
     - var index = 0;

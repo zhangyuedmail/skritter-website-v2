@@ -1,7 +1,6 @@
 gelato-component(data-name='study-prompt-vocab-reading')
-  - var prompt = view.prompt;
-
-  if prompt.reviews
+  if view.visible
+    - var prompt = view.prompt;
     - var readings = prompt.reviews.vocab.getReadingObjects();
     - var index = 0;
 

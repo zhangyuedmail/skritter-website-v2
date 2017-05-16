@@ -27,6 +27,7 @@ const StudyPromptVocabReadingComponent = GelatoComponent.extend({
    */
   initialize: function(options) {
     this.prompt = options.prompt;
+    this.visible = false;
   },
 
   /**
@@ -38,7 +39,17 @@ const StudyPromptVocabReadingComponent = GelatoComponent.extend({
       this.template = require('./MobileStudyPromptVocabReadingComponent.jade')
     }
 
+    if (this.prompt.reviews) {
+      if (app.isMobile() && _.includes(['defn'], this.prompt.reviews.part)) {
+      } else {
+        this.visible = true;
+      }
+    } else {
+      this.visible = false;
+    }
+
     this.renderTemplate();
+
     return this;
   },
 
