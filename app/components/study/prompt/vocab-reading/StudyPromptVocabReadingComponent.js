@@ -40,7 +40,7 @@ const StudyPromptVocabReadingComponent = GelatoComponent.extend({
     }
 
     if (this.prompt.reviews) {
-      if (app.isMobile() && _.includes(['defn'], this.prompt.reviews.part)) {
+      if (app.isMobile() && _.includes(['defn', 'rdng'], this.prompt.reviews.part)) {
       } else {
         this.visible = true;
       }
