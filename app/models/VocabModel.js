@@ -461,15 +461,22 @@ const VocabModel = SkritterModel.extend({
    * @returns {number}
    */
   getWritingFontSize: function() {
+    const screenWidth = app.getWidth();
     const characterLength = this.getCharacters().length;
 
     if (characterLength > 10) {
-      return 32;
-    } else if (characterLength > 5) {
-      return 48;
-    } else {
-      return 64;
+      return screenWidth / 12;
     }
+
+    if (characterLength > 6) {
+      return screenWidth / 8;
+    }
+
+    if (characterLength > 2) {
+      return screenWidth / 6;
+    }
+
+    return screenWidth / 4;
   },
 
   /**
