@@ -57,7 +57,7 @@ gelato-component(data-name='mobile-vocab-viewer-content')
       .row.edit-row
         .col-xs-6.text-left
           if app.isMobile() && vocab.isChinese()
-            if !app.dicts.pleco
+            if app.dicts.pleco
               img#pleco-icon.dict-icon(src='media/images/icon-pleco.png')
 
             if app.dicts.hanpingPro
