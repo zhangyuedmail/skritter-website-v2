@@ -25,6 +25,7 @@ shell.sed('-i', '{!application-version!}', project.version, './cordova/config.xm
 shell.rm('-rf', './cordova/www/*');
 shell.cp('-r', './public/*', './cordova/www');
 shell.cp('-f', './res/gradle.properties', './cordova/platforms/android/gradle.properties');
+shell.cp('-f', './res/xwalk-command-line', './cordova/platforms/android/assets/xwalk-command-line');
 
 shell.cd('./cordova');
 
