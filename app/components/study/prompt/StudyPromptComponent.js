@@ -212,11 +212,15 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.vocabMnemonic.reveal();
 
     if (contentExtra.hasClass('hidden')) {
+      this.$panelLeft.css('opacity', 0.4);
+      this.$panelLeft.css('pointer-events', 'none');
       contentDropdown.css('position', 'relative');
       contentExtra.removeClass('hidden');
       contentToggleDown.addClass('hidden');
       contentToggleUp.removeClass('hidden');
     } else {
+      this.$panelLeft.css('opacity', 1.0);
+      this.$panelLeft.css('pointer-events', 'auto');
       contentDropdown.css('position', 'absolute');
       contentExtra.addClass('hidden');
       contentToggleDown.removeClass('hidden');
