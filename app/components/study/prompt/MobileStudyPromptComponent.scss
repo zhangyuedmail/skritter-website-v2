@@ -100,28 +100,6 @@ gelato-component[data-name='mobile-study-prompt'] {
           left: 5px;
         }
       }
-
-      gelato-component[data-name="study-prompt-part-defn"] {
-        .answer {
-          font-size: 3.5vh;
-          padding-top: 0;
-        }
-
-        .question {
-          font-size: 4vh;
-        }
-
-        .writing {
-          font-size: 10vh;
-        }
-      }
-
-      gelato-component[data-name='study-prompt-part-tone'] {
-        .tone-message {
-          font-size: 5vh;
-          margin-top: -20px;
-        }
-      }
     }
   }
 

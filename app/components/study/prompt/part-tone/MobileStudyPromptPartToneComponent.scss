@@ -1,6 +1,6 @@
 @import "../../../../styles/_variables";
 
-gelato-component[data-name="study-prompt-part-tone"] {
+gelato-component[data-name="mobile-study-prompt-part-tone"] {
 
   height: 100%;
   position: absolute;
@@ -9,12 +9,13 @@ gelato-component[data-name="study-prompt-part-tone"] {
   .tone-message {
     color: $grey2;
     font-family: $font-slab;
-    font-size: 36px;
+    font-size: 4vh;
     font-weight: 300;
-    text-align: center;
-    margin-top: -20px;
-    z-index: 5002;
+    padding-top: 10px;
     position: relative;
+    text-align: center;
+    z-index: 5002;
+
   }
 
 }

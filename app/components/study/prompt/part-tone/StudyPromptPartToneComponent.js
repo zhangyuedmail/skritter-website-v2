@@ -47,6 +47,10 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @returns {StudyPromptPartToneComponent}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileStudyPromptPartToneComponent.jade')
+    }
+
     this.prompt.review = this.prompt.reviews.current();
     this.prompt.canvas.grid = false;
     this.prompt.canvas.reset();
