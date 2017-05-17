@@ -40,7 +40,7 @@
     "cal-heatmap": "~3.6",
     "compression": "~1.6",
     "cors": "~2.8",
-    "d3": "~4.8",
+    "d3": "~4.9",
     "dexie": "~1.5",
     "express": "~4.15",
     "font-awesome": "~4.7",
