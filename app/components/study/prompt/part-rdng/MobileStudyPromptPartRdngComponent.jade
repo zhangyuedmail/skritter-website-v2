@@ -26,7 +26,7 @@ gelato-component(data-name="mobile-study-prompt-part-rdng" class='noclick')
         else
           span!= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
 
-      .definition
+      .definition(style="font-size: " + vocab.getDefinitionFontSize() + 'vh')
         if app.user.get('showHeisig') && vocab.has('heisigDefinition')
           em!= vocab.get('heisigDefinition') + ' - '
         span!= vocab.getDefinition()

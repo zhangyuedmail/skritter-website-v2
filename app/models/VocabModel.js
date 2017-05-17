@@ -456,6 +456,19 @@ const VocabModel = SkritterModel.extend({
   },
 
   /**
+   * Return a scaled pixel value based on length of the definition.
+   * @method getDefinitionFontSize
+   * @returns {number}
+   */
+  getDefinitionFontSize () {
+    const definition = this.getDefinition();
+    const definitionLength = definition.length;
+    const screenWidth = app.getWidth();
+
+    return 3 - (definitionLength * 1.4) / screenWidth;
+  },
+
+  /**
    * Return a scaled pixel value based on length of the writing.
    * @method getWritingFontSize
    * @returns {number}
