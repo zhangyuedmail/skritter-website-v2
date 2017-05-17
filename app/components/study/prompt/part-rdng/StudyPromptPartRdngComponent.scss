@@ -11,6 +11,7 @@ gelato-component[data-name="study-prompt-part-rdng"] {
   }
 
   height: 100%;
+  padding-top: 20%;
   position: absolute;
   text-align: center;
   width: 100%;
@@ -24,7 +25,6 @@ gelato-component[data-name="study-prompt-part-rdng"] {
     font-family: $font-ubuntu;
     font-size: 18px;
     font-weight: 300;
-    padding-top: 10%;
   }
 
   .question {
@@ -37,7 +37,6 @@ gelato-component[data-name="study-prompt-part-rdng"] {
   .writing {
     color: #333950;
     font-size: 64px;
-    padding-top: 10%;
   }
 
   .reading-prompt {
