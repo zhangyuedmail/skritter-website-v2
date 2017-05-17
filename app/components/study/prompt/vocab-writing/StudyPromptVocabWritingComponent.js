@@ -29,6 +29,7 @@ const StudyPromptVocabWritingComponent = GelatoComponent.extend({
   render: function() {
     if (this.prompt.reviews) {
       if (app.isMobile() && _.includes(['defn', 'rdng'], this.prompt.reviews.part)) {
+        this.visible = false;
       } else {
         this.visible = true;
       }
