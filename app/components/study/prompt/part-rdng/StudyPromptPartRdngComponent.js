@@ -47,7 +47,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
 
     this.userReading =  this.prompt.review.get('userReading') || '';
 
-    // only support pinyin for first go around. Nihongo ga kite imasu!
+    // only support pinyin for first go around
     this.showReadingPrompt = !app.user.get('disablePinyinReadingPromptInput') && !app.isMobile() && app.isChinese();
 
     this.registerShortcuts = !this.showReadingPrompt;
