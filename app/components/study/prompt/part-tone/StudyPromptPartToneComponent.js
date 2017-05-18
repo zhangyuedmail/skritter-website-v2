@@ -258,7 +258,8 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @param {Number} score the new grade to apply
    */
   handlePromptToolbarGradingMousemove: function(score) {
-    this.handlePromptToolbarGradingMouseup(score);
+    this.prompt.stopAutoAdvance();
+    this.changeReviewScore(score);
   },
 
   /**
@@ -268,17 +269,25 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @param {Number} score the new grade to apply
    */
   handlePromptToolbarGradingMouseup: function(score) {
+    this.prompt.stopAutoAdvance();
+    this.changeReviewScore(score);
+
+    setTimeout(() => {
+      this.prompt.next();
+    }, config.gradingBarClickAdvanceDelay);
+  },
+
+  /**
+   * Changes the score for a review and updates the UI accordingly.
+   * Stops any auto-advance features.
+   * @param {Number} score the score to change the review to
+   */
+  changeReviewScore: function(score) {
     this.prompt.review.set('score', score);
     this.prompt.canvas.injectLayerColor(
       'character',
       this.prompt.review.getGradingColor()
     );
-
-    this.prompt.stopAutoAdvance();
-
-    setTimeout(() => {
-      this.prompt.next();
-    }, config.gradingBarClickAdvanceDelay);
   },
 
   /**
