@@ -19,6 +19,7 @@ module.exports = {
     "errorApplication": "Application Error",
     "errorUserReferralExpired": "User referrals can only be used with new accounts.",
     "errorUserReferralFailed": "Error making user referral. Please try again.",
+    "getStarted": "Get Started",
     "ja": "Japanese",
     "logIn": "Log In",
     "logOut": "Log Out",
