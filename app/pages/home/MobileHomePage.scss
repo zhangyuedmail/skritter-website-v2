@@ -19,7 +19,10 @@ gelato-page[data-name='mobile-home'] {
   }
 
   .welcome-options {
-    padding-top: 40%;
+    position: absolute;
+    bottom: 10%;
+    width: 88%;
+    margin: auto;
   }
 
   .welcome-panel {
