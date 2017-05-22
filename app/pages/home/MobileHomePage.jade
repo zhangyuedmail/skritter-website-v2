@@ -9,6 +9,10 @@ gelato-page(data-name='mobile-home')
     .welcome-options
       .row
         .col-xs-6
-          a.btn.btn-fixed.btn-success(href='/signup')= app.locale('common.getStarted')
+          a.btn.btn-fixed.btn-success(href='/signup')
+            div= app.locale('common.getStarted')
+            div.helper-text (new users)
         .col-xs-6.text-center
-          a.btn.btn-fixed.btn-success(href='/login')= app.locale('common.logIn')
+          a.btn.btn-fixed.btn-success(href='/login')
+            div= app.locale('common.logIn')
+            div.helper-text (existing users)

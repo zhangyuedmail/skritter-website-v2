@@ -6,6 +6,14 @@ gelato-page[data-name='mobile-home'] {
   padding: 15px !important;
   position: relative;
 
+  .btn-fixed {
+    padding: 7.5px;
+  }
+
+  .helper-text {
+    font-size: 11px;
+  }
+
   .logo {
     background-image: url('#{$dir-assets}/images/skrit-logo-1.png');
     background-position: 50%;
