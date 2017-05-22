@@ -108,7 +108,7 @@ gelato-component[data-name='mobile-study-prompt'] {
     border-top-right-radius: 0px;
     border-top-left-radius: 0px;
     height: 20%;
-    margin: 0 1px 0 0;
+    margin: 0;
     min-height: 150px;
     position: relative;
     text-align: center;
@@ -175,6 +175,7 @@ gelato-component[data-name='mobile-study-prompt'] {
       .content-extra {
         background-color: $white3;
         padding-bottom: 15px;
+        box-shadow: 0px 3px 3px #CCC;
 
         > div {
           margin-bottom: 15px;
@@ -190,7 +191,20 @@ gelato-component[data-name='mobile-study-prompt'] {
           color: $green5;
           cursor: pointer;
           font-size: 21px;
+          position: relative;
+          z-index: 1;
         }
+      }
+
+      .inner-background {
+        display: inline-block;
+        width: 13px;
+        height: 13px;
+        position: absolute;
+        background: $white1;
+        z-index: -1;
+        left: 2px;
+        top: 4px;
       }
     }
 
