@@ -33,6 +33,7 @@ module.exports = {
       "runeCapital": "Writing",
       "toneCapital": "Tone"
     },
+    "passwordReset": "Reset Password",
     "save": "Save",
     "saving": "Saving",
     "settings": "Settings",

@@ -23,6 +23,10 @@ module.exports = GelatoPage.extend({
 
   showFooter: !app.isMobile(),
 
+  navbarOptions: {
+    showBackBtn: true
+  },
+
   /**
    * @property template
    * @type {Function}
@@ -33,7 +37,7 @@ module.exports = GelatoPage.extend({
    * @property title
    * @type {String}
    */
-  title: 'Reset Password - Skritter',
+  title: app.locale('common.passwordReset') + ' - Skritter',
 
   /**
    * @method initialize
