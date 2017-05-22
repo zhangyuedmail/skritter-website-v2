@@ -26,6 +26,10 @@ module.exports = GelatoPage.extend({
     'click #send-validation-email': 'handleClickValidateSchoolEmail'
   },
 
+  navbarOptions: {
+    showBackBtn: true
+  },
+
   /**
    * The different subscription options available for purchase
    * @type {Array<Object>}
@@ -71,7 +75,7 @@ module.exports = GelatoPage.extend({
    * The page title to display
    * @type {String}
    */
-  title: app.locale('pages.signup.title'),
+  title: app.locale('common.signUp') + ' - Skritter',
 
   /**
    * Creates a new Signup View.
