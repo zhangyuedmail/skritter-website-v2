@@ -234,7 +234,9 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @param {Boolean} [skip]
    */
   next: function(skip) {
+    this.stopAutoAdvance();
     this.review.stop();
+
 
     if (skip || this.reviews.isLast()) {
       if (skip) {
@@ -404,6 +406,13 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     $(document).one('click', this.stopAutoAdvance);
     this._autoAdvanceListenerId = setTimeout(() => {
+
+      // if by some other means this listener should have already been stopped,
+      // make sure we don't double fire
+      if (!this._autoAdvanceListenerId) {
+        return;
+      }
+
       this._autoAdvanceListenerId = null;
       $(document).off('click', this.stopAutoAdvance);
       this.next();
@@ -421,6 +430,7 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     clearTimeout(this._autoAdvanceListenerId);
     this._autoAdvanceListenerId = null;
+    $(document).off('click', this.stopAutoAdvance);
   },
 
   /**
