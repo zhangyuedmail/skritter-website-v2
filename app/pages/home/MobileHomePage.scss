@@ -7,7 +7,9 @@ gelato-page[data-name='mobile-home'] {
   position: relative;
 
   .btn-fixed {
+    max-width: 150px;
     padding: 7.5px;
+    width: 100%;
   }
 
   .helper-text {
@@ -27,17 +29,17 @@ gelato-page[data-name='mobile-home'] {
   }
 
   .welcome-options {
+    bottom: 5%;
     position: absolute;
-    bottom: 10%;
-    width: 88%;
-    margin: auto;
+    width: 100%;
   }
 
   .welcome-panel {
     background: $white;
     border-radius: 5px;
     height: 100%;
-    padding: 15px;
+    padding: 15px 0;
+    position: relative;
     text-align: center;
 
     .character {
