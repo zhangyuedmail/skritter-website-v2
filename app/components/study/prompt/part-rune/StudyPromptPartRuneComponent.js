@@ -276,7 +276,12 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
           this.prompt.review.item.consecutiveWrong = 0;
         }
       }
-      this.prompt.next();
+
+      if (this.prompt.isAutoAdvancing) {
+        this.prompt.stopAutoAdvance();
+      } else {
+        this.prompt.next();
+      }
     } else {
       const now = Date.now();
 

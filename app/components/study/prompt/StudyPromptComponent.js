@@ -66,6 +66,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.reviews = null;
     this.vocabInfo = null;
     this.isDemo = options.isDemo;
+    this.isAutoAdvancing = false;
 
     //components
     this.canvas = new Canvas({prompt: this});
@@ -404,6 +405,16 @@ const StudyPromptComponent = GelatoComponent.extend({
       return;
     }
 
+    this.isAutoAdvancing = true;
+
+    this.$('#navigate-next').addClass('grade-' + this.review.get('score'));
+    const animSpeed = config.autoAdvanceDelay * 4;
+    const styleStr = '-webkit-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
+
+      '-moz-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
+            'animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;';
+    this.$('#navigate-next').attr('style', styleStr);
+
     $(document).one('click', this.stopAutoAdvance);
     this._autoAdvanceListenerId = setTimeout(() => {
 
@@ -424,13 +435,18 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @method stopAutoAdvance
    */
   stopAutoAdvance: function(event) {
+    this.isAutoAdvancing = false;
+
+    this.$('#navigate-next').removeClass('grade-1 grade-2 grade-3 grade-4');
+    this.$('#navigate-next').removeAttr('style');
+
+    $(document).off('click', this.stopAutoAdvance);
+
     if (!this._autoAdvanceListenerId) {
       return;
     }
-
     clearTimeout(this._autoAdvanceListenerId);
     this._autoAdvanceListenerId = null;
-    $(document).off('click', this.stopAutoAdvance);
   },
 
   /**

@@ -144,7 +144,11 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    */
   handlePromptCanvasClick: function() {
     if (this.prompt.review.isComplete()) {
-      this.prompt.next();
+      if (this.prompt.isAutoAdvancing) {
+        this.prompt.stopAutoAdvance();
+      } else {
+        this.prompt.next();
+      }
     }
   },
 
