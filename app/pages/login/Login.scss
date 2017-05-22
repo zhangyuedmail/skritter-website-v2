@@ -14,8 +14,9 @@ gelato-page[data-name='login'] {
       width: 45%;
     }
 
-    #password-reset {
-      width: auto;
+    #forgot-password-button {
+      display: block;
+      margin-top: 15px;
     }
 
     input {
