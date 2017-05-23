@@ -245,7 +245,7 @@ gelato-component[data-name='mobile-study-prompt'] {
   }
 
   #toolbar-action-container {
-    // bottom: 5px;
+    bottom: 3vh;
     max-height: 63px;
     position: absolute;
     width: 100%;
@@ -256,7 +256,7 @@ gelato-component[data-name='mobile-study-prompt'] {
   }
 
   #toolbar-grading-container {
-    bottom: -5px;
+    bottom: 3vh;
     position: absolute;
     width: 100%;
     z-index: 5003;
@@ -269,19 +269,58 @@ gelato-component[data-name='mobile-study-prompt'] {
   }
 }
 
+.defn {
+  #panel-left {
+    height: 90% !important;
+  }
+
+  #panel-right {
+    height: 10% !important;
+    min-height: 50px !important;
+  }
+}
+
+.rdng {
+  #panel-left {
+    height: 90% !important;
+  }
+
+  #panel-right {
+    height: 10% !important;
+    min-height: 50px !important;
+  }
+}
+
+.rune {
+  #toolbar-action-container {
+    bottom: 0.5vh !important;
+  }
+  #toolbar-grading-container {
+    bottom: 0.5vh !important;
+  }
+}
+
+.tone {
+  #toolbar-action-container {
+    bottom: 0.5vh !important;
+  }
+  #toolbar-grading-container {
+    bottom: 0.5vh !important;
+  }
+}
 
 @-webkit-keyframes AutoAdvanceProgress {
-    0%{background-position: 100% 50%}
-    50%{background-position: 0% 50%}
-    100%{background-position: 100% 50%}
+  0%{background-position: 100% 50%}
+  50%{background-position: 0% 50%}
+  100%{background-position: 100% 50%}
 }
 @-moz-keyframes AutoAdvanceProgress {
-    0%{background-position: 0% 50%}
-    50%{background-position: 100% 50%}
-    100%{background-position: 0% 50%}
+  0%{background-position: 0% 50%}
+  50%{background-position: 100% 50%}
+  100%{background-position: 0% 50%}
 }
 @keyframes AutoAdvanceProgress {
-    0%{background-position:100% 50%}
-    50%{background-position:0% 50%}
-    100%{background-position:100% 50%}
+  0%{background-position:100% 50%}
+  50%{background-position:0% 50%}
+  100%{background-position:100% 50%}
 }
