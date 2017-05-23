@@ -15,8 +15,9 @@ gelato-component[data-name='mobile-study-prompt-vocab-reading'] {
     cursor: pointer;
     display: inline;
     margin-right: 2px;
+    padding: 2px 4px;
     &.active {
-      background-color: $white1 !important;
+      background-color: $wood1 !important;
     }
     &.masked {
       background-color: $white5;
