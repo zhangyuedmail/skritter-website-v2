@@ -173,7 +173,7 @@ module.exports = GelatoApplication.extend({
   getApiUrl: function(version) {
     if (version) {
       if (version === 2) {
-        // return 'http://localhost:3210/v2/';
+        return 'http://localhost:3210/v2/';
         return this.config.apiRootV2 + '/';
       }
     }
@@ -791,6 +791,8 @@ module.exports = GelatoApplication.extend({
   start: function() {
     GelatoApplication.prototype.start.apply(this, arguments);
 
+    const self = this;
+
     //sets a global app object with installed dictionary states
     this.refreshAvailableDicts();
 
@@ -910,6 +912,8 @@ module.exports = GelatoApplication.extend({
             StatusBar.backgroundColorByHexString('#1c1206');
           }
         }
+
+        self._capturePlatformInfo();
       }
     );
   },
@@ -988,5 +992,25 @@ module.exports = GelatoApplication.extend({
 
     app.dialogs.vocabViewer.load(vocabId, vocab);
     app.dialogs.vocabViewer.open();
+  },
+
+  _capturePlatformInfo: function() {
+    if (this.user.isLoggedIn()) {
+      const platformData = {
+        client: this.isAndroid() ? 'android' : 'web',
+        // device: this.isMobile() && window.cordova ? : navigator.userAgent,
+        lang: this.getLanguage(),
+        user: this.user.id,
+        version: config.version
+      };
+
+      $.ajax({
+        url: app.getApiUrl(2) + 'usage/platform',
+        headers: app.user.session.getHeaders(),
+        context: this,
+        type: 'POST',
+        data: platformData
+      });
+    }
   }
 });
