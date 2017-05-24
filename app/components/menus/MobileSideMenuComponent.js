@@ -1,4 +1,5 @@
 const GelatoComponent = require('gelato/component');
+const ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
 
 /**
  * A component that displays basic user info and provides a list of top-level
@@ -63,7 +64,22 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * @param {jQuery.Event} e the click event
    */
   handleLogoutButtonClick: function(e) {
-    app.router.navigateLogout();
+    this._views['dialog'] = new ConfirmGenericDialog({
+      body: 'This will fully log you out of your current account and return to the log in screen.',
+      showButtonCancel: true,
+      buttonConfirm: 'Log Out',
+      buttonConfirmClass: 'btn-danger',
+      title: 'Are you sure?'
+    });
+
+    this._views['dialog'].once(
+      'confirm',
+      function() {
+        app.router.navigateLogout();
+      }
+    );
+
+    this._views['dialog'].open();
   },
 
   /**
