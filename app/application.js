@@ -173,7 +173,7 @@ module.exports = GelatoApplication.extend({
   getApiUrl: function(version) {
     if (version) {
       if (version === 2) {
-        return 'http://localhost:3210/v2/';
+        // return 'http://localhost:3210/v2/';
         return this.config.apiRootV2 + '/';
       }
     }
