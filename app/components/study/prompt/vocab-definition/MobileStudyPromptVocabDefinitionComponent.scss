@@ -22,6 +22,7 @@ gelato-component[data-name='mobile-study-prompt-vocab-definition'] {
     color: $grey4;
     font-size: 16px;
     font-weight: 300;
+    word-wrap: break-word;
     textarea {
       width: 100%;
     }
