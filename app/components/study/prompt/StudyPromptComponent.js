@@ -372,6 +372,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.trigger('reviews:set', reviews);
 
     if (reviews.part) {
+      this.$el.removeClass('defn rdng rune tone');
       this.$el.addClass(reviews.part);
     }
 
