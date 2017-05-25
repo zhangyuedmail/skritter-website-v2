@@ -9,6 +9,16 @@ gelato-component[data-name='mobile-stats-timeline'] {
     color: $grey5;
   }
 
+  .col-xs-4 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   gelato-component[data-name='stats-study-part-linegraph'] {
 
     .graph-title {
