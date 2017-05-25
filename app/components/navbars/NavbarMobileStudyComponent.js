@@ -113,15 +113,21 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
   },
 
   /**
-   * Updates the UI to show the due count
+   * Updates the UI to show the current due count
+   * @method handleDueCountUpdated
    */
   handleDueCountUpdated: function() {
     this.dueCountOffset = 0;
     this.$('.due-count').text(this.getDueCountWithOffset());
   },
 
+  /**
+   * Resets the state and UI after a group of words has been successfully added.
+   * @method handleItemAdded
+   */
   handleItemAdded: function() {
     this.$('#add').removeClass('adding');
+    this._adding = false;
   },
 
   /**
