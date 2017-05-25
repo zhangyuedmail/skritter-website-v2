@@ -410,13 +410,8 @@ const StudyPage = GelatoPage.extend({
               dialog.close();
             },
             success: () => {
-              this.items.reviews.post()
-                .then(
-                  () => {
-                    this.render();
-                    dialog.close();
-                  }
-                );
+              this.render();
+              dialog.close();
             }
           }
         );
