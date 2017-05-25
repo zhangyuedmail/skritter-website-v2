@@ -42,6 +42,7 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
 
     if (this.prompt.reviews) {
       if (app.isMobile() && _.includes(['defn', 'rdng'], this.prompt.reviews.part)) {
+        this.visible = false;
       } else {
         this.visible = true;
       }
