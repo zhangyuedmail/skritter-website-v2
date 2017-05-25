@@ -2334,16 +2334,8 @@ function hasToneMarks(text) {
  */
 function removeToneNumbers(text) {
   text = text.replace(/[0-9]/g, '');
-  switch (text) {
-    case 'lv':
-      return 'lü';
-    case 'lve':
-      return 'lüe';
-    case 'lvan':
-      return 'lüan';
-    case 'lvn':
-      return 'lün';
-  }
+  text = text.replace(/v/g, 'ü');
+
   return text;
 }
 
