@@ -332,11 +332,16 @@ const VocabModel = SkritterModel.extend({
   },
 
   /**
+   * Gets the sentence for the vocab, if available
    * @method getSentence
-   * @returns {Sentence}
+   * @returns {Sentence} null if a sentence for the vocab isn't found
    */
   getSentence: function() {
-    return this.collection.sentences.get(this.id);
+    if (this.collection) {
+      return this.collection.sentences.get(this.id);
+    }
+
+    return null;
   },
 
   /**
