@@ -1,6 +1,7 @@
-var GelatoPage = require('gelato/page');
-var Table = require('components/vocablists/VocablistsMineTableComponent');
-var Sidebar = require('components/vocablists/VocablistsSidebarComponent');
+const GelatoPage = require('gelato/page');
+const Table = require('components/vocablists/VocablistsMineTableComponent');
+const DeletedTable = require('components/vocablists/VocablistsDeletedTableComponent');
+const Sidebar = require('components/vocablists/VocablistsSidebarComponent');
 
 /**
  * @class VocablistMine
@@ -27,6 +28,11 @@ module.exports = GelatoPage.extend({
   initialize: function() {
     this.sidebar = new Sidebar();
     this.table = new Table();
+
+    // TODO: update desktop templates too
+    if (app.isMobile()) {
+      this._views['deleted'] = new DeletedTable();
+    }
   },
 
   /**
@@ -41,6 +47,11 @@ module.exports = GelatoPage.extend({
     this.renderTemplate();
     this.sidebar.setElement('#vocablist-sidebar-container').render();
     this.table.setElement('#vocablist-container').render();
+
+    if (app.isMobile()) {
+      this._views['deleted'].setElement('#deleted-container').render();
+    }
+
     return this;
   },
 

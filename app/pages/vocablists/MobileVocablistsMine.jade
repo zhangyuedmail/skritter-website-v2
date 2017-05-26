@@ -4,24 +4,29 @@ gelato-page(data-name='mobile-vocablists-mine')
 
   section#vocablist-nav-links.container
     .row.text-center
-      .col-xs-6
-        a(href='/vocablists/queue') Queue
-      .col-xs-6
-        a(href='/vocablists/browse') Browse
-    if app.getLanguage() === 'zh'
-      .row.text-center
-        .col-xs-4.selected My Lists
-        .col-xs-4
+      if app.getLanguage() === 'zh'
+        .col-xs-3.zh-smaller.zh-first
+          a(href='/vocablists/queue') Queue
+        .col-xs-3.zh-smaller
+          a(href='/vocablists/browse') Browse
+        .col-xs-3.selected My Lists
+        .col-xs-3.zh-last
           a(href='/vocablists/chinesepod') ChinesePod
+      else
         .col-xs-4
-          a(href='/vocablists/deleted') Deleted
-    else
-      .row.text-center
-        .col-xs-6.selected My Lists
-        .col-xs-6
-          a(href='/vocablists/deleted') Deleted
+          a(href='/vocablists/queue') Queue
+        .col-xs-4
+          a(href='/vocablists/browse') Browse
+        .col-xs-4.selected My Lists
 
   section.container
-    .content-block
+    .content-block.active-lists
       .row
         #vocablist-container
+
+  .content-block
+    .row
+      .header DELETED LISTS
+
+      .col-md-12.main-content
+        #deleted-container
