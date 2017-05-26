@@ -21,6 +21,8 @@ const MobileSideMenuComponent = GelatoComponent.extend({
     'click #button-beacon': 'handleClickButtonBeacon',
     'click #logout-btn': 'handleLogoutButtonClick',
     'click #settings-btn': 'handleSettingsButtonClick',
+    'click #menu-avatar': 'handleAvatarClick',
+    'click #username': 'handleAvatarClick'
   },
 
   /**
@@ -44,6 +46,15 @@ const MobileSideMenuComponent = GelatoComponent.extend({
   initialize: function(options) {
     this.user = options.user;
     this.listenTo(this.user.stats, 'state:standby', this.updateStats);
+    this.listenTo(this.user, 'change', this.updateUserInfo);
+  },
+
+  /**
+   * Handles the user clicking on their avatar. Navigates to the user settings page
+   * @param {jQuery} event
+   */
+  handleAvatarClick: function(event) {
+    this.handleSettingsButtonClick(event);
   },
 
   /**
