@@ -60,6 +60,21 @@ gelato-page > .container > .content-block {
 
 #vocablist-nav-links .row {
   margin-bottom: 0px;
+  padding: 0;
+
+  .zh-first {
+    padding-left: 20px;
+  }
+
+  .zh-smaller {
+    width: 23%;
+  }
+
+  .zh-last {
+    width: 29%;
+    text-align: left;
+    padding-left: 10px;
+  }
 }
 
 
