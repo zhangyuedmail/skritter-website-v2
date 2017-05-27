@@ -376,6 +376,8 @@ const StudyPromptComponent = GelatoComponent.extend({
       this.$el.addClass(reviews.part);
     }
 
+    this.$('#panel-right .content').scrollTop(0);
+
     this._preloadVocabInfo();
 
     return this;
@@ -409,7 +411,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     const styleStr = '-webkit-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
 
       '-moz-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
-            'animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;';
+      'animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;';
     this.$('#navigate-next').attr('style', styleStr);
 
     $(document).one('click', this.stopAutoAdvance);
