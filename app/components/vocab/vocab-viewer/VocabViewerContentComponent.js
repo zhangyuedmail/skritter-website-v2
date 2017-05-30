@@ -240,6 +240,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
   set: function(vocabs, vocabsContaining, items) {
     this.items = items || null;
     this.vocab = vocabs.at(0) || null;
+    this.vocabWriting = vocabs.at(0).get('writing');
     this.vocabs = vocabs || null;
     this.vocabsContaining = vocabsContaining || null;
 

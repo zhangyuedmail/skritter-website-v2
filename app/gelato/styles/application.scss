@@ -81,6 +81,7 @@ html, body {
   -webkit-transform: translate3d(112%, 0, 0);
   overflow-y: auto;
   width: 90%;
+  z-index: 9000;
 
   &.push-main {
     transform: translate3d(11%, 0, 0);
