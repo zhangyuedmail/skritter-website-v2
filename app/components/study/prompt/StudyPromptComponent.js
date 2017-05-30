@@ -404,13 +404,19 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     this.isAutoAdvancing = true;
 
-    this.$('#navigate-next').addClass('grade-' + this.review.get('score'));
-    const animSpeed = config.autoAdvanceDelay * 4;
-    const styleStr = '-webkit-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
+    const score = this.review.get('score');
 
+    // multiply the speed x2 if the user got the prompt wrong (grade 1 or 2)
+    // so they can see the prompt longer
+    const promptDelayMultiplier = score > 2 ? 1 : 2;
+
+    const animSpeed = config.autoAdvanceDelay * 4 * promptDelayMultiplier;
+    const styleStr = '-webkit-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
       '-moz-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
       'animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;';
+
     this.$('#navigate-next').attr('style', styleStr);
+    this.$('#navigate-next').addClass('grade-' + score);
 
     $(document).one('click', this.stopAutoAdvance);
     this._autoAdvanceListenerId = setTimeout(() => {
@@ -424,7 +430,7 @@ const StudyPromptComponent = GelatoComponent.extend({
       this._autoAdvanceListenerId = null;
       $(document).off('click', this.stopAutoAdvance);
       this.next();
-    }, config.autoAdvanceDelay);
+    }, config.autoAdvanceDelay * promptDelayMultiplier);
   },
 
   /**
