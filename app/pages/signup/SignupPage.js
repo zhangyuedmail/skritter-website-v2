@@ -207,7 +207,7 @@ module.exports = GelatoPage.extend({
    * @param {String} message the error to show to the user
    */
   displayErrorMessage: function(message) {
-    this.$('#signup-error-alert').html(message).removeClass('hide');
+    this.$('#signup-error-alert').html(message).removeClass('hidden');
   },
 
   /**
@@ -279,7 +279,9 @@ module.exports = GelatoPage.extend({
     event.preventDefault();
     if (!this.subscribing) {
       this.subscribing = true;
-      var formData = this.getFormData();
+      this.$('#signup-error-alert').addClass('hidden');
+
+      const formData = this.getFormData();
 
       if (app.isMobile()) {
         this.subscribeAndroid(formData);
