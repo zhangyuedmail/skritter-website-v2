@@ -344,18 +344,13 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     if (app.isMobile()) {
       // set prompt height based on toolbar and screen height
-      this.$el.height(app.getHeight() - toolbarHeight);
-
-      // on larger screen add some extra padding so things look nice
-      if (toolbarHeight > 66) {
-        this.$toolbarContainer.addClass('margin-top');
-      }
-
-      // use vh to make button height more dynamic on different screen sizes
-      this.$toolbarContainer.css({height: '5vh'});
+      this.$el.height(app.getHeight() - $('#navbar-container').height() - 10);
 
       // set size of panel left for absolute positioning of toolbar buttons
       this.$panelLeft.height(this.getHeight() - this.$panelRight.height());
+
+      // use vh to make button height more dynamic on different screen sizes
+      this.$toolbarContainer.css({height: '5vh'});
     }
 
     return this;
@@ -462,14 +457,14 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     if (app.isMobile()) {
       return outerContainer.height() -
-        this.$('#panel-right').height() -
-        this.$('#input-container').height() -
+        this.$panelRight.height() -
+        this.$inputContainer.height() -
 
         // there's some padding somewhere
         48;
     } else {
       return outerContainer.height() -
-        (this.$('#input-container').height() +
+        (this.$inputContainer.height() +
 
         // the margin-top property of #toolbar-action-container + the padding-top of #panel-left
         40 + 62);
