@@ -995,7 +995,7 @@ module.exports = GelatoApplication.extend({
   },
 
   _capturePlatformInfo: function() {
-    if (this.user.isLoggedIn()) {
+    if (!this.isDevelopment() && this.user.isLoggedIn()) {
       const platformData = {
         client: this.isAndroid() ? 'android' : 'web',
         // device: this.isMobile() && window.cordova ? : navigator.userAgent,
