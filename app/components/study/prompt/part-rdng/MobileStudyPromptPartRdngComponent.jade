@@ -24,7 +24,7 @@ gelato-component(data-name="mobile-study-prompt-part-rdng" class='noclick')
         if app.fn.isKana(writing)
           span!= kana.toRomaji(reading)
         else
-          span!= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+          span!= vocab.getReading()
 
       .definition(style="font-size: " + vocab.getDefinitionFontSize() + 'vh')
         if app.user.get('showHeisig') && vocab.has('heisigDefinition')

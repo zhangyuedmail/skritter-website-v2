@@ -292,8 +292,15 @@ const VocabModel = SkritterModel.extend({
    * @returns {String}
    */
   getReading: function() {
-    //TODO: depreciate this for direct usage in templates
-    return this.isChinese() ? app.fn.pinyin.toTone(this.get('reading')) : this.get('reading');
+    if (this.isChinese()) {
+      if (app.user.get('readingChinese') === 'zhuyin') {
+        return app.fn.pinyin.toZhuyin(this.get('reading'));
+      } else {
+        return app.fn.pinyin.toTone(this.get('reading'));
+      }
+    }
+
+    return this.get('reading');
   },
 
   /**

@@ -16,7 +16,7 @@ gelato-component(data-name="study-prompt-part-defn")
           if app.fn.isKana(writing)
             span!= kana.toRomaji(reading)
           else
-            span!= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+            span!= vocab.getReading()
 
         .definition
           if app.user.get('showHeisig') && vocab.has('heisigDefinition')

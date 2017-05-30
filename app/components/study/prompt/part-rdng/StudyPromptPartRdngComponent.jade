@@ -20,7 +20,8 @@ gelato-component(data-name="study-prompt-part-rdng" class='noclick')
     .answer(class=prompt.reviews.isComplete() ? '' : 'invisible')
       - var writing = vocab.get('writing');
       - var reading = vocab.get('reading');
+
       if app.fn.isKana(writing)
         span!= kana.toRomaji(reading)
       else
-        span!= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+        span!= vocab.getReading()
