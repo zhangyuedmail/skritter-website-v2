@@ -333,18 +333,18 @@ const StudyPromptComponent = GelatoComponent.extend({
    */
   resize: function() {
     const inputSize = this.getInputSize();
+
     this.$inputContainer.css({height: inputSize, width: inputSize});
 
-    this.canvas.resize();
-
-    if (app.isMobile()) {
-      this.$el.height(this.page.getHeight());
-    }
     const toolbarHeight = this._getToolbarHeight();
 
     this.$toolbarContainer.css({height: toolbarHeight + 'px'});
 
+    this.canvas.resize();
+
     if (app.isMobile()) {
+      // set prompt height based on toolbar and screen height
+      this.$el.height(app.getHeight() - toolbarHeight);
 
       // on larger screen add some extra padding so things look nice
       if (toolbarHeight > 66) {
@@ -353,6 +353,9 @@ const StudyPromptComponent = GelatoComponent.extend({
 
       // use vh to make button height more dynamic on different screen sizes
       this.$toolbarContainer.css({height: '5vh'});
+
+      // set size of panel left for absolute positioning of toolbar buttons
+      this.$panelLeft.height(this.getHeight() - this.$panelRight.height());
     }
 
     return this;
@@ -463,7 +466,7 @@ const StudyPromptComponent = GelatoComponent.extend({
         this.$('#input-container').height() -
 
         // there's some padding somewhere
-        10;
+        48;
     } else {
       return outerContainer.height() -
         (this.$('#input-container').height() +

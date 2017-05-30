@@ -296,9 +296,21 @@ gelato-component[data-name='mobile-study-prompt'] {
   }
 }
 
+.defn {
+  #toolbar-grading-container {
+    bottom: 0.5vh !important;
+  }
+}
+
+.rdng {
+  #toolbar-grading-container {
+    bottom: 0.5vh !important;
+  }
+}
+
 .rune {
   #toolbar-action-container {
-    bottom: 0.5vh !important;
+    bottom: 1vh !important;
   }
   #toolbar-grading-container {
     bottom: 0.5vh !important;
@@ -307,7 +319,7 @@ gelato-component[data-name='mobile-study-prompt'] {
 
 .tone {
   #toolbar-action-container {
-    bottom: 0.5vh !important;
+    bottom: 1vh !important;
   }
   #toolbar-grading-container {
     bottom: 0.5vh !important;
