@@ -20,4 +20,56 @@ gelato-page[data-name='mobile-study'] {
     display: none;
   }
 
+  .defn {
+    #panel-left {
+      height: 90% !important;
+    }
+
+    #panel-right {
+      height: 10% !important;
+      min-height: 50px !important;
+    }
+  }
+
+  .rdng {
+    #panel-left {
+      height: 90% !important;
+    }
+
+    #panel-right {
+      height: 10% !important;
+      min-height: 50px !important;
+    }
+  }
+
+  .defn {
+    #toolbar-grading-container {
+      bottom: 0.5vh !important;
+    }
+  }
+
+  .rdng {
+    #toolbar-grading-container {
+      bottom: 0.5vh !important;
+    }
+  }
+
+  .rune {
+    #toolbar-action-container {
+      bottom: 1vh !important;
+    }
+    #toolbar-grading-container {
+      bottom: 0.5vh !important;
+    }
+  }
+
+  .tone {
+    #toolbar-action-container {
+      bottom: 1vh !important;
+    }
+    #toolbar-grading-container {
+      bottom: 0.5vh !important;
+    }
+  }
+
 }
