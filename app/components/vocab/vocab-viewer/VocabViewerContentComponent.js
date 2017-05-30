@@ -136,6 +136,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     if (app.isCordova()) {
       plugins.core.openHanpingLite(this.vocabWriting);
+    } else {
+      console.info('HANPING LITE:', this.vocabWriting);
     }
   },
 
@@ -148,6 +150,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     if (app.isCordova()) {
       plugins.core.openHanpingPro(this.vocabWriting);
+    } else {
+      console.info('HANPING PRO:', this.vocabWriting);
     }
   },
 
@@ -160,6 +164,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     if (app.isCordova()) {
       plugins.core.openHanpingYue(this.vocabWriting);
+    } else {
+      console.info('HANPING YUE:', this.vocabWriting);
     }
   },
 
@@ -196,6 +202,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     if (app.isCordova()) {
       plugins.core.openPleco(this.vocabWriting);
+    } else {
+      console.info('PLECO:', this.vocabWriting);
     }
   },
 

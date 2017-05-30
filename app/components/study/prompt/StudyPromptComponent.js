@@ -589,6 +589,7 @@ const StudyPromptComponent = GelatoComponent.extend({
 
           vocabInfo.vocabsContaining.remove(vocabId);
 
+          self.vocabInfo.vocabWriting = vocabs.at(0).get('writing');
           self.vocabInfo = vocabInfo;
         }
       }
