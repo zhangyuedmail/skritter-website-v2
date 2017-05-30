@@ -38,9 +38,11 @@ const StudyPromptNavigationComponent = GelatoComponent.extend({
    */
   render: function() {
     this.renderTemplate();
+
     this.stopListening();
     this.listenTo(this.prompt.page.items.reviews, 'add', this.render);
     this.listenTo(this.prompt.page.items.reviews, 'state', this.render);
+
     return this;
   },
 

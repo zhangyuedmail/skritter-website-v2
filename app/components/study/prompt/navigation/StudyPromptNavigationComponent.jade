@@ -6,10 +6,10 @@ gelato-component(data-name="study-prompt-navigation")
 
     if page.previousPrompt
       if view.showLeft && !prompt.reviews.isFirst()
-        i#navigate-previous.fa.fa-angle-left
+        i#navigate-previous.fa.fa-angle-left(class=prompt.review.isComplete() ? 'review-complete' : '')
     else
       if view.showLeft && page.items.reviews.length
-        i#navigate-previous.fa.fa-angle-left
+        i#navigate-previous.fa.fa-angle-left(class=prompt.review.isComplete() ? 'review-complete' : '')
 
     if view.showRight
-      i#navigate-next.fa.fa-angle-right
+      i#navigate-next.fa.fa-angle-right(class=prompt.review.isComplete() ? 'review-complete' : '')
