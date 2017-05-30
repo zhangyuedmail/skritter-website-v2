@@ -4,6 +4,12 @@ gelato-dialog[data-name='notification-dialog'] {
   font-family: $font-ubuntu;
   text-transform: uppercase;
 
+  .modal {
+    width: 100%;
+    left: 0%;
+    transition: left .2s, width .2s;
+  }
+
   .modal-content {
     border-radius: 0;
 

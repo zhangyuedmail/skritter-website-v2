@@ -2,10 +2,8 @@ gelato-dialog(data-name='notification-dialog')
 
   .modal.fade(tabindex='-1', role='dialog')
     .modal-dialog
-      if dialogTitle
-        .dialog-title= dialogTitle
+      .dialog-title(class=dialogTitle ? '' : 'hidden')= dialogTitle
       .modal-content
         .modal-body!= body
-      if showConfirmButton
-        .button-wrapper
-          .btn= buttonText
+      .button-wrapper(class=showConfirmButton ? '' : 'hidden')
+        #notification-button.btn= buttonText

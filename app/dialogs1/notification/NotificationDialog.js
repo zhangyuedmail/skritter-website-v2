@@ -5,12 +5,8 @@ const GelatoDialog = require('gelato/dialog');
  * @extends {GelatoDialog}
  */
 module.exports = GelatoDialog.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function(options) {
-    this.set(options);
+  events: {
+    'click #notification-button': 'handleNotificationButtonClicked'
   },
 
   /**
@@ -18,6 +14,14 @@ module.exports = GelatoDialog.extend({
    * @type {Function}
    */
   template: require('./NotificationDialog.jade'),
+
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function(options) {
+    this.set(options);
+  },
 
   /**
    * @method render
@@ -33,6 +37,19 @@ module.exports = GelatoDialog.extend({
     });
 
     return this;
+  },
+
+  /**
+   *
+   * @param {jQuery.Event}event
+   */
+  handleNotificationButtonClicked: function(event) {
+    if (this.next) {
+      this.set(this.next);
+      return;
+    }
+
+    this.close();
   },
 
   /**
@@ -52,7 +69,49 @@ module.exports = GelatoDialog.extend({
     this.body = options.body;
     this.buttonText = options.buttonText;
     this.showConfirmButton = options.showConfirmButton;
+    this.next = options.next;
+    this.style = options.style;
+
+    if (this.style) {
+      this.setStyle(this.style);
+    }
+
+    this.updateValues();
 
     return this;
+  },
+
+  /**
+   *
+   * @param {Object} style
+   * @param {Object} [style.dialog] style options for the dialog
+   * @param {Object} [style.backdrop] style options for the backdrop
+   */
+  setStyle: function(style) {
+    if (style.dialog) {
+      let dialogStyle = 'display: block;';
+      for (let key in style.dialog) {
+        dialogStyle += key + ': ' + style.dialog[key] + ';';
+      }
+
+      this.$('.modal').attr('style', dialogStyle);
+    }
+
+    if (style.backdrop) {
+      let backdropStyle = '';
+      for (let key in style.backdrop) {
+        backdropStyle += key + ': ' + style.backdrop[key] + ';';
+      }
+      $('.modal-backdrop').attr('style', backdropStyle);
+    }
+  },
+
+  updateValues: function() {
+    this.$('.dialog-title').toggleClass('hidden', !this.dialogTitle).text(this.dialogTitle);
+    this.$('.button-wrapper').toggleClass('hidden', !this.showConfirmButton);
+    this.$('.modal-body').html(this.body);
+    if (this.showConfirmButton) {
+      this.$('#notification-button').text(this.buttonText || 'OK');
+    }
   }
 });

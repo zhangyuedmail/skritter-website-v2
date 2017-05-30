@@ -405,6 +405,7 @@ module.exports = GelatoApplication.extend({
   initEventListeners: function() {
     this.listenTo(vent, 'vocabInfo:toggle', this.toggleVocabInfo);
     this.listenTo(vent, 'notification:show', this.showNotification);
+    this.listenTo(vent, 'notification:close', this.closeNotification);
 
     if (this.isMobile()) {
       this.listenTo(vent, 'mobileNavMenu:toggle', this.toggleSideMenu);
@@ -767,6 +768,13 @@ module.exports = GelatoApplication.extend({
     this.feedbackDailog.open();
   },
 
+  closeNotification: function() {
+    if (this._views['notification-dialog']) {
+      this._views['notification-dialog'].close();
+      this._views['notification-dialog'] = null;
+    }
+  },
+
   /**
    * Shows a notification dialog to the user with the specified options
    * @param {Object} options content and display options for the dialog
@@ -774,13 +782,21 @@ module.exports = GelatoApplication.extend({
    * @param {Boolean} [options.showTitle] whether to show a title on the dialog
    * @param {String} [options.body] the text to display
    * @param {String} [options.buttonText] the text for the confirm/close button
-   * @param {Boolean} [options.showConfirmButton] whether to show a button to confirm/close the dialog
+   * @param {Boolean} [options.showConfirmButton] whether to show a button
+   *                                              to confirm/close the dialog
+   * @param {Boolean} [options.keepAlive] will attempt to reuse the current
+   *                                      dialog if it's open instead of closing
+   *                                      and creating a new instance
+   * @param {Object} [options.style] object containing CSS properties for the
+   *                                 'dialog' and the 'backdrop'
    */
   showNotification: function(options) {
-    if (this._views['notification-dialog']) {
-      this._views['notification-dialog'].close();
-      this._views['notification-dialog'] = null;
+    if (options.keepAlive && this._views['notification-dialog']) {
+      this._views['notification-dialog'].set(options);
+      return;
     }
+
+    this.closeNotification();
 
     this._views['notification-dialog'] = new NotificationDialog(options).open();
   },
