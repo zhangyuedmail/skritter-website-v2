@@ -1,38 +1,36 @@
 gelato-component(data-name='study-prompt-vocab-writing')
-  - var prompt = view.prompt;
-
-  if prompt.reviews
+  if view.visible
+    - var prompt = view.prompt;
     - var reviews = prompt.reviews;
     - var classes = [];
     - var index = 0;
 
-    if reviews.isChinese()
-      - classes.push('text-chinese');
-    if reviews.isJapanese()
-      - classes.push('text-japanese');
+    div(class=reviews.isJapanese() ? 'text-japanese' : 'text-chinese')
 
-    case reviews.part
+      case reviews.part
 
-      when 'rune'
-        for review in reviews.models
-          if review.get('filler')
-            div.filler
-              span= review.vocab.get('writing')
-          else
-            if reviews.position <= index && !review.get('complete')
-              - classes.push('masked');
-            if reviews.position === index
-              - classes.push('active');
-            div.character(class=classes.join(' '), data-position=index)
-              span= review.vocab.get('writing')
-            - index++
+        when 'rune'
+          for review in reviews.models
+            if review.get('filler')
+              div.filler
+                span= review.vocab.get('writing')
+            else
+              if reviews.position <= index && !review.get('complete')
+                - classes.push('masked');
+              if reviews.position === index
+                - classes.push('active');
+              div.character(class=classes.join(' '), data-position=index)
+                span= review.vocab.get('writing')
+              - classes.splice(0);
+              - index++
 
-      default
-        for review in reviews.models
-          if review.get('filler')
-            div.filler
-              span= review.vocab.get('writing')
-          else
-            div.character(class=classes.join(' '), data-position=index)
-              span= review.vocab.get('writing')
-            - index++
+        default
+          for review in reviews.models
+            if review.get('filler')
+              div.filler
+                span= review.vocab.get('writing')
+            else
+              div.character(class=classes.join(' '), data-position=index)
+                span= review.vocab.get('writing')
+              - classes.splice(0);
+              - index++

@@ -25,16 +25,6 @@ html, body {
   position: relative;
   height: 100%;
 
-  &.push-left {
-    //transform: translate3d(-90%, 0, 0);
-    //-webkit-transform: translate3d(-90%, 0, 0);
-  }
-
-  &.push-right {
-    //transform: translate3d(250px, 0, 0);
-    //-webkit-transform: translate3d(250px, 0, 0);
-  }
-
   &.default {
     background: $background-primary;
   }
@@ -45,16 +35,16 @@ html, body {
 }
 
 #main-app-container-overlay {
-  position: absolute;
-  top: 50px;
+  position: fixed;
+  top: 0;
   bottom: 0;
   width: 100%;
   background: #000;
   opacity: 0;
   z-index: -1;
   cursor: pointer;
-  transition: transform .25s ease-out, opacity .25s;
-  -webkit-transition: -webkit-transform .25s ease-out, opacity .25s;
+  transition: transform $sidebar-speed ease-out, opacity $sidebar-speed;
+  -webkit-transition: -webkit-transform $sidebar-speed ease-out, opacity $sidebar-speed;
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
 
@@ -74,21 +64,24 @@ html, body {
 }
 
 #left-side-app-container {
-  position: absolute;
-  transition: transform .25s ease-out;
-  -webkit-transition: -webkit-transform .25s ease-out;
+  position: fixed;
+  transition: transform $sidebar-speed ease-out;
+  -webkit-transition: -webkit-transform $sidebar-speed ease-out;
   transform: translate3d(-100%, 0, 0);
   -webkit-transform: translate3d(-100%, 0, 0);
   width: 250px;
+  z-index: 9000;
 }
 
 #right-side-app-container {
-  transition: transform .25s ease-out;
-  -webkit-transition: -webkit-transform .25s ease-out;
+  position: fixed;
+  transition: transform $sidebar-speed ease-out;
+  -webkit-transition: -webkit-transform $sidebar-speed ease-out;
   transform: translate3d(112%, 0, 0);
   -webkit-transform: translate3d(112%, 0, 0);
   overflow-y: auto;
   width: 90%;
+  z-index: 9000;
 
   &.push-main {
     transform: translate3d(11%, 0, 0);
@@ -143,6 +136,18 @@ gelato-application {
       user-select: none;
     }
 
+    .modal-dialog {
+      margin: 0;
+    }
+
+    .modal-content {
+      border-radius: 0;
+
+      .modal-header {
+        border-radius: 0;
+      }
+    }
+
     .progress {
       height: 6px;
     }
@@ -159,6 +164,7 @@ gelato-application {
         position: absolute;
         left: 0;
         right: 0;
+        padding-bottom: 10px;
 
         .container {
           padding: 0;
@@ -171,11 +177,11 @@ gelato-application {
     }
 
     #main-app-container {
-      //transition: transform .25s ease-out;
-      //-webkit-transition: -webkit-transform .25s ease-out;
+      //transition: transform $sidebar-speed ease-out;
+      //-webkit-transition: -webkit-transform $sidebar-speed ease-out;
       //transform: translate3d(0, 0, 0);
       //-webkit-transform: translate3d(0, 0, 0);
-      z-index: 0;
+      //z-index: 0;
     }
 
     #left-side-app-container, #right-side-app-container {

@@ -268,7 +268,7 @@ const StudyPage = GelatoPage.extend({
       }
 
       if (promptItems.readiness >= 1.0) {
-        this.toolbar.dueCountOffset++;
+        vent.trigger('dueCountOffset:increase');
       }
 
       this.currentItem._queue = false;
@@ -316,6 +316,7 @@ const StudyPage = GelatoPage.extend({
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
+
 
       // TODO: fix automatic item adding
       // if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
@@ -409,13 +410,8 @@ const StudyPage = GelatoPage.extend({
               dialog.close();
             },
             success: () => {
-              this.items.reviews.post()
-                .then(
-                  () => {
-                    this.render();
-                    dialog.close();
-                  }
-                );
+              this.render();
+              dialog.close();
             }
           }
         );

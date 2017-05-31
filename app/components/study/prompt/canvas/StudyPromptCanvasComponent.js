@@ -227,10 +227,14 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     options = options || {};
     options.color = options.color || '#000000';
     options.font = options.font || 'Arial';
-    options.size = options.size || this.size;
 
-    const font = options.size + 'px ' + options.font;
+    const size = this.size * 0.75;
+    const font = size + 'px ' + options.font;
     const text = new createjs.Text(character, font, options.color);
+
+    // center character on canvas
+    text.x = (this.size - size) / 2;
+    text.y = (this.size - size) / 1.5;
 
     this.getLayer(layerName).addChild(text);
 

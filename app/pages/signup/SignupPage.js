@@ -26,6 +26,10 @@ module.exports = GelatoPage.extend({
     'click #send-validation-email': 'handleClickValidateSchoolEmail'
   },
 
+  navbarOptions: {
+    showBackBtn: true
+  },
+
   /**
    * The different subscription options available for purchase
    * @type {Array<Object>}
@@ -71,7 +75,7 @@ module.exports = GelatoPage.extend({
    * The page title to display
    * @type {String}
    */
-  title: app.locale('pages.signup.title'),
+  title: app.locale('common.signUp') + ' - Skritter',
 
   /**
    * Creates a new Signup View.
@@ -203,7 +207,7 @@ module.exports = GelatoPage.extend({
    * @param {String} message the error to show to the user
    */
   displayErrorMessage: function(message) {
-    this.$('#signup-error-alert').html(message).removeClass('hide');
+    this.$('#signup-error-alert').html(message).removeClass('hidden');
   },
 
   /**
@@ -275,7 +279,9 @@ module.exports = GelatoPage.extend({
     event.preventDefault();
     if (!this.subscribing) {
       this.subscribing = true;
-      var formData = this.getFormData();
+      this.$('#signup-error-alert').addClass('hidden');
+
+      const formData = this.getFormData();
 
       if (app.isMobile()) {
         this.subscribeAndroid(formData);
@@ -581,6 +587,9 @@ module.exports = GelatoPage.extend({
         case 'Property "name" must be no longer than 20 characters long.':
           errorMsg = app.locale('pages.signup.errorUsernameTooLong');
           break;
+        case 'Property "password" must be no longer than 20 characters long.':
+          errorMsg = app.locale('pages.signup.errorPasswordLengthTooLong');
+          break;
         case "InvalidValidationCode":
           errorMsg = app.locale('pages.signup.errorInvalidEmailValidationCode');
           break;
@@ -698,6 +707,11 @@ module.exports = GelatoPage.extend({
 
     if (formData.password1.length < 6) {
       this.displayErrorMessage(app.locale('pages.signup.errorInvalidPasswordLength'));
+      return false;
+    }
+
+    if (formData.password1.length > 256) {
+      this.displayErrorMessage(app.locale('pages.signup.errorInvalidPasswordLengthTooLong'));
       return false;
     }
 

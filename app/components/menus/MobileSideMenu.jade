@@ -3,7 +3,8 @@
   #logout-btn.logout.fa.fa-sign-out
   .user-info-wrapper.text-center
     img.profile-picture#menu-avatar(src="data:image/png;base64, " + user.get('avatar'), alt="")
-    #username.username= app.user.get('name')
+    div
+      span#username.username= app.user.get('name')
 
 .user-stats-wrapper.row
   .stats-wrapper.col-xs-6.text-center
@@ -16,7 +17,7 @@
 .links-wrapper
   ul.nav
     li
-      a(href="/dashboard") Home
+      a(href="/dashboard") Dashboard
     li
       a(href="/study") Study
     li

@@ -28,6 +28,7 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
   initialize: function(options) {
     this.editing = false;
     this.prompt = options.prompt;
+    this.visible = false;
   },
 
   /**
@@ -37,6 +38,16 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
   render: function() {
     if (app.isMobile()) {
       this.template = require('./MobileStudyPromptVocabDefinitionComponent.jade')
+    }
+
+    if (this.prompt.reviews) {
+      if (app.isMobile() && _.includes(['defn', 'rdng'], this.prompt.reviews.part)) {
+        this.visible = false;
+      } else {
+        this.visible = true;
+      }
+    } else {
+      this.visible = false;
     }
 
     this.renderTemplate();

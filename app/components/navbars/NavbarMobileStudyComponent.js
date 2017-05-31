@@ -34,6 +34,9 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
 
     this.listenTo(vent, 'items:added', this.handleItemAdded);
     this.listenTo(this.page.items, 'update:due-count', this.handleDueCountUpdated);
+    this.listenTo(vent, 'dueCountOffset:increase', () => {
+      this.dueCountOffset++;
+    });
   },
 
   /**
@@ -51,6 +54,15 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
     this._views['timer'].setElement('#timer-container').render();
 
     return this;
+  },
+
+  /**
+   * @method getDueCountWithOffset
+   * @returns {Number}
+   */
+  getDueCountWithOffset: function() {
+    const dueCount = this.page.items.dueCount - this.dueCountOffset;
+    return dueCount > 0 ? dueCount : 0;
   },
 
   /**
@@ -101,14 +113,21 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
   },
 
   /**
-   * Updates the UI to show the due count
+   * Updates the UI to show the current due count
+   * @method handleDueCountUpdated
    */
   handleDueCountUpdated: function() {
-    this.$('.due-count').text(this.page.items.dueCount);
+    this.dueCountOffset = 0;
+    this.$('.due-count').text(this.getDueCountWithOffset());
   },
 
+  /**
+   * Resets the state and UI after a group of words has been successfully added.
+   * @method handleItemAdded
+   */
   handleItemAdded: function() {
     this.$('#add').removeClass('adding');
+    this._adding = false;
   },
 
   /**

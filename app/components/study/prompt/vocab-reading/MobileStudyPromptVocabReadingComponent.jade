@@ -1,7 +1,6 @@
 gelato-component(data-name='mobile-study-prompt-vocab-reading')
-  - var prompt = view.prompt;
-
-  if prompt.reviews
+  if view.visible
+    - var prompt = view.prompt;
     - var readings = prompt.reviews.vocab.getReadingObjects();
     - var index = 0;
 
@@ -14,11 +13,18 @@ gelato-component(data-name='mobile-study-prompt-vocab-reading')
           for reading in readings
             if (reading.type === 'character')
               - var review = prompt.reviews.at(index)
+
               div.reading(data-position=index)
                 if !prompt.reviews.isComplete() && review.isReadingHidden()
                   button.show-reading.btn.btn-sm.btn-default show
                 else
-                  span= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading.value) : reading.value
+                  if (prompt.reviews.isChinese())
+                    if (app.user.get('readingChinese') === 'zhuyin')
+                      span= app.fn.pinyin.toZhuyin(reading.value)
+                    else
+                      span= app.fn.pinyin.toTone(reading.value)
+                  else
+                    span= reading.value
               - index++
             else
               div.filler
@@ -29,17 +35,27 @@ gelato-component(data-name='mobile-study-prompt-vocab-reading')
             if (reading.type === 'character')
               - var review = prompt.reviews.at(index)
               - var classes = []
+
               if (prompt.reviews.position === index)
                 - classes.push('active')
+
               div.reading(class=classes.join(' '), data-position=index)
                 if prompt.reviews.vocab.isChinese()
                   if review.isReadingHidden()
                     button.show-reading.btn.btn-sm.btn-default show
                   else
                     if review.isComplete()
-                      span= app.fn.pinyin.toTone(reading.value)
+                      if (app.user.get('readingChinese') === 'zhuyin')
+                        span= app.fn.pinyin.toZhuyin(reading.value)
+                      else
+                        span= app.fn.pinyin.toTone(reading.value)
                     else
-                      span= app.fn.pinyin.removeToneNumbers(reading.value)
+                      - var toneless = app.fn.pinyin.removeToneNumbers(reading.value);
+
+                      if (app.user.get('readingChinese') === 'zhuyin')
+                        span= app.fn.pinyin.toZhuyin(toneless + '1')
+                      else
+                        span= toneless
                 else
                   span= reading.value
               - index++
@@ -50,10 +66,11 @@ gelato-component(data-name='mobile-study-prompt-vocab-reading')
         default
           - var review = prompt.reviews.at(0);
           - var reading = prompt.reviews.vocab.get('reading');
+
           div.reading(data-position=0)
             if prompt.reviews.part === 'defn' && review.isReadingHidden()
               button.show-reading.btn.btn-sm.btn-default show
             else if prompt.reviews.part === 'rdng' && !review.isComplete()
               // hide reading or something like that?
             else
-              span= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+              span= vocab.getReading()

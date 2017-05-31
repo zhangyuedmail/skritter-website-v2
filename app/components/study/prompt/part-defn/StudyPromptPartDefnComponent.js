@@ -42,6 +42,10 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    * @returns {StudyPromptPartDefnComponent}
    */
   render: function() {
+    if (app.isMobile()) {
+      this.template = require('./MobileStudyPromptPartDefnComponent.jade')
+    }
+
     this.renderTemplate();
     this.prompt.review = this.prompt.reviews.current();
     this.prompt.canvas.grid = false;

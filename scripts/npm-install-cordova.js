@@ -11,6 +11,7 @@ shell.exec('cordova platform add android@6.2.3');
 shell.exec('cordova platform add ios@4.4.0');
 
 // plugins
+shell.exec('cordova plugin add cordova-plugin-crosswalk-webview');
 shell.exec('cordova plugin add cordova-plugin-device');
 shell.exec('cordova plugin add cordova-plugin-file');
 shell.exec('cordova plugin add cordova-plugin-file-transfer');

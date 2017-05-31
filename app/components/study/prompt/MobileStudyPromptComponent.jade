@@ -16,24 +16,32 @@ gelato-component(data-name='mobile-study-prompt')
           span.spl= app.locale('components.studyPrompt.emptyButton')
 
   #panel-right
-    .content
-      #tutorial-container
-      #toolbar-vocab-container
-      #vocab-style-container
-      #vocab-writing-container
-      #vocab-reading-container
-      #vocab-definition-container
-    #review-status-container
-
-  #panel-left.no-select
     #leech-ribbon.ribbon.hidden
       .icon.icon-study-leech
     #new-ribbon.ribbon.hidden
       .icon.icon-study-new-character
+
+    .content
+      #vocab-style-container
+      #vocab-writing-container
+      #vocab-reading-container
+      #vocab-definition-container
+
+    .content-dropdown
+      .content-extra.hidden
+        #vocab-sentence-container
+        #vocab-mnemonic-container
+      .dropdown-toggle
+        i.toggle-down.fa.fa-arrow-circle-down
+          .inner-background
+        i.toggle-up.fa.fa-arrow-circle-up.hidden
+          .inner-background
+  #panel-left.no-select
     .content
       #navigation-container
       #input-container
         #canvas-container
         #review-container
-      #toolbar-grading-container
-      #toolbar-action-container
+
+    #toolbar-grading-container
+    #toolbar-action-container

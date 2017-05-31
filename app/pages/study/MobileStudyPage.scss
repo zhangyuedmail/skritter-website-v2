@@ -4,20 +4,72 @@ gelato-page[data-name='mobile-study'] {
 
   background: $background-primary;
   height: 100%;
-  padding-bottom: 10px !important;
-  padding-top: 60px;
+  padding-bottom: 5px !important;
+  padding-top: 55px;
   position: absolute;
   width: 100%;
 
   #study-prompt-container {
     height: 100%;
-    padding: 0 10px;
+    padding: 0 5px;
     position: absolute;
     width: 100%;
   }
 
   #study-toolbar-container {
     display: none;
+  }
+
+  .defn {
+    #panel-left {
+      height: 90% !important;
+    }
+
+    #panel-right {
+      height: 10% !important;
+      min-height: 50px !important;
+    }
+  }
+
+  .rdng {
+    #panel-left {
+      height: 90% !important;
+    }
+
+    #panel-right {
+      height: 10% !important;
+      min-height: 50px !important;
+    }
+  }
+
+  .defn {
+    #toolbar-grading-container {
+      bottom: 0.5vh !important;
+    }
+  }
+
+  .rdng {
+    #toolbar-grading-container {
+      bottom: 0.5vh !important;
+    }
+  }
+
+  .rune {
+    #toolbar-action-container {
+      bottom: 1vh !important;
+    }
+    #toolbar-grading-container {
+      bottom: 0.5vh !important;
+    }
+  }
+
+  .tone {
+    #toolbar-action-container {
+      bottom: 1vh !important;
+    }
+    #toolbar-grading-container {
+      bottom: 0.5vh !important;
+    }
   }
 
 }

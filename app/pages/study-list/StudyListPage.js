@@ -242,10 +242,12 @@ const StudyListPage = GelatoPage.extend({
       }
 
       if (promptItems.readiness >= 1.0) {
-        this.toolbar.dueCountOffset++;
+        vent.trigger('dueCountOffset:increase');
       }
 
-      this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
+      if (!app.isMobile()) {
+        this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
+      }
 
       this.currentItem._queue = false;
       this.currentPromptItems = null;

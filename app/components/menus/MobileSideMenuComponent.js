@@ -1,4 +1,5 @@
 const GelatoComponent = require('gelato/component');
+const ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
 
 /**
  * A component that displays basic user info and provides a list of top-level
@@ -20,6 +21,8 @@ const MobileSideMenuComponent = GelatoComponent.extend({
     'click #button-beacon': 'handleClickButtonBeacon',
     'click #logout-btn': 'handleLogoutButtonClick',
     'click #settings-btn': 'handleSettingsButtonClick',
+    'click #menu-avatar': 'handleAvatarClick',
+    'click #username': 'handleAvatarClick'
   },
 
   /**
@@ -43,6 +46,15 @@ const MobileSideMenuComponent = GelatoComponent.extend({
   initialize: function(options) {
     this.user = options.user;
     this.listenTo(this.user.stats, 'state:standby', this.updateStats);
+    this.listenTo(this.user, 'change', this.updateUserInfo);
+  },
+
+  /**
+   * Handles the user clicking on their avatar. Navigates to the user settings page
+   * @param {jQuery} event
+   */
+  handleAvatarClick: function(event) {
+    this.handleSettingsButtonClick(event);
   },
 
   /**
@@ -63,7 +75,22 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * @param {jQuery.Event} e the click event
    */
   handleLogoutButtonClick: function(e) {
-    app.router.navigateLogout();
+    this._views['dialog'] = new ConfirmGenericDialog({
+      body: 'This will fully log you out of your current account and return to the log in screen.',
+      showButtonCancel: true,
+      buttonConfirm: 'Log Out',
+      buttonConfirmClass: 'btn-danger',
+      title: 'Are you sure?'
+    });
+
+    this._views['dialog'].once(
+      'confirm',
+      function() {
+        app.router.navigateLogout();
+      }
+    );
+
+    this._views['dialog'].open();
   },
 
   /**

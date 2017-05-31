@@ -11,6 +11,7 @@ gelato-component[data-name="mobile-study-prompt-part-rdng"] {
   }
 
   height: 100%;
+  padding-top: 20%;
   position: absolute;
   text-align: center;
   width: 100%;
@@ -20,25 +21,35 @@ gelato-component[data-name="mobile-study-prompt-part-rdng"] {
   }
 
   .answer {
-    color: #404851;
+    color: $grey5;
     font-family: $font-ubuntu;
     font-size: 2.75vh;
     font-weight: 300;
-    padding-top: 10%;
+    margin: 0 10%;
+
+    .definition {
+      color: $white6;
+      margin-top: 15px;
+      word-wrap: break-word;
+    }
+
+    .reading {
+      border: 1px solid $grey5;
+      padding: 10px;
+    }
   }
 
   .question {
-    color: #b2b3b4;
+    color: $grey5;
     font-family: $font-slab;
     font-size: 28px;
     font-weight: 300;
-    margin-top: 30px;
+    margin: 10% 10% 0 10%;
   }
 
   .writing {
     color: #333950;
     font-size: 64px;
-    padding-top: 10%;
   }
 
   .reading-prompt {
@@ -71,13 +82,13 @@ gelato-component[data-name="mobile-study-prompt-part-rdng"] {
   .prompt-grade-3 {
     border: 2px solid $grade3;
     color: $grade3;
-    box-shadow: 0px 0px 8px;
+    box-shadow: 0 0 8px;
   }
 
   .prompt-grade-1 {
     border: 2px solid $grade1;
     color: $grade1;
-    box-shadow: 0px 0px 8px;
+    box-shadow: 0 0 8px;
   }
 
   .grade-4 {

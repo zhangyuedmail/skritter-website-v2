@@ -2,6 +2,7 @@ const GelatoApplication = require('gelato/application');
 const AddVocabDialog = require('dialogs1/add-vocab/view');
 const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 const ViewDialog = require('dialogs1/view-dialog/view');
+const NotificationDialog = require('dialogs1/notification/NotificationDialog.js');
 const FeedbackComponent = require('components/common/FeedbackComponent');
 
 const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
@@ -24,132 +25,6 @@ const vent = require('vent');
  * @extends {GelatoApplication}
  */
 module.exports = GelatoApplication.extend({
-
-  /**
-   * Initializes a new application instance. Sets up error handling, analytics,
-   * and various app-level properties such as referrals.
-   * @method initialize
-   * @constructor
-   */
-  initialize: function(options) {
-    GelatoApplication.prototype.initialize.apply(this, arguments);
-
-    this.config = config;
-
-    if (this.isProduction()) {
-      Raven.config(
-        config.sentryUrl,
-        {
-          ignoreUrls: [/localhost/],
-          release: this.getVersionWithBuildTimestamp()
-        }
-      ).install();
-    }
-
-    /**
-     * String to auto-populate signup form with
-     * @type {String}
-     */
-    this.couponCode = null;
-    this.dicts = {};
-    this.checkAndSetReferralInfo();
-
-    this.fn = Functions;
-    this.mixpanel = Mixpanel;
-    this.router = new Router();
-    this.user = new User({id: this.getSetting('user') || 'application'});
-
-    this.localBackend = this.fn.getParameterByName('thinkLocally') || this.defaults.thinkLocally;
-    if (this.localBackend) {
-      console.warn('NOTICE:', 'Using localhost backend');
-    }
-
-    if (window.ga && this.isProduction()) {
-      ga('create', 'UA-4642573-1', 'auto');
-      ga('set', 'forceSSL', true);
-    }
-
-    if (this.isWebsite()) {
-      this.mixpanel.init(this.getMixpanelKey());
-    } else {
-      window.mixpanel = {
-        alias: function() {},
-        identify: function() {},
-        init: function() {},
-        register: function() {},
-        track: function() {}
-      };
-    }
-
-    if (this.isDevelopment()) {
-      window.onerror = this.handleError;
-    }
-
-    if (config.recordLoadTimes) {
-      this.loadTimes = {
-        _loading: {
-          pages: {
-            app: null
-          },
-          api: {}
-        },
-        pages: {
-          app: null,
-          appScreenloaderHide: null,
-          dashboard: [],
-          stats: [],
-          study: [],
-          vocablistsBrowse: [],
-          vocablistsPublished: [],
-          vocablistsQueue: [],
-          vocablistsSearch: [],
-          vocabInfoViewer: [],
-          words: []
-        },
-        api: {},
-        report: function() {
-          if (!this.pages.app) {
-            console.log('Nothing to report yet, sir!');
-          }
-          console.log('The app took ' + parseInt(this.pages.app, 10) + ' ms to load until application.js rendered.');
-          console.log('And the app took ' + parseInt(this.pages.appScreenloaderHide, 10) + ' ms to load until the screenloader disappeared.');
-          ["dashboard", "stats", "study", "vocablistsBrowse",
-            "vocablistsPublished", "vocablistsQueue", "vocablistsSearch",
-            "vocabInfoViewer", "words"].forEach((section) => {
-            if (this.pages[section].length) {
-              let avgTime = this.pages[section].reduce(function(n, val) {
-                  return n + val;}, 0) / this.pages[section].length;
-              console.log('The ' + section + ' averaged ' +
-                parseInt(avgTime, 10) + ' ms across ' +
-                this.pages[section].length + ' loads.');
-              console.log('\tdata: ' + this.pages[section].map(v => {return parseInt(v, 10);}));
-            }
-          });
-        }
-      };
-
-      if (window._appLoadStartTime) {
-        this.loadTimes._loading.pages.app = window._appLoadStartTime;
-      }
-    }
-
-    this.initNavbar();
-    this.initFooter();
-    this.initSideViews();
-
-    this.listenTo(vent, 'vocabInfo:toggle', this.toggleVocabInfo);
-
-    if (this.isMobile()) {
-      this.listenTo(vent, 'mobileNavMenu:toggle', this.toggleSideMenu);
-      this.listenTo(vent, 'page:switch', () => { this.toggleSideMenu(false); });
-
-      if (this.isAndroid()) {
-        this._backButtonStack = [];
-        document.addEventListener('menubutton', (e) => {this.handleAndroidMenuKeyPressed(e);}, false);
-        document.addEventListener('backbutton', (e) => {this.handleAndroidBackButtonPressed(e);}, false);
-      }
-    }
-  },
 
   events: {
     'click #main-app-container-overlay': 'handleOverlayClick'
@@ -174,6 +49,68 @@ module.exports = GelatoApplication.extend({
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
     version: '{!application-version!}'
+  },
+
+  /**
+   * Initializes a new application instance. Sets up error handling, analytics,
+   * and various app-level properties such as referrals.
+   * @method initialize
+   * @constructor
+   */
+  initialize: function(options) {
+    GelatoApplication.prototype.initialize.apply(this, arguments);
+
+    this.config = config;
+
+    /**
+     * String to auto-populate signup form with
+     * @type {String}
+     */
+    this.couponCode = null;
+
+    /**
+     * Object of zh and ja dictionary services Skritter links to
+     * @type {Object}
+     */
+    this.dicts = {};
+
+    this.fn = Functions;
+    this.mixpanel = Mixpanel;
+    this.router = new Router();
+    this.user = new User({id: this.getSetting('user') || 'application'});
+
+    this.localBackend = this.fn.getParameterByName('thinkLocally') || this.defaults.thinkLocally;
+    if (this.localBackend) {
+      console.warn('NOTICE:', 'Using localhost backend');
+    }
+
+    if (this.isProduction()) {
+      Raven.config(
+        config.sentryUrl,
+        {
+          ignoreUrls: [/localhost/],
+          release: this.getVersionWithBuildTimestamp()
+        }
+      ).install();
+    }
+
+    this.checkAndSetReferralInfo();
+
+    this.initAnalytics();
+
+    if (this.isDevelopment()) {
+      window.onerror = this.handleError;
+    }
+
+    if (config.recordLoadTimes) {
+      this.initPerfRecording();
+    }
+
+    this.initNavbar();
+    this.initFooter();
+    this.initSideViews();
+
+    this.initEventListeners();
   },
 
   render: function() {
@@ -438,6 +375,61 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
+   * Initializes analytics platforms
+   * @method initAnalytics
+   */
+  initAnalytics: function() {
+    if (window.ga && this.isProduction()) {
+      ga('create', 'UA-4642573-1', 'auto');
+      ga('set', 'forceSSL', true);
+    }
+
+    if (this.isWebsite()) {
+      this.mixpanel.init(this.getMixpanelKey());
+    } else {
+      window.mixpanel = {
+        alias: function() {},
+        identify: function() {},
+        init: function() {},
+        register: function() {},
+        track: function() {}
+      };
+    }
+  },
+
+  /**
+   * Sets up application-level event listeners
+   * @method initEventListeners
+   *
+   */
+  initEventListeners: function() {
+    this.listenTo(vent, 'vocabInfo:toggle', this.toggleVocabInfo);
+    this.listenTo(vent, 'notification:show', this.showNotification);
+    this.listenTo(vent, 'notification:close', this.closeNotification);
+
+    if (this.isMobile()) {
+      this.listenTo(vent, 'mobileNavMenu:toggle', this.toggleSideMenu);
+      this.listenTo(vent, 'page:switch', () => { this.toggleSideMenu(false); });
+
+      if (this.isAndroid()) {
+        this._backButtonStack = [];
+        document.addEventListener('menubutton', (e) => {this.handleAndroidMenuKeyPressed(e);}, false);
+        document.addEventListener('backbutton', (e) => {this.handleAndroidBackButtonPressed(e);}, false);
+      }
+    }
+  },
+
+  /**
+   * Initializes the footer component for the application
+   * @method initFooter
+   */
+  initFooter: function() {
+    if (!this.isMobile()) {
+      this._views['footer'] =  new MarketingFooter();
+    }
+  },
+
+  /**
    * Initilizes the navbar for the application based on the screen size/platform
    * of the device.
    * @method initNavbar
@@ -453,12 +445,54 @@ module.exports = GelatoApplication.extend({
   },
 
   /**
-   * Initializes the footer component for the application
-   * @method initFooter
+   * Sets up objects and methods related to recording the application's performance timing.
+   * @method initPerfRecording
    */
-  initFooter: function() {
-    if (!this.isMobile()) {
-      this._views['footer'] =  new MarketingFooter();
+  initPerfRecording: function() {
+    this.loadTimes = {
+      _loading: {
+        pages: {
+          app: null
+        },
+        api: {}
+      },
+      pages: {
+        app: null,
+        appScreenloaderHide: null,
+        dashboard: [],
+        stats: [],
+        study: [],
+        vocablistsBrowse: [],
+        vocablistsPublished: [],
+        vocablistsQueue: [],
+        vocablistsSearch: [],
+        vocabInfoViewer: [],
+        words: []
+      },
+      api: {},
+      report: function() {
+        if (!this.pages.app) {
+          console.log('Nothing to report yet, sir!');
+        }
+        console.log('The app took ' + parseInt(this.pages.app, 10) + ' ms to load until application.js rendered.');
+        console.log('And the app took ' + parseInt(this.pages.appScreenloaderHide, 10) + ' ms to load until the screenloader disappeared.');
+        ["dashboard", "stats", "study", "vocablistsBrowse",
+          "vocablistsPublished", "vocablistsQueue", "vocablistsSearch",
+          "vocabInfoViewer", "words"].forEach((section) => {
+          if (this.pages[section].length) {
+            let avgTime = this.pages[section].reduce(function(n, val) {
+                return n + val;}, 0) / this.pages[section].length;
+            console.log('The ' + section + ' averaged ' +
+              parseInt(avgTime, 10) + ' ms across ' +
+              this.pages[section].length + ' loads.');
+            console.log('\tdata: ' + this.pages[section].map(v => {return parseInt(v, 10);}));
+          }
+        });
+      }
+    };
+
+    if (window._appLoadStartTime) {
+      this.loadTimes._loading.pages.app = window._appLoadStartTime;
     }
   },
 
@@ -734,11 +768,46 @@ module.exports = GelatoApplication.extend({
     this.feedbackDailog.open();
   },
 
+  closeNotification: function() {
+    if (this._views['notification-dialog']) {
+      this._views['notification-dialog'].close();
+      this._views['notification-dialog'] = null;
+    }
+  },
+
+  /**
+   * Shows a notification dialog to the user with the specified options
+   * @param {Object} options content and display options for the dialog
+   * @param {String} [options.dialogTitle] the title for the dialog
+   * @param {Boolean} [options.showTitle] whether to show a title on the dialog
+   * @param {String} [options.body] the text to display
+   * @param {String} [options.buttonText] the text for the confirm/close button
+   * @param {Boolean} [options.showConfirmButton] whether to show a button
+   *                                              to confirm/close the dialog
+   * @param {Boolean} [options.keepAlive] will attempt to reuse the current
+   *                                      dialog if it's open instead of closing
+   *                                      and creating a new instance
+   * @param {Object} [options.style] object containing CSS properties for the
+   *                                 'dialog' and the 'backdrop'
+   */
+  showNotification: function(options) {
+    if (options.keepAlive && this._views['notification-dialog']) {
+      this._views['notification-dialog'].set(options);
+      return;
+    }
+
+    this.closeNotification();
+
+    this._views['notification-dialog'] = new NotificationDialog(options).open();
+  },
+
   /**
    * @method start
    */
   start: function() {
     GelatoApplication.prototype.start.apply(this, arguments);
+
+    const self = this;
 
     //sets a global app object with installed dictionary states
     this.refreshAvailableDicts();
@@ -859,6 +928,8 @@ module.exports = GelatoApplication.extend({
             StatusBar.backgroundColorByHexString('#1c1206');
           }
         }
+
+        self._capturePlatformInfo();
       }
     );
   },
@@ -937,5 +1008,25 @@ module.exports = GelatoApplication.extend({
 
     app.dialogs.vocabViewer.load(vocabId, vocab);
     app.dialogs.vocabViewer.open();
+  },
+
+  _capturePlatformInfo: function() {
+    if (!this.isDevelopment() && this.user.isLoggedIn()) {
+      const platformData = {
+        client: this.isAndroid() ? 'android' : 'web',
+        // device: this.isMobile() && window.cordova ? : navigator.userAgent,
+        lang: this.getLanguage(),
+        user: this.user.id,
+        version: config.version
+      };
+
+      $.ajax({
+        url: app.getApiUrl(2) + 'usage/platform',
+        headers: app.user.session.getHeaders(),
+        context: this,
+        type: 'POST',
+        data: platformData
+      });
+    }
   }
 });

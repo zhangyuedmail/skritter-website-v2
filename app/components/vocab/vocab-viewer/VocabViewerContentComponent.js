@@ -136,6 +136,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     if (app.isCordova()) {
       plugins.core.openHanpingLite(this.vocabWriting);
+    } else {
+      console.info('HANPING LITE:', this.vocabWriting);
     }
   },
 
@@ -148,6 +150,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     if (app.isCordova()) {
       plugins.core.openHanpingPro(this.vocabWriting);
+    } else {
+      console.info('HANPING PRO:', this.vocabWriting);
     }
   },
 
@@ -160,6 +164,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     if (app.isCordova()) {
       plugins.core.openHanpingYue(this.vocabWriting);
+    } else {
+      console.info('HANPING YUE:', this.vocabWriting);
     }
   },
 
@@ -196,6 +202,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     if (app.isCordova()) {
       plugins.core.openPleco(this.vocabWriting);
+    } else {
+      console.info('PLECO:', this.vocabWriting);
     }
   },
 
@@ -232,6 +240,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
   set: function(vocabs, vocabsContaining, items) {
     this.items = items || null;
     this.vocab = vocabs.at(0) || null;
+    this.vocabWriting = vocabs.at(0).get('writing');
     this.vocabs = vocabs || null;
     this.vocabsContaining = vocabsContaining || null;
 

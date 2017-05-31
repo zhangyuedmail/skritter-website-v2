@@ -292,8 +292,15 @@ const VocabModel = SkritterModel.extend({
    * @returns {String}
    */
   getReading: function() {
-    //TODO: depreciate this for direct usage in templates
-    return this.isChinese() ? app.fn.pinyin.toTone(this.get('reading')) : this.get('reading');
+    if (this.isChinese()) {
+      if (app.user.get('readingChinese') === 'zhuyin') {
+        return app.fn.pinyin.toZhuyin(this.get('reading'));
+      } else {
+        return app.fn.pinyin.toTone(this.get('reading'));
+      }
+    }
+
+    return this.get('reading');
   },
 
   /**
@@ -332,11 +339,16 @@ const VocabModel = SkritterModel.extend({
   },
 
   /**
+   * Gets the sentence for the vocab, if available
    * @method getSentence
-   * @returns {Sentence}
+   * @returns {Sentence} null if a sentence for the vocab isn't found
    */
   getSentence: function() {
-    return this.collection.sentences.get(this.id);
+    if (this.collection) {
+      return this.collection.sentences.get(this.id);
+    }
+
+    return null;
   },
 
   /**
@@ -456,20 +468,52 @@ const VocabModel = SkritterModel.extend({
   },
 
   /**
+   * Return a scaled pixel value based on length of the definition.
+   * @method getDefinitionFontSize
+   * @returns {number}
+   */
+  getDefinitionFontSize () {
+    const definition = this.getDefinition();
+    const definitionLength = definition.length;
+    const screenWidth = app.getWidth();
+
+    return 3 - (definitionLength * 1.4) / screenWidth;
+  },
+
+  /**
    * Return a scaled pixel value based on length of the writing.
    * @method getWritingFontSize
    * @returns {number}
    */
   getWritingFontSize: function() {
+    const screenWidth = app.getWidth();
     const characterLength = this.getCharacters().length;
+
+    if (app.isMobile()) {
+      if (characterLength > 10) {
+        return screenWidth / 12;
+      }
+
+      if (characterLength > 6) {
+        return screenWidth / 8;
+      }
+
+      if (characterLength > 2) {
+        return screenWidth / 6;
+      }
+
+      return screenWidth / 4;
+    }
 
     if (characterLength > 10) {
       return 32;
-    } else if (characterLength > 5) {
-      return 48;
-    } else {
-      return 64;
     }
+
+    if (characterLength > 5) {
+      return 48;
+    }
+
+    return 64;
   },
 
   /**

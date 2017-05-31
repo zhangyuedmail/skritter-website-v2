@@ -11,10 +11,10 @@ gelato-component[data-name='study-prompt-vocab-writing'] {
     display: inline;
     margin-right: 2px;
     &.active {
-      background-color: $white1 !important;
+      border-bottom: 0.5vh solid $lime6 !important;
     }
     &.masked {
-      background-color: $white5;
+      border-bottom: 0.5vh solid $white6;
     }
     &.masked span {
       visibility: hidden;

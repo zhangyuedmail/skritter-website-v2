@@ -14,6 +14,10 @@ gelato-component[data-name="study-prompt-toolbar-action"] {
       box-sizing: border-box;
       padding: 0 10px;
 
+      &.disabled {
+        visibility: hidden;
+      }
+
       i {
         background-position: 50%;
         height: inherit;
@@ -23,20 +27,21 @@ gelato-component[data-name="study-prompt-toolbar-action"] {
   }
 
   #toolbar-stroke-order {
-        width: 96%; // [the original aspect ratio] 25/26 = 96%;
-      }
+    width: 96%; // [the original aspect ratio] 25/26 = 96%;
+  }
 
-      #toolbar-erase {
-        width: 91.6%;
-      }
+  #toolbar-erase {
+    width: 91.6%;
+  }
 
-      #toolbar-show {
-        width: 100%;
-      }
+  #toolbar-show {
+    padding-top: 5px;
+    width: 100%;
+  }
 
-      #toolbar-correct {
-        width: 100%;
-      }
+  #toolbar-correct {
+    width: 100%;
+  }
 
   .btn-default {
     background-color: transparent;

@@ -28,12 +28,18 @@ gelato-component[data-name='mobile-study-prompt'] {
     }
   }
 
+  .icon-study-new-character {
+    height: 58px;
+    width: 58px;
+  }
+
   #panel-left {
     background-color: $white1;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     height: 74%;
-    padding: 10px;
+    padding: 0;
+    position: relative;
 
     .content {
       margin: 0 auto;
@@ -44,7 +50,6 @@ gelato-component[data-name='mobile-study-prompt'] {
       #input-container {
         background-color: $white1;
         cursor: pointer;
-        margin: 0 auto;
         position: relative;
         z-index: 5000;
 
@@ -70,13 +75,6 @@ gelato-component[data-name='mobile-study-prompt'] {
         }
       }
 
-      #toolbar-grading-container {
-        bottom: -12px;
-        left: 0;
-        position: absolute;
-        width: 100%;
-        z-index: 5003;
-      }
       #toolbar-stroke-order {
         width: 96%; // [the original aspect ratio] 25/26 = 96%;
       }
@@ -95,69 +93,39 @@ gelato-component[data-name='mobile-study-prompt'] {
         //height: 74.5%;
       }
 
-      #toolbar-action-container {
-        max-height: 63px;
-
-        &.margin-top {
-          margin-top: 15px;
-        }
-      }
-
       gelato-component[data-name='study-prompt-navigation'] {
         font-size: 8vh;
-        top: 30%;
+        top: 40%;
 
         #navigate-next {
           right: 0;
+          padding-right: 5px;
+          padding-bottom: 3px;
+          background-size: 400% 100% !important;
+
+          &.grade-1 {
+            background: linear-gradient(to left, $white1 1%, $white1 50%, $grade1 51%, $grade1 100%);
+          }
+          &.grade-2 {
+            background: linear-gradient(to right, $white1 1%, $white1 50%, $grade2 51%, $grade2 100%);
+          }
+          &.grade-3 {
+            background: linear-gradient(to left, $white1 1%, $white1 50%, $grade3 51%, $grade3 100%);
+          }
+          &.grade-4 {
+            background: linear-gradient(to right, $white1 1%, $white1 50%, $grade4 51%, $grade4 100%);
+          }
+          &.auto-advancing {
+            -webkit-animation: AutoAdvanceProgress 1s ease infinite;
+            -moz-animation: AutoAdvanceProgress 1s ease infinite;
+            animation: AutoAdvanceProgress 1s ease infinite;
+          }
         }
 
         #navigate-previous {
-          left: 0;
+          left: 5px;
         }
       }
-
-      gelato-component[data-name="study-prompt-part-defn"] {
-        .answer {
-          font-size: 3.5vh;
-          padding-top: 0;
-        }
-
-        .question {
-          font-size: 4vh;
-        }
-
-        .writing {
-          font-size: 10vh;
-        }
-      }
-
-      gelato-component[data-name="mobile-study-prompt-part-rdng"] {
-        .answer {
-          font-size: 4vh;
-        }
-
-        .question {
-          font-size: 4vh;
-        }
-
-        .writing {
-          font-size: 10vh;
-        }
-      }
-
-      gelato-component[data-name='study-prompt-part-tone'] {
-        .tone-message {
-          font-size: 5vh;
-          margin-top: -20px;
-        }
-      }
-    }
-
-    .ribbon {
-      left: 0;
-      position: absolute;
-      top: 0;
-      z-index: 6000;
     }
   }
 
@@ -166,9 +134,11 @@ gelato-component[data-name='mobile-study-prompt'] {
     border-top-right-radius: 0px;
     border-top-left-radius: 0px;
     height: 20%;
-    margin: 0 1px 0 0;
+    margin: 0;
     min-height: 150px;
+    position: relative;
     text-align: center;
+    z-index: 6000;
 
     .content {
       height: 100%;
@@ -181,7 +151,7 @@ gelato-component[data-name='mobile-study-prompt'] {
       }
 
       #vocab-definition-container {
-        margin-top: 15px;
+        margin-top: 5px;
       }
 
       #vocab-mnemonic-container {
@@ -194,15 +164,15 @@ gelato-component[data-name='mobile-study-prompt'] {
 
       &::-webkit-scrollbar {
         background-color: transparent;
-        width: 6px;
+        width: 1vh;
       }
 
       &::-webkit-scrollbar-thumb {
-        background-color: $grey1;
+        background-color: $white8;
       }
 
       &::-webkit-scrollbar-track {
-        background-color: ($white5 - #030303);
+        background-color: ($white6);
       }
 
       gelato-component[data-name='study-prompt-vocab-sentence'] {
@@ -214,14 +184,61 @@ gelato-component[data-name='mobile-study-prompt'] {
 
       gelato-component[data-name='study-prompt-vocab-style'] {
         position: absolute;
-        right: 5px;
-        top: 5px;
+        right: 15px;
+        top: 10px;
       }
 
       gelato-component[data-name='study-prompt-vocab-writing'] {
         font-size: 5vh;
       }
 
+    }
+
+    .content-dropdown {
+      position: absolute;
+      width: 100%;
+
+      .content-extra {
+        background-color: $white3;
+        padding-bottom: 15px;
+        box-shadow: 0px 3px 3px #CCC;
+
+        > div {
+          margin-bottom: 15px;
+        }
+      }
+
+      .dropdown-toggle {
+        bottom: -14px;
+        position: absolute;
+        width: 100%;
+
+        i {
+          color: $green5;
+          cursor: pointer;
+          font-size: 21px;
+          position: relative;
+          z-index: 1;
+        }
+      }
+
+      .inner-background {
+        display: inline-block;
+        width: 13px;
+        height: 13px;
+        position: absolute;
+        background: $white1;
+        z-index: -1;
+        left: 2px;
+        top: 4px;
+      }
+    }
+
+    .ribbon {
+      left: 0;
+      position: absolute;
+      top: 0;
+      z-index: 6000;
     }
 
     #review-status-container {
@@ -232,9 +249,43 @@ gelato-component[data-name='mobile-study-prompt'] {
     }
   }
 
+  #toolbar-action-container {
+    bottom: 3vh;
+    max-height: 63px;
+    position: absolute;
+    width: 100%;
+
+    &.margin-top {
+      margin-top: 15px;
+    }
+  }
+
+  #toolbar-grading-container {
+    bottom: 3vh;
+    position: absolute;
+    width: 100%;
+    z-index: 5003;
+  }
+
   .icon-margin {
     display: inline-block;
     margin-left: 10px;
     margin-right: 10px;
   }
+}
+
+@-webkit-keyframes AutoAdvanceProgress {
+  0%{background-position: 100% 50%}
+  50%{background-position: 0% 50%}
+  100%{background-position: 100% 50%}
+}
+@-moz-keyframes AutoAdvanceProgress {
+  0%{background-position: 0% 50%}
+  50%{background-position: 100% 50%}
+  100%{background-position: 0% 50%}
+}
+@keyframes AutoAdvanceProgress {
+  0%{background-position:100% 50%}
+  50%{background-position:0% 50%}
+  100%{background-position:100% 50%}
 }

@@ -117,6 +117,8 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
     let el = event.type !== 'touchend' ? event.currentTarget : this._getElementFromTouchEvent(event);
 
     event.preventDefault();
+    event.stopPropagation();
+
     this.select($(el).data('value'));
     this.trigger('mouseup', this.value);
   },

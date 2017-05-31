@@ -57,7 +57,7 @@ gelato-component(data-name='mobile-vocab-viewer-content')
       .row.edit-row
         .col-xs-6.text-left
           if app.isMobile() && vocab.isChinese()
-            if !app.dicts.pleco
+            if app.dicts.pleco
               img#pleco-icon.dict-icon(src='media/images/icon-pleco.png')
 
             if app.dicts.hanpingPro
@@ -164,10 +164,10 @@ gelato-component(data-name='mobile-vocab-viewer-content')
           .header-writing= view.vocabWriting || ''
         .col-xs-6.text-right
           if app.isMobile() && app.isChinese()
-            if !app.dicts.pleco
+            if app.dicts.pleco
               img#pleco-icon.dict-icon(src='media/images/icon-pleco.png')
 
-            if !app.dicts.hanpingPro
+            if app.dicts.hanpingPro
               img#hanping-pro-icon.dict-icon(src='media/images/icon-hanping-pro.png')
             else if app.dicts.hanpingLite
               img#hanping-lite-icon.dict-icon(src='media/images/icon-hanping-lite.png')

@@ -2,9 +2,10 @@ gelato-component(data-name="mobile-study-prompt-part-rdng" class='noclick')
   - var prompt = view.prompt;
 
   if prompt.reviews.part === 'rdng' && prompt.reviews
+    - var vocab = prompt.reviews.vocab;
 
     .writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
-      span= prompt.reviews.vocab.get('writing')
+      span(style="font-size: " + vocab.getWritingFontSize() + 'px')= vocab.get('writing')
 
     .question(class=prompt.reviews.isComplete() ? 'hidden' : '')
       if prompt.reviews.isChinese()
@@ -18,7 +19,14 @@ gelato-component(data-name="mobile-study-prompt-part-rdng" class='noclick')
     .answer(class=prompt.reviews.isComplete() ? '' : 'invisible')
       - var writing = prompt.reviews.vocab.get('writing');
       - var reading = prompt.reviews.vocab.get('reading');
-      if app.fn.isKana(writing)
-        span!= kana.toRomaji(reading)
-      else
-        span!= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+
+      .reading
+        if app.fn.isKana(writing)
+          span!= kana.toRomaji(reading)
+        else
+          span!= vocab.getReading()
+
+      .definition(style="font-size: " + vocab.getDefinitionFontSize() + 'vh')
+        if app.user.get('showHeisig') && vocab.has('heisigDefinition')
+          em!= vocab.get('heisigDefinition') + ' - '
+        span!= vocab.getDefinition()

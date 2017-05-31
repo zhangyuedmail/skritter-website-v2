@@ -3,19 +3,32 @@
 gelato-page[data-name='mobile-vocablists-mine'] {
 
   background: $background-primary;
-  padding-top: 108px;
+  padding-top: 78px;
 
   .container {
     margin-top: 0px;
   }
+
   .content-block {
     margin-top: 10px;
-    padding-top: 0px;
     padding-bottom: 0px;
+    border-radius: 0;
+    background: $white3;
+  }
+
+  .active-lists {
+    padding-top: 0;
   }
 
   .main-content {
     padding: 0px 17px;
     border-radius: 0px;
+  }
+
+  .header {
+    margin-top: 0;
+    font-size: 12px;
+    padding-left: 15px;
+    padding-bottom: 15px;
   }
 }

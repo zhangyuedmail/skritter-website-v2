@@ -39,6 +39,14 @@ const StudyPromptComponent = GelatoComponent.extend({
   template: require('./StudyPromptComponent.jade'),
 
   /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click .dropdown-toggle': 'handleClickDropdownToggle'
+  },
+
+  /**
    * @method initialize
    * @param {Object} options
    * @constructor
@@ -58,6 +66,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.reviews = null;
     this.vocabInfo = null;
     this.isDemo = options.isDemo;
+    this.isAutoAdvancing = false;
 
     //components
     this.canvas = new Canvas({prompt: this});
@@ -180,6 +189,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    */
   getInputSize: function() {
     var $content = this.$panelLeft.find('.content');
+
     if ($content.length) {
       return $content.width();
     } else {
@@ -188,11 +198,46 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
+   * @method handleClickDropdownToggle
+   * @param {Event} event
+   */
+  handleClickDropdownToggle: function(event) {
+    const content = this.$('.content');
+    const contentDropdown = this.$('.content-dropdown');
+    const contentExtra = this.$('.content-extra');
+    const contentToggleDown = contentDropdown.find('.toggle-down');
+    const contentToggleUp = contentDropdown.find('.toggle-up');
+
+    event.preventDefault();
+
+    // force reveal the mnemonic on toggle
+    this.vocabMnemonic.reveal();
+
+    if (contentExtra.hasClass('hidden')) {
+      this.$panelLeft.css('opacity', 0.33);
+      this.$panelLeft.css('pointer-events', 'none');
+      contentDropdown.css('position', 'relative');
+      contentExtra.removeClass('hidden');
+      contentToggleDown.addClass('hidden');
+      contentToggleUp.removeClass('hidden');
+    } else {
+      this.$panelLeft.css('opacity', 1.0);
+      this.$panelLeft.css('pointer-events', 'auto');
+      contentDropdown.css('position', 'absolute');
+      contentExtra.addClass('hidden');
+      contentToggleDown.removeClass('hidden');
+      contentToggleUp.addClass('hidden');
+    }
+  },
+
+  /**
    * @method next
    * @param {Boolean} [skip]
    */
   next: function(skip) {
+    this.stopAutoAdvance();
     this.review.stop();
+
 
     if (skip || this.reviews.isLast()) {
       if (skip) {
@@ -288,34 +333,24 @@ const StudyPromptComponent = GelatoComponent.extend({
    */
   resize: function() {
     const inputSize = this.getInputSize();
+
     this.$inputContainer.css({height: inputSize, width: inputSize});
 
-    this.canvas.resize();
-
-    if (app.isMobile()) {
-      this.$el.height(this.page.getHeight());
-    }
     const toolbarHeight = this._getToolbarHeight();
 
     this.$toolbarContainer.css({height: toolbarHeight + 'px'});
 
+    this.canvas.resize();
+
     if (app.isMobile()) {
+      // set prompt height based on toolbar and screen height
+      this.$el.height(app.getHeight() - $('#navbar-container').height() - 10);
 
-      // on larger screen add some extra padding so things look nice
-      if (toolbarHeight > 66) {
-        this.$toolbarContainer.addClass('margin-top');
-      }
+      // set size of panel left for absolute positioning of toolbar buttons
+      this.$panelLeft.height(this.getHeight() - this.$panelRight.height());
 
-      // on smaller screen sizes, force a smaller canvas for some minimum button height
-      if (toolbarHeight <= 40) {
-
-        // we subtract 50 instead of 40 so that there's a little padding at
-        // the bottom and it doesn't seem as cramped.
-        const newCanvasSize = this.canvas.$el.height() - (50 - toolbarHeight);
-        this.$toolbarContainer.css({height: '40px'});
-        this.$inputContainer.css({height: newCanvasSize, width: newCanvasSize});
-        this.canvas.resize(newCanvasSize);
-      }
+      // use vh to make button height more dynamic on different screen sizes
+      this.$toolbarContainer.css({height: '5vh'});
     }
 
     return this;
@@ -333,6 +368,13 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.navigation.render();
     this.reviewStatus.render();
     this.trigger('reviews:set', reviews);
+
+    if (reviews.part) {
+      this.$el.removeClass('defn rdng rune tone');
+      this.$el.addClass(reviews.part);
+    }
+
+    this.$('#panel-right .content').scrollTop(0);
 
     this._preloadVocabInfo();
 
@@ -360,12 +402,35 @@ const StudyPromptComponent = GelatoComponent.extend({
       return;
     }
 
+    this.isAutoAdvancing = true;
+
+    const score = this.review.get('score');
+
+    // multiply the speed x2 if the user got the prompt wrong (grade 1 or 2)
+    // so they can see the prompt longer
+    const promptDelayMultiplier = score > 2 ? 1 : 2;
+
+    const animSpeed = config.autoAdvanceDelay * 4 * promptDelayMultiplier;
+    const styleStr = '-webkit-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
+      '-moz-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
+      'animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;';
+
+    this.$('#navigate-next').attr('style', styleStr);
+    this.$('#navigate-next').addClass('grade-' + score);
+
     $(document).one('click', this.stopAutoAdvance);
     this._autoAdvanceListenerId = setTimeout(() => {
+
+      // if by some other means this listener should have already been stopped,
+      // make sure we don't double fire
+      if (!this._autoAdvanceListenerId) {
+        return;
+      }
+
       this._autoAdvanceListenerId = null;
       $(document).off('click', this.stopAutoAdvance);
       this.next();
-    }, config.autoAdvanceDelay);
+    }, config.autoAdvanceDelay * promptDelayMultiplier);
   },
 
   /**
@@ -373,10 +438,16 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @method stopAutoAdvance
    */
   stopAutoAdvance: function(event) {
+    this.isAutoAdvancing = false;
+
+    this.$('#navigate-next').removeClass('grade-1 grade-2 grade-3 grade-4');
+    this.$('#navigate-next').removeAttr('style');
+
+    $(document).off('click', this.stopAutoAdvance);
+
     if (!this._autoAdvanceListenerId) {
       return;
     }
-
     clearTimeout(this._autoAdvanceListenerId);
     this._autoAdvanceListenerId = null;
   },
@@ -392,14 +463,14 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     if (app.isMobile()) {
       return outerContainer.height() -
-        this.$('#panel-right').height() -
-        this.$('#input-container').height() -
+        this.$panelRight.height() -
+        this.$inputContainer.height() -
 
         // there's some padding somewhere
-        10;
+        48;
     } else {
       return outerContainer.height() -
-        (this.$('#input-container').height() +
+        (this.$inputContainer.height() +
 
         // the margin-top property of #toolbar-action-container + the padding-top of #panel-left
         40 + 62);

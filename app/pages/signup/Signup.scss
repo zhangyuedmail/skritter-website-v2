@@ -4,6 +4,41 @@ gelato-page[data-name='signup'] {
   background: $background-marketing;
   padding-top: 50px;
 
+  &.mobile {
+    background: $background-primary;
+    padding-bottom: 0 !important;
+
+    button,
+    a.btn {
+      margin-top: 30px;
+      width: 45%;
+    }
+
+    input {
+      &::-webkit-input-placeholder {
+      }
+      &:-moz-placeholder {
+        opacity: 1;
+      }
+      &::-moz-placeholder {
+        opacity: 1;
+      }
+    }
+
+    label {
+      font-size: 18px;
+      font-weight: 300;
+    }
+
+    .wrapper {
+      background: $white1;
+      margin: auto;
+      margin-top: 10px;
+      max-width: 100%;
+    }
+
+  }
+
   #section-header {
     margin-bottom: 50px;
 

@@ -11,8 +11,10 @@ gelato-component[data-name="study-prompt-part-tone"] {
     font-family: $font-slab;
     font-size: 36px;
     font-weight: 300;
-    margin-top: -30px;
     text-align: center;
+    margin-top: -20px;
+    z-index: 5002;
+    position: relative;
   }
 
 }

@@ -4,6 +4,7 @@ const Prompt = require('components/study/prompt/StudyPromptComponent.js');
 const DemoCallToActionDialog = require('dialogs1/demo-call-to-action/view');
 const DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
 const ItemsCollection = require('collections/ItemCollection');
+const vent = require('vent');
 
 /**
  * @class Demo
@@ -43,6 +44,8 @@ const DemoPage = GelatoPage.extend({
    * @constructor
    */
   initialize: function(options) {
+    _.bindAll(this, 'teachDemoChar1','teachDemoChar2', 'writeDemoChar1', 'writeDemoChar2', 'completeDemo', 'switchToWriting');
+
     this.dialog = null;
     this.lang = 'zh';
     this.notify = null;
@@ -135,7 +138,7 @@ const DemoPage = GelatoPage.extend({
         self.prompt.show();
         self.promptItems = vocab.getPromptItems('rune');
         self.promptItems.teachAll();
-        self.step1();
+        self.teachDemoChar1();
       }
     );
   },
@@ -143,7 +146,7 @@ const DemoPage = GelatoPage.extend({
   /**
    * @method step1
    */
-  step1: function() {
+  teachDemoChar1: function() {
     this.prompt.tutorial.show();
     this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step1')));
     this.prompt.set(this.promptItems);
@@ -151,51 +154,111 @@ const DemoPage = GelatoPage.extend({
     this.prompt.$('#navigation-container').hide();
     this.prompt.$('#toolbar-action-container').hide();
     this.prompt.$('#toolbar-vocab-container').hide();
-    this.prompt.once('character:complete', this.step2.bind(this));
-  },
+    this.prompt.once('character:complete', this.teachDemoChar2);
 
-  /**
-   * @method step2
-   */
-  step2: function() {
-    app.mixpanel.track('Completed tracing demo character #1');
-    this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step2')));
-    this.prompt.part.eraseCharacter();
-    this.prompt.review.set('score', 3);
-    this.prompt.$('#toolbar-action-container').show();
-    this.prompt.$('#toolbar-grading-container').hide();
-    this.prompt.once('reviews:next', this.step3.bind(this));
+    if (app.isDevelopment()) {
+      this.showDemoGuidePopup();
+    }
   },
 
   /**
    * @method step3
    */
-  step3: function() {
-    app.mixpanel.track('Completed writing demo character #1');
+  teachDemoChar2: function() {
+    app.mixpanel.track('Completed tracing demo character #1');
+
     this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step3')));
     this.prompt.$('#toolbar-action-container').hide();
-    this.prompt.once('character:complete', this.step4.bind(this));
+    this.prompt.once('character:complete', this.writeDemoChar1);
+  },
+
+  /**
+   * Erases the characters and goes back to the beginning of the review
+   */
+  switchToWriting: function() {
+    this.prompt.part.eraseCharacter();
+    this.prompt.previous();
+    this.prompt.part.eraseCharacter();
+    vent.trigger('notification:show', {
+      dialogTitle: 'Getting Hints',
+      showTitle: true,
+      keepAlive: true,
+      body: this.parseTemplate(require('./notify-step2'))
+    })
+  },
+
+  /**
+   * @method step2
+   */
+  writeDemoChar1: function() {
+    this.switchToWriting();
+    app.mixpanel.track('Completed tracing demo character #2');
+    this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step2')));
+    this.prompt.review.set('score', 3);
+    this.prompt.$('#toolbar-action-container').show();
+    this.prompt.$('#toolbar-grading-container').hide();
+    this.prompt.once('reviews:next', this.writeDemoChar2);
   },
 
   /**
    * @method step4
    */
-  step4: function() {
-    app.mixpanel.track('Completed tracing demo character #2');
+  writeDemoChar2: function() {
+    app.mixpanel.track('Completed writing demo character #1');
     this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step4')));
     this.prompt.part.eraseCharacter();
     this.prompt.review.set('score', 3);
     this.prompt.$('#toolbar-action-container').show();
-    this.prompt.once('character:complete', this.step5.bind(this));
+    this.prompt.once('character:complete', this.completeDemo);
   },
 
   /**
    * @method step5
    */
-  step5: function() {
+  completeDemo: function() {
     app.mixpanel.track('Completed writing demo character #2');
     this.dialog = new DemoCallToActionDialog();
     this.dialog.open();
+  },
+
+  /**
+   * Shows a popup that guides the user through the demo and
+   * updates as the user progresses through it.
+   */
+  showDemoGuidePopup: function() {
+    vent.trigger('notification:show', {
+      dialogTitle: 'First Characters',
+      showTitle: true,
+      body: "Let's get started by learning the characters in the word <b>Chinese language</b>",
+      buttonText: 'Next',
+      showConfirmButton: true,
+      style: {
+        backgdrop: {
+          top: '51px'
+        },
+        dialog: {
+          top: '15%'
+        }
+      },
+      next: {
+        dialogTitle: 'First Characters',
+        showTitle: true,
+        body: "We’ll always teach you the correct stroke order for new characters you’re learning. Trace the strokes for the characters 中 and 文.",
+        showConfirmButton: false,
+        style: {
+          dialog: {
+            width: '53%',
+            left: '48%',
+            top: '15%'
+          },
+          backdrop: {
+            left: '50%',
+            width: '50%',
+            top: '51px'
+          }
+        }
+      }
+    });
   },
 
   /**

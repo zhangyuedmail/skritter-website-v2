@@ -43,6 +43,9 @@ const StudyToolbarComponent = GelatoComponent.extend({
     this.listenTo(this.page.items, 'update:due-count', this.handleUpdateDueCount);
     this.listenTo(this.stats, 'state:standby', this.updateTimerOffset);
     this.listenTo(vent, 'items:added', this.updateAddButton);
+    this.listenTo(vent, 'dueCountOffset:increase', () => {
+      this.dueCountOffset++;
+    });
 
     this.stats.fetchToday();
   },

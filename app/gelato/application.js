@@ -373,6 +373,11 @@ const GelatoApplication = Backbone.View.extend({
   start: function() {
     $(this.rootSelector).prepend(this.render().$el);
 
+    // enable navbar on mobile so height can be calculated
+    if (this.isMobile()) {
+      this.toggleNavbar(true);
+    }
+
     if (this.router) {
       this.listenTo(this.router, 'page:navigate', this.go, this);
     }

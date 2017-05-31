@@ -3,7 +3,18 @@
 gelato-page[data-name='mobile-home'] {
   background: $background-primary;
   height: 100%;
-  padding: 60px 30px 0 30px;
+  padding: 15px !important;
+  position: relative;
+
+  .btn-fixed {
+    max-width: 150px;
+    padding: 7.5px;
+    width: 100%;
+  }
+
+  .helper-text {
+    font-size: 11px;
+  }
 
   .logo {
     background-image: url('#{$dir-assets}/images/skrit-logo-1.png');
@@ -14,18 +25,21 @@ gelato-page[data-name='mobile-home'] {
   }
 
   .language {
-    font-size: 20px;
+    font-size: 4vh;
   }
 
   .welcome-options {
-    padding-top: 20%;
+    bottom: 5%;
+    position: absolute;
+    width: 100%;
   }
 
   .welcome-panel {
     background: $white;
     border-radius: 5px;
-    height: 80%;
-    padding: 5px;
+    height: 100%;
+    padding: 15px 0;
+    position: relative;
     text-align: center;
 
     .character {

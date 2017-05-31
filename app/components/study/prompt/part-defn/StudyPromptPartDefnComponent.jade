@@ -9,9 +9,19 @@ gelato-component(data-name="study-prompt-part-defn")
 
     if prompt.reviews.isComplete()
       .answer
-        if app.user.get('showHeisig') && vocab.has('heisigDefinition')
-          em!= vocab.get('heisigDefinition') + ' - '
-        span!= vocab.getDefinition()
+        - var writing = prompt.reviews.vocab.get('writing');
+        - var reading = prompt.reviews.vocab.get('reading');
+
+        .reading
+          if app.fn.isKana(writing)
+            span!= kana.toRomaji(reading)
+          else
+            span!= vocab.getReading()
+
+        .definition
+          if app.user.get('showHeisig') && vocab.has('heisigDefinition')
+            em!= vocab.get('heisigDefinition') + ' - '
+          span!= vocab.getDefinition()
     else
       .question
         span What's the definition?

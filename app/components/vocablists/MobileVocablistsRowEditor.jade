@@ -1,4 +1,4 @@
-gelato-component(data-name='vocablists-list-editor-rows')
+gelato-component(data-name='mobile-vocablists-list-editor-rows')
   - var rows = view.rows;
   - var vocablist = view.vocablist;
   - var vocablistSection = view.vocablistSection;
@@ -51,9 +51,9 @@ gelato-component(data-name='vocablists-list-editor-rows')
 
             .col-xs-2.vocab-reading= vocab1.getReading()
 
-            .col-xs-3.vocab-definition!= vocab1.getDefinition()
+            .col-xs-4.vocab-definition!= vocab1.getDefinition()
 
-            .col-xs-2.vocab-options.text-right
+            .col-xs-1.vocab-options.text-right
               if row.results && row.results.length > 1
                 button.show-results.btn.btn-sm.btn-info All Results
                 | &nbsp;&nbsp;

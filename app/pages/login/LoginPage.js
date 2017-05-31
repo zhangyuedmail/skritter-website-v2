@@ -37,7 +37,7 @@ const LoginPage = GelatoPage.extend({
    * @property title
    * @type {String}
    */
-  title: 'Login - Skritter',
+  title: app.locale('common.logIn') + ' - Skritter',
 
   /**
    * @property template

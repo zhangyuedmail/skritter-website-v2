@@ -12,9 +12,10 @@ gelato-page(data-name='login').mobile
         .form-group.text-center
           button#button-login.btn.btn-fixed.btn-primary.btn-success(type="button")= app.locale('common.logIn')
 
-        if app.isDevelopment()
-          .form-group.text-center
-            button#button-skeleton.btn.btn-fixed.btn-info(type="button") Skeleton
+          if app.isDevelopment()
+            .form-group.text-center
+              a#button-skeleton.btn.btn-warning(href="#") Skeleton
 
       .text-center
-        a#password-reset.btn.btn-default(href="/password-reset") Forgot your password?
+        a#signup-button(href="/signup") Don't have an account?
+        a#forgot-password-button(href="/password-reset") Forgot your password?

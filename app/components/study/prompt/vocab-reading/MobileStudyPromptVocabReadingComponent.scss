@@ -7,7 +7,10 @@ gelato-component[data-name='mobile-study-prompt-vocab-reading'] {
 
   button {
     background-color: $grey1;
-    border-radius: 4px;
+    border-radius: 3px;
+    padding: 4px 8px;
+    margin-bottom: 1px;
+    font-variant: small-caps;
   }
 
   .reading {
@@ -15,8 +18,9 @@ gelato-component[data-name='mobile-study-prompt-vocab-reading'] {
     cursor: pointer;
     display: inline;
     margin-right: 2px;
+    padding-bottom: 4px;
     &.active {
-      background-color: $white1 !important;
+      border-bottom: 0.5vh solid $lime6 !important;
     }
     &.masked {
       background-color: $white5;

@@ -42,7 +42,7 @@ gelato-page[data-name='signup'] {
       background: none;
       margin: auto;
       margin-top: 50px;
-      max-width: 400px;
+      max-width: 100%;
     }
 
   }
@@ -88,7 +88,7 @@ gelato-page[data-name='signup'] {
   @media (max-width: 500px) {
     .content-block {
       margin: 50px auto;
-      max-width: 400px;
+      max-width: 100%;
     }
     #footer-container {
       position: relative;

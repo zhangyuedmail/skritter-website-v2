@@ -1,7 +1,6 @@
 gelato-component(data-name='study-prompt-vocab-definition')
-  - var prompt = view.prompt;
-
-  if prompt.reviews
+  if view.visible
+    - var prompt = view.prompt;
     - var vocab = prompt.reviews.vocab;
     - var definition = prompt.reviews.vocab.getDefinition();
 

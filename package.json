@@ -40,7 +40,7 @@
     "cal-heatmap": "~3.6",
     "compression": "~1.6",
     "cors": "~2.8",
-    "d3": "~4.8",
+    "d3": "~4.9",
     "dexie": "~1.5",
     "express": "~4.15",
     "font-awesome": "~4.7",
@@ -77,7 +77,7 @@
     "sass-brunch": "~2.10",
     "selenium-webdriver": "~2.53",
     "shelljs": "~0.7",
-    "sinon": "~2.2",
+    "sinon": "~2.3",
     "uglify-js-brunch": "~2.10"
   }
 }
