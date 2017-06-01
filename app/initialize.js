@@ -40,6 +40,10 @@ module.exports = (function() {
   }
 
   if (window.cordova) {
+    if (window.MobileAccessibility) {
+      window.MobileAccessibility.usePreferredTextZoom(false);
+    }
+
     document.addEventListener('deviceready', start, false);
   } else {
     $(document).ready(start);

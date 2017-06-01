@@ -18,5 +18,6 @@ shell.exec('cordova plugin add cordova-plugin-file-transfer');
 shell.exec('cordova plugin add cordova-plugin-media');
 shell.exec('cordova plugin add cordova-plugin-splashscreen');
 shell.exec('cordova plugin add cordova-plugin-statusbar');
+shell.exec('cordova plugin add https://github.com/phonegap/phonegap-mobile-accessibility.git');
 shell.exec('cordova plugin add https://github.com/mcfarljw/cordova-plugin-billing.git');
 shell.exec('cordova plugin add ../plugins/core');
