@@ -26,6 +26,11 @@ bootstrap-navbar[data-name='mobile'] {
       background-color: $sand2;
       width: 20px;
     }
+
+    &:hover,
+    &:focus {
+      background-color: $sand6;
+    }
   }
 
   .title-txt {
