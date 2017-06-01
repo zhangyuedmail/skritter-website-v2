@@ -10,4 +10,19 @@ bootstrap-dialog[data-name="progress"] {
     width: 300px;
   }
 
+
+
+}
+
+.mobile {
+
+  bootstrap-dialog[data-name="progress"] {
+    .modal-content {
+      border: none;
+    }
+    .modal-dialog {
+      width: 100%;
+    }
+  }
+
 }
