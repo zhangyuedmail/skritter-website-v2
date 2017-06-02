@@ -6,7 +6,10 @@ gelato-component(data-name="study-prompt-part-rdng" class='noclick')
 
     .question(class=prompt.reviews.isComplete() ? 'invisible' : '')
       if prompt.reviews.isChinese()
-        span What's the pinyin?
+        if app.user.get('readingChinese') === 'zhuyin'
+          span What's the zhuyin?
+        else
+          span What's the pinyin?
       else
         span What's the pronunciation?
 
