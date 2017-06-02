@@ -239,11 +239,11 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
 
       // wait until events finish firing and call stack is cleared
       _.defer(() => {
+        this.renderComplete();
+
         if (app.user.get('autoAdvancePrompts')) {
           this.prompt.startAutoAdvance();
         }
-
-        this.renderComplete();
       });
     }
   },
