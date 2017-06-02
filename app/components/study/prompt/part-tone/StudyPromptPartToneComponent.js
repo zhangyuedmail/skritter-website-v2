@@ -54,6 +54,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.review = this.prompt.reviews.current();
     this.prompt.canvas.grid = false;
     this.prompt.canvas.reset();
+
     this.prompt.canvas.drawCharacter(
       'character-background',
       this.prompt.review.vocab.get('writing'),
@@ -62,20 +63,32 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
         font: this.prompt.review.vocab.getFontName()
       }
     );
+
     this.prompt.canvas.drawShape(
       'character',
       this.prompt.review.character.getUserShape(),
       {color: this.prompt.review.getGradingColor()}
     );
+
     this.prompt.toolbarAction.buttonCorrect = true;
     this.prompt.toolbarAction.buttonErase = false;
     this.prompt.toolbarAction.buttonShow = false;
     this.prompt.toolbarAction.buttonTeach = false;
+
+    if (app.isMobile()) {
+      this.prompt.vocabDefinition.render();
+      this.prompt.vocabMnemonic.render();
+      this.prompt.vocabSentence.render();
+      this.prompt.vocabStyle.render();
+      this.prompt.vocabWriting.render();
+    }
+
     if (this.prompt.review.isComplete()) {
       this.renderComplete();
     } else {
       this.renderIncomplete();
     }
+
     return this;
   },
 
@@ -86,31 +99,40 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
   renderComplete: function() {
     this.prompt.review.stop();
     this.prompt.review.set('complete', true);
+
     this.prompt.canvas.disableInput();
+
     this.prompt.canvas.injectLayerColor(
       'character',
       this.prompt.review.getGradingColor()
     );
+
     this.prompt.navigation.render();
     this.prompt.shortcuts.grading.listen();
     this.prompt.shortcuts.tone.stop_listening();
     this.prompt.toolbarAction.render();
-    this.prompt.toolbarGrading.render();
-    this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
-    this.prompt.toolbarVocab.render();
-    this.prompt.vocabContained.render();
-    this.prompt.vocabDefinition.render();
-    this.prompt.vocabMnemonic.render();
+    this.prompt.toolbarGrading.render().select(this.prompt.review.get('score'));
     this.prompt.vocabReading.render();
-    this.prompt.vocabSentence.render();
-    this.prompt.vocabStyle.render();
-    this.prompt.vocabWriting.render();
+
+    if (!app.isMobile()) {
+      this.prompt.toolbarVocab.render();
+      this.prompt.vocabContained.render();
+      this.prompt.vocabDefinition.render();
+      this.prompt.vocabMnemonic.render();
+      this.prompt.vocabSentence.render();
+      this.prompt.vocabStyle.render();
+      this.prompt.vocabWriting.render();
+    }
+
+    this.$('.tone-message').hide();
+
     if (app.user.isAudioEnabled() &&
       this.prompt.reviews.isLast()) {
       this.prompt.reviews.vocab.play();
     }
+
     this.prompt.trigger('tone:complete');
-    this.renderTemplate();
+
     return this;
   },
 
@@ -121,21 +143,28 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
   renderIncomplete: function() {
     this.prompt.review.start();
     this.prompt.review.set('complete', false);
+
     this.prompt.canvas.enableInput();
+
     this.prompt.navigation.render();
     this.prompt.shortcuts.grading.stop_listening();
     this.prompt.shortcuts.tone.listen();
     this.prompt.toolbarAction.render();
     this.prompt.toolbarGrading.render();
-    this.prompt.toolbarVocab.render();
-    this.prompt.vocabContained.render();
-    this.prompt.vocabDefinition.render();
-    this.prompt.vocabMnemonic.render();
     this.prompt.vocabReading.render();
-    this.prompt.vocabSentence.render();
-    this.prompt.vocabStyle.render();
-    this.prompt.vocabWriting.render();
-    this.renderTemplate();
+
+    if (!app.isMobile()) {
+      this.prompt.toolbarVocab.render();
+      this.prompt.vocabContained.render();
+      this.prompt.vocabDefinition.render();
+      this.prompt.vocabMnemonic.render();
+      this.prompt.vocabSentence.render();
+      this.prompt.vocabStyle.render();
+      this.prompt.vocabWriting.render();
+    }
+
+    this.$('.tone-message').show();
+
     return this;
   },
 
@@ -202,15 +231,20 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     }
 
     if (this.prompt.review.character.isComplete()) {
-      this.renderComplete();
+      // inject the grading color before expensive rendering
+      this.prompt.canvas.injectLayerColor(
+        'character',
+        this.prompt.review.getGradingColor()
+      );
 
-      if (app.user.get('autoAdvancePrompts')) {
-
-        // wait until events finish firing and call stack is cleared
-        _.defer(() => {
+      // wait until events finish firing and call stack is cleared
+      _.defer(() => {
+        if (app.user.get('autoAdvancePrompts')) {
           this.prompt.startAutoAdvance();
-        });
-      }
+        }
+
+        this.renderComplete();
+      });
     }
   },
 
@@ -298,6 +332,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @method completeTone
    */
   completeTone: function() {
+    console.log('tits');
     var possibleTones = this.prompt.review.getTones();
     var expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
     this.prompt.canvas.clearLayer('character');
