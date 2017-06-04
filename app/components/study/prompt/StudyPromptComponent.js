@@ -184,14 +184,18 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
+   * Calculates what the size of the input container should be based on the screen size and aspect ratio.
    * @method getInputSize
    * @returns {Number}
    */
   getInputSize: function() {
-    var $content = this.$panelLeft.find('.content');
+    const $content = this.$panelLeft.find('.content');
 
     if ($content.length) {
-      return $content.width();
+      const width = $content.width();
+      const height = $content.height() || this.$panelLeft.height();
+
+      return Math.min(width, height);
     } else {
       return 0;
     }
@@ -332,6 +336,18 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @returns {StudyPromptComponent}
    */
   resize: function() {
+
+    // need to set these values first before getInputSize will return the
+    // right value on mobile since it relies on the #panel-left height
+    // to calculate
+    if (app.isMobile()) {
+      // set prompt height based on toolbar and screen height
+      this.$el.height(app.getHeight() - $('#navbar-container').height() - 10);
+
+      // set size of panel left for absolute positioning of toolbar buttons
+      this.$panelLeft.height(this.getHeight() - this.$panelRight.height());
+    }
+
     const inputSize = this.getInputSize();
 
     this.$inputContainer.css({height: inputSize, width: inputSize});
@@ -343,14 +359,11 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.canvas.resize();
 
     if (app.isMobile()) {
-      // set prompt height based on toolbar and screen height
-      this.$el.height(app.getHeight() - $('#navbar-container').height() - 10);
-
-      // set size of panel left for absolute positioning of toolbar buttons
-      this.$panelLeft.height(this.getHeight() - this.$panelRight.height());
 
       // use vh to make button height more dynamic on different screen sizes
       this.$toolbarContainer.css({height: '5vh'});
+    } else {
+
     }
 
     return this;

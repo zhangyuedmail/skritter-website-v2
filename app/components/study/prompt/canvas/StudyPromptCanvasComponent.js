@@ -502,6 +502,14 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
 
     size = this.canvasSizeOverride || this.prompt.getInputSize(size);
 
+    // artificially add a little padding at the bottom if the canvas is about to be
+    // set to the same height as its parent container
+    const usingHeight = this.prompt.$panelLeft && this.prompt.$panelLeft.height() === size;
+    if (usingHeight) {
+      size = size - 25;
+      this.canvasSizeOverride = size;
+    }
+
     this.$el.height(size);
     this.$el.width(size);
     this.stage.canvas.height = size;

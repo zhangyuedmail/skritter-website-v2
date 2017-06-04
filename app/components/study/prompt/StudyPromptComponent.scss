@@ -51,6 +51,7 @@ gelato-component[data-name='study-prompt'] {
         background-color: $white1;
         cursor: pointer;
         position: relative;
+        margin: auto;
         z-index: 5000;
 
         #canvas-container {
