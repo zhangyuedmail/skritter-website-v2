@@ -179,12 +179,14 @@ const DemoPage = GelatoPage.extend({
     this.prompt.part.eraseCharacter();
     this.prompt.previous();
     this.prompt.part.eraseCharacter();
-    vent.trigger('notification:show', {
-      dialogTitle: 'Getting Hints',
-      showTitle: true,
-      keepAlive: true,
-      body: this.parseTemplate(require('./notify-step2'))
-    })
+    if (app.isDevelopment()) {
+      vent.trigger('notification:show', {
+        dialogTitle: 'Getting Hints',
+        showTitle: true,
+        keepAlive: true,
+        body: this.parseTemplate(require('./notify-step2'))
+      });
+    }
   },
 
   /**
