@@ -308,7 +308,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
       this.loadStart = window.performance.now();
     }
 
-    if (vocabInfo) {
+    if (vocabInfo && vocabInfo.vocabs.length) {
       this.set(vocabInfo.vocabs, vocabInfo.vocabsContaining, vocabInfo.items);
       return;
     }
