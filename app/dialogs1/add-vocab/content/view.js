@@ -42,6 +42,17 @@ module.exports = GelatoComponent.extend({
     return this;
   },
   /**
+   * Returns a vocablist if a page has one declared.
+   * @returns {null}
+   */
+  getCurrentList: function() {
+    if (!app.router.page.vocablist) {
+      return null;
+    }
+
+    return app.router.page.vocablist;
+  },
+  /**
    * @method getFormData
    * @returns {Object}
    */
