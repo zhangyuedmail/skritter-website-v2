@@ -2425,7 +2425,7 @@ const data = {
   },
   696: function(defaultColor) {
     const stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAD6AnEYAAgUAAgeAAgUYAAksAKk2AKksYAUk2AKk2AelAYAAhQAKhaAehQYAUhkgegyg8gyYgKgKgUgKgKgKYgygogygegygeYgUAAgUAAgUAAYAAAUAKAUAKAUYAKAUAUAUAKAUYAUBQAUBGAABQYAUGugyGugUGkYgUEiAAEsgKEiYAABagKBkAABkYAABQAABQgKBaYAAAogKAoAAAoYgKBagnBaAJBkYAUAyBkFyBkh4YA8hGgehuAAhaYAAjmAAjmAAjmYAAhkAAhaAAhk").cp());
-    stroke.setBounds(0, 0, 39, 278);
+    stroke.setBounds(0, 0, 39, 378);
     return stroke;
   },
   697: function(defaultColor) {
