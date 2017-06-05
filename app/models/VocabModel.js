@@ -608,7 +608,11 @@ const VocabModel = SkritterModel.extend({
         }
       );
     } else {
-      new Howl({src: [audio.url], format: ['mp3']}).play();
+      new Howl({
+        src: [audio.url],
+        format: ['mp3'],
+        volume: app.user.get('volume')
+      }).play();
     }
 
     return true;
@@ -623,6 +627,7 @@ const VocabModel = SkritterModel.extend({
       }
     );
 
+    media.setVolume(app.user.get('volume'));
     media.play();
   },
 
