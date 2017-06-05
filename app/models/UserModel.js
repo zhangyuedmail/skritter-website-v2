@@ -22,6 +22,7 @@ const UserModel = SkritterModel.extend({
     avatar: require('data/default-avatar'),
     allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     allJapaneseParts: ['defn', 'rdng', 'rune'],
+    audioEnabled: true,
     dailyItemAddingLimit: 20,
     disabled: false,
     filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
@@ -237,7 +238,7 @@ const UserModel = SkritterModel.extend({
    * @returns {Boolean}
    */
   isAudioEnabled: function() {
-    return this.get('volume') > 0;
+    return !!this.get('audioEnabled');
   },
 
   /**

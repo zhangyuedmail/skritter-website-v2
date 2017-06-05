@@ -1,10 +1,10 @@
-const BootstrapDialog = require('base/bootstrap-dialog');
+const GelatoDialog = require('gelato/dialog');
 
 /**
- * @class StudySettingsDialog
- * @extends {BootstrapDialog}
+ * @class QuickSettingsDialog
+ * @extends {GelatoDialog}
  */
-module.exports = BootstrapDialog.extend({
+module.exports = GelatoDialog.extend({
   /**
    * @property events
    * @type {Object}
@@ -19,11 +19,11 @@ module.exports = BootstrapDialog.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./QuickSettingsDialog.jade'),
 
   /**
    * @method render
-   * @returns {StudySettingsDialog}
+   * @returns {QuickSettingsDialog}
    */
   render: function() {
     this.renderTemplate();
@@ -59,7 +59,9 @@ module.exports = BootstrapDialog.extend({
    */
   getSettings: function() {
     const settings = {
-      squigs: this.$('#field-squigs input').is(':checked')
+      audioEnabled: this.$('#field-audio input').is(':checked'),
+      squigs: this.$('#field-squigs input').is(':checked'),
+      volume: this.volumeSlider.bootstrapSlider('getValue')
     };
 
     if (app.isChinese()) {
@@ -70,12 +72,6 @@ module.exports = BootstrapDialog.extend({
     if (app.isJapanese()) {
       settings.filteredJapaneseParts = this.getSelectedParts();
       settings.filteredJapaneseStyles = [];
-    }
-
-    if (this.$('#field-audio input').is(':checked')) {
-      settings.volume = this.volumeSlider.bootstrapSlider('getValue');
-    } else {
-      settings.volume = 0;
     }
 
     return settings;

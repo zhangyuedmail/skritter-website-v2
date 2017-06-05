@@ -5,7 +5,8 @@ const Recipes = require('components/common/CommonRecipesComponent.js');
 const Items = require('collections/ItemCollection.js');
 const Vocablists = require('collections/VocablistCollection.js');
 const MobileStudyNavbar = require('components/navbars/NavbarMobileStudyComponent.js');
-const StudySettings = require('dialogs/study-settings/view');
+const QuickSettings = require('dialogs1/quick-settings/QuickSettingsDialog.js');
+
 const vent = require('vent');
 
 /**
@@ -391,32 +392,29 @@ const StudyPage = GelatoPage.extend({
    * @method showStudySettings
    */
   showStudySettings: function() {
-    const dialog = new StudySettings();
+    const dialog = new QuickSettings();
 
     dialog.open();
 
-    dialog.on(
-      'save',
-      (settings) => {
-        ScreenLoader.show();
-        ScreenLoader.post('Saving study settings');
-        app.user.set(settings, {merge: true});
-        app.user.cache();
-        app.user.save(
-          null,
-          {
-            error: () => {
-              ScreenLoader.hide();
-              dialog.close();
-            },
-            success: () => {
-              this.render();
-              dialog.close();
-            }
+    dialog.on('save', settings => {
+      ScreenLoader.show();
+      ScreenLoader.post('Saving study settings');
+      app.user.set(settings, {merge: true});
+      app.user.cache();
+      app.user.save(
+        null,
+        {
+          error: () => {
+            ScreenLoader.hide();
+            dialog.close();
+          },
+          success: () => {
+            this.render();
+            dialog.close();
           }
-        );
-      }
-    );
+        }
+      );
+    });
   },
 
   /**
