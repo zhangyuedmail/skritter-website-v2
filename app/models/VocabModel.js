@@ -627,8 +627,9 @@ const VocabModel = SkritterModel.extend({
       }
     );
 
-    media.setVolume(app.user.get('volume'));
     media.play();
+
+    media.setVolume(app.user.get('volume'));
   },
 
   /**
