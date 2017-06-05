@@ -8,6 +8,26 @@ bootstrap-dialog[data-name="study-settings"] {
     }
   }
 
+  .title {
+    margin-top: -5px;
+  }
+
+  #audio-volume {
+    margin-left: 10px;
+
+    .slider-handle {
+      background: $green5;
+    }
+
+    .slider-selection {
+      background: $grey1;
+    }
+
+    .slider-track {
+      background: $grey2;
+    }
+  }
+
   #button-close {
     cursor: pointer;
     float: right;

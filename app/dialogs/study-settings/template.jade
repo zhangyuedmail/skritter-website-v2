@@ -8,98 +8,115 @@ bootstrap-dialog(data-name='study-settings')
 
         .modal-body
 
-          .title Study Settings
+          .title Quick Settings
 
           form.form-horizontal
             .form-group
+
               label.col-sm-3.control-label(for="field-parts") Filter parts
+
               .col-sm-9#field-parts
                 .checkbox-inline
                   label
-                    input(type="checkbox", name="parts", value="rune", checked=user.isAddingPart('rune') && user.isReviewingPart('rune'), disabled=!user.isAddingPart('rune')).part-checkbox
+                    input.part-checkbox(
+                    type="checkbox",
+                    name="parts",
+                    value="rune",
+                    checked=user.isAddingPart('rune') && user.isReviewingPart('rune'),
+                    disabled=!user.isAddingPart('rune')
+                    )
                     | Writing
                 if (app.getLanguage() === 'zh')
                   .checkbox-inline
                     label
-                      input(type="checkbox", name="parts", value="tone", checked=user.isAddingPart('tone') && user.isReviewingPart('tone'), disabled=!user.isAddingPart('tone')).part-checkbox
+                      input.part-checkbox(
+                      type="checkbox",
+                      name="parts",
+                      value="tone",
+                      checked=user.isAddingPart('tone') && user.isReviewingPart('tone'),
+                      disabled=!user.isAddingPart('tone')
+                      )
                       | Tone
                 .checkbox-inline
                   label
-                    input(type="checkbox", name="parts", value="rdng", checked=user.isAddingPart('rdng') && user.isReviewingPart('rdng'), disabled=!user.isAddingPart('rdng')).part-checkbox
+                    input.part-checkbox(
+                    type="checkbox",
+                    name="parts",
+                    value="rdng",
+                    checked=user.isAddingPart('rdng') && user.isReviewingPart('rdng'),
+                    disabled=!user.isAddingPart('rdng')
+                    )
                     | Reading
                 .checkbox-inline
                   label
-                    input(type="checkbox", name="parts", value="defn", checked=user.isAddingPart('defn') && user.isReviewingPart('defn'), disabled=!user.isAddingPart('defn')).part-checkbox
+                    input.part-checkbox(
+                    type="checkbox",
+                    name="parts", value="defn",
+                    checked=user.isAddingPart('defn') && user.isReviewingPart('defn'),
+                    disabled=!user.isAddingPart('defn')
+                    )
                     | Definition
-            //TODO: enable when feature works
-            //.form-group
-              label.col-sm-3.control-label(for="field-daily-item-adding-limit") Daily Adding Limit
-              .col-sm-9#field-daily-item-adding-limit
-                label
-                  input(type="number", value=user.get('dailyItemAddingLimit'))
+
+            if app.isChinese()
+
+              hr
+
+              .form-group
+
+                label.col-sm-3.control-label(for="field-parts") Filter styles
+
+                .col-sm-9#field-styles
+                  .checkbox-inline
+                    label
+                      input.style-checkbox(
+                      type="checkbox",
+                      name="styles",
+                      value="simp",
+                      checked=true,
+                      disabled=false
+                      )
+                      | Simplified
+                  if (app.getLanguage() === 'zh')
+                    .checkbox-inline
+                      label
+                        input.style-checkbox(
+                        type="checkbox",
+                        name="styles",
+                        value="trad",
+                        checked=true,
+                        disabled=false
+                        )
+                        | Traditional
+
+            hr
+
             .form-group
-              label.col-sm-3.control-label(for="field-hide-reading") Hide reading
-              .col-sm-9#field-hide-reading
+              label.col-sm-3.control-label(for="field-audio") Audio enabled
+              .col-sm-9#field-audio
                 .checkbox
-                  label
-                    input(type="checkbox", checked=user.get('hideReading'))
+                  label.toggle-switch
+                    input(type="checkbox", checked=user.isAudioEnabled())
+                    .toggle-switch-slider.round
+
             .form-group
-              label.col-sm-3.control-label(for="field-hide-definition") Hide definition
-              .col-sm-9#field-hide-definition
-                .checkbox
-                  label
-                    input(type="checkbox", checked=user.get('hideDefinition'))
+              label.col-sm-3.control-label(for="field-audio-volume") Audio volume
+              .col-sm-9
+                input#field-audio-volume(
+                type="text",
+                data-slider-id='audio-volume'
+                data-slider-min="0",
+                data-slider-max="1",
+                data-slider-step="0.1",
+                data-slider-value=user.get('volume')
+                )
+
             .form-group
               label.col-sm-3.control-label(for="field-squigs") Raw squigs
               .col-sm-9#field-squigs
                 .checkbox
-                  label
+                  label.toggle-switch
                     input(type="checkbox", checked=user.get('squigs'))
-            .form-group
-              label.col-sm-3.control-label(for="field-teaching-mode") Teaching mode
-              .col-sm-9#field-teaching-mode
-                .checkbox
-                  label
-                    input(type="checkbox", checked=user.get('teachingMode'))
-
-            // TODO: fix automatic item adding
-            //.form-group
-            //  label.col-sm-3.control-label(for="field-auto-adding") Auto Adding
-            //  .col-sm-9#field-auto-adding
-            //    .checkbox
-            //      label
-            //        input(type="checkbox", checked=user.get('addFrequency') > 0, disabled)
-
-            .form-group
-              label.col-sm-3.control-label(for="field-audio") Audio
-              .col-sm-9#field-audio
-                .checkbox
-                  label
-                    input(type="checkbox", checked=user.isAudioEnabled())
-
-            if app.isChinese()
-              .form-group
-                label.col-sm-3.control-label(for="field-bopomofo") Bopomofo
-                .col-sm-9#field-bopomofo
-                  .checkbox
-                    label
-                      input(type="checkbox", checked=user.get('readingChinese') === 'zhuyin')
-
-            if app.isJapanese()
-              .form-group
-                label.col-sm-3.control-label(for="field-romaji") Romaji
-                .col-sm-9#field-rromaji
-                  .checkbox
-                    label
-                      input(type="checkbox", checked=user.get('readingJapanese') === 'romaji')
-
-            if app.isChinese() && !app.isMobile()
-              .form-group
-                label.col-sm-3.control-label(for="pinyin-input") Disable pinyin input on reading prompts
-                .col-sm-9
-                  .checkbox
-                    label
-                      input#field-pinyin-input(type="checkbox", checked=app.user.get('disablePinyinReadingPromptInput'))
+                    .toggle-switch-slider.round
 
           .text-right
             button#button-save.btn.btn-fixed.btn-primary(type='button') Save

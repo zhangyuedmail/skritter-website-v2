@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+const BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class StudySettingsDialog
@@ -27,19 +27,30 @@ module.exports = BootstrapDialog.extend({
    */
   render: function() {
     this.renderTemplate();
+
+    this.volumeSlider = this.$('#field-audio-volume').bootstrapSlider({});
+
     return this;
   },
+
   /**
    * @method getSelectedParts
    * @returns {Array}
    */
   getSelectedParts: function() {
-    var parts = [];
-    this.$('#field-parts :checked').each(function() {
-      parts.push($(this).val());
+    return this.$('#field-parts :checked').map(function() {
+      return $(this).val();
     });
+  },
 
-    return parts;
+  /**
+   * @method getSelectedStyles
+   * @returns {Array}
+   */
+  getSelectedStyles: function() {
+    return this.$('#field-styles :checked').map(function() {
+      return $(this).val();
+    });
   },
 
   /**
@@ -47,32 +58,27 @@ module.exports = BootstrapDialog.extend({
    * @returns {Object}
    */
   getSettings: function() {
-    if (app.isJapanese()) {
-      return {
-        // dailyItemAddingLimit: this.$('#field-daily-item-adding-limit input').val(),
-        // addFrequency: this.$('#field-auto-adding').is(':checked') ? 80 : 0,
-        filteredJapaneseParts: this.getSelectedParts(),
-        hideDefinition: this.$('#field-hide-definition input').is(':checked'),
-        hideReading: this.$('#field-hide-reading input').is(':checked'),
-        readingJapanese: this.$('#field-romaji input').is(':checked') ? 'romaji' : 'kana',
-        squigs: this.$('#field-squigs input').is(':checked'),
-        teachingMode: this.$('#field-teaching-mode input').is(':checked'),
-        volume: this.$('#field-audio input').is(':checked') ? 1 : 0
-      };
-    } else {
-      return {
-        // dailyItemAddingLimit: this.$('#field-daily-item-adding-limit input').val(),
-        // addFrequency: this.$('#field-auto-adding').is(':checked') ? 80 : 0,
-        disablePinyinReadingPromptInput: this.$('#field-pinyin-input').is(':checked'),
-        filteredChineseParts: this.getSelectedParts(),
-        hideDefinition: this.$('#field-hide-definition input').is(':checked'),
-        hideReading: this.$('#field-hide-reading input').is(':checked'),
-        readingChinese: this.$('#field-bopomofo input').is(':checked') ? 'zhuyin' : 'pinyin',
-        squigs: this.$('#field-squigs input').is(':checked'),
-        teachingMode: this.$('#field-teaching-mode input').is(':checked'),
-        volume: this.$('#field-audio input').is(':checked') ? 1 : 0
-      };
+    const settings = {
+      squigs: this.$('#field-squigs input').is(':checked')
+    };
+
+    if (app.isChinese()) {
+      settings.filteredChineseParts = this.getSelectedParts();
+      settings.filteredChineseStyles = this.getSelectedStyles();
     }
+
+    if (app.isJapanese()) {
+      settings.filteredJapaneseParts = this.getSelectedParts();
+      settings.filteredJapaneseStyles = [];
+    }
+
+    if (this.$('#field-audio input').is(':checked')) {
+      settings.volume = this.volumeSlider.bootstrapSlider('getValue');
+    } else {
+      settings.volume = 0;
+    }
+
+    return settings;
   },
 
   /**
@@ -81,6 +87,7 @@ module.exports = BootstrapDialog.extend({
    */
   handleClickClose: function(event) {
     event.preventDefault();
+
     this.trigger('close');
     this.close();
   },
@@ -91,6 +98,7 @@ module.exports = BootstrapDialog.extend({
    */
   handleClickSave: function(event) {
     event.preventDefault();
+
     this.trigger('save', this.getSettings());
     this.$(':input').attr('disabled', true);
   },
@@ -100,7 +108,7 @@ module.exports = BootstrapDialog.extend({
    * @param {jQuery.Event} event the click event on the checkbox
    */
   handleClickVocabPart: function(event) {
-    var checked = this.$('.part-checkbox:checked');
+    const checked = this.$('.part-checkbox:checked');
 
     if (checked.length === 0) {
       $(event.target).prop('checked', true);
