@@ -25,7 +25,7 @@ gelato-component(data-name='mobile-vocablists-list-editor-rows')
           if row.vocabs.length
             - var vocab1 = row.vocabs[0];
             - var vocab2 = row.vocabs[1];
-            - var hasWritingDiff = vocab1.getWritingDifference(vocab2.id);
+            - var hasWritingDiff = vocab1.getWritingDifference(vocab2);
 
             .col-xs-1
               if view.editing && vocablist.isEditable()
@@ -33,7 +33,7 @@ gelato-component(data-name='mobile-vocablists-list-editor-rows')
 
             .col-xs-2.vocab-writing
               if onlyStudyingTradChinese && hasWritingDiff
-                span(class=vocab1.getFontClass())= vocab1.getWritingDifference(vocab2.id)
+                span(class=vocab1.getFontClass())= vocab1.getWritingDifference(vocab2)
               else
                 span(class=vocab1.getFontClass())= vocab1.get('writing')
 
@@ -45,7 +45,7 @@ gelato-component(data-name='mobile-vocablists-list-editor-rows')
                   else
                     span(class=vocab1.getFontClass()) -
                 else
-                  span(class=vocab1.getFontClass())= vocab1.getWritingDifference(vocab2.id) || '-'
+                  span(class=vocab1.getFontClass())= vocab1.getWritingDifference(vocab2) || '-'
               if vocab1.isJapanese()
                 span.study-writing(class=row.studyWriting ? 'active' : '') W
 

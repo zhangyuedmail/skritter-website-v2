@@ -2,7 +2,7 @@
  * @property map
  * @type Object
  */
-var map = {
+const map = {
   "怀": "懷",
   "挂": "掛",
   "瞩": "矚",
@@ -2634,17 +2634,22 @@ var map = {
  * @returns {String}
  */
 function fromBase(base) {
-  var rune = '';
-  var splitBase = base.split('-');
-  var splitBaseRunes = splitBase[1].split('');
-  var language = splitBase[0];
-  var variation = parseInt(splitBase[2], 10);
+  const splitBase = base.split('-');
+  const splitBaseRunes = splitBase[1].split('');
+  const language = splitBase[0];
+  const variation = parseInt(splitBase[2], 10);
+  let rune = '';
+
   if (language === 'zh') {
-    for (var i = 0, length = splitBaseRunes.length; i < length; i++) {
-      var splitBaseRune = splitBaseRunes[i];
-      var splitMatchedRune = map[splitBaseRune];
+    for (let i = 0, length = splitBaseRunes.length; i < length; i++) {
+      const splitBaseRune = splitBaseRunes[i];
+      const splitMatchedRune = map[splitBaseRune];
+
       if (variation !== 0 && splitMatchedRune) {
-        var offset = variation > 1 ? 2 : 1;
+        const offset = variation > 1 ? 2 : 1;
+
+        console.log(splitBaseRune, splitMatchedRune[1], offset);
+
         rune += splitMatchedRune[variation - offset];
       } else {
         rune += splitBaseRune;
@@ -2653,6 +2658,7 @@ function fromBase(base) {
   } else {
     rune = splitBase[1];
   }
+
   return rune;
 }
 /**
@@ -2662,36 +2668,39 @@ function fromBase(base) {
  * @returns {String}
  */
 function toBase(word, options) {
-  var mappedRunes = [];
-  var multiple = false;
-  var runes = word.split('');
-  var style = 'simp';
-  var variation = 0;
+  const mappedRunes = [];
+  const runes = word.split('');
+  let multiple = false;
+  let style = 'simp';
+  let variation = 0;
+
   //set default option values
-  options = _.defaults(
-    options || {},
-    {
-      lang: 'zh'
-    }
-  );
+  options = _.defaults(options, {
+    lang: 'zh'
+  });
+
   //return base variations for japanese
   if (options.lang === 'ja') {
     return ['ja', word, '0'].join('-');
   }
+
   //cycle through each rune in a word
-  for (var i in runes) {
+  for (let i in runes) {
     //get the mapped information for the rune
-    for (var key in map) {
+    for (let key in map) {
       //check the map values for the rune
-      var valueIndex = map[key].indexOf(runes[i]) + 1;
+      const valueIndex = map[key].indexOf(runes[i]) + 1;
+
       if (valueIndex > 0) {
         //flag trad variants that map to multiple runes
         mappedRunes.push(key);
         variation = variation < valueIndex ? valueIndex : variation;
+
         if (key !== runes[i])
           style = 'trad';
         if (map[key].split('').length > 1) {
           multiple = true;
+
           break;
         }
       }
@@ -2701,6 +2710,7 @@ function toBase(word, options) {
       mappedRunes.push(runes[i]);
     }
   }
+
   //determines the variation based on mapping results
   if (runes.length === 1) {
     if (style === 'simp') {
@@ -2723,6 +2733,7 @@ function toBase(word, options) {
       }
     }
   }
+
   return ['zh', mappedRunes.join(''), variation].join('-');
 }
 
@@ -2732,19 +2743,16 @@ function toBase(word, options) {
  * @returns {String}
  */
 function toSimplified(word) {
-  var result = [];
-  _.forEach(
-    word.split(''),
-    function(character) {
-      var key = _.findKey(
-        map,
-        function(value) {
-          return _.includes(value, character);
-        }
-      );
-      result.push(key || character);
-    }
-  );
+  const result = [];
+
+  _.forEach(word.split(''), function(character) {
+    const key = _.findKey(map, function(value) {
+      return _.includes(value, character);
+    });
+
+    result.push(key || character);
+  });
+
   return result.join('');
 }
 
@@ -2756,17 +2764,19 @@ function toSimplified(word) {
  * @returns {Array}
  */
 function toTraditional(wordString) {
-  var words = [''];
+  let words = [''];
 
-  var simplifiedString = toSimplified(wordString);
+  const simplifiedString = toSimplified(wordString);
   simplifiedString.split('').forEach(function(c) {
-    var trads = simpCharToTrad(c, true);
-    var tradWords = [];
+    const trads = simpCharToTrad(c, true);
+    const tradWords = [];
+
     words.forEach(function(w) {
       trads.forEach(function(t) {
         tradWords.push(w + t);
       });
     });
+
     words = tradWords;
   });
 
@@ -2783,7 +2793,7 @@ function toTraditional(wordString) {
  * @returns {string|string[]} the traditional version(s) of the simplified character
  */
 function simpCharToTrad(character, multiples) {
-  var tradList = map[character];
+  const tradList = map[character];
 
   if (!tradList) {
     return (multiples) ? [character] : character;

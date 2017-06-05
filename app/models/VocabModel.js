@@ -435,15 +435,26 @@ const VocabModel = SkritterModel.extend({
    * Gets the alternate writing for a character. E.g. If given a simplified
    * character, will find the traditional variant of it.
    * @method getWritingDifference
-   * @param {String} vocabId the
+   * @param {VocabModel|String} vocabId
    * @returns {String}
    */
   getWritingDifference: function(vocabId) {
-    vocabId = vocabId || this.id;
+    let writing;
+
+    // accept an actual vocab when calculating diff
+    if (_.isObject(vocabId)) {
+      writing = vocabId.get('writing');
+      vocabId = vocabId.id;
+    } else if (_.isString(vocabId)){
+      writing = app.fn.mapper.fromBase(vocabId);
+    } else {
+      vocabId = this.id;
+      writing = this.get('writing');
+    }
 
     return _.zipWith(
       this.get('writing').split(),
-      app.fn.mapper.fromBase(vocabId).split(),
+      writing.split(),
       function(thisChar, otherChar) {
 
         // the simplified character
