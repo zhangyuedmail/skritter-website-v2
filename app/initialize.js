@@ -12,6 +12,7 @@ require('babel-polyfill');
 require('bootstrap');
 require('bootstrap-daterangepicker');
 require('bootstrap-notify');
+require('bootstrap-slider');
 require('bootstrap-switch');
 require('d3');
 require('highcharts');

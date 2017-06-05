@@ -33,6 +33,7 @@ exports.config = {
     styles: {
       'bootstrap': ['dist/css/bootstrap.css'],
       'bootstrap-daterangepicker': ['daterangepicker.css'],
+      'bootstrap-slider': ['dist/css/bootstrap-slider.css'],
       'bootstrap-switch': ['dist/css/bootstrap3/bootstrap-switch.css'],
       'cal-heatmap': ['cal-heatmap.css'],
       'font-awesome': ['css/font-awesome.css'],
