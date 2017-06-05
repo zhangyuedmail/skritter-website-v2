@@ -37,7 +37,14 @@ gelato-component(data-name='study-prompt-vocab-contained')
                     - var childId = app.fn.mapper.toBase(child.writing);
                     span.decomp-writing(data-vocabid=childId, class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
                     | &nbsp;
-                    span.decomp-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+
+                    if vocab.isChinese() && (app.user.get('readingChinese') === 'zhuyin')
+                      span.spr= app.fn.pinyin.toZhuyin(child.reading)
+                    else if  vocab.isChinese()
+                      span.spr= app.fn.pinyin.toTone(child.reading)
+                    else
+                      span.spr= child.reading
+
                     | &nbsp;
                     if app.user.get('showHeisig') && child.heisigDefinition
                       em!= child.heisigDefinition + ' - '
