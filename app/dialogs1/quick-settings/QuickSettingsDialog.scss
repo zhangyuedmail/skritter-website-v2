@@ -28,6 +28,12 @@ gelato-dialog[data-name="quick-settings"] {
     }
   }
 
+  .text-left {
+    float: left;
+    position: absolute;
+    bottom: 15px;
+  }
+
   #button-close {
     cursor: pointer;
     float: right;
