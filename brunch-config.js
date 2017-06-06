@@ -49,7 +49,7 @@ exports.config = {
       delay: 100
     },
     babel: {
-      ignore: ['app/data/*', 'app/utils/*', 'node_modules/*', 'vendor/*'],
+      ignore: ['app/data/*', 'node_modules/*', 'vendor/*'],
       presets: ['es2015']
     },
     replace: {
