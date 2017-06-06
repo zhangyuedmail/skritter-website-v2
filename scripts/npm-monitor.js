@@ -10,5 +10,5 @@ process.env.THINK_LOCALLY = process.argv.length > 2  && process.argv[2] === 'thi
 
 process.env.NODE_ENV = 'development';
 shell.rm('-rf', './public');
-shell.exec('brunch watch --production', {async: true});
+shell.exec('brunch watch', {async: true});
 shell.exec('nodemon ./server.js --config ./nodemon.json', {async: true});
