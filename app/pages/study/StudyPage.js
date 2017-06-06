@@ -337,7 +337,7 @@ const StudyPage = GelatoPage.extend({
       return;
     }
 
-    if (!queue.length) {
+    if (queue.length < 2) {
       this.prompt.$panelLeft.css('opacity', 0.4);
       this.prompt.$panelLeft.css('pointer-events', 'none');
       this.prompt.$panelRight.css('pointer-events', 'none');
@@ -345,6 +345,7 @@ const StudyPage = GelatoPage.extend({
       this.items.fetchNext({limit: 30});
       return;
     }
+
 
     if (this.items.skipped) {
       this.items.preloadNext();
