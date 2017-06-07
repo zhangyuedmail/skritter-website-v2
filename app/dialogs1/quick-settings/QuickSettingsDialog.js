@@ -40,7 +40,7 @@ module.exports = GelatoDialog.extend({
   getSelectedParts: function() {
     return this.$('#field-parts :checked').map(function() {
       return $(this).val();
-    });
+    }).get();
   },
 
   /**
@@ -48,9 +48,9 @@ module.exports = GelatoDialog.extend({
    * @returns {Array}
    */
   getSelectedStyles: function() {
-    return this.$('#field-styles :checked').map(function() {
+    return ['both'].concat(this.$('#field-styles :checked').map(function() {
       return $(this).val();
-    });
+    }).get());
   },
 
   /**

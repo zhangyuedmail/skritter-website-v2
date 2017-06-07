@@ -17,17 +17,18 @@ gelato-dialog(data-name='quick-settings')
               label.col-sm-3.control-label(for="field-parts") Filter parts
 
               .col-sm-9#field-parts
-                .checkbox-inline
-                  label
-                    input.part-checkbox(
-                    type="checkbox",
-                    name="parts",
-                    value="rune",
-                    checked=user.isAddingPart('rune') && user.isReviewingPart('rune'),
-                    disabled=!user.isAddingPart('rune')
-                    )
-                    | Writing
-                if (app.getLanguage() === 'zh')
+                if user.isAddingPart('rune')
+                  .checkbox-inline
+                    label
+                      input.part-checkbox(
+                      type="checkbox",
+                      name="parts",
+                      value="rune",
+                      checked=user.isAddingPart('rune') && user.isReviewingPart('rune'),
+                      disabled=!user.isAddingPart('rune')
+                      )
+                      | Writing
+                if app.getLanguage() === 'zh' && user.isAddingPart('tone')
                   .checkbox-inline
                     label
                       input.part-checkbox(
@@ -38,25 +39,28 @@ gelato-dialog(data-name='quick-settings')
                       disabled=!user.isAddingPart('tone')
                       )
                       | Tone
-                .checkbox-inline
-                  label
-                    input.part-checkbox(
-                    type="checkbox",
-                    name="parts",
-                    value="rdng",
-                    checked=user.isAddingPart('rdng') && user.isReviewingPart('rdng'),
-                    disabled=!user.isAddingPart('rdng')
-                    )
-                    | Reading
-                .checkbox-inline
-                  label
-                    input.part-checkbox(
-                    type="checkbox",
-                    name="parts", value="defn",
-                    checked=user.isAddingPart('defn') && user.isReviewingPart('defn'),
-                    disabled=!user.isAddingPart('defn')
-                    )
-                    | Definition
+                if user.isAddingPart('rdng')
+                  .checkbox-inline
+                    label
+                      input.part-checkbox(
+                      type="checkbox",
+                      name="parts",
+                      value="rdng",
+                      checked=user.isAddingPart('rdng') && user.isReviewingPart('rdng'),
+                      disabled=!user.isAddingPart('rdng')
+                      )
+                      | Reading
+                if user.isAddingPart('defn')
+                  .checkbox-inline
+                    label
+                      input.part-checkbox(
+                      type="checkbox",
+                      name="parts",
+                      value="defn",
+                      checked=user.isAddingPart('defn') && user.isReviewingPart('defn'),
+                      disabled=!user.isAddingPart('defn')
+                      )
+                      | Definition
 
             if app.isChinese()
 
@@ -67,25 +71,26 @@ gelato-dialog(data-name='quick-settings')
                 label.col-sm-3.control-label(for="field-parts") Filter styles
 
                 .col-sm-9#field-styles
-                  .checkbox-inline
-                    label
-                      input.style-checkbox(
-                      type="checkbox",
-                      name="styles",
-                      value="simp",
-                      checked=true,
-                      disabled=false
-                      )
-                      | Simplified
-                  if (app.getLanguage() === 'zh')
+                  if user.isAddingStyle('simp')
+                    .checkbox-inline
+                      label
+                        input.style-checkbox(
+                        type="checkbox",
+                        name="styles",
+                        value="simp",
+                        checked=user.isAddingStyle('simp') && user.isReviewingStyle('simp'),
+                        disabled=!user.isAddingStyle('simp')
+                        )
+                        | Simplified
+                  if user.isAddingStyle('trad')
                     .checkbox-inline
                       label
                         input.style-checkbox(
                         type="checkbox",
                         name="styles",
                         value="trad",
-                        checked=true,
-                        disabled=false
+                        checked=user.isAddingStyle('trad') && user.isReviewingStyle('trad'),
+                        disabled=!user.isAddingStyle('trad')
                         )
                         | Traditional
 
