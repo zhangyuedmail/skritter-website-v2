@@ -8,8 +8,11 @@ gelato-page(data-name='account-settings-study')
 
         .col-md-9
           #section-content
+
             .title Study Settings
+
             form.form-horizontal
+
               .form-group
                 label.col-sm-3.control-label(for="field-target-language") Target language
                 .col-sm-9
@@ -24,7 +27,8 @@ gelato-page(data-name='account-settings-study')
                       - var langCode = lang[0][0];
                       - var langString = lang[0][1];
                       option(value=langCode, selected=(app.user.get('sourceLang') === langCode))= langString
-              if (app.getLanguage() === 'zh')
+
+              if app.isChinese()
                 .form-group
                   label.col-sm-3.control-label(for="field-styles") Character styles
                   .col-sm-9#field-styles
@@ -34,14 +38,17 @@ gelato-page(data-name='account-settings-study')
                     label.checkbox-inline
                       input(type="checkbox", name="styles", value="trad", checked=user.get('addTraditional'))
                       | Traditional
+
+              hr
+
               .form-group
-                label.col-sm-3.control-label(for="field-parts") Parts studying
+                label.col-sm-3.control-label(for="field-parts") Parts adding
                 .col-sm-9#field-parts
                   .checkbox-inline
                     label
                       input(type="checkbox", name="parts", value="rune", checked=user.isAddingPart('rune'))
                       | Writing
-                  if (app.getLanguage() === 'zh')
+                  if app.isChinese()
                     .checkbox-inline
                       label
                         input(type="checkbox", name="parts", value="tone", checked=user.isAddingPart('tone'))
@@ -54,49 +61,117 @@ gelato-page(data-name='account-settings-study')
                     label
                       input(type="checkbox", name="parts", value="defn", checked=user.isAddingPart('defn'))
                       | Definition
-              if (app.getLanguage() === 'ja')
+
+              hr
+
+              if app.isJapanese()
                 .form-group
                   label.col-sm-3.control-label(for="field-study-kana") Study kana
                   .col-sm-9
                     .checkbox
-                      label
+                      label.toggle-switch
                         input#field-study-kana(type="checkbox", checked=user.get('studyKana'))
+                        .toggle-switch-slider.round
                 .form-group
                   label.col-sm-3.control-label(for="field-study-rare-writings") Study uncommon kanji
                   .col-sm-9
                     .checkbox
-                      label
+                      label.toggle-switch
                         input#field-study-all-list-writings(type="checkbox", checked=user.get('studyAllListWritings'))
+                        .toggle-switch-slider.round
                 .form-group
                   label.col-sm-3.control-label(for="field-study-all-list-writings") Study all kanji in lists
                   .col-sm-9
                     .checkbox
-                      label
+                      label.toggle-switch
                         input#field-study-rare-writings(type="checkbox", checked=user.get('studyRareWritings'))
+                        .toggle-switch-slider.round
               .form-group
                 label.col-sm-3.control-label(for="field-auto-advance") Auto advance prompts (beta)
-                  if (app.getLanguage() === 'zh')
+                  if app.isChinese()
                     .option-desc Has a 1 second delay before advancing on tone and writing prompts
                   else
                     .option-desc Has a 1 second delay before advancing on writing prompts
                 .col-sm-9
                   .checkbox
-                    label
+                    label.toggle-switch
                       input#field-auto-advance(type="checkbox", checked=user.get('autoAdvancePrompts'))
+                      .toggle-switch-slider.round
               .form-group
-                label.col-sm-3.control-label(for="field-heisig") Include Heisig keywords
+                label.col-sm-3.control-label(for="field-heisig") Show heisig keywords
                 .col-sm-9
                   .checkbox
-                    label
+                    label.toggle-switch
                       input#field-heisig(type="checkbox", checked=user.get('showHeisig'))
+                      .toggle-switch-slider.round
               .form-group
-                label.col-sm-3.control-label(for="field-add-contained") Also add characters when adding words
+                label.col-sm-3.control-label(for="field-add-contained") Add characters when adding words
                 .col-sm-9
                   .checkbox
-                    label
+                    label.toggle-switch
                       input#field-add-contained(type="checkbox", checked=user.get('autoAddComponentCharacters'))
+                      .toggle-switch-slider.round
 
               hr
+
+              if app.isChinese()
+                .form-group
+                  label.col-xs-3.control-label(for="field-bopomofo") Bopomofo
+                  .col-xs-9
+                    .checkbox
+                      label.toggle-switch
+                        input#field-bopomofo(type="checkbox", checked=user.get('readingChinese') === 'zhuyin')
+                        .toggle-switch-slider.round
+
+              if app.isChinese() && !app.isMobile()
+                .form-group
+                  label.col-xs-3.control-label(for="field-pinyin-input") Disable pinyin input
+                  .col-xs-9
+                    .checkbox
+                      label.toggle-switch
+                        input#field-pinyin-input(type="checkbox", checked=user.get('disablePinyinReadingPromptInput'))
+                        .toggle-switch-slider.round
+
+              .form-group
+                label.col-xs-3.control-label(for="field-hide-reading") Hide reading
+                .col-xs-9
+                  .checkbox
+                    label.toggle-switch
+                      input#field-hide-reading(type="checkbox", checked=user.get('hideReading'))
+                      .toggle-switch-slider.round
+
+              .form-group
+                label.col-xs-3.control-label(for="field-hide-definition") Hide definition
+                .col-xs-9
+                  .checkbox
+                    label.toggle-switch
+                      input#field-hide-definition(type="checkbox", checked=user.get('hideDefinition'))
+                      .toggle-switch-slider.round
+
+              .form-group
+                label.col-xs-3.control-label(for="field-squigs") Raw squigs
+                .col-xs-9
+                  .checkbox
+                    label.toggle-switch
+                      input#field-squigs(type="checkbox", checked=user.get('squigs'))
+                      .toggle-switch-slider.round
+
+              if app.isJapanese()
+                .form-group
+                  label.col-xs-3.control-label(for="field-romaji") Romaji
+                  .col-xs-9
+                    .checkbox
+                      label.toggle-switch
+                        input#field-romaji(type="checkbox", checked=user.get('readingJapanese') === 'romaji')
+                        .toggle-switch-slider.round
+
+              .form-group
+                label.col-xs-3.control-label(for="field-teaching-mode") Teaching mode
+                .col-xs-9
+                  .checkbox
+                    label.toggle-switch
+                      input#field-teaching-mode(type="checkbox", checked=user.get('teachingMode'))
+                      .toggle-switch-slider.round
 
               .form-group
                 .col-sm-12
