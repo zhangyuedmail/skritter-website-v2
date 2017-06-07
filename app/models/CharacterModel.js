@@ -48,16 +48,19 @@ const CharacterModel = GelatoModel.extend({
         let strokeParams = this.collection.params.filter({strokeId: strokeId});
         let strokeContains = strokeParams[0].get('contains');
         let strokeShape = this.collection.shapes.get(strokeId);
+        let variationId = a + 1;
+        let positionId = (strokeData.x * 500).toFixed(0) + (strokeData.y * 500).toFixed(0);
 
         stroke.set({
           contains: strokeContains,
           data: strokeData,
-          id: strokePosition + '-' + strokeId,
+          id: strokePosition + '-' + strokeId + '-' + positionId,
           params: strokeParams,
           position: strokePosition,
           shape: strokeShape,
           strokeId: strokeId,
-          tone: rune === 'tones' ? a + 1 : null
+          tone: rune === 'tones' ? a + 1 : null,
+          variationId: variationId
         });
 
         strokePosition += strokeContains.length || 1;

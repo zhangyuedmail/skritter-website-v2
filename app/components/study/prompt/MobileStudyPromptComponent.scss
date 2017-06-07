@@ -51,6 +51,7 @@ gelato-component[data-name='mobile-study-prompt'] {
         background-color: $white1;
         cursor: pointer;
         position: relative;
+        margin: auto;
         z-index: 5000;
 
         #canvas-container {
@@ -254,6 +255,7 @@ gelato-component[data-name='mobile-study-prompt'] {
     max-height: 63px;
     position: absolute;
     width: 100%;
+    z-index: 5002;
 
     &.margin-top {
       margin-top: 15px;

@@ -19,62 +19,78 @@ function Recognizer() {
  */
 Recognizer.prototype.recognize = function(stroke, character, size) {
   this.size = size;
-  var results = this.getResults(stroke, character);
+
+  let results = this.getResults(stroke, character);
+
   results = _.filter(results, 'total');
   results = _.sortBy(results, 'total');
+
   if (results.length) {
     return results[0];
   }
 };
 
 Recognizer.prototype.getResults = function(stroke, character) {
-  var results = [];
-  var targets = character.getExpectedTargets();
-  for (var a = 0, lengthA = targets.length; a < lengthA; a++) {
-    var target = targets[a];
-    for (var b = 0, lengthB = target.length; b < lengthB; b++) {
-      var targetStroke = target.at(b);
+  let strokes = [];
+  let results = [];
+  let targets = character.getExpectedTargets();
+
+  for (let a = 0, lengthA = targets.length; a < lengthA; a++) {
+    let target = targets[a];
+
+    for (let b = 0, lengthB = target.length; b < lengthB; b++) {
+      let targetStroke = target.at(b);
+
       if (targetStroke.get('position') === character.getPosition()) {
+        strokes.push(targetStroke);
+
         results = results.concat(this.runChecks(stroke, targetStroke));
       }
     }
   }
+
   return results;
 };
 
 Recognizer.prototype.runChecks = function(userStroke, targetStroke) {
-  var results = [];
-  var params = targetStroke.getParams();
-  for (var a = 0, lengthA = params.length; a < lengthA; a++) {
-    var param = params[a];
-    var skipChecks = param.get('skipChecks') || [];
-    var strokeId = param.get('strokeId');
+  let results = [];
+  let params = targetStroke.getParams();
+
+  for (let a = 0, lengthA = params.length; a < lengthA; a++) {
+    let param = params[a];
+    let skipChecks = param.get('skipChecks') || [];
+    let strokeId = param.get('strokeId');
+
     if (strokeId === 387) {
       continue;
     }
-    var result = userStroke.clone();
-    var scores = {};
-    var total = 0;
+
+    let result = userStroke.clone();
+    let scores = {};
+    let total = 0;
+
     if (skipChecks.indexOf('angle') === -1) {
       scores.angle = this.checkAngle(userStroke, param);
     }
+
     if (skipChecks.indexOf('corners') === -1) {
       scores.corners = this.checkCorners(userStroke, param);
     }
+
     if (skipChecks.indexOf('distance') === -1) {
       scores.distance = this.checkDistance(userStroke, param);
     }
-    for (var check in scores) {
-      if (scores.hasOwnProperty(check)) {
-        var score = scores[check];
-        if (score > -1) {
-          total += score;
-        } else {
-          total = false;
-          break;
-        }
+
+    _.forEach(scores, score => {
+      if (score > -1) {
+        total += score;
+      } else {
+        total = false;
+
+        return false;
       }
-    }
+    });
+
     result.set({
       contains: targetStroke.get('contains'),
       data: targetStroke.get('data'),
@@ -82,12 +98,15 @@ Recognizer.prototype.runChecks = function(userStroke, targetStroke) {
       position: targetStroke.get('position'),
       shape: targetStroke.get('shape'),
       strokeId: targetStroke.get('strokeId'),
+      variationId: targetStroke.get('variationId'),
       tone: targetStroke.get('tone')
     });
+
     result.scores = scores;
     result.total = total;
     results.push(result);
   }
+
   return results;
 };
 
@@ -107,13 +126,15 @@ Recognizer.prototype.scaleThreshold = function(value) {
  * @returns {Number}
  */
 Recognizer.prototype.checkAngle = function(userStroke, targetParam) {
-  var angleThreshold = targetParam.get('angleThreshold') || this.baseAngleThreshold;
-  var targetAngle = targetParam.getFirstAngle();
-  var userAngle = userStroke.getFirstAngle();
-  var score = Math.abs(userAngle - targetAngle);
+  let angleThreshold = targetParam.get('angleThreshold') || this.baseAngleThreshold;
+  let targetAngle = targetParam.getFirstAngle();
+  let userAngle = userStroke.getFirstAngle();
+  let score = Math.abs(userAngle - targetAngle);
+
   if (score <= angleThreshold) {
     return score;
   }
+
   return -1;
 };
 
@@ -124,13 +145,15 @@ Recognizer.prototype.checkAngle = function(userStroke, targetParam) {
  * @returns {Number}
  */
 Recognizer.prototype.checkCorners = function(userStroke, targetParam) {
-  var cornerThreshold = targetParam.get('cornerThreshold') || this.baseCornerThreshold;
-  var targetCorners = targetParam.get('corners');
-  var userCorners = userStroke.get('corners');
-  var score = Math.abs(targetCorners.length - userCorners.length);
+  let cornerThreshold = targetParam.get('cornerThreshold') || this.baseCornerThreshold;
+  let targetCorners = targetParam.get('corners');
+  let userCorners = userStroke.get('corners');
+  let score = Math.abs(targetCorners.length - userCorners.length);
+
   if (score <= cornerThreshold) {
     return score * this.baseCornerPenalty;
   }
+
   return -1;
 };
 
@@ -141,12 +164,14 @@ Recognizer.prototype.checkCorners = function(userStroke, targetParam) {
  * @returns {Number}
  */
 Recognizer.prototype.checkDistance = function(userStroke, targetParam) {
-  var targetCenter = targetParam.getRectangle().center;
-  var userCenter = userStroke.getUserRectangle().center;
-  var score = app.fn.getDistance(userCenter, targetCenter);
+  let targetCenter = targetParam.getRectangle().center;
+  let userCenter = userStroke.getUserRectangle().center;
+  let score = app.fn.getDistance(userCenter, targetCenter);
+
   if (score <= this.scaleThreshold(this.baseDistanceThreshold)) {
     return score;
   }
+
   return -1;
 };
 

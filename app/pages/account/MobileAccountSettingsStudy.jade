@@ -25,7 +25,7 @@ gelato-page(data-name='mobile-account-settings-study')
                   - var langCode = lang[0][0];
                   - var langString = lang[0][1];
                   option(value=langCode, selected=(app.user.get('sourceLang') === langCode))= langString
-          if (app.getLanguage() === 'zh')
+          if app.isChinese()
             .form-group
               label.col-xs-3.control-label(for="field-styles") Character styles
               .col-xs-9#field-styles
@@ -36,13 +36,13 @@ gelato-page(data-name='mobile-account-settings-study')
                   input(type="checkbox", name="styles", value="trad", checked=user.get('addTraditional'))
                   | Traditional
           .form-group
-            label.col-xs-4.control-label(for="field-parts") Parts studying
+            label.col-xs-4.control-label(for="field-parts") Parts adding
             .col-xs-8#field-parts
               .checkbox-inline
                 label
                   input(type="checkbox", name="parts", value="rune", checked=user.isAddingPart('rune'))
                   | Writing
-              if (app.getLanguage() === 'zh')
+              if app.isChinese()
                 .checkbox-inline
                   label
                     input(type="checkbox", name="parts", value="tone", checked=user.isAddingPart('tone'))
@@ -55,7 +55,32 @@ gelato-page(data-name='mobile-account-settings-study')
                 label
                   input(type="checkbox", name="parts", value="defn", checked=user.isAddingPart('defn'))
                   | Definition
-          if (app.getLanguage() === 'ja')
+
+          hr
+
+          .form-group
+            label.col-xs-9.control-label(for="field-auto-advance") Auto advance prompts (beta)
+            .col-xs-3
+              .checkbox
+                label.toggle-switch
+                  input#field-auto-advance(type="checkbox", checked=user.get('autoAdvancePrompts'))
+                  .toggle-switch-slider.round
+          .form-group
+            label.col-xs-9.control-label(for="field-heisig") Show heisig keywords
+            .col-xs-3
+              .checkbox
+                label.toggle-switch
+                  input#field-heisig(type="checkbox", checked=user.get('showHeisig'))
+                  .toggle-switch-slider.round
+          .form-group
+            label.col-xs-9.control-label(for="field-add-contained") Add characters when adding words
+            .col-xs-3
+              .checkbox
+                label.toggle-switch
+                  input#field-add-contained(type="checkbox", checked=user.get('autoAddComponentCharacters'))
+                  .toggle-switch-slider.round
+
+          if app.isJapanese()
             .form-group
               label.col-xs-9.control-label(for="field-study-kana") Study kana
               .col-xs-3
@@ -77,26 +102,66 @@ gelato-page(data-name='mobile-account-settings-study')
                   label.toggle-switch
                     input#field-study-rare-writings(type="checkbox", checked=user.get('studyRareWritings'))
                     .toggle-switch-slider.round
+
+          hr
+
+          if app.isChinese()
+            .form-group
+              label.col-xs-9.control-label(for="field-bopomofo") Bopomofo
+              .col-xs-3
+                .checkbox
+                  label.toggle-switch
+                    input#field-bopomofo(type="checkbox", checked=user.get('readingChinese') === 'zhuyin')
+                    .toggle-switch-slider.round
+
+          if app.isChinese() && !app.isMobile()
+            .form-group
+              label.col-xs-9.control-label(for="field-pinyin-input") Disable pinyin input
+              .col-xs-3
+                .checkbox
+                  label.toggle-switch
+                    input#field-pinyin-input(type="checkbox", checked=user.get('disablePinyinReadingPromptInput'))
+                    .toggle-switch-slider.round
+
           .form-group
-            label.col-xs-9.control-label(for="field-auto-advance") Auto advance prompts
-            .col-xs-
-              .checkbox
-                label.toggle-switch
-                  input#field-auto-advance(type="checkbox", checked=user.get('autoAdvancePrompts'))
-                  .toggle-switch-slider.round
-          .form-group
-            label.col-xs-9.control-label(for="field-heisig") Include Heisig keywords
+            label.col-xs-9.control-label(for="field-hide-reading") Hide reading
             .col-xs-3
               .checkbox
                 label.toggle-switch
-                  input#field-heisig(type="checkbox", checked=user.get('showHeisig'))
+                  input#field-hide-reading(type="checkbox", checked=user.get('hideReading'))
                   .toggle-switch-slider.round
+
           .form-group
-            label.col-xs-9.control-label(for="field-add-contained") Also add characters when adding words
+            label.col-xs-9.control-label(for="field-hide-definition") Hide definition
             .col-xs-3
               .checkbox
                 label.toggle-switch
-                  input#field-add-contained(type="checkbox", checked=user.get('autoAddComponentCharacters'))
+                  input#field-hide-definition(type="checkbox", checked=user.get('hideDefinition'))
+                  .toggle-switch-slider.round
+
+          .form-group
+            label.col-xs-9.control-label(for="field-squigs") Raw squigs
+            .col-xs-3
+              .checkbox
+                label.toggle-switch
+                  input#field-squigs(type="checkbox", checked=user.get('squigs'))
+                  .toggle-switch-slider.round
+
+          if app.isJapanese()
+            .form-group
+              label.col-xs-9.control-label(for="field-romaji") Romaji
+              .col-xs-3
+                .checkbox
+                  label.toggle-switch
+                    input#field-romaji(type="checkbox", checked=user.get('readingJapanese') === 'romaji')
+                    .toggle-switch-slider.round
+
+          .form-group
+            label.col-xs-9.control-label(for="field-teaching-mode") Teaching mode
+            .col-xs-3
+              .checkbox
+                label.toggle-switch
+                  input#field-teaching-mode(type="checkbox", checked=user.get('teachingMode'))
                   .toggle-switch-slider.round
 
           .form-group

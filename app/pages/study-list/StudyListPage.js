@@ -5,7 +5,7 @@ const Recipes = require('components/common/CommonRecipesComponent.js');
 const Items = require('collections/ItemCollection.js');
 const Vocablist = require('models/VocablistModel.js');
 const MobileStudyNavbar = require('components/navbars/NavbarMobileStudyComponent.js');
-const StudySettings = require('dialogs/study-settings/view');
+const QuickSettings = require('dialogs1/quick-settings/QuickSettingsDialog.js');
 const vent = require('vent');
 
 /**
@@ -366,11 +366,11 @@ const StudyListPage = GelatoPage.extend({
    * Shows a dialog that allows the user to adjust their study settings
    */
   showStudySettings: function() {
-    const dialog = new StudySettings();
+    const dialog = new QuickSettings();
 
     dialog.open();
 
-    dialog.on('save', (settings) => {
+    dialog.on('save', settings => {
       ScreenLoader.show();
       ScreenLoader.post('Saving study settings');
       app.user.set(settings, {merge: true});
@@ -383,13 +383,11 @@ const StudyListPage = GelatoPage.extend({
             dialog.close();
           },
           success: () => {
-            this.items.reviews.post()
-              .then(
-                () => {
-                  this.render();
-                  dialog.close();
-                }
-              );
+            // TODO: figure out why this causes canvas sizing issue
+            // this.render();
+            // dialog.close();
+
+            app.reload();
           }
         }
       );

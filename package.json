@@ -7,7 +7,8 @@
     "email": "team@skritter.com",
     "url": "https://skritter.com"
   },
-  "version": "2.2.5",
+  "version": "2.3.0",
+  "versionCode": "20300",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "bootstrap": "~3.3",
     "bootstrap-daterangepicker": "~2.1",
     "bootstrap-notify": "~3.1",
+    "bootstrap-slider": "~9.8",
     "bootstrap-switch": "~3.3",
     "buffer": "~5.0",
     "cal-heatmap": "~3.6",

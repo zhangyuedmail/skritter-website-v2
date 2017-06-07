@@ -1,0 +1,47 @@
+@import "../../styles/_variables";
+
+gelato-dialog[data-name="quick-settings"] {
+
+  .modal-body {
+    .title {
+      font-size: 22px;
+    }
+  }
+
+  .title {
+    margin-top: -5px;
+  }
+
+  #audio-volume {
+    margin-left: 10px;
+
+    .slider-handle {
+      background: $green5;
+    }
+
+    .slider-selection {
+      background: $grey1;
+    }
+
+    .slider-track {
+      background: $grey2;
+    }
+  }
+
+  .text-left {
+    float: left;
+    position: absolute;
+    bottom: 15px;
+  }
+
+  #button-close {
+    cursor: pointer;
+    float: right;
+    font-size: 28px;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    z-index: 9999;
+  }
+
+}

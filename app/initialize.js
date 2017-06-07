@@ -12,6 +12,7 @@ require('babel-polyfill');
 require('bootstrap');
 require('bootstrap-daterangepicker');
 require('bootstrap-notify');
+require('bootstrap-slider');
 require('bootstrap-switch');
 require('d3');
 require('highcharts');
@@ -40,6 +41,10 @@ module.exports = (function() {
   }
 
   if (window.cordova) {
+    if (window.MobileAccessibility) {
+      window.MobileAccessibility.usePreferredTextZoom(false);
+    }
+
     document.addEventListener('deviceready', start, false);
   } else {
     $(document).ready(start);

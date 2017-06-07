@@ -183,7 +183,9 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   drawCircle: function(layerName, x, y, radius, options) {
     const circle = new createjs.Shape();
+
     options = options ? options : {};
+
     circle.graphics.beginFill(options.fill || '#000000');
     circle.graphics.drawCircle(x, y, radius);
 
@@ -191,6 +193,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       circle.alpha = options.alpha;
     }
     this.getLayer(layerName).addChild(circle);
+
+    this.stage.update();
 
     return circle;
   },
@@ -203,7 +207,9 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   drawGrid: function() {
     const grid = new createjs.Shape();
+
     this.clearLayer('character-grid');
+
     grid.graphics.beginStroke(this.gridColor).setStrokeStyle(this.gridLineWidth, 'round', 'round');
     grid.graphics.dashedLineTo(this.size / 2, 0, this.size / 2, this.size, this.gridDashLength);
     grid.graphics.dashedLineTo(0, this.size / 2, this.size, this.size / 2, this.gridDashLength);
@@ -211,7 +217,10 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     grid.graphics.dashedLineTo(this.size, 0, 0, this.size, this.gridDashLength);
     grid.graphics.endStroke();
     grid.cache(0, 0, this.size, this.size);
+
     this.getLayer('character-grid').addChild(grid);
+
+    this.stage.update();
 
     return this;
   },
@@ -250,10 +259,14 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   drawShape: function(layerName, shape, options) {
     options = options || {};
+
     if (options.color) {
       this.injectColor(shape, options.color);
     }
+
     this.getLayer(layerName).addChild(shape);
+
+    this.stage.update();
 
     return shape;
   },
@@ -488,6 +501,14 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     }
 
     size = this.canvasSizeOverride || this.prompt.getInputSize(size);
+
+    // artificially add a little padding at the bottom if the canvas is about to be
+    // set to the same height as its parent container
+    const usingHeight = this.prompt.$panelLeft && this.prompt.$panelLeft.height() === size;
+    if (usingHeight) {
+      size = size - 25;
+      this.canvasSizeOverride = size;
+    }
 
     this.$el.height(size);
     this.$el.width(size);

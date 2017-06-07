@@ -84,7 +84,12 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                 for child in decomp.get('Children')
                   div
                     span.spr= child.writing
-                    span.spr= vocab.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                    if vocab.isChinese() && (app.user.get('readingChinese') === 'zhuyin')
+                      span.spr= app.fn.pinyin.toZhuyin(child.reading)
+                    else if  vocab.isChinese()
+                      span.spr= app.fn.pinyin.toTone(child.reading)
+                    else
+                      span.spr= child.reading
                     span.spr :
                     if app.user.get('showHeisig') && child.heisigDefinition
                       em= child.heisigDefinition + ' - '

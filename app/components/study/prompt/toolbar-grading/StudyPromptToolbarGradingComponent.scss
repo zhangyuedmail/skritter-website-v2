@@ -1,6 +1,7 @@
 @import "../../../../styles/_variables";
 
 gelato-component[data-name="study-prompt-toolbar-grading"] {
+  z-index: 6002;
 
   .btn-default {
     background: transparent;

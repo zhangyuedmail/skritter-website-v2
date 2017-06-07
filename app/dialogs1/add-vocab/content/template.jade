@@ -13,8 +13,13 @@ gelato-component(data-name='add-vocab-content')
 
       label(for='vocab-list') List
       select#vocab-list.form-control
+        - var currentList = view.getCurrentList();
+
         for vocablist in dialog.vocablists.models
-          option(value=vocablist.id, selected=vocablist.get('name') == 'Miscellaneous')= vocablist.get('name')
+          if currentList
+            option(value=vocablist.id, selected=vocablist.id == currentList.id)= vocablist.get('name')
+          else
+            option(value=vocablist.id, selected=vocablist.get('name') == 'Miscellaneous')= vocablist.get('name')
 
       if view.vocablist
         label(for='vocab-list-section') Section

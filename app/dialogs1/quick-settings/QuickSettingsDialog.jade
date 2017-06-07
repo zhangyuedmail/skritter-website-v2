@@ -1,0 +1,131 @@
+gelato-dialog(data-name='quick-settings')
+  - var user = app.user;
+
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+
+        #button-close.fa.fa-close
+
+        .modal-body
+
+          .title Quick Settings
+
+          form.form-horizontal
+            .form-group
+
+              label.col-sm-3.control-label(for="field-parts") Filter parts
+
+              .col-sm-9#field-parts
+                if user.isAddingPart('rune')
+                  .checkbox-inline
+                    label
+                      input.part-checkbox(
+                      type="checkbox",
+                      name="parts",
+                      value="rune",
+                      checked=user.isAddingPart('rune') && user.isReviewingPart('rune'),
+                      disabled=!user.isAddingPart('rune')
+                      )
+                      | Writing
+                if app.getLanguage() === 'zh' && user.isAddingPart('tone')
+                  .checkbox-inline
+                    label
+                      input.part-checkbox(
+                      type="checkbox",
+                      name="parts",
+                      value="tone",
+                      checked=user.isAddingPart('tone') && user.isReviewingPart('tone'),
+                      disabled=!user.isAddingPart('tone')
+                      )
+                      | Tone
+                if user.isAddingPart('rdng')
+                  .checkbox-inline
+                    label
+                      input.part-checkbox(
+                      type="checkbox",
+                      name="parts",
+                      value="rdng",
+                      checked=user.isAddingPart('rdng') && user.isReviewingPart('rdng'),
+                      disabled=!user.isAddingPart('rdng')
+                      )
+                      | Reading
+                if user.isAddingPart('defn')
+                  .checkbox-inline
+                    label
+                      input.part-checkbox(
+                      type="checkbox",
+                      name="parts",
+                      value="defn",
+                      checked=user.isAddingPart('defn') && user.isReviewingPart('defn'),
+                      disabled=!user.isAddingPart('defn')
+                      )
+                      | Definition
+
+            if app.isChinese()
+
+              hr
+
+              .form-group
+
+                label.col-sm-3.control-label(for="field-parts") Filter styles
+
+                .col-sm-9#field-styles
+                  if user.isAddingStyle('simp')
+                    .checkbox-inline
+                      label
+                        input.style-checkbox(
+                        type="checkbox",
+                        name="styles",
+                        value="simp",
+                        checked=user.isAddingStyle('simp') && user.isReviewingStyle('simp'),
+                        disabled=!user.isAddingStyle('simp')
+                        )
+                        | Simplified
+                  if user.isAddingStyle('trad')
+                    .checkbox-inline
+                      label
+                        input.style-checkbox(
+                        type="checkbox",
+                        name="styles",
+                        value="trad",
+                        checked=user.isAddingStyle('trad') && user.isReviewingStyle('trad'),
+                        disabled=!user.isAddingStyle('trad')
+                        )
+                        | Traditional
+
+            hr
+
+            .form-group
+              label.col-sm-3.control-label(for="field-audio") Audio enabled
+              .col-sm-9#field-audio
+                .checkbox
+                  label.toggle-switch
+                    input(type="checkbox", checked=user.isAudioEnabled())
+                    .toggle-switch-slider.round
+
+            .form-group
+              label.col-sm-3.control-label(for="field-audio-volume") Audio volume
+              .col-sm-9
+                input#field-audio-volume(
+                type="text",
+                data-slider-id='audio-volume'
+                data-slider-min="0",
+                data-slider-max="1",
+                data-slider-step="0.1",
+                data-slider-value=user.get('volume')
+                )
+
+            .form-group
+              label.col-sm-3.control-label(for="field-squigs") Raw squigs
+              .col-sm-9#field-squigs
+                .checkbox
+                  label.toggle-switch
+                    input(type="checkbox", checked=user.get('squigs'))
+                    .toggle-switch-slider.round
+
+          .text-left
+            a.btn.btn-primary(href="/account/settings/study") See all settings
+          .text-right
+            button#button-save.btn.btn-fixed.btn-success(type='button')= app.locale('common.save')
+

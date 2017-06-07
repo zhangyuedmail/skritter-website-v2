@@ -616,7 +616,7 @@ module.exports = GelatoPage.extend({
    */
   _handleSubmittedProcessSuccess: function() {
     if (app.isMobile()) {
-      app.router.navigate('dashboard');
+      app.router.navigate('vocablists/browse');
       app.reload();
       return;
     }

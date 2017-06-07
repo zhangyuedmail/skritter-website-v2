@@ -22,10 +22,13 @@ const UserModel = SkritterModel.extend({
     avatar: require('data/default-avatar'),
     allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     allJapaneseParts: ['defn', 'rdng', 'rune'],
+    audioEnabled: true,
     dailyItemAddingLimit: 20,
     disabled: false,
     filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
+    filteredChineseStyles: ['both', 'simp', 'trad'],
     filteredJapaneseParts: ['defn', 'rdng', 'rune'],
+    filteredJapaneseStyles: [],
     hideDefinition: false,
     gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
     goals: {ja: {items: 20}, zh: {items: 20}},
@@ -148,6 +151,7 @@ const UserModel = SkritterModel.extend({
    */
   getFilteredParts: function() {
     var filteredParts = app.isChinese() ? this.get('filteredChineseParts') : this.get('filteredJapaneseParts');
+
     return _.intersection(this.getStudyParts(), filteredParts);
   },
 
@@ -156,16 +160,9 @@ const UserModel = SkritterModel.extend({
    * @returns {Array}
    */
   getFilteredStyles: function() {
-    var styles = ['both'];
-    if (app.isChinese()) {
-      if (this.get('reviewSimplified')) {
-        styles.push('simp');
-      }
-      if (this.get('reviewTraditional')) {
-        styles.push('trad');
-      }
-    }
-    return styles;
+    var filteredParts = app.isChinese() ? this.get('filteredChineseStyles') : this.get('filteredChineseStyles');
+
+    return _.intersection(this.getStudyStyles(), filteredParts);
   },
 
   /**
@@ -204,6 +201,25 @@ const UserModel = SkritterModel.extend({
   },
 
   /**
+   * @method getStudyStyles
+   * @returns {Array}
+   */
+  getStudyStyles: function() {
+    var styles = ['both'];
+
+    if (app.isChinese()) {
+      if (this.get('reviewSimplified')) {
+        styles.push('simp');
+      }
+      if (this.get('reviewTraditional')) {
+        styles.push('trad');
+      }
+    }
+
+    return styles;
+  },
+
+  /**
    * @method getRaygunTags
    * @returns {Array}
    */
@@ -233,11 +249,20 @@ const UserModel = SkritterModel.extend({
   },
 
   /**
+   * @method isAddingStyle
+   * @param {String} style
+   * @returns {Boolean}
+   */
+  isAddingStyle: function(style) {
+    return _.includes(this.getStudyStyles(), style);
+  },
+
+  /**
    * @method isAudioEnabled
    * @returns {Boolean}
    */
   isAudioEnabled: function() {
-    return this.get('volume') > 0;
+    return !!this.get('audioEnabled');
   },
 
   /**
@@ -263,6 +288,15 @@ const UserModel = SkritterModel.extend({
    */
   isReviewingPart: function(part) {
     return _.includes(this.getFilteredParts(), part);
+  },
+
+  /**
+   * @method isReviewingStyle
+   * @param {String} style
+   * @returns {Boolean}
+   */
+  isReviewingStyle: function(style) {
+    return _.includes(this.getFilteredStyles(), style);
   },
 
   /**

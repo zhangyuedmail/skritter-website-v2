@@ -13,9 +13,9 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * @type {Object}
    */
   events: {
-    'change select': 'handleChangeSelect',
-    'change input[type="checkbox"]': 'handleChangeCheckbox',
-    'change #field-target-language': 'handleChangeTargetLanguage',
+    // 'change select': 'handleChangeSelect',
+    // 'change input[type="checkbox"]': 'handleChangeCheckbox',
+    // 'change #field-target-language': 'handleChangeTargetLanguage',
     'click #button-save': 'handleClickButtonSave'
   },
 
@@ -115,20 +115,28 @@ const AccountSettingsStudyPage = GelatoPage.extend({
     app.user.set({
       autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
       autoAdvancePrompts: this.$('#field-auto-advance').is(':checked'),
+      hideDefinition: this.$('#field-hide-definition').is(':checked'),
+      hideReading: this.$('#field-hide-reading').is(':checked'),
       showHeisig: this.$('#field-heisig').is(':checked'),
       sourceLang: this.$('#field-source-language').val(),
-      targetLang: this.$('#field-target-language').val()
+      squigs: this.$('#field-squigs').is(':checked'),
+      targetLang: this.$('#field-target-language').val() || app.getLanguage(),
+      teachingMode: this.$('#field-teaching-mode').is(':checked'),
     });
 
     if (app.isChinese()) {
       app.user.set({
         addSimplified: this.$('#field-styles [value="simp"]').is(':checked'),
         addTraditional: this.$('#field-styles [value="trad"]').is(':checked'),
-        chineseStudyParts: this.getSelectedParts()
+        chineseStudyParts: this.getSelectedParts(),
+        readingChinese: this.$('#field-bopomofo').is(':checked') ? 'zhuyin' : 'pinyin'
       });
-    } else if (app.isJapanese()) {
+    }
+
+    if (app.isJapanese()) {
       app.user.set({
         japaneseStudyParts: this.getSelectedParts(),
+        readingJapanese: this.$('#field-romaji').is(':checked') ? 'romaji' : 'kana',
         studyKana: this.$('#field-study-kana').is(':checked'),
         studyRareWritings: this.$('#field-study-rare-writings').is(':checked'),
         studyAllListWritings: this.$('#field-study-all-list-writings').is(':checked')
@@ -136,13 +144,14 @@ const AccountSettingsStudyPage = GelatoPage.extend({
     }
 
     zhStudyStyleChanged = (app.isChinese() && app.user.hasChanged('addSimplified') ||
-      app.user.hasChanged('addTraditional'));
+    app.user.hasChanged('addTraditional'));
 
     app.user.save(null, {
       error: function(req, error) {
         let msg = error.responseJSON.message;
         self.displayErrorMessage(msg);
-      }, success: () => {
+      },
+      success: () => {
         if (zhStudyStyleChanged) {
           this.dialog = new ResetVocablistPositionDialog();
           this.dialog.render();

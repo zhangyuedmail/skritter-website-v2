@@ -48,7 +48,10 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     this.userReading =  this.prompt.review.get('userReading') || '';
 
     // only support pinyin for first go around
-    this.showReadingPrompt = !app.user.get('disablePinyinReadingPromptInput') && !app.isMobile() && app.isChinese();
+    this.showReadingPrompt = app.isChinese() &&
+      !app.isMobile() &&
+      !app.user.get('disablePinyinReadingPromptInput') &&
+      app.user.get('readingChinese') !== 'zhuyin';
 
     this.registerShortcuts = !this.showReadingPrompt;
 

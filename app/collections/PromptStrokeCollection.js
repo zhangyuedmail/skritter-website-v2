@@ -45,21 +45,27 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @returns {Array}
    */
   getExpectedTargets: function() {
-    var expected = [];
-    var scores = [];
-    for (var a = 0, lengthA = this.targets.length; a < lengthA; a++) {
-      var target = this.targets[a];
+    let expected = [];
+    let scores = [];
+
+    for (let a = 0, lengthA = this.targets.length; a < lengthA; a++) {
+      let target = this.targets[a];
+
       scores[a] = 0;
-      for (var b = 0, lengthB = this.length; b < lengthB; b++) {
+
+      for (let b = 0, lengthB = this.length; b < lengthB; b++) {
         scores[a] += target.find({id: this.at(b).id}) ? 1 : 0;
       }
     }
-    var best = scores[scores.indexOf(Math.max.apply(Math, scores))];
-    for (var c = 0, lengthC = scores.length; c < lengthC; c++) {
+
+    let best = scores[scores.indexOf(Math.max.apply(Math, scores))];
+
+    for (let c = 0, lengthC = scores.length; c < lengthC; c++) {
       if (scores[c] === best) {
         expected.unshift(this.targets[c]);
       }
     }
+
     return expected.length ? expected : [this.targets[0]];
   },
 
@@ -76,10 +82,10 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @returns {Number}
    */
   getMaxPosition: function() {
-    var max = 0;
+    let max = 0;
 
-    for (var i = 0, length = this.targets.length; i < length; i++) {
-      var targetMax = this.targets[i].getPosition();
+    for (let i = 0, length = this.targets.length; i < length; i++) {
+      let targetMax = this.targets[i].getPosition();
       max = targetMax > max ? targetMax : max;
     }
 
@@ -91,10 +97,10 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @returns {Number}
    */
   getPosition: function() {
-    var position = 0;
+    let position = 0;
 
-    for (var i = 0, length = this.length; i < length; i++) {
-      var contains = this.at(i).get('contains');
+    for (let i = 0, length = this.length; i < length; i++) {
+      let contains = this.at(i).get('contains');
       position += contains.length ? contains.length : 1;
     }
 
@@ -115,10 +121,10 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @returns {createjs.Container}
    */
   getTargetShape: function(excludeStrokes) {
-    var container = new createjs.Container();
-    var target = this.getExpectedTargets()[0];
+    let container = new createjs.Container();
+    let target = this.getExpectedTargets()[0];
 
-    for (var i = 0, length = target.length; i < length; i++) {
+    for (let i = 0, length = target.length; i < length; i++) {
       if (!excludeStrokes) {
         container.addChild(target.at(i).getTargetShape());
       }
@@ -143,9 +149,9 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @returns {createjs.Container}
    */
   getUserShape: function(excludeStrokes) {
-    var container = new createjs.Container();
+    let container = new createjs.Container();
 
-    for (var i = 0, length = this.length; i < length; i++) {
+    for (let i = 0, length = this.length; i < length; i++) {
       if (!excludeStrokes) {
         container.addChild(this.at(i).getTargetShape());
       }
@@ -161,8 +167,8 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @returns {createjs.Container}
    */
   getUserSquig: function(excludeStrokes) {
-    var container = new createjs.Container();
-    for (var i = 0, length = this.length; i < length; i++) {
+    let container = new createjs.Container();
+    for (let i = 0, length = this.length; i < length; i++) {
       if (!excludeStrokes) {
         container.addChild(this.at(i).getUserSquig());
       }
@@ -195,8 +201,8 @@ const PromptStrokeCollection = GelatoCollection.extend({
    */
   recognize: function(points, shape) {
     if (points && points.length > 1) {
-      var newStroke = new PromptStrokeModel({points: points});
-      var stroke = app.fn.recognizer.recognize(newStroke, this, this.getSize());
+      let newStroke = new PromptStrokeModel({points: points});
+      let stroke = app.fn.recognizer.recognize(newStroke, this, this.getSize());
 
       if (stroke) {
         stroke.set('squig', shape);
