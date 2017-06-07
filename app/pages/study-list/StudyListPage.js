@@ -383,8 +383,11 @@ const StudyListPage = GelatoPage.extend({
             dialog.close();
           },
           success: () => {
-            this.render();
-            dialog.close();
+            // TODO: figure out why this causes canvas sizing issue
+            // this.render();
+            // dialog.close();
+
+            app.reload();
           }
         }
       );
