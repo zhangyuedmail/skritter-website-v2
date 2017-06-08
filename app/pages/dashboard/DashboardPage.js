@@ -74,6 +74,8 @@ const DashboardPage = GelatoPage.extend({
     }
 
     app.mixpanel.track('Viewed dashboard page');
+
+    app.capturePlatformInfo();
   },
 
   /**

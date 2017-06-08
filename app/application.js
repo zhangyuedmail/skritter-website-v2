@@ -138,7 +138,28 @@ module.exports = GelatoApplication.extend({
   dialogs: {
     vocabViewer: null
   },
+  /**
+   * Sends a request to the api and records usage information.
+   */
+  capturePlatformInfo: function() {
+    if (!this.isDevelopment() && this.user.isLoggedIn()) {
+      const platformData = {
+        client: this.isAndroid() ? 'android' : 'web',
+        // device: this.isMobile() && window.cordova ? : navigator.userAgent,
+        lang: this.getLanguage(),
+        user: this.user.id,
+        version: config.version
+      };
 
+      $.ajax({
+        url: app.getApiUrl(2) + 'usage/platform',
+        headers: app.user.session.getHeaders(),
+        context: this,
+        type: 'POST',
+        data: platformData
+      });
+    }
+  },
   /**
    * Checks if the URL contains a siteref param, and if it does, sets its value
    * as the siteRef instance varaible on the application object. Processes and
@@ -928,8 +949,6 @@ module.exports = GelatoApplication.extend({
             StatusBar.backgroundColorByHexString('#1c1206');
           }
         }
-
-        self._capturePlatformInfo();
       }
     );
   },
@@ -1008,25 +1027,5 @@ module.exports = GelatoApplication.extend({
 
     app.dialogs.vocabViewer.load(vocabId, vocab);
     app.dialogs.vocabViewer.open();
-  },
-
-  _capturePlatformInfo: function() {
-    if (!this.isDevelopment() && this.user.isLoggedIn()) {
-      const platformData = {
-        client: this.isAndroid() ? 'android' : 'web',
-        // device: this.isMobile() && window.cordova ? : navigator.userAgent,
-        lang: this.getLanguage(),
-        user: this.user.id,
-        version: config.version
-      };
-
-      $.ajax({
-        url: app.getApiUrl(2) + 'usage/platform',
-        headers: app.user.session.getHeaders(),
-        context: this,
-        type: 'POST',
-        data: platformData
-      });
-    }
   }
 });
