@@ -25,6 +25,7 @@ const UserModel = SkritterModel.extend({
     audioEnabled: true,
     dailyItemAddingLimit: 20,
     disabled: false,
+    disablePinyinReadingPromptInput: false,
     filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     filteredChineseStyles: ['both', 'simp', 'trad'],
     filteredJapaneseParts: ['defn', 'rdng', 'rune'],
