@@ -129,6 +129,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
         addSimplified: this.$('#field-styles [value="simp"]').is(':checked'),
         addTraditional: this.$('#field-styles [value="trad"]').is(':checked'),
         chineseStudyParts: this.getSelectedParts(),
+        disablePinyinReadingPromptInput: this.$('#field-pinyin-input').is(':checked'),
         readingChinese: this.$('#field-bopomofo').is(':checked') ? 'zhuyin' : 'pinyin'
       });
     }
