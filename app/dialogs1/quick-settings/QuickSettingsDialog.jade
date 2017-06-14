@@ -124,8 +124,8 @@ gelato-dialog(data-name='quick-settings')
                     input(type="checkbox", checked=user.get('squigs'))
                     .toggle-switch-slider.round
 
-          .text-left
-            a.btn.btn-primary(href="/account/settings/study") See all settings
-          .text-right
-            button#button-save.btn.btn-fixed.btn-success(type='button')= app.locale('common.save')
-
+          .bottom-buttons
+            .text-left
+              a.btn.btn-primary(href="/account/settings/study") More settings
+            .text-right
+              button#button-save.btn.btn-success(type='button')= app.locale('common.save')
