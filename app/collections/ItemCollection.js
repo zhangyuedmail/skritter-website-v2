@@ -260,7 +260,7 @@ const ItemCollection = BaseSkritterCollection.extend({
                 data: {
                   languageCode: app.getLanguage(),
                   limit: options.limit,
-                  lists: options.lists,
+                  lists: options.lists || app.user.getFilteredLists().join('|'),
                   parts: app.user.getFilteredParts().join('|'),
                   sections: options.sections,
                   styles: app.user.getFilteredStyles().join('|')

@@ -1,4 +1,5 @@
 const GelatoDialog = require('gelato/dialog');
+const ListSelect = require('components/common/ListSelectComponent');
 
 /**
  * @class QuickSettingsDialog
@@ -22,11 +23,21 @@ module.exports = GelatoDialog.extend({
   template: require('./QuickSettingsDialog.jade'),
 
   /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this._views['lists'] = new ListSelect();
+  },
+
+  /**
    * @method render
    * @returns {QuickSettingsDialog}
    */
   render: function() {
     this.renderTemplate();
+
+    this._views['lists'].setElement('#list-select-container').render();
 
     this.volumeSlider = this.$('#field-audio-volume').bootstrapSlider({});
 
@@ -65,11 +76,13 @@ module.exports = GelatoDialog.extend({
     };
 
     if (app.isChinese()) {
+      settings.filteredChineseLists = this._views['lists'].getSelected();
       settings.filteredChineseParts = this.getSelectedParts();
       settings.filteredChineseStyles = this.getSelectedStyles();
     }
 
     if (app.isJapanese()) {
+      settings.filteredJapaneseLists = this._views['lists'].getSelected();
       settings.filteredJapaneseParts = this.getSelectedParts();
       settings.filteredJapaneseStyles = [];
     }

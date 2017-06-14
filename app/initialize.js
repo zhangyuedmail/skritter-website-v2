@@ -11,6 +11,7 @@ window.WebFont = require('webfontloader');
 require('babel-polyfill');
 require('bootstrap');
 require('bootstrap-daterangepicker');
+require('bootstrap-multiselect');
 require('bootstrap-notify');
 require('bootstrap-slider');
 require('bootstrap-switch');
