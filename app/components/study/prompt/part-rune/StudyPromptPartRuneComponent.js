@@ -510,6 +510,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method eraseCharacter
    */
   eraseCharacter: function() {
+    this.prompt.stopAutoAdvance();
     this.prompt.review.set({complete: false, showTeaching: false});
     this.prompt.review.character.reset();
     this.render();
