@@ -13,35 +13,33 @@ gelato-page(data-name='mobile-account-billing-history')
 
   .container
     .content-block
-      .main-content
+      .header BILLING HISTORY
+      .row
 
-        .billing-links
-          a(href='/account/billing/subscription') Subscription
-          span &nbsp;-&nbsp;
-          a(href='/account/billing/history') History
+        .col-xs-12.main-content
 
-        .table-oversized-wrapper
-          table.table.table-striped
-            tr
-              td.date-td Date
-              td.service-td Service
-              td.length-td Length purchased
-              td.charged-td Amount charged
-
-            for payment in view.payments.models
+          .table-oversized-wrapper
+            table.table.table-striped
               tr
-                td.date-td= moment(payment.get('created') * 1000).format('LL')
-                td.service-td
-                  if user.get('isAdmin') && payment.get('stripeID')
-                    a(href="https://dashboard.stripe.com/payments/" + payment.get('stripeID'))
-                      | Stripe
-                  else
-                    | #{payment.get('service')}
-                td.length-td= payment.get('name')
-                td.charged-td= payment.getChargedAmount()
+                td.date-td Date
+                td.service-td Service
+                td.length-td Length purchased
+                td.charged-td Amount charged
 
-          if view.payments.state === 'fetching'
-            p.text-center
-              i.fa.fa-3x.fa-spinner.fa-pulse
-          else if view.payments.cursor
-            button#load-more-btn.btn.btn-primary.btn-block Load More
+              for payment in view.payments.models
+                tr
+                  td.date-td= moment(payment.get('created') * 1000).format('LL')
+                  td.service-td
+                    if user.get('isAdmin') && payment.get('stripeID')
+                      a(href="https://dashboard.stripe.com/payments/" + payment.get('stripeID'))
+                        | Stripe
+                    else
+                      | #{payment.get('service')}
+                  td.length-td= payment.get('name')
+                  td.charged-td= payment.getChargedAmount()
+
+            if view.payments.state === 'fetching'
+              p.text-center
+                i.fa.fa-3x.fa-spinner.fa-pulse
+            else if view.payments.cursor
+              button#load-more-btn.btn.btn-primary.btn-block Load More

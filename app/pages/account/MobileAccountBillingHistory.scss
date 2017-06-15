@@ -6,7 +6,7 @@ gelato-page[data-name='mobile-account-billing-history'] {
   padding-top: 100px;
 
   #nav-links {
-    background: $grey7;
+    background: $wood7;
     margin-bottom: 15px;
     margin-top: -50px;
     padding-bottom: 10px;
@@ -19,6 +19,10 @@ gelato-page[data-name='mobile-account-billing-history'] {
       padding: 4px 0;
       margin-bottom: 4px;
 
+      a {
+        color: $sand1;
+      }
+
       &.selected {
         margin-bottom: 0;
         border-bottom: 4px solid $green4;
@@ -30,6 +34,16 @@ gelato-page[data-name='mobile-account-billing-history'] {
     }
   }
 
+  .content-block {
+    padding: 0;
+  }
+
+  .header {
+    margin-top: 0;
+    font-size: 12px;
+    padding: 15px;
+  }
+
   .billing-links {
     left: 10px;
     position: absolute;
@@ -37,7 +51,7 @@ gelato-page[data-name='mobile-account-billing-history'] {
   }
 
   .table-oversized-wrapper {
-    margin-top: 30px;
+    margin-top: 0;
   }
 
   .date-td {
@@ -53,8 +67,8 @@ gelato-page[data-name='mobile-account-billing-history'] {
   }
 
   .main-content {
-    border-radius: 25px;
-    padding: 40px;
+    border-radius: 0;
+    padding: 0 30px;
   }
 
   .state-td {
