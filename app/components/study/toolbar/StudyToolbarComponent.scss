@@ -76,6 +76,12 @@ gelato-component[data-name='study-toolbar'] {
     .add-amt {
       color: $green5;
       cursor: pointer;
+      padding: 10px 15px;
+
+      &:hover {
+        background: $green3;
+        color: $green6;
+      }
     }
 
     .popup-label {
