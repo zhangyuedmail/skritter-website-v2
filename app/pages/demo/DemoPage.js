@@ -3,6 +3,7 @@ const Vocabs = require('collections/VocabCollection');
 const Prompt = require('components/study/prompt/StudyPromptComponent.js');
 const DemoCallToActionDialog = require('dialogs1/demo-call-to-action/view');
 const DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
+const DemoProgressComponent = require('components/demo/DemoProgressComponent.js');
 const ItemsCollection = require('collections/ItemCollection');
 const vent = require('vent');
 
@@ -59,6 +60,13 @@ const DemoPage = GelatoPage.extend({
     this.vocab = null;
     this.vocabs = new Vocabs();
     this.items = new ItemsCollection();
+
+    if (app.isDevelopment()) {
+      this._views['progress'] = new DemoProgressComponent({
+        demoPage: this,
+        firstStep: 'languageSelection'
+      });
+    }
   },
 
   /**
@@ -68,6 +76,10 @@ const DemoPage = GelatoPage.extend({
   render: function() {
     this.renderTemplate();
     this.prompt.setElement('#demo-prompt-container').render();
+
+    if (this._views['progress']) {
+      this.$('#progress-container').html(this._views['progress'].render().el)
+    }
     this.loadDemo();
 
     return this;
@@ -219,6 +231,8 @@ const DemoPage = GelatoPage.extend({
     this.prompt.$('#toolbar-action-container').hide();
     this.prompt.$('#toolbar-vocab-container').hide();
     this.prompt.once('character:complete', this.teachDemoChar2);
+
+    this.trigger('step:update', 'teachDemoChar1');
 
     if (app.isDevelopment()) {
       this.showDemoGuidePopup();
