@@ -1,0 +1,73 @@
+@import "../../styles/_variables";
+
+gelato-dialog[data-name="avatar-select"] {
+
+  .modal-body {
+    .title {
+      font-size: 22px;
+    }
+  }
+
+  .title {
+    margin-top: -5px;
+  }
+
+  .bottom-buttons {
+    margin-top: 50px;
+  }
+
+  #audio-volume {
+    margin-left: 10px;
+
+    .slider-handle {
+      background: $green5;
+    }
+
+    .slider-selection {
+      background: $grey1;
+    }
+
+    .slider-track {
+      background: $grey2;
+    }
+  }
+
+  .avatars {
+    img {
+      width: 100%;
+    }
+
+    .col-xs-3 {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  .text-left {
+    float: left;
+    position: absolute;
+    bottom: 15px;
+  }
+
+  .selected-avatar {
+    margin-top: 30px;
+    text-align: center;
+
+    .title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+
+
+  .button-close.fa-close {
+    cursor: pointer;
+    float: right;
+    font-size: 28px;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    z-index: 9999;
+  }
+
+}

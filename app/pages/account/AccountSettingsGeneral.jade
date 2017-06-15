@@ -17,11 +17,13 @@ gelato-page(data-name='account-settings-general')
                 label.col-sm-3.control-label(for="field-avatar")= app.locale('pages.accountGeneral.avatarLabel')
                   .option-desc= app.locale('pages.accountGeneral.avatarDescription')
                 .col-sm-9
-                  img#field-avatar(src="data:image/png;base64, " + user.get('avatar'), alt="")
+                  img#field-avatar(src="data:image/png;base64," + user.get('avatar'), alt="")
                   input#avatar-upload-input.hide(type="file", accept="image/*")
                   br
                   br
-                  button#change-avatar.btn.btn-sm.btn-primary= app.locale('pages.accountGeneral.changeAvatar')
+                  button#select-avatar.btn.btn-sm.btn-primary Select
+                  span.spr
+                  button#upload-avatar.btn.btn-sm.btn-primary Upload
               .form-group
                 label.col-sm-3.control-label(for="field-id")= app.locale('pages.accountGeneral.userIdLabel')
                   .option-desc= app.locale('pages.accountGeneral.userIdDescription')

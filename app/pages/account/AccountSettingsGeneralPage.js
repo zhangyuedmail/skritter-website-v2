@@ -1,7 +1,9 @@
 const GelatoPage = require('gelato/page');
 const AccountSidebar = require('components/account/AccountSidebarComponent');
+const AvatarSelect = require('dialogs1/avatar-select/AvatarSelectDialog.js');
 const ChangePasswordDialog = require('dialogs1/change-password/view');
 const ResetAllDataDialog = require('dialogs1/reset-all-data/view');
+
 const defaultAvatar = require('data/default-avatar');
 
 /**
@@ -18,8 +20,9 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     'change #avatar-upload-input': 'handleChangeAvatarUploadInput',
     'change #field-country': 'handleSelectCountry',
     'click #button-save': 'handleClickButtonSave',
+    'click #select-avatar': 'handleClickSelectAvatar',
+    'click #upload-avatar': 'handleClickUploadAvatar',
     'click #field-change-password': 'handleClickChangePassword',
-    'click #change-avatar': 'handleClickChangeAvatar',
     'click #reset-all-data': 'handleClickResetAllData'
   },
 
@@ -64,6 +67,26 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     return this;
   },
 
+  convertFileToDataURL: function(url) {
+    const xhr = new XMLHttpRequest();
+
+    return new Promise(resolve => {
+      xhr.onload = function() {
+        const reader = new FileReader();
+
+        reader.onloadend = function() {
+          resolve(reader.result);
+        };
+
+        reader.readAsDataURL(xhr.response);
+      };
+
+      xhr.open('GET', url);
+      xhr.responseType = 'blob';
+      xhr.send();
+    });
+  },
+
   /**
    * Displays an error message to the user.
    * @param {String} msg the message to display to the user
@@ -85,12 +108,13 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @param {Event} event
    */
   handleChangeAvatarUploadInput: function(event) {
-    var file = event.target.files[0];
-    var data = new FormData().append('image', file);
-    var reader = new FileReader();
-    reader.onload = function(event) {
-      $('#field-avatar').attr('src', event.target.result);
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = event => {
+      this.$('#field-avatar').attr('src', event.target.result);
     };
+
     reader.readAsDataURL(file);
   },
 
@@ -130,11 +154,35 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
   },
 
   /**
-   * @method handleClickChangeAvatar
+   * @method handleClickSelectAvatar
    * @param {Event} event
    */
-  handleClickChangeAvatar: function(event) {
+  handleClickSelectAvatar: function(event) {
+    const dialog = new AvatarSelect();
+
     event.preventDefault();
+
+    dialog.on('select', async id => {
+      const avatar = await this.convertFileToDataURL('/media/avatars/' + id + '.png');
+
+      if (avatar) {
+        this.$('#field-avatar').attr('src', avatar);
+      } else {
+        this.$('#field-avatar').attr('src', defaultAvatar);
+      }
+
+    });
+
+    dialog.open();
+  },
+
+  /**
+   * @method handleClickUploadAvatar
+   * @param {Event} event
+   */
+  handleClickUploadAvatar: function(event) {
+    event.preventDefault();
+
     this.$('#avatar-upload-input').trigger('click');
   },
 
@@ -186,9 +234,11 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    */
   _getFormData: function() {
     let avatar = this.$('#field-avatar').get(0).src;
+
     avatar = avatar.replace('data:image/gif;base64,', '');
     avatar = avatar.replace('data:image/jpeg;base64,', '');
     avatar = avatar.replace('data:image/png;base64,', '');
+
     return {
       avatar: avatar,
       aboutMe: this.$('#field-about').val().trim(),
