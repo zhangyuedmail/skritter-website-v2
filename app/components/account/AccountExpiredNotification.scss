@@ -2,8 +2,8 @@
 
 gelato-component[data-name='expired-notification'] {
   .dark {
-    background: $grey7;
-    color: $white5;
+    background: $grey7 !important;
+    color: $white5 !important;
   }
 
   .push-left {

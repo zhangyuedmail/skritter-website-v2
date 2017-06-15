@@ -1,5 +1,6 @@
 const GelatoPage = require('gelato/page');
 const AccountSidebar = require('components/account/AccountSidebarComponent');
+const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 const AvatarSelect = require('dialogs1/avatar-select/AvatarSelectDialog.js');
 const ChangePasswordDialog = require('dialogs1/change-password/view');
 const ResetAllDataDialog = require('dialogs1/reset-all-data/view');
@@ -49,6 +50,8 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     this.sidebar = new AccountSidebar();
     this.listenTo(app.user, 'state', this.render);
 
+    this._views['expiration'] = new ExpiredNotification({hideable: false});
+
     app.user.fetch();
   },
 
@@ -63,6 +66,8 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
 
     this.renderTemplate();
     this.sidebar.setElement('#sidebar-container').render();
+
+    this._views['expiration'].setElement('#subscription-notice').render();
 
     return this;
   },

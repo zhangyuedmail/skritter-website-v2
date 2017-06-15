@@ -8,4 +8,7 @@ gelato-component(data-name='expired-notification').hidden.row
         .push-right
           a(href="/account/billing/subscription")
             .btn.btn-success= app.locale('pages.dashboard.goToSubSettings')
-          span#hide-sub-expired.hide-sub-expired= app.locale('pages.dashboard.hide')
+          if view.hideable
+            span#hide-sub-expired.hide-sub-expired= app.locale('pages.dashboard.hide')
+          else
+            span#hide-sub-expired.hide-sub-expired.invisible= app.locale('pages.dashboard.hide')
