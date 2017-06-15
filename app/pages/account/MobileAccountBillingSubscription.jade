@@ -36,7 +36,10 @@ gelato-page(data-name='mobile-account-billing-subscription')
                   p.form-control-static= view.subscription.getStatus()
 
               .form-group.form-group-lg
-                label.control-label.col-xs-5 Expires
+                if view.subscription.isSubscribed()
+                  label.control-label.col-xs-5 Next payment
+                else
+                  label.control-label.col-xs-5 Expires on
                 .col-xs-7
                   p.form-control-static
                     if expires
