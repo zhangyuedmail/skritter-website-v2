@@ -23,7 +23,7 @@ const UserModel = SkritterModel.extend({
     allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     allJapaneseParts: ['defn', 'rdng', 'rune'],
     audioEnabled: true,
-    autoAdvancePrompts: 1.0,
+    autoAdvancePrompts: 0.0,
     dailyItemAddingLimit: 20,
     disabled: false,
     disablePinyinReadingPromptInput: false,
@@ -476,9 +476,6 @@ const UserModel = SkritterModel.extend({
    * @returns Array
    */
   parse: function(response) {
-    if (response.User && response.User.autoAdvancePrompts) {
-      response.User.autoAdvancePrompts = Boolean(response.User.autoAdvancePrompts);
-    }
     return response.User;
   },
 

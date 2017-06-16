@@ -95,7 +95,7 @@ gelato-page(data-name='account-settings-study')
                 .col-sm-9
                   .checkbox
                     label.toggle-switch
-                      input#field-auto-advance(type="checkbox", checked=user.get('autoAdvancePrompts'))
+                      input#field-auto-advance(type="checkbox", checked=Boolean(user.get('autoAdvancePrompts')))
                       .toggle-switch-slider.round
               .form-group
                 label.col-sm-3.control-label(for="field-heisig") Show heisig keywords
