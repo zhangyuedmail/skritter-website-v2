@@ -106,5 +106,13 @@ module.exports = GelatoDialog.extend({
    */
   getAvatarRows: function() {
     return _.chunk(this.avatars, 4);
+  },
+
+  /**
+   * Returns a string file path where the avatars are located.
+   * @returns {String}
+   */
+  getFilePath: function() {
+    return app.isCordova() ? 'media/avatars/' : '/media/avatars/';
   }
 });

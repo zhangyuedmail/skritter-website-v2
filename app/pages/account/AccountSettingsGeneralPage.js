@@ -174,7 +174,8 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     event.preventDefault();
 
     dialog.on('select', async id => {
-      const avatar = await this.convertFileToDataURL('/media/avatars/' + id + '.png');
+      const path = app.isCordova() ? 'media/avatars/' : '/media/avatars/';
+      const avatar = await this.convertFileToDataURL(path + id + '.png');
 
       if (avatar) {
         this.$('#field-avatar').attr('src', avatar);
