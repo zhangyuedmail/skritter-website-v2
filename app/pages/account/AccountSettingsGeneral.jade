@@ -51,20 +51,23 @@ gelato-page(data-name='account-settings-general')
                   .option-desc= app.locale('pages.accountGeneral.aboutMeDescription')
                 .col-sm-9
                   textarea#field-about.form-control(rows="5")= user.get('aboutMe')
+
               .form-group
                 label.col-sm-3.control-label(for="field-private")= app.locale('pages.accountGeneral.privateLabel')
                   .option-desc= app.locale('pages.accountGeneral.privateDescription')
                 .col-sm-9
                   .checkbox
-                    label
+                    label.toggle-switch
                       input#field-private(type="checkbox", checked=user.get('private'))
+                      .toggle-switch-slider.round
               .form-group
                 label.col-sm-3.control-label(for="field-eccentric")= app.locale('pages.accountGeneral.eccentricLabel')
                   .option-desc= app.locale('pages.accountGeneral.eccentricDescription')
                 .col-sm-9
                   .checkbox
-                    label
+                    label.toggle-switch
                       input#field-eccentric(type="checkbox", checked=user.get('eccentric'))
+                      .toggle-switch-slider.round
 
               hr
 

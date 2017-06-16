@@ -129,17 +129,21 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @param {Event} event
    */
   handleClickButtonSave: function(event) {
-    let self = this;
+    const formData = this._getFormData();
+
     event.preventDefault();
-    let formData = this._getFormData();
 
     if (!this._validateAccountData(formData)) {
       return;
     }
+
     this.$('#error-alert').addClass('hidden');
 
-    app.user.save(formData, {
-      error: function(req, error) {
+    app.user.set(formData);
+    app.user.cache();
+
+    app.user.save(null, {
+      error: (req, error) => {
         let msg = error.responseJSON.message;
 
         if (msg.indexOf('Another user goes by that name.') > -1) {
@@ -151,10 +155,12 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
 
           app.user.set('avatar', defaultAvatar);
           app.user.save();
+          app.user.cache();
         }
 
-        self.displayErrorMessage(msg);
-      }
+        this.displayErrorMessage(msg);
+      },
+      success: model => model.cache()
     });
   },
 
