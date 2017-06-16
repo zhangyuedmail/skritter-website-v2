@@ -477,9 +477,9 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.prompt.stopAutoAdvance();
     this.changeReviewScore(score);
 
-    setTimeout(() => {
-      this.prompt.next();
-    }, config.gradingBarClickAdvanceDelay);
+    if (app.user.get('autoAdvancePrompts')) {
+      this.prompt.startAutoAdvance();
+    }
   },
 
   /**
