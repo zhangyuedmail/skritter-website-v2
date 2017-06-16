@@ -13,7 +13,8 @@ module.exports = GelatoDialog.extend({
   events: {
     'click #button-close': 'handleClickClose',
     'click #button-save': 'handleClickSave',
-    'click .part-checkbox': 'handleClickVocabPart'
+    'click .part-checkbox': 'handleClickVocabPart',
+    'click #more-settings-btn': 'handleClickMoreSettings'
   },
 
   /**
@@ -99,6 +100,13 @@ module.exports = GelatoDialog.extend({
 
     this.trigger('close');
     this.close();
+    $('body').removeClass('modal-open');
+  },
+
+  handleClickMoreSettings: function(event) {
+    this.handleClickClose(event);
+
+    app.router.navigate('account/settings/study', {trigger: true});
   },
 
   /**
