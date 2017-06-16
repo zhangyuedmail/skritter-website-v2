@@ -282,6 +282,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @param {Number} score the new grade to apply
    */
   handlePromptToolbarGradingMousedown: function(score) {
+    this._mouseDown = true;
     if (this.prompt.review.isComplete()) {
       this.prompt.review.set('score', score);
       this.prompt.canvas.injectLayerColor(
@@ -298,6 +299,9 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @param {Number} score the new grade to apply
    */
   handlePromptToolbarGradingMousemove: function(score) {
+    if (!this._mouseDown) {
+      return;
+    }
     this.prompt.stopAutoAdvance();
     this.changeReviewScore(score);
   },
@@ -309,6 +313,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @param {Number} score the new grade to apply
    */
   handlePromptToolbarGradingMouseup: function(score) {
+    this._mouseDown = false;
     this.prompt.stopAutoAdvance();
     this.changeReviewScore(score);
 

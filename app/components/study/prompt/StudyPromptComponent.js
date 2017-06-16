@@ -433,7 +433,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.$('#navigate-next').attr('style', styleStr);
     this.$('#navigate-next').addClass('grade-' + score);
 
-    $(document).one('click', this.stopAutoAdvance);
+
     this._autoAdvanceListenerId = setTimeout(() => {
 
       // if by some other means this listener should have already been stopped,
@@ -446,6 +446,10 @@ const StudyPromptComponent = GelatoComponent.extend({
       $(document).off('click', this.stopAutoAdvance);
       this.next();
     }, config.autoAdvanceDelay * promptDelayMultiplier);
+
+    _.defer(() => {
+      $(document).one('click', this.stopAutoAdvance);
+    });
   },
 
   /**

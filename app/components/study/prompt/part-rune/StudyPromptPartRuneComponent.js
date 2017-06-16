@@ -54,6 +54,8 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
      */
     this._helpInterval = 300;
 
+    this._mouseDown = false;
+
     this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
     this.listenTo(this.prompt.canvas, 'doubletap', this.handlePromptDoubleTap);
     this.listenTo(this.prompt.canvas, 'swipeup', this.handlePromptCanvasSwipeUp);
@@ -447,6 +449,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @param {Number} score the new grade to apply
    */
   handlePromptToolbarGradingMousedown: function(score) {
+    this._mouseDown = true;
     if (this.prompt.review.isComplete()) {
       this.prompt.review.set('score', score);
       this.prompt.canvas.injectLayerColor(
@@ -463,6 +466,10 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @param {Number} score the new grade to apply
    */
   handlePromptToolbarGradingMousemove: function(score) {
+    if (!this._mouseDown) {
+      return;
+    }
+
     this.prompt.stopAutoAdvance();
     this.changeReviewScore(score);
   },
@@ -474,6 +481,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @param {Number} score the new grade to apply
    */
   handlePromptToolbarGradingMouseup: function(score) {
+    this._mouseDown = false;
     this.prompt.stopAutoAdvance();
     this.changeReviewScore(score);
 
