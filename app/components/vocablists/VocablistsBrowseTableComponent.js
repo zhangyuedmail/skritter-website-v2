@@ -105,11 +105,11 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @param {Event} event
    */
   handleClickAddToQueueLink: function(event) {
-    event.preventDefault();
-    const self = this;
     const target = $(event.currentTarget);
     const listId = target.data('vocablist-id');
     const vocablist = this.vocablists.get(listId);
+
+    event.preventDefault();
 
     if (vocablist.get('studyingMode') === 'not studying' && !this._adding) {
       this._adding = true;
@@ -120,16 +120,21 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
 
       vocablist.save({'studyingMode': 'adding'}, {
         patch: true,
-        success: function() {
+        success: () => {
           if (app.getSetting('newuser-' + app.user.id)) {
             app.getSetting('newuser-' + app.user.id, false);
             app.router.navigateStudy();
           } else {
-            self.render();
+            this._adding = false;
+
+            this.render();
           }
         },
-        error: function() {
-          self.render();
+        error: () => {
+          this._adding = false;
+
+          this.render();
+
           app.notifyUser({
             message: app.locale('pages.vocabLists.errorAddingList')
           });
