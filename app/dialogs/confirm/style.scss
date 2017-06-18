@@ -16,3 +16,11 @@ bootstrap-dialog[data-name="confirm"] {
   }
 
 }
+
+.mobile bootstrap-dialog[data-name="confirm"] {
+
+  .modal-dialog {
+    width: 100%;
+  }
+
+}
