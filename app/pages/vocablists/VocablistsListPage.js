@@ -167,25 +167,30 @@ module.exports = GelatoPage.extend({
    * @param {Event} event
    */
   handleClickCopyLink: function(event) {
-    event.preventDefault();
-    var confirmDialog = new ConfirmDialog({
+    const confirmDialog = new ConfirmDialog({
       title: 'Confirm Copy',
       body: 'Are you sure you want to make a copy of this list?',
       okText: 'Yes - Copy!',
       onConfirm: 'show-spinner'
     });
-    this.listenTo(confirmDialog, 'confirm', function() {
-      var copyUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/copy';
+
+    event.preventDefault();
+
+    this.listenTo(confirmDialog, 'confirm', () => {
+      const copyUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/copy';
+
       $.ajax({
         url: copyUrl,
         method: 'POST',
         headers: app.user.headers(),
-        success: function(response) {
+        success: response => {
           app.router.navigate('/vocablists/view/' + response.VocabList.id, {trigger: true});
+
           confirmDialog.close();
         }
       });
     });
+
     confirmDialog.render().open();
   },
 

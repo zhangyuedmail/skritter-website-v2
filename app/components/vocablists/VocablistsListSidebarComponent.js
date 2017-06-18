@@ -20,15 +20,15 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    */
   events: {
     'change #image-upload-input': 'handleChangeImageUploadInput',
-    'click #add-to-queue': 'handleClickAddToQueue',
-    'click #copy-link': 'handleClickCopyLink',
-    'click #delete-link': 'handleClickDeleteLink',
-    'click #export-link': 'handleClickExportLink',
-    'click #history-link': 'handleClickHistoryLink',
-    'click #publish-link': 'handleClickPublishLink',
-    'click #quick-add-link': 'handleClickQuickAddLink',
-    'click #study-settings-link': 'handleClickStudySettingsLink',
-    'click #image-upload-link': 'handleClickImageUploadLink'
+    'click #add-to-queue-sidebar': 'handleClickAddToQueue',
+    'click #copy-link-sidebar': 'handleClickCopyLink',
+    'click #delete-link-sidebar': 'handleClickDeleteLink',
+    'click #export-link-sidebar': 'handleClickExportLink',
+    'click #history-link-sidebar': 'handleClickHistoryLink',
+    'click #publish-link-sidebar': 'handleClickPublishLink',
+    'click #quick-add-link-sidebar': 'handleClickQuickAddLink',
+    'click #study-settings-link-sidebar': 'handleClickStudySettingsLink',
+    'click #image-upload-link-sidebar': 'handleClickImageUploadLink'
   },
 
   /**
@@ -112,15 +112,18 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @param {Event} event
    */
   handleClickCopyLink: function(event) {
-    event.preventDefault();
-    var confirmDialog = new ConfirmDialog({
+    const confirmDialog = new ConfirmDialog({
       title: 'Confirm Copy',
       body: 'Are you sure you want to make a copy of this list?',
       okText: 'Yes - Copy!',
       onConfirm: 'show-spinner'
     });
+
+    event.preventDefault();
+
     this.listenTo(confirmDialog, 'confirm', function() {
-      var copyUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/copy';
+      const copyUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/copy';
+
       $.ajax({
         url: copyUrl,
         method: 'POST',
@@ -131,6 +134,7 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
         }
       });
     });
+
     confirmDialog.render().open();
   },
 
