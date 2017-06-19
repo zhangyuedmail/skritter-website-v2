@@ -69,9 +69,9 @@ module.exports = GelatoPage.extend({
   handleClickButtonReset: function(event) {
     event.preventDefault();
 
-    var email = this.$('#password-reset-input').val().trim();
+    const email = this.$('#password-reset-input').val().trim();
 
-    if (!this.choices.length && (email.indexOf('@') < 1 || email.indexOf('.') < 2)) {
+    if (!this.choices.length && !email.match(app.config.emailRegexp)) {
       this._displayValidationErrorMessage(app.locale('pages.signup.errorInvalidEmail'));
       return;
     }
