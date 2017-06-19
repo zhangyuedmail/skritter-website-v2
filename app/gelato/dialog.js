@@ -38,6 +38,11 @@ var GelatoDialog = GelatoView.extend({
    * @returns {GelatoDialog}
    */
   close: function() {
+    // TODO: figure out why the element is getting unset on study screens
+    if (!this.element) {
+      this.element = this.$('[role="dialog"]');
+    }
+
     this.element.modal('hide');
     return this;
   },
