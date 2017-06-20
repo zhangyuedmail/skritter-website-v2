@@ -9,7 +9,7 @@ gelato-component(data-name='study-prompt-vocab-definition')
     case prompt.reviews.part
 
       when 'defn'
-        .value(class=(prompt.reviews.isComplete() ? 'visible' : 'invisible'))
+        .value(class=(view.editing || prompt.reviews.isComplete() ? 'visible' : 'invisible'))
           if view.editing
             textarea= definition
           else
