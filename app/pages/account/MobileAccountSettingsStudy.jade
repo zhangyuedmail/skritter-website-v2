@@ -59,6 +59,35 @@ gelato-page(data-name='mobile-account-settings-study')
           hr
 
           .form-group
+            label.col-xs-3.control-label(for="field-retention-index") Retention rate
+            .col-xs-9
+              select#field-retention-index.form-control
+                - var retentionIndex = user.get('retentionIndex');
+                option(value="75", selected=(retentionIndex === 75)) 87%
+                option(value="80", selected=(retentionIndex === 80)) 90%
+                option(value="85", selected=(retentionIndex === 85)) 92%
+                option(value="90", selected=(retentionIndex === 90)) 95%
+                option(value="95", selected=(retentionIndex === 95)) 97%
+
+          //.form-group
+          //  label.col-xs-3.control-label(for="field-add-word-frequency") Add word frequency
+          //  .col-xs-9
+          //    select#field-add-word-frequency.form-control
+          //      option(value="fast", selected=true) Fast
+          //      option(value="normal", selected=false) Normal
+          //      option(value="slow", selected=false) Slow
+          //      option(value="manual", selected=false) Manual
+          //
+          //.form-group
+          //  label.col-xs-3.control-label(for="field-section-movement") Section movement
+          //  .col-xs-9
+          //    select#field-section-movement.form-control
+          //      option(value="automatic", selected=true) Automatic
+          //      option(value="manual", selected=false) Manual
+
+          hr
+
+          .form-group
             label.col-xs-9.control-label(for="field-auto-advance") Auto advance prompts (beta)
             .col-xs-3
               .checkbox
