@@ -13,8 +13,10 @@ gelato-page[data-name='dashboard'] {
     position: absolute;
     left: 0px;
     top: 55px;
+    -webkit-writing-mode: vertical-lr;
     writing-mode: vertical-lr;
     text-orientation: inherit;
+    -webkit-transform: rotate(-180deg);
     transform: rotate(-180deg);
     letter-spacing: 1px;
     padding: 20px 10px;
