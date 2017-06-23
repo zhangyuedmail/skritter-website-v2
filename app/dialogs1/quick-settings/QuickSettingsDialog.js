@@ -60,9 +60,13 @@ module.exports = GelatoDialog.extend({
    * @returns {Array}
    */
   getSelectedStyles: function() {
-    return ['both'].concat(this.$('#field-styles :checked').map(function() {
-      return $(this).val();
-    }).get());
+    if (app.user.isAddingStyle('simp') && app.user.isAddingStyle('trad')) {
+      return ['both'].concat(this.$('#field-styles :checked').map(function() {
+        return $(this).val();
+      }).get());
+    }
+
+    return app.user.getStudyStyles();
   },
 
   /**

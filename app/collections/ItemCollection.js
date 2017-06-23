@@ -281,10 +281,10 @@ const ItemCollection = BaseSkritterCollection.extend({
                   sections: options.sections,
                   styles: app.user.getFilteredStyles().join('|')
                 },
-                error: (error) => {
+                error: error => {
                   callback(error);
                 },
-                success: (result) => {
+                success: result => {
                   this.reset();
 
                   _.forEach(

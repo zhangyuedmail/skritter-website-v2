@@ -32,7 +32,7 @@ const UserModel = SkritterModel.extend({
     filteredChineseStyles: ['both', 'simp', 'trad'],
     filteredJapaneseParts: ['defn', 'rdng', 'rune'],
     filteredJapaneseLists: [],
-    filteredJapaneseStyles: [],
+    filteredJapaneseStyles: ['none'],
     hideDefinition: false,
     gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
     goals: {ja: {items: 20}, zh: {items: 20}},
@@ -172,9 +172,9 @@ const UserModel = SkritterModel.extend({
    * @returns {Array}
    */
   getFilteredStyles: function() {
-    var filteredParts = app.isChinese() ? this.get('filteredChineseStyles') : this.get('filteredChineseStyles');
+    var filteredStyles = app.isChinese() ? this.get('filteredChineseStyles') : this.get('filteredJapaneseStyles');
 
-    return _.intersection(this.getStudyStyles(), filteredParts);
+    return _.intersection(this.getStudyStyles(), filteredStyles);
   },
 
   /**
