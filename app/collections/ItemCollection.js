@@ -38,7 +38,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.dueCount = 0;
     this.dueCountState = 'standby';
     this.fetchingState = 'standby';
-    this.listId = null;
+    this.listIds = [];
     this.preloadingState = 'standby';
     this.sorted = null;
   },
@@ -544,7 +544,7 @@ const ItemCollection = BaseSkritterCollection.extend({
       data: {
         lang: app.getLanguage(),
         languageCode: app.getLanguage(),
-        lists: this.listId,
+        lists: this.listIds.join(','),
         parts: app.user.getFilteredParts().join(','),
         styles: app.user.getFilteredStyles().join(',')
       },

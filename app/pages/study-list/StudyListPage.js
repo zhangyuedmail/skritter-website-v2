@@ -61,6 +61,9 @@ const StudyListPage = GelatoPage.extend({
       this._views['recipe'] = new Recipes();
     }
 
+    // make sure the item collection knows about filtered list
+    this.items.listIds = [this.vocablist.id];
+
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
     this.listenTo(vent, 'items:add', this.addItems);
@@ -142,7 +145,6 @@ const StudyListPage = GelatoPage.extend({
   checkRequirements: function() {
     ScreenLoader.post('Preparing study');
 
-    this.items.listId = this.vocablist.id;
     this.items.updateDueCount();
 
     async.parallel(

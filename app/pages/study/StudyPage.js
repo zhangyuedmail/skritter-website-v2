@@ -68,6 +68,9 @@ const StudyPage = GelatoPage.extend({
       this._views['recipe'] = new Recipes();
     }
 
+    // make sure the item collection knows about filtered lists
+    this.items.listIds = app.user.getFilteredLists();
+
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
     this.listenTo(vent, 'items:add', this.addItems);
