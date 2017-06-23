@@ -274,16 +274,6 @@ const StudyListPage = GelatoPage.extend({
     const items = this.items.getNext();
     const queue = this.items.getQueue();
 
-    if (!queue.length) {
-      this.prompt.$panelLeft.css('opacity', 0.4);
-      this.prompt.$panelLeft.css('pointer-events', 'none');
-      this.prompt.$panelRight.css('pointer-events', 'none');
-      this.items.reviews.post({skip: 1});
-      this.items.fetchNext({limit: 30, lists: this.vocablist.id});
-
-      return;
-    }
-
     if (this.previousPrompt) {
       this.prompt.$panelLeft.css('opacity', 1.0);
       this.prompt.$panelLeft.css('pointer-events', 'auto');
@@ -322,7 +312,7 @@ const StudyListPage = GelatoPage.extend({
       this.prompt.$panelLeft.css('pointer-events', 'none');
       this.prompt.$panelRight.css('pointer-events', 'none');
       this.items.reviews.post({skip: 1});
-      this.items.fetchNext({limit: 30});
+      this.items.fetchNext({limit: 30, lists: this.vocablist.id});
       return;
     }
 
