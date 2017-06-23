@@ -48,6 +48,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * DON'T CALL THIS FUNCTION DIRECTLY: use addItems() instead!
    * @param {Object} [options] options for the add operation
    * @param {String} [options.listId] a list id from which to add items
+   * @param {Number} [options.offset] offset value for which list to start adding from
    * @return {Promise<Object>} resolves when the item has been added
    * @method addItem
    */
@@ -55,8 +56,10 @@ const ItemCollection = BaseSkritterCollection.extend({
     const self = this;
 
     options = options || {};
+    options.lang = options.lang || app.getLanguage();
     options.limit = options.limit || 1;
     options.listId = options.listId || '';
+    options.offset = options.offset || 0;
 
     return new Promise((resolve, reject) => {
       if (this.addingState === 'standby') {
@@ -68,10 +71,11 @@ const ItemCollection = BaseSkritterCollection.extend({
       }
 
       $.ajax({
-        url: app.getApiUrl() + 'items/add?lists=' + options.listId + '&lang=' + app.getLanguage(),
+        url: app.getApiUrl() + 'items/add',
         type: 'POST',
         headers: app.user.session.getHeaders(),
         context: this,
+        data: options,
         error: function(error) {
           self.addingState = 'standby';
 
@@ -109,6 +113,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @param {Object} [options] object that contains options for the add operation
    * @param {Number} [options.limit] the number of items to attempt to add
    * @param {String} [options.listId] a list id from which to add items
+   * @param {Number} [options.offset] offset value for which list to start adding from
    * @param {Function} [callback] an optional callback that will be called when
    *                              the limit has been reached.
    * @method addItems
@@ -119,6 +124,7 @@ const ItemCollection = BaseSkritterCollection.extend({
 
     options = options || {};
     options.limit = options.limit || 1;
+    options.offset = options.offset || Math.round(Math.random());
 
     app.user.isSubscriptionActive(active => {
       if (!active) {
@@ -133,11 +139,14 @@ const ItemCollection = BaseSkritterCollection.extend({
         },
         async callback => {
           count++;
+
           try {
             const result = await this.addItem(options);
 
             results.items.push(result);
             results.numVocabsAdded += result.numVocabsAdded;
+
+            options.offset++;
 
             callback();
           } catch (error) {
