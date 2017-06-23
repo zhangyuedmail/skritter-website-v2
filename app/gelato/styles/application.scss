@@ -30,7 +30,7 @@ html, body {
   }
 
   &.marketing {
-    background: $background-marketing;
+    background: #FFF $background-marketing;
   }
 }
 
@@ -237,4 +237,36 @@ gelato-application {
       }
     }
   }
+}
+
+
+.loader-spinner {
+  width: 30px;
+  height: 30px;
+  background: url('#{$dir-assets}/loader-sprite-sheet.png') left center;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  animation: play 2s steps(58) infinite;
+}
+
+@keyframes play {
+   100% { background-position: -1740px; }
+}
+
+.brush-loader {
+  width: 30px;
+  height: 30px;
+  background: url('#{$dir-assets}/loader-sprite-sheet.png') left center;
+  -webkit-animation: loading-spin 2s infinite linear;
+  animation: loading-spin 2s infinite linear;
+}
+
+@-webkit-keyframes loading-spin {
+		from {
+				-webkit-transform: rotate(359deg);
+		}
+		to {
+				-webkit-transform: rotate(0deg);
+		}
 }
