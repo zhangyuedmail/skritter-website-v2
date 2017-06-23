@@ -257,16 +257,16 @@ gelato-application {
 .brush-loader {
   width: 30px;
   height: 30px;
-  background: url('#{$dir-assets}/loader-sprite-sheet.png') left center;
+  background: url('#{$dir-assets}/brush-loader.png') left center;
   -webkit-animation: loading-spin 2s infinite linear;
   animation: loading-spin 2s infinite linear;
 }
 
 @-webkit-keyframes loading-spin {
 		from {
-				-webkit-transform: rotate(359deg);
+				-webkit-transform: rotate(0deg);
 		}
 		to {
-				-webkit-transform: rotate(0deg);
+				-webkit-transform: rotate(359deg);
 		}
 }
