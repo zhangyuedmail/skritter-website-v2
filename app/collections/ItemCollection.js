@@ -124,7 +124,7 @@ const ItemCollection = BaseSkritterCollection.extend({
 
     options = options || {};
     options.limit = options.limit || 1;
-    options.offset = options.offset || Math.round(Math.random());
+    options.offset = options.offset || Math.round(Math.random() * 10);
 
     app.user.isSubscriptionActive(active => {
       if (!active) {
