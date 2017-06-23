@@ -277,9 +277,7 @@ const StudyListPage = GelatoPage.extend({
     const queue = this.items.getQueue();
 
     if (this.previousPrompt) {
-      this.prompt.$panelLeft.css('opacity', 1.0);
-      this.prompt.$panelLeft.css('pointer-events', 'auto');
-      this.prompt.$panelRight.css('pointer-events', 'auto');
+      this.togglePromptLoading(false);
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
@@ -290,9 +288,7 @@ const StudyListPage = GelatoPage.extend({
     if (items.length) {
       this.currentItem = items[0];
       this.currentPromptItems = items[0].getPromptItems();
-      this.prompt.$panelLeft.css('opacity', 1.0);
-      this.prompt.$panelLeft.css('pointer-events', 'auto');
-      this.prompt.$panelRight.css('pointer-events', 'auto');
+      this.togglePromptLoading(false);
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
@@ -310,9 +306,7 @@ const StudyListPage = GelatoPage.extend({
     }
 
     if (!queue.length) {
-      this.prompt.$panelLeft.css('opacity', 0.4);
-      this.prompt.$panelLeft.css('pointer-events', 'none');
-      this.prompt.$panelRight.css('pointer-events', 'none');
+      this.togglePromptLoading(true);
       this.items.reviews.post({skip: 1});
       this.items.fetchNext({limit: 30, lists: this.vocablist.id});
       return;
@@ -325,9 +319,7 @@ const StudyListPage = GelatoPage.extend({
     }
 
     // disable things while preloading
-    this.prompt.$panelLeft.css('opacity', 0.4);
-    this.prompt.$panelLeft.css('pointer-events', 'none');
-    this.prompt.$panelRight.css('pointer-events', 'none');
+    this.togglePromptLoading(true);
     this.items.preloadNext();
   },
 
@@ -336,7 +328,7 @@ const StudyListPage = GelatoPage.extend({
    */
   previous: function() {
     if (this.previousPromptItems) {
-      this.prompt.$panelLeft.css('opacity', 1.0);
+      this.togglePromptLoading(false);
       this.prompt.reviewStatus.render();
       this.prompt.set(this.previousPromptItems);
       this.toolbar.render();
@@ -384,7 +376,22 @@ const StudyListPage = GelatoPage.extend({
         }
       );
     });
-  }
+  },
+
+  /**
+   * Toggles the loading state on the canvas when fetching new items
+   * @param {Boolean} loading whether the prompt is loading
+   */
+  togglePromptLoading: function(loading) {
+
+    // toggle it if it wasn't passed in
+    if (loading === undefined) {
+      loading = !(this.prompt.$panelLeft.css('opacity') === 0.4);
+    }
+
+    this.prompt.$el.find('gelato-component[data-name="study-prompt"]').toggleClass('fetching-items', loading);
+  },
+
 
 });
 
