@@ -116,7 +116,8 @@ const StudyPage = GelatoPage.extend({
     this.items.addItems(
       {
         lang: app.getLanguage(),
-        limit: numToAdd
+        limit: numToAdd,
+        lists: app.user.getFilteredLists()
       },
       function(error, result) {
         if (!error) {
@@ -176,6 +177,7 @@ const StudyPage = GelatoPage.extend({
               lang: app.getLanguage(),
               languageCode: app.getLanguage(),
               limit: 1,
+              lists: app.user.getFilteredLists(),
               sort: 'adding'
             },
             error: function() {
@@ -211,7 +213,8 @@ const StudyPage = GelatoPage.extend({
             this.items.addItems(
               {
                 lang: app.getLanguage(),
-                limit: 5
+                limit: 5,
+                lists: app.user.getFilteredLists()
               },
               function() {
                 app.reload();

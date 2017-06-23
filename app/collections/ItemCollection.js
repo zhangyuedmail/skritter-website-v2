@@ -47,19 +47,22 @@ const ItemCollection = BaseSkritterCollection.extend({
    * Adds a single item for a user to study.
    * DON'T CALL THIS FUNCTION DIRECTLY: use addItems() instead!
    * @param {Object} [options] options for the add operation
-   * @param {String} [options.listId] a list id from which to add items
-   * @param {Number} [options.offset] offset value for which list to start adding from
+   * @param {String} [options.lang] language to fetch items from lists
+   * @param {String|String[]} [options.listIds] an array or string of list ids from which to add items
    * @return {Promise<Object>} resolves when the item has been added
    * @method addItem
    */
   addItem: function(options) {
-    const self = this;
-
     options = options || {};
     options.lang = options.lang || app.getLanguage();
-    options.limit = options.limit || 1;
-    options.listId = options.listId || '';
-    options.offset = options.offset || 0;
+
+    if (options.lists) {
+      options.lists = _.isArray(options.lists) ? options.lists : [options.lists];
+    } else {
+      options.lists = [];
+    }
+
+    options.lists = options.lists.join('|');
 
     return new Promise((resolve, reject) => {
       if (this.addingState === 'standby') {
@@ -70,18 +73,20 @@ const ItemCollection = BaseSkritterCollection.extend({
         return;
       }
 
+      const params = '?lang=' + options.lang +
+        '&lists=' + options.lists +
+        '&offset=' + options.offset;
+
       $.ajax({
-        url: app.getApiUrl() + 'items/add',
+        url: app.getApiUrl() + 'items/add' + params,
         type: 'POST',
         headers: app.user.session.getHeaders(),
-        context: this,
-        data: options,
-        error: function(error) {
-          self.addingState = 'standby';
+        error: error => {
+          this.addingState = 'standby';
 
           reject(error);
         },
-        success: function(result) {
+        success: result => {
           if (result.Items.length) {
             const item = new ItemModel(result.Items[0]);
 
@@ -90,16 +95,16 @@ const ItemCollection = BaseSkritterCollection.extend({
             item._loaded = false;
             item._queue = true;
 
-            self.add(item);
-            self.unshift(item);
+            this.add(item);
+            this.unshift(item);
 
             // only preload when a single item is being added
             if (options.limit === 1) {
-              self.preloadNext();
+              this.preloadNext();
             }
           }
 
-          self.addingState = 'standby';
+          this.addingState = 'standby';
 
           resolve(result);
         }
@@ -135,6 +140,8 @@ const ItemCollection = BaseSkritterCollection.extend({
 
       async.whilst(
         () => {
+          console.log(count, options.limit);
+
           return count < options.limit
         },
         async callback => {

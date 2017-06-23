@@ -107,7 +107,7 @@ const StudyListPage = GelatoPage.extend({
       {
         lang: app.getLanguage(),
         limit: numToAdd,
-        listId: this.vocablist.id
+        lists: this.vocablist.id
       },
       function(error, result) {
         if (!error) {
@@ -187,7 +187,7 @@ const StudyListPage = GelatoPage.extend({
               {
                 lang: app.getLanguage(),
                 limit: 5,
-                listId: this.vocablist.id
+                lists: this.vocablist.id
               },
               function() {
                 app.reload();
