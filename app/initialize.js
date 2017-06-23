@@ -26,7 +26,7 @@ const Application = require('./application');
 module.exports = (function() {
 
   function start() {
-    window.ScreenLoader = new (require('../startup/screen-loader/module'))();
+    window.ScreenLoader = new (require('../startup/screen-loader/ScreenLoaderComponent'))();
     window.ScreenLoader.post('Loading application');
 
     window.app = new Application({rootSelector: 'body'});
