@@ -170,6 +170,12 @@
   }
 }
 
+.icon-study-dont-know {
+  background-image: url('#{$dir-assets}/vectors/study-dont-know.svg');
+  max-height: 44px;
+  max-width: 50px;
+}
+
 .icon-study-erase {
   background-image: url('#{$dir-assets}/vectors/study-erase.svg');
   max-height: 48px;
