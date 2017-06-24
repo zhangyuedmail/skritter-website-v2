@@ -191,6 +191,7 @@ const GelatoApplication = Backbone.View.extend({
       }
       // hack to remove bootstrap model backdrop
       $('.modal-backdrop').remove();
+      $('body').removeAttr('style');
 
       this._views['page'].remove();
     }
