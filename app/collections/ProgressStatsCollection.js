@@ -316,6 +316,11 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
     let amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
       minutes ? minutes + ':' + seconds :
         seconds;
+
+    if (largestUnit === 'seconds' && amount === '00') {
+      amount = '0';
+    }
+
     return {
       amount: amount,
       units: largestUnit
