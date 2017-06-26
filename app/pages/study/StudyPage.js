@@ -430,7 +430,8 @@ const StudyPage = GelatoPage.extend({
       loading = !(this.prompt.$panelLeft.css('opacity') === 0.4);
     }
 
-    this.prompt.$el.find('gelato-component[data-name="study-prompt"]').toggleClass('fetching-items', loading);
+    const componentName = app.isMobile() ? 'mobile-study-prompt' : 'study-prompt';
+    this.prompt.$el.find('gelato-component[data-name="' + componentName + '"]').toggleClass('fetching-items', loading);
   },
 
   /**
