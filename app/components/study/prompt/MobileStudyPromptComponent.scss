@@ -8,6 +8,30 @@ gelato-component[data-name='mobile-study-prompt'] {
   overflow: hidden;
   position: relative;
 
+  &.fetching-items {
+     #panel-left, #panel-right {
+       pointer-events: none;
+     }
+
+    .brush-loader {
+      display: block;
+    }
+
+    #panel-left {
+      .content {
+        opacity: 0.4;
+      }
+    }
+  }
+
+  .brush-loader {
+    display: none;
+    z-index: 8000;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
   #overlay {
     background-color: $white1;
     border-radius: 25px;
