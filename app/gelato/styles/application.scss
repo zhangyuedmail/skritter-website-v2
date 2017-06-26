@@ -260,6 +260,11 @@ gelato-application {
   background: url('#{$dir-assets}/brush-loader.png') left center;
   -webkit-animation: loading-spin 2s infinite linear;
   animation: loading-spin 2s infinite linear;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 @-webkit-keyframes loading-spin {
