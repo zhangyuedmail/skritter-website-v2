@@ -23,12 +23,16 @@ const UserModel = SkritterModel.extend({
     allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
     allJapaneseParts: ['defn', 'rdng', 'rune'],
     audioEnabled: true,
+    autoAdvancePrompts: 0.0,
     dailyItemAddingLimit: 20,
     disabled: false,
+    disablePinyinReadingPromptInput: false,
     filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
+    filteredChineseLists: [],
     filteredChineseStyles: ['both', 'simp', 'trad'],
     filteredJapaneseParts: ['defn', 'rdng', 'rune'],
-    filteredJapaneseStyles: [],
+    filteredJapaneseLists: [],
+    filteredJapaneseStyles: ['none'],
     hideDefinition: false,
     gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
     goals: {ja: {items: 20}, zh: {items: 20}},
@@ -40,7 +44,7 @@ const UserModel = SkritterModel.extend({
     studyKana: false,
     teachingMode: true,
     timezone: 'America/New_York',
-    volume: 1,
+    volume: 1.0,
     wordDictionary: null
   },
 
@@ -149,6 +153,14 @@ const UserModel = SkritterModel.extend({
    * @method getFilterParts
    * @returns {Array}
    */
+  getFilteredLists: function() {
+    return app.isChinese() ? this.get('filteredChineseLists') : this.get('filteredJapaneseLists');
+  },
+
+  /**
+   * @method getFilterParts
+   * @returns {Array}
+   */
   getFilteredParts: function() {
     var filteredParts = app.isChinese() ? this.get('filteredChineseParts') : this.get('filteredJapaneseParts');
 
@@ -160,9 +172,9 @@ const UserModel = SkritterModel.extend({
    * @returns {Array}
    */
   getFilteredStyles: function() {
-    var filteredParts = app.isChinese() ? this.get('filteredChineseStyles') : this.get('filteredChineseStyles');
+    var filteredStyles = app.isChinese() ? this.get('filteredChineseStyles') : this.get('filteredJapaneseStyles');
 
-    return _.intersection(this.getStudyStyles(), filteredParts);
+    return _.intersection(this.getStudyStyles(), filteredStyles);
   },
 
   /**

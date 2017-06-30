@@ -11,6 +11,7 @@ window.WebFont = require('webfontloader');
 require('babel-polyfill');
 require('bootstrap');
 require('bootstrap-daterangepicker');
+require('bootstrap-multiselect');
 require('bootstrap-notify');
 require('bootstrap-slider');
 require('bootstrap-switch');
@@ -25,7 +26,7 @@ const Application = require('./application');
 module.exports = (function() {
 
   function start() {
-    window.ScreenLoader = new (require('../startup/screen-loader/module'))();
+    window.ScreenLoader = new (require('../startup/screen-loader/ScreenLoaderComponent'))();
     window.ScreenLoader.post('Loading application');
 
     window.app = new Application({rootSelector: 'body'});

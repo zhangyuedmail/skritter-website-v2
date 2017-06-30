@@ -89,10 +89,13 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
     this.prompt.vocabSentence.render();
     this.prompt.vocabStyle.render();
     this.prompt.vocabWriting.render();
+
     if (app.user.isAudioEnabled()) {
       this.prompt.reviews.vocab.play();
     }
+
     this.renderTemplate();
+
     return this;
   },
 
@@ -146,9 +149,9 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
   handlePromptToolbarGradingMouseup: function(value) {
     this.prompt.review.set('score', value);
 
-    setTimeout(() => {
-      this.prompt.next();
-    }, config.gradingBarClickAdvanceDelay);
+    if (app.user.get('autoAdvancePrompts')) {
+      this.prompt.startAutoAdvance();
+    }
   }
 
 });

@@ -1,0 +1,80 @@
+@import "../../styles/_variables";
+
+gelato-component.demo-progress-component {
+  width: 100%;
+  background-color: $black;
+  position: absolute;
+  color: $white2;
+  font-size: 16px;
+  height: 40px;
+
+  .progress-bar-wrapper {
+    position: absolute;
+    background: #CCC;
+    height: 1vh;
+    top: 2vh;
+    left: 10%;
+    right: 100px;
+  }
+
+  .skip-btn {
+    position: absolute;
+    right: 10px;
+    top: .5vh;
+  }
+
+  .progress-bar {
+    background: $green5;
+  }
+
+  .user-stats-wrapper {
+    margin-bottom: 20px;
+  }
+
+  .profile-picture {
+    display: block;
+    margin-left: 75px;
+    margin-bottom: 10px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #999;
+  }
+
+  .logout {
+    cursor: pointer;
+    margin-left: 15px;
+  }
+
+  .settings {
+    cursor: pointer;
+    float: right;
+    margin-right: 15px;
+    text-align: right;
+  }
+
+  .settings, .logout {
+    font-size: 24px;
+  }
+
+  a {
+    color: $sand1;
+    font-size: 22px;
+    padding: 4px 15px;
+
+    &:hover, &:focus {
+      background-color: $sand6;
+    }
+  }
+
+  .help-button-wrapper {
+    position: absolute;
+    bottom: 0;
+  }
+
+  .fa-question-circle {
+    float: left;
+    margin-right: 10px;
+    margin-top: 6px;
+  }
+}

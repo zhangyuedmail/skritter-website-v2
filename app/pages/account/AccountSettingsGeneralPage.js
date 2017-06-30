@@ -1,7 +1,10 @@
 const GelatoPage = require('gelato/page');
 const AccountSidebar = require('components/account/AccountSidebarComponent');
+const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
+const AvatarSelect = require('dialogs1/avatar-select/AvatarSelectDialog.js');
 const ChangePasswordDialog = require('dialogs1/change-password/view');
 const ResetAllDataDialog = require('dialogs1/reset-all-data/view');
+
 const defaultAvatar = require('data/default-avatar');
 
 /**
@@ -18,8 +21,9 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     'change #avatar-upload-input': 'handleChangeAvatarUploadInput',
     'change #field-country': 'handleSelectCountry',
     'click #button-save': 'handleClickButtonSave',
+    'click #select-avatar': 'handleClickSelectAvatar',
+    'click #upload-avatar': 'handleClickUploadAvatar',
     'click #field-change-password': 'handleClickChangePassword',
-    'click #change-avatar': 'handleClickChangeAvatar',
     'click #reset-all-data': 'handleClickResetAllData'
   },
 
@@ -46,6 +50,8 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     this.sidebar = new AccountSidebar();
     this.listenTo(app.user, 'state', this.render);
 
+    this._views['expiration'] = new ExpiredNotification({hideable: false});
+
     app.user.fetch();
   },
 
@@ -61,7 +67,29 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     this.renderTemplate();
     this.sidebar.setElement('#sidebar-container').render();
 
+    this._views['expiration'].setElement('#subscription-notice').render();
+
     return this;
+  },
+
+  convertFileToDataURL: function(url) {
+    const xhr = new XMLHttpRequest();
+
+    return new Promise(resolve => {
+      xhr.onload = function() {
+        const reader = new FileReader();
+
+        reader.onloadend = function() {
+          resolve(reader.result);
+        };
+
+        reader.readAsDataURL(xhr.response);
+      };
+
+      xhr.open('GET', url);
+      xhr.responseType = 'blob';
+      xhr.send();
+    });
   },
 
   /**
@@ -85,12 +113,13 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @param {Event} event
    */
   handleChangeAvatarUploadInput: function(event) {
-    var file = event.target.files[0];
-    var data = new FormData().append('image', file);
-    var reader = new FileReader();
-    reader.onload = function(event) {
-      $('#field-avatar').attr('src', event.target.result);
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = event => {
+      this.$('#field-avatar').attr('src', event.target.result);
     };
+
     reader.readAsDataURL(file);
   },
 
@@ -100,17 +129,21 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @param {Event} event
    */
   handleClickButtonSave: function(event) {
-    let self = this;
+    const formData = this._getFormData();
+
     event.preventDefault();
-    let formData = this._getFormData();
 
     if (!this._validateAccountData(formData)) {
       return;
     }
+
     this.$('#error-alert').addClass('hidden');
 
-    app.user.save(formData, {
-      error: function(req, error) {
+    app.user.set(formData);
+    app.user.cache();
+
+    app.user.save(null, {
+      error: (req, error) => {
         let msg = error.responseJSON.message;
 
         if (msg.indexOf('Another user goes by that name.') > -1) {
@@ -122,19 +155,46 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
 
           app.user.set('avatar', defaultAvatar);
           app.user.save();
+          app.user.cache();
         }
 
-        self.displayErrorMessage(msg);
-      }
+        this.displayErrorMessage(msg);
+      },
+      success: model => model.cache()
     });
   },
 
   /**
-   * @method handleClickChangeAvatar
+   * @method handleClickSelectAvatar
    * @param {Event} event
    */
-  handleClickChangeAvatar: function(event) {
+  handleClickSelectAvatar: function(event) {
+    const dialog = new AvatarSelect();
+
     event.preventDefault();
+
+    dialog.on('select', async id => {
+      const path = app.isCordova() ? 'media/avatars/' : '/media/avatars/';
+      const avatar = await this.convertFileToDataURL(path + id + '.png');
+
+      if (avatar) {
+        this.$('#field-avatar').attr('src', avatar);
+      } else {
+        this.$('#field-avatar').attr('src', defaultAvatar);
+      }
+
+    });
+
+    dialog.open();
+  },
+
+  /**
+   * @method handleClickUploadAvatar
+   * @param {Event} event
+   */
+  handleClickUploadAvatar: function(event) {
+    event.preventDefault();
+
     this.$('#avatar-upload-input').trigger('click');
   },
 
@@ -186,9 +246,11 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    */
   _getFormData: function() {
     let avatar = this.$('#field-avatar').get(0).src;
+
     avatar = avatar.replace('data:image/gif;base64,', '');
     avatar = avatar.replace('data:image/jpeg;base64,', '');
     avatar = avatar.replace('data:image/png;base64,', '');
+
     return {
       avatar: avatar,
       aboutMe: this.$('#field-about').val().trim(),

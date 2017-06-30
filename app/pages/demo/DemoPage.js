@@ -3,6 +3,7 @@ const Vocabs = require('collections/VocabCollection');
 const Prompt = require('components/study/prompt/StudyPromptComponent.js');
 const DemoCallToActionDialog = require('dialogs1/demo-call-to-action/view');
 const DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
+const DemoProgressComponent = require('components/demo/DemoProgressComponent.js');
 const ItemsCollection = require('collections/ItemCollection');
 const vent = require('vent');
 
@@ -44,7 +45,9 @@ const DemoPage = GelatoPage.extend({
    * @constructor
    */
   initialize: function(options) {
-    _.bindAll(this, 'teachDemoChar1','teachDemoChar2', 'writeDemoChar1', 'writeDemoChar2', 'completeDemo', 'switchToWriting');
+    _.bindAll(this, 'teachDemoChar1','teachDemoChar2', 'writeDemoChar1',
+      'writeDemoChar2', 'completeDemo', 'switchToWriting', 'teachEraseDemoChar1',
+      'teachDefinitionPrompt1', 'teachEraseDemoChar2');
 
     this.dialog = null;
     this.lang = 'zh';
@@ -57,6 +60,13 @@ const DemoPage = GelatoPage.extend({
     this.vocab = null;
     this.vocabs = new Vocabs();
     this.items = new ItemsCollection();
+
+    if (app.isDevelopment()) {
+      this._views['progress'] = new DemoProgressComponent({
+        demoPage: this,
+        firstStep: 'languageSelection'
+      });
+    }
   },
 
   /**
@@ -66,6 +76,10 @@ const DemoPage = GelatoPage.extend({
   render: function() {
     this.renderTemplate();
     this.prompt.setElement('#demo-prompt-container').render();
+
+    if (this._views['progress']) {
+      this.$('#progress-container').html(this._views['progress'].render().el)
+    }
     this.loadDemo();
 
     return this;
@@ -136,11 +150,73 @@ const DemoPage = GelatoPage.extend({
       function(error, vocab) {
         ScreenLoader.hide();
         self.prompt.show();
-        self.promptItems = vocab.getPromptItems('rune');
+        if (app.isDevelopment()) {
+          const runeItems = vocab.getPromptItems('rune');
+          self.promptItems = runeItems;
+        } else {
+          self.promptItems = vocab.getPromptItems('rune');
+        }
         self.promptItems.teachAll();
         self.teachDemoChar1();
       }
     );
+  },
+
+  /**
+   * Step that teaches users how to use the erase characters from the prompt
+   */
+  teachEraseDemoChar1: function() {
+    vent.trigger('notification:show', {
+        dialogTitle: 'Erasing Characters',
+        showTitle: true,
+        keepAlive: true,
+        body: this.parseTemplate(require('./notify-erase-character1.jade'))
+      });
+
+    const eraseBtn = $('.icon-study-erase');
+    const eraseBtnPos = eraseBtn.offset();
+    const eraseBtnWidth = Math.round(eraseBtn.width() / 2);
+    const eraseBtnHeight = Math.round(eraseBtn.width() / 2);
+    vent.trigger('callToActionGuide:toggle', true, {
+      top: (eraseBtnPos.top - eraseBtnHeight) + 'px',
+      left: (eraseBtnPos.left - eraseBtnWidth) + 'px',
+      width: (eraseBtnHeight * 4) + 'px',
+      height: (eraseBtnHeight * 4) + 'px'
+    });
+
+    this.prompt.once('character:erased', this.teachEraseDemoChar2);
+  },
+
+  /**
+   * Step that responds to a user erasing a character
+   */
+  teachEraseDemoChar2: function() {
+    vent.trigger('notification:show', {
+      dialogTitle: 'Erasing Characters',
+      showTitle: true,
+      keepAlive: true,
+      body: this.parseTemplate(require('./notify-erase-character2.jade'))
+    });
+
+    vent.trigger('callToActionGuide:toggle', false);
+
+    this.prompt.once('character:complete', this.teachDefinitionPrompt1);
+  },
+
+  /**
+   * Step that teaches users how to answer a definition prompt
+   */
+  teachDefinitionPrompt1: function() {
+    const defnItems = this.vocab.getPromptItems('defn');
+    this.promptItems = defnItems;
+    this.prompt.set(this.promptItems);
+
+    vent.trigger('notification:show', {
+      dialogTitle: 'Definition Prompts',
+      showTitle: true,
+      keepAlive: true,
+      body: this.parseTemplate(require('./notify-definition1.jade'))
+    });
   },
 
   /**
@@ -155,6 +231,8 @@ const DemoPage = GelatoPage.extend({
     this.prompt.$('#toolbar-action-container').hide();
     this.prompt.$('#toolbar-vocab-container').hide();
     this.prompt.once('character:complete', this.teachDemoChar2);
+
+    this.trigger('step:update', 'teachDemoChar1');
 
     if (app.isDevelopment()) {
       this.showDemoGuidePopup();
@@ -211,7 +289,12 @@ const DemoPage = GelatoPage.extend({
     this.prompt.part.eraseCharacter();
     this.prompt.review.set('score', 3);
     this.prompt.$('#toolbar-action-container').show();
-    this.prompt.once('character:complete', this.completeDemo);
+
+    if (app.isDevelopment()) {
+      this.prompt.once('character:complete', this.teachEraseDemoChar1);
+    } else {
+      this.prompt.once('character:complete', this.completeDemo);
+    }
   },
 
   /**
@@ -235,7 +318,7 @@ const DemoPage = GelatoPage.extend({
       buttonText: 'Next',
       showConfirmButton: true,
       style: {
-        backgdrop: {
+        backdrop: {
           top: '51px'
         },
         dialog: {

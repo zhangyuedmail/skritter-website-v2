@@ -61,6 +61,9 @@ const StudyListPage = GelatoPage.extend({
       this._views['recipe'] = new Recipes();
     }
 
+    // make sure the item collection knows about filtered list
+    this.items.listIds = [this.vocablist.id];
+
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
     this.listenTo(vent, 'items:add', this.addItems);
@@ -107,7 +110,7 @@ const StudyListPage = GelatoPage.extend({
       {
         lang: app.getLanguage(),
         limit: numToAdd,
-        listId: this.vocablist.id
+        lists: this.vocablist.id
       },
       function(error, result) {
         if (!error) {
@@ -142,7 +145,6 @@ const StudyListPage = GelatoPage.extend({
   checkRequirements: function() {
     ScreenLoader.post('Preparing study');
 
-    this.items.listId = this.vocablist.id;
     this.items.updateDueCount();
 
     async.parallel(
@@ -187,7 +189,7 @@ const StudyListPage = GelatoPage.extend({
               {
                 lang: app.getLanguage(),
                 limit: 5,
-                listId: this.vocablist.id
+                lists: this.vocablist.id
               },
               function() {
                 app.reload();
@@ -274,20 +276,8 @@ const StudyListPage = GelatoPage.extend({
     const items = this.items.getNext();
     const queue = this.items.getQueue();
 
-    if (!queue.length) {
-      this.prompt.$panelLeft.css('opacity', 0.4);
-      this.prompt.$panelLeft.css('pointer-events', 'none');
-      this.prompt.$panelRight.css('pointer-events', 'none');
-      this.items.reviews.post({skip: 1});
-      this.items.fetchNext({limit: 30, lists: this.vocablist.id});
-
-      return;
-    }
-
     if (this.previousPrompt) {
-      this.prompt.$panelLeft.css('opacity', 1.0);
-      this.prompt.$panelLeft.css('pointer-events', 'auto');
-      this.prompt.$panelRight.css('pointer-events', 'auto');
+      this.togglePromptLoading(false);
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
@@ -298,9 +288,7 @@ const StudyListPage = GelatoPage.extend({
     if (items.length) {
       this.currentItem = items[0];
       this.currentPromptItems = items[0].getPromptItems();
-      this.prompt.$panelLeft.css('opacity', 1.0);
-      this.prompt.$panelLeft.css('pointer-events', 'auto');
-      this.prompt.$panelRight.css('pointer-events', 'auto');
+      this.togglePromptLoading(false);
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
@@ -318,11 +306,9 @@ const StudyListPage = GelatoPage.extend({
     }
 
     if (!queue.length) {
-      this.prompt.$panelLeft.css('opacity', 0.4);
-      this.prompt.$panelLeft.css('pointer-events', 'none');
-      this.prompt.$panelRight.css('pointer-events', 'none');
+      this.togglePromptLoading(true);
       this.items.reviews.post({skip: 1});
-      this.items.fetchNext({limit: 30});
+      this.items.fetchNext({limit: 30, lists: this.vocablist.id});
       return;
     }
 
@@ -333,9 +319,7 @@ const StudyListPage = GelatoPage.extend({
     }
 
     // disable things while preloading
-    this.prompt.$panelLeft.css('opacity', 0.4);
-    this.prompt.$panelLeft.css('pointer-events', 'none');
-    this.prompt.$panelRight.css('pointer-events', 'none');
+    this.togglePromptLoading(true);
     this.items.preloadNext();
   },
 
@@ -344,7 +328,7 @@ const StudyListPage = GelatoPage.extend({
    */
   previous: function() {
     if (this.previousPromptItems) {
-      this.prompt.$panelLeft.css('opacity', 1.0);
+      this.togglePromptLoading(false);
       this.prompt.reviewStatus.render();
       this.prompt.set(this.previousPromptItems);
       this.toolbar.render();
@@ -392,8 +376,22 @@ const StudyListPage = GelatoPage.extend({
         }
       );
     });
-  }
+  },
 
+  /**
+   * Toggles the loading state on the canvas when fetching new items
+   * @param {Boolean} loading whether the prompt is loading
+   */
+  togglePromptLoading: function(loading) {
+
+    // toggle it if it wasn't passed in
+    if (loading === undefined) {
+      loading = !(this.prompt.$panelLeft.css('opacity') === 0.4);
+    }
+
+    const componentName = app.isMobile() ? 'mobile-study-prompt' : 'study-prompt';
+    this.prompt.$el.find('gelato-component[data-name="' + componentName + '"]').toggleClass('fetching-items', loading);
+  }
 });
 
 module.exports = StudyListPage;

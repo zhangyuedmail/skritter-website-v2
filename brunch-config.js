@@ -33,6 +33,7 @@ exports.config = {
     styles: {
       'bootstrap': ['dist/css/bootstrap.css'],
       'bootstrap-daterangepicker': ['daterangepicker.css'],
+      'bootstrap-multiselect': ['dist/css/bootstrap-multiselect.css'],
       'bootstrap-slider': ['dist/css/bootstrap-slider.css'],
       'bootstrap-switch': ['dist/css/bootstrap3/bootstrap-switch.css'],
       'cal-heatmap': ['cal-heatmap.css'],
@@ -50,7 +51,7 @@ exports.config = {
     },
     babel: {
       ignore: ['app/data/*', 'node_modules/*', 'vendor/*'],
-      presets: ['es2015']
+      presets: ['env']
     },
     replace: {
       mappings: {

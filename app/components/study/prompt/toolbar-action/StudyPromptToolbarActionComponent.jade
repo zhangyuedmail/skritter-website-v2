@@ -14,6 +14,6 @@ gelato-component(data-name="study-prompt-toolbar-action")
     .btn-wrapper(role="group")
       button#toolbar-correct.btn.btn-default(type="button", class=view.buttonCorrect ? '' : 'disabled')
         if prompt.review.get('score') > 1
-          i.icon.icon-study-correct(class=view.buttonCorrect ? '' : 'disabled')
+          i.icon.icon-study-dont-know(class=view.buttonCorrect ? '' : 'disabled')
         else
           i.icon.icon-study-incorrect(class=view.buttonCorrect ? '' : 'disabled')

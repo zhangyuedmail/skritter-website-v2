@@ -23,6 +23,16 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
   template: require('./AccountExpiredNotification'),
 
   /**
+   * @method initialize
+   * @param {Object} [options]
+   */
+  initialize: function(options) {
+    options = options || {};
+
+    this.hideable = _.defaultTo(options.hideable, true);
+  },
+
+  /**
    * @method render
    * @returns {ExpiredNotificationComponent}
    */
@@ -43,6 +53,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
     event.preventDefault();
 
     app.setSetting('hideSubscriptionNotification', true);
+
     this.updateSubscriptionState();
   },
 
@@ -54,7 +65,14 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
   updateSubscriptionState: function() {
     const sub = app.user.subscription;
     const hide = app.getSetting('hideSubscriptionNotification');
-    const hideNotification = sub.getStatus() !== 'Expired' || hide;
+    let hideNotification;
+
+    if (this.hideable) {
+      hideNotification = sub.getStatus() !== 'Expired' || hide
+    } else {
+      hideNotification = sub.getStatus() !== 'Expired';
+    }
+
     if (sub.state === 'standby') {
       this.$('gelato-component').toggleClass('hidden', hideNotification);
 

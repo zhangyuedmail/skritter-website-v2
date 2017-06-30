@@ -1,7 +1,6 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='demo'] {
-
   background: $background-primary;
   padding-top: 50px;
   padding-bottom: 0;
@@ -10,4 +9,8 @@ gelato-page[data-name='demo'] {
     margin-top: 50px;
   }
 
+  #progress-container {
+    //max-width: 1140px;
+    margin: auto;
+  }
 }

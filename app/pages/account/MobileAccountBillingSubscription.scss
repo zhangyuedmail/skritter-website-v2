@@ -70,6 +70,11 @@ gelato-page[data-name='mobile-account-billing-subscription'] {
     top: 10px;
   }
 
+  .billing-history {
+    margin-top: 30px;
+    text-align: center;
+  }
+
   .spoof-button-area {
     margin: 0 auto 0 auto;
     width: 180px;
@@ -97,8 +102,8 @@ gelato-page[data-name='mobile-account-billing-subscription'] {
   }
 
   .main-content {
-    border-radius: 0px;
-    padding: 15px;
+    border-radius: 0;
+    padding: 30px;
   }
 
   .form-control-static {
@@ -108,5 +113,9 @@ gelato-page[data-name='mobile-account-billing-subscription'] {
   .pad-top {
     padding-top: 20px;
     padding-bottom: 20px;
+  }
+
+  .sub-button {
+    text-align: center;
   }
 }

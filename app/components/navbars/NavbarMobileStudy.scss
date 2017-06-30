@@ -97,6 +97,12 @@ bootstrap-navbar[data-name='mobile'] {
     color: $green6;
   }
 
+  .add-amt {
+    color: $green5;
+    cursor: pointer;
+    padding: 10px 15px;
+  }
+
   #add-popup {
     position: absolute;
     top: 35px;

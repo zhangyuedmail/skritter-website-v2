@@ -7,8 +7,8 @@
     "email": "team@skritter.com",
     "url": "https://skritter.com"
   },
-  "version": "2.3.0",
-  "versionCode": "20300",
+  "version": "2.3.1",
+  "versionCode": "20301",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
     "body-parser": "~1.17",
     "bootstrap": "~3.3",
     "bootstrap-daterangepicker": "~2.1",
+    "bootstrap-multiselect": "0.9.13-1",
     "bootstrap-notify": "~3.1",
     "bootstrap-slider": "~9.8",
     "bootstrap-switch": "~3.3",
@@ -63,7 +64,7 @@
     "auto-reload-brunch": "~2.7",
     "babel-brunch": "~6.1",
     "babel-polyfill": "~6.23",
-    "babel-preset-es2015": "~6.24",
+    "babel-preset-env": "~1.5",
     "brunch": "~2.10",
     "chai": "~3.5",
     "chai-webdriver": "~1.2",

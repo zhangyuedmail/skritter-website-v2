@@ -113,10 +113,12 @@ const AccountSettingsStudyPage = GelatoPage.extend({
     let zhStudyStyleChanged;
 
     app.user.set({
+      addFrequency: parseInt(this.$('#field-add-frequency').val(), 10),
       autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
-      autoAdvancePrompts: this.$('#field-auto-advance').is(':checked'),
+      autoAdvancePrompts: this.$('#field-auto-advance').is(':checked') ? 1.0 : 0,
       hideDefinition: this.$('#field-hide-definition').is(':checked'),
       hideReading: this.$('#field-hide-reading').is(':checked'),
+      retentionIndex: parseInt(this.$('#field-retention-index').val(), 10),
       showHeisig: this.$('#field-heisig').is(':checked'),
       sourceLang: this.$('#field-source-language').val(),
       squigs: this.$('#field-squigs').is(':checked'),
@@ -129,6 +131,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
         addSimplified: this.$('#field-styles [value="simp"]').is(':checked'),
         addTraditional: this.$('#field-styles [value="trad"]').is(':checked'),
         chineseStudyParts: this.getSelectedParts(),
+        disablePinyinReadingPromptInput: this.$('#field-pinyin-input').is(':checked'),
         readingChinese: this.$('#field-bopomofo').is(':checked') ? 'zhuyin' : 'pinyin'
       });
     }
@@ -145,7 +148,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
 
     zhStudyStyleChanged = (app.isChinese() && app.user.hasChanged('addSimplified') ||
     app.user.hasChanged('addTraditional'));
-
+    app.user.cache();
     app.user.save(null, {
       error: function(req, error) {
         let msg = error.responseJSON.message;

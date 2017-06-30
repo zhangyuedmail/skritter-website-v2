@@ -8,6 +8,30 @@ gelato-component[data-name='mobile-study-prompt'] {
   overflow: hidden;
   position: relative;
 
+  &.fetching-items {
+     #panel-left, #panel-right {
+       pointer-events: none;
+     }
+
+    .brush-loader {
+      display: block;
+    }
+
+    #panel-left {
+      .content {
+        opacity: 0.4;
+      }
+    }
+  }
+
+  .brush-loader {
+    display: none;
+    z-index: 8000;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
   #overlay {
     background-color: $white1;
     border-radius: 25px;
@@ -108,13 +132,13 @@ gelato-component[data-name='mobile-study-prompt'] {
             background: linear-gradient(to left, $white1 1%, $white1 50%, $grade1 51%, $grade1 100%);
           }
           &.grade-2 {
-            background: linear-gradient(to right, $white1 1%, $white1 50%, $grade2 51%, $grade2 100%);
+            background: linear-gradient(to left, $white1 1%, $white1 50%, $grade2 51%, $grade2 100%);
           }
           &.grade-3 {
             background: linear-gradient(to left, $white1 1%, $white1 50%, $grade3 51%, $grade3 100%);
           }
           &.grade-4 {
-            background: linear-gradient(to right, $white1 1%, $white1 50%, $grade4 51%, $grade4 100%);
+            background: linear-gradient(to left, $white1 1%, $white1 50%, $grade4 51%, $grade4 100%);
           }
           &.auto-advancing {
             -webkit-animation: AutoAdvanceProgress 1s ease infinite;

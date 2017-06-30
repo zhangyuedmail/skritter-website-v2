@@ -38,55 +38,73 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.dueCount = 0;
     this.dueCountState = 'standby';
     this.fetchingState = 'standby';
-    this.listId = null;
+    this.listIds = [];
     this.preloadingState = 'standby';
     this.sorted = null;
   },
 
   /**
-   * Adds a single item for a user to study
+   * Adds a single item for a user to study.
+   * DON'T CALL THIS FUNCTION DIRECTLY: use addItems() instead!
    * @param {Object} [options] options for the add operation
-   * @param {String} [options.listId] a list id from which to add items
+   * @param {String} [options.lang] language to fetch items from lists
+   * @param {String|String[]} [options.listIds] an array or string of list ids from which to add items
    * @return {Promise<Object>} resolves when the item has been added
    * @method addItem
    */
   addItem: function(options) {
-    const self = this;
+    options = options || {};
+    options.lang = options.lang || app.getLanguage();
+
+    if (options.lists) {
+      options.lists = _.isArray(options.lists) ? options.lists : [options.lists];
+    } else {
+      options.lists = [];
+    }
+
+    options.lists = options.lists.join('|');
 
     return new Promise((resolve, reject) => {
       if (this.addingState === 'standby') {
         this.addingState = 'adding';
       } else {
         resolve();
+
         return;
       }
 
-      options.listId = options.listId || '';
+      const params = '?lang=' + options.lang +
+        '&lists=' + options.lists +
+        '&offset=' + options.offset;
 
       $.ajax({
-        url: app.getApiUrl() + 'items/add?lists=' + options.listId + '&lang=' + app.getLanguage(),
+        url: app.getApiUrl() + 'items/add' + params,
         type: 'POST',
         headers: app.user.session.getHeaders(),
-        context: this,
-        error: function(error) {
-          self.addingState = 'standby';
+        error: error => {
+          this.addingState = 'standby';
 
           reject(error);
         },
-        success: function(result) {
+        success: result => {
           if (result.Items.length) {
             const item = new ItemModel(result.Items[0]);
+
+            console.log('ADDED ITEM:', result.Items[0]);
 
             item._loaded = false;
             item._queue = true;
 
-            self.add(item);
+            this.add(item);
+            this.unshift(item);
 
-            self.unshift(item);
-            self.preloadNext();
+            // only preload when a single item is being added
+            if (options.limit === 1) {
+              this.preloadNext();
+            }
           }
 
-          self.addingState = 'standby';
+          this.addingState = 'standby';
 
           resolve(result);
         }
@@ -100,42 +118,53 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @param {Object} [options] object that contains options for the add operation
    * @param {Number} [options.limit] the number of items to attempt to add
    * @param {String} [options.listId] a list id from which to add items
+   * @param {Number} [options.offset] offset value for which list to start adding from
    * @param {Function} [callback] an optional callback that will be called when
    *                              the limit has been reached.
    * @method addItems
    */
   addItems: function(options, callback) {
-    let self = this;
     let count = 0;
     let results = {items: [], numVocabsAdded: 0, itemsFailed: 0};
 
     options = options || {};
     options.limit = options.limit || 1;
+    options.offset = options.offset || Math.round(Math.random() * 10);
 
-    app.user.isSubscriptionActive((active) => {
+    app.user.isSubscriptionActive(active => {
       if (!active) {
         this.itemsAdded(results, callback);
+
+        return;
       }
 
-      async.whilst(() => { return count < options.limit}, function(whilstCb) {
-        count++;
+      async.whilst(
+        () => {
+          console.log(count, options.limit);
 
-        self.addItem(options).then((result) => {
-          if (result) {
+          return count < options.limit
+        },
+        async callback => {
+          count++;
+
+          try {
+            const result = await this.addItem(options);
+
             results.items.push(result);
             results.numVocabsAdded += result.numVocabsAdded;
+
+            options.offset++;
+
+            callback();
+          } catch (error) {
+            results.itemsFailed++;
+
+            callback();
           }
-
-          whilstCb();
-        }, (error) => {
-          results.itemsFailed++;
-
-          // TODO: retry?
-          whilstCb();
+        },
+        () => {
+          this.itemsAdded(results, callback);
         });
-      }, () => {
-        this.itemsAdded(results, callback);
-      });
     });
   },
 
@@ -150,6 +179,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @return {Object} the results object
    */
   itemsAdded: function(results, callback) {
+    this.preloadNext();
     this.updateDueCount();
 
     if (_.isFunction(callback)) {
@@ -246,15 +276,15 @@ const ItemCollection = BaseSkritterCollection.extend({
                 data: {
                   languageCode: app.getLanguage(),
                   limit: options.limit,
-                  lists: options.lists,
+                  lists: options.lists || app.user.getFilteredLists().join('|'),
                   parts: app.user.getFilteredParts().join('|'),
                   sections: options.sections,
                   styles: app.user.getFilteredStyles().join('|')
                 },
-                error: (error) => {
+                error: error => {
                   callback(error);
                 },
-                success: (result) => {
+                success: result => {
                   this.reset();
 
                   _.forEach(
@@ -315,6 +345,11 @@ const ItemCollection = BaseSkritterCollection.extend({
 
           // check if model has been removed from collection
           if (!model) {
+            return false;
+          }
+
+          // exclude models that have not been fully loaded yet
+          if (!model._loaded) {
             return false;
           }
 
@@ -509,7 +544,7 @@ const ItemCollection = BaseSkritterCollection.extend({
       data: {
         lang: app.getLanguage(),
         languageCode: app.getLanguage(),
-        lists: this.listId,
+        lists: this.listIds.join(','),
         parts: app.user.getFilteredParts().join(','),
         styles: app.user.getFilteredStyles().join(',')
       },

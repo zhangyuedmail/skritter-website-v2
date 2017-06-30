@@ -5,7 +5,7 @@
 function ScreenLoader() {
   this.element = null;
   this.messages = [];
-  this.template = require('./template');
+  this.template = require('./ScreenLoader.jade');
   this.timeout = null;
   this.render();
 }

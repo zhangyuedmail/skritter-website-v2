@@ -84,6 +84,13 @@ const VocablistCollection = BaseSkritterCollection.extend({
   },
 
   /**
+   * @method getStudying
+   */
+  getStudying: function() {
+    return this.getAdding().concat(this.getReviewing());
+  },
+
+  /**
    * @method resetAllPositions
    * @param {Function} [callback]
    * @returns {VocablistCollection}

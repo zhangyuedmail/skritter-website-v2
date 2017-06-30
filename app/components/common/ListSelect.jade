@@ -1,0 +1,8 @@
+gelato-component(data-name='list-select')
+  - var selectedLists = app.user.getFilteredLists();
+
+  select#field-lists(multiple)
+    for vocablist in view.vocablists.models
+      - var state = _.includes(selectedLists, vocablist.id);
+
+      option(value=vocablist.id, selected=state)= vocablist.get('shortName') || vocablist.get('name')

@@ -82,6 +82,14 @@ const SubscriptionModel = SkritterModel.extend({
   },
 
   /**
+   * @method isSubscribed
+   * @returns {boolean}
+   */
+  isSubscribed: function() {
+    return this.get('subscribed');
+  },
+
+  /**
    * @method restoreSubscription
    */
   restoreSubscription: function() {

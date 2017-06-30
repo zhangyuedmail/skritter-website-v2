@@ -83,17 +83,19 @@ const ContactPage = GelatoPage.extend({
       headers: app.user.session.getHeaders(),
       context: this,
       type: 'POST',
-      data: JSON.stringify(formData)
-    }).done(function() {
-      this.$('#contact-message').removeClass();
-      this.$('#contact-message').addClass('text-success');
-      this.$('#contact-message').text('Your feedback has been successfully submitted.');
-      this.$('form').hide(500);
-    }).error(function(error) {
-      this.$('#contact-message').removeClass();
-      this.$('#contact-message').addClass('text-danger');
-      this.$('#contact-message').text(JSON.stringify(error));
-      this.enableForm('form');
+      data: JSON.stringify(formData),
+      success: () => {
+        this.$('#contact-message').removeClass();
+        this.$('#contact-message').addClass('text-success');
+        this.$('#contact-message').text('Your feedback has been successfully submitted.');
+        this.$('form').hide(500);
+      },
+      error: (error) => {
+        this.$('#contact-message').removeClass();
+        this.$('#contact-message').addClass('text-danger');
+        this.$('#contact-message').text(JSON.stringify(error));
+        this.enableForm('form');
+      }
     });
   },
 

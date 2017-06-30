@@ -62,7 +62,7 @@ gelato-dialog(data-name='quick-settings')
                       )
                       | Definition
 
-            if app.isChinese()
+            if app.isChinese() && user.isAddingStyle('simp') && user.isAddingStyle('trad')
 
               hr
 
@@ -97,6 +97,15 @@ gelato-dialog(data-name='quick-settings')
             hr
 
             .form-group
+
+              label.col-sm-3.control-label(for="field-parts") Filter lists
+
+              .col-sm-9
+                #list-select-container
+
+            hr
+
+            .form-group
               label.col-sm-3.control-label(for="field-audio") Audio enabled
               .col-sm-9#field-audio
                 .checkbox
@@ -124,8 +133,8 @@ gelato-dialog(data-name='quick-settings')
                     input(type="checkbox", checked=user.get('squigs'))
                     .toggle-switch-slider.round
 
-          .text-left
-            a.btn.btn-primary(href="/account/settings/study") See all settings
-          .text-right
-            button#button-save.btn.btn-fixed.btn-success(type='button')= app.locale('common.save')
-
+          .bottom-buttons
+            .text-left
+              #more-settings-btn.btn.btn-primary More settings
+            .text-right
+              button#button-save.btn.btn-success(type='button')= app.locale('common.save')

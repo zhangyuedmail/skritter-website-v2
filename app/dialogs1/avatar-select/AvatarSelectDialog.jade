@@ -1,0 +1,27 @@
+gelato-dialog(data-name='avatar-select')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+
+        .button-close.fa.fa-close
+
+        .modal-body
+
+          .title Select an avatar
+
+          form.form-horizontal
+            .avatars
+              for row in view.getAvatarRows()
+                .row
+                  .col-xs-3
+                    if row[0]
+                      img.avatar(src=view.getFilePath() + row[0] + '.png', alt='', data-id=row[0])
+                  .col-xs-3
+                    if row[1]
+                    img.avatar(src=view.getFilePath() + row[1] + '.png', alt='', data-id=row[1])
+                  .col-xs-3
+                    if row[2]
+                      img.avatar(src=view.getFilePath() + row[2] + '.png', alt='', data-id=row[2])
+                  .col-xs-3
+                    if row[3]
+                      img.avatar(src=view.getFilePath() + row[3] + '.png', alt='', data-id=row[3])

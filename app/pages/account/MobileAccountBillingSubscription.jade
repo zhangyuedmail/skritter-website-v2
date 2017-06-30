@@ -36,7 +36,10 @@ gelato-page(data-name='mobile-account-billing-subscription')
                   p.form-control-static= view.subscription.getStatus()
 
               .form-group.form-group-lg
-                label.control-label.col-xs-5 Expires
+                if view.subscription.isSubscribed()
+                  label.control-label.col-xs-5 Next payment
+                else
+                  label.control-label.col-xs-5 Expires on
                 .col-xs-7
                   p.form-control-static
                     if expires
@@ -50,12 +53,15 @@ gelato-page(data-name='mobile-account-billing-subscription')
 
 
               if view.subscription.isExpired()
-                div
+                div.sub-button
                   button.subscribe-android.btn.btn-success(data-type='one.month.sub')
                     | Subscribe: monthly ($9.99 USD)
-                div
+                div.sub-button
                   button.subscribe-android.btn.btn-success(data-type='one.year.sub')
                     | Subscribe: yearly ($99.99 USD)
-                div
+                div.sub-button
                   button.restore-android.btn.btn-warning
                     | Restore
+
+              .billing-history
+                a(href='/account/billing/history') View billing history

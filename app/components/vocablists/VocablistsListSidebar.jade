@@ -44,7 +44,7 @@ gelato-component(data-name='vocablists-list-sidebar')
 
         if vocablist.isEditable()
           #image-upload-prompt
-            a#image-upload-link
+            a#image-upload-link-sidebar
               span.glyphicon.glyphicon-plus-sign
               span.spl= app.locale('common.changePhoto')
           input#image-upload-input.hide(type="file", accept="image/*")
@@ -78,42 +78,42 @@ gelato-component(data-name='vocablists-list-sidebar')
         .actions
           if vocablist.get('studyingMode') !== 'not studying'
             div.action
-              a#study-settings-link
+              a#study-settings-link-sidebar
                 span.glyphicon.glyphicon-cog
                 span= app.locale('common.settings')
 
           if vocablist.publishable()
-            a#publish-link
+            a#publish-link-sidebar
               div.action
                 span.glyphicon.glyphicon-share
                 span= app.locale('pages.vocabLists.publish')
 
           if vocablist.copyable()
-            a#copy-link
+            a#copy-link-sidebar
               div.action
                 span.glyphicon.glyphicon-duplicate
                 span= app.locale('common.copy')
 
           if vocablist
-            a#export-link
+            a#export-link-sidebar
               div.action
                 span.glyphicon.glyphicon-download
                 span= app.locale('pages.vocabLists.export')
 
           if vocablist.isEditable()
-            a#quick-add-link
+            a#quick-add-link-sidebar
               div.action
                 span.glyphicon.glyphicon-plus-sign
                 span= app.locale('pages.vocabLists.quickAdd')
 
           if vocablist.deletable()
-            a#delete-link
+            a#delete-link-sidebar
               div.action
                 span.glyphicon.glyphicon-trash
                 span= app.locale('common.delete')
 
           if vocablist.get('sort') === 'chinesepod-label'
-            a#update-link
+            a#update-link-sidebar
               div.action
                 i.fa.fa-1x.fa-spinner.fa-pulse.hide
                 span.glyphicon.glyphicon-refresh

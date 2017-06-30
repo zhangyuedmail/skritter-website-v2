@@ -30,7 +30,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    */
   initialize: function() {
     this._lists = [];
-    this._filterString = '';
+    this._filterString = app.get('lastVocablistBrowseSearch');
     this._filterType = [];
     this._layout = 'list';
     this._sortType = 'popularity';
@@ -64,10 +64,16 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
   },
 
   /**
+   * @param {String} [state] the state change that caused the rerender,
+   * if this was called through an event
    * @method render
    * @returns {VocablistsBrowseTableComponent}
    */
-  render: function() {
+  render: function(state) {
+    if (state === 'saving') {
+      return;
+    }
+
     this.update();
     this.renderTemplate();
     this.delegateEvents();
@@ -99,29 +105,36 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @param {Event} event
    */
   handleClickAddToQueueLink: function(event) {
-    event.preventDefault();
-    const self = this;
     const target = $(event.currentTarget);
     const listId = target.data('vocablist-id');
     const vocablist = this.vocablists.get(listId);
 
+    event.preventDefault();
+
     if (vocablist.get('studyingMode') === 'not studying' && !this._adding) {
       this._adding = true;
       vocablist.justAdded = true;
-      target.text(app.locale('pages.vocabLists.adding')).removeClass('add-to-queue-link');
+      target.removeClass('add-to-queue-link');
+      target.find('.glyphicon-plus-sign').hide();
+      target.find('.add-to-queue-text').text(app.locale('pages.vocabLists.adding'));
 
       vocablist.save({'studyingMode': 'adding'}, {
         patch: true,
-        success: function() {
+        success: () => {
           if (app.getSetting('newuser-' + app.user.id)) {
             app.getSetting('newuser-' + app.user.id, false);
             app.router.navigateStudy();
           } else {
-            self.render();
+            this._adding = false;
+
+            this.render();
           }
         },
-        error: function() {
-          self.render();
+        error: () => {
+          this._adding = false;
+
+          this.render();
+
           app.notifyUser({
             message: app.locale('pages.vocabLists.errorAddingList')
           });
@@ -143,7 +156,11 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @param {String} value
    */
   setFilterString: function(value) {
-    this._filterString = value.toLowerCase();
+    const searchValue = value.toLowerCase();
+
+    app.set('lastVocablistBrowseSearch', searchValue);
+
+    this._filterString = searchValue;
     this.render();
   },
 

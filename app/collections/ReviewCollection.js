@@ -106,7 +106,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
               data: JSON.stringify(data),
               error: (error) => {
                 const items = _
-                  .chain(error.responseJSON.errors)
+                  .chain(error.responseJSON ? error.responseJSON.errors : [])
                   .map('Item')
                   .without(undefined)
                   .value();

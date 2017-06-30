@@ -9,6 +9,22 @@ gelato-component[data-name='study-prompt'] {
   position: relative;
   width: 100%;
 
+  &.fetching-items {
+     #panel-left, #panel-right {
+       pointer-events: none;
+     }
+
+    .brush-loader {
+      display: block;
+    }
+
+    #panel-left {
+      .content {
+        opacity: 0.4;
+      }
+    }
+  }
+
   #overlay {
     background-color: $white1;
     border-radius: 25px;
@@ -27,6 +43,14 @@ gelato-component[data-name='study-prompt'] {
         margin: 0 5px;
       }
     }
+  }
+
+  .brush-loader {
+    display: none;
+    z-index: 8000;
+    position: absolute;
+    top: 20px;
+    right: 20px;
   }
 
   #panel-left {

@@ -26,6 +26,8 @@ gelato-page(data-name='account-billing-history')
                     if user.get('isAdmin') && payment.get('stripeID')
                       a(href="https://dashboard.stripe.com/payments/" + payment.get('stripeID'))
                         | Stripe
+                    else if payment.get('service') === 'Stripe'
+                      | #{payment.get('service')} (Credit Card
                     else
                       | #{payment.get('service')}
                   td.length-td= payment.get('name')

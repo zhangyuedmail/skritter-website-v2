@@ -147,19 +147,19 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
       return;
     }
 
-    var rangeData = this.getRangeData();
+    const rangeData = this.getRangeData();
 
     // total change number
-    var totalStr = "";
+    let totalStr = "";
+
     if (rangeData.totalChangeLearned > 0) {
       totalStr = "+";
-    } else if (rangeData.totalChangeLearned < 0) {
-      totalStr = "-";
     }
+
     totalStr += rangeData.totalChangeLearned;
 
     // graph
-    var chartData = this._graph.series[0];
+    const chartData = this._graph.series[0];
     chartData.setData(rangeData.chartData);
 
 

@@ -1,4 +1,5 @@
 const GelatoDialog = require('gelato/dialog');
+const ListSelect = require('components/common/ListSelectComponent');
 
 /**
  * @class QuickSettingsDialog
@@ -12,7 +13,8 @@ module.exports = GelatoDialog.extend({
   events: {
     'click #button-close': 'handleClickClose',
     'click #button-save': 'handleClickSave',
-    'click .part-checkbox': 'handleClickVocabPart'
+    'click .part-checkbox': 'handleClickVocabPart',
+    'click #more-settings-btn': 'handleClickMoreSettings'
   },
 
   /**
@@ -22,11 +24,21 @@ module.exports = GelatoDialog.extend({
   template: require('./QuickSettingsDialog.jade'),
 
   /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this._views['lists'] = new ListSelect();
+  },
+
+  /**
    * @method render
    * @returns {QuickSettingsDialog}
    */
   render: function() {
     this.renderTemplate();
+
+    this._views['lists'].setElement('#list-select-container').render();
 
     this.volumeSlider = this.$('#field-audio-volume').bootstrapSlider({});
 
@@ -48,9 +60,13 @@ module.exports = GelatoDialog.extend({
    * @returns {Array}
    */
   getSelectedStyles: function() {
-    return ['both'].concat(this.$('#field-styles :checked').map(function() {
-      return $(this).val();
-    }).get());
+    if (app.user.isAddingStyle('simp') && app.user.isAddingStyle('trad')) {
+      return ['both'].concat(this.$('#field-styles :checked').map(function() {
+        return $(this).val();
+      }).get());
+    }
+
+    return app.user.getStudyStyles();
   },
 
   /**
@@ -65,11 +81,13 @@ module.exports = GelatoDialog.extend({
     };
 
     if (app.isChinese()) {
+      settings.filteredChineseLists = this._views['lists'].getSelected();
       settings.filteredChineseParts = this.getSelectedParts();
       settings.filteredChineseStyles = this.getSelectedStyles();
     }
 
     if (app.isJapanese()) {
+      settings.filteredJapaneseLists = this._views['lists'].getSelected();
       settings.filteredJapaneseParts = this.getSelectedParts();
       settings.filteredJapaneseStyles = [];
     }
@@ -86,6 +104,13 @@ module.exports = GelatoDialog.extend({
 
     this.trigger('close');
     this.close();
+    $('body').removeClass('modal-open');
+  },
+
+  handleClickMoreSettings: function(event) {
+    this.handleClickClose(event);
+
+    app.router.navigate('account/settings/study', {trigger: true});
   },
 
   /**

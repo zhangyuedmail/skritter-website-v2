@@ -18,6 +18,18 @@ module.exports = {
   autoAdvanceDelay: 1000,
 
   /**
+   * Max size in px of the study canvas
+   * @type {Number}
+   */
+  canvasSize: 450,
+
+  /**
+   * Path for where to store audio persistently on a mobile device
+   * @type {String}
+   */
+  cordovaAudioUrl: 'cdvfile://localhost/persistent/audios/',
+
+  /**
    * The standard format a date should go in for internal application usage
    * (e.g. adding a date to a variable's value)
    * @type {String}
@@ -29,16 +41,10 @@ module.exports = {
   description: '{!application-description!}',
 
   /**
-   * Max size in px of the study canvas
-   * @type {Number}
+   * A standard regexp to use to perform all frontend email validation
+   * @type {RegExp}
    */
-  canvasSize: 450,
-
-  /**
-   * Path for where to store audio persistently on a mobile device
-   * @type {String}
-   */
-  cordovaAudioUrl: 'cdvfile://localhost/persistent/audios/',
+  emailRegexp: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
 
   /**
    * How long to wait in ms before advancing to the next prompt after the user
@@ -53,7 +59,17 @@ module.exports = {
    */
   language: '{!application-language!}',
 
+  /**
+   * A number value representing last time items have been changed.
+   * @type {Number}
+   */
   lastItemChanged: 0,
+
+  /**
+   * A string representing last vocablist browse search term.
+   * @type {String}
+   */
+  lastVocablistBrowseSearch: '',
 
   /**
    * The UI language code

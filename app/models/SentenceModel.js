@@ -53,6 +53,11 @@ const SentenceModel = GelatoModel.extend({
       }
     }
 
+    // catch sentence missing sentences writing when the above fails
+    if (!writing) {
+      writing = this.get('sentenceRune');
+    }
+
     if (mask !== undefined && typeof mask === 'string') {
       const pieces = mask.split('');
 
