@@ -15,21 +15,18 @@ gelato-page[data-name='mobile-account-settings-study'] {
     width: 100%;
     z-index: 7002;
 
+    a {
+      color: $sand1;
+    }
+
     .nav-option {
       padding: 4px 0;
       margin-bottom: 4px;
 
-      a {
-        color: $sand1;
-      }
-
       &.selected {
         margin-bottom: 0;
         border-bottom: 4px solid $green4;
-
-        a {
-          color: $white;
-        }
+        color: $white;
       }
     }
   }
