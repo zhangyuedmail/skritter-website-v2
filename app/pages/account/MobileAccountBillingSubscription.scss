@@ -18,18 +18,12 @@ gelato-page[data-name='mobile-account-billing-subscription'] {
     .nav-option {
       padding: 4px 0;
       margin-bottom: 4px;
-
-      a {
-        color: $sand1;
-      }
+      color: $sand1;
 
       &.selected {
         margin-bottom: 0;
         border-bottom: 4px solid $green4;
-
-        a {
-          color: $white;
-        }
+        color: $white;
       }
     }
   }
