@@ -89,7 +89,7 @@ module.exports = GelatoDialog.extend({
     if (app.isJapanese()) {
       settings.filteredJapaneseLists = this._views['lists'].getSelected();
       settings.filteredJapaneseParts = this.getSelectedParts();
-      settings.filteredJapaneseStyles = [];
+      settings.filteredJapaneseStyles = ['none', 'both'];
     }
 
     return settings;
