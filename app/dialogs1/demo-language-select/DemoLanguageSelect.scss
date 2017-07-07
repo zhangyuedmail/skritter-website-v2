@@ -1,0 +1,40 @@
+@import "../../styles/_variables";
+
+gelato-dialog[data-name="demo-language-select"] {
+}
+
+gelato-dialog[data-name="demo-language-select-dark"] {
+  .selection-indicator {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background: $green7;
+    border-radius: 50%;
+    float: left;
+  }
+
+  .button-wrapper {
+    max-width: 200px;
+    margin: auto;
+  }
+
+  .pad-bottom {
+    margin-bottom: 25px;
+  }
+
+  .button-detail-wrapper {
+    margin-left: 75px;
+    text-align: left;
+    font-size: 2.25vh;
+  }
+
+  .language-selection-button {
+    cursor: pointer;
+
+    &:hover {
+      .selection-indicator {
+        background: $green4;
+      }
+    }
+  }
+}

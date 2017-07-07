@@ -1,12 +1,12 @@
 @import "../../styles/_variables";
 
-gelato-dialog[data-name='notification-dialog'] {
+.dark-notification-dialog, gelato-dialog[data-name='notification-dialog'] {
   font-family: $font-ubuntu;
   text-transform: uppercase;
 
   .modal {
     width: 100%;
-    left: 0%;
+    left: 0;
     transition: left .2s, width .2s;
   }
 
@@ -44,6 +44,7 @@ gelato-dialog[data-name='notification-dialog'] {
   .button-wrapper {
     text-align: center;
   }
+
   .btn {
     background: $green5;
     border-radius: 40px;
