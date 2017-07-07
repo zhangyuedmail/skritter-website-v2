@@ -74,7 +74,7 @@ const DemoProgressComponent = GelatoComponent.extend({
    * @param {jQuery.Event} e the click event
    */
   handleSkipButtonClick: function(e) {
-    // TODO
+    this.trigger('demo:skip');
   },
 
   /**

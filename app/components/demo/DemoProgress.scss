@@ -7,55 +7,47 @@ gelato-component.demo-progress-component {
   color: $white2;
   font-size: 16px;
   height: 40px;
+  padding: 0 10%;
+
+  .row {
+    position: relative;
+    margin: auto;
+    height: 100%;
+  }
 
   .progress-bar-wrapper {
     position: absolute;
     background: #CCC;
-    height: 1vh;
-    top: 2vh;
-    left: 10%;
-    right: 100px;
+    height: 1.5vh;
+    bottom: .5vh;
+    left: 0;
+    right: 75px;
+    border-radius: 10px;
   }
 
   .skip-btn {
     position: absolute;
     right: 10px;
-    top: .5vh;
+    bottom: .5vh;
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+
+  .step-text-wrapper {
+    text-transform: uppercase;
+    margin-top: .5vh;
+    font-size: 12px;
+  }
+
+  .step-text {
+    font-weight: 300;
   }
 
   .progress-bar {
     background: $green5;
+    border-radius: 10px;
   }
 
-  .user-stats-wrapper {
-    margin-bottom: 20px;
-  }
-
-  .profile-picture {
-    display: block;
-    margin-left: 75px;
-    margin-bottom: 10px;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: #999;
-  }
-
-  .logout {
-    cursor: pointer;
-    margin-left: 15px;
-  }
-
-  .settings {
-    cursor: pointer;
-    float: right;
-    margin-right: 15px;
-    text-align: right;
-  }
-
-  .settings, .logout {
-    font-size: 24px;
-  }
 
   a {
     color: $sand1;
@@ -65,16 +57,5 @@ gelato-component.demo-progress-component {
     &:hover, &:focus {
       background-color: $sand6;
     }
-  }
-
-  .help-button-wrapper {
-    position: absolute;
-    bottom: 0;
-  }
-
-  .fa-question-circle {
-    float: left;
-    margin-right: 10px;
-    margin-top: 6px;
   }
 }

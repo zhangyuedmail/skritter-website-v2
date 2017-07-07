@@ -23,7 +23,7 @@ module.exports = GelatoDialog.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: require('./DemoComplete.jade'),
   /**
    * @method render
    * @returns {DemoCallToActionDialog}
