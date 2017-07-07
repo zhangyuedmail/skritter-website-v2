@@ -19,6 +19,10 @@ screen-loader {
     visibility: hidden;
   }
 
+  &.now {
+    transition: none !important;
+  }
+
   .screen-message {
     color: #ebeaf0;
     font-family: "Roboto Slab", sans-serif;

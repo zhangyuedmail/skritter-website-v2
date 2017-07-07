@@ -49,7 +49,7 @@ const StudyPage = GelatoPage.extend({
       this.loadAlreadyTimed = false;
     }
 
-    ScreenLoader.show();
+    ScreenLoader.show(true);
 
     Howler.autoSuspend = false;
 
