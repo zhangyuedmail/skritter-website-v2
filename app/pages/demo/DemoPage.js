@@ -21,6 +21,10 @@ const DemoPage = GelatoPage.extend({
     'click #contact-submit': 'handleClickContactSubmit'
   },
 
+  navbarOptions: {
+    showBackBtn: true
+  },
+
   /**
    * @property showFooter
    * @type Boolean
@@ -189,12 +193,21 @@ const DemoPage = GelatoPage.extend({
     const eraseBtnPos = eraseBtn.offset();
     const eraseBtnWidth = Math.round(eraseBtn.width() / 2);
     const eraseBtnHeight = Math.round(eraseBtn.width() / 2);
-    vent.trigger('callToActionGuide:toggle', true, {
-      top: (eraseBtnPos.top - eraseBtnHeight) + 'px',
-      left: (eraseBtnPos.left - eraseBtnWidth) + 'px',
-      width: (eraseBtnHeight * 4) + 'px',
-      height: (eraseBtnHeight * 4) + 'px'
-    });
+
+    if (app.isMobile()) {
+      // TODO: repeating swipe up motion
+    } else {
+      const popupTopPos = eraseBtnPos ? (eraseBtnPos.top - eraseBtnHeight) : 0;
+      const popupLeftPos = eraseBtnPos ? (eraseBtnPos.left - eraseBtnWidth) : 0;
+      const popupSize = app.isMobile() ? 'auto' : (eraseBtnHeight * 4) + 'px';
+
+      vent.trigger('callToActionGuide:toggle', true, {
+        top: popupTopPos + 'px',
+        left: popupLeftPos + 'px',
+        width: popupSize,
+        height: popupSize
+      });
+    }
 
     this.prompt.once('character:erased', this.teachEraseDemoChar2);
   },
@@ -218,10 +231,13 @@ const DemoPage = GelatoPage.extend({
         'character',
         this.prompt.review.getGradingColor()
       );
-      // this.prompt.part.render();
-      // setTimeout(() => {
-      //   this.teachDefinitionPrompt1()
-      // }, 1000);
+
+      vent.trigger('notification:show', {
+        dialogTitle: 'Different Prompts',
+        showTitle: true,
+        keepAlive: true,
+        body: this.parseTemplate(require('./notify-different-prompts.jade'))
+      });
     });
 
     this.prompt.once('next', this.teachDefinitionPrompt1);
@@ -255,7 +271,14 @@ const DemoPage = GelatoPage.extend({
       body: this.parseTemplate(require('./notify-srs-1.jade'))
     });
 
+    this.prompt.$('#toolbar-action-container').hide();
+    this.prompt.$('#toolbar-grading-container').show();
+
     this.prompt.once('next', () => {
+
+      this.prompt.$('#toolbar-action-container').show();
+      this.prompt.$('#toolbar-grading-container').hide();
+
       if (this.lang === 'zh') {
         this.teachTonePrompt1();
       } else {
@@ -420,6 +443,8 @@ const DemoPage = GelatoPage.extend({
    * updates as the user progresses through it.
    */
   showDemoGuidePopup: function() {
+    const mobile = app.isMobile();
+
     vent.trigger('notification:show', {
       dialogTitle: 'First Characters',
       showTitle: true,
@@ -441,14 +466,17 @@ const DemoPage = GelatoPage.extend({
         showConfirmButton: false,
         style: {
           dialog: {
-            width: '53%',
-            left: '48%',
-            top: '15%'
+            width: mobile ? 'auto' : '53%',
+            left: mobile ? '0%' : '48%',
+            top: mobile ? '1%' : '15%',
+            height: mobile ? '19%' : 'auto'
           },
           backdrop: {
-            left: '50%',
-            width: '50%',
-            top: '90px'
+            left: mobile ? '0%' : '50%',
+            width: mobile ? '100%' : '50%',
+            top: '90px',
+            bottom: mobile ? 'auto' : '0%',
+            height: mobile ? '150px' : 'auto'
           }
         }
       }
