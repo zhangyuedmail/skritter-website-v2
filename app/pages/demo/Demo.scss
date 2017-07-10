@@ -10,7 +10,24 @@ gelato-page[data-name='demo'] {
   }
 
   #progress-container {
-    //max-width: 1140px;
     margin: auto;
+  }
+}
+
+#button-signup {
+  float: right;
+}
+
+.demo-notification-tones-body {
+  .tone-wrapper {
+    margin-bottom: 10px;
+
+    .first-tone {
+      margin-bottom: 10px;
+    }
+
+    .media {
+      margin-left: 15px;
+    }
   }
 }

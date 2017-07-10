@@ -1,4 +1,12 @@
 p
-  | Wow you're done
-button#button-back.btn.btn-lg.btn-default= app.locale('common.back')
-button#button-signup.btn.btn-lg.btn-primary= app.locale('common.signUp')
+  | You just got a taste of how Skritter works. Sign up for a free account to
+  ul
+    li Remember 95% of your characters and words
+    li Study from 200+ textbooks and thousands of user-made lists
+    li Create your own custom lists
+    li Study anytime anywhere with our included iOS and Android apps
+a(href="/features")
+  button#button-back.btn.btn-lg.btn-default= app.locale('pages.demo.seeAllFeatures')
+
+a(href="/signup")
+  button#button-signup.btn.btn-lg.btn-primary= app.locale('common.signUp')

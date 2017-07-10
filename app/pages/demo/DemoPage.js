@@ -115,14 +115,16 @@ const DemoPage = GelatoPage.extend({
           app.mixpanel.track('Started demo', {'Language': lang});
           self.lang = lang;
           let vocabDataZh = {"Vocabs":[{"lang":"zh","priority":0,"style":"both","audio":"http://storage.googleapis.com/skritter_audio/zh/cpod/6364231618265088.mp3","toughness":1,"sentenceIds":[],"dictionaryLinks":{"you-dao":"http://dict.youdao.com/search?q=%E4%BD%A0%E5%A5%BD&keyfrom=dict.index","mdbg":"http://www.mdbg.net/chindict/chindict.php?page=worddict&wdrst=0&wdqb=%E4%BD%A0%E5%A5%BD","yellow-bridge":"http://www.yellowbridge.com/chinese/dictionary.php?word=%E4%BD%A0%E5%A5%BD","chinesepod":"http://chinesepod.com/tools/glossary/entry/%E4%BD%A0%E5%A5%BD","zdic":"","hanzicraft":"http://www.hanzicraft.com/character/%E4%BD%A0%E5%A5%BD","tatoeba-zh":"http://tatoeba.org/eng/sentences/search?query=%E4%BD%A0%E5%A5%BD&from=cmn&to=und","tw-moe":"https://www.moedict.tw/%E4%BD%A0%E5%A5%BD"},"bannedParts":[],"ilk":"word","writing":"\u4f60\u597d","audios":[{"source":"cpod","reading":"ni3hao3","mp3":"http://storage.googleapis.com/skritter_audio/zh/cpod/6364231618265088.mp3","writing":null,"id":"6364231618265088"}],"containedVocabIds":["zh-\u4f60-0","zh-\u597d-0"],"audioURL":"http://storage.googleapis.com/skritter_audio/zh/cpod/6364231618265088.mp3","toughnessString":"easiest","definitions":{"en":"hello; how do you do"},"starred":false,"reading":"ni3hao3","id":"zh-\u4f60\u597d-0","sentenceId":"zh-\u665a\u4e0a\u597d\u4f60\u597d\u5417-0"}],"statusCode":200,"Decomps":[],"Sentences":[{"lang":"zh","sentenceIds":[],"style":"simp","toughness":9,"creator":"Tatoeba","segmentation":{"readingFillers":[""," ",", "," ","?"],"reading":"Wan3shang5 hao3, ni3hao3 ma5?","wordWritings":["\u665a\u4e0a","\u597d","\u4f60\u597d","\u5417"],"writing":"\u665a\u4e0a\u597d\uff0c\u4f60\u597d\u5417\uff1f","wordVocabVotes":[3,5,5,42,0,0],"wordReadings":["wan3shang5","hao3","ni3hao3","ma5"],"wordVocabIds":["zh-\u665a\u4e0a-0","zh-\u597d-0","zh-\u4f60\u597d-0","zh-\u5417-0"],"overallVotes":55,"writingFillers":["","","\uff0c","","\uff1f"]},"bannedParts":[],"ilk":"sent","writing":"\u665a\u4e0a\u597d\uff0c\u4f60\u597d\u5417\uff1f","dictionaryLinks":{"you-dao":"http://dict.youdao.com/search?q=%E6%99%9A%E4%B8%8A%E5%A5%BD%E4%BD%A0%E5%A5%BD%E5%90%97&keyfrom=dict.index","mdbg":"http://www.mdbg.net/chindict/chindict.php?page=worddict&wdrst=0&wdqb=%E6%99%9A%E4%B8%8A%E5%A5%BD%E4%BD%A0%E5%A5%BD%E5%90%97","yellow-bridge":"http://www.yellowbridge.com/chinese/dictionary.php?word=%E6%99%9A%E4%B8%8A%E5%A5%BD%E4%BD%A0%E5%A5%BD%E5%90%97","chinesepod":"http://chinesepod.com/tools/glossary/entry/%E6%99%9A%E4%B8%8A%E5%A5%BD%E4%BD%A0%E5%A5%BD%E5%90%97","zdic":"","hanzicraft":"http://www.hanzicraft.com/character/%E6%99%9A%E4%B8%8A%E5%A5%BD%E4%BD%A0%E5%A5%BD%E5%90%97","tatoeba-zh":"http://tatoeba.org/eng/sentences/search?query=%E6%99%9A%E4%B8%8A%E5%A5%BD%E4%BD%A0%E5%A5%BD%E5%90%97&from=cmn&to=und","tw-moe":"https://www.moedict.tw/%E6%99%9A%E4%B8%8A%E5%A5%BD%E4%BD%A0%E5%A5%BD%E5%90%97"},"containedVocabIds":["zh-\u665a-0","zh-\u4e0a-0","zh-\u597d-0","zh-\u4f60-0","zh-\u597d-0","zh-\u5417-0"],"toughnessString":"hardest","definitions":{"en":"Good evening, how are you?"},"starred":false,"reading":"Wan3shang5 hao3, ni3hao3 ma5?","id":"zh-\u665a\u4e0a\u597d\u4f60\u597d\u5417-0"}]};
+          let vocabDataJa = {"Vocabs":[{"lang":"ja","rareKanji":false,"sentenceId":"ja-\u3061\u3087\u3063\u3068\u5143\u6c17\u304c\u306a\u3044\u3067\u3059-0","audio":"http://storage.googleapis.com/skritter_audio/ja/kaori/6311145470164992.mp3","toughness":4,"sentenceIds":[],"dictionaryLinks":{"wwwjdic":"http://nihongo.monash.edu/cgi-bin/wwwjdic?1MMJ%E5%85%83%E6%B0%97","jisho":"http://jisho.org/words?jap=%E5%85%83%E6%B0%97","goo":"http://dictionary.goo.ne.jp/srch/je/%E5%85%83%E6%B0%97/m0u/","weblio":"http://ejje.weblio.jp/content/%E5%85%83%E6%B0%97","alc":"http://eow.alc.co.jp/%E5%85%83%E6%B0%97/UTF-8/"},"bannedParts":[],"ilk":"word","writing":"\u5143\u6c17","audios":[{"source":"kaori","reading":"\u3052\u3093\u304d","mp3":"http://storage.googleapis.com/skritter_audio/ja/kaori/6311145470164992.mp3","writing":"\u5143\u6c17","id":"6311145470164992"}],"containedVocabIds":["ja-\u5143-0","ja-\u6c17-0"],"audioURL":"http://storage.googleapis.com/skritter_audio/ja/kaori/6311145470164992.mp3","toughnessString":"medium","definitions":{"en":"healthy; energetic"},"starred":false,"reading":"\u3052\u3093\u304d","id":"ja-\u5143\u6c17-0"}],"statusCode":200,"Decomps":[],"Sentences":[{"lang":"ja","rareKanji":false,"segmentation":{"readingFillers":["","","","","",""],"reading":"\u3061\u3087\u3063\u3068\u3052\u3093\u304d\u304c\u306a\u3044\u3067\u3059\u3002","wordWritings":["\u3061\u3087\u3063\u3068","\u5143\u6c17","\u304c\u306a\u3044","\u3067\u3059","\u3002"],"writing":"\u3061\u3087\u3063\u3068\u5143\u6c17\u304c\u306a\u3044\u3067\u3059\u3002","wordVocabVotes":[0,0,0,0,0],"wordReadings":["\u3061\u3087\u3063\u3068","\u3052\u3093\u304d","\u304c\u306a\u3044","\u3067\u3059","\u3002"],"wordVocabIds":["ja-\u3061\u3087\u3063\u3068-0","ja-\u5143\u6c17-0","","ja-\u3067\u3059-0",""],"overallVotes":5,"writingFillers":["","","","","",""]},"toughness":47,"creator":"g1itch","dictionaryLinks":{"wwwjdic":"http://nihongo.monash.edu/cgi-bin/wwwjdic?1MMJ%E3%81%A1%E3%82%87%E3%81%A3%E3%81%A8%E5%85%83%E6%B0%97%E3%81%8C%E3%81%AA%E3%81%84%E3%81%A7%E3%81%99","jisho":"http://jisho.org/words?jap=%E3%81%A1%E3%82%87%E3%81%A3%E3%81%A8%E5%85%83%E6%B0%97%E3%81%8C%E3%81%AA%E3%81%84%E3%81%A7%E3%81%99","goo":"http://dictionary.goo.ne.jp/srch/je/%E3%81%A1%E3%82%87%E3%81%A3%E3%81%A8%E5%85%83%E6%B0%97%E3%81%8C%E3%81%AA%E3%81%84%E3%81%A7%E3%81%99/m0u/","weblio":"http://ejje.weblio.jp/content/%E3%81%A1%E3%82%87%E3%81%A3%E3%81%A8%E5%85%83%E6%B0%97%E3%81%8C%E3%81%AA%E3%81%84%E3%81%A7%E3%81%99","alc":"http://eow.alc.co.jp/%E3%81%A1%E3%82%87%E3%81%A3%E3%81%A8%E5%85%83%E6%B0%97%E3%81%8C%E3%81%AA%E3%81%84%E3%81%A7%E3%81%99/UTF-8/"},"bannedParts":[],"created":1374776549,"ilk":"sent","writing":"\u3061\u3087\u3063\u3068\u5143\u6c17\u304c\u306a\u3044\u3067\u3059\u3002","containedVocabIds":["ja-\u5143-0","ja-\u6c17-0"],"sentenceIds":[],"toughnessString":"unknown","definitions":{"en":"I feel a bit down."},"starred":false,"reading":"\u3061\u3087\u3063\u3068\u3052\u3093\u304d\u304c\u306a\u3044\u3067\u3059\u3002","id":"ja-\u3061\u3087\u3063\u3068\u5143\u6c17\u304c\u306a\u3044\u3067\u3059-0"}]};
 
           if (self.useNewDemo) {
             vocabDataZh = {"Vocabs":[{"lang":"zh","sentenceIds":[],"style":"both","audio":"http://storage.googleapis.com/skritter_audio/zh/cpod/4920340100677632.mp3","toughness":2,"creator":"CPAPI","dictionaryLinks":{"you-dao":"http://dict.youdao.com/search?q=%E4%B8%AD%E6%96%87&keyfrom=dict.index","mdbg":"http://www.mdbg.net/chindict/chindict.php?page=worddict&wdrst=0&wdqb=%E4%B8%AD%E6%96%87","yellow-bridge":"http://www.yellowbridge.com/chinese/dictionary.php?word=%E4%B8%AD%E6%96%87","chinesepod":"http://chinesepod.com/tools/glossary/entry/%E4%B8%AD%E6%96%87","zdic":"","hanzicraft":"http://www.hanzicraft.com/character/%E4%B8%AD%E6%96%87","tatoeba-zh":"http://tatoeba.org/eng/sentences/search?query=%E4%B8%AD%E6%96%87&from=cmn&to=und","tw-moe":"https://www.moedict.tw/%E4%B8%AD%E6%96%87"},"bannedParts":[],"created":1281392448,"ilk":"word","writing":"\u4e2d\u6587","audios":[{"source":"cpod","reading":"zhong1wen2","mp3":"http://storage.googleapis.com/skritter_audio/zh/cpod/4920340100677632.mp3","writing":null,"id":"4920340100677632"},{"source":"tan","reading":"zhong1wen2","mp3":"http://storage.googleapis.com/skritter_audio/zh/tan/5250798843854848.mp3","writing":null,"id":"5250798843854848"}],"containedVocabIds":["zh-\u4e2d-0","zh-\u6587-0"],"audioURL":"http://storage.googleapis.com/skritter_audio/zh/cpod/4920340100677632.mp3","toughnessString":"easier","definitions":{"en":"Chinese (language)"},"starred":false,"reading":"Zhong1wen2","id":"zh-\u4e2d\u6587-0","sentenceId":"zh-\u6211\u5b66\u4e60\u4e2d\u6587-0"}],"statusCode":200,"Decomps":[],"Sentences":[{"lang":"zh","sentenceIds":[],"style":"simp","toughness":8,"creator":"Hutongschool","segmentation":{"readingFillers":[""," "," ",""],"reading":"wo3 xue2xi2 Zhong1wen2","wordWritings":["\u6211","\u5b66\u4e60","\u4e2d\u6587"],"writing":"\u6211 \u5b66\u4e60 \u4e2d\u6587","wordVocabVotes":[0,4,8],"wordReadings":["wo3","xue2xi2","Zhong1wen2"],"wordVocabIds":["zh-\u6211-0","zh-\u5b66\u4e60-0","zh-\u4e2d\u6587-0"],"overallVotes":20,"writingFillers":["","","",""]},"bannedParts":[],"created":1373960687,"ilk":"sent","writing":"\u6211 \u5b66\u4e60 \u4e2d\u6587","dictionaryLinks":{"you-dao":"http://dict.youdao.com/search?q=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87&keyfrom=dict.index","mdbg":"http://www.mdbg.net/chindict/chindict.php?page=worddict&wdrst=0&wdqb=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87","yellow-bridge":"http://www.yellowbridge.com/chinese/dictionary.php?word=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87","chinesepod":"http://chinesepod.com/tools/glossary/entry/%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87","zdic":"","hanzicraft":"http://www.hanzicraft.com/character/%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87","tatoeba-zh":"http://tatoeba.org/eng/sentences/search?query=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87&from=cmn&to=und","tw-moe":"https://www.moedict.tw/%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87"},"containedVocabIds":["zh-\u6211-0","zh-\u5b66-0","zh-\u4e60-0","zh-\u4e2d-0","zh-\u6587-0"],"toughnessString":"harder","definitions":{"en":"I study Chinese."},"starred":false,"reading":"wo3 xue2xi2 Zhong1wen2","id":"zh-\u6211\u5b66\u4e60\u4e2d\u6587-0"}]};
+            vocabDataJa = {"Vocabs":[{"lang":"ja","rareKanji":false,"sentenceId":"ja-\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059-0","audio":"http://storage.googleapis.com/skritter_audio/ja/kaori/4862201342984192.mp3","toughness":2,"sentenceIds":[],"dictionaryLinks":{"wwwjdic":"http://nihongo.monash.edu/cgi-bin/wwwjdic?1MMJ%E6%97%A5%E6%9C%AC","jisho":"http://jisho.org/words?jap=%E6%97%A5%E6%9C%AC","goo":"http://dictionary.goo.ne.jp/srch/je/%E6%97%A5%E6%9C%AC/m0u/","weblio":"http://ejje.weblio.jp/content/%E6%97%A5%E6%9C%AC","alc":"http://eow.alc.co.jp/%E6%97%A5%E6%9C%AC/UTF-8/"},"bannedParts":[],"creator":"mtaran","ilk":"word","writing":"\u65e5\u672c","audios":[{"source":"kaori","reading":"\u306b\u307b\u3093","mp3":"http://storage.googleapis.com/skritter_audio/ja/kaori/4862201342984192.mp3","writing":"\u65e5\u672c","id":"4862201342984192"},{"source":"kaori","reading":"\u306b\u3063\u307d\u3093","mp3":"http://storage.googleapis.com/skritter_audio/ja/kaori/4974911622742016.mp3","writing":"\u65e5\u672c","id":"4974911622742016"}],"created":1249318103,"containedVocabIds":["ja-\u65e5-0","ja-\u672c-0"],"audioURL":"http://storage.googleapis.com/skritter_audio/ja/kaori/4862201342984192.mp3","toughnessString":"easier","definitions":{"en":"Japan"},"starred":false,"reading":"\u306b\u307b\u3093, \u306b\u3063\u307d\u3093","id":"ja-\u65e5\u672c-0"}],"statusCode":200,"Decomps":[],"Sentences":[{"lang":"ja","rareKanji":false,"segmentation":{"readingFillers":["","","","","","","",""],"reading":"\u3044\u3051\u3070\u306a\u306f\u306b\u3063\u307d\u3093\u306e\u3076\u3093\u304b\u3067\u3059\u3002","wordWritings":["\u751f\u3051\u82b1","\u306f","\u65e5\u672c","\u306e","\u6587\u5316","\u3067\u3059","\u3002"],"writing":"\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059\u3002","wordVocabVotes":[0,0,0,0,0,0,0],"wordReadings":["\u3044\u3051\u3070\u306a","\u306f","\u306b\u3063\u307d\u3093","\u306e","\u3076\u3093\u304b","\u3067\u3059","\u3002"],"wordVocabIds":["ja-\u751f\u3051\u82b1-0","ja-\u306f-1","ja-\u65e5\u672c-0","ja-\u306e-0","ja-\u6587\u5316-0","ja-\u3067\u3059-0",""],"overallVotes":6,"writingFillers":["","","","","","","",""]},"toughness":42,"creator":"Tatoeba","dictionaryLinks":{"wwwjdic":"http://nihongo.monash.edu/cgi-bin/wwwjdic?1MMJ%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99","jisho":"http://jisho.org/words?jap=%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99","goo":"http://dictionary.goo.ne.jp/srch/je/%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99/m0u/","weblio":"http://ejje.weblio.jp/content/%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99","alc":"http://eow.alc.co.jp/%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99/UTF-8/"},"bannedParts":[],"ilk":"sent","writing":"\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059\u3002","containedVocabIds":["ja-\u751f-0","ja-\u82b1-0","ja-\u65e5-0","ja-\u672c-0","ja-\u6587-0","ja-\u5316-0"],"sentenceIds":[],"toughnessString":"unknown","definitions":{"en":"Flower arrangement is a part of Japanese culture."},"starred":false,"reading":"\u3044\u3051\u3070\u306a\u306f\u306b\u3063\u307d\u3093\u306e\u3076\u3093\u304b\u3067\u3059\u3002","id":"ja-\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059-0"}]};
           }
 
-          const vocabDataJa = {"Vocabs":[{"lang":"ja","rareKanji":false,"sentenceId":"ja-\u3061\u3087\u3063\u3068\u5143\u6c17\u304c\u306a\u3044\u3067\u3059-0","audio":"http://storage.googleapis.com/skritter_audio/ja/kaori/6311145470164992.mp3","toughness":4,"sentenceIds":[],"dictionaryLinks":{"wwwjdic":"http://nihongo.monash.edu/cgi-bin/wwwjdic?1MMJ%E5%85%83%E6%B0%97","jisho":"http://jisho.org/words?jap=%E5%85%83%E6%B0%97","goo":"http://dictionary.goo.ne.jp/srch/je/%E5%85%83%E6%B0%97/m0u/","weblio":"http://ejje.weblio.jp/content/%E5%85%83%E6%B0%97","alc":"http://eow.alc.co.jp/%E5%85%83%E6%B0%97/UTF-8/"},"bannedParts":[],"ilk":"word","writing":"\u5143\u6c17","audios":[{"source":"kaori","reading":"\u3052\u3093\u304d","mp3":"http://storage.googleapis.com/skritter_audio/ja/kaori/6311145470164992.mp3","writing":"\u5143\u6c17","id":"6311145470164992"}],"containedVocabIds":["ja-\u5143-0","ja-\u6c17-0"],"audioURL":"http://storage.googleapis.com/skritter_audio/ja/kaori/6311145470164992.mp3","toughnessString":"medium","definitions":{"en":"healthy; energetic"},"starred":false,"reading":"\u3052\u3093\u304d","id":"ja-\u5143\u6c17-0"}],"statusCode":200,"Decomps":[],"Sentences":[{"lang":"ja","rareKanji":false,"segmentation":{"readingFillers":["","","","","",""],"reading":"\u3061\u3087\u3063\u3068\u3052\u3093\u304d\u304c\u306a\u3044\u3067\u3059\u3002","wordWritings":["\u3061\u3087\u3063\u3068","\u5143\u6c17","\u304c\u306a\u3044","\u3067\u3059","\u3002"],"writing":"\u3061\u3087\u3063\u3068\u5143\u6c17\u304c\u306a\u3044\u3067\u3059\u3002","wordVocabVotes":[0,0,0,0,0],"wordReadings":["\u3061\u3087\u3063\u3068","\u3052\u3093\u304d","\u304c\u306a\u3044","\u3067\u3059","\u3002"],"wordVocabIds":["ja-\u3061\u3087\u3063\u3068-0","ja-\u5143\u6c17-0","","ja-\u3067\u3059-0",""],"overallVotes":5,"writingFillers":["","","","","",""]},"toughness":47,"creator":"g1itch","dictionaryLinks":{"wwwjdic":"http://nihongo.monash.edu/cgi-bin/wwwjdic?1MMJ%E3%81%A1%E3%82%87%E3%81%A3%E3%81%A8%E5%85%83%E6%B0%97%E3%81%8C%E3%81%AA%E3%81%84%E3%81%A7%E3%81%99","jisho":"http://jisho.org/words?jap=%E3%81%A1%E3%82%87%E3%81%A3%E3%81%A8%E5%85%83%E6%B0%97%E3%81%8C%E3%81%AA%E3%81%84%E3%81%A7%E3%81%99","goo":"http://dictionary.goo.ne.jp/srch/je/%E3%81%A1%E3%82%87%E3%81%A3%E3%81%A8%E5%85%83%E6%B0%97%E3%81%8C%E3%81%AA%E3%81%84%E3%81%A7%E3%81%99/m0u/","weblio":"http://ejje.weblio.jp/content/%E3%81%A1%E3%82%87%E3%81%A3%E3%81%A8%E5%85%83%E6%B0%97%E3%81%8C%E3%81%AA%E3%81%84%E3%81%A7%E3%81%99","alc":"http://eow.alc.co.jp/%E3%81%A1%E3%82%87%E3%81%A3%E3%81%A8%E5%85%83%E6%B0%97%E3%81%8C%E3%81%AA%E3%81%84%E3%81%A7%E3%81%99/UTF-8/"},"bannedParts":[],"created":1374776549,"ilk":"sent","writing":"\u3061\u3087\u3063\u3068\u5143\u6c17\u304c\u306a\u3044\u3067\u3059\u3002","containedVocabIds":["ja-\u5143-0","ja-\u6c17-0"],"sentenceIds":[],"toughnessString":"unknown","definitions":{"en":"I feel a bit down."},"starred":false,"reading":"\u3061\u3087\u3063\u3068\u3052\u3093\u304d\u304c\u306a\u3044\u3067\u3059\u3002","id":"ja-\u3061\u3087\u3063\u3068\u5143\u6c17\u304c\u306a\u3044\u3067\u3059-0"}]};
           self.vocabs.add(lang === 'zh' ? vocabDataZh.Vocabs : vocabDataJa.Vocabs);
           app.set('demoLang', lang);
+          app.user.set('targetLang', lang);
           self.vocab = self.vocabs.at(0);
           callback(null, self.vocab);
         },
@@ -173,6 +175,9 @@ const DemoPage = GelatoPage.extend({
           self.promptItems = vocab.getPromptItems('rune');
         }
         self.promptItems.teachAll();
+
+        // uncomment for faster testing shortcut
+        // self.teachTonePrompt1();
         self.teachDemoChar1();
       }
     );
@@ -231,6 +236,10 @@ const DemoPage = GelatoPage.extend({
         'character',
         this.prompt.review.getGradingColor()
       );
+
+      _.defer(() => {
+        this.$('#study-prompt-toolbar-action').hide();
+      });
 
       vent.trigger('notification:show', {
         dialogTitle: 'Different Prompts',
@@ -291,8 +300,11 @@ const DemoPage = GelatoPage.extend({
    * @method step1
    */
   teachDemoChar1: function() {
-    this.prompt.tutorial.show();
-    this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step1')));
+    if (!this.useNewDemo) {
+      this.prompt.tutorial.show();
+      this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step1')));
+    }
+
     this.prompt.set(this.promptItems);
     this.prompt.shortcuts.unregisterAll();
     this.prompt.$('#navigation-container').hide();
@@ -313,7 +325,10 @@ const DemoPage = GelatoPage.extend({
   teachDemoChar2: function() {
     app.mixpanel.track('Completed tracing demo character #1');
 
-    this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step3')));
+    if (!this.useNewDemo) {
+      this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step3')));
+    }
+
     this.prompt.$('#toolbar-action-container').hide();
     this.prompt.once('next', this.writeDemoChar1);
   },
@@ -332,6 +347,14 @@ const DemoPage = GelatoPage.extend({
       keepAlive: true,
       body: this.parseTemplate(require('./notify-reading1.jade'))
     });
+
+    if (this.lang === 'zh' && !app.isMobile()) {
+      // this.$('.reading-prompt').removeClass('hidden');
+      $('.modal').removeAttr('tabindex');
+      _.defer(() => {
+        $('#reading-prompt').focus();
+      });
+    }
 
     this.prompt.once('next', () => {
       // TODO: add in more features
@@ -363,6 +386,8 @@ const DemoPage = GelatoPage.extend({
     this.prompt.part.eraseCharacter();
     this.prompt.previous();
     this.prompt.part.eraseCharacter();
+    this.$('#study-prompt-toolbar-action').hide();
+
     if (this.useNewDemo) {
       vent.trigger('notification:show', {
         dialogTitle: 'Getting Hints',
@@ -379,7 +404,11 @@ const DemoPage = GelatoPage.extend({
   writeDemoChar1: function() {
     this.switchToWriting();
     app.mixpanel.track('Completed tracing demo character #2');
-    this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step2')));
+
+    if (!this.useNewDemo) {
+      this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step2')));
+    }
+
     this.prompt.review.set('score', 3);
     this.prompt.$('#toolbar-action-container').show();
     this.prompt.$('#toolbar-grading-container').hide();
@@ -391,7 +420,11 @@ const DemoPage = GelatoPage.extend({
    */
   writeDemoChar2: function() {
     app.mixpanel.track('Completed writing demo character #1');
-    this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step4')));
+
+    if (!this.useNewDemo) {
+      this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step4')));
+    }
+
     this.prompt.part.eraseCharacter();
     this.prompt.review.set('score', 3);
     this.prompt.$('#toolbar-action-container').show();
@@ -446,9 +479,9 @@ const DemoPage = GelatoPage.extend({
     const mobile = app.isMobile();
 
     vent.trigger('notification:show', {
-      dialogTitle: 'First Characters',
+      dialogTitle: app.locale('pages.demo.firstCharactersTitle'),
       showTitle: true,
-      body: "Let's get started by learning the characters in the word <b>Chinese language</b>",
+      body: app.locale('pages.demo.firstCharactersBody' + this.lang),
       buttonText: 'Next',
       showConfirmButton: true,
       style: {
@@ -460,9 +493,9 @@ const DemoPage = GelatoPage.extend({
         }
       },
       next: {
-        dialogTitle: 'First Characters',
+        dialogTitle: app.locale('pages.demo.firstCharactersTitle'),
         showTitle: true,
-        body: "We’ll always teach you the correct stroke order for new characters you’re learning. Trace the strokes for the characters 中 and 文.",
+        body: app.locale('pages.demo.firstCharacters2Body' + this.lang),
         showConfirmButton: false,
         style: {
           dialog: {

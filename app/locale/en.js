@@ -155,6 +155,18 @@ module.exports = {
       "thisMonth": "This Month"
     },
 
+    "demo": {
+      "firstCharactersTitle": "First Characters",
+      "firstCharactersBodyzh": "Let's get started by learning the characters in the word <b>Chinese language</b>, 中文.",
+      "firstCharactersBodyja": "Let's get started by learning the characters in the word for <b>Japan</b>, 日本.",
+      "firstCharacters2Bodyzh": "We’ll always teach you the correct stroke order for new characters you’re learning. Trace the strokes for the characters 中 and 文.",
+      "firstCharacters2Bodyja": "We’ll always teach you the correct stroke order for new characters you’re learning. Trace the strokes for the characters 日 and 本.",
+      "readingBody1ja": "Skritter also teaches you the pronunciation. Think of the kana for 日本, then tap to reveal the answer.",
+      "readingBody1zh": "Skritter also teaches you the pronunciation. Type the pinyin for 中文 in the box below then press enter.",
+      "readingBody1zhMobile": "Skritter also teaches you the pronunciation. Think of the pinyin for 中文, then tap to reveal the answer.",
+      "seeAllFeatures": "See all features"
+    },
+
     "features": {
       "callToAction": "Try it out now",
       "handwritingTitle": "Handwriting Recognition",
