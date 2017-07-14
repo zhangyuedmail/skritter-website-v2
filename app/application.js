@@ -919,7 +919,7 @@ module.exports = GelatoApplication.extend({
               function(error) {
                 // TODO: get refresh tokens working properly
                 // if the session token is invalid, log the user out
-                if (error.responseJSON.statusCode === 400 &&
+                if (error.responseJSON && error.responseJSON.statusCode === 400 &&
                   error.responseJSON.message.indexOf("No such refresh token") > -1) {
                   app.user.logout();
                 } else {
