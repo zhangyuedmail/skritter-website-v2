@@ -13,7 +13,8 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click #hide-sub-expired': 'handleHideSubscriptionExpiredNotice'
+    'click #hide-sub-expired': 'handleHideSubscriptionExpiredNotice',
+    'click #reload-page-btn': 'handleClickReloadPage'
   },
 
   /**
@@ -27,6 +28,10 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    * @param {Object} [options]
    */
   initialize: function(options) {
+    _.bindAll(this, 'updateSubscriptionState', 'errorFetchingSubscription');
+
+    this.errorFetchingData = false;
+
     options = options || {};
 
     this.hideable = _.defaultTo(options.hideable, true);
@@ -39,9 +44,28 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
   render: function() {
     this.renderTemplate();
 
-    app.user.isSubscriptionActive(_.bind(this.updateSubscriptionState, this));
+    app.user.isSubscriptionActive(this.updateSubscriptionState, this.errorFetchingSubscription);
 
     return this;
+  },
+
+  /**
+   * Handles case where there's an error fetching a user's subscription.
+   * Notifies the user of network issues.
+   * @param error
+   */
+  errorFetchingSubscription: function(error) {
+    this.errorFetchingData = true;
+    this.updateSubscriptionState();
+    this.trigger('data-fetch:failed', 'accountExpired');
+  },
+
+  /**
+   * Reloads the page so that all the network requests can be retried
+   * @param {jQuery.Event} event
+   */
+  handleClickReloadPage: function(event) {
+    app.reload();
   },
 
   /**
@@ -74,11 +98,16 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
     }
 
     if (sub.state === 'standby') {
-      this.$('gelato-component').toggleClass('hidden', hideNotification);
+      if (this.errorFetchingData) {
+        this.$('.network-error-block').removeClass('hidden');
+        this.$('.account-expired-block').addClass('hidden');
+      }
+
+      this.$('gelato-component').toggleClass('hidden', hideNotification && !this.errorFetchingData);
 
       // something somewhere is manually setting the CSS to
       // display: hidden at runtime, don't know where, hack to fix it.
-      if (!hideNotification) {
+      if (!hideNotification || this.errorFetchingData) {
         this.$('gelato-component').css({display: 'block'});
       }
     }

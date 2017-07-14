@@ -38,6 +38,7 @@ module.exports = {
     "saving": "Saving",
     "settings": "Settings",
     "signUp": "Sign Up",
+    "tryAgain": "Try again",
     "undo": "Undo",
     "update": "Update",
     "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription.",
@@ -150,6 +151,7 @@ module.exports = {
       "goToSubSettings": "Go to your subscription settings",
       "hide": "Hide",
       "lists": "Lists",
+      "networkUnstable": "Network connection unstable",
       "subExpiredDetails": "Purchase a subscription to study new items and lists.",
       "subscriptionExpired": "Subscription expired",
       "thisMonth": "This Month"
