@@ -73,6 +73,8 @@ const DashboardPage = GelatoPage.extend({
       this.listenTo(this._views['queue'], 'component:loaded', this.onComponentLoaded);
     }
 
+    this.listenTo(this._views['expiration'], 'fetch-data:failed', this.subscriptionFetchFailed);
+
     app.mixpanel.track('Viewed dashboard page');
 
     app.capturePlatformInfo();
@@ -129,6 +131,10 @@ const DashboardPage = GelatoPage.extend({
    */
   onFeedbackBtnClicked: function() {
     app.showFeedbackDialog();
+  },
+
+  subscriptionFetchFailed: function() {
+
   }
 });
 

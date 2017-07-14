@@ -17,6 +17,7 @@ const DashboardStatusComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function() {
+    this.errorFetchingDueCount = false;
     this.dueCount = null;
     this.vocablists = app.user.vocablists;
     this.listenTo(this.vocablists, 'state', this.render);
@@ -54,7 +55,9 @@ const DashboardStatusComponent = GelatoComponent.extend({
       },
       error: function(error) {
         this.dueCount = '-';
+        this.errorFetchingDueCount = true;
         this.render();
+        this.trigger('fetch-data:failed', 'goal');
       },
       success: function(result) {
         let count = 0;

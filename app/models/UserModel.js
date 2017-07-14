@@ -318,9 +318,11 @@ const UserModel = SkritterModel.extend({
    * This is bad design. I'm sorry. Will refactor once we do ES6. I..."promise".
    * @param {Function} [callback] called when it can be determined
    *                            whether the subscription is active.
+   * @param {Function} [callbackError] called when there's a problem getting
+   *                                   the subscription
    */
-  isSubscriptionActive: function(callback) {
-    var self = this;
+  isSubscriptionActive: function(callback, callbackError) {
+    const self = this;
 
     if (this.subscription.isFetched) {
 
@@ -334,6 +336,11 @@ const UserModel = SkritterModel.extend({
         success: function() {
           if (_.isFunction(callback)) {
             callback(self.subscription.getStatus() !== 'Expired');
+          }
+        },
+        error: function(error) {
+          if (callbackError) {
+            callbackError(error);
           }
         }
       });

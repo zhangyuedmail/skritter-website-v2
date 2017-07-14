@@ -41,6 +41,11 @@ gelato-component(data-name='dashboard-queue')
     .text-center
       br
       a(href='/vocablists/queue').btn.btn-success Manage
+  else if view.errorLoadingLists
+    .row
+      .col-xs-12.text-center
+        p.lead Error loading your lists
+        .btn.btn-primary#load-lists Retry
   else
     .row
       .col-xs-12.text-center
