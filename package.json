@@ -27,7 +27,7 @@
     "monitor": "node ./scripts/npm-monitor",
     "prune": "node ./scripts/npm-prune",
     "start": "node ./scripts/npm-start",
-    "test": "nightwatch"
+    "test": "node ./scripts/npm-test"
   },
   "dependencies": {
     "async": "~2.4",
