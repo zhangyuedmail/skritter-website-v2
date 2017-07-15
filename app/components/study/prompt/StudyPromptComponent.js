@@ -431,8 +431,11 @@ const StudyPromptComponent = GelatoComponent.extend({
       'animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;';
 
     this.$('#navigate-next').attr('style', styleStr);
-    this.$('#navigate-next').addClass('grade-' + score);
 
+    // TODO: dark-grey advance color?
+    if (!app.user.get('disableGradingColor')) {
+      this.$('#navigate-next').addClass('grade-' + score);
+    }
 
     this._autoAdvanceListenerId = setTimeout(() => {
 

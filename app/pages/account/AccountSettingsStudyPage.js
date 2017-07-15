@@ -116,6 +116,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
       addFrequency: parseInt(this.$('#field-add-frequency').val(), 10),
       autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
       autoAdvancePrompts: this.$('#field-auto-advance').is(':checked') ? 1.0 : 0,
+      disableGradingColor: this.$('#field-disable-color').is(':checked'),
       hideDefinition: this.$('#field-hide-definition').is(':checked'),
       hideReading: this.$('#field-hide-reading').is(':checked'),
       retentionIndex: parseInt(this.$('#field-retention-index').val(), 10),

@@ -150,10 +150,12 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     if (this.prompt.review.get('showTeaching')) {
       this.prompt.review.set('score', 1);
     } else {
-      this.prompt.canvas.injectLayerColor(
-        'character',
-        this.prompt.review.getGradingColor()
-      );
+      if (!app.user.get('disableGradingColor')) {
+        this.prompt.canvas.injectLayerColor(
+          'character',
+          this.prompt.review.getGradingColor()
+        );
+      }
     }
 
     if (app.user.get('squigs')) {
@@ -270,10 +272,12 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
       if (this.prompt.review.get('showTeaching')) {
         this.prompt.review.set('score', 1);
       } else {
-        this.prompt.canvas.injectLayerColor(
-          'character',
-          this.prompt.review.getGradingColor()
-        );
+        if (!app.user.get('disableGradingColor')) {
+          this.prompt.canvas.injectLayerColor(
+            'character',
+            this.prompt.review.getGradingColor()
+          );
+        }
       }
 
       // wait until events finish firing and call stack is cleared
@@ -410,10 +414,12 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
 
     if (this.prompt.review.isComplete()) {
-      this.prompt.canvas.injectLayerColor(
-        'character',
-        this.prompt.review.getGradingColor()
-      );
+      if (!app.user.get('disableGradingColor')) {
+        this.prompt.canvas.injectLayerColor(
+          'character',
+          this.prompt.review.getGradingColor()
+        );
+      }
       this.prompt.toolbarAction.render();
     } else {
       this.completeCharacter();
@@ -452,10 +458,12 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this._mouseDown = true;
     if (this.prompt.review.isComplete()) {
       this.prompt.review.set('score', score);
-      this.prompt.canvas.injectLayerColor(
-        'character',
-        this.prompt.review.getGradingColor()
-      );
+      if (!app.user.get('disableGradingColor')) {
+        this.prompt.canvas.injectLayerColor(
+          'character',
+          this.prompt.review.getGradingColor()
+        );
+      }
     }
   },
 
@@ -497,10 +505,12 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    */
   changeReviewScore: function(score) {
     this.prompt.review.set('score', score);
-    this.prompt.canvas.injectLayerColor(
-      'character',
-      this.prompt.review.getGradingColor()
-    );
+    if (!app.user.get('disableGradingColor')) {
+      this.prompt.canvas.injectLayerColor(
+        'character',
+        this.prompt.review.getGradingColor()
+      );
+    }
   },
 
   /**
