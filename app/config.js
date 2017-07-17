@@ -115,7 +115,7 @@ module.exports = {
    */
   useV2Gets: {
     items: false,
-    itemsdue: true,
+    itemsdue: false,
     progstats: true,
     subscriptions: false,
     users: true,
