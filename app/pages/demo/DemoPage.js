@@ -455,7 +455,7 @@ const DemoPage = GelatoPage.extend({
             top: '90px'
           },
           dialog: {
-            top: '15%'
+            top: '100px'
           }
         },
         next: {
@@ -489,7 +489,7 @@ const DemoPage = GelatoPage.extend({
           top: '90px'
         },
         dialog: {
-          top: '15%'
+          top: '20%'
         }
       },
       next: {
@@ -501,7 +501,7 @@ const DemoPage = GelatoPage.extend({
           dialog: {
             width: mobile ? 'auto' : '53%',
             left: mobile ? '0%' : '48%',
-            top: mobile ? '1%' : '15%',
+            top: mobile ? '1%' : '20%',
             height: mobile ? '19%' : 'auto'
           },
           backdrop: {

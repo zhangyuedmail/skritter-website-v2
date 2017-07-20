@@ -4,6 +4,10 @@ gelato-dialog[data-name="demo-language-select"] {
 }
 
 gelato-dialog[data-name="demo-language-select-dark"] {
+  .modal-dialog {
+    top: 20%;
+  }
+
   .selection-indicator {
     display: inline-block;
     width: 50px;
