@@ -166,7 +166,7 @@ module.exports = {
       "readingBody1ja": "Skritter also teaches you the pronunciation. Think of the kana for 日本, then tap to reveal the answer.",
       "readingBody1zh": "Skritter also teaches you the pronunciation. Type the pinyin for 中文 in the box below then press enter.",
       "readingBody1zhMobile": "Skritter also teaches you the pronunciation. Think of the pinyin for 中文, then tap to reveal the answer.",
-      "seeAllFeatures": "See all features"
+      "seeAllFeatures": "See All Features"
     },
 
     "features": {
