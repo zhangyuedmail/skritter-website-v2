@@ -106,6 +106,16 @@ const UserModel = SkritterModel.extend({
       model.unset('wordDictionary');
     }
 
+    // TODO: figure out why server returns this as a string but it is actually an array
+    if (typeof model.get('ballerSubscriptions') === 'string') {
+      model.set('ballerSubscriptions', model.get('ballerSubscriptions').split(','));
+    }
+
+    // TODO: figure out why server returns this as a string but it is actually an array
+    if (typeof model.get('isBallerFor') === 'string') {
+      model.set('isBallerFor', model.get('isBallerFor').split(','));
+    }
+
     GelatoCollection.prototype.sync.call(this, method, model, options);
   },
 
