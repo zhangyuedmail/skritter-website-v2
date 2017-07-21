@@ -320,7 +320,6 @@ const StudyPage = GelatoPage.extend({
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
 
-
       // TODO: fix automatic item adding
       // if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
       //   this.addItems(true);
