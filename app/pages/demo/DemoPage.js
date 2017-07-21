@@ -56,14 +56,14 @@ const DemoPage = GelatoPage.extend({
 
     this.useNewDemo = app.isDevelopment();
 
-    console.log('foo');
-
     this.dialog = null;
     this.lang = 'zh';
     this.notify = null;
     this.prompt = new Prompt({
       page: this,
-      isDemo: true
+      isDemo: true,
+      showTapToAdvanceText: true,
+      showGradingButtons: false
     });
     this.promptItems = null;
     this.vocab = null;
@@ -194,6 +194,8 @@ const DemoPage = GelatoPage.extend({
         body: this.parseTemplate(require('./notify-erase-character1.jade'))
       });
 
+    this.trigger('step:update', 'erasingCharacters');
+
     const eraseBtn = $('.icon-study-erase');
     const eraseBtnPos = eraseBtn.offset();
     const eraseBtnWidth = Math.round(eraseBtn.width() / 2);
@@ -238,8 +240,11 @@ const DemoPage = GelatoPage.extend({
       );
 
       _.defer(() => {
-        this.$('#study-prompt-toolbar-action').hide();
+        this.$('#toolbar-action-container').hide();
       });
+
+      this.$('.tap-to-advance-wrapper').removeClass('hidden');
+      this.prompt.$('.grading-btn-wrapper').addClass('hidden');
 
       vent.trigger('notification:show', {
         dialogTitle: 'Different Prompts',
@@ -266,10 +271,11 @@ const DemoPage = GelatoPage.extend({
       keepAlive: true,
       body: this.parseTemplate(require('./notify-definition1.jade'))
     });
+    this.trigger('step:update', 'definitionPrompts');
+
+    this.prompt.$('#toolbar-action-container').show();
 
     this.prompt.review.once('change:complete', this.teachSRS1);
-
-
   },
 
   teachSRS1: function() {
@@ -279,14 +285,21 @@ const DemoPage = GelatoPage.extend({
       keepAlive: true,
       body: this.parseTemplate(require('./notify-srs-1.jade'))
     });
+    this.trigger('step:update', 'spacedRepetition');
 
     this.prompt.$('#toolbar-action-container').hide();
-    this.prompt.$('#toolbar-grading-container').show();
+
+    _.defer(() => {
+      this.prompt.$('.grading-btn-wrapper').removeClass('hidden');
+      this.prompt.toolbarGrading.once('grade:selected', () => {
+        this.$('.tap-to-advance-wrapper').removeClass('hidden');
+      });
+    });
 
     this.prompt.once('next', () => {
-
+      this.$('.grading-btn').off('click');
       this.prompt.$('#toolbar-action-container').show();
-      this.prompt.$('#toolbar-grading-container').hide();
+      this.prompt.$('.grading-btn-wrapper').addClass('hidden');
 
       if (this.lang === 'zh') {
         this.teachTonePrompt1();
@@ -347,6 +360,9 @@ const DemoPage = GelatoPage.extend({
       keepAlive: true,
       body: this.parseTemplate(require('./notify-reading1.jade'))
     });
+    this.trigger('step:update', 'readingPrompts');
+
+    this.prompt.$('#toolbar-action-container').show();
 
     if (this.lang === 'zh' && !app.isMobile()) {
       // this.$('.reading-prompt').removeClass('hidden');
@@ -356,8 +372,12 @@ const DemoPage = GelatoPage.extend({
       });
     }
 
+    this.prompt.once('reading:complete', () => {
+      this.$('.tap-to-advance-wrapper').removeClass('hidden');
+      this.prompt.$('#toolbar-action-container').hide();
+    });
+
     this.prompt.once('next', () => {
-      // TODO: add in more features
       this.completeDemo();
     });
   },
@@ -377,6 +397,23 @@ const DemoPage = GelatoPage.extend({
       body: this.parseTemplate(require('./notify-tone1.jade'))
     });
 
+    this.trigger('step:update', 'tonePrompts');
+
+    this.prompt.once('tone:complete', () => {
+      this.$('.tap-to-advance-wrapper').removeClass('hidden');
+      this.prompt.$('#toolbar-action-container').hide();
+
+      this.prompt.once('reviews:next', () => {
+        this.prompt.$('#toolbar-action-container').show();
+      });
+
+      // this is a hack...there are two characters, let's just redo it again
+      this.prompt.once('tone:complete', () => {
+        this.$('.tap-to-advance-wrapper').removeClass('hidden');
+        this.prompt.$('#toolbar-action-container').hide();
+      });
+    });
+
     this.prompt.once('next', this.teachReadingPrompt1);
   },
   /**
@@ -385,6 +422,7 @@ const DemoPage = GelatoPage.extend({
   switchToWriting: function() {
     this.prompt.part.eraseCharacter();
     this.prompt.previous();
+    this.prompt.review.set('score', 3);
     this.prompt.part.eraseCharacter();
     this.$('#study-prompt-toolbar-action').hide();
 
@@ -395,6 +433,8 @@ const DemoPage = GelatoPage.extend({
         keepAlive: true,
         body: this.parseTemplate(require('./notify-step2'))
       });
+
+      this.trigger('step:update', 'writeDemoChar1');
     }
   },
 
@@ -411,7 +451,11 @@ const DemoPage = GelatoPage.extend({
 
     this.prompt.review.set('score', 3);
     this.prompt.$('#toolbar-action-container').show();
-    this.prompt.$('#toolbar-grading-container').hide();
+
+    this.prompt.once('character:complete', () => {
+        this.$('.tap-to-advance-wrapper').removeClass('hidden');
+        this.prompt.$('.grading-btn-wrapper').addClass('hidden');
+    });
     this.prompt.once('reviews:next', this.writeDemoChar2);
   },
 
@@ -465,6 +509,7 @@ const DemoPage = GelatoPage.extend({
           showConfirmButton: false
         }
       });
+      this.trigger('step:update', 'demoComplete');
     } else {
       this.dialog = new DemoCallToActionDialog();
       this.dialog.open();

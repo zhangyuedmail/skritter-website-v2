@@ -128,6 +128,8 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
       this.setReadingPromptFocus();
     }
 
+    this.prompt.trigger('reading:complete');
+
     return this;
   },
 

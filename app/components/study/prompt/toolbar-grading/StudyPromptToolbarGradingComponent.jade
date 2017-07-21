@@ -2,26 +2,26 @@ gelato-component(data-name="study-prompt-toolbar-grading")
   - var prompt = view.prompt;
 
   if prompt.review && prompt.review.isComplete()
-    .btn-group.btn-group-justified(role='group', class=prompt.review.get('showTeaching') ? '' : 'hidden')
+    .btn-group.btn-group-justified.tap-to-advance-wrapper(role='group', class=prompt.review.get('showTeaching') || view.showTapToAdvanceText ? '' : 'hidden')
       .btn-group(role='group').text-center
         button.btn.btn-default(type='button')
           .teaching-text tap to advance
 
-    .btn-group.btn-group-justified(role='group', class=prompt.review.get('showTeaching') ? 'hidden' : '')
+    .btn-group.btn-group-justified.grading-btn-wrapper(role='group', class=prompt.review.get('showTeaching') || !view.showGradingButtons ? 'hidden' : '')
       .btn-group(role='group')
-        button.btn.btn-default.grade1(class=view.value === 1 ? 'selected' : '', type='button', data-value='1')
+        button.btn.btn-default.grading-btn.grade1(class=view.value === 1 ? 'selected' : '', type='button', data-value='1')
           .grade-value 1
           .grade-text forgot
       .btn-group(role='group')
-        button.btn.btn-default.grade2(class=view.value === 2 ? 'selected' : '', type='button', data-value='2')
+        button.btn.btn-default.grading-btn.grade2(class=view.value === 2 ? 'selected' : '', type='button', data-value='2')
           .grade-value 2
           .grade-text so-so
       .btn-group(role='group')
-        button.btn.btn-default.grade3(class=view.value === 3 ? 'selected' : '', type='button', data-value='3')
+        button.btn.btn-default.grading-btn.grade3(class=view.value === 3 ? 'selected' : '', type='button', data-value='3')
           .grade-value 3
           .grade-text got it
       .btn-group(role='group')
-        button.btn.btn-default.grade4(class=view.value === 4 ? 'selected' : '', type='button', data-value='4')
+        button.btn.btn-default.grading-btn.grade4(class=view.value === 4 ? 'selected' : '', type='button', data-value='4')
           .grade-value 4
           .grade-text too easy
 
