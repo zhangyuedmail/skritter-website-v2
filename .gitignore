@@ -8,5 +8,6 @@
 # Files
 *.apk
 *.keystore
+*.log
 *.build.json
 *.billing.json
