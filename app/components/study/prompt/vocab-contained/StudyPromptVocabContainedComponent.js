@@ -58,6 +58,12 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
 
   handleClickChildWriting: function(event) {
     const id = $(event.target).data('vocabid');
+
+    // disable this for the demo
+    if (this.prompt.isDemo) {
+      return;
+    }
+
     vent.trigger('studyPromptVocabInfo:show', id);
   },
 

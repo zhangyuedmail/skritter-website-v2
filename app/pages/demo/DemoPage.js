@@ -487,6 +487,11 @@ const DemoPage = GelatoPage.extend({
     app.mixpanel.track('Completed writing demo character #2');
 
     if (this.useNewDemo) {
+      if (!this.prompt.review.isComplete()) {
+        this.prompt.review.set('complete', true);
+        this.prompt.renderPart();
+      }
+
       vent.trigger('notification:show', {
         dialogTitle: 'Lots of Features!',
         showTitle: true,
@@ -496,17 +501,29 @@ const DemoPage = GelatoPage.extend({
         showConfirmButton: true,
         style: {
           backdrop: {
-            top: '90px'
+            top: '90px',
+            width: '50%'
           },
           dialog: {
-            top: '100px'
+            top: '100px',
+            width: '50%'
           }
         },
         next: {
           dialogTitle: 'Demo Complete',
           showTitle: true,
           body: this.parseTemplate(require('./notify-demo-complete.jade')),
-          showConfirmButton: false
+          showConfirmButton: false,
+          style: {
+            backdrop: {
+              top: '90px',
+              width: '100%'
+            },
+            dialog: {
+              top: '100px',
+              width: '100%'
+            }
+          }
         }
       });
       this.trigger('step:update', 'demoComplete');
