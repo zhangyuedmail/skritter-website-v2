@@ -92,6 +92,7 @@ module.exports = GelatoPage.extend({
     this.couponCode = app.getStoredCouponCode();
 
     app.mixpanel.track('Viewed signup page');
+    this._setSignupProgress('viewSignupPage');
   },
 
   /**
@@ -395,7 +396,6 @@ module.exports = GelatoPage.extend({
         self.createUser(formData, callback);
       }
     ], function(error) {
-      ScreenLoader.hide();
       if (error) {
         self._handleSubmittedProcessError(error.responseJSON || error);
       } else {
@@ -529,6 +529,7 @@ module.exports = GelatoPage.extend({
    * @private
    */
   _handleSubmittedProcessError: function(error) {
+    ScreenLoader.hide();
 
     // Let the user actually subscribe again when submitting the form
     this.subscribing = false;
@@ -615,6 +616,20 @@ module.exports = GelatoPage.extend({
    * @private
    */
   _handleSubmittedProcessSuccess: function() {
+    this._setSignupProgress('createdUser').then(() => {
+      this._navigatePostSignup();
+    }, () => {
+      this._navigatePostSignup();
+    });
+  },
+
+  /**
+   * Navigates the user to the appropriate area after the signup process has completed
+   * @private
+   */
+  _navigatePostSignup: function() {
+    ScreenLoader.hide();
+
     if (app.isMobile()) {
       app.router.navigate('vocablists/browse');
       app.reload();
@@ -760,6 +775,45 @@ module.exports = GelatoPage.extend({
     }
 
     return true;
-  }
+  },
+
+  /**
+   * Records the user's progress through the signup process
+   * @param {String} step the id of the step the user is on
+   * @return {Promise}
+   * @private
+   */
+  _setSignupProgress: function(step) {
+    return new Promise((resolve, reject) => {
+      if (!app.isDevelopment()) {
+        const platformData = {
+          client: app.isAndroid() ? 'android' : 'web',
+          lang: app.getLanguage(),
+          version: app.config.version,
+          uuid: localStorage.getItem('skrit-uuid'),
+          step
+        };
+
+        if (app.user.id && app.user.id !== 'application') {
+          platformData['user'] = app.user.id;
+        }
+
+        $.ajax({
+          url: app.getApiUrl(2) + 'usage/demo',
+          type: 'POST',
+          headers: app.user.session.getHeaders(),
+          data: platformData,
+          error: function(error) {
+            reject();
+          },
+          success: function() {
+            resolve();
+          }
+        });
+      } else {
+        resolve();
+      }
+    });
+  },
 
 });

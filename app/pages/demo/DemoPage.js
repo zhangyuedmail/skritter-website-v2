@@ -75,7 +75,7 @@ const DemoPage = GelatoPage.extend({
         demoPage: this,
         firstStep: 'languageSelection'
       });
-
+      this.setDemoProgress('languageSelection');
       this.listenTo(this._views['progress'], 'demo:skip', this.completeDemo);
     }
   },
@@ -194,7 +194,7 @@ const DemoPage = GelatoPage.extend({
         body: this.parseTemplate(require('./notify-erase-character1.jade'))
       });
 
-    this.trigger('step:update', 'erasingCharacters');
+    this.setDemoProgress('erasingCharacters');
 
     const eraseBtn = $('.icon-study-erase');
     const eraseBtnPos = eraseBtn.offset();
@@ -271,7 +271,7 @@ const DemoPage = GelatoPage.extend({
       keepAlive: true,
       body: this.parseTemplate(require('./notify-definition1.jade'))
     });
-    this.trigger('step:update', 'definitionPrompts');
+    this.setDemoProgress('definitionPrompts');
 
     this.prompt.$('#toolbar-action-container').show();
 
@@ -285,7 +285,7 @@ const DemoPage = GelatoPage.extend({
       keepAlive: true,
       body: this.parseTemplate(require('./notify-srs-1.jade'))
     });
-    this.trigger('step:update', 'spacedRepetition');
+    this.setDemoProgress('spacedRepetition');
 
     this.prompt.$('#toolbar-action-container').hide();
 
@@ -325,7 +325,7 @@ const DemoPage = GelatoPage.extend({
     this.prompt.$('#toolbar-vocab-container').hide();
     this.prompt.once('character:complete', this.teachDemoChar2);
 
-    this.trigger('step:update', 'teachDemoChar1');
+    this.setDemoProgress('teachDemoChar1');
 
     if (this.useNewDemo) {
       this.showDemoGuidePopup();
@@ -360,7 +360,7 @@ const DemoPage = GelatoPage.extend({
       keepAlive: true,
       body: this.parseTemplate(require('./notify-reading1.jade'))
     });
-    this.trigger('step:update', 'readingPrompts');
+    this.setDemoProgress('readingPrompts');
 
     this.prompt.$('#toolbar-action-container').show();
 
@@ -397,7 +397,7 @@ const DemoPage = GelatoPage.extend({
       body: this.parseTemplate(require('./notify-tone1.jade'))
     });
 
-    this.trigger('step:update', 'tonePrompts');
+    this.setDemoProgress('tonePrompts');
 
     this.prompt.once('tone:complete', () => {
       this.$('.tap-to-advance-wrapper').removeClass('hidden');
@@ -434,7 +434,7 @@ const DemoPage = GelatoPage.extend({
         body: this.parseTemplate(require('./notify-step2'))
       });
 
-      this.trigger('step:update', 'writeDemoChar1');
+      this.setDemoProgress('writeDemoChar1');
     }
   },
 
@@ -526,7 +526,7 @@ const DemoPage = GelatoPage.extend({
           }
         }
       });
-      this.trigger('step:update', 'demoComplete');
+      this.setDemoProgress('demoComplete');
     } else {
       this.dialog = new DemoCallToActionDialog();
       this.dialog.open();
@@ -579,8 +579,34 @@ const DemoPage = GelatoPage.extend({
   },
 
   /**
+   * Records the user's progress through the demo
+   */
+  setDemoProgress: function(step) {
+    this.trigger('step:update', step);
+
+    if (!app.isDevelopment() && !app.user.isLoggedIn()) {
+      const platformData = {
+        client: app.isAndroid() ? 'android' : 'web',
+        lang: this.lang,
+        version: app.config.version,
+        uuid: localStorage.getItem('skrit-uuid'),
+        step
+      };
+
+      $.ajax({
+        url: app.getApiUrl(2) + 'usage/demo',
+        type: 'POST',
+        headers: app.user.session.getHeaders(),
+        data: platformData,
+        error: function(error) {},
+        success: function() {}
+      });
+    }
+  },
+
+  /**
    * @method remove
-   * @returns {Contact}
+   * @returns {DemoPage}
    */
   remove: function() {
     this.prompt.remove();
