@@ -61,6 +61,34 @@
     display: inline-block;
     margin: 0;
   }
+
+  // TODO: move to its own .scss file
+  .demo-complete-view {
+    position: relative;
+
+
+    .sign-up-area {
+      background: #f7efe4;
+      max-width: 700px;
+      text-align: center;
+      text-transform: capitalize;
+      padding-bottom: 20px;
+      margin: auto;
+    }
+
+    .free-tial-wrapper {
+      color: #272727;
+      padding-top: 20px;
+      font-weight: bold;
+    }
+
+    #button-signup {
+      float: none;
+
+      background: #ed5236;
+      color: #FFF;
+    }
+  }
 }
 
 .mobile {

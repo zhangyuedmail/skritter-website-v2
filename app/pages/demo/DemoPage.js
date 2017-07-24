@@ -510,8 +510,8 @@ const DemoPage = GelatoPage.extend({
           }
         },
         next: {
-          dialogTitle: 'Demo Complete',
-          showTitle: true,
+          // dialogTitle: 'Demo Complete',
+          showTitle: false,
           body: this.parseTemplate(require('./notify-demo-complete.jade')),
           showConfirmButton: false,
           style: {
