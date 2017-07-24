@@ -8,6 +8,8 @@
     width: 100%;
     left: 0;
     transition: left .2s, width .2s;
+    max-height: calc(100% - 150px);
+    overflow-y: auto;
   }
 
   .modal-content {
@@ -66,17 +68,31 @@
   .demo-complete-view {
     position: relative;
 
+    .skritter-main-features {
+      text-align: left;
+      color: #272727;
+    }
+
+    .media-heading {
+      font-weight: bold;
+      margin-bottom: 0;
+    }
+
+    .media-subtext {
+      font-weight: 300;
+      font-size: 13px;
+    }
 
     .sign-up-area {
       background: #f7efe4;
       max-width: 700px;
       text-align: center;
-      text-transform: capitalize;
+      text-transform: uppercase;
       padding-bottom: 20px;
       margin: auto;
     }
 
-    .free-tial-wrapper {
+    .free-trial-wrapper {
       color: #272727;
       padding-top: 20px;
       font-weight: bold;
