@@ -485,6 +485,7 @@ const DemoPage = GelatoPage.extend({
    */
   completeDemo: function() {
     app.mixpanel.track('Completed writing demo character #2');
+    this.setDemoProgress('demoComplete');
 
     if (this.useNewDemo) {
       if (!this.prompt.review.isComplete()) {
@@ -526,7 +527,6 @@ const DemoPage = GelatoPage.extend({
           }
         }
       });
-      this.setDemoProgress('demoComplete');
     } else {
       this.dialog = new DemoCallToActionDialog();
       this.dialog.open();

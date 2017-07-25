@@ -66,11 +66,59 @@
 
   // TODO: move to its own .scss file
   .demo-complete-view {
+    margin: auto;
+    max-width: 700px;
     position: relative;
+    background: #ffffff;
+    background: linear-gradient(to top, #ffffff 0%,#ffffff 33%,#f7efe4 63%,#f7efe4 100%);
+    background: -webkit-linear-gradient(top, #ffffff 0%,#ffffff 33%,#f7efe4 63%,#f7efe4 100%);
+    background: -moz-linear-gradient(top, #ffffff 0%, #ffffff 33%, #f7efe4 63%, #f7efe4 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7efe4',GradientType=1 );
 
     .skritter-main-features {
       text-align: left;
       color: #272727;
+      background-image: url('#{$dir-assets}/images/devices1.png');
+      background-position: 90% 25px;
+      background-repeat: no-repeat;
+    }
+
+    img {
+      position: absolute;
+      left: 0;
+    }
+
+    .tagline {
+      font-size: 25px;
+      font-weight: 300;
+      color: #000;
+      text-transform: uppercase;
+      line-height: 1.2;
+      margin-left: 25px;
+      margin-top: 98px;
+      letter-spacing: 1px;
+      padding-right: 95px;
+    }
+
+    .icon {
+      max-width: 35px;
+    }
+
+    .push-left {
+      margin-right: 45px;
+    }
+
+    .push-right {
+      margin-left: 45px;
+    }
+
+    .features-row {
+      margin-top: 99px;
+    }
+
+    .media-body {
+      padding-left: 8px;
+      padding-bottom: 21px;
     }
 
     .media-heading {
@@ -81,10 +129,21 @@
     .media-subtext {
       font-weight: 300;
       font-size: 13px;
+      text-transform: none;
+      line-height: 1;
+    }
+
+    .see-features-wrapper {
+      text-align: center;
+      margin-top: -8px;
+
+      a {
+        color: #000;
+        font-size: 11px;
+      }
     }
 
     .sign-up-area {
-      background: #f7efe4;
       max-width: 700px;
       text-align: center;
       text-transform: uppercase;

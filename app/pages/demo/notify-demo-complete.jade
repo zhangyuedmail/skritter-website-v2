@@ -1,46 +1,48 @@
 .demo-complete-view
   .sign-up-area
     img(src="/media/images/demo-complete-features.jpg", alt="")
-    //#section-main-features
-    //  .container
-    //    .row
-    //      .col-md-6.block
-    //        .media
-    //          .media-left
-    //            .media-object
-    //              i.icon.icon-marketing-handwriting-recognition
-    //          .media-body
-    //            .media-heading Handwriting Recognition
-    //            .media-subtext Write characters, don't trace them with our active-recall learning strategy.
-    //      .col-md-6.block
-    //        .media
-    //          .media-left
-    //            .media-object
-    //              i.icon.icon-marketing-textbooks
-    //          .media-body
-    //            .media-heading Studying your way
-    //            .media-subtext
-    //              | Skritter gives you immediate stroke-level feedback and helps you review hard characters more often.
-    //    .row
-    //      .col-md-6.block
-    //        .media
-    //          .media-left
-    //            .media-object
-    //              i.icon.icon-marketing-stroke-order
-    //          .media-body
-    //            .media-heading Teaching Mode
-    //            .media-subtext Learn the correct stroke order right away for quick character mastery.
-    //      .col-md-6.block
-    //        .media
-    //          .media-left
-    //            .media-object
-    //              i.icon.icon-marketing-plane
-    //          .media-body
-    //            .media-heading Characters on the go
-    //            .media-subtext Learn Chinese & Japanese characters with our mobile apps anywhere, even in Antarctica.
+    .skritter-main-features
+      .row
+        .col-md-6.block.tagline Simple enough for students, powerful enough for expats
+        .col-md-6.block
+      .row.features-row
+        .col-md-6.block
+          .media.push-right
+            .media-left
+              .media-object
+                i.icon.icon-marketing-handwriting-recognition
+            .media-body
+              .media-heading Handwriting Recognition
+              .media-subtext Write characters, don't trace them with our active-recall learning strategy.
+        .col-md-6.block
+          .media
+            .media-left
+              .media-object
+                i.icon.icon-marketing-textbooks
+            .media-body
+              .media-heading Studying your way
+              .media-subtext
+                | Start learning from hundreds of textbooks and vocab lists, or make your own.
+      .row
+        .col-md-6.block
+          .media.push-right
+            .media-left
+              .media-object
+                i.icon.icon-marketing-stroke-order
+            .media-body
+              .media-heading Teaching Mode
+              .media-subtext Learn the correct stroke order right away for quick character mastery.
+        .col-md-6.block
+          .media
+            .media-left
+              .media-object
+                i.icon.icon-marketing-plane
+            .media-body
+              .media-heading Characters on the go
+              .media-subtext Learn Chinese & Japanese characters with our mobile apps anywhere, even in Antarctica.
+      .row
+        .col-md-12.block.see-features-wrapper
+          a(href="/features#section-call-to-action")= app.locale('pages.demo.seeAllFeatures')
     a(href="/signup")
       button#button-signup.btn.btn-lg.btn-danger= app.locale('common.signUp').toUpperCase()
-    .free-tial-wrapper 7-DAY FREE TRIAL
-
-  a(href="/features#section-call-to-action")
-    button#button-back.btn.btn-lg.btn-default= app.locale('pages.demo.seeAllFeatures')
+    .free-trial-wrapper 7-DAY FREE TRIAL
