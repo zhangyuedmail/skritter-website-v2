@@ -39,8 +39,6 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
   initialize: function(options) {
     this.prompt = options.prompt;
 
-    this.showGradingButtons = options.showGradingButtons;
-
     this._eventsDelayed = false;
 
     this._lastButtonMouseoverGrade = null;
