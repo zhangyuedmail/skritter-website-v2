@@ -1,16 +1,11 @@
-var GelatoDialog = require('base/gelato-dialog');
+const GelatoDialog = require('base/gelato-dialog');
 
 /**
  * @class DemoLanguageSelectDialog
  * @extends {GelatoDialog}
  */
 module.exports = GelatoDialog.extend({
-  /**
-   * @method initialize
-   * @param {Object} options
-   */
-  initialize: function(options) {
-  },
+
   /**
    * @property events
    * @type {Object}
@@ -19,11 +14,13 @@ module.exports = GelatoDialog.extend({
     'click #button-select-chinese': 'handleClickButtonSelectChinese',
     'click #button-select-japanese': 'handleClickButtonSelectJapanese'
   },
+
   /**
    * @property template
    * @type {Function}
    */
-  template: require('./template'),
+  template: app.isDevelopment() ? require('./DemoLanguageSelectDark.jade') : require('./DemoLanguageSelectBootstrap.jade'),
+
   /**
    * @method render
    * @returns {DemoLanguageSelectDialog}
@@ -32,6 +29,7 @@ module.exports = GelatoDialog.extend({
     this.renderTemplate();
     return this;
   },
+
   /**
    * @method handleClickButtonSelectChinese
    * @param {Event} event
@@ -41,6 +39,7 @@ module.exports = GelatoDialog.extend({
     this.trigger('select', null, 'zh');
     this.close();
   },
+
   /**
    * @method handleClickButtonSelectJapanese
    * @param {Event} event

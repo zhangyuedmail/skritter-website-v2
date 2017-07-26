@@ -49,7 +49,7 @@ const StudyPage = GelatoPage.extend({
       this.loadAlreadyTimed = false;
     }
 
-    ScreenLoader.show();
+    ScreenLoader.show(true);
 
     Howler.autoSuspend = false;
 
@@ -319,7 +319,6 @@ const StudyPage = GelatoPage.extend({
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
       this.toolbar.render();
-
 
       // TODO: fix automatic item adding
       // if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {

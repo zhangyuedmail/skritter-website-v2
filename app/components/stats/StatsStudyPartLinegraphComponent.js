@@ -177,21 +177,22 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
   },
 
   /**
-   * Gets data from the collection for the specified range and organizes more meaningful data for the specified type of stat
+   * Gets data from the collection for the specified range and organizes
+   * more meaningful data for the specified type of stat
    * @returns {{chartData: Array<Number>, totalChangeLearned: number, studied: number, remembered: number, retentionRate: number, added: *}}
    */
   getRangeData: function() {
-    var chartData = [];
-    var total = 0;
-    var collection = this.range ? this.collection.getStatsInRange(this.range.start, this.range.end) : this.collection.models;
-    var length = collection.length > 6 && !this.range ? 6 : collection.length - 1;
-    var studied = 0;
-    var remembered = 0;
-    var retentionRate = 0;
-    var stats = [];
+    const chartData = [];
+    const collection = this.range ? this.collection.getStatsInRange(this.range.start, this.range.end) : this.collection.models;
+    const length = collection.length > 6 && !this.range ? 6 : collection.length - 1;
+    let remembered = 0;
+    let retentionRate = 0;
+    const stats = [];
+    let studied = 0;
+    let total = 0;
 
-    for (var i = length; i >= 0; i--) {
-      var stat = collection[i].get(this.type)[this.part];
+    for (let i = length; i >= 0; i--) {
+      const stat = collection[i].get(this.type)[this.part];
       stats.push(stat);
       chartData.push(stat.learned.all);
       total += stat.learned.day;
@@ -202,12 +203,18 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
     // wonky 1000 / 10 division to get first decimal place
     retentionRate = studied === 0 ? 0 : (Math.floor((remembered / studied) * 1000) / 10);
 
+    // last stat - first stat = total change in learned.
+    // Tallying daily totals appears to be a bit buggy
+    const lastStat = collection[0].get(this.type)[this.part];
+    const firstStat = collection[length].get(this.type)[this.part];
+    const totalChangeLearned = lastStat.learned.all - firstStat.learned.all;
+
     return {
-      chartData: chartData,
-      totalChangeLearned: total,
-      studied: studied,
-      remembered: remembered,
-      retentionRate: retentionRate,
+      chartData,
+      totalChangeLearned,
+      studied,
+      remembered,
+      retentionRate,
       added: this._getAdded(stats)
     };
   },

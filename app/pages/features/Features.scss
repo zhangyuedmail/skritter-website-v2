@@ -7,7 +7,7 @@ gelato-page[data-name='features'] {
 
   #section-additional-features {
     background-color: $white;
-    padding-bottom: 50px;
+
     .block {
       padding-bottom: 60px;
     }
@@ -32,7 +32,7 @@ gelato-page[data-name='features'] {
 
   #section-main-features {
     background-color: $white;
-    padding-bottom: 50px;
+    margin-bottom: 50px;
     .block {
       padding-bottom: 60px;
     }
@@ -70,6 +70,13 @@ gelato-page[data-name='features'] {
       font-weight: 400;
       margin-bottom: 50px;
     }
+  }
+
+  #section-sign-up {
+    padding-bottom: 50px;
+  }
+  .signup-link {
+    display: inline-block;
   }
 
 }

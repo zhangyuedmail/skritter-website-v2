@@ -44,7 +44,7 @@ const StudyListPage = GelatoPage.extend({
    * @constructor
    */
   initialize: function(options) {
-    ScreenLoader.show();
+    ScreenLoader.show(true);
 
     this.currentItem = null;
     this.currentPromptItems = null;

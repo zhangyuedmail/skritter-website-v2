@@ -24,5 +24,5 @@ shell.exec('cordova plugin add ../plugins/core');
 
 // TODO: remove once issue is fixed
 // https://github.com/phonegap/ios-sim/issues/210
-shell.cd('./platforms/ios/cordova');
-shell.exec('npm install ios-sim@latest');
+// shell.cd('./platforms/ios/cordova');
+// shell.exec('npm install ios-sim@latest');

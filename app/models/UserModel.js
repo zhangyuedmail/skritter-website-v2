@@ -106,6 +106,20 @@ const UserModel = SkritterModel.extend({
       model.unset('wordDictionary');
     }
 
+    // these are really weird properties
+    ['ballerSubscriptions', 'isBallerFor'].forEach(prop => {
+      if (typeof model.get(prop) === 'object' && model.get(prop).length === 1) {
+        if (model.get(prop)[0] === '') {
+          model.set(prop, []);
+        }
+      }
+
+      // TODO: figure out why server returns this as a string but it is actually an array
+      if (typeof model.get(prop) === 'string') {
+        model.set(prop, model.get(prop).split(','));
+      }
+    });
+
     GelatoCollection.prototype.sync.call(this, method, model, options);
   },
 
@@ -318,9 +332,11 @@ const UserModel = SkritterModel.extend({
    * This is bad design. I'm sorry. Will refactor once we do ES6. I..."promise".
    * @param {Function} [callback] called when it can be determined
    *                            whether the subscription is active.
+   * @param {Function} [callbackError] called when there's a problem getting
+   *                                   the subscription
    */
-  isSubscriptionActive: function(callback) {
-    var self = this;
+  isSubscriptionActive: function(callback, callbackError) {
+    const self = this;
 
     if (this.subscription.isFetched) {
 
@@ -334,6 +350,11 @@ const UserModel = SkritterModel.extend({
         success: function() {
           if (_.isFunction(callback)) {
             callback(self.subscription.getStatus() !== 'Expired');
+          }
+        },
+        error: function(error) {
+          if (callbackError) {
+            callbackError(error);
           }
         }
       });

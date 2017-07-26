@@ -20,6 +20,7 @@ module.exports = GelatoDialog.extend({
    * @constructor
    */
   initialize: function(options) {
+    // options.ignoreBackdropClick = options.ignoreBackdropClick !== undefined ? options.ignoreBackgdropClick : true;
     this.set(options);
   },
 
@@ -39,6 +40,7 @@ module.exports = GelatoDialog.extend({
     if (this.style) {
       _.defer(() => {
         this.setStyle(this.style);
+        $('body').removeClass('modal-open');
       });
     }
 

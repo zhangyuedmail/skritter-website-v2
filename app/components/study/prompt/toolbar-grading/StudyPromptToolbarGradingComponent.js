@@ -54,7 +54,7 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
   render: function(options) {
     options = options || {};
 
-    this.renderTemplate();
+    this.renderTemplate(options);
 
     if (options.delayEvents) {
       this._delayEvents();
@@ -132,6 +132,8 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
     this.value = parseInt(value, 10);
     this.$('button').removeClass('selected');
     this.$('.grade' + this.value).addClass('selected');
+
+    this.trigger('grade:selected', this.value);
 
     return this;
   },

@@ -1,13 +1,15 @@
 @import "../../styles/_variables";
 
-gelato-dialog[data-name='notification-dialog'] {
+.dark-notification-dialog, gelato-dialog[data-name='notification-dialog'] {
   font-family: $font-ubuntu;
   text-transform: uppercase;
 
   .modal {
     width: 100%;
-    left: 0%;
+    left: 0;
     transition: left .2s, width .2s;
+    max-height: calc(100% - 150px);
+    overflow-y: auto;
   }
 
   .modal-content {
@@ -21,7 +23,7 @@ gelato-dialog[data-name='notification-dialog'] {
 
 
   .modal-dialog {
-    margin-top: 10%;
+    margin-top: 0;
     max-width: 1000px;
     width: 80%;
   }
@@ -44,6 +46,7 @@ gelato-dialog[data-name='notification-dialog'] {
   .button-wrapper {
     text-align: center;
   }
+
   .btn {
     background: $green5;
     border-radius: 40px;
@@ -56,4 +59,119 @@ gelato-dialog[data-name='notification-dialog'] {
     margin-top: 25px;
   }
 
+  .media {
+    display: inline-block;
+    margin: 0;
+  }
+
+  // TODO: move to its own .scss file
+  .demo-complete-view {
+    margin: auto;
+    max-width: 700px;
+    position: relative;
+    background: #ffffff;
+    background: linear-gradient(to top, #ffffff 0%,#ffffff 33%,#f7efe4 63%,#f7efe4 100%);
+    background: -webkit-linear-gradient(top, #ffffff 0%,#ffffff 33%,#f7efe4 63%,#f7efe4 100%);
+    background: -moz-linear-gradient(top, #ffffff 0%, #ffffff 33%, #f7efe4 63%, #f7efe4 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7efe4',GradientType=1 );
+
+    .skritter-main-features {
+      text-align: left;
+      color: #272727;
+      background-image: url('#{$dir-assets}/images/devices1.png');
+      background-position: 90% 25px;
+      background-repeat: no-repeat;
+    }
+
+    img {
+      position: absolute;
+      left: 0;
+    }
+
+    .tagline {
+      font-size: 25px;
+      font-weight: 300;
+      color: #000;
+      text-transform: uppercase;
+      line-height: 1.2;
+      margin-left: 25px;
+      margin-top: 98px;
+      letter-spacing: 1px;
+      padding-right: 95px;
+    }
+
+    .icon {
+      max-width: 35px;
+    }
+
+    .push-left {
+      margin-right: 45px;
+    }
+
+    .push-right {
+      margin-left: 45px;
+    }
+
+    .features-row {
+      margin-top: 99px;
+    }
+
+    .media-body {
+      padding-left: 8px;
+      padding-bottom: 21px;
+    }
+
+    .media-heading {
+      font-weight: bold;
+      margin-bottom: 0;
+    }
+
+    .media-subtext {
+      font-weight: 300;
+      font-size: 13px;
+      text-transform: none;
+      line-height: 1;
+    }
+
+    .see-features-wrapper {
+      text-align: center;
+      margin-top: -8px;
+
+      a {
+        color: #000;
+        font-size: 11px;
+      }
+    }
+
+    .sign-up-area {
+      max-width: 700px;
+      text-align: center;
+      text-transform: uppercase;
+      padding-bottom: 20px;
+      margin: auto;
+    }
+
+    .free-trial-wrapper {
+      color: #272727;
+      padding-top: 20px;
+      font-weight: bold;
+    }
+
+    #button-signup {
+      float: none;
+
+      background: #ed5236;
+      color: #FFF;
+    }
+  }
+}
+
+.mobile {
+  .dark-notification-dialog, gelato-dialog[data-name='notification-dialog'] {
+    .modal-dialog {
+      margin-top: 10%;
+      max-width: none;
+      width: auto;
+    }
+  }
 }

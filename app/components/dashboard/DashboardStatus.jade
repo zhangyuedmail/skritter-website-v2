@@ -8,6 +8,8 @@ gelato-component(data-name='dashboard-status')
         | &nbsp; items ready to review.
       else if view.dueCount === 0 && view.vocablists.state === 'standby'
         span no items to review.
+      else if view.errorFetchingDueCount
+        | items ready to review.
       else
         | - items ready to review.
 

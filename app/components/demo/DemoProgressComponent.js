@@ -35,16 +35,40 @@ const DemoProgressComponent = GelatoComponent.extend({
   /**
    *
    */
-  stepData: {
-    languageSelection: {
-      number: 1,
-      name: "Language Selection"
+  stepData: [
+    {
+      id: 'languageSelection',
+      name: 'Language Selection'
     },
-    teachDemoChar1: {
-      number: 2,
-      name: "First Characters"
+    {
+      id: 'teachDemoChar1',
+      name: 'First Characters'
+    },
+    {
+      id: 'writeDemoChar1',
+      name: 'Getting Hints'
+    },
+    {
+      id: 'erasingCharacters',
+      name: 'Erasing Characters'
+    },
+    {
+      id: 'definitionPrompts',
+      name: 'Definition Prompts'
+    },
+    {
+      id: 'spacedRepetition',
+      name: 'Spaced Repetition'
+    },
+    {
+      id: 'readingPrompts',
+      name: 'Reading Prompts'
+    },
+    {
+      id: 'demoComplete',
+      name: 'Demo Complete'
     }
-  },
+  ],
 
   /**
    * Initializes a demo progress component
@@ -54,8 +78,14 @@ const DemoProgressComponent = GelatoComponent.extend({
    */
   initialize: function(options) {
     this.demoPage = options.demoPage;
-    this.numDemoSteps = Object.keys(this.stepData).length;
-    this.firstStep = options.firstStep || this.stepData[OBject.keys[this.stepData][0]];
+    this.firstStep = options.firstStep || this.stepData[0];
+
+    if (this.demoPage.lang === 'zh') {
+      this.stepData.splice(this.stepData.length - 2, 0, {
+        id: 'tonePrompts',
+        name: 'Tone Prompts'
+      });
+    }
 
     this.listenTo(this.demoPage, 'step:update', this.updateStep);
   },
@@ -74,7 +104,7 @@ const DemoProgressComponent = GelatoComponent.extend({
    * @param {jQuery.Event} e the click event
    */
   handleSkipButtonClick: function(e) {
-    // TODO
+    this.trigger('demo:skip');
   },
 
   /**
@@ -83,12 +113,20 @@ const DemoProgressComponent = GelatoComponent.extend({
    * @param {String} step the current step
    */
   updateStep: function(step) {
-    const stepInfo = this.stepData[step];
+    let i = 0;
+    let stepInfo;
 
-    const progressPercent = (stepInfo.number / this.numDemoSteps) * 100;
+    for (; i < this.stepData.length; i++) {
+        if (this.stepData[i].id === step) {
+          stepInfo = this.stepData[i];
+          break;
+        }
+    }
+
+    const progressPercent = ((i + 1) / this.stepData.length) * 100;
 
     this.$('.progress-bar').attr('style', 'width: ' + progressPercent + '%');
-    this.$('#step-num').text('Step ' + stepInfo.number);
+    this.$('#step-num').text('Step ' + (i + 1));
     this.$('#step-text').text(stepInfo.name);
   }
 

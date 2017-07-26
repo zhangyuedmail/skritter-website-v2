@@ -15,8 +15,8 @@ function ScreenLoader() {
  * @returns {ScreenLoader}
  */
 ScreenLoader.prototype.clear = function() {
-  var messageContainer = this.element.querySelector('.screen-message-container');
-  for (var i = 0, length = this.messages.length; i < length; i++) {
+  const messageContainer = this.element.querySelector('.screen-message-container');
+  for (let i = 0, length = this.messages.length; i < length; i++) {
     messageContainer.removeChild(this.messages[i]);
     this.messages.shift();
   }
@@ -25,14 +25,18 @@ ScreenLoader.prototype.clear = function() {
 };
 
 /**
+ * @param {Boolean} [immediate] whether to hide immediately without fading out
  * @method hide
  * @returns {ScreenLoader}
  */
-ScreenLoader.prototype.hide = function() {
-  this.element.className = 'fade-out';
+ScreenLoader.prototype.hide = function(immediate) {
+  const classString = 'fade-out' + (immediate ? ' now' : '');
+  this.element.className = classString;
+
   this.timeout = setTimeout((function() {
     this.clear();
   }).bind(this), 500);
+
   return this;
 };
 
@@ -52,13 +56,13 @@ ScreenLoader.prototype.notice = function(value) {
  * @returns {ScreenLoader}
  */
 ScreenLoader.prototype.post = function(value) {
-  var messageContainer = this.element.querySelector('.screen-message-container');
+  const messageContainer = this.element.querySelector('.screen-message-container');
   if (value) {
-    var newMessage = document.createElement('div');
+    const newMessage = document.createElement('div');
     newMessage.className = 'screen-message';
     newMessage.innerHTML = value;
     if (this.messages.length) {
-      var oldMessage = this.messages.shift();
+      const oldMessage = this.messages.shift();
       oldMessage.className += ' fade-out';
       messageContainer.insertBefore(newMessage, oldMessage);
       setTimeout(function() {
@@ -77,20 +81,26 @@ ScreenLoader.prototype.post = function(value) {
  * @returns {ScreenLoader}
  */
 ScreenLoader.prototype.render = function() {
-  var element = document.createElement('screen-loader');
+  const element = document.createElement('screen-loader');
+
   element.innerHTML = this.template();
   document.body.appendChild(element);
   this.element = element;
+
   return this;
 };
 
 /**
+ * @param {Boolean} [immediate] whether to show immediately without fading in
  * @method show
  * @returns {ScreenLoader}
  */
-ScreenLoader.prototype.show = function() {
+ScreenLoader.prototype.show = function(immediate) {
+  const classString = 'fade-in' + (immediate ? ' now' : '');
+
   clearTimeout(this.timeout);
-  this.element.className = 'fade-in';
+  this.element.className = classString;
+
   return this;
 };
 

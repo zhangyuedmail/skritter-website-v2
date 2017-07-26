@@ -68,6 +68,18 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.isDemo = options.isDemo;
     this.isAutoAdvancing = false;
 
+    /**
+     * Whether to always show the "tap to advance" text on completion of a propmpt
+     * @type {Boolean}
+     */
+    this.showTapToAdvanceText = options.showTapToAdvanceText || false;
+
+    /**
+     * Whether to show the grading buttons
+     * @type {Boolean}
+     */
+    this.showGradingButtons = options.showGradingButtons !== undefined ? options.showGradingButtons : true;
+
     //components
     this.canvas = new Canvas({prompt: this});
     this.navigation = new Navigation({prompt: this});
@@ -118,7 +130,10 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.navigation.setElement('#navigation-container').render();
     this.reviewStatus.setElement('#review-status-container').render();
     this.toolbarAction.setElement('#toolbar-action-container').render();
-    this.toolbarGrading.setElement('#toolbar-grading-container').render();
+    this.toolbarGrading.setElement('#toolbar-grading-container').render({
+      showGradingButtons: this.showGradingButtons,
+      showTapToAdvanceText: this.showTapToAdvanceText
+    });
     this.toolbarVocab.setElement('#toolbar-vocab-container').render();
     this.tutorial.setElement('#tutorial-container').render().hide();
     this.vocabContained.setElement('#vocab-contained-container').render();
@@ -431,8 +446,11 @@ const StudyPromptComponent = GelatoComponent.extend({
       'animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;';
 
     this.$('#navigate-next').attr('style', styleStr);
-    this.$('#navigate-next').addClass('grade-' + score);
 
+    // TODO: dark-grey advance color?
+    if (!app.user.get('disableGradingColor')) {
+      this.$('#navigate-next').addClass('grade-' + score);
+    }
 
     this._autoAdvanceListenerId = setTimeout(() => {
 
