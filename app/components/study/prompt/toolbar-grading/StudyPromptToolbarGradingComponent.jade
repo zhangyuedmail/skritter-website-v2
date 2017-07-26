@@ -9,7 +9,7 @@ gelato-component(data-name="study-prompt-toolbar-grading")
         button.btn.btn-default(type='button')
           .teaching-text tap to advance
 
-    .btn-group.btn-group-justified.grading-btn-wrapper(role='group', class=prompt.review.get('showTeaching') || showGradingButtons ? '' : 'hidden')
+    .btn-group.btn-group-justified.grading-btn-wrapper(role='group', class=!prompt.review.get('showTeaching') && showGradingButtons ? '' : 'hidden')
       .btn-group(role='group')
         button.btn.btn-default.grading-btn.grade1(class=view.value === 1 ? 'selected' : '', type='button', data-value='1')
           .grade-value 1
