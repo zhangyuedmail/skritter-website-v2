@@ -54,7 +54,7 @@ const DemoPage = GelatoPage.extend({
       'teachDefinitionPrompt1', 'teachEraseDemoChar2', 'teachReadingPrompt1',
       'teachTonePrompt1', 'teachSRS1');
 
-    this.useNewDemo = !app.isDevelopment();
+    this.useNewDemo = app.isDevelopment();
 
     this.dialog = null;
     this.lang = 'zh';
