@@ -54,7 +54,7 @@ const DemoPage = GelatoPage.extend({
       'teachDefinitionPrompt1', 'teachEraseDemoChar2', 'teachReadingPrompt1',
       'teachTonePrompt1', 'teachSRS1');
 
-    this.useNewDemo = app.isDevelopment();
+    this.useNewDemo = !app.isDevelopment();
 
     this.dialog = null;
     this.lang = 'zh';
@@ -75,9 +75,10 @@ const DemoPage = GelatoPage.extend({
         demoPage: this,
         firstStep: 'languageSelection'
       });
-      this.setDemoProgress('languageSelection');
       this.listenTo(this._views['progress'], 'demo:skip', this.completeDemo);
     }
+
+    this.setDemoProgress('languageSelection');
   },
 
   /**
@@ -337,6 +338,7 @@ const DemoPage = GelatoPage.extend({
    */
   teachDemoChar2: function() {
     app.mixpanel.track('Completed tracing demo character #1');
+    this.setDemoProgress('teachDemoChar2', true);
 
     if (!this.useNewDemo) {
       this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step3')));
@@ -433,8 +435,6 @@ const DemoPage = GelatoPage.extend({
         keepAlive: true,
         body: this.parseTemplate(require('./notify-step2'))
       });
-
-      this.setDemoProgress('writeDemoChar1');
     }
   },
 
@@ -444,6 +444,7 @@ const DemoPage = GelatoPage.extend({
   writeDemoChar1: function() {
     this.switchToWriting();
     app.mixpanel.track('Completed tracing demo character #2');
+    this.setDemoProgress('writeDemoChar1');
 
     if (!this.useNewDemo) {
       this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step2')));
@@ -464,6 +465,7 @@ const DemoPage = GelatoPage.extend({
    */
   writeDemoChar2: function() {
     app.mixpanel.track('Completed writing demo character #1');
+    this.setDemoProgress('writeDemoChar2', true);
 
     if (!this.useNewDemo) {
       this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step4')));
@@ -580,9 +582,13 @@ const DemoPage = GelatoPage.extend({
 
   /**
    * Records the user's progress through the demo
+   * @param {String} step the id of the current step
+   * @param {Boolean} [silent] whether to send analytics without triggering an event
    */
-  setDemoProgress: function(step) {
-    this.trigger('step:update', step);
+  setDemoProgress: function(step, silent) {
+    if (!silent) {
+      this.trigger('step:update', step);
+    }
 
     if (!app.isDevelopment() && !app.user.isLoggedIn()) {
       const platformData = {
