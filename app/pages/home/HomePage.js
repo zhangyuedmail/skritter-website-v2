@@ -26,7 +26,7 @@ const HomePage = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./HomePage.jade'),
+  template: require('./Home'),
 
   /**
    * @property title
@@ -48,7 +48,7 @@ const HomePage = GelatoPage.extend({
    */
   render: function() {
     if (app.isMobile()) {
-      this.template = require('./MobileHomePage.jade');
+      this.template = require('./MobileHome');
       this.showFooter = false;
       this.showNavbar = false;
     }
