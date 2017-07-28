@@ -504,7 +504,7 @@ const DemoPage = GelatoPage.extend({
         showConfirmButton: true,
         style: {
           backdrop: {
-            top: '90px',
+            top: '0px',
             width: '50%'
           },
           dialog: {
@@ -519,7 +519,7 @@ const DemoPage = GelatoPage.extend({
           showConfirmButton: false,
           style: {
             backdrop: {
-              top: '90px',
+              top: '0px',
               width: '100%'
             },
             dialog: {
@@ -550,7 +550,7 @@ const DemoPage = GelatoPage.extend({
       showConfirmButton: true,
       style: {
         backdrop: {
-          top: '90px'
+          top: '0px'
         },
         dialog: {
           top: '20%'
@@ -571,7 +571,7 @@ const DemoPage = GelatoPage.extend({
           backdrop: {
             left: mobile ? '0%' : '50%',
             width: mobile ? '100%' : '50%',
-            top: '90px',
+            top: '0px',
             bottom: mobile ? 'auto' : '0%',
             height: mobile ? '150px' : 'auto'
           }
@@ -590,7 +590,7 @@ const DemoPage = GelatoPage.extend({
       this.trigger('step:update', step);
     }
 
-    if (!app.isDevelopment() && !app.user.isLoggedIn()) {
+    if (app.isDevelopment() && !app.user.isLoggedIn()) {
       const platformData = {
         client: app.isAndroid() ? 'android' : 'web',
         lang: this.lang,
