@@ -251,6 +251,10 @@ module.exports = {
       "mnemonicUpdated": "Mnemonic successfully updated"
     },
 
+    "syncStatus": {
+      "title": "Sync Status"
+    },
+
     "vocabLists": {
       "titleBrowse": "Browse - Skritter",
       "titleCpod": "ChinesePod - Skritter",

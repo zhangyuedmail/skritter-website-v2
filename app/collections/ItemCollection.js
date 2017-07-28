@@ -139,11 +139,7 @@ const ItemCollection = BaseSkritterCollection.extend({
       }
 
       async.whilst(
-        () => {
-          console.log(count, options.limit);
-
-          return count < options.limit
-        },
+        () => count < options.limit,
         async callback => {
           count++;
 
@@ -294,8 +290,6 @@ const ItemCollection = BaseSkritterCollection.extend({
                     }
                   );
 
-                  console.log('FETCHED:', result);
-
                   callback();
                 }
               });
@@ -445,8 +439,6 @@ const ItemCollection = BaseSkritterCollection.extend({
       .value()
       .slice(0, options.limit);
 
-    console.log('PRELOADING:', itemIds);
-
     return new Promise(
       (resolve, reject) => {
         // return successful when no item preloading needed
@@ -489,8 +481,6 @@ const ItemCollection = BaseSkritterCollection.extend({
                 }
               }
             );
-
-            console.log('PRELOADED:', itemIds);
 
             // preload characters for items just added
             this.fetchCharacters()
