@@ -74,7 +74,7 @@
     "css-brunch": "2.10.x",
     "jade-brunch": "2.8.x",
     "javascript-brunch": "2.10.x",
-    "mocha": "3.4.x",
+    "mocha": "3.5.x",
     "nightwatch": "0.9.x",
     "nodemon": "1.11.x",
     "replace-brunch": "2.0.x",
