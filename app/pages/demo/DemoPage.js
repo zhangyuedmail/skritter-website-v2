@@ -590,7 +590,7 @@ const DemoPage = GelatoPage.extend({
       this.trigger('step:update', step);
     }
 
-    if (app.isDevelopment() && !app.user.isLoggedIn()) {
+    if (!app.isDevelopment() && !app.user.isLoggedIn()) {
       const platformData = {
         client: app.isAndroid() ? 'android' : 'web',
         lang: this.lang,
