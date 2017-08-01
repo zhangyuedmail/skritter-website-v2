@@ -6,7 +6,7 @@ gelato-dialog(data-name='reset-all-data')
 
         .modal-header
           .pull-left
-            .modal-title Are you sure?
+            .modal-title Reset all #{app.getLanguageName()} account data?
           .pull-right
             a(href='#', data-dismiss='modal')
               i.fa.fa-times-circle-o
@@ -16,10 +16,10 @@ gelato-dialog(data-name='reset-all-data')
           ul
             li Delete all of your study progress
             li Remove all lists from your queue
-          label(for='reset-password') Retype your password:
+          label(for='reset-password') Re-type your password:
           input#input-password(type='password')
           #error-message.text-danger
 
         .modal-footer
-          button#button-confirm.btn.btn-danger Reset
+          button#button-confirm.btn.btn-danger Reset #{app.getLanguageName()}
           button#button-cancel.btn.btn-default Cancel

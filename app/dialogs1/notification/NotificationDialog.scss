@@ -140,6 +140,7 @@
       a {
         color: #000;
         font-size: 11px;
+        text-decoration: underline !important;
       }
     }
 
@@ -152,9 +153,8 @@
     }
 
     .free-trial-wrapper {
-      color: #272727;
-      padding-top: 20px;
-      font-weight: bold;
+      color: #FFF;
+      font-size: 13px;
     }
 
     #button-signup {

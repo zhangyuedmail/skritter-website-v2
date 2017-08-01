@@ -30,7 +30,7 @@ const StudyListPage = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./StudyListPage.jade'),
+  template: require('./StudyList'),
 
   /**
    * @property title
@@ -76,7 +76,7 @@ const StudyListPage = GelatoPage.extend({
    */
   render: function() {
     if (app.isMobile()) {
-      this.template = require('./MobileStudyListPage.jade');
+      this.template = require('./MobileStudyList');
     }
 
     this.renderTemplate();

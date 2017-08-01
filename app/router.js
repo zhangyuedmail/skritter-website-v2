@@ -47,6 +47,7 @@ module.exports = Router.extend({
     'signup(/:plan)': 'navigateSignup',
     'stats': 'navigateStats',
     'study(/:listId)(/:sectionId)': 'navigateStudy',
+    'sync-status': 'navigateSyncStatus',
     'test': 'navigateTest',
     'turkish': 'navigateTurkish',
     'vocab(/:vocabId)': 'navigateVocab',
@@ -228,7 +229,7 @@ module.exports = Router.extend({
   navigateDashboard: function() {
     if (app.user.isLoggedIn()) {
       this.navigate('dashboard');
-      this.go('pages/dashboard/DashboardPage.js');
+      this.go('pages/dashboard/DashboardPage');
     } else {
       this.navigateLogin();
     }
@@ -266,7 +267,7 @@ module.exports = Router.extend({
    */
   navigateHome: function() {
     if (app.isMobile()) {
-      this.go('pages/home/HomePage.js');
+      this.go('pages/home/HomePage');
     } else {
       window.location.replace('/');
     }
@@ -373,12 +374,23 @@ module.exports = Router.extend({
       if (sectionId) {
         //TODO: replace when single list section study ready for action
         //this.go('pages/study-section', {listId: listId, sectionId: sectionId});
-        this.go('pages/study/StudyPage.js');
+        this.go('pages/study/StudyPage');
       } else if (listId) {
         this.go('pages/study-list/StudyListPage.js', {listId: listId});
       } else {
-        this.go('pages/study/StudyPage.js');
+        this.go('pages/study/StudyPage');
       }
+    } else {
+      this.navigateLogin();
+    }
+  },
+
+  /**
+   * @method navigateSyncStatus
+   */
+  navigateSyncStatus: function() {
+    if (app.user.isLoggedIn()) {
+      this.go('pages/sync-status/SyncStatusPage');
     } else {
       this.navigateLogin();
     }

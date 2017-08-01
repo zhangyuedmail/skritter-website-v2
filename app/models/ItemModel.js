@@ -187,7 +187,7 @@ const ItemModel = SkritterModel.extend({
    * @returns {Number}
    */
   getReadiness: function(startingAt) {
-    if (!this.get('last')) {
+    if (!this.get('interval') || !this.get('last') || !this.get('next')) {
       return 9999;
     }
 

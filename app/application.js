@@ -416,6 +416,17 @@ module.exports = GelatoApplication.extend({
         track: function() {}
       };
     }
+
+    this.checkAndSetUUID();
+  },
+
+  /**
+   * Sets a UUID for the user if they don't have one
+   */
+  checkAndSetUUID: function() {
+    if (localStorage && !localStorage.getItem('skrit-uuid')) {
+      localStorage.setItem('skrit-uuid', '' + Date.now() + Math.floor(Math.random() * 1000000));
+    }
   },
 
   /**
@@ -791,6 +802,8 @@ module.exports = GelatoApplication.extend({
   },
 
   closeNotification: function() {
+    $('gelato-application').removeClass('no-scroll');
+
     if (this._views['notification-dialog']) {
       this._views['notification-dialog'].close();
       this._views['notification-dialog'] = null;
@@ -819,6 +832,7 @@ module.exports = GelatoApplication.extend({
     }
 
     this.closeNotification();
+    $('gelato-application').addClass('no-scroll');
 
     this._views['notification-dialog'] = new NotificationDialog(options).open();
   },

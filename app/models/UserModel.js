@@ -1,4 +1,5 @@
 const SkritterModel = require('base/BaseSkritterModel');
+const OfflineModel = require('models/OfflineModel');
 const SessionModel = require('models/SessionModel');
 const SubscriptionModel = require('models/SubscriptionModel');
 const CharacterCollection = require('collections/CharacterCollection');
@@ -74,6 +75,7 @@ const UserModel = SkritterModel.extend({
    */
   initialize: function() {
     this.characters = new CharacterCollection();
+    this.offline = new OfflineModel(null, {user: this});
     this.session = new SessionModel(null, {user: this});
     this.subscription = new SubscriptionModel({id: this.id});
   },

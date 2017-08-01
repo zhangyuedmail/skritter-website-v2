@@ -40,7 +40,7 @@ const DashboardPage = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./DashboardPage.jade'),
+  template: require('./Dashboard'),
 
   /**
    * @method initialize

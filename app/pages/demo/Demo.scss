@@ -11,6 +11,9 @@ gelato-page[data-name='demo'] {
 
   #progress-container {
     margin: auto;
+    position: fixed;
+    width: 100%;
+    z-index: 5001;
   }
 }
 
