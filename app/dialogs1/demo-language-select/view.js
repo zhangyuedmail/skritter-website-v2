@@ -19,7 +19,7 @@ module.exports = GelatoDialog.extend({
    * @property template
    * @type {Function}
    */
-  template: app.isDevelopment() ? require('./DemoLanguageSelectDark.jade') : require('./DemoLanguageSelectBootstrap.jade'),
+  template: require('./DemoLanguageSelectDark.jade'),
 
   /**
    * @method render
