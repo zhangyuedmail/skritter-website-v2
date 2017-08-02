@@ -627,9 +627,11 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @private
    */
   _processTextPreCorrection: function() {
-    var text = this.$('#reading-prompt').val().toLowerCase();
+    let text = this.$('#reading-prompt').val();
 
-    if (app.isChinese()) {
+    if (text && app.isChinese()) {
+      text = text.toLowerCase()
+
       if (this.zhInputType === 'pinyin') {
         text = this._processPinyinPreCorrection(text);
       }

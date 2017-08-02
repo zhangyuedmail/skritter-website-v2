@@ -78,13 +78,15 @@ gelato-page(data-name='account-settings-study')
 
               .form-group
                 label.col-sm-3.control-label(for="field-add-frequency") Add word frequency
+                  .option-desc Automatic adding has been temporarily disabled.
                 .col-sm-9
-                  select#field-add-frequency.form-control
+                  select#field-add-frequency.form-control(disabled)
                     - var addFrequency = user.get('addFrequency');
-                    option(value="90", selected=(addFrequency === 90)) Fast
-                    option(value="70", selected=(addFrequency === 70)) Normal
-                    option(value="60", selected=(addFrequency === 60)) Slow
-                    option(value="0", selected=(addFrequency === 60)) Manual
+                    // option(value="90", selected=(addFrequency === 90)) Fast
+                    // option(value="70", selected=(addFrequency === 70)) Normal
+                    // option(value="60", selected=(addFrequency === 60)) Slow
+                    // option(value="0", selected=(addFrequency === 60)) Manual
+                    option(value=addFrequency, selected) Manual
 
               //.form-group
               //  label.col-sm-3.control-label(for="field-section-movement") Section movement

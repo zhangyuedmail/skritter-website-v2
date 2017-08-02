@@ -8,7 +8,7 @@ gelato-component(data-name='expired-notification').hidden.row
           .bold= app.locale('pages.dashboard.subscriptionExpired')
           .expiration-description= app.locale('pages.dashboard.subExpiredDetails')
         .push-right
-          span.network-error-block
+          span.network-error-block.hidden
             .btn.btn-primary#reload-page-btn= app.locale('common.tryAgain')
           a(href="/account/billing/subscription").account-expired-block
             .btn.btn-success= app.locale('pages.dashboard.goToSubSettings')

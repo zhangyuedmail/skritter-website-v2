@@ -217,6 +217,10 @@ const DemoPage = GelatoPage.extend({
       });
     }
 
+    _.defer(() => {
+      this.$('.tap-to-advance-wrapper').addClass('hidden');
+    });
+
     this.prompt.once('character:erased', this.teachEraseDemoChar2);
   },
 
