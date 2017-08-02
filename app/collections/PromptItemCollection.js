@@ -14,6 +14,12 @@ const PromptItemCollection = GelatoCollection.extend({
   complete: false,
 
   /**
+   * @property due
+   * @type {Boolean}
+   */
+  due: false,
+
+  /**
    * @property group
    * @type {String}
    */
@@ -118,6 +124,7 @@ const PromptItemCollection = GelatoCollection.extend({
       itemId: this.item ? this.item.id : this.vocab.id,
       bearTime: true,
       currentInterval: this.interval || 0,
+      due: this.due,
       reviewTime: this.getBaseReviewingTime(),
       score: this.getBaseScore(),
       submitTime: this.getBaseSubmitTime(),
@@ -204,9 +211,11 @@ const PromptItemCollection = GelatoCollection.extend({
    */
   getReview: function() {
     var reviews = [this.getBaseReviewData()];
+
     if (this.length > 1) {
       reviews = reviews.concat(this.getChildReviewData());
     }
+
     return {
       created: this.created,
       data: reviews,

@@ -271,11 +271,15 @@ const StudyPage = GelatoPage.extend({
     if (this.currentPromptItems) {
       if (this.items.reviews.length > 2) {
         this.items.reviews.post({skip: 1});
-        this.items.updateDueCount();
       }
 
-      if (promptItems.readiness >= 1.0) {
-        vent.trigger('dueCountOffset:increase');
+      // TODO: remove this if new review based system works better
+      // if (promptItems.readiness >= 1.0) {
+      //   vent.trigger('dueCountOffset:increase');
+      // }
+
+      if (!app.isMobile()) {
+        this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
       }
 
       this.currentItem._queue = false;
@@ -307,7 +311,6 @@ const StudyPage = GelatoPage.extend({
       this.togglePromptLoading(false);
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
-      this.toolbar.render();
 
       return;
     }
@@ -318,7 +321,6 @@ const StudyPage = GelatoPage.extend({
       this.togglePromptLoading(false);
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
-      this.toolbar.render();
 
       // TODO: fix automatic item adding
       // if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
@@ -365,7 +367,6 @@ const StudyPage = GelatoPage.extend({
       this.togglePromptLoading(false);
       this.prompt.reviewStatus.render();
       this.prompt.set(this.previousPromptItems);
-      this.toolbar.render();
     }
   },
 

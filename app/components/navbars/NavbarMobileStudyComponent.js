@@ -37,6 +37,9 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
     this.listenTo(vent, 'dueCountOffset:increase', () => {
       this.dueCountOffset++;
     });
+    this.listenTo(vent, 'dueCountOffset:set', (value) => {
+      this.dueCountOffset = value;
+    });
   },
 
   /**

@@ -36,11 +36,14 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.cursor = null;
     this.addingState = 'standby';
     this.dueCount = 0;
+    this.dueCountServer = 0;
     this.dueCountState = 'standby';
     this.fetchingState = 'standby';
     this.listIds = [];
     this.preloadingState = 'standby';
     this.sorted = null;
+
+    this.listenTo(this.reviews, 'update:due', this.updateDueCount);
   },
 
   /**
@@ -513,9 +516,24 @@ const ItemCollection = BaseSkritterCollection.extend({
 
   /**
    * @method updateDueCount
+   * @param {boolean} [skipServer]
    */
-  updateDueCount: function() {
+  updateDueCount: function(skipServer) {
     if (this.dueCountState === 'fetching') {
+      return;
+    }
+
+    if (skipServer) {
+      let localCount = this.dueCountServer - this.reviews.getDueCountOffset();
+
+      if (localCount > 0) {
+        this.dueCount = localCount;
+      } else {
+        this.dueCount = 0;
+      }
+
+      this.trigger('update:due-count', this.dueCount);
+
       return;
     }
 
@@ -544,12 +562,26 @@ const ItemCollection = BaseSkritterCollection.extend({
         this.trigger('update:due-count', this.dueCount);
       },
       success: (result) => {
-        let count = 0;
+        let serverCount = 0;
+        let localCount = 0;
 
-        _.forIn(result.due, part => _.forIn(part, style => count += style));
+        _.forIn(result.due, part => {
+          _.forIn(part, style => {
+            serverCount += style;
+          });
+        });
 
-        this.dueCount =  count;
+        localCount = serverCount - this.reviews.getDueCountOffset();
+
+        if (localCount > 0) {
+          this.dueCount = localCount;
+        } else {
+          this.dueCount = 0;
+        }
+
+        this.dueCountServer = serverCount;
         this.dueCountState = 'standby';
+
         this.trigger('update:due-count', this.dueCount);
       }
     });

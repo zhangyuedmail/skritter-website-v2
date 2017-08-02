@@ -80,6 +80,7 @@ const PromptItemModel = GelatoModel.extend({
       itemId: this.item ? this.item.id : this.vocab.id,
       bearTime: false,
       currentInterval: this.interval || 0,
+      due: this.get('due'),
       reviewTime: this.getReviewingTime(),
       score: this.get('score'),
       submitTime: this.get('submitTime'),

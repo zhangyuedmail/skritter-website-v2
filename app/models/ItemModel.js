@@ -153,23 +153,30 @@ const ItemModel = SkritterModel.extend({
       let childItem = items[i];
       let childVocab = vocabs[i];
       let promptItem = new PromptItemModel();
+
       promptItem.character = characters[i];
       promptItem.interval = childItem.get('interval');
       promptItem.item = childItem;
       promptItem.vocab = childVocab;
+
       if (i === 0 && vocabs.length > 1) {
         promptItem.set('submitTime', Date.now() / 1000);
       }
+
       if (_.includes(['rune', 'tone'], part)) {
         promptItem.set('filler', characters[i] ? childVocab.isFiller() : true);
         promptItem.set('complete', characters[i] ? childVocab.isFiller() : true);
       } else {
         promptItem.set('filler', false);
       }
+
+      promptItem.set('due', childItem.isDue());
       promptItem.set('kana', childVocab.isKana());
+
       promptItems.add(promptItem);
     }
 
+    promptItems.due = this.isDue();
     promptItems.created = now;
     promptItems.group = now + '_' + this.id;
     promptItems.interval = this.get('interval');
@@ -285,6 +292,14 @@ const ItemModel = SkritterModel.extend({
    */
   isChinese: function() {
     return this.get('lang') === 'zh';
+  },
+
+  /**
+   * @method isDue
+   * @returns {Boolean}
+   */
+  isDue: function() {
+    return !!this.get('vocabIds').length && this.getReadiness() >= 1.0;
   },
 
   /**

@@ -28,6 +28,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
   initialize: function(models, options) {
     options = options || {};
     this.items = options.items;
+    this.postCountOffset = 0;
   },
 
   /**
@@ -62,6 +63,21 @@ const ReviewCollection = BaseSkritterCollection.extend({
   },
 
   /**
+   * @method getDueCountOffset
+   * @returns {Number}
+   */
+  getDueCountOffset: function() {
+    const reviews = _.flatten(this.map('data'));
+    let offset = this.postCountOffset;
+
+    _.forEach(reviews, review => {
+      if (review.due) offset++;
+    });
+
+    return offset;
+  },
+
+  /**
    * @method post
    * @param {Object} [options]
    */
@@ -71,6 +87,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
     if (this.state !== 'standby') {
       return;
     }
+
 
     this.state = 'posting';
     this.trigger('state', this.state, this);
@@ -123,6 +140,13 @@ const ReviewCollection = BaseSkritterCollection.extend({
               },
               success: () => {
                 this.remove(chunk);
+
+                _.forEach(data, review => {
+                  if (review.due) this.postCountOffset++;
+                });
+
+                this.trigger('update:due', true);
+
                 setTimeout(callback, 1000);
               }
             });
@@ -198,6 +222,8 @@ const ReviewCollection = BaseSkritterCollection.extend({
 
       updatedReviews.push(this.add(model, options));
     }
+
+    this.trigger('update:due', true);
 
     return updatedReviews;
   }
