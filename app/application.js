@@ -579,7 +579,7 @@ module.exports = GelatoApplication.extend({
       },
       docs: {
         enabled: !app.isMobile(),
-        baseUrl: 'https://skritter.helpscoutdocs.com/'
+        baseUrl: 'https://docs.skritter.com'
       }
     };
     HS.beacon.ready = function(callback) {
