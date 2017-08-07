@@ -149,7 +149,7 @@ gelato-page(data-name='account-settings-study')
 
               hr
 
-              if user.get('isAdmin')
+              if user.get('isAdmin') || app.isDevelopment()
                 .form-group
                   label.col-sm-3.control-label(for="field-disable-color") Disable grading color
                   .col-sm-9
