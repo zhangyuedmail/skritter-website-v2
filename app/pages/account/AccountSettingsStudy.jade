@@ -21,6 +21,7 @@ gelato-page(data-name='account-settings-study')
                     option(value="ja", selected=(app.getLanguage() === 'ja')) Japanese
               .form-group
                 label.col-sm-3.control-label(for="field-source-language") Source language
+                  .option-desc Definitions fall back to English when not available in other languages.
                 .col-sm-9
                   select#field-source-language.form-control
                     for lang in view.sourceLanguages
@@ -67,6 +68,7 @@ gelato-page(data-name='account-settings-study')
 
               .form-group
                 label.col-sm-3.control-label(for="field-retention-index") Retention rate
+                  .option-desc Lower is more efficient, while higher better ensures you remember everything.
                 .col-sm-9
                   select#field-retention-index.form-control
                     - var retentionIndex = user.get('retentionIndex');
@@ -168,6 +170,7 @@ gelato-page(data-name='account-settings-study')
               if app.isChinese() && !app.isMobile()
                 .form-group
                   label.col-xs-3.control-label(for="field-pinyin-input") Disable pinyin input
+                    .option-desc You wont be asked to type the pinyin during reading prompts.
                   .col-xs-9
                     .checkbox
                       label.toggle-switch
@@ -192,6 +195,7 @@ gelato-page(data-name='account-settings-study')
 
               .form-group
                 label.col-xs-3.control-label(for="field-squigs") Raw squigs
+                  .option-desc Show your own handwriting to test if you really know the character.
                 .col-xs-9
                   .checkbox
                     label.toggle-switch
@@ -209,6 +213,7 @@ gelato-page(data-name='account-settings-study')
 
               .form-group
                 label.col-xs-3.control-label(for="field-teaching-mode") Teaching mode
+                  .option-desc New characters will display a stroke order tracing overlay the first time you encounter them.
                 .col-xs-9
                   .checkbox
                     label.toggle-switch
