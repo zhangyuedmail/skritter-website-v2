@@ -81,7 +81,7 @@
     "sass-brunch": "2.10.x",
     "selenium-server-standalone-jar": "3.4.x",
     "shelljs": "0.7.x",
-    "sinon": "2.4.x",
+    "sinon": "3.0.x",
     "uglify-js-brunch": "2.10.x"
   }
 }
