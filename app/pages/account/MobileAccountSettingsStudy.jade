@@ -67,6 +67,7 @@ gelato-page(data-name='mobile-account-settings-study')
                 option(value="85", selected=(retentionIndex === 85)) 92%
                 option(value="90", selected=(retentionIndex === 90)) 95%
                 option(value="95", selected=(retentionIndex === 95)) 97%
+            .option-desc Lower is more efficient, while higher better ensures you remember everything.
 
           .form-group
             label.col-xs-3.control-label(for="field-add-frequency") Add word frequency
@@ -96,6 +97,10 @@ gelato-page(data-name='mobile-account-settings-study')
                 label.toggle-switch
                   input#field-auto-advance(type="checkbox", checked=Boolean(user.get('autoAdvancePrompts')))
                   .toggle-switch-slider.round
+            if app.isChinese()
+              .option-desc Has a 1 second delay before advancing on tone and writing prompts
+            else
+              .option-desc Has a 1 second delay before advancing on writing prompts
           .form-group
             label.col-xs-9.control-label(for="field-heisig") Show heisig keywords
             .col-xs-3
@@ -153,6 +158,7 @@ gelato-page(data-name='mobile-account-settings-study')
                   label.toggle-switch
                     input#field-pinyin-input(type="checkbox", checked=user.get('disablePinyinReadingPromptInput'))
                     .toggle-switch-slider.round
+              .option-desc You wont be asked to type the pinyin during reading prompts.
 
           .form-group
             label.col-xs-9.control-label(for="field-hide-reading") Hide reading
@@ -177,6 +183,7 @@ gelato-page(data-name='mobile-account-settings-study')
                 label.toggle-switch
                   input#field-squigs(type="checkbox", checked=user.get('squigs'))
                   .toggle-switch-slider.round
+            .option-desc Show your own handwriting to test if you really know the character.
 
           if app.isJapanese()
             .form-group
@@ -194,6 +201,7 @@ gelato-page(data-name='mobile-account-settings-study')
                 label.toggle-switch
                   input#field-teaching-mode(type="checkbox", checked=user.get('teachingMode'))
                   .toggle-switch-slider.round
+            .option-desc New characters will display a stroke order tracing overlay the first time you encounter them.
 
           .form-group
             .col-xs-12.button-options
