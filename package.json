@@ -9,6 +9,8 @@
   },
   "version": "2.3.3",
   "versionCode": "20303",
+  "iosVersion": "3.0.0",
+  "iosVersionBundle": "3000",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -19,11 +21,13 @@
   },
   "scripts": {
     "android": "node ./scripts/npm-android",
+    "android-build": "node ./scripts/npm-android-build",
     "android-release": "node ./scripts/npm-android-release",
     "build": "node ./scripts/npm-build",
     "build-production": "node ./scripts/npm-build-production",
     "install-cordova": "node ./scripts/npm-install-cordova",
     "ios": "node ./scripts/npm-ios",
+    "ios-build": "node ./scripts/npm-ios-build",
     "monitor": "node ./scripts/npm-monitor",
     "prune": "node ./scripts/npm-prune",
     "start": "node ./scripts/npm-start",
