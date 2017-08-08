@@ -7,11 +7,17 @@ gelato-component(data-name="study-prompt-part-rdng" class='noclick')
     .question(class=prompt.reviews.isComplete() ? 'invisible' : '')
       if prompt.reviews.isChinese()
         if app.user.get('readingChinese') === 'zhuyin'
-          span What's the zhuyin?
+          span What's the
+          span.highlight.spl zhuyin
+          span ?
         else
-          span What's the pinyin?
+          span What's the
+          span.highlight.spl pinyin
+          span ?
       else
-        span What's the pronunciation?
+        span What's the
+        span.highlight.spl pronunciation
+        span ?
 
     .writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
       span(style="font-size: " + vocab.getWritingFontSize() + 'px')= vocab.get('writing')

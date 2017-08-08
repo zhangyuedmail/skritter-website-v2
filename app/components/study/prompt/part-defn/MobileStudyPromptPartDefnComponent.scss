@@ -32,11 +32,15 @@ gelato-component[data-name="mobile-study-prompt-part-defn"] {
   }
 
   .question {
-    color: $grade1;
+    color: $grey5;
     font-family: $font-slab;
     font-size: 28px;
     font-weight: 300;
     margin: 10% 10% 0 10%;
+
+    .highlight {
+      color: $grade4;
+    }
   }
 
   .writing {

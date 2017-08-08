@@ -10,11 +10,17 @@ gelato-component(data-name="mobile-study-prompt-part-rdng" class='noclick')
     .question(class=prompt.reviews.isComplete() ? 'hidden' : '')
       if prompt.reviews.isChinese()
         if app.user.get('readingChinese') === 'zhuyin'
-          span What's the zhuyin?
+          span What's the
+          span.highlight.spl zhuyin
+          span ?
         else
-          span What's the pinyin?
+          span What's the
+          span.highlight.spl pinyin
+          span ?
       else
-        span What's the pronunciation?
+        span What's the
+        span.highlight.spl pronunciation
+        span ?
 
     .reading-prompt(class=view.showReadingPrompt ? '' : 'hidden')
       input#reading-prompt.reading-prompt-input(value="#{view.userReading}", autocomplete="off" ,autocorrect="off" ,autocapitalize="off", spellcheck="false")
