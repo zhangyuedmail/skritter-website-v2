@@ -60,27 +60,33 @@ body
                   a#menu-sign-up-btn(href="/signup")= app.locale('common.signUp')
                 li(class=currentSection === 'login' ? 'active' : '')
                   a#menu-log-in-btn(href="/login")= app.locale('common.logIn')
-
-
-      #hero-slider.carousel.slide(data-ride="carousel", data-interval="false")
-        //TODO: enable indicators and navigation with more hero images
-        //ol.carousel-indicators
-          li.active(data-target="#hero-slider", data-slide-to="0")
-          li(data-target="#hero-slider", data-slide-to="1")
-        .carousel-inner(role="listbox")
-          .item.active
-            img(src="/media/images/marketing_hero1_phone.jpg", alt="")
-            .container
-              .carousel-header
-                .motto-text= app.locale('pages.home.motto1')
-                .motto-text= app.locale('pages.home.motto2')
-                a.btn.btn-lg.btn-danger.hidden-xs(href='/demo')= app.locale('pages.home.demoLink')
-          //.item
-            img(src="/media/images/home_hero2.png", alt="")
-        //a.left.carousel-control(href="#hero-slider", role="button", data-ignore="true", data-slide="prev")
-          span.glyphicon.glyphicon-chevron-left
-        //a.right.carousel-control(href="#hero-slider", role="button", data-ignore="true", data-slide="next")
-          span.glyphicon.glyphicon-chevron-right
+      .cover-section-wrapper
+        .device-photo
+          img(src="/media/images/landing/skritter-devices.png")
+        .main
+          .left-wrapper
+            .your-path Your path to Chinese & Japanese Mastery
+            .data-box
+              .stat-wrapper
+                .stat-num
+                  .stat-unit#lists-counter
+                  .stat-unit +
+                .stat-label lists to study
+              .right-border
+              .stat-wrapper
+                .stat-num
+                  .stat-unit#items-studied-counter
+                  .stat-unit &nbsp;million+
+                .stat-label items studied
+            a.btn.btn-lg.btn-danger.hidden-xs.try-it-out-button(href='/demo')= app.locale('pages.home.tryItOut')
+        .row.anchor
+          .col-md-12
+            .mobile-app-link
+              a#link-apple-store(href="https://itunes.apple.com/us/artist/inkren-llc/id402280587", target="_blank")
+                img.badge-link(src="/media/images/landing/apple.png")
+            .mobile-app-link
+              a#link-google-store(href="https://play.google.com/store/apps/developer?id=Skritter", target="_blank")
+                img.badge-link(src="/media/images/landing/google.png")
 
       section#section-features.light
         .container
@@ -119,13 +125,6 @@ body
                 .media-body
                   .media-heading= app.locale('pages.home.reviewHeader')
                   span= app.locale('pages.home.reviewText')
-          .row
-            .col-xs-12.col-sm-6.ios-store-link
-              a#link-apple-store(href="https://itunes.apple.com/us/artist/inkren-llc/id402280587", target="_blank")
-                img.badge-link(src="/media/images/badge-apple.png")
-            .col-xs-12.col-sm-6.android-store-link
-              a#link-google-store(href="https://play.google.com/store/apps/developer?id=Skritter", target="_blank")
-                img.badge-link(src="/media/images/badge-google.png")
 
       section#section-testimonials.dark
         .container
@@ -208,6 +207,13 @@ body
     include ./includes/StaticMarketingFooter
 
   script.
+    // countup plugin
+    !function(a,t){"function"==typeof define&&define.amd?define(t):"object"==typeof exports?module.exports=t(require,exports,module):a.CountUp=t()}(this,function(a,t,e){var n=function(a,t,e,n,i,r){function o(a){a=a.toFixed(c.decimals),a+="";var t,e,n,i;if(t=a.split("."),e=t[0],n=t.length>1?c.options.decimal+t[1]:"",i=/(\d+)(\d{3})/,c.options.useGrouping)for(;i.test(e);)e=e.replace(i,"$1"+c.options.separator+"$2");return c.options.prefix+e+n+c.options.suffix}function l(a,t,e,n){return e*(-Math.pow(2,-10*a/n)+1)*1024/1023+t}function s(a){return"number"==typeof a&&!isNaN(a)}for(var u=0,m=["webkit","moz","ms","o"],d=0;d<m.length&&!window.requestAnimationFrame;++d)window.requestAnimationFrame=window[m[d]+"RequestAnimationFrame"],window.cancelAnimationFrame=window[m[d]+"CancelAnimationFrame"]||window[m[d]+"CancelRequestAnimationFrame"];window.requestAnimationFrame||(window.requestAnimationFrame=function(a,t){var e=(new Date).getTime(),n=Math.max(0,16-(e-u)),i=window.setTimeout(function(){a(e+n)},n);return u=e+n,i}),window.cancelAnimationFrame||(window.cancelAnimationFrame=function(a){clearTimeout(a)});var c=this;if(c.version=function(){return"1.8.5"},c.options={useEasing:!0,useGrouping:!0,separator:",",decimal:".",easingFn:l,formattingFn:o,prefix:"",suffix:""},r&&"object"==typeof r)for(var f in c.options)r.hasOwnProperty(f)&&null!==r[f]&&(c.options[f]=r[f]);""===c.options.separator&&(c.options.useGrouping=!1),c.initialize=function(){return!!c.initialized||(c.d="string"==typeof a?document.getElementById(a):a,c.d?(c.startVal=Number(t),c.endVal=Number(e),s(c.startVal)&&s(c.endVal)?(c.decimals=Math.max(0,n||0),c.dec=Math.pow(10,c.decimals),c.duration=1e3*Number(i)||2e3,c.countDown=c.startVal>c.endVal,c.frameVal=c.startVal,c.initialized=!0,!0):(console.error("[CountUp] startVal or endVal is not a number",c.startVal,c.endVal),!1)):(console.error("[CountUp] target is null or undefined",c.d),!1))},c.printValue=function(a){var t=c.options.formattingFn(a);"INPUT"===c.d.tagName?this.d.value=t:"text"===c.d.tagName||"tspan"===c.d.tagName?this.d.textContent=t:this.d.innerHTML=t},c.count=function(a){c.startTime||(c.startTime=a),c.timestamp=a;var t=a-c.startTime;c.remaining=c.duration-t,c.options.useEasing?c.countDown?c.frameVal=c.startVal-c.options.easingFn(t,0,c.startVal-c.endVal,c.duration):c.frameVal=c.options.easingFn(t,c.startVal,c.endVal-c.startVal,c.duration):c.countDown?c.frameVal=c.startVal-(c.startVal-c.endVal)*(t/c.duration):c.frameVal=c.startVal+(c.endVal-c.startVal)*(t/c.duration),c.countDown?c.frameVal=c.frameVal<c.endVal?c.endVal:c.frameVal:c.frameVal=c.frameVal>c.endVal?c.endVal:c.frameVal,c.frameVal=Math.round(c.frameVal*c.dec)/c.dec,c.printValue(c.frameVal),t<c.duration?c.rAF=requestAnimationFrame(c.count):c.callback&&c.callback()},c.start=function(a){c.initialize()&&(c.callback=a,c.rAF=requestAnimationFrame(c.count))},c.pauseResume=function(){c.paused?(c.paused=!1,delete c.startTime,c.duration=c.remaining,c.startVal=c.frameVal,requestAnimationFrame(c.count)):(c.paused=!0,cancelAnimationFrame(c.rAF))},c.reset=function(){c.paused=!1,delete c.startTime,c.initialized=!1,c.initialize()&&(cancelAnimationFrame(c.rAF),c.printValue(c.startVal))},c.update=function(a){if(c.initialize())return a=Number(a),s(a)?void(a!==c.frameVal&&(cancelAnimationFrame(c.rAF),c.paused=!1,delete c.startTime,c.startVal=c.frameVal,c.endVal=a,c.countDown=c.startVal>c.endVal,c.rAF=requestAnimationFrame(c.count))):void console.error("[CountUp] update() - new endVal is not a number",a)},c.initialize()&&c.printValue(c.startVal)};return n});
+    var itemsCounter = new CountUp("items-studied-counter", 0, 778);
+    var listsCounter = new CountUp("lists-counter", 0, 9100);
+    itemsCounter.start();
+    listsCounter.start();
+
     if (mixpanel) {
       mixpanel.track('Viewed home page')
       mixpanel.track_links('#link-apple-store', 'Clicked ios app button');
