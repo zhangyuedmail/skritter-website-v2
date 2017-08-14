@@ -150,14 +150,18 @@ module.exports = GelatoApplication.extend({
         user: this.user.id,
         version: config.version
       };
+      try {
+        $.ajax({
+          url: app.getApiUrl(2) + 'usage/platform',
+          headers: app.user.session.getHeaders(),
+          context: this,
+          type: 'POST',
+          data: platformData,
+          error: function(error) {}
+        });
+      } catch(e) {
 
-      $.ajax({
-        url: app.getApiUrl(2) + 'usage/platform',
-        headers: app.user.session.getHeaders(),
-        context: this,
-        type: 'POST',
-        data: platformData
-      });
+      }
     }
   },
   /**
