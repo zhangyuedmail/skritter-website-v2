@@ -52,7 +52,7 @@ gelato-page[data-name='home'] {
 
   .main {
     padding: 0px;
-    margin-top: 50px;
+    top: 50px;
     width: 100%;
     height: calc(100% - 100px);
     background: url("#{$dir-assets}/images/landing/bamboo-background.jpg") no-repeat bottom right scroll;
@@ -198,7 +198,7 @@ gelato-page[data-name='home'] {
 
   .device-photo {
     position: absolute;
-    top: 50px;
+    height: 95%;
     left: 50%;
     bottom: 0;
     right: 0;
@@ -207,7 +207,9 @@ gelato-page[data-name='home'] {
     img {
       max-height: 100%;
       max-width: 100%;
-      float: right;
+      position: absolute;
+      bottom: 0;
+      right: 0;
     }
   }
 
@@ -382,6 +384,32 @@ gelato-page[data-name='home'] {
     margin-bottom: 40px;
   }
 
+  @media (max-width: 1024px) {
+    .left-wrapper {
+      margin-left: 100px;
+      margin-right: 100px;
+      max-width: none;
+    }
+
+    .main {
+      //padding-bottom: 160px;
+    }
+
+    .your-path {
+      text-align: center;
+    }
+
+    .left-wrapper {
+      text-align: left;
+    }
+
+    .try-it-out-button {
+      margin-top: 60px;
+      margin-left: 50px;
+      margin-bottom: 80px;
+    }
+  }
+
   @media (max-width: 768px) {
     .motto-text {
       text-shadow: 2px 2px 4px #151515;
@@ -398,7 +426,24 @@ gelato-page[data-name='home'] {
     }
 
     .left-wrapper {
-      margin-right: 99px;
+      margin-left: 35px;
+      margin-right: 35px;
+      max-width: none;
+    }
+
+    .device-photo {
+      left: 0%;
+      top: auto;
+      bottom: 110px;
+      text-align: center;
+
+      img {
+        max-width: 50%;
+      }
+    }
+
+    .try-it-out-button {
+      margin-bottom: 115px;
     }
 
     .anchor {
