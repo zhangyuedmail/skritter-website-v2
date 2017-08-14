@@ -111,7 +111,8 @@ module.exports = {
       "timezoneLabel": "Timezone",
       "timezoneDescription": "The timezone where you are in",
       "userIdLabel": "User ID",
-      "userIdDescription": "Unique system id for your account. Cannot be changed."
+      "userIdDescription": "Unique system id for your account. Cannot be changed.",
+      "errorResetGeneral": "A problem occurred while resetting your account. Please try again."
     },
 
     "accountSetup": {
