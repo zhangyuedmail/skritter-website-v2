@@ -6,14 +6,15 @@ gelato-component(data-name='vocablists-reviewing-table')
         a(href="/vocablists/view/" + list.id)= list.get('name')
       .col-md-4
         .progress
-          .progress-bar(style="width:" + (list.getProgress().percent) + '%')
+          if list.get('studyingMode') === 'finished'
+            .progress-bar.progress-bar-success(style="width:" + (list.getProgress().percent) + '%')
+          else
+            .progress-bar(style="width:" + (list.getProgress().percent) + '%')
 
       .col-md-1.text-center
         if list.get('studyingMode') === 'reviewing'
           .restart-adding-link
             i.glyphicon.glyphicon-play
-        if list.get('studyingMode') === 'finished'
-          span Finished
 
       .col-md-1.text-center
         a(href="/study/" + list.id) Study
