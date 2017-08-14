@@ -2,22 +2,24 @@ gelato-component(data-name='mobile-vocablists-reviewing-table')
 
   for list in view.vocablists.getReviewing()
     .row(data-list-id=list.id)
-      .col-md-4.col-xs-12
+      .col-xs-6
         a.vocablist-title(href="/vocablists/view/" + list.id)= list.get('name')
-      .col-md-4.col-xs-12.progress-wrapper
-        .progress
-          .progress-bar(style="width:" + (list.getProgress().percent) + '%')
-
-      .col-md-4.col-xs-12.options-wrapper
+      .col-xs-6
         if list.get('studyingMode') === 'reviewing'
           .col-xs-4.restart-adding-link
             i.glyphicon.glyphicon-play
         if list.get('studyingMode') === 'finished'
-          .col-xs-4.status-text Finished
+          .col-xs-4.status-text
         .col-xs-4.list-settings-span.text-right
           i.glyphicon.glyphicon-cog
         .col-xs-4.remove-list-span.text-right
           i.glyphicon.glyphicon-remove
+      .col-xs-12.progress-wrapper
+        .progress
+          if list.get('studyingMode') === 'finished'
+            .progress-bar.progress-bar-success(style="width:" + (list.getProgress().percent) + '%')
+          else
+            .progress-bar(style="width:" + (list.getProgress().percent) + '%')
 
   if view.vocablists.state === 'fetching'
     p.text-center
