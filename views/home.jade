@@ -80,7 +80,7 @@ body
                 .stat-label items studied
             a.btn.btn-lg.btn-danger.hidden-xs.try-it-out-button(href='/demo')= app.locale('pages.home.tryItOut')
         .row.anchor
-          .col-md-12
+          .col-xs-12
             .mobile-app-link
               a#link-apple-store(href="https://itunes.apple.com/us/artist/inkren-llc/id402280587", target="_blank")
                 img.badge-link(src="/media/images/landing/apple.png")
@@ -94,7 +94,9 @@ body
             a.btn.btn-lg.btn-danger.push-bottom-40(href='/demo')= app.locale('pages.home.demoLink')
           .header.text-center= app.locale('pages.home.headerText')
           .row
-            iframe#promo-video(width='640', height='360', src='https://www.youtube.com/embed/LafTN34lc_Q', frameborder='0', allowfullscreen)
+            #promo-video.youtube(data-embed="LafTN34lc_Q")
+              .play-btn
+            //iframe#promo-video(width='640', height='360', src='https://www.youtube.com/embed/LafTN34lc_Q', frameborder='0', allowfullscreen)
           .row
             .col-sm-6
               .media
@@ -214,9 +216,28 @@ body
     itemsCounter.start();
     listsCounter.start();
 
+    // youtube lazy-loader
+    var yt = document.getElementById('promo-video');
+    var ytSrc = 'https://img.youtube.com/vi/' + yt.dataset.embed + '/maxresdefault.jpg';
+    var ytImg = new Image();
+    ytImg.src = ytSrc;
+    ytImg.addEventListener('load', function () {
+      yt.appendChild(ytImg);
+    });
+    yt.addEventListener("click", function () {
+      var ytIframe = document.createElement('iframe');
+      ytIframe.setAttribute('frameborder', '0');
+      ytIframe.setAttribute('allowfullscreen', '');
+      ytIframe.setAttribute('src', 'https://www.youtube.com/embed/' + this.dataset.embed + '?rel=0&showinfo=0&autoplay=1');
+
+      this.innerHTML = "";
+      this.appendChild(ytIframe);
+    });
+
+
     if (mixpanel) {
       mixpanel.track('Viewed home page')
       mixpanel.track_links('#link-apple-store', 'Clicked ios app button');
       mixpanel.track_links('#link-google-store', 'Clicked android app button');
-      mixpanel.track_links('#promo-video', 'Started home promo video');
+
     }

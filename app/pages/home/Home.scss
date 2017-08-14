@@ -134,6 +134,60 @@ gelato-page[data-name='home'] {
     padding: 10px 35px;
   }
 
+  .youtube {
+    background-color: #000;
+    margin-bottom: 30px;
+    position: relative;
+    padding-top: 48%;
+    overflow: hidden;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      top: -16.84%;
+      left: 0;
+      opacity: 0.7;
+    }
+
+    .play-btn {
+      width: 90px;
+      height: 60px;
+      background-color: #333;
+      box-shadow: 0 0 30px rgba( 0,0,0,0.6 );
+      z-index: 1;
+      opacity: 0.8;
+      border-radius: 6px;
+
+      &:before {
+        content: "";
+        border-style: solid;
+        border-width: 15px 0 15px 26.0px;
+        border-color: transparent transparent transparent #fff;
+      }
+    }
+
+    img, .play-btn {
+      cursor: pointer;
+    }
+
+    img, iframe, .play-btn, .play-btn:before {
+      position: absolute;
+    }
+
+    .play-btn, .play-btn:before {
+      top: 50%;
+      left: 50%;
+      transform: translate3d( -50%, -50%, 0 );
+    }
+
+    iframe {
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
+  }
+
   .mobile-app-link {
     display: inline-block;
 
@@ -341,6 +395,16 @@ gelato-page[data-name='home'] {
     .ios-store-link, .android-store-link {
       text-align: center;
       margin-bottom: 15px;
+    }
+
+    .left-wrapper {
+      margin-right: 99px;
+    }
+
+    .anchor {
+      .col-xs-12 {
+        text-align: center;
+      }
     }
   }
 }
