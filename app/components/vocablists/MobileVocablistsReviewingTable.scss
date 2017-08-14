@@ -2,6 +2,11 @@
 
 gelato-component[data-name='mobile-vocablists-reviewing-table'] {
 
+  a {
+    color: $grey5;
+    cursor: pointer;
+  }
+
   a.action-link {
     color: $green5;
     cursor: pointer;
