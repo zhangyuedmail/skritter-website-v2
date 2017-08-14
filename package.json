@@ -83,9 +83,9 @@
     "nodemon": "1.11.x",
     "replace-brunch": "2.0.x",
     "sass-brunch": "2.10.x",
-    "selenium-server-standalone-jar": "3.4.x",
+    "selenium-server-standalone-jar": "3.5.x",
     "shelljs": "0.7.x",
-    "sinon": "3.0.x",
+    "sinon": "3.2.x",
     "uglify-js-brunch": "2.10.x"
   }
 }
