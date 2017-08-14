@@ -604,17 +604,16 @@ const VocabModel = SkritterModel.extend({
       return false;
     }
 
-    let self = this;
     let audio = this.audios[0];
 
     if (app.isCordova()) {
       resolveLocalFileSystemURL(app.config.cordovaAudioUrl + audio.name,
         function(entry) {
-          self.playCordovaAudio(entry.toURL());
+          plugins.audio.play(entry.toURL(), app.user.get('volume'));
         },
         function() {
           new FileTransfer().download(audio.url, app.config.cordovaAudioUrl + audio.name, function(entry) {
-            self.playCordovaAudio(entry.toURL());
+            plugins.audio.play(entry.toURL(), app.user.get('volume'));
           });
         }
       );
@@ -627,20 +626,6 @@ const VocabModel = SkritterModel.extend({
     }
 
     return true;
-  },
-
-  playCordovaAudio: function(url) {
-    const media = new Media(
-      url,
-      function() {
-        media.stop();
-        media.release();
-      }
-    );
-
-    media.play();
-
-    media.setVolume(app.user.get('volume'));
   },
 
   /**
