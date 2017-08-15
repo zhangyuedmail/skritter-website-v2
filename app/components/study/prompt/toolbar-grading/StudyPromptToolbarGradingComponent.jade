@@ -3,7 +3,7 @@ gelato-component(data-name="study-prompt-toolbar-grading")
   - var showGradingButtons = prompt.showGradingButtons;
   - var showTapToAdvanceText = prompt.showTapToAdvanceText;
 
-  if prompt.review && prompt.review.isComplete()
+  if prompt.review && prompt.review.isComplete() && !app.user.get('disableGradingColor')
     .btn-group.btn-group-justified.tap-to-advance-wrapper(role='group', class=prompt.review.get('showTeaching') || showTapToAdvanceText ? '' : 'hidden')
       .btn-group(role='group').text-center
         button.btn.btn-default(type='button')
