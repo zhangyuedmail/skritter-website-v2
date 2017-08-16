@@ -847,8 +847,6 @@ module.exports = GelatoApplication.extend({
   start: function() {
     GelatoApplication.prototype.start.apply(this, arguments);
 
-    const self = this;
-
     //sets a global app object with installed dictionary states
     this.refreshAvailableDicts();
 
