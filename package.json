@@ -67,7 +67,7 @@
   "devDependencies": {
     "auto-reload-brunch": "2.7.x",
     "babel-brunch": "6.1.x",
-    "babel-polyfill": "6.23.x",
+    "babel-polyfill": "6.26.x",
     "babel-preset-env": "1.6.x",
     "brunch": "2.10.x",
     "chai": "4.1.x",
