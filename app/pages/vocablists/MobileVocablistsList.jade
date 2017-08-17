@@ -1,6 +1,10 @@
 gelato-page(data-name='mobile-vocablists-list')
   - var editor = view.editor;
   - var vocablist = view.vocablist;
+  - var sort = view.vocablist.get('sort');
+  - var isChinesePodLists = sort === 'chinesepod-label' || sort === 'chinesepod-lesson';
+  - var isMyLists = sort === 'custom' && vocablist.get('creator') === app.user.id;
+  - var isPublishedLists = sort === 'custom' && vocablist.get('creator') !== app.user.id;
 
   section.container
     .content-block
@@ -13,6 +17,32 @@ gelato-page(data-name='mobile-vocablists-list')
               i.fa.fa-3x.fa-spinner.fa-pulse
 
           else
+            div
+              if sort === 'official'
+                a.back-link(href="/vocablists/browse")
+                  span.glyphicon.glyphicon-chevron-left
+                  span= app.locale('pages.vocabLists.backToOfficial')
+
+              else if isMyLists
+                a.back-link(href="/vocablists/my-lists")
+                  span.glyphicon.glyphicon-chevron-left
+                  span= app.locale('pages.vocabLists.backToMy')
+
+              else if isPublishedLists
+                a.back-link(href="/vocablists/published")
+                  span.glyphicon.glyphicon-chevron-left
+                  span= app.locale('pages.vocabLists.backToPublished')
+
+              else if isChinesePodLists
+                a.back-link(href="/vocablists/chinesepod")
+                  span.glyphicon.glyphicon-chevron-left
+                  span= app.locale('pages.vocabLists.backToCpod')
+
+              else if sort
+                // TODO: add links to other custom lists
+                a.back-link(href="/vocablists/queue")
+                  span.glyphicon.glyphicon-chevron-left
+                  span Back to lists
 
             .content-details
 
