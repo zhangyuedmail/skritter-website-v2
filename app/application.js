@@ -963,7 +963,7 @@ module.exports = GelatoApplication.extend({
           setTimeout(navigator.splashscreen.hide, 1000);
 
           if (app.isAndroid()) {
-            StatusBar.backgroundColorByHexString('#1c1206');
+            StatusBar.backgroundColorByHexString('#38240c');
           }
         }
       }
