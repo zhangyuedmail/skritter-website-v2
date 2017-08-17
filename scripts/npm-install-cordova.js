@@ -20,8 +20,3 @@ shell.exec('cordova plugin add https://github.com/phonegap/phonegap-mobile-acces
 shell.exec('cordova plugin add https://github.com/mcfarljw/cordova-plugin-audio.git');
 shell.exec('cordova plugin add https://github.com/mcfarljw/cordova-plugin-billing.git');
 shell.exec('cordova plugin add ../plugins/core');
-
-// TODO: remove once issue is fixed
-// https://github.com/phonegap/ios-sim/issues/210
-// shell.cd('./platforms/ios/cordova');
-// shell.exec('npm install ios-sim@latest');
