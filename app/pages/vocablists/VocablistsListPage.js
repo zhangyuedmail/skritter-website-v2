@@ -104,7 +104,8 @@ module.exports = GelatoPage.extend({
       function(callback) {
         self.vocablist.fetch({
           data: {
-            include_user_names: 'true'
+            include_user_names: 'true',
+            includeSectionCompletion: 'true'
           },
           error: function() {
             callback();
@@ -129,6 +130,10 @@ module.exports = GelatoPage.extend({
     if (this.vocablist.get('sections').length === 1) {
       this.vocablistSection.set('id', this.vocablist.get('sections')[0].id);
       this.vocablistSection.fetch({
+        data: {
+          include_user_names: 'true',
+          includeSectionCompletion: 'true'
+        },
         error: function(error) {
           callback(error);
         },
