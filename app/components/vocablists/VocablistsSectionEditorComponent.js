@@ -31,8 +31,6 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
   initialize: function(options) {
     this.editing = false;
     this.vocablist = options.vocablist;
-    this.listenTo(this.vocablist, 'change:sections', this.render);
-    this.listenTo(this.vocablistSection, 'change:vocabs', this.render);
   },
 
   /**
@@ -41,6 +39,10 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
    */
   render: function() {
     this.renderTemplate();
+
+    this.listenTo(this.vocablist, 'change:sections', this.render);
+    this.listenTo(this.vocablistSection, 'change:vocabs', this.render);
+
     return this;
   },
 

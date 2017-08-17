@@ -12,16 +12,25 @@ gelato-component(data-name='vocablists-list-section-editor')
     if index === vocablist.get('sections').length - 1
       - classes.push('last-section');
 
+    if _.includes(vocablist.get('sectionsSkipping'), section.id)
+      - classes.push('skip');
+
+    if section.id && section.id === view.vocablist.get('currentSection')
+      - classes.push('active');
+
+    if section.completed
+      - classes.push('complete');
+
     .row(class=classes.join(' '), data-index=index, data-section-id=section.id)
       if section.deleted
-        .col-xs-6
+        .col-xs-5
           span.deleted-text= app.locale('pages.vocabLists.deleted')
-        .col-xs-6.text-right
+        .col-xs-5.text-right
           if view.editing
             i#restore-section.fa.fa-undo.cursor-pointer
               span.undo-text= app.locale('common.undo')
       else
-        .col-xs-6
+        .col-xs-5
           if view.editing
             input#section-name.section-name(value=section.name)
           else
@@ -35,9 +44,8 @@ gelato-component(data-name='vocablists-list-section-editor')
             span= section.rows.length + ' word'
           else if !view.editing
             a.section-link(href="/vocablists/view/" + view.vocablist.id + "/" + section.id) (click to add words)
-        .col-xs-2
+        .col-xs-3
           if section.completed
-            span.spr Completed
             span= moment(section.completed).format('L')
           else if _.includes(vocablist.get('sectionsSkipping'), section.id)
             | Skipping
@@ -49,9 +57,10 @@ gelato-component(data-name='vocablists-list-section-editor')
 
   if vocablist.state === 'standby'
     .row
-      .col-xs-6.row-header Name
-      .col-xs-3.row-header Details
-      .col-xs-3.row-header
+      .col-xs-5.row-header Name
+      .col-xs-3.row-header Content
+      .col-xs-3.row-header Status
+      .col-xs-1.row-header
     #vocablist-sections
       for section, index in vocablist.get('sections')
         +sectionRow(section, index)
