@@ -4,18 +4,25 @@ gelato-page[data-name='mobile-vocablists-browse'] {
   background: $background-primary;
   padding-top: 78px;
 
+  #include-all {
+    padding: 15px 15px;
+  }
+
   #table-options {
     margin-bottom: 40px;
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: -15px;
 
     .input-group {
       input {
-        border-bottom-right-radius: 25px;
-        border-top-right-radius: 25px;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
       }
 
       span {
-        border-bottom-left-radius: 25px;
-        border-top-left-radius: 25px;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
       }
 
       .input-group-addon {
