@@ -7,6 +7,15 @@ const GelatoPage = require('gelato/page');
 const SyncStatusPage = GelatoPage.extend({
 
   /**
+   * @property events
+   * @type {Object}
+   */
+  events: {
+    'click #reset-now': 'handleResetNow',
+    'click #sync-now': 'handleSyncNow'
+  },
+
+  /**
    * @property template
    * @type {Function}
    */
@@ -19,6 +28,14 @@ const SyncStatusPage = GelatoPage.extend({
   title: app.locale('pages.syncStatus.title'),
 
   /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.listenTo(app.user.offline, 'status', this.render);
+  },
+
+  /**
    * @method render
    * @returns {SyncStatusPage}
    */
@@ -26,6 +43,20 @@ const SyncStatusPage = GelatoPage.extend({
     this.renderTemplate();
 
     return this;
+  },
+
+  /**
+   * @method handleResetNow
+   */
+  handleResetNow: function() {
+    app.user.offline.uncache();
+  },
+
+  /**
+   * @method handleSyncNow
+   */
+  handleSyncNow: function() {
+    app.user.offline.sync();
   },
 
   /**

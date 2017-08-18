@@ -18,6 +18,7 @@ const OfflineModel = GelatoModel.extend({
     options = _.defaults(options, {});
 
     this.database = null;
+    this.status = 'standby';
     this.user = options.user;
   },
 
@@ -43,10 +44,11 @@ const OfflineModel = GelatoModel.extend({
    * @property defaults
    * @type {Object}
    */
-  defaults: {
-    lastItemSync: 0,
-    lastListSync: 0,
-    lastVocabSync: 0
+  defaults: function() {
+    return {
+      lastItemSync: 0,
+      lastListSync: 0
+    };
   },
 
   /**
@@ -57,26 +59,75 @@ const OfflineModel = GelatoModel.extend({
   },
 
   /**
-   * Loads offline sync meta data and initializes indexedDB database.
+   * Gets next items based on specified query parameters.
+   * @returns {Promise.<Object>}
    */
-  load: function () {
-    this.set(app.getLocalStorage(this.user.id + '-offline'));
-
-    if (this.database) {
-      this.database.close();
-    }
-
-    this.database = new Dexie('skritter:' + app.user.id);
-
-    this.database.version(1).stores({
-      characters: '_id,writing',
-      items: 'id,next,part,style',
-      lists: 'id,name,studyingMode',
-      reviews: 'id',
-      vocabs: 'id,writing'
+  loadNext: function (query) {
+    query = _.defaults(query, {
+      limit: 100,
+      lists: [],
+      parts: this.user.getFilteredParts(),
+      styles: this.user.getFilteredStyles()
     });
 
-    return Promise.all([this.loadAllItems(), this.loadAllReviews()]);
+    return new Promise(async resolve => {
+      const result = {Characters: [], Items: [], Vocabs: []};
+
+      const queryItemResult = await this.database.items.orderBy('next').limit(query.limit).filter(item => {
+        // exclude when no active vocab ids
+        if (!item.vocabIds || item.vocabIds.length === 0) {
+          return false;
+        }
+
+        // exclude part not including in user settings
+        if (!_.includes(query.parts, item.part)) {
+          return false;
+        }
+
+        // exclude style not including in user settings
+        if (!_.includes(query.styles, item.style)) {
+          return false;
+        }
+
+        if (query.lists.length && _.intersection(query.lists, item.vocabListIds).length === 0) {
+          return false;
+        }
+
+        return true;
+      });
+
+      // STEP 1: load items that are due next
+      result.Items = await queryItemResult.toArray();
+
+      // STEP 2: load vocabs based on items
+      result.Vocabs = await this.loadVocabsFromItems(result.Items);
+
+      // STEP 3: load more items based on vocabs
+      console.log(_.chain(result.Vocabs).filter(vocab => vocab.containedVocabIds).map('containedVocabIds').flatten().uniq().value());
+
+      // STEP 4: load characters based on vocabs
+
+      resolve(result);
+    });
+  },
+
+  /**
+   * Loads vocabs based on item vocabIds property.
+   * @returns {Promise.<Array>}
+   */
+  loadVocabsFromItems: async function (items) {
+    const vocabIds = _.chain(items).map('vocabIds').flatten().uniq().value();
+    const requests = _.map(vocabIds, vocabId => this.database.vocabs.get(vocabId));
+
+    return Promise.all(requests);
+  },
+
+  /**
+   * Loads characters based on vocab writing property.
+   * @returns {Promise.<Array>}
+   */
+  loadCharactersFromVocabs: function (vocabs) {
+
   },
 
   /**
@@ -109,50 +160,74 @@ const OfflineModel = GelatoModel.extend({
     return this.reviews;
   },
 
+   /**
+   * Prepare offline sync meta data and indexedDB database.
+   */
+  prepare: function () {
+    this.set(app.getLocalStorage(this.user.id + '-offline'));
+
+    if (this.database) {
+      this.database.close();
+    }
+
+    this.database = new Dexie('skritter:' + app.user.id);
+
+    this.database.version(1).stores({
+      characters: '_id,writing',
+      items: 'id,next,part,style',
+      lists: 'id,name,studyingMode',
+      reviews: 'id',
+      vocabs: 'id,writing'
+    });
+  },
+
   /**
    * Syncs data based on last sync time offsets.
    */
-  sync: async function () {
-    await Promise.all([
-      this._downloadItems(),
-      this._downloadLists(),
-      this._downloadVocabs()
-    ]);
+  sync: async function (offset) {
+    this.status = 'syncing';
 
-    this.cache();
+    this.trigger('status', this.status);
+
+    let items = await this._downloadItems(offset);
+    let vocabs = await this._downloadItemVocabs(items);
+    let characters = await this._downloadVocabCharacters(vocabs);
+
+    items = undefined;
+    vocabs = undefined;
+    characters = undefined;
+
+    this.status = 'standby';
+
+    this.trigger('status', this.status);
   },
 
   /**
    * Removes offline sync meta data from localStorage.
    */
   uncache: function () {
-    app.removeLocalStorage(this.id + '-offline');
-  },
+    this.status = 'uncaching';
 
-  /**
-   * Downloads all characters based on writings array.
-   * @param {Array} writings
-   * @returns {Promise.<*>}
-   * @private
-   */
-  _downloadCharacters: async function (writings) {
-    if (!writings ||! writings.length) {
-      return Promise.resolve();
-    }
+    this.trigger('status', this.status);
 
-    const result = await this._fetchCharacters({ writings });
+    this.set(this.defaults());
 
-    return this.database.characters.bulkPut(result.data);
+    app.removeLocalStorage(this.user.id + '-offline');
+
+    this.status = 'standby';
+
+    this.trigger('status', this.status);
   },
 
   /**
    * Downloads all items based on changed offset.
    * @param {Number} [offset]
-   * @returns {Promise.<*>}
+   * @returns {Promise.<Array>}
    * @private
    */
   _downloadItems: async function (offset) {
     const now = moment().unix();
+    let items = [];
     let cursor;
 
     offset = offset || this.get('lastItemSync');
@@ -168,6 +243,8 @@ const OfflineModel = GelatoModel.extend({
 
             await this.database.items.bulkPut(result.data);
 
+            items = items.concat(result.data);
+
             cursor = result.cursor;
 
             callback();
@@ -181,7 +258,9 @@ const OfflineModel = GelatoModel.extend({
           } else {
             this.set('lastItemSync', now);
 
-            resolve();
+            this.cache();
+
+            resolve(items);
           }
         }
       );
@@ -190,7 +269,7 @@ const OfflineModel = GelatoModel.extend({
 
   /**
    * Downloads all list marked as currently studying.
-   * @returns {Promise.<*>}
+   * @returns {Promise.<Array>}
    * @private
    */
   _downloadLists: async function () {
@@ -216,6 +295,8 @@ const OfflineModel = GelatoModel.extend({
           } else {
             this.set('lastListSync', now);
 
+            this.cache();
+
             resolve();
           }
         }
@@ -224,57 +305,56 @@ const OfflineModel = GelatoModel.extend({
   },
 
   /**
-   * Downloads all vocabs based on changed offset.
+   * Downloads vocabs based on array of items.
    * @param {Number} [offset]
-   * @returns {Promise.<*>}
+   * @returns {Promise.<Array>}
    * @private
    */
-  _downloadVocabs: async function (offset) {
-    const now = moment().unix();
-    let cursor;
-
-    offset = offset || this.get('lastVocabSync');
+  _downloadItemVocabs: async function (items) {
+    const vocabIds = _.chain(items).map('vocabIds').flatten().uniq().value();
+    const vocabIdChunks = _.chunk(vocabIds, 100);
+    let vocabs = [];
 
     return new Promise((resolve, reject) => {
-      async.whilst(
-        () => {
-          return cursor !== null;
-        },
-        async callback => {
-          try {
-            const result = await this._fetchVocabs({sort: 'all', offset, cursor });
+      async.eachLimit(vocabIdChunks, 10,
+        async (chunk, callback) => {
+          const result = await this._fetchVocabs({ids: chunk});
 
-            const writings = _
-              .chain(result.data)
-              .map('writing')
-              .join('')
-              .split('')
-              .uniq()
-              .value();
-
-            await Promise.all([
-              this.database.vocabs.bulkPut(result.data),
-              this._downloadCharacters(writings)
-            ]);
-
-            cursor = result.cursor;
-
-            callback();
-          } catch (error) {
-            callback(error);
+          if (result.data.length) {
+            vocabs = vocabs.concat(result.data);
           }
+
+          callback();
         },
-        error => {
+        async error => {
           if (error) {
             reject(error);
           } else {
-            this.set('lastVocabSync', now);
+            await this.database.vocabs.bulkPut(vocabs);
 
-            resolve();
+            resolve(vocabs);
           }
         }
       );
     });
+  },
+
+  /**
+   * Downloads characters based on array of vocabs.
+   * @param {Array} vocabs
+   * @returns {Promise.<Array>}
+   * @private
+   */
+  _downloadVocabCharacters: async function (vocabs) {
+    if (!vocabs ||! vocabs.length) {
+      return Promise.resolve();
+    }
+
+    const writings = _.chain(vocabs).map('writing').join('').split('').uniq().value();
+
+    const result = await this._fetchCharacters({ writings });
+
+    return this.database.characters.bulkPut(result.data);
   },
 
   /**
@@ -400,7 +480,7 @@ const OfflineModel = GelatoModel.extend({
     });
 
     const responseCursor = response.cursor || null;
-    const responseVocabs = response.Vocabs;
+    const responseVocabs = response.Vocabs || [];
 
     return {data: responseVocabs, cursor: responseCursor};
   }

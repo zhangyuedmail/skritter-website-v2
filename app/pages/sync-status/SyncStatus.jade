@@ -1,3 +1,16 @@
 gelato-page(data-name='sync-status')
   .container
-    .content-block
+    .content-block.text-center
+
+      h5 Last Item Sync:
+      p= app.user.offline.get('lastItemSync')
+
+      h5 Last List Sync:
+      p= app.user.offline.get('lastListSync')
+
+      h5 Last Vocab Sync:
+      p= app.user.offline.get('lastVocabSync')
+
+      if app.user.offline.status === 'standby'
+        button#sync-now.btn.btn-primary Sync
+        button#reset-now.btn.btn-danger Reset
