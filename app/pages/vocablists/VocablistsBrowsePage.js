@@ -44,6 +44,8 @@ module.exports = GelatoPage.extend({
       this.loadAlreadyTimed = false;
     }
 
+    this.filterType = 'textbook';
+
     this._views['sidebar'] = new Sidebar();
     this._views['table'] = new Table();
     this._views['expiration'] = new ExpiredNotification();
@@ -80,15 +82,26 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleChangeCheckbox
    */
-  handleChangeCheckbox: function() {
-    /** TODO: support checkbox filters
-     var checkedBoxes = $('input[type="checkbox"]:checked');
-     var filterTypes = checkedBoxes.map(function(i, el) {
-            return $(el).attr('name');
-        });
-     this.table.setFilterTypes(filterTypes);
-     this.table.render();
-     **/
+  handleChangeCheckbox: function(event) {
+    this.filterType = this.$(event.target).val();
+
+    this._views['table'].vocablists.reset();
+
+    if (this.filterType === 'textbook') {
+      this._views['table'].setFilterType('textbook');
+      this._views['table'].fetchLists({sort: 'official'});
+    } else {
+      this._views['table'].setFilterType('published');
+      this._views['table'].fetchLists({q: this.$('#list-search-input').val(), sort: 'search'});
+    }
+
+    this.$('#field-filter-list input[type="checkbox"]').each((index, element) => {
+      if (element.value === this.filterType) {
+        element.checked = true;
+      } else {
+        element.checked = false;
+      }
+    });
   },
 
   /**
@@ -120,7 +133,20 @@ module.exports = GelatoPage.extend({
    * @param {Event} event
    */
   handleKeypressListSearchInput: function(event) {
-    this._views['table'].setFilterString(event.target.value);
+    if (event.which === 13  || event.keyCode === 13) {
+      const searchValue = event.target.value;
+
+      if (this.filterType === 'published') {
+        this._views['table'].vocablists.reset();
+        this._views['table'].fetchLists({q: searchValue, sort: 'search'});
+      } else {
+        this._views['table'].setFilterString(searchValue);
+      }
+
+      return true;
+    }
+
+    return false;
   },
 
   /**
