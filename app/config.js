@@ -78,8 +78,7 @@ module.exports = {
   locale: 'en',
 
   /**
-   * The max amount of time for the timer to increase by for a certain
-   * prompt type
+   * The max amount of time for the timer to increase by for a certain prompt type.
    * @type {Object<String, Number>}
    */
   maxPromptTimes: {
@@ -90,6 +89,11 @@ module.exports = {
   },
 
   nodeApiRoot: 'https://api-dot-write-way.appspot.com',
+
+  /**
+   * Whether to allow offline mode to function.
+   */
+  offlineEnabled: false,
 
   sentryUrl: 'https://4aa61a5ed92f4aaf8a9ae79777b70843@sentry.io/123679',
 
