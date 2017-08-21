@@ -249,79 +249,109 @@ const ItemCollection = BaseSkritterCollection.extend({
 
         this.fetchingState = 'fetching';
 
-        async.series(
-          [
-            (callback) => {
-              ScreenLoader.post('Updating cache');
+        if (app.user.offline.isReady()) {
+          async.series(
+            [
+              async callback => {
+                const result = await app.user.offline.loadNext();
 
-              $.ajax({
-                url: app.getApiUrl(2) + 'queue/update',
-                type: 'GET',
-                headers: app.user.session.getHeaders(),
-                data: {
-                  languageCode: app.getLanguage()
-                },
-                error: (error) => callback(error),
-                success: () => callback()
-              });
-            },
-            (callback) => {
-              ScreenLoader.post('Fetching next');
+                _.forEach(this.add(result.Items), item => {
+                  item._loaded = true;
+                  item._queue = true;
+                });
 
-              $.ajax({
-                url: app.getApiUrl(2) + 'queue/next',
-                type: 'GET',
-                headers: app.user.session.getHeaders(),
-                data: {
-                  languageCode: app.getLanguage(),
-                  limit: options.limit,
-                  lists: options.lists || app.user.getFilteredLists().join('|'),
-                  parts: app.user.getFilteredParts().join('|'),
-                  sections: options.sections,
-                  styles: app.user.getFilteredStyles().join('|')
-                },
-                error: error => {
-                  callback(error);
-                },
-                success: result => {
-                  this.reset();
+                this.add(result.ContainedItems);
 
-                  _.forEach(
-                    this.add(result),
-                    (model) => {
-                      model._queue = true;
-                    }
-                  );
+                this.vocabs.add(result.Vocabs);
 
-                  callback();
-                }
-              });
-            }
-          ],
-          (error) => {
-            if (error) {
+                app.user.characters.add(result.Characters);
+
+                callback();
+              }
+            ],
+            (error) => {
               this.fetchingState = 'standby';
-              reject(error);
-              return;
+
+              if (error) {
+                reject(error);
+              } else {
+                console.log(this);
+
+                resolve();
+              }
             }
+          );
+        } else {
+          async.series(
+            [
+              (callback) => {
+                ScreenLoader.post('Updating cache');
 
-            // preload stuff because we need it anyways
-            this.preloadNext({limit: 5})
-              .catch(
-                (error) => {
-                  this.fetchingState = 'standby';
-                  reject(error);
-                }
-              )
-              .then(
-                () => {
-                  this.fetchingState = 'standby';
-                  resolve();
-                }
-              );
-          }
-        );
+                $.ajax({
+                  url: app.getApiUrl(2) + 'queue/update',
+                  type: 'GET',
+                  headers: app.user.session.getHeaders(),
+                  data: {
+                    languageCode: app.getLanguage()
+                  },
+                  error: (error) => callback(error),
+                  success: () => callback()
+                });
+              },
+              (callback) => {
+                ScreenLoader.post('Fetching next');
 
+                $.ajax({
+                  url: app.getApiUrl(2) + 'queue/next',
+                  type: 'GET',
+                  headers: app.user.session.getHeaders(),
+                  data: {
+                    languageCode: app.getLanguage(),
+                    limit: options.limit,
+                    lists: options.lists || app.user.getFilteredLists().join('|'),
+                    parts: app.user.getFilteredParts().join('|'),
+                    sections: options.sections,
+                    styles: app.user.getFilteredStyles().join('|')
+                  },
+                  error: error => {
+                    callback(error);
+                  },
+                  success: result => {
+                    this.reset();
+
+                    _.forEach(this.add(result), model => {
+                      model._queue = true;
+                    });
+
+                    callback();
+                  }
+                });
+              }
+            ],
+            (error) => {
+              if (error) {
+                this.fetchingState = 'standby';
+                reject(error);
+                return;
+              }
+
+              // preload stuff because we need it anyways
+              this.preloadNext({limit: 5})
+                .catch(
+                  (error) => {
+                    this.fetchingState = 'standby';
+                    reject(error);
+                  }
+                )
+                .then(
+                  () => {
+                    this.fetchingState = 'standby';
+                    resolve();
+                  }
+                );
+            }
+          );
+        }
       }
     );
   },
@@ -367,13 +397,11 @@ const ItemCollection = BaseSkritterCollection.extend({
 
           // exclude rune items without stroke data
           if (model.isPartRune() && !model.isCharacterDataLoaded()) {
-            console.log('SKIPPING ITEM:', model.id);
-
             // exclude the rune item from the local queue
             model._queue = false;
 
             // move the item into future on the server
-            model.bump();
+            // model.bump();
 
             return false;
           }
@@ -386,7 +414,7 @@ const ItemCollection = BaseSkritterCollection.extend({
               model._queue = false;
 
               // move the item into future on the server
-              model.bump();
+              // model.bump();
 
               return false;
             }
@@ -417,6 +445,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.vocabs.add(response.Vocabs);
     this.vocabs.decomps.add(response.Decomps);
     this.vocabs.sentences.add(response.Sentences);
+
     return response.Items.concat(response.ContainedItems || []);
   },
 

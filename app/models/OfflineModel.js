@@ -59,10 +59,18 @@ const OfflineModel = GelatoModel.extend({
   },
 
   /**
+   * Returns a boolean state regarding offline study readiness.
+   * @returns {boolean}
+   */
+  isReady: function () {
+    return app.config.offlineEnabled && this.get('lastItemSync') && this.get('lastListSync');
+  },
+
+  /**
    * Gets next items based on specified query parameters.
    * @returns {Promise.<Object>}
    */
-  loadNext: function (query) {
+  loadNext: async function (query) {
     query = _.defaults(query, {
       limit: 100,
       lists: [],
@@ -71,7 +79,7 @@ const OfflineModel = GelatoModel.extend({
     });
 
     return new Promise(async resolve => {
-      const result = {Characters: [], Items: [], Vocabs: []};
+      const result = {Characters: [], ContainedItems: [], ContainedVocabs: [], Items: [], Vocabs: []};
 
       // STEP 1: Order and fetch items to be studied next
       const queryItemResult = await this.database.items.orderBy('next').limit(query.limit).filter(item => {
@@ -106,9 +114,8 @@ const OfflineModel = GelatoModel.extend({
       // STEP 4: load more items based on vocabs
       const containedVocabIds = _.chain(result.Vocabs).filter(vocab => vocab.containedVocabIds).map('containedVocabIds').flatten().uniq().value();
       const queryRelatedItemResult = await this.database.items.filter(item => _.some(containedVocabIds, vocabId => item.id.indexOf(vocabId) > -1));
-      const relatedItems = await queryRelatedItemResult.toArray();
 
-      result.Items = result.Items.concat(relatedItems);
+      result.ContainedItems = await queryRelatedItemResult.toArray();
 
       // STEP 5: load characters based on vocabs
       result.Characters = await this.loadCharactersFromVocabs(result.Vocabs);
@@ -134,7 +141,7 @@ const OfflineModel = GelatoModel.extend({
    */
   loadCharactersFromVocabs: function (vocabs) {
     const writings = _.chain(vocabs).map('writing').join('').split('').uniq().value();
-    const requests = _.map(writings, writing => this.database.characters.get(writing));
+    const requests = _.map(writings, writing => this.database.characters.where('writing').equals(writing).first());
 
     return Promise.all(requests);
   },
