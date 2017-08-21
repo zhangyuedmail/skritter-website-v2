@@ -73,6 +73,7 @@ const OfflineModel = GelatoModel.extend({
     return new Promise(async resolve => {
       const result = {Characters: [], Items: [], Vocabs: []};
 
+      // STEP 1: Order and fetch items to be studied next
       const queryItemResult = await this.database.items.orderBy('next').limit(query.limit).filter(item => {
         // exclude when no active vocab ids
         if (!item.vocabIds || item.vocabIds.length === 0) {
@@ -96,16 +97,21 @@ const OfflineModel = GelatoModel.extend({
         return true;
       });
 
-      // STEP 1: load items that are due next
+      // STEP 2: load items that are due next
       result.Items = await queryItemResult.toArray();
 
-      // STEP 2: load vocabs based on items
+      // STEP 3: load vocabs based on items
       result.Vocabs = await this.loadVocabsFromItems(result.Items);
 
-      // STEP 3: load more items based on vocabs
-      console.log(_.chain(result.Vocabs).filter(vocab => vocab.containedVocabIds).map('containedVocabIds').flatten().uniq().value());
+      // STEP 4: load more items based on vocabs
+      const containedVocabIds = _.chain(result.Vocabs).filter(vocab => vocab.containedVocabIds).map('containedVocabIds').flatten().uniq().value();
+      const queryRelatedItemResult = await this.database.items.filter(item => _.some(containedVocabIds, vocabId => item.id.indexOf(vocabId) > -1));
+      const relatedItems = await queryRelatedItemResult.toArray();
 
-      // STEP 4: load characters based on vocabs
+      result.Items = result.Items.concat(relatedItems);
+
+      // STEP 5: load characters based on vocabs
+      result.Characters = await this.loadCharactersFromVocabs(result.Vocabs);
 
       resolve(result);
     });
@@ -127,7 +133,10 @@ const OfflineModel = GelatoModel.extend({
    * @returns {Promise.<Array>}
    */
   loadCharactersFromVocabs: function (vocabs) {
+    const writings = _.chain(vocabs).map('writing').join('').split('').uniq().value();
+    const requests = _.map(writings, writing => this.database.characters.get(writing));
 
+    return Promise.all(requests);
   },
 
   /**
