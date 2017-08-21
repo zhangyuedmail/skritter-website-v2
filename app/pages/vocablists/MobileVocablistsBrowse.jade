@@ -31,6 +31,18 @@ gelato-page(data-name='mobile-vocablists-browse')
                   span.input-group-addon
                     i.fa.fa-search
                   input#list-search-input.form-control(type="text", placeholder="Type to search by title")
+
+            .form-inline#field-filter-list
+              label View only:
+              .checkbox
+                label
+                  input(type="checkbox" value='textbook', checked)
+                  span Textbooks
+              .checkbox
+                label
+                  input(type="checkbox" value='published')
+                  span User published
+
       .row
         .col-md-12.main-content
           #vocablist-container

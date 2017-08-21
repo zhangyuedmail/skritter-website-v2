@@ -41,16 +41,17 @@ gelato-page[data-name='mobile-vocablists-browse'] {
     }
 
     .form-inline {
+      margin-left: 15px;
       margin-top: 15px;
       color: $grey4;
 
-      label {
-        margin-right: 10px;
+      .checkbox {
+        display: inline-block;
       }
 
-      input {
+      label {
         margin-right: 10px;
-        margin-left: 20px;
+        margin-left: 15px;
       }
     }
   }
