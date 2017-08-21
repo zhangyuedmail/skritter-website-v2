@@ -83,6 +83,8 @@ module.exports = GelatoPage.extend({
    * @method handleChangeCheckbox
    */
   handleChangeCheckbox: function(event) {
+    const searchValue = this.$('#list-search-input').val();
+
     this.filterType = this.$(event.target).val();
 
     this._views['table'].vocablists.reset();
@@ -92,7 +94,12 @@ module.exports = GelatoPage.extend({
       this._views['table'].fetchLists({sort: 'official'});
     } else {
       this._views['table'].setFilterType('published');
-      this._views['table'].fetchLists({q: this.$('#list-search-input').val(), sort: 'search'});
+
+      if (searchValue === '') {
+        this._views['table'].fetchLists({sort: 'published'});
+      } else {
+        this._views['table'].fetchLists({q: searchValue, sort: 'search'});
+      }
     }
 
     this.$('#field-filter-list input[type="checkbox"]').each((index, element) => {
@@ -138,7 +145,12 @@ module.exports = GelatoPage.extend({
 
       if (this.filterType === 'published') {
         this._views['table'].vocablists.reset();
-        this._views['table'].fetchLists({q: searchValue, sort: 'search'});
+
+        if (searchValue === '') {
+          this._views['table'].fetchLists({sort: 'published'});
+        } else {
+          this._views['table'].fetchLists({q: searchValue, sort: 'search'});
+        }
       } else {
         this._views['table'].setFilterString(searchValue);
       }
