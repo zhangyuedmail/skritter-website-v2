@@ -93,7 +93,7 @@ module.exports = {
   /**
    * Whether to allow offline mode to function.
    */
-  offlineEnabled: true,
+  offlineEnabled: false,
 
   sentryUrl: 'https://4aa61a5ed92f4aaf8a9ae79777b70843@sentry.io/123679',
 
