@@ -275,8 +275,6 @@ const ItemCollection = BaseSkritterCollection.extend({
               if (error) {
                 reject(error);
               } else {
-                console.log(this);
-
                 resolve();
               }
             }
