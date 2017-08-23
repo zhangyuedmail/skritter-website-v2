@@ -8,6 +8,9 @@ gelato-component(data-name='dashboard-queue')
     - var addingFrom = view.vocablists.getAdding();
     - var reviewingFrom = view.vocablists.getReviewing();
 
+    a#manage-button(href='/vocablists/queue')
+      i.fa.fa-gear
+
     if view.vocablists.state === 'fetching'
       p.text-center.mini-spinner
         i.fa.fa-3x.fa-spinner.fa-pulse
@@ -18,11 +21,12 @@ gelato-component(data-name='dashboard-queue')
       .row(data-list-id=list.id)
         .col-md-4
           a(href="/vocablists/view/" + list.id)= list.get('name')
-        .col-md-6
+        .col-md-8
           .progress
-            .progress-bar(style="width:" + progress.percent + '%')= app.isMobile() ? '' : progress.percent + '%'
-        .col-md-2.text-center
-          a(href='/study/' + list.id) Study
+            if list.get('studyingMode') === 'finished'
+              .progress-bar.progress-bar-success(style="width:" + (list.getProgress().percent) + '%')
+            else
+              .progress-bar(style="width:" + (list.getProgress().percent) + '%')
 
     if reviewingFrom.length
       .reviewing-label.row
@@ -33,14 +37,12 @@ gelato-component(data-name='dashboard-queue')
         .row(data-list-id=list.id)
           .col-md-4
             a(href="/vocablists/view/" + list.id)= list.get('name')
-          .col-md-6
+          .col-md-8
             .progress
-              .progress-bar(style="width: " + progress.percent + '%')= app.isMobile() ? '' : progress.percent + '%'
-          .col-md-2.text-center
-            a(href='/study/' + list.id) Study
-    .text-center
-      br
-      a#manage-button(href='/vocablists/queue').btn.btn-success Manage
+              if list.get('studyingMode') === 'finished'
+                .progress-bar.progress-bar-success(style="width:" + (list.getProgress().percent) + '%')
+              else
+                .progress-bar(style="width:" + (list.getProgress().percent) + '%')
   else if view.errorLoadingLists
     .row
       .col-xs-12.text-center
