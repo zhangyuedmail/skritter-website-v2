@@ -51,12 +51,9 @@ const DashboardPage = GelatoPage.extend({
       this.loadStart = window.performance.now();
     }
 
-    if (!app.isMobile()) {
-      this._views['month'] = new DashboardMonth();
-      this._views['total'] = new DashboardTotal();
-    }
-
     this._views['goal'] = new DashboardGoal();
+    this._views['month'] = new DashboardMonth();
+    this._views['total'] = new DashboardTotal();
     this._views['queue'] = new DashboardQueue();
     this._views['expiration'] = new ExpiredNotification();
 
