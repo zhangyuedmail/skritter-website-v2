@@ -43,6 +43,22 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.preloadingState = 'standby';
     this.sorted = null;
 
+    /**
+     * Keeps track of what items the queue requests. If there's a mismatch between a user's Queue and UserItems,
+     * a lot of nulls will be returned. When this is detected, this flag should be turned true.
+     * On two subsequent requests that return > 90% nulls for items, if this is already set to true,
+     * the queue will automatically be reset and the page reloaded, which should fix the issue.
+     * @type {boolean}
+     */
+    this.queuePossiblyStale = false;
+
+    /**
+     * Whether the queue is currently being reset
+     * @type {boolean}
+     * @private
+     */
+    this._resettingQueue = false;
+
     this.listenTo(this.reviews, 'update:due', this.updateDueCount);
   },
 
@@ -499,12 +515,20 @@ const ItemCollection = BaseSkritterCollection.extend({
           error: (error) => {
             reject(error);
           },
-          success: (result) => {
+          success: (collection, result) => {
+            const nullItems = result.Items.map(i => i === null);
+            if (nullItems.length / result.Items.length >= .9) {
+              if (!this.queuePossiblyStale) {
+                this.queuePossiblyStale = true;
+              } else {
+                this.resetQueue(true);
+              }
+            }
             // mark items that have successfully been loaded from the server
             _.forEach(
               itemIds,
               (itemId) => {
-                const item = result.get(itemId);
+                const item = collection.get(itemId);
 
                 if (item) {
                   item._loaded = true;
@@ -539,6 +563,47 @@ const ItemCollection = BaseSkritterCollection.extend({
   reset: function() {
     this.vocabs.reset();
     return BaseSkritterCollection.prototype.reset.apply(this, arguments);
+  },
+
+  /**
+   * Resets a user's queue for the current language
+   * @param {Boolean} [reload] whether to reload the page after resetting
+   */
+  resetQueue: function(reload) {
+    return new Promise((resolve, reject) => {
+
+      // I know, UI code in a model. Sorry :-(
+      ScreenLoader.post('Synching queue');
+
+      if (this._resettingQueue) {
+        resolve();
+        return;
+      }
+
+      this._resettingQueue = true;
+
+      $.ajax({
+        data: {
+          languageCode: app.getLanguage()
+        },
+        headers: app.user.session.getHeaders(),
+        type: 'GET',
+        url: app.getApiUrl(2) + 'queue/reset/' + app.user.id,
+        error: (error) => {
+          ScreenLoader.post('Queue synchronization error. Please contact the team@skritter.com to fix this.');
+          this._resettingQueue = false;
+          reject(error);
+        },
+        success: () => {
+          this._resettingQueue = false;
+          resolve();
+
+          if (reload) {
+            app.reload();
+          }
+        }
+      });
+    });
   },
 
   /**
