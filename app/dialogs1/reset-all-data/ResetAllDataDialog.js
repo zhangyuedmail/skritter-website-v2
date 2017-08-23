@@ -53,7 +53,9 @@ const ResetAllDataDialog = GelatoDialog.extend({
     const password = this.$('#input-password').val();
 
     this.resetV1Data(password)
-      .then(this.resetV2Data, (error) => {this.handleResetError(error);})
+
+    // this is done on server-side now
+    // .then(this.resetV2Data, (error) => {this.handleResetError(error);})
       .then(() => {
         app.user.setLastItemUpdate(0);
         app.user.cache();
