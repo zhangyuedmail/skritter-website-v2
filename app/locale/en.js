@@ -151,7 +151,7 @@ module.exports = {
       "allTime": "All Time",
       "goToSubSettings": "Go to your subscription settings",
       "hide": "Hide",
-      "lists": "Lists",
+      "lists": "List Progress",
       "networkUnstable": "Network connection unstable",
       "subExpiredDetails": "Purchase a subscription to study new items and lists.",
       "subscriptionExpired": "Subscription expired",

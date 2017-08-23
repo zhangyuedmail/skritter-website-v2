@@ -5,6 +5,12 @@ gelato-component[data-name='dashboard-queue'] {
   font-weight: 300;
   margin: 30px 10px 0 10px;
 
+  #manage-button {
+    position: absolute;
+    top: -45px;
+    right: 0;
+  }
+
   .col-md-2,
   .col-md-4 {
     margin-bottom: 10px;
