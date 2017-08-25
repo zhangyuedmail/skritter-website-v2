@@ -516,7 +516,8 @@ const ItemCollection = BaseSkritterCollection.extend({
             reject(error);
           },
           success: (collection, result) => {
-            const nullItems = result.Items.map(i => i === null);
+            // check for null items to determine if queue reset is needed
+            const nullItems = result.Items.filter(i => i === null);
             if (nullItems.length / result.Items.length >= .9) {
               if (!this.queuePossiblyStale) {
                 this.queuePossiblyStale = true;
@@ -524,6 +525,7 @@ const ItemCollection = BaseSkritterCollection.extend({
                 this.resetQueue(true);
               }
             }
+
             // mark items that have successfully been loaded from the server
             _.forEach(
               itemIds,
