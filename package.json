@@ -61,7 +61,7 @@
     "moment": "2.18.x",
     "moment-timezone": "0.5.x",
     "morgan": "1.8.x",
-    "wanakana": "2.2.x",
+    "wanakana": "2.3.x",
     "webfontloader": "1.6.x"
   },
   "devDependencies": {
