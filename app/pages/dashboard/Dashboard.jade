@@ -10,17 +10,25 @@ gelato-page(data-name='dashboard')
           .content
             #dashboard-goal-container
 
-      .col-md-3
+      .col-md-3(class=app.isMobile() ? 'hidden' : '')
         .content-block
           .title= app.locale('pages.dashboard.thisMonth')
           .content
             #dashboard-month-container
 
-      .col-md-3
+      .col-md-3(class=app.isMobile() ? 'hidden' : '')
         .content-block
           .title= app.locale('pages.dashboard.allTime')
           .content
             #dashboard-total-container
+
+    if app.isMobile()
+      .row
+        .col-xs-12
+          .content-block
+            .title Stats
+            .content
+              #dashboard-progress-container
 
     .row
       .col-xs-12

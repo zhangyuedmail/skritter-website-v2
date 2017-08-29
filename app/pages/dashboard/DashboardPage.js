@@ -1,6 +1,7 @@
 const GelatoPage = require('gelato/page');
 const DashboardGoal = require('components/dashboard/DashboardStatusComponent');
 const DashboardMonth = require('components/dashboard/DashboardMonthComponent');
+const DashboardProgress = require('components/dashboard/DashboardProgressComponent');
 const DashboardQueue = require('components/dashboard/DashboardQueueComponent');
 const DashboardTotal = require('components/dashboard/DashboardTotalComponent');
 const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
@@ -52,10 +53,15 @@ const DashboardPage = GelatoPage.extend({
     }
 
     this._views['goal'] = new DashboardGoal();
-    this._views['month'] = new DashboardMonth();
-    this._views['total'] = new DashboardTotal();
     this._views['queue'] = new DashboardQueue();
     this._views['expiration'] = new ExpiredNotification();
+
+    if (app.isMobile()) {
+      this._views['progress'] = new DashboardProgress();
+    } else {
+      this._views['month'] = new DashboardMonth();
+      this._views['total'] = new DashboardTotal();
+    }
 
     if (app.config.recordLoadTimes) {
       this.componentsLoaded = {
@@ -86,6 +92,10 @@ const DashboardPage = GelatoPage.extend({
 
     if (this._views['month']) {
       this._views['month'].setElement('#dashboard-month-container').render();
+    }
+
+    if (this._views['progress']) {
+      this._views['progress'].setElement('#dashboard-progress-container').render();
     }
 
     if (this._views['total']) {
