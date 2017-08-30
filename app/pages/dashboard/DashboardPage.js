@@ -16,7 +16,9 @@ const MobileNavbar = require('components/navbars/NavbarMobileDashboardComponent'
 const DashboardPage = GelatoPage.extend({
 
   events: {
-    'click #feedback-btn': 'onFeedbackBtnClicked'
+    'click #feedback-btn': 'onFeedbackBtnClicked',
+    'click #rating-btn': 'onRatingBtnClicked',
+    'click #rating-cancel-btn': 'onRatingCancelBtnClicked'
   },
 
   /**
@@ -76,7 +78,8 @@ const DashboardPage = GelatoPage.extend({
       this.listenTo(this._views['queue'], 'component:loaded', this.onComponentLoaded);
     }
 
-    this.listenTo(this._views['expiration'], 'fetch-data:failed', this.subscriptionFetchFailed);
+    // this.listenTo(this._views['expiration'], 'fetch-data:failed', this.subscriptionFetchFailed);
+    this.listenTo(app.user.subscription, 'state:standby', this.onSubscriptionSync);
 
     app.mixpanel.track('Viewed dashboard page');
 
@@ -140,8 +143,42 @@ const DashboardPage = GelatoPage.extend({
     app.showFeedbackDialog();
   },
 
-  subscriptionFetchFailed: function() {
+  onRatingBtnClicked: function() {
+    if (app.getLanguage() === 'zh') {
+      plugins.core.openGooglePlay('com.inkren.skritter.chinese');
+    } else {
+      plugins.core.openGooglePlay('com.inkren.skritter.japanese');
+    }
 
+    this.$('.rating-notice').hide();
+
+    app.user.set('hideRatingNotice', true);
+    app.user.cache();
+  },
+
+  onRatingCancelBtnClicked: function() {
+    this.$('.rating-notice').hide();
+
+    app.user.set('hideRatingNotice', true);
+    app.user.cache();
+  },
+
+  onSubscriptionSync: function(sub) {
+    const $ratingNotice = this.$('.rating-notice');
+
+    if (app.user.get('hideRatingNotice')) {
+      $ratingNotice.addClass('hidden');
+
+      return;
+    }
+
+    if (!sub.isSubscribed()) {
+      $ratingNotice.addClass('hidden');
+
+      return;
+    }
+
+    $ratingNotice.removeClass('hidden');
   }
 });
 

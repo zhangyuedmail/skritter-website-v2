@@ -4,6 +4,15 @@ gelato-page(data-name='dashboard')
   .container
     #subscription-notice
 
+    if app.isMobile()
+      .row.rating-notice.hidden
+        .col-xs-12
+          .content-block
+            .title Spread the word!
+            .content If you love Skritter and are learning lots of characters, you can help us by going to the Play Store and rating us 5 stars.
+            button#rating-btn.btn.btn-primary Rate Us!
+            button#rating-cancel-btn.btn.btn-default No, thanks.
+
     .row#first-row
       .col-md-6
         .content-block
