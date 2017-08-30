@@ -95,7 +95,7 @@ gelato-page(data-name='account-billing-subscription')
                   .col-sm-9
                     p.form-control-static
                       if vacation
-                        span= moment(vacation.begin).format('dddd, MMMM Do')
+                        span= moment(vacation.start).format('dddd, MMMM Do')
                         span.spr.spl -
                         span.spr= moment(vacation.end).format('dddd, MMMM Do')
                         span#cancel-vacation-wrapper
