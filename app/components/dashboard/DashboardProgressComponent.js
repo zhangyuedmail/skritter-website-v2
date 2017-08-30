@@ -34,7 +34,8 @@ const DashboardMonthComponent = GelatoComponent.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.heatmap.init({
+
+    const settings = {
       cellSize: 22,
       cellPadding: 5,
       cellRadius: 25,
@@ -47,7 +48,15 @@ const DashboardMonthComponent = GelatoComponent.extend({
       start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
       subDomain: 'x_day',
       subDomainTextFormat: "%d"
-    });
+    };
+
+    const mobileSettings = {
+      cellSize: 20,
+      cellPadding: 2,
+      cellRadius: 5
+    };
+
+    this.heatmap.init(_.extend(settings, app.isMobile() ? mobileSettings : {}));
     this.updateHeatmap();
     this.updateStreak();
     return this;
