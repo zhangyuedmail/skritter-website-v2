@@ -205,6 +205,8 @@ const OfflineModel = GelatoModel.extend({
 
     this.trigger('status', this.status);
 
+    await this._downloadLists();
+
     let items = await this._downloadItems(offset);
     let vocabs = await this._downloadItemVocabs(items);
     let characters = await this._downloadVocabCharacters(vocabs);

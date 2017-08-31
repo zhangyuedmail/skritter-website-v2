@@ -876,9 +876,6 @@ module.exports = GelatoApplication.extend({
         window.indexedDB.deleteDatabase(this.user.id + '-database');
       }
 
-      // initialize new indexedDB instance
-      this.user.offline.prepare();
-
       // lets start listening to global keyboard events
       this.listener = new window.keypress.Listener();
       this.listener.simple_combo(
@@ -946,6 +943,28 @@ module.exports = GelatoApplication.extend({
               }
             );
           }
+        },
+        (callback) => {
+          // skip offline stuff when disabled, no user or mobile not detected
+          if (!this.config.offlineEnabled || !this.user.isLoggedIn() || !this.isMobile()) {
+            callback();
+
+            return;
+          }
+
+          // initialize indexedDB instance for offline
+          this.user.offline.prepare();
+
+          // skip initial sync when data is ready
+          if (this.user.offline.isReady()) {
+            callback();
+
+            return;
+          }
+
+          ScreenLoader.post('Preparing offline study');
+
+          this.user.offline.sync().then(callback);
         }
       ],
       function() {
