@@ -144,10 +144,20 @@ const DashboardPage = GelatoPage.extend({
   },
 
   onRatingBtnClicked: function() {
-    if (app.getLanguage() === 'zh') {
-      plugins.core.openGooglePlay('com.inkren.skritter.chinese');
-    } else {
-      plugins.core.openGooglePlay('com.inkren.skritter.japanese');
+    if (app.isAndroid()) {
+      if (app.getLanguage() === 'zh') {
+        plugins.core.openGooglePlay('com.inkren.skritter.chinese');
+      } else {
+        plugins.core.openGooglePlay('com.inkren.skritter.japanese');
+      }
+    }
+
+    if (app.isIOS()) {
+      if (app.getLanguage() === 'zh') {
+        window.open('itms-apps://itunes.apple.com/app/skritter-chinese/id520277126', '_system');
+      } else {
+        window.open('itms-apps://itunes.apple.com/app/skritter-japanese/id548801568', '_system');
+      }
     }
 
     this.$('.rating-notice').hide();
