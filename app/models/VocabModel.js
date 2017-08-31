@@ -605,15 +605,39 @@ const VocabModel = SkritterModel.extend({
     }
 
     let audio = this.audios[0];
+    let cdvPath = app.config.cordovaAudioUrl + audio.name;
 
     if (app.isCordova()) {
-      resolveLocalFileSystemURL(app.config.cordovaAudioUrl + audio.name,
+      resolveLocalFileSystemURL(cdvPath,
         function(entry) {
-          plugins.audio.play(entry.toURL(), app.user.get('volume'));
+          if (app.isAndroid()) {
+            plugins.audio.play(entry.toURL(), app.user.get('volume'));
+          }
+
+          if (app.isIOS()) {
+            const media = new Media(cdvPath, function() {
+              media.stop();
+              media.release();
+            });
+
+            media.play();
+          }
         },
         function() {
-          new FileTransfer().download(audio.url, app.config.cordovaAudioUrl + audio.name, function(entry) {
-            plugins.audio.play(entry.toURL(), app.user.get('volume'));
+          new FileTransfer().download(audio.url, cdvPath, function(entry) {
+            if (app.isAndroid()) {
+              plugins.audio.play(entry.toURL(), app.user.get('volume'));
+            }
+
+            if (app.isIOS()) {
+              const media = new Media(cdvPath, function() {
+                media.stop();
+                media.release();
+              });
+
+              media.play();
+              media.setVolume(app.user.get('volume'));
+            }
           });
         }
       );
