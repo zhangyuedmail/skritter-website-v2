@@ -63,7 +63,7 @@ const OfflineModel = GelatoModel.extend({
    * @returns {boolean}
    */
   isReady: function () {
-    return app.config.offlineEnabled && this.get('lastItemSync') && this.get('lastListSync');
+    return app.config.offlineEnabled && !!this.get('lastItemSync') && !!this.get('lastListSync');
   },
 
   /**
