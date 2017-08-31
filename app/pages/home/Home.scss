@@ -55,7 +55,7 @@ gelato-page[data-name='home'] {
     top: 50px;
     width: 100%;
     height: calc(100% - 100px);
-    background: url("#{$dir-assets}/images/landing/bamboo-background.jpg") no-repeat bottom right scroll;
+    background: url("#{$dir-assets}/images/landing/bamboo-background.jpg") no-repeat bottom right fixed;
     background-size: cover;
 
   }
@@ -415,6 +415,19 @@ gelato-page[data-name='home'] {
       text-shadow: 2px 2px 4px #151515;
     }
 
+    .your-path {
+      padding-top: 10px;
+      font-size: 32px;
+    }
+
+    .stat-num {
+      font-size: 24px;
+    }
+
+    .try-it-out-button {
+      display: none;
+    }
+
     #hero-slider {
       img {
         opacity: 0.9;
@@ -426,20 +439,13 @@ gelato-page[data-name='home'] {
     }
 
     .left-wrapper {
-      margin-left: 35px;
-      margin-right: 35px;
+      margin-left: 10px;
+      margin-right: 10px;
       max-width: none;
     }
 
     .device-photo {
-      left: 0%;
-      top: auto;
-      bottom: 110px;
-      text-align: center;
-
-      img {
-        max-width: 50%;
-      }
+      display: none;
     }
 
     .try-it-out-button {
@@ -447,6 +453,8 @@ gelato-page[data-name='home'] {
     }
 
     .anchor {
+      height: auto;
+
       .col-xs-12 {
         text-align: center;
       }
