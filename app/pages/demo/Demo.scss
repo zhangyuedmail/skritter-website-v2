@@ -6,7 +6,7 @@ gelato-page[data-name='demo'] {
   padding-bottom: 0;
 
   #demo-prompt-container {
-    margin-top: 50px;
+    padding-top: 50px;
   }
 
   #progress-container {
@@ -33,4 +33,23 @@ gelato-page[data-name='demo'] {
       margin-left: 15px;
     }
   }
+}
+
+.mobile {
+  #page-container gelato-page[data-name='demo'] {
+    padding-bottom: 0px;
+  }
+}
+
+@keyframes swipeUpToErase {
+  0% {
+    bottom: 10%;
+  }
+    100% {
+    bottom: 33%;
+  }
+}
+
+.show-erase-swipe-animation {
+  animation: swipeUpToErase 2s infinite;
 }

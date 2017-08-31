@@ -87,11 +87,13 @@ const DemoPage = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    this.prompt.setElement('#demo-prompt-container').render();
 
     if (this._views['progress']) {
       this.$('#progress-container').html(this._views['progress'].render().el)
     }
+
+    this.prompt.setElement('#demo-prompt-container').render();
+
     this.loadDemo();
 
     return this;
@@ -190,7 +192,7 @@ const DemoPage = GelatoPage.extend({
   teachEraseDemoChar1: function() {
     vent.trigger('notification:show', {
         dialogTitle: 'Erasing Characters',
-        showTitle: true,
+        showTitle: !app.isMobile(),
         keepAlive: true,
         body: this.parseTemplate(require('./notify-erase-character1.jade'))
       });
@@ -203,7 +205,14 @@ const DemoPage = GelatoPage.extend({
     const eraseBtnHeight = Math.round(eraseBtn.width() / 2);
 
     if (app.isMobile()) {
-      // TODO: repeating swipe up motion
+      vent.trigger('callToActionGuide:toggle', true, {
+        left: '40%',
+        // width: '2vh',
+        // height: '2vh',
+        top: 'auto'
+      });
+
+      $('#app-call-to-action-guide').addClass('show-erase-swipe-animation');
     } else {
       const popupTopPos = eraseBtnPos ? (eraseBtnPos.top - eraseBtnHeight) : 0;
       const popupLeftPos = eraseBtnPos ? (eraseBtnPos.left - eraseBtnWidth) : 0;
@@ -230,7 +239,7 @@ const DemoPage = GelatoPage.extend({
   teachEraseDemoChar2: function() {
     vent.trigger('notification:show', {
       dialogTitle: 'Erasing Characters',
-      showTitle: true,
+      showTitle: !app.isMobile(),
       keepAlive: true,
       body: this.parseTemplate(require('./notify-erase-character2.jade'))
     });
@@ -253,7 +262,7 @@ const DemoPage = GelatoPage.extend({
 
       vent.trigger('notification:show', {
         dialogTitle: 'Different Prompts',
-        showTitle: true,
+        showTitle: !app.isMobile(),
         keepAlive: true,
         body: this.parseTemplate(require('./notify-different-prompts.jade'))
       });
@@ -272,7 +281,7 @@ const DemoPage = GelatoPage.extend({
 
     vent.trigger('notification:show', {
       dialogTitle: 'Definition Prompts',
-      showTitle: true,
+      showTitle: !app.isMobile(),
       keepAlive: true,
       body: this.parseTemplate(require('./notify-definition1.jade'))
     });
@@ -286,7 +295,7 @@ const DemoPage = GelatoPage.extend({
   teachSRS1: function() {
     vent.trigger('notification:show', {
       dialogTitle: 'Spaced Repetition',
-      showTitle: true,
+      showTitle: !app.isMobile(),
       keepAlive: true,
       body: this.parseTemplate(require('./notify-srs-1.jade'))
     });
@@ -297,7 +306,7 @@ const DemoPage = GelatoPage.extend({
     _.defer(() => {
       this.prompt.$('.grading-btn-wrapper').removeClass('hidden');
       this.prompt.toolbarGrading.once('grade:selected', () => {
-        this.$('.tap-to-advance-wrapper').removeClass('hidden');
+        this.$('.tap-to-advance-wrapper').toggleClass('hidden', app.isMobile());
       });
     });
 
@@ -362,7 +371,7 @@ const DemoPage = GelatoPage.extend({
 
     vent.trigger('notification:show', {
       dialogTitle: 'Pronunciation Prompts',
-      showTitle: true,
+      showTitle: !app.isMobile(),
       keepAlive: true,
       body: this.parseTemplate(require('./notify-reading1.jade'))
     });
@@ -435,7 +444,7 @@ const DemoPage = GelatoPage.extend({
     if (this.useNewDemo) {
       vent.trigger('notification:show', {
         dialogTitle: 'Getting Hints',
-        showTitle: true,
+        showTitle: !app.isMobile(),
         keepAlive: true,
         body: this.parseTemplate(require('./notify-step2'))
       });
@@ -509,11 +518,11 @@ const DemoPage = GelatoPage.extend({
         style: {
           backdrop: {
             top: '0px',
-            width: '50%'
+            width: app.isMobile() ? '100%' : '50%'
           },
           dialog: {
             top: '100px',
-            width: '50%'
+            width: app.isMobile() ? '100%' : '50%'
           }
         },
         next: {
@@ -527,7 +536,8 @@ const DemoPage = GelatoPage.extend({
               width: '100%'
             },
             dialog: {
-              top: '100px',
+              top: app.isMobile() ? '49px' : '100px',
+              'max-height': app.isMobile() ? 'calc(100% - 49px)' : 'calc(100% - 49px)',
               width: '100%'
             }
           }
@@ -562,22 +572,22 @@ const DemoPage = GelatoPage.extend({
       },
       next: {
         dialogTitle: app.locale('pages.demo.firstCharactersTitle'),
-        showTitle: true,
+        showTitle: !mobile,
         body: app.locale('pages.demo.firstCharacters2Body' + this.lang),
         showConfirmButton: false,
         style: {
           dialog: {
             width: mobile ? 'auto' : '53%',
             left: mobile ? '0%' : '48%',
-            top: mobile ? '1%' : '20%',
-            height: mobile ? '19%' : 'auto'
+            top: mobile ? '89px' : '20%',
+            height: mobile ? '195px' : 'auto'
           },
           backdrop: {
             left: mobile ? '0%' : '50%',
             width: mobile ? '100%' : '50%',
-            top: '0px',
+            top: mobile ? '90px': '0px',
             bottom: mobile ? 'auto' : '0%',
-            height: mobile ? '150px' : 'auto'
+            height: mobile ? '159px' : 'auto'
           }
         }
       }

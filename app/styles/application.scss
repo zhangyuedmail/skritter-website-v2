@@ -17,6 +17,11 @@ gelato-application {
   position: relative;
 }
 
+.mobile {
+  .modal-backdrop {
+    z-index: 6000;
+  }
+}
 .modal-backdrop {
   width: 100%;
   left: 0%;
