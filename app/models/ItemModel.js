@@ -206,9 +206,9 @@ const ItemModel = SkritterModel.extend({
     // Don't let anything long-term be more ready than 250%; deprioritize the
     // really overdue long shots so that the more doable stuff comes first
     // (down to 150%).
-    if (readiness > 2.5 && scheduledAgo > 600) {
-      readiness = Math.max(1.5, 3.5 - Math.pow(readiness / 2.5, .33333));
-    }
+    // if (readiness > 2.5 && scheduledAgo > 600) {
+    //   readiness = Math.max(1.5, 3.5 - Math.pow(readiness / 2.5, .33333));
+    // }
 
     return readiness;
   },
