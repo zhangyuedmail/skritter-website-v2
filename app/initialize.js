@@ -3,10 +3,11 @@ window._ = require('lodash');
 window.Backbone = require('backbone');
 
 window.async = require('async');
-window.CalHeatMap = require('cal-heatmap');
 window.moment = require('moment');
 window.wanakana = require('wanakana');
 window.WebFont = require('webfontloader');
+window.CalHeatMap = require('cal-heatmap');
+window.Highcharts = require('highcharts');
 
 require('babel-polyfill');
 require('bootstrap');
