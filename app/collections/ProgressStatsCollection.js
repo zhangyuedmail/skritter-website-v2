@@ -428,9 +428,11 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Number}
    */
   getDailyItemsReviewed: function() {
-    var total = 0;
-    var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
-    var stat = this.get(today);
+    const today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
+    const stat = this.get(today);
+
+    let total = 0;
+
     if (stat) {
       total += stat.get('char').defn.studied.day;
       total += stat.get('char').rdng.studied.day;
@@ -441,7 +443,8 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
       total += stat.get('word').rune.studied.day;
       total += stat.get('word').tone.studied.day;
     }
-    return total;
+
+    return total || 0;
   },
 
   /**
@@ -449,8 +452,9 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Number}
    */
   getDailyTimeStudied: function() {
-    var today = moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD');
-    var stat = this.get(today);
+    const  today = moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD');
+    const  stat = this.get(today);
+
     return stat ? stat.get('timeStudied').day : 0;
   },
 
@@ -459,9 +463,10 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Number}
    */
   getGoalItemPercent: function() {
-    var goal = app.user.getGoal();
-    var totalItems = app.user.data.stats.getDailyItemsReviewed();
-    var percentItems = Math.round(totalItems / goal.value * 100);
+    const goal = app.user.getGoal();
+    const totalItems = app.user.stats.getDailyItemsReviewed();
+    const percentItems = Math.round(totalItems / goal.items * 100);
+
     return percentItems > 100 ? 100 : parseFloat(percentItems.toFixed(2));
   },
 
@@ -470,9 +475,10 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Number}
    */
   getGoalTimePercent: function() {
-    var goal = app.user.getGoal();
-    var totalTime = app.user.data.stats.getDailyTimeStudied() / 60;
-    var percentTime = Math.round(totalTime / goal.value * 100);
+    const goal = app.user.getGoal();
+    const totalTime = app.user.stats.getDailyTimeStudied() / 60;
+    const percentTime = Math.round(totalTime / goal.time * 100);
+
     return percentTime > 100 ? 100 : parseFloat(percentTime.toFixed(2));
   },
 

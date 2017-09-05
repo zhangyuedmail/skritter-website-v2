@@ -1,5 +1,5 @@
 const GelatoPage = require('gelato/page');
-const DashboardGoal = require('components/dashboard/DashboardStatusComponent');
+const DashboardGoal = require('components/dashboard/DashboardGoalComponent');
 const DashboardMonth = require('components/dashboard/DashboardMonthComponent');
 const DashboardProgress = require('components/dashboard/DashboardProgressComponent');
 const DashboardQueue = require('components/dashboard/DashboardQueueComponent');

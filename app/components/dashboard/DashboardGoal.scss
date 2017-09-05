@@ -12,25 +12,11 @@ gelato-component[data-name='dashboard-goal'] {
   }
 
   #doughnut-column {
-    margin-left: 20px;
+    margin-top: 20px;
   }
 
-  #items-column {
-    margin-top: 40px;
-    .text {
-      color: #8c9196;
-      display: inline-block;
-      font-family: $font-ubuntu;
-      font-size: 16px;
-      font-weight: 300;
-    }
-    .value {
-      color: #87a64b;
-      display: inline-block;
-      font-family: $font-slab;
-      font-size: 36px;
-      font-weight: 300;
-    }
+  #option-column {
+    margin-top: 80px;
   }
 
 }

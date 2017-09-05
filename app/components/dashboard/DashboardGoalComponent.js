@@ -10,7 +10,7 @@ const DashboardGoalComponent = GelatoComponent.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./DashboardGoalComponent'),
+  template: require('./DashboardGoal'),
 
   /**
    * @method initialize
@@ -27,6 +27,7 @@ const DashboardGoalComponent = GelatoComponent.extend({
    */
   render: function() {
     this.renderTemplate();
+
     this.doughnut = new Highcharts.Chart({
       chart: {
         backgroundColor: 'transparent',
@@ -74,8 +75,10 @@ const DashboardGoalComponent = GelatoComponent.extend({
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
       }
     });
-    //this.updateDoughnut();
-    //this.updateItems();
+
+    this.listenTo(app.user.stats, 'sync', this.updateDoughnut);
+    this.listenTo(app.user.stats, 'sync', this.updateText);
+
     return this;
   },
 
@@ -107,30 +110,38 @@ const DashboardGoalComponent = GelatoComponent.extend({
    * @method updateDoughnut
    */
   updateDoughnut: function() {
-    var goal = app.user.getGoal();
-    var percent = 0;
-    switch (goal.type) {
+    const goal = app.user.getGoal();
+    let percent = 0;
+
+    switch (app.user.get('goalType')) {
       case 'items':
-        var totalReviews = app.user.data.stats.getDailyItemsReviewed();
+      const totalReviews = app.user.stats.getDailyItemsReviewed();
+
         this.doughnut.setTitle({
-          text: totalReviews + '<br>items',
+          text: totalReviews + ' / ' + goal.items  + '<br>items',
           align: 'center',
           verticalAlign: 'middle',
           y: 0
         });
-        percent = app.user.data.stats.getGoalItemPercent();
+
+        percent = app.user.stats.getGoalItemPercent();
+
         break;
       case 'time':
-        var totalTime = app.user.data.stats.getDailyTimeStudied();
+        const totalTime = app.user.stats.getDailyTimeStudied();
+
         this.doughnut.setTitle({
-          text: moment(totalTime * 1000).format('mm:ss') + '<br>minutes',
+          text: moment(totalTime * 1000).format('m') + ' / '  + goal.time + '<br>minutes',
           align: 'center',
           verticalAlign: 'middle',
           y: 0
         });
-        percent = app.user.data.stats.getGoalTimePercent();
+
+        percent = app.user.stats.getGoalTimePercent();
+
         break;
     }
+
     this.doughnut.series[0].setData([
       {name: "Completed", color: '#c5da4b', y: percent},
       {name: "Remaining", color: '#efeef3', y: 100 - percent}
@@ -138,15 +149,15 @@ const DashboardGoalComponent = GelatoComponent.extend({
   },
 
   /**
-   * @method updateItems
+   * @method updateText
    */
-  updateItems: function() {
-    if (app.user.data.items.length) {
-      this.$('#items-added .value').text(app.user.data.items.getAddedCount());
-    }
-    if (app.user.data.stats.length) {
-      this.$('#items-reviewed .value').text(app.user.data.stats.getDailyItemsReviewed());
-    }
+  updateText: function() {
+    // if (app.user.data.items.length) {
+    //   this.$('#items-added .value').text(app.user.data.items.getAddedCount());
+    // }
+    // if (app.user.data.stats.length) {
+    //   this.$('#items-reviewed .value').text(app.user.data.stats.getDailyItemsReviewed());
+    // }
   }
 
 });

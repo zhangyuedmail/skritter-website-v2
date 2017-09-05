@@ -1,13 +1,9 @@
 gelato-component(data-name='dashboard-goal')
   .row
-    #doughnt-column.col-xs-6
+    #doughnut-column.col-xs-6
       #goal-doughnut
-    #items-column.col-xs-6
-      #items-reviewed
-        .value -
-        | &nbsp;&nbsp;&nbsp;
-        .text items reviewed
-      #items-added
-        .value -
-        | &nbsp;&nbsp;&nbsp;
-        .text items added
+    #option-column.col-xs-6
+      if view.dueCount !== 0 || (view.vocablists.state === 'standby' && view.vocablists.length > 0)
+        a.btn.btn-fixed.btn-success(type="button", href="/study") Study
+      else
+        a.btn.btn-fixed.btn-success(type="button", href="/vocablists/browse") Add a list to study
