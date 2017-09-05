@@ -37,7 +37,8 @@ const UserModel = SkritterModel.extend({
     hideDefinition: false,
     hideRatingNotice: false,
     gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
-    goals: {ja: {items: 20}, zh: {items: 20}},
+    goalType: 'item',
+    goalValues: {ja: {items: 100, time: 10}, zh: {items: 100, time: 10}},
     lastChineseItemUpdate: 0,
     lastJapaneseItemUpdate: 0,
     readingChinese: 'pinyin',
@@ -200,6 +201,31 @@ const UserModel = SkritterModel.extend({
    */
   getLastItemUpdate: function() {
     return app.isChinese() ? this.get('lastChineseItemUpdate') : this.get('lastJapaneseItemUpdate')
+  },
+
+  /**
+   * @method getGoal
+   * @returns {Object}
+   */
+  getGoal: function() {
+    return this.get('goalValues')[app.getLanguage()];
+  },
+
+  /**
+   * @method setGoal
+   * @param {String} type
+   * @param {String} value
+   * @returns {Object}
+   */
+  setGoal: function(type, value) {
+    const goal = this.get('goalValues');
+
+    goal[app.getLanguage()][type] = value;
+
+    this.set('goalType', type);
+    this.set('goalValues', goal);
+
+    this.cache();
   },
 
   /**
