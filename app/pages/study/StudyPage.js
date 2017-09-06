@@ -177,8 +177,7 @@ const StudyPage = GelatoPage.extend({
         },
         (callback) => {
           const today = moment().format(app.config.dateFormatApp);
-          const yesterday = moment().startOf('day').subtract(1, 'days').format(app.config.dateFormatApp);
-          app.user.stats.getNumItemsAddedInPeriod(yesterday, today)
+          this._getNumItemsAddedToday(today)
             .catch(callback)
             .then((added) => {
               this.itemsAddedToday = added;
@@ -401,12 +400,19 @@ const StudyPage = GelatoPage.extend({
     return GelatoPage.prototype.remove.call(this);
   },
 
+  /**
+   * Determines whether an item should be auto-added
+   * @param {UserItem} currentItem the current item that the user is studying
+   * @returns {boolean} whether an item should be added
+   */
   shouldAutoAddItem: function(currentItem) {
     if (!app.isDevelopment()) {
       return;
     }
+    const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
+    const maxItemsPerDay = app.config.maxAutoAddItems * (app.user.get(targetLangName + 'StudyParts').length);
 
-    if (this.items.dueCount > 50 || this.itemsAddedToday > 10) {
+    if (this.items.dueCount > 50 || this.itemsAddedToday > maxItemsPerDay) {
       // return false;
     }
 
@@ -424,6 +430,12 @@ const StudyPage = GelatoPage.extend({
 
     if (diff*diff < 0.5) {
       // return true;
+    }
+
+    // for the case of accounts with barely anything to study and we haven't added much yet,
+    // let's keep adding things
+    if (this.items.dueCount < 10 && this.items.dueCount > 0 && this.itemsAddedToday < maxItemsPerDay / 2) {
+      return true;
     }
 
     return false;
@@ -475,6 +487,34 @@ const StudyPage = GelatoPage.extend({
 
     const componentName = app.isMobile() ? 'mobile-study-prompt' : 'study-prompt';
     this.prompt.$el.find('gelato-component[data-name="' + componentName + '"]').toggleClass('fetching-items', loading);
+  },
+
+  /**
+   * Gets the number of items a user has added today
+   * @param {Moment} today today's date
+   * @returns {Promise}
+   * @private
+   */
+  _getNumItemsAddedToday: function(today) {
+    return new Promise((resolve, reject) => {
+      // TODO: probably need to store/get this value locally better if user is offline
+      $.ajax({
+        url: app.getApiUrl(2) + 'gae/items/added',
+        type: 'GET',
+        headers: app.user.session.getHeaders(),
+        context: this,
+        data: {
+          languageCode: app.getLanguage(),
+          startDate: today.format(app.config.dateFormatApp)
+        },
+        error: function(error) {
+          reject(error);
+        },
+        success: function(result) {
+          resolve(result.added);
+        }
+      });
+    });
   },
 
   /**
