@@ -3,6 +3,7 @@ const DashboardGoal = require('components/dashboard/DashboardGoalComponent');
 const DashboardMonth = require('components/dashboard/DashboardMonthComponent');
 const DashboardProgress = require('components/dashboard/DashboardProgressComponent');
 const DashboardQueue = require('components/dashboard/DashboardQueueComponent');
+const DashboardStatus = require('components/dashboard/DashboardStatusComponent');
 const DashboardTotal = require('components/dashboard/DashboardTotalComponent');
 const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 const MobileNavbar = require('components/navbars/NavbarMobileDashboardComponent');
@@ -54,7 +55,13 @@ const DashboardPage = GelatoPage.extend({
       this.loadStart = window.performance.now();
     }
 
-    this._views['goal'] = new DashboardGoal();
+    if (app.config.goalModeEnabled) {
+      this._views['goal'] = new DashboardGoal();
+    } else {
+      this._views['goal'] = new DashboardStatus();
+    }
+    
+
     this._views['queue'] = new DashboardQueue();
     this._views['expiration'] = new ExpiredNotification();
 

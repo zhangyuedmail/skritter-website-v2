@@ -47,6 +47,12 @@ module.exports = {
   emailRegexp: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
 
   /**
+   * Show all the fancy goal mode related stuff?
+   * @type {Boolean}
+   */
+  goalModeEnabled: false,
+
+  /**
    * How long to wait in ms before advancing to the next prompt after the user
    * clicks a grading button
    * @type {Number}
