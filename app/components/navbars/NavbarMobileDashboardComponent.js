@@ -28,7 +28,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     }
 
     this.showBackBtn = viewOptions.showBackBtn;
-    this.showSyncBtn = true;
+    this.showSyncBtn = app.config.offlineEnabled;
   },
 
   /**
