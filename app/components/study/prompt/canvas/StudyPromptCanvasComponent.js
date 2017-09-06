@@ -130,9 +130,22 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     } else {
       stage = new createjs.Stage(canvas);
     }
-    createjs.Ticker.setFPS(32);
-    createjs.Ticker.removeEventListener('tick', stage);
-    createjs.Ticker.addEventListener('tick', stage);
+
+    const ticker = createjs.Ticker;
+    ticker.setFPS(32);
+    ticker.removeEventListener('tick', stage);
+    ticker.addEventListener('tick', stage);
+
+    if (app.isDevelopment() && app.user.get('showCanvasFPS')) {
+      $('gelato-application').prepend('<div id="fps-counter" style="position:absolute;top:100px;z-index:99999;color:#EEE;background:#111;"></div>');
+      const fpsCounter = $('#fps-counter');
+      ticker.addEventListener('tick', () => {
+        if (this.prompt.reviews && this.prompt.reviews.part === 'rune') {
+          fpsCounter.text(ticker.getMeasuredFPS().toFixed(2) + ' FPS, ' + ticker.getMeasuredTickTime());
+        }
+      });
+    }
+
     createjs.Touch.enable(stage);
     stage.autoClear = true;
     stage.enableDOMEvents(true);
