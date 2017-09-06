@@ -21,6 +21,7 @@ gelato-page(data-name='account-settings-study')
                     option(value="ja", selected=(app.getLanguage() === 'ja')) Japanese
               .form-group
                 label.col-sm-3.control-label(for="field-source-language") Source language
+                  .option-desc Definitions fall back to English when not available in other languages.
                 .col-sm-9
                   select#field-source-language.form-control
                     for lang in view.sourceLanguages
@@ -40,7 +41,7 @@ gelato-page(data-name='account-settings-study')
                     label.checkbox-inline
                       input(type="checkbox", name="styles", value="trad", checked=user.get('addTraditional'))
                       | Traditional
-              hr
+                hr
 
               .form-group
                 label.col-sm-3.control-label(for="field-parts") Parts adding
@@ -67,6 +68,7 @@ gelato-page(data-name='account-settings-study')
 
               .form-group
                 label.col-sm-3.control-label(for="field-retention-index") Retention rate
+                  .option-desc Lower is more efficient, while higher better ensures you remember everything.
                 .col-sm-9
                   select#field-retention-index.form-control
                     - var retentionIndex = user.get('retentionIndex');
@@ -80,13 +82,15 @@ gelato-page(data-name='account-settings-study')
                 label.col-sm-3.control-label(for="field-add-frequency") Add word frequency
                   .option-desc Automatic adding has been temporarily disabled.
                 .col-sm-9
-                  select#field-add-frequency.form-control(disabled)
+                  select#field-add-frequency.form-control
                     - var addFrequency = user.get('addFrequency');
-                    // option(value="90", selected=(addFrequency === 90)) Fast
-                    // option(value="70", selected=(addFrequency === 70)) Normal
-                    // option(value="60", selected=(addFrequency === 60)) Slow
-                    // option(value="0", selected=(addFrequency === 60)) Manual
-                    option(value=addFrequency, selected) Manual
+                    if app.isDevelopment()
+                      option(value="90", selected=(addFrequency === 90)) Fast
+                      option(value="70", selected=(addFrequency === 70)) Normal
+                      option(value="60", selected=(addFrequency === 60)) Slow
+                      option(value="0", selected=(addFrequency <= 60)) Manual
+                    else
+                      option(value="0", selected=(addFrequency <= 60)) Manual
 
               //.form-group
               //  label.col-sm-3.control-label(for="field-section-movement") Section movement
@@ -120,7 +124,7 @@ gelato-page(data-name='account-settings-study')
                         input#field-study-rare-writings(type="checkbox", checked=user.get('studyRareWritings'))
                         .toggle-switch-slider.round
               .form-group
-                label.col-sm-3.control-label(for="field-auto-advance") Auto advance prompts (beta)
+                label.col-sm-3.control-label(for="field-auto-advance") Auto advance prompts
                   if app.isChinese()
                     .option-desc Has a 1 second delay before advancing on tone and writing prompts
                   else
@@ -147,7 +151,7 @@ gelato-page(data-name='account-settings-study')
 
               hr
 
-              if user.get('isAdmin')
+              if user.get('isAdmin') || app.isDevelopment()
                 .form-group
                   label.col-sm-3.control-label(for="field-disable-color") Disable grading color
                   .col-sm-9
@@ -168,6 +172,7 @@ gelato-page(data-name='account-settings-study')
               if app.isChinese() && !app.isMobile()
                 .form-group
                   label.col-xs-3.control-label(for="field-pinyin-input") Disable pinyin input
+                    .option-desc You wont be asked to type the pinyin during reading prompts.
                   .col-xs-9
                     .checkbox
                       label.toggle-switch
@@ -192,6 +197,7 @@ gelato-page(data-name='account-settings-study')
 
               .form-group
                 label.col-xs-3.control-label(for="field-squigs") Raw squigs
+                  .option-desc Show your own handwriting to test if you really know the character.
                 .col-xs-9
                   .checkbox
                     label.toggle-switch
@@ -209,6 +215,7 @@ gelato-page(data-name='account-settings-study')
 
               .form-group
                 label.col-xs-3.control-label(for="field-teaching-mode") Teaching mode
+                  .option-desc New characters will display a stroke order tracing overlay the first time you encounter them.
                 .col-xs-9
                   .checkbox
                     label.toggle-switch

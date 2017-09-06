@@ -58,6 +58,7 @@ const GelatoApplication = Backbone.View.extend({
 
     // add a specific class if we're on mobile, and only render the footer if we're on mobile
     if (this.isMobile()) {
+      $('body').addClass('mobile');
       this.$el.addClass('mobile');
     }
 

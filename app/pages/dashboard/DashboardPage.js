@@ -1,7 +1,9 @@
 const GelatoPage = require('gelato/page');
-const DashboardGoal = require('components/dashboard/DashboardStatusComponent');
+const DashboardGoal = require('components/dashboard/DashboardGoalComponent');
 const DashboardMonth = require('components/dashboard/DashboardMonthComponent');
+const DashboardProgress = require('components/dashboard/DashboardProgressComponent');
 const DashboardQueue = require('components/dashboard/DashboardQueueComponent');
+const DashboardStatus = require('components/dashboard/DashboardStatusComponent');
 const DashboardTotal = require('components/dashboard/DashboardTotalComponent');
 const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 const MobileNavbar = require('components/navbars/NavbarMobileDashboardComponent');
@@ -15,7 +17,9 @@ const MobileNavbar = require('components/navbars/NavbarMobileDashboardComponent'
 const DashboardPage = GelatoPage.extend({
 
   events: {
-    'click #feedback-btn': 'onFeedbackBtnClicked'
+    'click #feedback-btn': 'onFeedbackBtnClicked',
+    'click #rating-btn': 'onRatingBtnClicked',
+    'click #rating-cancel-btn': 'onRatingCancelBtnClicked'
   },
 
   /**
@@ -51,14 +55,22 @@ const DashboardPage = GelatoPage.extend({
       this.loadStart = window.performance.now();
     }
 
-    if (!app.isMobile()) {
+    if (app.config.goalModeEnabled) {
+      this._views['goal'] = new DashboardGoal();
+    } else {
+      this._views['goal'] = new DashboardStatus();
+    }
+    
+
+    this._views['queue'] = new DashboardQueue();
+    this._views['expiration'] = new ExpiredNotification();
+
+    if (app.isMobile()) {
+      this._views['progress'] = new DashboardProgress();
+    } else {
       this._views['month'] = new DashboardMonth();
       this._views['total'] = new DashboardTotal();
     }
-
-    this._views['goal'] = new DashboardGoal();
-    this._views['queue'] = new DashboardQueue();
-    this._views['expiration'] = new ExpiredNotification();
 
     if (app.config.recordLoadTimes) {
       this.componentsLoaded = {
@@ -73,7 +85,8 @@ const DashboardPage = GelatoPage.extend({
       this.listenTo(this._views['queue'], 'component:loaded', this.onComponentLoaded);
     }
 
-    this.listenTo(this._views['expiration'], 'fetch-data:failed', this.subscriptionFetchFailed);
+    // this.listenTo(this._views['expiration'], 'fetch-data:failed', this.subscriptionFetchFailed);
+    this.listenTo(app.user.subscription, 'state:standby', this.onSubscriptionSync);
 
     app.mixpanel.track('Viewed dashboard page');
 
@@ -89,6 +102,10 @@ const DashboardPage = GelatoPage.extend({
 
     if (this._views['month']) {
       this._views['month'].setElement('#dashboard-month-container').render();
+    }
+
+    if (this._views['progress']) {
+      this._views['progress'].setElement('#dashboard-progress-container').render();
     }
 
     if (this._views['total']) {
@@ -133,8 +150,52 @@ const DashboardPage = GelatoPage.extend({
     app.showFeedbackDialog();
   },
 
-  subscriptionFetchFailed: function() {
+  onRatingBtnClicked: function() {
+    if (app.isAndroid()) {
+      if (app.getLanguage() === 'zh') {
+        plugins.core.openGooglePlay('com.inkren.skritter.chinese');
+      } else {
+        plugins.core.openGooglePlay('com.inkren.skritter.japanese');
+      }
+    }
 
+    if (app.isIOS()) {
+      if (app.getLanguage() === 'zh') {
+        window.open('itms-apps://itunes.apple.com/app/skritter-chinese/id520277126', '_system');
+      } else {
+        window.open('itms-apps://itunes.apple.com/app/skritter-japanese/id548801568', '_system');
+      }
+    }
+
+    this.$('.rating-notice').hide();
+
+    app.user.set('hideRatingNotice', true);
+    app.user.cache();
+  },
+
+  onRatingCancelBtnClicked: function() {
+    this.$('.rating-notice').hide();
+
+    app.user.set('hideRatingNotice', true);
+    app.user.cache();
+  },
+
+  onSubscriptionSync: function(sub) {
+    const $ratingNotice = this.$('.rating-notice');
+
+    if (app.user.get('hideRatingNotice')) {
+      $ratingNotice.addClass('hidden');
+
+      return;
+    }
+
+    if (!sub.isSubscribed()) {
+      $ratingNotice.addClass('hidden');
+
+      return;
+    }
+
+    $ratingNotice.removeClass('hidden');
   }
 });
 

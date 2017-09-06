@@ -43,6 +43,22 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.preloadingState = 'standby';
     this.sorted = null;
 
+    /**
+     * Keeps track of what items the queue requests. If there's a mismatch between a user's Queue and UserItems,
+     * a lot of nulls will be returned. When this is detected, this flag should be turned true.
+     * On two subsequent requests that return > 90% nulls for items, if this is already set to true,
+     * the queue will automatically be reset and the page reloaded, which should fix the issue.
+     * @type {boolean}
+     */
+    this.queuePossiblyStale = false;
+
+    /**
+     * Whether the queue is currently being reset
+     * @type {boolean}
+     * @private
+     */
+    this._resettingQueue = false;
+
     this.listenTo(this.reviews, 'update:due', this.updateDueCount);
   },
 
@@ -249,79 +265,107 @@ const ItemCollection = BaseSkritterCollection.extend({
 
         this.fetchingState = 'fetching';
 
-        async.series(
-          [
-            (callback) => {
-              ScreenLoader.post('Updating cache');
+        if (app.user.offline.isReady()) {
+          async.series(
+            [
+              async callback => {
+                const result = await app.user.offline.loadNext();
 
-              $.ajax({
-                url: app.getApiUrl(2) + 'queue/update',
-                type: 'GET',
-                headers: app.user.session.getHeaders(),
-                data: {
-                  languageCode: app.getLanguage()
-                },
-                error: (error) => callback(error),
-                success: () => callback()
-              });
-            },
-            (callback) => {
-              ScreenLoader.post('Fetching next');
+                _.forEach(this.add(result.Items), item => {
+                  item._loaded = true;
+                  item._queue = true;
+                });
 
-              $.ajax({
-                url: app.getApiUrl(2) + 'queue/next',
-                type: 'GET',
-                headers: app.user.session.getHeaders(),
-                data: {
-                  languageCode: app.getLanguage(),
-                  limit: options.limit,
-                  lists: options.lists || app.user.getFilteredLists().join('|'),
-                  parts: app.user.getFilteredParts().join('|'),
-                  sections: options.sections,
-                  styles: app.user.getFilteredStyles().join('|')
-                },
-                error: error => {
-                  callback(error);
-                },
-                success: result => {
-                  this.reset();
+                this.add(result.ContainedItems);
 
-                  _.forEach(
-                    this.add(result),
-                    (model) => {
-                      model._queue = true;
-                    }
-                  );
+                this.vocabs.add(result.Vocabs);
 
-                  callback();
-                }
-              });
-            }
-          ],
-          (error) => {
-            if (error) {
+                app.user.characters.add(result.Characters);
+
+                callback();
+              }
+            ],
+            (error) => {
               this.fetchingState = 'standby';
-              reject(error);
-              return;
+
+              if (error) {
+                reject(error);
+              } else {
+                resolve();
+              }
             }
+          );
+        } else {
+          async.series(
+            [
+              (callback) => {
+                ScreenLoader.post('Updating cache');
 
-            // preload stuff because we need it anyways
-            this.preloadNext({limit: 5})
-              .catch(
-                (error) => {
-                  this.fetchingState = 'standby';
-                  reject(error);
-                }
-              )
-              .then(
-                () => {
-                  this.fetchingState = 'standby';
-                  resolve();
-                }
-              );
-          }
-        );
+                $.ajax({
+                  url: app.getApiUrl(2) + 'queue/update',
+                  type: 'GET',
+                  headers: app.user.session.getHeaders(),
+                  data: {
+                    languageCode: app.getLanguage()
+                  },
+                  error: (error) => callback(error),
+                  success: () => callback()
+                });
+              },
+              (callback) => {
+                ScreenLoader.post('Fetching next');
 
+                $.ajax({
+                  url: app.getApiUrl(2) + 'queue/next',
+                  type: 'GET',
+                  headers: app.user.session.getHeaders(),
+                  data: {
+                    languageCode: app.getLanguage(),
+                    limit: options.limit,
+                    lists: options.lists || app.user.getFilteredLists().join('|'),
+                    parts: app.user.getFilteredParts().join('|'),
+                    sections: options.sections,
+                    styles: app.user.getFilteredStyles().join('|')
+                  },
+                  error: error => {
+                    callback(error);
+                  },
+                  success: result => {
+                    this.reset();
+
+                    _.forEach(this.add(result), model => {
+                      model._queue = true;
+                    });
+
+                    callback();
+                  }
+                });
+              }
+            ],
+            (error) => {
+              if (error) {
+                this.fetchingState = 'standby';
+                reject(error);
+                return;
+              }
+
+              // preload stuff because we need it anyways
+              this.preloadNext({limit: 5})
+                .catch(
+                  (error) => {
+                    this.fetchingState = 'standby';
+                    reject(error);
+                  }
+                )
+                .then(
+                  () => {
+                    this.fetchingState = 'standby';
+                    resolve();
+                  }
+                );
+            }
+          );
+        }
       }
     );
   },
@@ -367,13 +411,11 @@ const ItemCollection = BaseSkritterCollection.extend({
 
           // exclude rune items without stroke data
           if (model.isPartRune() && !model.isCharacterDataLoaded()) {
-            console.log('SKIPPING ITEM:', model.id);
-
             // exclude the rune item from the local queue
             model._queue = false;
 
             // move the item into future on the server
-            model.bump();
+            // model.bump();
 
             return false;
           }
@@ -386,7 +428,7 @@ const ItemCollection = BaseSkritterCollection.extend({
               model._queue = false;
 
               // move the item into future on the server
-              model.bump();
+              // model.bump();
 
               return false;
             }
@@ -417,6 +459,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     this.vocabs.add(response.Vocabs);
     this.vocabs.decomps.add(response.Decomps);
     this.vocabs.sentences.add(response.Sentences);
+
     return response.Items.concat(response.ContainedItems || []);
   },
 
@@ -472,12 +515,22 @@ const ItemCollection = BaseSkritterCollection.extend({
           error: (error) => {
             reject(error);
           },
-          success: (result) => {
+          success: (collection, result) => {
+            // check for null items to determine if queue reset is needed
+            const nullItems = result.Items.filter(i => i === null);
+            if (nullItems.length / result.Items.length >= .9) {
+              if (!this.queuePossiblyStale) {
+                this.queuePossiblyStale = true;
+              } else {
+                this.resetQueue(true);
+              }
+            }
+
             // mark items that have successfully been loaded from the server
             _.forEach(
               itemIds,
               (itemId) => {
-                const item = result.get(itemId);
+                const item = collection.get(itemId);
 
                 if (item) {
                   item._loaded = true;
@@ -512,6 +565,47 @@ const ItemCollection = BaseSkritterCollection.extend({
   reset: function() {
     this.vocabs.reset();
     return BaseSkritterCollection.prototype.reset.apply(this, arguments);
+  },
+
+  /**
+   * Resets a user's queue for the current language
+   * @param {Boolean} [reload] whether to reload the page after resetting
+   */
+  resetQueue: function(reload) {
+    return new Promise((resolve, reject) => {
+
+      // I know, UI code in a model. Sorry :-(
+      ScreenLoader.post('Synching queue');
+
+      if (this._resettingQueue) {
+        resolve();
+        return;
+      }
+
+      this._resettingQueue = true;
+
+      $.ajax({
+        data: {
+          languageCode: app.getLanguage()
+        },
+        headers: app.user.session.getHeaders(),
+        type: 'GET',
+        url: app.getApiUrl(2) + 'queue/reset/' + app.user.id,
+        error: (error) => {
+          ScreenLoader.post('Queue synchronization error. Please contact the team@skritter.com to fix this.');
+          this._resettingQueue = false;
+          reject(error);
+        },
+        success: () => {
+          this._resettingQueue = false;
+          resolve();
+
+          if (reload) {
+            app.reload();
+          }
+        }
+      });
+    });
   },
 
   /**

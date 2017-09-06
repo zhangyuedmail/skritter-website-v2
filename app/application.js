@@ -144,20 +144,24 @@ module.exports = GelatoApplication.extend({
   capturePlatformInfo: function() {
     if (!this.isDevelopment() && this.user.isLoggedIn()) {
       const platformData = {
-        client: this.isAndroid() ? 'android' : 'web',
+        client: (this.isAndroid() && 'android') || (this.isIOS() && 'ios') || 'web',
         // device: this.isMobile() && window.cordova ? : navigator.userAgent,
         lang: this.getLanguage(),
         user: this.user.id,
         version: config.version
       };
+      try {
+        $.ajax({
+          url: app.getApiUrl(2) + 'usage/platform',
+          headers: app.user.session.getHeaders(),
+          context: this,
+          type: 'POST',
+          data: platformData,
+          error: function(error) {}
+        });
+      } catch(e) {
 
-      $.ajax({
-        url: app.getApiUrl(2) + 'usage/platform',
-        headers: app.user.session.getHeaders(),
-        context: this,
-        type: 'POST',
-        data: platformData
-      });
+      }
     }
   },
   /**
@@ -843,18 +847,16 @@ module.exports = GelatoApplication.extend({
   start: function() {
     GelatoApplication.prototype.start.apply(this, arguments);
 
-    const self = this;
-
-    //sets a global app object with installed dictionary states
+    // sets a global app object with installed dictionary states
     this.refreshAvailableDicts();
 
-    //load cached user data if it exists
+    // load cached user data if it exists
     this.user.set(this.getLocalStorage(this.user.id + '-user'));
     this.user.session.set(this.getLocalStorage(this.user.id + '-session'));
     this.user.on('state', this.user.cache);
     this.user.session.on('state', this.user.session.cache);
 
-    //set raygun tracking for logged in user
+    // set raygun tracking for logged in user
     if (this.user.isLoggedIn()) {
       Raven.setUserContext({
         id: this.user.id,
@@ -869,12 +871,12 @@ module.exports = GelatoApplication.extend({
         'Language Code': app.getLanguage()
       });
 
-      //cleanup unused indexedDB instance
+      // cleanup unused indexedDB instance
       if (window.indexedDB) {
         window.indexedDB.deleteDatabase(this.user.id + '-database');
       }
 
-      //lets start listening to global keyboard events
+      // lets start listening to global keyboard events
       this.listener = new window.keypress.Listener();
       this.listener.simple_combo(
         'shift a',
@@ -908,7 +910,7 @@ module.exports = GelatoApplication.extend({
       'platform': this.getPlatform()
     });
 
-    //use async for cleaner loading code
+    // use async for cleaner loading code
     async.series(
       [
         (callback) => {
@@ -931,8 +933,7 @@ module.exports = GelatoApplication.extend({
                 callback();
               },
               function(error) {
-                // TODO: get refresh tokens working properly
-                // if the session token is invalid, log the user out
+                // TODO: get refresh tokens working properly if the session token is invalid, log the user out
                 if (error.responseJSON && error.responseJSON.statusCode === 400 &&
                   error.responseJSON.message.indexOf("No such refresh token") > -1) {
                   app.user.logout();
@@ -942,6 +943,28 @@ module.exports = GelatoApplication.extend({
               }
             );
           }
+        },
+        (callback) => {
+          // skip offline stuff when disabled, no user or mobile not detected
+          if (!this.config.offlineEnabled || !this.user.isLoggedIn() || !this.isMobile()) {
+            callback();
+
+            return;
+          }
+
+          // initialize indexedDB instance for offline
+          this.user.offline.prepare();
+
+          // skip initial sync when data is ready
+          if (this.user.offline.isReady()) {
+            callback();
+
+            return;
+          }
+
+          ScreenLoader.post('Preparing offline study');
+
+          this.user.offline.sync().then(callback);
         }
       ],
       function() {
@@ -961,7 +984,7 @@ module.exports = GelatoApplication.extend({
           setTimeout(navigator.splashscreen.hide, 1000);
 
           if (app.isAndroid()) {
-            StatusBar.backgroundColorByHexString('#1c1206');
+            StatusBar.backgroundColorByHexString('#38240c');
           }
         }
       }

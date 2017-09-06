@@ -1,6 +1,8 @@
 # Directories
 /build
 /cordova
+/cordova-android
+/cordova-ios
 /node_modules
 /output
 /public

@@ -111,7 +111,8 @@ module.exports = {
       "timezoneLabel": "Timezone",
       "timezoneDescription": "The timezone where you are in",
       "userIdLabel": "User ID",
-      "userIdDescription": "Unique system id for your account. Cannot be changed."
+      "userIdDescription": "Unique system id for your account. Cannot be changed.",
+      "errorResetGeneral": "A problem occurred while resetting your account. Please try again."
     },
 
     "accountSetup": {
@@ -150,7 +151,7 @@ module.exports = {
       "allTime": "All Time",
       "goToSubSettings": "Go to your subscription settings",
       "hide": "Hide",
-      "lists": "Lists",
+      "lists": "List Progress",
       "networkUnstable": "Network connection unstable",
       "subExpiredDetails": "Purchase a subscription to study new items and lists.",
       "subscriptionExpired": "Subscription expired",
@@ -188,7 +189,8 @@ module.exports = {
       "bookText": "Start learning from hundreds of textbooks and users' lists, or make your own.",
       "reviewHeader": "Efficient reviewing",
       "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn.",
-      "demoLink": "Try it out now"
+      "demoLink": "Try it out now",
+      "tryItOut": "TRY IT OUT"
     },
 
     "resetPassword": {

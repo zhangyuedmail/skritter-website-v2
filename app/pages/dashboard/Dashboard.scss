@@ -56,6 +56,23 @@ gelato-page[data-name='dashboard'] {
   .margin-top {
     margin-top: 50px;
   }
+
+  .rating-notice {
+    font-weight: 300;
+    font-size: 16px;
+    text-align: center;
+
+    .content {
+      line-height: 1.5;
+      padding: 15px 5px;
+      text-align: left;
+    }
+
+    button {
+      margin-right: 15px;
+      margin-top: 15px;
+    }
+  }
 }
 
 .mobile {

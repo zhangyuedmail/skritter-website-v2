@@ -357,7 +357,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     // to calculate
     if (app.isMobile()) {
       // set prompt height based on toolbar and screen height
-      this.$el.height(app.getHeight() - $('#navbar-container').height() - 10);
+      this.$el.height(app.getHeight() - $('#navbar-container').height() -  ($('.demo-progress-component').height() || 0) - 10);
 
       // set size of panel left for absolute positioning of toolbar buttons
       this.$panelLeft.height(this.getHeight() - this.$panelRight.height());

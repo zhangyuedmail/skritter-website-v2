@@ -3,7 +3,7 @@ const AccountSidebar = require('components/account/AccountSidebarComponent');
 const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 const AvatarSelect = require('dialogs1/avatar-select/AvatarSelectDialog.js');
 const ChangePasswordDialog = require('dialogs1/change-password/view');
-const ResetAllDataDialog = require('dialogs1/reset-all-data/view');
+const ResetAllDataDialog = require('dialogs1/reset-all-data/ResetAllDataDialog.js');
 
 const defaultAvatar = require('data/default-avatar');
 

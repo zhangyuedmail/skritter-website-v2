@@ -18,10 +18,14 @@ module.exports = BootstrapDialog.extend({
       throw new Error('VocablistSettingsDialog requires a vocablist passed in!')
     }
     if (!this.vocablist.get('sections')) {
-      this.vocablist.fetch();
-      //this.listenTo(this.vocablist, 'state', this.render);
+      this.vocablist.fetch({
+        data: {
+          include_user_names: 'true',
+          includeSectionCompletion: 'true'
+        }
+      });
 
-      // Hack until state event and property works.
+      // hack until state event and property works
       this.listenTo(this.vocablist, 'sync', function() {
         this.vocablist.state = 'standby';
         this.renderContent();
@@ -104,7 +108,10 @@ module.exports = BootstrapDialog.extend({
       attributes.currentIndex = 0;
     }
 
-    this.vocablist.set(attributes).save(attributes, {patch: true});
+    this.vocablist.set(attributes).save(attributes, {
+      patch: true,
+      url: app.getApiUrl() + this.vocablist.url() + "?includeSectionCompletion=true"
+    });
 
     this.close();
   }

@@ -8,7 +8,7 @@ gelato-page(data-name='vocablists-browse')
         .col-md-9.main-content
           .title-wrapper
             .title Browse Lists
-            .explaination These are Skritter-reviewed lists for the most popular textbooks and standardized tests
+            .explaination Search for official textbooks or user contributed lists.
           #table-options
             .row
               .col-md-10
@@ -24,15 +24,16 @@ gelato-page(data-name='vocablists-browse')
                 span#list-option.glyphicon.glyphicon-th-list.layout-selector.chosen
               .col-md-1
                 span#grid-option.glyphicon.glyphicon-th-large.layout-selector
-            // TODO: support checkbox filters
-            //- .form-inline
+
+            .form-inline#field-filter-list
               label View only:
               .checkbox
                 label
-                  input#textbooks(type="checkbox" name='textbooks')
+                  input(type="checkbox" value='textbook', checked)
                   span Textbooks
               .checkbox
                 label
-                  input#other-official-lists(type="checkbox" name='other-official')
-                  span Other official lists
+                  input(type="checkbox" value='published')
+                  span User published
+
           #vocablist-container

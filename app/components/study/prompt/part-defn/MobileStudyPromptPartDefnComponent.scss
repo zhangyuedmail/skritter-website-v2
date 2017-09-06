@@ -37,6 +37,11 @@ gelato-component[data-name="mobile-study-prompt-part-defn"] {
     font-size: 28px;
     font-weight: 300;
     margin: 10% 10% 0 10%;
+
+    .highlight {
+      color: $grade1;
+      font-weight: 700;
+    }
   }
 
   .writing {

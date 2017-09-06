@@ -64,6 +64,9 @@ const StudyPage = GelatoPage.extend({
     this.toolbar = new Toolbar({page: this});
     this.vocablists = new Vocablists();
 
+    // will hold a Number that shows
+    this.itemsAddedToday = null;
+
     if (app.user.get('eccentric')) {
       this._views['recipe'] = new Recipes();
     }
@@ -114,6 +117,7 @@ const StudyPage = GelatoPage.extend({
    * whether to suppress messages to the user about the items added if nothing was added.
    */
   addItems: function(silenceNoItems, numToAdd) {
+    const self = this;
     numToAdd = numToAdd || 1;
 
     this.items.addItems(
@@ -142,6 +146,8 @@ const StudyPage = GelatoPage.extend({
               message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.',
               type: 'pastel-success'
             });
+
+            self.itemsAddedToday += added;
           }
         }
         vent.trigger('items:added', !error ? result : null);
@@ -168,6 +174,16 @@ const StudyPage = GelatoPage.extend({
               callback();
             }
           });
+        },
+        (callback) => {
+          const today = moment().format(app.config.dateFormatApp);
+          const yesterday = moment().startOf('day').subtract(1, 'days').format(app.config.dateFormatApp);
+          app.user.stats.getNumItemsAddedInPeriod(yesterday, today)
+            .catch(callback)
+            .then((added) => {
+              this.itemsAddedToday = added;
+              callback();
+            }, callback);
         },
         (callback) => {
           this.items.fetchNext({limit: 30})
@@ -322,10 +338,9 @@ const StudyPage = GelatoPage.extend({
       this.prompt.reviewStatus.render();
       this.prompt.set(this.currentPromptItems);
 
-      // TODO: fix automatic item adding
-      // if (app.user.isItemAddingAllowed() && this.items.dueCount < 5) {
-      //   this.addItems(true);
-      // }
+      if (app.user.isItemAddingAllowed() && this.shouldAutoAddItem(this.currentItem)) {
+        this.addItems(true);
+      }
 
       if (items.length < 5) {
         this.items.preloadNext();
@@ -384,6 +399,34 @@ const StudyPage = GelatoPage.extend({
     Howler.autoSuspend = true;
 
     return GelatoPage.prototype.remove.call(this);
+  },
+
+  shouldAutoAddItem: function(currentItem) {
+    if (!app.isDevelopment()) {
+      return;
+    }
+
+    if (this.items.dueCount > 50 || this.itemsAddedToday > 10) {
+      // return false;
+    }
+
+    // kinda a magic number
+    const addRange = 0.4;
+    const readiness = currentItem.getReadiness();
+    let addFreq = app.user.get('addFrequency') / 100;
+
+    if (addFreq === 0.9) {
+      addFreq = 0.825;
+    }
+
+    const diff = 1 - (readiness - addFreq) / addRange;
+    console.log(`readiness ${readiness}  diff: ${diff}  diff quad: ${diff*diff}`);
+
+    if (diff*diff < 0.5) {
+      // return true;
+    }
+
+    return false;
   },
 
   /**

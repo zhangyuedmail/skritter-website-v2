@@ -1,36 +1,34 @@
 @import "../../styles/_variables";
 
 gelato-component[data-name='dashboard-total'] {
-
   text-align: center;
+
+  .text {
+    font-family: $font-ubuntu;
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  .value {
+    color: #87a64b;
+    font-family: $font-slab;
+    font-size: 36px;
+    font-weight: 300;
+  }
 
   #characters-learned {
     margin-top: 40px;
-    .text {
-      font-family: $font-ubuntu;
-      font-size: 16px;
-      font-weight: 300;
-    }
-    .value {
-      color: #87a64b;
-      font-family: $font-slab;
-      font-size: 36px;
-      font-weight: 300;
-    }
   }
 
   #words-learned {
     margin-top: 20px;
-    .text {
-      font-family: $font-ubuntu;
-      font-size: 16px;
-      font-weight: 300;
-    }
-    .value {
-      color: #87a64b;
-      font-family: $font-slab;
-      font-size: 36px;
-      font-weight: 300;
+  }
+}
+
+.mobile {
+  gelato-component[data-name='dashboard-total'] {
+    #words-learned, #characters-learned {
+      margin-top: 30px;
     }
   }
 }

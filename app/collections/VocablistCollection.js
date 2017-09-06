@@ -34,7 +34,6 @@ const VocablistCollection = BaseSkritterCollection.extend({
     }
 
     if (method === 'read' && app.config.useV2Gets.vocablists) {
-      // options.url = 'https://api.skritter.com/v2/gae/vocablists';
       options.url = app.getApiUrl(2) + 'gae/vocablists';
     }
 

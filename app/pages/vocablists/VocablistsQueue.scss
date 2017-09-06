@@ -5,4 +5,15 @@ gelato-page[data-name='vocablists-queue'] {
   background: $background-primary;
   padding-top: 75px;
 
+  .description-text {
+    color: $grey3;
+    font-family: $font-slab;
+    font-size: 12px;
+    padding-bottom: 30px;
+  }
+
+  .header {
+    margin-bottom: 0;
+  }
+
 }

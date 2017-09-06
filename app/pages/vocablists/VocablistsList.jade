@@ -20,12 +20,12 @@ gelato-page(data-name='vocablists-list')
             .content-details
 
               .row
-                .col-xs-6
+                .col-xs-8
                   if view.editing
                     input.list-name(value=vocablist.get('name'))
                   else
                     .list-name= vocablist.get('name')
-                .col-xs-6.text-right
+                .col-xs-4.text-right
                   if vocablist.isEditable()
                     #editing-buttons
                       if editor.editing

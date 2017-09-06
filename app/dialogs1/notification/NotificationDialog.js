@@ -115,7 +115,7 @@ module.exports = GelatoDialog.extend({
   },
 
   updateValues: function() {
-    this.$('.dialog-title').toggleClass('hidden', !this.dialogTitle).text(this.dialogTitle);
+    this.$('.dialog-title').toggleClass('hidden', !this.dialogTitle || !this.showTitle).text(this.dialogTitle);
     this.$('.button-wrapper').toggleClass('hidden', !this.showConfirmButton);
     this.$('.modal-body').html(this.body);
     if (this.showConfirmButton) {

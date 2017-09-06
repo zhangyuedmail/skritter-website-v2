@@ -1,7 +1,8 @@
 gelato-component(data-name='dashboard-total')
-  #characters-learned
-    .value -
-    .text characters learned
-  #words-learned
-    .value -
-    .text words learned
+  .row
+    #characters-learned(class=app.isMobile() ? 'col-xs-6' : '')
+      .value -
+      .text characters learned
+    #words-learned(class=app.isMobile() ? 'col-xs-6' : '')
+      .value -
+      .text words learned

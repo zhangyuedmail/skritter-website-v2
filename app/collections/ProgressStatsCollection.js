@@ -249,23 +249,27 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {Function} [callbackError]
    */
   fetchToday: function(callbackSuccess, callbackError) {
-    this.fetch({
-      data: {
-        lang: app.getLanguage(),
-        languageCode: app.getLanguage(),
-        start: moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD')
-      },
-      remove: false,
-      success: (model) => {
-        if (typeof callbackSuccess === 'function') {
-          callbackSuccess(model);
+    return new Promise((resolve, reject) => {
+      this.fetch({
+        data: {
+          lang: app.getLanguage(),
+          languageCode: app.getLanguage(),
+          start: moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD')
+        },
+        remove: false,
+        success: (model) => {
+          if (typeof callbackSuccess === 'function') {
+            callbackSuccess(model);
+          }
+          resolve(model);
+        },
+        error: (model, error) => {
+          if (typeof callbackError === 'function') {
+            callbackError(error, model);
+          }
+          reject(error);
         }
-      },
-      error: (model, error) => {
-        if (typeof callbackError === 'function') {
-          callbackError(error, model);
-        }
-      }
+      });
     });
   },
 
@@ -424,9 +428,11 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Number}
    */
   getDailyItemsReviewed: function() {
-    var total = 0;
-    var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
-    var stat = this.get(today);
+    const today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
+    const stat = this.get(today);
+
+    let total = 0;
+
     if (stat) {
       total += stat.get('char').defn.studied.day;
       total += stat.get('char').rdng.studied.day;
@@ -437,7 +443,8 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
       total += stat.get('word').rune.studied.day;
       total += stat.get('word').tone.studied.day;
     }
-    return total;
+
+    return total || 0;
   },
 
   /**
@@ -445,8 +452,9 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Number}
    */
   getDailyTimeStudied: function() {
-    var today = moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD');
-    var stat = this.get(today);
+    const  today = moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD');
+    const  stat = this.get(today);
+
     return stat ? stat.get('timeStudied').day : 0;
   },
 
@@ -455,9 +463,10 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Number}
    */
   getGoalItemPercent: function() {
-    var goal = app.user.getGoal();
-    var totalItems = app.user.data.stats.getDailyItemsReviewed();
-    var percentItems = Math.round(totalItems / goal.value * 100);
+    const goal = app.user.getGoal();
+    const totalItems = app.user.stats.getDailyItemsReviewed();
+    const percentItems = Math.round(totalItems / goal.items * 100);
+
     return percentItems > 100 ? 100 : parseFloat(percentItems.toFixed(2));
   },
 
@@ -466,9 +475,10 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Number}
    */
   getGoalTimePercent: function() {
-    var goal = app.user.getGoal();
-    var totalTime = app.user.data.stats.getDailyTimeStudied() / 60;
-    var percentTime = Math.round(totalTime / goal.value * 100);
+    const goal = app.user.getGoal();
+    const totalTime = app.user.stats.getDailyTimeStudied() / 60;
+    const percentTime = Math.round(totalTime / goal.time * 100);
+
     return percentTime > 100 ? 100 : parseFloat(percentTime.toFixed(2));
   },
 
@@ -516,6 +526,54 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
     }
 
     return bestStreak;
+  },
+
+  /**
+   * Gets the number of items a user has added to their study queue within an inclusive date range
+   * @param {String} startDate
+   * @param {String} endDate
+   * @returns {Promise<Number>} the number of items added in the date range
+   */
+  getNumItemsAddedInPeriod: function(startDate, endDate) {
+    return new Promise((resolve, reject) => {
+      this.fetchRange(startDate, endDate, {
+        success: () => {
+          const stats = this._getStatsInRange(startDate, endDate
+          );
+          if (!stats.length) {
+            resolve(0);
+          }
+
+          const start = stats[0];
+          const end = stats[stats.length - 1];
+
+          let addedStart = 0;
+          let addedEnd = 0;
+
+          ['rdng', 'rune', 'defn', 'tone'].forEach((part) => {
+            if (start.get('word')[part]) {
+              addedStart += (start.get('word')[part].learned.all + start.get('word')[part].learning.all);
+            }
+            if (start.get('char')[part]) {
+              addedStart += (start.get('char')[part].learned.all + start.get('char')[part].learning.all);
+            }
+            if (end.get('word')[part]) {
+              addedEnd += (end.get('word')[part].learned.all + end.get('word')[part].learning.all);
+            }
+            if (end.get('char')[part]) {
+              addedEnd += (end.get('char')[part].learned.all + end.get('char')[part].learning.all);
+
+            }
+          });
+
+          const totalAdded = addedEnd - addedStart;
+
+          resolve(totalAdded);
+        },
+        error: reject,
+        remove: false
+      });
+    });
   },
 
   /**

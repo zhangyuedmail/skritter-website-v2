@@ -6,7 +6,8 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
 
   events: {
     'click #toggle-menu': 'handleToggleMenuClick',
-    'click #back-btn': 'handleBackClick'
+    'click #back-btn': 'handleBackClick',
+    'click #sync-btn': 'handleSyncClick'
   },
 
   /**
@@ -27,6 +28,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     }
 
     this.showBackBtn = viewOptions.showBackBtn;
+    this.showSyncBtn = app.config.offlineEnabled;
   },
 
   /**
@@ -45,6 +47,14 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
   handleToggleMenuClick: function(event) {
     event.preventDefault();
     vent.trigger('mobileNavMenu:toggle');
+  },
+
+  /**
+   *
+   * @param event
+   */
+  handleSyncClick: function(event) {
+    event.preventDefault();
   }
 });
 
