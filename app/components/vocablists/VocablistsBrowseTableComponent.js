@@ -47,7 +47,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
 
     this.listenTo(this.vocablists, 'state', this.render);
     this.listenTo(this.vocablists, 'sync', function(collection, response, options) {
-      if (options.data.sort === 'official' && response.cursor) {
+      if (options.data && options.data.sort === 'official' && response.cursor) {
         // TODO: figure out why this goes into an infinite loop
         // this.fetchLists({data: {cursor: response.cursor, sort: 'official'}});
       } else {
