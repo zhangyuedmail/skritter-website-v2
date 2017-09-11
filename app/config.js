@@ -141,5 +141,5 @@ module.exports = {
 
   version: '{!application-version!}',
 
-  writingFillers: ['~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？']
+  writingFillers: [' ', '~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？']
 };
