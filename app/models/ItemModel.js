@@ -189,9 +189,14 @@ const ItemModel = SkritterModel.extend({
   },
 
   /**
+   * Gets the readiness value for an item based on the current time.
+   * The closer the readiness is to 0, the less it is due. The higher it is
+   * above 1.0, the more an item is due.
    * @method getReadiness
-   * @param {Number} [startingAt]
-   * @returns {Number}
+   * @param {Number} [startingAt] a UNIX-style timestamp to represent the
+   *                              current time. Calculates based on the current
+   *                              time when the function is called if not provided.
+   * @returns {Number} the item's readiness
    */
   getReadiness: function(startingAt) {
     if (!this.get('last') || !this.get('next')) {
@@ -199,16 +204,43 @@ const ItemModel = SkritterModel.extend({
     }
 
     const now = startingAt || moment().unix();
-    const actualAgo = now - this.get('last');
-    const scheduledAgo = this.get('next') - this.get('last');
-    let readiness = actualAgo / scheduledAgo;
+    const timeElapsedSinceLastAttempt = now - this.get('last');
+    const scheduledInterval = this.get('next') - this.get('last');
+    let readiness = timeElapsedSinceLastAttempt / scheduledInterval;
+
+    if (readiness < 0 && scheduledInterval > 1) {
+      readiness = 0.7;
+    }
+
+    // Tweak readiness to favor items that haven't been seen in a while at really
+    // low readiness, so that new items don't crowd them out and you see everything
+    // when studying a small set of words.
+
+    // I want it to grow logarithmically such that it'll give a very small but non-
+    // negligible change to items that are older than a few minutes, while giving
+    // about .50 boost after a year to something maxed out (10 years).
+
+    // The boost should drop off quickly for items that have some readiness themselves.
+    if (readiness > 0 && timeElapsedSinceLastAttempt > 9000) {
+      const dayBonus = 1.0;
+
+      // 0.0000115740740741 = the ratio of a day elapsed in a second, 1/86400
+      let ageBonus = 0.1 * Math.log(1 + (2 * timeElapsedSinceLastAttempt) * 0.0000115740740741);
+      const readiness2 = readiness > 1.0 ? 0.0 : 1.0 - readiness;
+      ageBonus *= readiness2 * readiness2;  // Less bonus if ready
+      readiness += ageBonus;
+    }
 
     // Don't let anything long-term be more ready than 250%; deprioritize the
     // really overdue long shots so that the more doable stuff comes first
     // (down to 150%).
-    // if (readiness > 2.5 && scheduledAgo > 600) {
-    //   readiness = Math.max(1.5, 3.5 - Math.pow(readiness / 2.5, .33333));
-    // }
+    if (readiness > 2.5 && scheduledInterval > 550) {
+      if (readiness > 20.0) {
+        readiness = 1.5;
+      } else {
+         readiness = 3.5 - Math.pow(readiness * 0.4, 0.33333);
+      }
+    }
 
     return readiness;
   },
