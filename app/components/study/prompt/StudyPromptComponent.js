@@ -426,6 +426,7 @@ const StudyPromptComponent = GelatoComponent.extend({
 
   /**
    * Starts a timer to auto-advance to the next prompt if the user has it enabled
+   * and sets the style/speed of the prompt's auto-advance
    */
   startAutoAdvance: function() {
     if (this._autoAdvanceListenerId || !app.user.get('autoAdvancePrompts')) {
@@ -434,7 +435,7 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     this.isAutoAdvancing = true;
 
-    const score = this.review.get('score');
+    let score = this.review.get('score');
 
     // multiply the speed x2 if the user got the prompt wrong (grade 1 or 2)
     // so they can see the prompt longer
@@ -447,7 +448,11 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     this.$('#navigate-next').attr('style', styleStr);
 
-    // TODO: dark-grey advance color?
+    if (this.review.get('showTeaching')) {
+
+      score = 3;
+    }
+
     if (!app.user.get('disableGradingColor')) {
       this.$('#navigate-next').addClass('grade-' + score);
     }
