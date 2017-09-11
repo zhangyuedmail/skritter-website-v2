@@ -445,7 +445,7 @@ const StudyPage = GelatoPage.extend({
 
     // for the case of accounts with barely anything to study and we haven't added much yet,
     // let's keep adding things
-    if (this.items.dueCount < 10 && this.items.dueCount > 0 &&
+    if (addFreq > 0.6 && this.items.dueCount < 10 && this.items.dueCount > 0 &&
       this.itemsAddedToday < maxItemsPerDay / 2
       && this.promptsSinceLastAutoAdd > 10) {
       return true;
