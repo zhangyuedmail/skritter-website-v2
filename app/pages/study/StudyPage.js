@@ -66,6 +66,8 @@ const StudyPage = GelatoPage.extend({
 
     // will hold a Number that shows
     this.itemsAddedToday = null;
+    this.promptsReviewed = 0;
+    this.promptsSinceLastAutoAdd = 0;
 
     if (app.user.get('eccentric')) {
       this._views['recipe'] = new Recipes();
@@ -331,6 +333,9 @@ const StudyPage = GelatoPage.extend({
     }
 
     if (items.length) {
+      this.promptsReviewed++;
+      this.promptsSinceLastAutoAdd++;
+
       this.currentItem = items[0];
       this.currentPromptItems = items[0].getPromptItems();
       this.togglePromptLoading(false);
@@ -339,6 +344,7 @@ const StudyPage = GelatoPage.extend({
 
       if (app.user.isItemAddingAllowed() && this.shouldAutoAddItem(this.currentItem)) {
         this.addItems(true);
+        this.promptsSinceLastAutoAdd = 0;
       }
 
       if (items.length < 5) {
@@ -401,40 +407,53 @@ const StudyPage = GelatoPage.extend({
   },
 
   /**
-   * Determines whether an item should be auto-added
+   * Determines whether an item should be auto-added based on its readiness and other heuristics about the queue
    * @param {UserItem} currentItem the current item that the user is studying
    * @returns {boolean} whether an item should be added
    */
   shouldAutoAddItem: function(currentItem) {
-    if (!app.isDevelopment()) {
-      return;
-    }
     const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
-    const maxItemsPerDay = app.config.maxAutoAddItems * (app.user.get(targetLangName + 'StudyParts').length);
 
-    if (this.items.dueCount > 50 || this.itemsAddedToday > maxItemsPerDay) {
-      // return false;
+    // TODO: figure out some good values for this
+    const addFreqMultiplier = 1; // {0.7: .75, 0.8: 1, 0.9: 1.2};
+    const maxItemsPerDay = app.config.maxAutoAddItems * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
+    const addFreq = app.user.get('addFrequency') / 100;
+
+    if ((this.items.dueCount > 50 && (addFreq !== 0.9)) || this.itemsAddedToday > maxItemsPerDay) {
+      return false;
     }
 
     // kinda a magic number
     const addRange = 0.4;
     const readiness = currentItem.getReadiness();
-    let addFreq = app.user.get('addFrequency') / 100;
 
-    if (addFreq === 0.9) {
-      addFreq = 0.825;
+
+    // if they're currently studying a brand new item, let's wait until after they get through that
+    if (readiness === 9999) {
+      return false;
     }
 
     const diff = 1 - (readiness - addFreq) / addRange;
-    console.log(`readiness ${readiness}  diff: ${diff}  diff quad: ${diff*diff}`);
 
-    if (diff*diff < 0.5) {
-      // return true;
+
+    // the most common add case--the current item has been sufficiently studied,
+    // with a couple rate-limiting checks
+    if (diff*diff > 0.5 && this.promptsReviewed > 1 && this.promptsSinceLastAutoAdd > 4) {
+      console.log(`normal auto-add case: promptsSinceLastAutoAdd > 4 ${readiness}  diff: ${diff}  diff quad: ${diff*diff}`);
+      return true;
     }
 
     // for the case of accounts with barely anything to study and we haven't added much yet,
     // let's keep adding things
-    if (this.items.dueCount < 10 && this.items.dueCount > 0 && this.itemsAddedToday < maxItemsPerDay / 2) {
+    if (this.items.dueCount < 10 && this.items.dueCount > 0 &&
+      this.itemsAddedToday < maxItemsPerDay / 2
+      && this.promptsSinceLastAutoAdd > 10) {
+      return true;
+    }
+
+    // for accounts set with a high add rate but a lot of reviews, still add something every once in a while
+    // to keep things motivating
+    if (addFreq === 0.9 && this.promptsReviewed % 80 === 0 && this.promptsSinceLastAutoAdd > 50) {
       return true;
     }
 
@@ -497,7 +516,6 @@ const StudyPage = GelatoPage.extend({
    */
   _getNumItemsAddedToday: function(today) {
     return new Promise((resolve, reject) => {
-      // TODO: probably need to store/get this value locally better if user is offline
       $.ajax({
         url: app.getApiUrl(2) + 'gae/items/added',
         type: 'GET',
@@ -507,14 +525,36 @@ const StudyPage = GelatoPage.extend({
           languageCode: app.getLanguage(),
           startDate: today.format(app.config.dateFormatApp)
         },
-        error: function(error) {
-          reject(error);
+        error: (error) => {
+          resolve(this._getNumItemsAddedTodayFromLocalStorage())
         },
         success: function(result) {
           resolve(result.added);
         }
       });
     });
+  },
+
+  /**
+   * Gets the number of items added today from localStorage. Refreshes and
+   * cleans up the cache so only today's data is saved.
+   * @private
+   */
+  _getNumItemsAddedTodayFromLocalStorage: function() {
+    const itemsAdded = app.getSetting('itemsAutoAddedToday') || {};
+    const today = moment().format(app.config.dateFormatApp);
+
+    if (itemsAdded[today] === undefined) {
+      itemsAdded[today] = 0;
+    }
+
+    // refresh the cache so that any previous days are erased from localStorage,
+    // only today's data is persisted
+    const newAddedObj = {};
+    newAddedObj[today] = itemsAdded[today];
+    app.setSetting('itemsAutoAddedToday', newAddedObj);
+
+    return itemsAdded[today];
   },
 
   /**
