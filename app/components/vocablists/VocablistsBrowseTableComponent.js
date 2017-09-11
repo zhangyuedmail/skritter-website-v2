@@ -43,7 +43,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
      */
     this._adding = false;
 
-    this.fetchLists({sort: 'official'});
+    this.fetchOfficialLists();
 
     this.listenTo(this.vocablists, 'state', this.render);
     this.listenTo(this.vocablists, 'sync', function(collection, response, options) {
@@ -57,17 +57,20 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
   },
 
   /**
+   * Fetches a batch of vocab lists
    * @method fetchLists
-   * @param {Object} [params]
+   * @param {Object} [params] parameters to use in the request
+   * @param {Object} [options] options to send to the fetch function
    */
-  fetchLists: function(params) {
+  fetchLists: function(params, options) {
     const data = _.defaults(params, {
       lang: app.getLanguage(),
       languageCode: app.getLanguage(),
       sort: 'official'
     });
 
-    return this.vocablists.fetch({data: data, remove: false});
+    options = _.defaults({data, remove: false}, options || {});
+    return this.vocablists.fetch(options);
   },
 
   /**
@@ -85,6 +88,18 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
     this.renderTemplate();
     this.delegateEvents();
     return this;
+  },
+
+  /**
+   * Fetches all the official textbook lists in batches.
+   * @returns {Promise} resolves when all the lists have been fetched
+   */
+  fetchOfficialLists: function() {
+    return new Promise((resolve, reject) => {
+      this.fetchLists({sort: 'official'}, {success: (collection, resp) => {
+        this.fetchLists({sort: 'official', cursor: resp.cursor}, {success: () => {resolve();}, error: reject});
+      }, error: reject});
+    });
   },
 
   /**

@@ -91,7 +91,7 @@ module.exports = GelatoPage.extend({
 
     if (this.filterType === 'textbook') {
       this._views['table'].setFilterType('textbook');
-      this._views['table'].fetchLists({sort: 'official'});
+      this._views['table'].fetchOfficialLists();
     } else {
       this._views['table'].setFilterType('published');
 
