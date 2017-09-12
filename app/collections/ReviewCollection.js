@@ -28,6 +28,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
   initialize: function(models, options) {
     options = options || {};
     this.items = options.items;
+    this.addCountOffset = 0;
     this.postCountOffset = 0;
   },
 
@@ -68,7 +69,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
    */
   getDueCountOffset: function() {
     const reviews = _.flatten(this.map('data'));
-    let offset = this.postCountOffset;
+    let offset = this.postCountOffset - this.addCountOffset;
 
     _.forEach(reviews, review => {
       if (review.due) offset++;
