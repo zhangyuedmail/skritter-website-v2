@@ -113,7 +113,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
     let zhStudyStyleChanged;
 
     app.user.set({
-      addFrequency: parseInt(this.$('#field-add-frequency').val(), 10),
+      addFrequency: parseInt(this.$('#field-add-frequency').val(), 10) || app.user.get('addFrequency'),
       autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
       autoAdvancePrompts: this.$('#field-auto-advance').is(':checked') ? 1.0 : 0,
       disableGradingColor: this.$('#field-disable-color').is(':checked'),
