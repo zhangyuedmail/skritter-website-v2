@@ -91,7 +91,7 @@ module.exports = GelatoPage.extend({
 
     if (this.filterType === 'textbook') {
       this._views['table'].setFilterType('textbook');
-      this._views['table'].fetchLists({sort: 'official'});
+      this._views['table'].fetchOfficialLists();
     } else {
       this._views['table'].setFilterType('published');
 
@@ -149,7 +149,7 @@ module.exports = GelatoPage.extend({
         if (searchValue === '') {
           this._views['table'].fetchLists({sort: 'published'});
         } else {
-          this._views['table'].fetchLists({q: searchValue, sort: 'search'});
+          this._views['table'].fetchLists({q: _.toLower(searchValue), sort: 'search'});
         }
       } else {
         this._views['table'].setFilterString(searchValue);

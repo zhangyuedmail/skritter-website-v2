@@ -20,9 +20,9 @@ gelato-component(data-name='vocablists-list-sidebar')
             span= app.locale('pages.vocabLists.backToMy')
 
         else if isPublishedLists
-          a.back-link(href="/vocablists/published")
+          a.back-link(href="/vocablists/browse")
             span.glyphicon.glyphicon-chevron-left
-            span= app.locale('pages.vocabLists.backToPublished')
+            span= app.locale('pages.vocabLists.backToOfficial')
 
         else if isChinesePodLists
           a.back-link(href="/vocablists/chinesepod")

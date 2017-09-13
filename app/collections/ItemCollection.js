@@ -194,8 +194,17 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @return {Object} the results object
    */
   itemsAdded: function(results, callback) {
+    const addedCount = results.numVocabsAdded;
+    const partCount = app.user.getFilteredParts().length;
+
     this.preloadNext();
-    this.updateDueCount();
+
+    // make a guess at how many items to add to the due count
+    // based on number of vocabs added and active parts
+    if (addedCount) {
+      this.reviews.addCountOffset += addedCount * partCount;
+      this.updateDueCount(true);
+    }
 
     if (_.isFunction(callback)) {
       callback(null, results);
@@ -415,7 +424,7 @@ const ItemCollection = BaseSkritterCollection.extend({
             model._queue = false;
 
             // move the item into future on the server
-            // model.bump();
+            model.bump();
 
             return false;
           }
@@ -428,7 +437,7 @@ const ItemCollection = BaseSkritterCollection.extend({
               model._queue = false;
 
               // move the item into future on the server
-              // model.bump();
+              model.bump();
 
               return false;
             }

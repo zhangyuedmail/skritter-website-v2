@@ -95,11 +95,21 @@ const SessionModel = SkritterModel.extend({
   },
 
   /**
+   * A token is expired if it is more than two weeks old.
    * @method isExpired
    * @returns {Boolean}
    */
   isExpired: function() {
     return this.getExpires() < moment().unix();
+  },
+
+  /**
+   * A token is refreshable if it will expire in less than a week.
+   * @method isRefreshable
+   * @returns {Boolean}
+   */
+  isRefreshable: function() {
+    return moment(this.getExpires() * 1000).subtract(1, 'week').unix() < moment().unix();
   },
 
   /**

@@ -198,6 +198,7 @@ const GelatoApplication = Backbone.View.extend({
     }
 
     window.scrollTo(0, 0);
+    $('gelato-application')[0].scrollTop = 0;
     this._views['page'] = new (require(path))(options);
 
     // preserve the router page reference for now

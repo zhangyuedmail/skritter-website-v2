@@ -84,6 +84,12 @@ module.exports = {
   locale: 'en',
 
   /**
+   * Maximum number of items that can be auto-adding per day.
+   * Does not limit manual adding.
+   */
+  maxAutoAddItems: 10,
+
+  /**
    * The max amount of time for the timer to increase by for a certain prompt type.
    * @type {Object<String, Number>}
    */
@@ -135,5 +141,5 @@ module.exports = {
 
   version: '{!application-version!}',
 
-  writingFillers: ['~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？']
+  writingFillers: [' ', '~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？']
 };

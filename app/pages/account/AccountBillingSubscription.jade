@@ -167,6 +167,9 @@ gelato-page(data-name='account-billing-subscription')
 
               else if app.isWebsite() && _.includes([false, 'stripe'], subscribed)
                 // - ON WEBSITE, NOT SUBSCRIBED OR SUBSCRIBED TO STRIPE
+                - var expMonth = view.subscription.get('stripe')['cardExpMonth'];
+                - var expYear = view.subscription.get('stripe')['cardExpYear'];
+
                 if subscribed === 'stripe'
                   .title Edit subscription
                 if !subscribed
@@ -258,23 +261,24 @@ gelato-page(data-name='account-billing-subscription')
                   label.control-label.col-sm-3 Expiration date
                   .col-sm-4
                     select#card-month-select.form-control
-                      option(value='01') 01 - January
-                      option(value='02') 02 - February
-                      option(value='03') 03 - March
-                      option(value='04') 04 - April
-                      option(value='05') 05 - May
-                      option(value='06') 06 - June
-                      option(value='07') 07 - July
-                      option(value='08') 08 - August
-                      option(value='09') 09 - September
-                      option(value='10') 10 - October
-                      option(value='11') 11 - November
-                      option(value='12') 12 - December
+                      option(value='01', selected=expMonth===1) 01 - January
+                      option(value='02', selected=expMonth===2) 02 - February
+                      option(value='03', selected=expMonth===3) 03 - March
+                      option(value='04', selected=expMonth===4) 04 - April
+                      option(value='05', selected=expMonth===5) 05 - May
+                      option(value='06', selected=expMonth===6) 06 - June
+                      option(value='07', selected=expMonth===7) 07 - July
+                      option(value='08', selected=expMonth===8) 08 - August
+                      option(value='09', selected=expMonth===9) 09 - September
+                      option(value='10', selected=expMonth===10) 10 - October
+                      option(value='11', selected=expMonth===11) 11 - November
+                      option(value='12', selected=expMonth===12) 12 - December
                   .col-sm-2
                     select#card-year-select.form-control
-                      - var year = moment().year();
+                      - var currentYear = moment().year();
                       for i in _.range(10)
-                        option(value=year + i)= year + i
+                        - var calculatedYear = currentYear + i;
+                        option(value=calculatedYear, selected=expYear===calculatedYear)= calculatedYear
 
                 .form-group.form-group-lg.credit-card-form-group
                   .col-sm-3
@@ -416,6 +420,3 @@ gelato-page(data-name='account-billing-subscription')
                     button#unsubscribe-btn.btn.btn-fixed.btn-success
                       span Cancel subscription
                       i.fa.fa-1x.fa-spinner.fa-pulse.hide
-
-
-

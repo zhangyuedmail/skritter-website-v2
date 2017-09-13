@@ -124,12 +124,7 @@ module.exports = BootstrapDialog.extend({
       method: 'PUT',
       success: () => {
         this.hideError();
-
-        if (app.isDevelopment()) {
-          this.deleteVocabFromList();
-        } else {
-          this.close();
-        }
+        this.deleteVocabFromList();
       },
       error: (error) => {
         this.resetUI();
@@ -170,7 +165,7 @@ module.exports = BootstrapDialog.extend({
    */
   resetUI: function() {
     this.hideError();
-    this.$('.#confirm-btn').removeClass('hidden');
+    this.$('#confirm-btn').removeClass('hidden');
     this.$('.step-1').removeClass('hidden');
     this.$('.step-2').addClass('hidden');
   },

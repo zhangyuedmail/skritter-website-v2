@@ -52,12 +52,11 @@ gelato-page[data-name='home'] {
 
   .main {
     padding: 0px;
-    top: 50px;
+    position: relative;
+    top: 0px;
     width: 100%;
-    height: calc(100% - 100px);
-    background: url("#{$dir-assets}/images/landing/bamboo-background.jpg") no-repeat bottom right fixed;
+    background: url("#{$dir-assets}/images/landing/bamboo-background.jpg") no-repeat bottom center;
     background-size: cover;
-
   }
 
   .left-wrapper {
