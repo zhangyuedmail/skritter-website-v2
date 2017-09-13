@@ -944,7 +944,7 @@ module.exports = GelatoApplication.extend({
           this.user.offline.sync().then(callback);
         }
       ],
-      function() {
+      () => {
         setTimeout(function() {
           if (app.config.recordLoadTimes) {
             const loadTime = window.performance.now() - window._appLoadStartTime;
@@ -958,7 +958,7 @@ module.exports = GelatoApplication.extend({
         }, 500);
 
         if (app.isCordova()) {
-          document.addEventListener('resume', this._checkSessionRefreshToken, false);
+          document.addEventListener('resume', this._checkUserRefreshToken, false);
 
           setTimeout(navigator.splashscreen.hide, 1000);
 
