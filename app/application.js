@@ -914,7 +914,7 @@ module.exports = GelatoApplication.extend({
     async.series(
       [
         (callback) => {
-          //check for user authentication type
+          // check for user authentication type
           if (app.user.id === 'application') {
             app.user.session.authenticate(
               'client_credentials',
@@ -928,20 +928,24 @@ module.exports = GelatoApplication.extend({
               }
             );
           } else {
-            app.user.session.refresh(
-              function() {
-                callback();
-              },
-              function(error) {
-                // TODO: get refresh tokens working properly if the session token is invalid, log the user out
-                if (error.responseJSON && error.responseJSON.statusCode === 400 &&
-                  error.responseJSON.message.indexOf("No such refresh token") > -1) {
-                  app.user.logout();
-                } else {
+            // only attempt to refresh token that are about to expire
+            if (app.user.session.isRefreshable()) {
+              app.user.session.refresh(
+                function() {
                   callback();
+                },
+                function(error) {
+                  // log user out if the refresh token does not exist
+                  if (error.responseJSON && _.includes(error.responseJSON.message, 'No such refresh token')) {
+                    app.user.logout();
+                  } else {
+                    callback();
+                  }
                 }
-              }
-            );
+              );
+            } else {
+              callback();
+            }
           }
         },
         (callback) => {
