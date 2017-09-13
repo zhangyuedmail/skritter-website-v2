@@ -916,36 +916,9 @@ module.exports = GelatoApplication.extend({
         (callback) => {
           // check for user authentication type
           if (app.user.id === 'application') {
-            app.user.session.authenticate(
-              'client_credentials',
-              null,
-              null,
-              function() {
-                callback();
-              },
-              function() {
-                callback();
-              }
-            );
+            this._checkClientRefreshToken().then(callback);
           } else {
-            // only attempt to refresh token that are about to expire
-            if (app.user.session.isRefreshable()) {
-              app.user.session.refresh(
-                function() {
-                  callback();
-                },
-                function(error) {
-                  // log user out if the refresh token does not exist
-                  if (error.responseJSON && _.includes(error.responseJSON.message, 'No such refresh token')) {
-                    app.user.logout();
-                  } else {
-                    callback();
-                  }
-                }
-              );
-            } else {
-              callback();
-            }
+            this._checkUserRefreshToken().then(callback);
           }
         },
         (callback) => {
@@ -985,6 +958,8 @@ module.exports = GelatoApplication.extend({
         }, 500);
 
         if (app.isCordova()) {
+          document.addEventListener('resume', this._checkSessionRefreshToken, false);
+
           setTimeout(navigator.splashscreen.hide, 1000);
 
           if (app.isAndroid()) {
@@ -1087,5 +1062,52 @@ module.exports = GelatoApplication.extend({
 
     app.dialogs.vocabViewer.load(vocabId, vocab);
     app.dialogs.vocabViewer.open();
+  },
+
+  /**
+   * Checks if a client session token is refreshable and refreshes it if needed.
+   * @returns {Promise}
+   */
+  _checkClientRefreshToken: function() {
+    return new Promise(resolve => {
+      app.user.session.authenticate(
+        'client_credentials',
+        null,
+        null,
+        function() {
+          resolve();
+        },
+        function() {
+          resolve();
+        }
+      );
+    });
+  },
+
+  /**
+   * Checks if a user session token is refreshable and refreshes it if needed.
+   * @returns {Promise}
+   */
+  _checkUserRefreshToken: function() {
+    return new Promise(resolve => {
+      // only attempt to refresh token that are about to expire
+      if (app.user.session.isRefreshable()) {
+        app.user.session.refresh(
+          function() {
+            resolve();
+          },
+          function(error) {
+            // log user out if the refresh token does not exist
+            if (error.responseJSON && _.includes(error.responseJSON.message, 'No such refresh token')) {
+              app.user.logout();
+            } else {
+              resolve();
+            }
+          }
+        );
+      } else {
+        resolve();
+      }
+    });
   }
 });
