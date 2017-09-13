@@ -424,7 +424,7 @@ const ItemCollection = BaseSkritterCollection.extend({
             model._queue = false;
 
             // move the item into future on the server
-            // model.bump();
+            model.bump();
 
             return false;
           }
@@ -437,7 +437,7 @@ const ItemCollection = BaseSkritterCollection.extend({
               model._queue = false;
 
               // move the item into future on the server
-              // model.bump();
+              model.bump();
 
               return false;
             }
