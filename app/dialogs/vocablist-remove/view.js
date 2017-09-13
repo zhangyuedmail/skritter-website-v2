@@ -124,12 +124,7 @@ module.exports = BootstrapDialog.extend({
       method: 'PUT',
       success: () => {
         this.hideError();
-
-        if (app.isDevelopment()) {
-          this.deleteVocabFromList();
-        } else {
-          this.close();
-        }
+        this.deleteVocabFromList();
       },
       error: (error) => {
         this.resetUI();
