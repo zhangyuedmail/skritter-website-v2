@@ -30,6 +30,7 @@
     "install-cordova-ios": "node ./scripts/npm-install-cordova-ios",
     "ios": "node ./scripts/npm-ios",
     "ios-build": "node ./scripts/npm-ios-build",
+    "ios-release": "node ./scripts/npm-ios-release",
     "monitor": "node ./scripts/npm-monitor",
     "prune": "node ./scripts/npm-prune",
     "start": "node ./scripts/npm-start",
