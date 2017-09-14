@@ -75,6 +75,7 @@
     <icon src="../res/{!application-language!}/ios/icon/icon-76.png" width="76" height="76" />
     <icon src="../res/{!application-language!}/ios/icon/icon-76@2x.png" width="152" height="152" />
     <icon src="../res/{!application-language!}/ios/icon/icon-83.5@2x.png" width="167" height="167" />
+    <splash src="../res/{!application-language!}/ios/screen/Default@2x~universal~anyany.png" />
   </platform>
 
   <engine name="android" spec="6.2.3" />
