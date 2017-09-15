@@ -136,7 +136,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     ticker.removeEventListener('tick', stage);
     ticker.addEventListener('tick', stage);
 
-    if (app.isDevelopment() && app.user.get('showCanvasFPS')) {
+    if (app.config.showCanvasFPS) {
       $('gelato-application').prepend('<div id="fps-counter" style="position:absolute;top:100px;z-index:99999;color:#EEE;background:#111;"></div>');
       const fpsCounter = $('#fps-counter');
       ticker.addEventListener('tick', () => {

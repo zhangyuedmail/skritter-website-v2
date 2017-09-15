@@ -110,6 +110,12 @@ module.exports = {
   sentryUrl: 'https://4aa61a5ed92f4aaf8a9ae79777b70843@sentry.io/123679',
 
   /**
+   * Whether to show a FPS counter when on the study page
+   * @type {Boolean}
+   */
+  showCanvasFPS: false,
+
+  /**
    * Whether app page load times should be stored to app.loadTimes
    * @type {Boolean}
    */
