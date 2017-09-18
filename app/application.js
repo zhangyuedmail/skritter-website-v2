@@ -913,7 +913,7 @@ module.exports = GelatoApplication.extend({
     // use async for cleaner loading code
     async.series(
       [
-        (callback) => {
+        async callback => {
           // check for user authentication type
           if (app.user.id === 'application') {
             this._checkClientRefreshToken().then(callback);
@@ -921,7 +921,7 @@ module.exports = GelatoApplication.extend({
             this._checkUserRefreshToken().then(callback);
           }
         },
-        (callback) => {
+        async callback => {
           // skip offline stuff when disabled, no user or mobile not detected
           if (!this.config.offlineEnabled || !this.user.isLoggedIn() || !this.isMobile()) {
             callback();
@@ -934,6 +934,8 @@ module.exports = GelatoApplication.extend({
 
           // skip initial sync when data is ready
           if (this.user.offline.isReady()) {
+            await this.user.offline.loadAllReviews();
+
             callback();
 
             return;
@@ -941,7 +943,9 @@ module.exports = GelatoApplication.extend({
 
           ScreenLoader.post('Preparing offline study');
 
-          this.user.offline.sync().then(callback);
+          await this.user.offline.sync();
+
+          callback();
         }
       ],
       () => {

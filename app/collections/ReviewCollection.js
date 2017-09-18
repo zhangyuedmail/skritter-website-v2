@@ -187,15 +187,13 @@ const ReviewCollection = BaseSkritterCollection.extend({
 
       model.data = _.uniqBy(model.data, 'itemId');
 
-      for (var b = 0, lengthB = model.data.length; b < lengthB; b++) {
+      for (let b = 0, lengthB = model.data.length; b < lengthB; b++) {
         const modelData = model.data[b];
         const item = modelData.item.clone();
         const submitTimeSeconds = Math.round(modelData.submitTime);
 
-        modelData.score = parseInt(modelData.score, 10);
-
         if (!_.isInteger(modelData.score)) {
-          modelData.score = 3;
+          console.error('REVIEW ERROR:', 'score must be an integer value');
         }
 
         modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
@@ -204,9 +202,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
         modelData.previousSuccess = item.get('previousSuccess') || false;
 
         if (!_.isInteger(modelData.newInterval)) {
-          console.error('REVIEW ERROR: Missing new interval value');
-
-          modelData.newInterval = 86400;
+          console.error('REVIEW ERROR:', 'missing new interval integer value');
         }
 
         if (app.isDevelopment()) {

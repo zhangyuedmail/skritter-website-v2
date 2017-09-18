@@ -64,7 +64,7 @@ const StudyPage = GelatoPage.extend({
     this.toolbar = new Toolbar({page: this});
     this.vocablists = new Vocablists();
 
-    // will hold a Number that shows
+    // will hold a number that shows
     this.itemsAddedToday = null;
     this.promptsReviewed = 0;
     this.promptsSinceLastAutoAdd = 0;
@@ -72,6 +72,9 @@ const StudyPage = GelatoPage.extend({
     if (app.user.get('eccentric')) {
       this._views['recipe'] = new Recipes();
     }
+
+    // manually add reviews from offline cache
+    this.items.set(app.user.offline.reviews);
 
     // make sure the item collection knows about filtered lists
     this.items.listIds = app.user.getFilteredLists();
