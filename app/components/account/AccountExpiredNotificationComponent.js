@@ -89,7 +89,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
   updateSubscriptionState: function() {
     const sub = app.user.subscription;
     const hide = app.getSetting('hideSubscriptionNotification');
-    let hideNotification;
+    let hideNotification, networkError;
 
     if (this.hideable) {
       hideNotification = sub.getStatus() !== 'Expired' || hide
@@ -98,12 +98,18 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
     }
 
     if (sub.state === 'standby') {
-      if (this.errorFetchingData) {
+      if (this.errorFetchingData && app.user.offline.isReady()) {
+        // disable network error stuff when offline is working
+        networkError = false;
+      } else if (this.errorFetchingData) {
         this.$('.network-error-block').removeClass('hidden');
         this.$('.account-expired-block').addClass('hidden');
+
+        // use a variable to represent a network issue
+        networkError = true;
       }
 
-      this.$('gelato-component').toggleClass('hidden', hideNotification && !this.errorFetchingData);
+      this.$('gelato-component').toggleClass('hidden', hideNotification && !networkError);
 
       // something somewhere is manually setting the CSS to
       // display: hidden at runtime, don't know where, hack to fix it.
