@@ -29,6 +29,10 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
 
     this.showBackBtn = viewOptions.showBackBtn;
     this.showSyncBtn = app.config.offlineEnabled;
+
+    this.listenTo(app.user.offline, 'status', this.handleOfflineStatus);
+
+
   },
 
   /**
@@ -38,6 +42,21 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
   handleBackClick: function(event) {
     event.preventDefault();
     window.history.back();
+  },
+
+  /**
+   * Update sync button display based on offline sync status.
+   * @method handleOfflineStatus
+   */
+  handleOfflineStatus: function(value) {
+    const $button = this.$('#sync-btn');
+    const spinClass = 'fa-spin';
+
+    if (value === 'syncing') {
+      $button.addClass(spinClass);
+    } else {
+      $button.removeClass(spinClass);
+    }
   },
 
   /**
@@ -55,6 +74,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    */
   handleSyncClick: function(event) {
     event.preventDefault();
+    app.user.offline.sync();
   }
 });
 
