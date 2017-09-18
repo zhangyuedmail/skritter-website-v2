@@ -105,8 +105,12 @@ module.exports = {
   /**
    * Whether to allow offline mode to function.
    */
-  offlineEnabled: false,
+  offlineEnabled: true,
 
+  /**
+   * The sentry reporting url used for javascript error tracking.
+   * https://sentry.io/inkren-inc
+   */
   sentryUrl: 'https://4aa61a5ed92f4aaf8a9ae79777b70843@sentry.io/123679',
 
   /**

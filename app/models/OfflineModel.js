@@ -46,8 +46,7 @@ const OfflineModel = GelatoModel.extend({
    */
   defaults: function() {
     return {
-      lastItemSync: 0,
-      lastListSync: 0
+      lastSync: 0
     };
   },
 
@@ -63,7 +62,7 @@ const OfflineModel = GelatoModel.extend({
    * @returns {boolean}
    */
   isReady: function () {
-    return app.config.offlineEnabled && !!this.get('lastItemSync') && !!this.get('lastListSync');
+    return app.config.offlineEnabled && !!this.get('lastSync');
   },
 
   /**
@@ -201,6 +200,8 @@ const OfflineModel = GelatoModel.extend({
    * Syncs data based on last sync time offsets.
    */
   sync: async function (offset) {
+    const now = moment().unix();
+
     this.status = 'syncing';
 
     this.trigger('status', this.status);
@@ -214,6 +215,8 @@ const OfflineModel = GelatoModel.extend({
     items = undefined;
     vocabs = undefined;
     characters = undefined;
+
+    this.set('lastSync', now).cache();
 
     this.status = 'standby';
 
@@ -244,11 +247,10 @@ const OfflineModel = GelatoModel.extend({
    * @private
    */
   _downloadItems: async function (offset) {
-    const now = moment().unix();
     let items = [];
     let cursor;
 
-    offset = offset || this.get('lastItemSync');
+    offset = offset || this.get('lastSync');
 
     return new Promise((resolve, reject) => {
       async.whilst(
@@ -274,10 +276,6 @@ const OfflineModel = GelatoModel.extend({
           if (error) {
             reject(error);
           } else {
-            this.set('lastItemSync', now);
-
-            this.cache();
-
             resolve(items);
           }
         }
@@ -291,8 +289,8 @@ const OfflineModel = GelatoModel.extend({
    * @private
    */
   _downloadLists: async function () {
-    const now = moment().unix();
     const result = await this._fetchLists({sort: 'studying', fields: 'id'});
+    let lists = [];
 
     return new Promise((resolve, reject) => {
       async.eachLimit(result.data, 5,
@@ -301,6 +299,8 @@ const OfflineModel = GelatoModel.extend({
             const result = await this._fetchList(list.id);
 
             await this.database.lists.put(result.data);
+
+            lists = lists.concat(result.data);
 
             callback();
           } catch (error) {
@@ -311,11 +311,7 @@ const OfflineModel = GelatoModel.extend({
           if (error) {
             reject(error);
           } else {
-            this.set('lastListSync', now);
-
-            this.cache();
-
-            resolve();
+            resolve(lists);
           }
         }
       );
