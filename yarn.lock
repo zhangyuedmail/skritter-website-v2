@@ -1378,8 +1378,8 @@ chownr@~1.0.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.0.1.tgz#e2a75042a9551908bebd25b8523d5f9769d79181"
 
 chromedriver@2.32.x:
-  version "2.32.2"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-2.32.2.tgz#421bf30df37164e465e71461a7492e49b42380c5"
+  version "2.32.3"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-2.32.3.tgz#ce84f055bee7cbfe56f31182b276f33256b12bf1"
   dependencies:
     extract-zip "^1.6.5"
     kew "^0.7.0"
@@ -4530,8 +4530,8 @@ node-uuid@^1.4.7, node-uuid@~1.4.7:
   resolved "https://registry.yarnpkg.com/node-uuid/-/node-uuid-1.4.8.tgz#b040eb0923968afabf8d32fb1f17f1167fdab907"
 
 nodemon@1.12.x:
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.12.0.tgz#e538548a777340a19f855c4f087b7e528aa3feda"
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.12.1.tgz#996a56dc49d9f16bbf1b78a4de08f13634b3878d"
   dependencies:
     chokidar "^1.7.0"
     debug "^2.6.8"
