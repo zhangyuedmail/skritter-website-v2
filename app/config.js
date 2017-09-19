@@ -50,7 +50,7 @@ module.exports = {
    * Show all the fancy goal mode related stuff?
    * @type {Boolean}
    */
-  goalModeEnabled: false,
+  goalModeEnabled: true,
 
   /**
    * How long to wait in ms before advancing to the next prompt after the user

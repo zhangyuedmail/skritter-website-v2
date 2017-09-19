@@ -1,4 +1,6 @@
 gelato-page(data-name='dashboard')
+  #dialog-container
+
   if !app.isMobile()
     #feedback-btn.feedback-btn Feedback
   .container
@@ -17,6 +19,7 @@ gelato-page(data-name='dashboard')
       .col-md-6
         .content-block
           if app.config.goalModeEnabled
+            i#goal-setting.fa.fa-gear
             .title Today
           .content
             #dashboard-goal-container

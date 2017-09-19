@@ -114,7 +114,7 @@ const DashboardGoalComponent = GelatoComponent.extend({
     let percent = 0;
 
     switch (app.user.get('goalType')) {
-      case 'items':
+      case 'item':
       const totalReviews = app.user.stats.getDailyItemsReviewed();
 
         this.doughnut.setTitle({

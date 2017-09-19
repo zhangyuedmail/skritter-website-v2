@@ -8,6 +8,14 @@ gelato-page[data-name='dashboard'] {
     height: 300px;
   }
 
+  #goal-setting {
+    color: $wood9;
+    font-size: 21px;
+    position: absolute;
+    right: 25px;
+    z-index: 5000;
+  }
+
   .feedback-btn {
     display: inline-block;
     position: absolute;
