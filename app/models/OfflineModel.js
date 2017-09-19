@@ -365,10 +365,31 @@ const OfflineModel = GelatoModel.extend({
     }
 
     const writings = _.chain(vocabs).map('writing').join('').split('').uniq().value();
+    const writingChunks = _.chunk(writings, 100);
+    let characters = [];
 
-    const result = await this._fetchCharacters({ writings });
+    return new Promise((resolve, reject) => {
+      async.eachLimit(writingChunks, 10,
+        async (chunk, callback) => {
+          const result = await this._fetchCharacters({writings: chunk});
 
-    return this.database.characters.bulkPut(result.data);
+          if (result.data.length) {
+            characters = characters.concat(result.data);
+          }
+
+          callback();
+        },
+        async error => {
+          if (error) {
+            reject(error);
+          } else {
+            await this.database.characters.bulkPut(characters);
+
+            resolve(characters);
+          }
+        }
+      );
+    });
   },
 
   /**
