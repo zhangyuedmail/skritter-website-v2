@@ -158,8 +158,6 @@ const DashboardPage = GelatoPage.extend({
   onGoalSettingClicked: function(event) {
     event.preventDefault();
 
-    console.log('ship');
-
     this.dialog = new SetGoalDialog();
     this.dialog.render();
     this.dialog.open();

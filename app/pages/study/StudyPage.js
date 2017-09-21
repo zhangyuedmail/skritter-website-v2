@@ -293,15 +293,6 @@ const StudyPage = GelatoPage.extend({
         this.items.reviews.post({skip: 1});
       }
 
-      // TODO: remove this if new review based system works better
-      // if (promptItems.readiness >= 1.0) {
-      //   vent.trigger('dueCountOffset:increase');
-      // }
-
-      if (!app.isMobile()) {
-        this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
-      }
-
       this.currentItem._queue = false;
       this.currentPromptItems = null;
       this.previousPromptItems = promptItems;
