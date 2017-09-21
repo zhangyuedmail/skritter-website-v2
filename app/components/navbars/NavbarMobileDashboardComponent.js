@@ -75,6 +75,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
   handleSyncClick: function(event) {
     event.preventDefault();
     app.user.offline.sync();
+    app.user.stats.fetchMonth();
   }
 });
 
