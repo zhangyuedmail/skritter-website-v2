@@ -144,7 +144,7 @@ module.exports = {
     itemsdue: false,
     progstats: true,
     subscriptions: false,
-    users: true,
+    users: false,
     vocablists: false,
     vocabs: false
   },
