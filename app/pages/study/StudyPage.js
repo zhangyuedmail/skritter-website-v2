@@ -410,8 +410,9 @@ const StudyPage = GelatoPage.extend({
 
     // TODO: figure out some good values for this
     const addFreqMultiplier = 1; // {0.7: .75, 0.8: 1, 0.9: 1.2};
-    const maxItemsPerDay = app.config.maxAutoAddItems * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
+    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 12};
     const addFreq = app.user.get('addFrequency') / 100;
+    const maxItemsPerDay = maxVocabsMap[addFreq] * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
 
     if ((this.items.dueCount > 50 && (addFreq !== 0.9)) || this.itemsAddedToday > maxItemsPerDay) {
       return false;
