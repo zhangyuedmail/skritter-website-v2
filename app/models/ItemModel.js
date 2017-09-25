@@ -199,14 +199,33 @@ const ItemModel = SkritterModel.extend({
    * @returns {Number} the item's readiness
    */
   getReadiness: function(startingAt) {
-    if (!this.get('last') || !this.get('next')) {
+    let readiness = 0;
+    let last = this.get('last');
+    let next = this.get('next');
+
+    // check if local reviews need to be calculated manually
+    if (this.collection && this.collection.reviews) {
+      const reviews = this.collection.reviews.getByItemId(this.id);
+
+      if (reviews.length) {
+        last = _.last(reviews).submitTime;
+      }
+
+      for (let i = 0, length = reviews.length; i < length; i++) {
+        next += reviews[i].newInterval;
+      }
+    }
+
+    // check if initial values are available
+    if (!last || !next) {
       return 9999;
     }
 
     const now = startingAt || moment().unix();
-    const timeElapsedSinceLastAttempt = now - this.get('last');
-    const scheduledInterval = this.get('next') - this.get('last');
-    let readiness = timeElapsedSinceLastAttempt / scheduledInterval;
+    const timeElapsedSinceLastAttempt = now - last;
+    const scheduledInterval = next - last;
+
+    readiness = timeElapsedSinceLastAttempt / scheduledInterval;
 
     if (readiness < 0 && scheduledInterval > 1) {
       readiness = 0.7;

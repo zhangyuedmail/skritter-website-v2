@@ -340,8 +340,6 @@ const ItemCollection = BaseSkritterCollection.extend({
                     callback(error);
                   },
                   success: result => {
-                    this.reset();
-
                     _.forEach(this.add(result), model => {
                       model._queue = true;
                     });
@@ -573,6 +571,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    */
   reset: function() {
     this.vocabs.reset();
+
     return BaseSkritterCollection.prototype.reset.apply(this, arguments);
   },
 

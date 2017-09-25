@@ -175,6 +175,46 @@ const OfflineModel = GelatoModel.extend({
     return this.reviews;
   },
 
+  /**
+   * Stores a review in the database and updates array.
+   * @param {ReviewModel[]} reviews
+   * @returns {Promise.<Array>}
+   */
+  putReviews: function (reviews) {
+    reviews = _.isArray(reviews) ? reviews : [reviews];
+
+    return new Promise(async (resolve, reject) => {
+      const reviewData = [];
+
+      for (let a = 0, lengthA = reviews.length; a < lengthA; a++) {
+        const review = reviews[a];
+        const reviewIndex = _.findIndex(this.reviews, {group: review.id});
+        const reviewJSON = review.toJSON();
+        const reviewCache = {};
+
+        delete reviewJSON.promptItems;
+
+        _.forEach(reviewJSON.data, data => delete data.item);
+
+        if (reviewIndex) {
+          this.reviews[reviewIndex] = reviewJSON;
+        } else {
+          this.reviews.push(reviewJSON);
+        }
+
+        reviewData.push(reviewJSON);
+      }
+
+      try {
+        await this.database.reviews.bulkPut(reviewData);
+      } catch (error) {
+        reject(error);
+      }
+
+      resolve(reviews);
+    });
+  },
+
    /**
    * Prepare offline sync meta data and indexedDB database.
    */
@@ -191,9 +231,21 @@ const OfflineModel = GelatoModel.extend({
       characters: '_id,writing',
       items: 'id,next,part,style',
       lists: 'id,name,studyingMode',
-      reviews: 'id',
+      reviews: 'group,created',
       vocabs: 'id,writing'
     });
+  },
+
+  /**
+   * Removes reviews by extracting the key from a review chunk.
+   * @param {ReviewModel[]} reviews
+   * @returns {Promise.<Array>}
+   */
+  removeReviews: function (reviews) {
+    const reviewArray = _.isArray(reviews) ? reviews: [reviews];
+    const groupIds = _.map(reviews, 'id');
+
+    return this.database.reviews.bulkDelete(groupIds);
   },
 
   /**
@@ -238,6 +290,52 @@ const OfflineModel = GelatoModel.extend({
     this.status = 'standby';
 
     this.trigger('status', this.status);
+  },
+
+  /**
+   * Updates item and cache item values from reviews.
+   * @param {ReviewModel[]} reviews
+   * @returns {Promise.<Array>}
+   */
+  updateItems: function (reviews) {
+    reviews = _.isArray(reviews) ? reviews : [reviews];
+
+    return new Promise(async (resolve, reject) => {
+      const reviewData = [];
+      const updatedItems = [];
+
+      for (let a = 0, lengthA = reviews.length; a < lengthA; a++) {
+        const review = reviews[a];
+        const reviewJSON = review.toJSON();
+
+        for (let b = 0, lengthB = reviewJSON.data.length; b < lengthB; b++) {
+          const reviewData = reviewJSON.data[b];
+          const submitted = parseInt(reviewData.submitTime, 10);
+          let item = _.find(updatedItems, {id: reviewData.itemId});
+
+          if (!item) {
+            item = await this.database.items.get(reviewData.itemId);
+          }
+
+          item.changed = submitted;
+          item.interval = reviewData.newInterval;
+          item.last = submitted;
+          item.next = submitted + reviewData.newInterval;
+          item.reviews += 1;
+          item.successes += reviewData.score > 1 ? 1 : 0;
+
+          updatedItems.push(item);
+        }
+      }
+
+      try {
+        await this.database.items.bulkPut(updatedItems);
+      } catch (error) {
+        reject(error);
+      }
+
+      resolve(updatedItems);
+    });
   },
 
   /**
