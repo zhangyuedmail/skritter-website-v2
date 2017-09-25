@@ -44,6 +44,8 @@ const StudyListPage = GelatoPage.extend({
    * @constructor
    */
   initialize: function(options) {
+    Howler.autoSuspend = false;
+
     ScreenLoader.show(true);
 
     this.currentItem = null;
@@ -57,6 +59,16 @@ const StudyListPage = GelatoPage.extend({
     this.toolbar = new Toolbar({page: this});
     this.vocablist = new Vocablist({id: options.listId});
 
+    // merge unsynced reviews into item collection reviews
+    if (app.user.offline.isReady()) {
+      this.items.reviews.add(app.user.offline.reviews);
+    }
+
+    // will hold a number that shows
+    this.itemsAddedToday = null;
+    this.promptsReviewed = 0;
+    this.promptsSinceLastAutoAdd = 0;
+
     if (app.user.get('eccentric')) {
       this._views['recipe'] = new Recipes();
     }
@@ -68,6 +80,9 @@ const StudyListPage = GelatoPage.extend({
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
     this.listenTo(vent, 'items:add', this.addItems);
     this.listenTo(vent, 'studySettings:show', this.showStudySettings);
+
+    // handle specific cordova related events
+    document.addEventListener('pause', this.handlePauseEvent.bind(this), false);
   },
 
   /**

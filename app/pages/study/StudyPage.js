@@ -49,9 +49,9 @@ const StudyPage = GelatoPage.extend({
       this.loadAlreadyTimed = false;
     }
 
-    ScreenLoader.show(true);
-
     Howler.autoSuspend = false;
+
+    ScreenLoader.show(true);
 
     this.currentItem = null;
     this.currentPromptItems = null;
@@ -64,6 +64,11 @@ const StudyPage = GelatoPage.extend({
     this.toolbar = new Toolbar({page: this});
     this.vocablists = new Vocablists();
 
+    // merge unsynced reviews into item collection reviews
+    if (app.user.offline.isReady()) {
+      this.items.reviews.add(app.user.offline.reviews);
+    }
+
     // will hold a number that shows
     this.itemsAddedToday = null;
     this.promptsReviewed = 0;
@@ -73,9 +78,6 @@ const StudyPage = GelatoPage.extend({
       this._views['recipe'] = new Recipes();
     }
 
-    // manually add reviews from offline cache
-    this.items.set(app.user.offline.reviews);
-
     // make sure the item collection knows about filtered lists
     this.items.listIds = app.user.getFilteredLists();
 
@@ -84,7 +86,7 @@ const StudyPage = GelatoPage.extend({
     this.listenTo(vent, 'items:add', this.addItems);
     this.listenTo(vent, 'studySettings:show', this.showStudySettings);
 
-    // Handle specific cordova related events
+    // handle specific cordova related events
     document.addEventListener('pause', this.handlePauseEvent.bind(this), false);
   },
 
