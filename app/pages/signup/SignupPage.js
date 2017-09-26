@@ -27,7 +27,8 @@ module.exports = GelatoPage.extend({
   },
 
   navbarOptions: {
-    showBackBtn: true
+    showBackBtn: true,
+    showSyncBtn: false
   },
 
   /**

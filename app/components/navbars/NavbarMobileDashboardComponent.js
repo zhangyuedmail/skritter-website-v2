@@ -28,7 +28,13 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     }
 
     this.showBackBtn = viewOptions.showBackBtn;
-    this.showSyncBtn = app.config.offlineEnabled;
+
+    if (viewOptions.showSyncBtn === false) {
+      this.showSyncBtn = false;
+    } else {
+      this.showSyncBtn = app.config.offlineEnabled;
+    }
+
 
     this.listenTo(app.user.offline, 'status', this.handleOfflineStatus);
 
