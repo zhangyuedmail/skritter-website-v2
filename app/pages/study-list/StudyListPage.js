@@ -127,6 +127,13 @@ const StudyListPage = GelatoPage.extend({
   },
 
   /**
+   * @method handlePauseEvent
+   */
+  handlePauseEvent: function() {
+    this.items.reviews.post(1);
+  },
+
+  /**
    * Adds items to the study queue
    * @method addItem
    * @param {Boolean} [silenceNoItems] whether to hide a popup if no items are added
