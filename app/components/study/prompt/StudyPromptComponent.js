@@ -437,11 +437,11 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     let score = this.review.get('score');
 
-    // multiply the speed x2 if the user got the prompt wrong (grade 1 or 2)
+    // multiply the speed x2.75 if the user got the prompt wrong (grade 1 or 2)
     // so they can see the prompt longer
-    const promptDelayMultiplier = score > 2 ? 1 : 2;
+    const promptDelayMultiplier = score > 2 ? 1 : 2.75;
 
-    const animSpeed = config.autoAdvanceDelay * 4 * promptDelayMultiplier;
+    const animSpeed = (config.autoAdvanceDelay * 4 * promptDelayMultiplier).toFixed(1);
     const styleStr = '-webkit-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
       '-moz-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
       'animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;';
