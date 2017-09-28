@@ -116,6 +116,31 @@ gelato-page(data-name='mobile-account-settings-study')
                   input#field-add-contained(type="checkbox", checked=user.get('autoAddComponentCharacters'))
                   .toggle-switch-slider.round
 
+          hr
+
+          .form-group
+            label.col-xs-3.control-label(for="field-goal-mode") Goal mode
+              .option-desc
+            .col-xs-9
+              .checkbox
+                label.toggle-switch
+                  input#field-goal-mode(type="checkbox", checked=user.get('goalEnabled'))
+                  .toggle-switch-slider.round
+
+          .form-group
+            label.col-xs-3.control-label(for="field-goal-type") Goal type
+              .option-desc
+            .col-xs-9
+              select#field-goal-type.form-control
+                option(value="item", selected=(app.user.get('goalType') === 'item')) Item
+                option(value="time", selected=(app.user.get('goalType') === 'time')) Time
+
+          .form-group
+            label.col-xs-3.control-label(for="field-goal-value") Goal value
+              .option-desc
+            .col-xs-9
+              input#field-goal-value(type="text", value=app.user.getGoal().value)
+
           if app.isJapanese()
             .form-group
               label.col-xs-9.control-label(for="field-study-kana") Study kana
