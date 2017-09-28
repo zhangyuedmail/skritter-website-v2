@@ -167,7 +167,7 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
       .toggleClass('good', rangeData.totalChangeLearned > 0)
       .toggleClass('bad', rangeData.totalChangeLearned < 0);
 
-    this.$('#num-added').text(rangeData.added).toggleClass('good', rangeData.added > 0);
+    this.$('#num-added').text(Math.max(rangeData.added, 0)).toggleClass('good', rangeData.added > 0);
     this.$('#num-reviews').text(rangeData.studied).toggleClass('good', rangeData.studied > 0);
     this.$('#num-retention').text(rangeData.retentionRate + '%')
       .toggleClass('excellent', rangeData.retentionRate > 95)
