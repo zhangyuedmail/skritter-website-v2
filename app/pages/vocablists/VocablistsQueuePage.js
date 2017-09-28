@@ -4,7 +4,7 @@ const ReviewingTable = require('components/vocablists/VocablistsReviewingTableCo
 const Sidebar = require('components/vocablists/VocablistsSidebarComponent');
 const Vocablists = require('collections/VocablistCollection');
 
-/**
+/**\
  * @class VocablistsQueue
  * @extends {GelatoPage}
  */
@@ -15,6 +15,10 @@ module.exports = GelatoPage.extend({
    * @type {String}
    */
   title: app.locale('pages.vocablists.titleQueue'),
+
+  navbarOptions: {
+    showCreateListBtn: true
+  },
 
   section: 'Lists',
 

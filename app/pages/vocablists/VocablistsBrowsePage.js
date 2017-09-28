@@ -22,6 +22,10 @@ module.exports = GelatoPage.extend({
     'click #grid-option': 'handleClickGridOption'
   },
 
+  navbarOptions: {
+    showCreateListBtn: true
+  },
+
   /**
    * @property title
    * @type {String}

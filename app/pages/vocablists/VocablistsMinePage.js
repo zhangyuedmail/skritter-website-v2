@@ -15,6 +15,10 @@ module.exports = GelatoPage.extend({
    */
   template: require('./VocablistsMine'),
 
+  navbarOptions: {
+    showCreateListBtn: true
+  },
+
   /**
    * @property title
    * @type {String}

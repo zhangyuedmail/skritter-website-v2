@@ -7,6 +7,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
   events: {
     'click #toggle-menu': 'handleToggleMenuClick',
     'click #back-btn': 'handleBackClick',
+    'click #create-list-btn': 'handleCreateListClick',
     'click #sync-btn': 'handleSyncClick'
   },
 
@@ -28,12 +29,8 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     }
 
     this.showBackBtn = viewOptions.showBackBtn;
-
-    if (viewOptions.showSyncBtn === false) {
-      this.showSyncBtn = false;
-    } else {
-      this.showSyncBtn = app.config.offlineEnabled;
-    }
+    this.showCreateListBtn = viewOptions.showCreateListBtn;
+    this.showSyncBtn = app.config.offlineEnabled && viewOptions.showSyncBtn
 
 
     this.listenTo(app.user.offline, 'status', this.handleOfflineStatus);
@@ -48,6 +45,11 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
   handleBackClick: function(event) {
     event.preventDefault();
     window.history.back();
+  },
+
+  handleCreateListClick: function(event) {
+    event.preventDefault();
+    app.router.navigate('vocablists/create', {trigger: true});
   },
 
   /**

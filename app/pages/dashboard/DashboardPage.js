@@ -29,6 +29,10 @@ const DashboardPage = GelatoPage.extend({
    */
   mobileNavbar: MobileNavbar,
 
+  navbarOptions: {
+    showSyncBtn: true
+  },
+
   /**
    * @property showFooter
    * @type {Boolean}
