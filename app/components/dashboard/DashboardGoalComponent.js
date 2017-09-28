@@ -118,7 +118,7 @@ const DashboardGoalComponent = GelatoComponent.extend({
       const totalReviews = app.user.stats.getDailyItemsReviewed();
 
         this.doughnut.setTitle({
-          text: totalReviews + ' / ' + goal.value  + '<br>items',
+          text: totalReviews + ' / ' + (goal.value || 0)  + '<br>items',
           align: 'center',
           verticalAlign: 'middle',
           y: 0
