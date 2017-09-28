@@ -63,7 +63,7 @@
     "lodash": "4.17.x",
     "moment": "2.18.x",
     "moment-timezone": "0.5.x",
-    "morgan": "1.8.x",
+    "morgan": "1.9.x",
     "wanakana": "2.3.x",
     "webfontloader": "1.6.x"
   },
@@ -88,7 +88,7 @@
     "sass-brunch": "2.10.x",
     "selenium-server-standalone-jar": "3.5.x",
     "shelljs": "0.7.x",
-    "sinon": "3.3.x",
+    "sinon": "4.0.x",
     "uglify-js-brunch": "2.10.x"
   }
 }
