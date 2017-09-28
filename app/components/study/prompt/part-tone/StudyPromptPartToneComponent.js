@@ -56,7 +56,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.canvas.reset();
 
     this.prompt.canvas.drawCharacter(
-      'character-background',
+      'character',
       this.prompt.review.vocab.get('writing'),
       {
         color: '#e8ded2',

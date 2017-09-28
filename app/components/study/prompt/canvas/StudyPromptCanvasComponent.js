@@ -24,6 +24,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
+    _.bindAll(this, 'onStageTick');
+
     this.brushScale = 0.025;
     this.defaultFadeEasing = createjs.Ease.sineOut;
     this.defaultFadeSpeed = 1000;
@@ -42,6 +44,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.stage = null;
     this.strokeColor = '#4b4b4b';
     this.canvasSizeOverride = null;
+
+    this.canvasDirty = false;
 
     this.downListener = null;
     this.moveListener = null;
@@ -74,14 +78,13 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   render: function() {
     this.renderTemplate();
     this.stage = this.createStage();
+
+    // TODO: put this in separate canvas
     this.createLayer('character-grid');
-    this.createLayer('character-background');
     this.createLayer('character-hint');
     this.createLayer('character-reveal');
     this.createLayer('character-teach');
     this.createLayer('character');
-    this.createLayer('input-background2');
-    this.createLayer('input-background1');
     this.createLayer('stroke-hint');
     this.createLayer('input');
     this.disableCanvas();
@@ -132,16 +135,16 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     }
 
     const ticker = createjs.Ticker;
-    ticker.setFPS(32);
-    ticker.removeEventListener('tick', stage);
-    ticker.addEventListener('tick', stage);
+    ticker.framerate = app.isMobile() ? 32 : 60;
+    ticker.removeEventListener('tick', this.onStageTick);
+    ticker.addEventListener('tick', this.onStageTick);
 
     if (app.config.showCanvasFPS) {
       $('gelato-application').prepend('<div id="fps-counter" style="position:absolute;top:100px;z-index:99999;color:#EEE;background:#111;"></div>');
       const fpsCounter = $('#fps-counter');
       ticker.addEventListener('tick', () => {
         if (this.prompt.reviews && this.prompt.reviews.part === 'rune') {
-          fpsCounter.text(ticker.getMeasuredFPS().toFixed(2) + ' FPS, ' + ticker.getMeasuredTickTime());
+          fpsCounter.text(ticker.getMeasuredFPS().toFixed(2) + ' FPS, ' + ticker.getMeasuredTickTime().toFixed(4));
         }
       });
     }
@@ -150,6 +153,14 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     stage.autoClear = true;
     stage.enableDOMEvents(true);
     return stage;
+  },
+
+  /**
+   * Performs dirty check logic to determine if the canvas is dirty and needs
+   * to be updated on the tick
+   */
+  onStageTick: function() {
+    this.stage.update();
   },
 
   /**
@@ -333,6 +344,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
 
       marker.graphics.moveTo(oldPoint.x, oldPoint.y);
 
+      self.canvasDirty = true;
+
       self.moveListener = self.stage.addEventListener('stagemousemove', onInputMove);
       self.upListener = self.stage.addEventListener('stagemouseup', onInputUp);
       self.leaveListener = self.stage.addEventListener('mouseleave', onInputLeave);
@@ -348,6 +361,12 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       oldPoint = point;
       oldMidPoint = midPoint;
       points.push(point);
+
+      if (app.config.showCanvasFPS) {
+        marker.cache(0, 0, self.size, self.size);
+      }
+
+      self.canvasDirty = true;
     }
 
     function onInputLeave(event) {
@@ -367,6 +386,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       clonedMarker.stroke = marker.stroke;
       self.triggerInputUp(points, clonedMarker);
       self.getLayer('input').removeAllChildren();
+
+      self.canvasDirty = true;
     }
 
     return this;
@@ -471,6 +492,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @returns {StudyPromptCanvasComponent}
    */
   remove: function() {
+    $('#fps-counter').remove();
     return GelatoComponent.prototype.remove.call(this);
   },
 
@@ -491,8 +513,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.getLayer('character-reveal').removeAllChildren();
     this.getLayer('character-teach').removeAllChildren();
     this.getLayer('character').removeAllChildren();
-    this.getLayer('input-background2').removeAllChildren();
-    this.getLayer('input-background1').removeAllChildren();
+    // this.getLayer('input-background2').removeAllChildren();
+    // this.getLayer('input-background1').removeAllChildren();
     this.getLayer('stroke-hint').removeAllChildren();
     this.getLayer('input').removeAllChildren();
 
@@ -549,6 +571,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   tracePath: function(layerName, path, options) {
     options = options || {};
+
     options.fill = options.fill || this.defaultTraceFill;
     var size = this.size;
     var circle = this.drawCircle(layerName, path[0].x, path[0].y, 10, {alpha: 0.6, fill: options.fill});
