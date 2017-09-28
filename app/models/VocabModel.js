@@ -26,7 +26,7 @@ const VocabModel = SkritterModel.extend({
    * @constructor
    */
   initialize: function() {
-    this.audioOffset = 0;
+    this.audioOffset = -1;
     this.audios = _.map(
       this.getUniqueAudios(),
       (data) => {
@@ -605,7 +605,7 @@ const VocabModel = SkritterModel.extend({
       return false;
     }
 
-    let audio = this.audios[this.audioOffset % this.audios.length];
+    let audio = this.audios[this.audioOffset > -1 ? this.audioOffset : 0  % this.audios.length];
     let cdvPath = app.config.cordovaAudioUrl + audio.name;
 
     if (app.isCordova()) {
