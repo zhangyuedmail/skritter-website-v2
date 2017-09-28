@@ -109,7 +109,6 @@ const AccountSettingsStudyPage = GelatoPage.extend({
   handleClickButtonSave: function(event) {
     event.preventDefault();
 
-    const self = this;
     let zhStudyStyleChanged;
 
     app.user.set({
@@ -117,6 +116,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
       autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
       autoAdvancePrompts: this.$('#field-auto-advance').is(':checked') ? 1.0 : 0,
       disableGradingColor: this.$('#field-disable-color').is(':checked'),
+      goalEnabled: this.$('#field-goal-mode').is(':checked'),
       hideDefinition: this.$('#field-hide-definition').is(':checked'),
       hideReading: this.$('#field-hide-reading').is(':checked'),
       retentionIndex: parseInt(this.$('#field-retention-index').val(), 10),
@@ -147,13 +147,15 @@ const AccountSettingsStudyPage = GelatoPage.extend({
       });
     }
 
-    zhStudyStyleChanged = (app.isChinese() && app.user.hasChanged('addSimplified') ||
-    app.user.hasChanged('addTraditional'));
+    zhStudyStyleChanged = (app.isChinese() && app.user.hasChanged('addSimplified') || app.user.hasChanged('addTraditional'));
+
+    app.user.setGoal(this.$('#field-goal-type').val(), parseInt(this.$('#field-goal-value').val(), 10))
+
     app.user.cache();
+
     app.user.save(null, {
-      error: function(req, error) {
-        let msg = error.responseJSON.message;
-        self.displayErrorMessage(msg);
+      error: (req, error) => {
+        this.displayErrorMessage(error.responseJSON.message);
       },
       success: () => {
         if (zhStudyStyleChanged) {

@@ -113,12 +113,12 @@ const DashboardGoalComponent = GelatoComponent.extend({
     const goal = app.user.getGoal();
     let percent = 0;
 
-    switch (app.user.get('goalType')) {
+    switch (goal.type) {
       case 'item':
       const totalReviews = app.user.stats.getDailyItemsReviewed();
 
         this.doughnut.setTitle({
-          text: totalReviews + ' / ' + goal.items  + '<br>items',
+          text: totalReviews + ' / ' + goal.value  + '<br>items',
           align: 'center',
           verticalAlign: 'middle',
           y: 0
@@ -131,7 +131,7 @@ const DashboardGoalComponent = GelatoComponent.extend({
         const totalTime = app.user.stats.getDailyTimeStudied();
 
         this.doughnut.setTitle({
-          text: moment(totalTime * 1000).format('m') + ' / '  + goal.time + '<br>minutes',
+          text: moment(totalTime * 1000).format('m') + ' / '  + goal.value + '<br>minutes',
           align: 'center',
           verticalAlign: 'middle',
           y: 0

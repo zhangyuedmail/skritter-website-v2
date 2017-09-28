@@ -18,7 +18,7 @@ gelato-page[data-name='account-settings-study'] {
 
     input {
       border-radius: 0;
-      height: 50px;
+      height: 34px;
 
       &[type="checkbox"] {
         height: auto;
@@ -27,6 +27,7 @@ gelato-page[data-name='account-settings-study'] {
       &[type="email"],
       &[type="text"] {
         max-width: 300px;
+        padding: 0 6px;
       }
     }
 

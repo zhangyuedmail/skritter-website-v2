@@ -37,8 +37,9 @@ const UserModel = SkritterModel.extend({
     hideDefinition: false,
     hideRatingNotice: false,
     gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
+    goalEnabled: true,
     goalType: 'item',
-    goalValues: {ja: {items: 100, time: 10}, zh: {items: 100, time: 10}},
+    goalValues: {ja: {item: 100, time: 10}, zh: {item: 100, time: 10}},
     lastChineseItemUpdate: 0,
     lastJapaneseItemUpdate: 0,
     readingChinese: 'pinyin',
@@ -208,24 +209,10 @@ const UserModel = SkritterModel.extend({
    * @returns {Object}
    */
   getGoal: function() {
-    return this.get('goalValues')[app.getLanguage()];
-  },
+    const type = this.get('goalType');
+    const values = this.get('goalValues')[app.getLanguage()];
 
-  /**
-   * @method setGoal
-   * @param {String} type
-   * @param {String} value
-   * @returns {Object}
-   */
-  setGoal: function(type, value) {
-    const goal = this.get('goalValues');
-
-    goal[app.getLanguage()][type] = value;
-
-    this.set('goalType', type);
-    this.set('goalValues', goal);
-
-    this.cache();
+    return {type: type, value: values[type]};
   },
 
   /**
@@ -527,6 +514,23 @@ const UserModel = SkritterModel.extend({
    */
   parse: function(response) {
     return response.User;
+  },
+
+  /**
+   * @method setGoal
+   * @param {String} type
+   * @param {String} value
+   * @returns {Object}
+   */
+  setGoal: function(type, value) {
+    const goal = this.get('goalValues');
+
+    goal[app.getLanguage()][type] = value;
+
+    this.set('goalType', type);
+    this.set('goalValues', goal);
+
+    this.cache();
   },
 
   /**

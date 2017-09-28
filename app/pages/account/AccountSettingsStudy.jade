@@ -148,6 +148,31 @@ gelato-page(data-name='account-settings-study')
 
               hr
 
+              .form-group
+                label.col-sm-3.control-label(for="field-goal-mode") Goal mode
+                  .option-desc
+                .col-sm-9
+                  .checkbox
+                    label.toggle-switch
+                      input#field-goal-mode(type="checkbox", checked=user.get('goalEnabled'))
+                      .toggle-switch-slider.round
+
+              .form-group
+                label.col-sm-3.control-label(for="field-goal-type") Goal type
+                  .option-desc
+                .col-sm-9
+                  select#field-goal-type.form-control
+                    option(value="item", selected=(app.user.get('goalType') === 'item')) Item
+                    option(value="time", selected=(app.user.get('goalType') === 'time')) Time
+
+              .form-group
+                label.col-sm-3.control-label(for="field-goal-value") Goal value
+                  .option-desc
+                .col-sm-9
+                 input#field-goal-value(type="text", value=app.user.getGoal().value)
+
+              hr
+
               if user.get('isAdmin') || app.isDevelopment()
                 .form-group
                   label.col-sm-3.control-label(for="field-disable-color") Disable grading color
