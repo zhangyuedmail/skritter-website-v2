@@ -19,6 +19,7 @@ const UserModel = SkritterModel.extend({
    * @type {Object}
    */
   defaults: {
+    allowEmailsFromSkritter: false,
     addItemOffset: 0,
     avatar: require('data/default-avatar'),
     allChineseParts: ['defn', 'rdng', 'rune', 'tone'],

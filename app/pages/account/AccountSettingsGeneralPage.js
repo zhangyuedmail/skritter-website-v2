@@ -160,7 +160,13 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
 
         this.displayErrorMessage(msg);
       },
-      success: model => model.cache()
+      success: (model) => {
+        model.cache();
+        app.notifyUser({
+          message: app.locale('pages.accountGeneral.saveSuccess'),
+          type: 'pastel-success'
+        });
+      }
     });
   },
 
@@ -252,6 +258,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     avatar = avatar.replace('data:image/png;base64,', '');
 
     return {
+      allowEmailsFromSkritter: this.$('#field-newsletter').is(':checked'),
       avatar: avatar,
       aboutMe: this.$('#field-about').val().trim(),
       country: this.$('#field-country').find(':selected').val(),
