@@ -605,43 +605,20 @@ const VocabModel = SkritterModel.extend({
       return false;
     }
 
-    let audio = this.audios[this.audioOffset > -1 ? this.audioOffset : 0  % this.audios.length];
-    let cdvPath = app.config.cordovaAudioUrl + audio.name;
+    const audioOffset = this.audioOffset > -1 ? this.audioOffset : 0;
+    let audio = this.audios[audioOffset % this.audios.length];
+
+    if (!audio) {
+      audio = this.audios[0];
+    }
+
+    if (!audio) {
+      return;
+    }
 
     if (app.isCordova()) {
-      resolveLocalFileSystemURL(cdvPath,
-        function(entry) {
-          if (app.isAndroid()) {
-            plugins.audio.play(entry.toURL(), app.user.get('volume'));
-          }
-
-          if (app.isIOS()) {
-            const media = new Media(cdvPath, function() {
-              media.stop();
-              media.release();
-            });
-
-            media.play();
-          }
-        },
-        function() {
-          new FileTransfer().download(audio.url, cdvPath, function(entry) {
-            if (app.isAndroid()) {
-              plugins.audio.play(entry.toURL(), app.user.get('volume'));
-            }
-
-            if (app.isIOS()) {
-              const media = new Media(cdvPath, function() {
-                media.stop();
-                media.release();
-              });
-
-              media.play();
-              media.setVolume(app.user.get('volume'));
-            }
-          });
-        }
-      );
+      const cdvPath = app.config.cordovaAudioUrl + audio.name;
+      this._playOrDownloadMobileAudio(audio, cdvPath);
     } else {
       new Howl({
         src: [audio.url],
@@ -653,6 +630,47 @@ const VocabModel = SkritterModel.extend({
     this.audioOffset++;
 
     return true;
+  },
+
+  /**
+   * Attempts to play an audio file on a mobile device using plugins or
+   * downloads the file if it does not exist locally.
+   * @param {Object} audio an object with information about an audio file
+   * @param {String} cdvPath the path of the local audio file
+   * @private
+   */
+  _playOrDownloadMobileAudio: function(audio, cdvPath) {
+    resolveLocalFileSystemURL(cdvPath, (entry) => {
+        this._playMobileAudio(cdvPath, entry);
+      },
+      function() {
+        new FileTransfer().download(audio.url, cdvPath, (entry) => {
+          this._playMobileAudio(cdvPath, entry);
+        });
+      }
+    );
+  },
+
+  /**
+   * Plays an audio file on Android or iOS
+   * @param {String} cdvPath the path of the local audio file
+   * @param {Object} audioInfo object with information about the audio file
+   * @private
+   */
+  _playMobileAudio: function(cdvPath, audioInfo) {
+    if (app.isAndroid()) {
+      plugins.audio.play(audioInfo.toURL(), app.user.get('volume'));
+    }
+
+    if (app.isIOS()) {
+      const media = new Media(cdvPath, function() {
+        media.stop();
+        media.release();
+      });
+
+      media.play();
+      media.setVolume(app.user.get('volume'));
+    }
   },
 
   /**
