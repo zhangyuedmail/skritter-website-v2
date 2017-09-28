@@ -7,7 +7,6 @@ const DashboardStatus = require('components/dashboard/DashboardStatusComponent')
 const DashboardTotal = require('components/dashboard/DashboardTotalComponent');
 const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 const MobileNavbar = require('components/navbars/NavbarMobileDashboardComponent');
-const SetGoalDialog = require('dialogs1/set-goal/view');
 
 /**
  * A page that shows a summary of the user's review count due, stats, and lists
@@ -57,7 +56,7 @@ const DashboardPage = GelatoPage.extend({
       this.loadStart = window.performance.now();
     }
 
-    if (app.config.goalModeEnabled) {
+    if (app.config.goalModeEnabled && app.user.get('goalEnabled')) {
       this._views['goal'] = new DashboardGoal();
     } else {
       this._views['goal'] = new DashboardStatus();
@@ -158,9 +157,7 @@ const DashboardPage = GelatoPage.extend({
   onGoalSettingClicked: function(event) {
     event.preventDefault();
 
-    this.dialog = new SetGoalDialog();
-    this.dialog.render();
-    this.dialog.open();
+    app.router.navigate('account/settings/study', {trigger: true});
   },
 
   onRatingBtnClicked: function() {

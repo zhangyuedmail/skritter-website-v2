@@ -10,9 +10,11 @@ gelato-page[data-name='dashboard'] {
 
   #goal-setting {
     color: $wood9;
+    cursor: pointer;
     font-size: 21px;
     position: absolute;
     right: 25px;
+    top: 20px;
     z-index: 5000;
   }
 
