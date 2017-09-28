@@ -207,8 +207,8 @@ body
     include ./includes/StaticMarketingFooter
 
   script.
-    // landing image height calculator...170 is a magic number
-    var height = window.innerHeight - 170;
+    // landing image height calculator
+    var height = window.innerHeight - (window.innerWidth > 768 ? 170 : 230);
     document.getElementById('landing-inner-wrapper').style.height = height + 'px';
 
     // countup plugin
