@@ -51,20 +51,10 @@ const FeedbackComponent = GelatoComponent.extend({
           thanks = '謝謝!';
       }
 
-      $.notify(
-        {
-          message: 'Feedback successfully sent! ' + thanks
-        },
-        {
-          type: 'pastel-success',
-          animate: {
-            enter: 'animated fadeInDown',
-            exit: 'animated fadeOutUp'
-          },
-          delay: 5000,
-          icon_type: 'class'
-        }
-      );
+      app.notifyUser({
+        message: 'Feedback successfully sent! ' + thanks,
+        type: 'pastel-success'
+      });
     }
   },
 
