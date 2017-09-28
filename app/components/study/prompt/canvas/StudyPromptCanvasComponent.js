@@ -508,13 +508,10 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     // });
 
     this.getLayer('character-grid').removeAllChildren();
-    this.getLayer('character-background').removeAllChildren();
     this.getLayer('character-hint').removeAllChildren();
     this.getLayer('character-reveal').removeAllChildren();
     this.getLayer('character-teach').removeAllChildren();
     this.getLayer('character').removeAllChildren();
-    // this.getLayer('input-background2').removeAllChildren();
-    // this.getLayer('input-background1').removeAllChildren();
     this.getLayer('stroke-hint').removeAllChildren();
     this.getLayer('input').removeAllChildren();
 
