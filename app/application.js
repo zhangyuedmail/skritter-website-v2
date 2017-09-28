@@ -643,6 +643,10 @@ module.exports = GelatoApplication.extend({
         message: options.message
       },
       {
+        offset: {
+          x: 20,
+          y: app.isMobile() ? 100 : 20
+        },
         type: options.type || 'pastel-danger',
         animate: {
           enter: options.animateEnter || 'animated fadeInDown',
