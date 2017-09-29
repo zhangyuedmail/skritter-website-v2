@@ -188,6 +188,11 @@ const StudyPromptComponent = GelatoComponent.extend({
         break;
     }
 
+    // reset audio offset on prompt vocab
+    if (this.reviews.vocab) {
+      this.reviews.vocab.resetAudioOffset();
+    }
+
     // brush dot
     this.$('#canvas-container').toggleClass('rune', this.reviews.part === 'rune');
 

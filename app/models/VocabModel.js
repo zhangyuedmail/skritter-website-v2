@@ -633,6 +633,70 @@ const VocabModel = SkritterModel.extend({
   },
 
   /**
+   * @method post
+   * @param {Function} callback
+   */
+  post: function(callback) {
+    $.ajax({
+      context: this,
+      url: app.getApiUrl() + 'vocabs',
+      type: 'POST',
+      headers: app.user.session.getHeaders(),
+      data: {
+        id: this.id,
+        definitions: JSON.stringify(this.get('definitions')),
+        lang: app.getLanguage(),
+        reading: this.get('reading'),
+        traditionalWriting: this.get('writingTraditional'),
+        writing: this.get('writing')
+      },
+      error: function(error) {
+        typeof callback === 'function' && callback(error);
+      },
+      success: function(result) {
+        typeof callback === 'function' && callback(null, this.set(result.Vocab, {merge: true}));
+      }
+    });
+  },
+
+
+  resetAudioOffset: function() {
+    this.audioOffset = -1;
+  },
+
+  /**
+   * @method toggleStarred
+   * @returns {Boolean}
+   */
+  toggleStarred: function() {
+    if (this.get('starred')) {
+      this.set('starred', false);
+      return false;
+    }
+    this.set('starred', true);
+    return true;
+  },
+
+  /**
+   * @method unbanAll
+   * @returns {Vocab}
+   */
+  unbanAll: function() {
+    this.set('bannedParts', []);
+    return this;
+  },
+
+  /**
+   * @method unbanPart
+   * @param {String} part
+   * @returns {Vocab}
+   */
+  unbanPart: function(part) {
+    this.set('bannedParts', _.remove(this.get('bannedParts'), part));
+    return this;
+  },
+
+  /**
    * Attempts to play an audio file on a mobile device using plugins or
    * downloads the file if it does not exist locally.
    * @param {Object} audio an object with information about an audio file
@@ -671,67 +735,7 @@ const VocabModel = SkritterModel.extend({
       media.play();
       media.setVolume(app.user.get('volume'));
     }
-  },
-
-  /**
-   * @method post
-   * @param {Function} callback
-   */
-  post: function(callback) {
-    $.ajax({
-      context: this,
-      url: app.getApiUrl() + 'vocabs',
-      type: 'POST',
-      headers: app.user.session.getHeaders(),
-      data: {
-        id: this.id,
-        definitions: JSON.stringify(this.get('definitions')),
-        lang: app.getLanguage(),
-        reading: this.get('reading'),
-        traditionalWriting: this.get('writingTraditional'),
-        writing: this.get('writing')
-      },
-      error: function(error) {
-        typeof callback === 'function' && callback(error);
-      },
-      success: function(result) {
-        typeof callback === 'function' && callback(null, this.set(result.Vocab, {merge: true}));
-      }
-    });
-  },
-
-  /**
-   * @method toggleStarred
-   * @returns {Boolean}
-   */
-  toggleStarred: function() {
-    if (this.get('starred')) {
-      this.set('starred', false);
-      return false;
-    }
-    this.set('starred', true);
-    return true;
-  },
-
-  /**
-   * @method unbanAll
-   * @returns {Vocab}
-   */
-  unbanAll: function() {
-    this.set('bannedParts', []);
-    return this;
-  },
-
-  /**
-   * @method unbanPart
-   * @param {String} part
-   * @returns {Vocab}
-   */
-  unbanPart: function(part) {
-    this.set('bannedParts', _.remove(this.get('bannedParts'), part));
-    return this;
   }
-
 });
 
 module.exports = VocabModel;
