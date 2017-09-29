@@ -165,10 +165,12 @@ const StudyPage = GelatoPage.extend({
   /**
    * Displays a notification to the user based on how many words were added
    * @param {Number} [added] how many items were just added
+   * @param {Boolean} [fromAutoAdd] whether the add was triggered from auto-add.
+   *                                Affects display of popups.
    */
-  showItemsAddedNotification: function(added) {
+  showItemsAddedNotification: function(added, fromAutoAdd) {
     if (added) {
-      if (this.itemsAddedToday >= this.getMaxItemsPerDay() && !this.userNotifiedAutoAddLimit) {
+      if (this.itemsAddedToday >= this.getMaxItemsPerDay() && !this.userNotifiedAutoAddLimit && fromAutoAdd) {
         app.notifyUser({
           message: 'You\'ve reached your daily auto-add limit today! You can still manually add more words if you want to progress faster.',
           type: 'pastel-success'
@@ -181,10 +183,12 @@ const StudyPage = GelatoPage.extend({
         });
       }
     } else {
-      app.notifyUser({
-        message: 'No more words to add. <br><a href="/vocablists/browse">Add a new list</a>',
-        type: 'pastel-info'
-      });
+      if (!fromAutoAdd) {
+        app.notifyUser({
+          message: 'No more words to add. <br><a href="/vocablists/browse">Add a new list</a>',
+          type: 'pastel-info'
+        });
+      }
     }
   },
 
@@ -366,7 +370,7 @@ const StudyPage = GelatoPage.extend({
 
       if (app.user.isItemAddingAllowed() && this.shouldAutoAddItem(this.currentItem)) {
         this.addItems(true).then((added) => {
-          this.showItemsAddedNotification(added);
+          this.showItemsAddedNotification(added, true);
           this.promptsSinceLastAutoAdd = 0;
         });
       }
