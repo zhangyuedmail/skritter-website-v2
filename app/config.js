@@ -105,7 +105,7 @@ module.exports = {
   /**
    * Whether to allow offline mode to function.
    */
-  offlineEnabled: true,
+  offlineEnabled: false,
 
   /**
    * The sentry reporting url used for javascript error tracking.
