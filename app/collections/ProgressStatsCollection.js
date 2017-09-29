@@ -465,7 +465,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
   getGoalItemPercent: function() {
     const goal = app.user.getGoal();
     const totalItems = app.user.stats.getDailyItemsReviewed();
-    const percentItems = Math.round(totalItems / goal.items * 100);
+    const percentItems = Math.round(totalItems / goal.value * 100);
 
     return percentItems > 100 ? 100 : parseFloat(percentItems.toFixed(2));
   },
@@ -477,7 +477,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
   getGoalTimePercent: function() {
     const goal = app.user.getGoal();
     const totalTime = app.user.stats.getDailyTimeStudied() / 60;
-    const percentTime = Math.round(totalTime / goal.time * 100);
+    const percentTime = Math.round(totalTime / goal.value * 100);
 
     return percentTime > 100 ? 100 : parseFloat(percentTime.toFixed(2));
   },

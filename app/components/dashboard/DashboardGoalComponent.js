@@ -131,7 +131,7 @@ const DashboardGoalComponent = GelatoComponent.extend({
         const totalTime = app.user.stats.getDailyTimeStudied();
 
         this.doughnut.setTitle({
-          text: moment(totalTime * 1000).format('m') + ' / '  + goal.value + '<br>minutes',
+          text: moment(totalTime * 1000).format('m') + ' / '  + (goal.value || 0) + '<br>minutes',
           align: 'center',
           verticalAlign: 'middle',
           y: 0
