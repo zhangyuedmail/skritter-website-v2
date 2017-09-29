@@ -16,6 +16,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
     // 'change select': 'handleChangeSelect',
     // 'change input[type="checkbox"]': 'handleChangeCheckbox',
     // 'change #field-target-language': 'handleChangeTargetLanguage',
+    'change #field-goal-type': 'handleChangeGoalType',
     'click #button-save': 'handleClickButtonSave'
   },
 
@@ -82,6 +83,15 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    */
   handleChangeCheckbox: function(event) {
     this.handleClickButtonSave(event);
+  },
+
+  handleChangeGoalType: function(event) {
+    const goalType = $(event.target).val();
+    const goalValue = app.user.get('goalValues')[app.getLanguage()][goalType];
+
+    event.preventDefault();
+
+    this.$('#field-goal-value').val(goalValue);
   },
 
   /**

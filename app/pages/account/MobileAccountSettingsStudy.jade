@@ -128,18 +128,13 @@ gelato-page(data-name='mobile-account-settings-study')
                   .toggle-switch-slider.round
 
           .form-group
-            label.col-xs-3.control-label(for="field-goal-type") Goal type
+            label.col-xs-3.control-label(for="field-goal-value") Goal target
               .option-desc
             .col-xs-9
-              select#field-goal-type.form-control
-                option(value="item", selected=(app.user.get('goalType') === 'item')) Item
-                option(value="time", selected=(app.user.get('goalType') === 'time')) Time
-
-          .form-group
-            label.col-xs-3.control-label(for="field-goal-value") Goal value
-              .option-desc
-            .col-xs-9
-              input#field-goal-value(type="text", value=app.user.getGoal().value)
+              input#field-goal-value.form-control.inline-block(type="text", value=app.user.getGoal().value)
+              select#field-goal-type.form-control.inline-block
+                option(value="item", selected=(app.user.get('goalType') === 'item')) Reviews
+                option(value="time", selected=(app.user.get('goalType') === 'time')) Minutes
 
           if app.isJapanese()
             .form-group

@@ -37,6 +37,10 @@ gelato-page[data-name='mobile-account-settings-study'] {
     color: $white6;
   }
 
+  .inline-block {
+    display: inline-block;
+  }
+
   .header {
     margin-top: 0;
     margin-bottom: 0px;
@@ -58,7 +62,7 @@ gelato-page[data-name='mobile-account-settings-study'] {
 
     input {
       border-radius: 0;
-      height: 50px;
+      height: 34px;
       &[type="checkbox"] {
         height: auto;
       }
@@ -92,6 +96,15 @@ gelato-page[data-name='mobile-account-settings-study'] {
     }
     #button-save {
       margin: 30px auto;
+    }
+    #field-goal-type {
+      max-width: 150px;
+    }
+    #field-goal-value {
+      height: 36px;
+      margin-right: 5px;
+      max-width: 100px;
+      outline: 0;
     }
   }
 
