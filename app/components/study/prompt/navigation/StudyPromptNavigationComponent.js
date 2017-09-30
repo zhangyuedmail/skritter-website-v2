@@ -60,7 +60,7 @@ const StudyPromptNavigationComponent = GelatoComponent.extend({
   update: function() {
     if (this.prompt.reviews) {
       const shouldShowLeftArrow = this.showLeft &&
-        !this.prompt.reviews.isFirst() && this.items.reviews.length &&
+        !this.prompt.reviews.isFirst() && this.prompt.page.items.reviews.length &&
         this.prompt.review.isComplete();
       const shouldShowRightArrow = this.showRight && this.prompt.review.isComplete();
 
