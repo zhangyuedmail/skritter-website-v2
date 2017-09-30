@@ -24,7 +24,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
-    _.bindAll(this, 'onStageTick');
+    _.bindAll(this, 'onStageTick', 'onInputMove');
 
     this.brushScale = 0.025;
     this.defaultFadeEasing = createjs.Ease.sineOut;
@@ -51,6 +51,12 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.moveListener = null;
     this.leaveListener = null;
     this.upListener = null;
+
+    // stroke variables
+    this.oldPoint = null;
+    this.oldMidPoint = null;
+    this.points = null;
+    this.marker = null;
 
     createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
       this.moveTo(x1, y1);
@@ -324,49 +330,31 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * and variables--this function does too much!
    */
   enableInput: function() {
-    var self = this;
-    var oldPoint, oldMidPoint, points, marker;
-    var strokeSize = this.size * self.brushScale;
+    const self = this;
+    const strokeSize = this.size * this.brushScale;
 
     this.disableInput();
     this.downListener = self.stage.addEventListener('stagemousedown', onInputDown);
 
     function onInputDown(event) {
-      points = [];
-      marker = new createjs.Shape();
-      marker.graphics.setStrokeStyle(strokeSize, 'round', 'round');
-      marker.stroke = marker.graphics.beginStroke(self.strokeColor).command;
+      self.points = [];
+      self.marker = new createjs.Shape();
+      self.marker.graphics.setStrokeStyle(strokeSize, 'round', 'round');
+      self.marker.stroke = self.marker.graphics.beginStroke(self.strokeColor).command;
 
-      points.push(new createjs.Point(event.stageX, event.stageY));
-      oldPoint = oldMidPoint = points[0];
-      self.triggerInputDown(oldPoint);
-      self.getLayer('input').addChild(marker);
+      self.marker.cache(0, 0, self.size * 2, self.size * 2);
+      self.points.push(new createjs.Point(event.stageX, event.stageY));
+      self.oldPoint = self.oldMidPoint = self.points[0];
+      self.triggerInputDown(self.oldPoint);
 
-      marker.graphics.moveTo(oldPoint.x, oldPoint.y);
+      self.getLayer('input').addChild(self.marker);
 
+      self.marker.graphics.moveTo(self.oldPoint.x, self.oldPoint.y);
       self.canvasDirty = true;
 
-      self.moveListener = self.stage.addEventListener('stagemousemove', onInputMove);
+      self.moveListener = self.stage.addEventListener('stagemousemove', self.onInputMove);
       self.upListener = self.stage.addEventListener('stagemouseup', onInputUp);
       self.leaveListener = self.stage.addEventListener('mouseleave', onInputLeave);
-    }
-
-    function onInputMove(event) {
-      const point = new createjs.Point(event.stageX, event.stageY);
-      const midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
-      marker.graphics
-        .setStrokeStyle(strokeSize, 'round', 'round')
-        .moveTo(midPoint.x, midPoint.y)
-        .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
-      oldPoint = point;
-      oldMidPoint = midPoint;
-      points.push(point);
-
-      if (app.config.showCanvasFPS) {
-        marker.cache(0, 0, self.size, self.size);
-      }
-
-      self.canvasDirty = true;
     }
 
     function onInputLeave(event) {
@@ -374,23 +362,57 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     }
 
     function onInputUp(event) {
-      self.stage.removeEventListener('stagemousemove', onInputMove);
+      self.stage.removeEventListener('stagemousemove', self.onInputMove);
       self.stage.removeEventListener('stagemouseup', onInputUp);
       self.stage.removeEventListener('mouseleave', onInputLeave);
 
-      points.push(new createjs.Point(event.stageX, event.stageY));
-      marker.graphics.lineTo(event.stageX, event.stageY);
-      marker.graphics.endStroke();
+      self.points.push(new createjs.Point(event.stageX, event.stageY));
 
-      var clonedMarker = marker.clone(true);
-      clonedMarker.stroke = marker.stroke;
-      self.triggerInputUp(points, clonedMarker);
+      self.marker.graphics.lineTo(event.stageX, event.stageY);
+      self.marker.graphics.endStroke();
+
+      const clonedMarker = self.marker.clone(true);
+      clonedMarker.stroke = self.marker.stroke;
+      clonedMarker.cache(0, 0, self.size, self.size);
+      self.marker = null;
+
+      self.triggerInputUp(self.points, clonedMarker);
       self.getLayer('input').removeAllChildren();
 
       self.canvasDirty = true;
     }
 
     return this;
+  },
+
+  /**
+   * Handles input down movement that draws a line on the canvas
+   * @param event
+   */
+  onInputMove: function(event) {
+    const strokeSize = this.size * this.brushScale;
+
+    const point = new createjs.Point(event.stageX, event.stageY);
+    const midPoint = new createjs.Point(this.oldPoint.x + point.x >> 1, this.oldPoint.y + point.y >> 1);
+
+    // const canvWidth = 300;
+    // const canvHeight = 300;
+    // const dx = Math.abs(point.x - (this.oldPoint.x || 1)) / canvWidth;
+    // const dy = Math.abs(point.y - (this.oldPoint.y || 1)) / canvHeight;
+    // const bestDelta = Math.max(dx, dy);
+    // console.log(strokeSize, (bestDelta * 10), (strokeSize - (bestDelta * 10)));
+    this.marker.graphics.unstore();
+    this.marker.graphics
+      .setStrokeStyle(strokeSize, 'round', 'round') //(strokeSize - (bestDelta * 25))
+      .moveTo(midPoint.x, midPoint.y)
+      .curveTo(this.oldPoint.x, this.oldPoint.y, this.oldMidPoint.x, this.oldMidPoint.y);
+    this.oldPoint = point;
+    this.oldMidPoint = midPoint;
+    this.points.push(point);
+
+    this.marker.updateCache('source-over');
+
+    this.canvasDirty = true;
   },
 
   /**
@@ -470,7 +492,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
           object.graphics._stroke = customStroke;
         }
         if (object.cacheID) {
-          object.updateCache();
+          object.updateCache('source-over');
         }
       }
     })(object);
