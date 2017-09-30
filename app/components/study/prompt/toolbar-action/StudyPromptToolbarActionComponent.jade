@@ -1,5 +1,6 @@
 gelato-component(data-name="study-prompt-toolbar-action")
   - var prompt = view.prompt;
+  - var shouldShowCorrectBtn = view.buttonCorrect && prompt.review && !prompt.review.get('complete');
 
   if prompt.review && !(app.isMobile() && prompt.review.isComplete())
     .btn-wrapper(role="group")
@@ -12,7 +13,7 @@ gelato-component(data-name="study-prompt-toolbar-action")
       button#toolbar-show.btn.btn-default(type="button", class=view.buttonShow ? '' : 'disabled')
         i.icon.icon-study-show(class=view.buttonShow ? '' : 'disabled')
     .btn-wrapper(role="group")
-      button#toolbar-correct.btn.btn-default(type="button", class=view.buttonCorrect ? '' : 'disabled')
+      button#toolbar-correct.btn.btn-default(type="button", class=shouldShowCorrectBtn ? '' : 'disabled')
         if prompt.review.get('score') > 1
           i.icon.icon-study-dont-know(class=view.buttonCorrect ? '' : 'disabled')
         else
