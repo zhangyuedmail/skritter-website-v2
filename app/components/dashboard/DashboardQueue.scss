@@ -38,6 +38,10 @@ gelato-component[data-name='dashboard-queue'] {
     top: -35px;
   }
 
+  .progress-bar-success {
+    background-color: $green5;
+  }
+
   @media (max-width: 992px) {
     .progress {
       height: 10px;
