@@ -1,15 +1,3 @@
 gelato-component(data-name="study-prompt-navigation")
-  - var page = view.prompt.page;
-  - var prompt = view.prompt;
-
-  if prompt.reviews
-
-    if page.previousPrompt
-      if view.showLeft && !prompt.reviews.isFirst()
-        i#navigate-previous.fa.fa-angle-left(class=prompt.review.isComplete() ? 'review-complete' : '')
-    else
-      if view.showLeft && page.items.reviews.length
-        i#navigate-previous.fa.fa-angle-left(class=prompt.review.isComplete() ? 'review-complete' : '')
-
-    if view.showRight
-      i#navigate-next.fa.fa-angle-right(class=prompt.review.isComplete() ? 'review-complete' : '')
+  i#navigate-previous.fa.fa-angle-left
+  i#navigate-next.fa.fa-angle-right

@@ -76,7 +76,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
   renderComplete: function() {
     this.prompt.review.stop();
     this.prompt.review.set('complete', true);
-    this.prompt.navigation.render();
+    this.prompt.navigation.update();
     this.prompt.shortcuts.grading.listen();
     this.prompt.toolbarAction.render();
     this.prompt.toolbarGrading.render();

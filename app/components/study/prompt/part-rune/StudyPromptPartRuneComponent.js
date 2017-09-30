@@ -130,7 +130,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.prompt.canvas.clearLayer('character-teach');
     this.prompt.canvas.disableInput();
 
-    this.prompt.navigation.render();
+    this.prompt.navigation.update();
     this.prompt.toolbarAction.render();
     this.prompt.toolbarGrading.render({delayEvents: true});
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
@@ -188,7 +188,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
 
     this.prompt.canvas.enableInput();
 
-    this.prompt.navigation.render();
+    this.prompt.navigation.update();
     this.prompt.toolbarAction.render();
     this.prompt.toolbarGrading.render();
     this.prompt.vocabReading.render();
