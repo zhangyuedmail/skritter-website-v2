@@ -95,12 +95,15 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @returns {StudyPromptCanvasComponent}
    */
   clearLayer: function(name) {
-    var layer = this.getLayer(name);
+    const layer = this.getLayer(name);
+    const stage = _layerMap[name];
+
     createjs.Tween.removeTweens(layer);
     layer.removeAllChildren();
     layer.uncache();
     layer.alpha = 1;
-    this.inputStage.update();
+    stage.update();
+
     return this;
   },
 
@@ -368,7 +371,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
 
       self.marker.graphics.moveTo(self.oldPoint.x, self.oldPoint.y);
       self.canvasDirty = true;
-
+      self.inputStage.update();
       self.moveListener = self.inputStage.addEventListener('stagemousemove', self.onInputMove);
       self.upListener = self.inputStage.addEventListener('stagemouseup', onInputUp);
       self.leaveListener = self.inputStage.addEventListener('mouseleave', onInputLeave);
@@ -387,6 +390,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
 
       self.marker.graphics.lineTo(event.stageX, event.stageY);
       self.marker.graphics.endStroke();
+      self.inputStage.update();
 
       const clonedMarker = self.marker.clone(true);
       clonedMarker.stroke = self.marker.stroke;
@@ -395,6 +399,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
 
       self.triggerInputUp(self.points, clonedMarker);
       self.getLayer('input').removeAllChildren();
+      self.inputStage.update();
 
       self.canvasDirty = true;
     }
@@ -428,6 +433,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.points.push(point);
 
     this.marker.updateCache('source-over');
+    this.inputStage.update();
 
     this.canvasDirty = true;
   },
@@ -533,7 +539,6 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   onDisplayStageTick: function() {
     this.displayStage.update();
-    this.inputStage.update();
   },
 
   /**
