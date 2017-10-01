@@ -13,6 +13,8 @@ require('utils/createjs-helpers');
  * @private
  */
 const _layerMap = {};
+let _tracingCircle = {};
+
 /**
  * @class StudyPromptCanvasComponent
  * @extends {GelatoComponent}
@@ -550,6 +552,11 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     return GelatoComponent.prototype.remove.call(this);
   },
 
+  removeTweensFromLayer: function(layerName) {
+    const layer = this.getLayer(layerName);
+    createjs.Tween.removeTweens(layer);
+  },
+
   /**
    * @method reset
    * @returns {StudyPromptCanvasComponent}
@@ -631,6 +638,11 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   tracePath: function(layerName, path, options) {
     options = options || {};
 
+    if (!options.perservePrevTracingCircle && _tracingCircle.circle) {
+      const layer = this.getLayer(_tracingCircle.layerName);
+      layer.removeChild(_tracingCircle.circle);
+    }
+
     options.fill = options.fill || this.defaultTraceFill;
     var size = this.size;
     var circle = this.drawCircle(layerName, path[0].x, path[0].y, 10, {alpha: 0.6, fill: options.fill});
@@ -647,6 +659,10 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
         tween.wait(1000);
       }
     }
+
+    _tracingCircle = {layerName, circle};
+
+    return circle;
   },
 
   /**

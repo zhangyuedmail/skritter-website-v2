@@ -63,7 +63,7 @@ StudyPromptShortcuts.prototype._handleActionShow = function() {
 StudyPromptShortcuts.prototype._handleActionTeach = function() {
   switch (this.prompt.reviews.part) {
     case 'rune':
-      this.prompt.part.teachCharacter();
+      this.prompt.part.startTeachingCharacter();
       break;
   }
 };

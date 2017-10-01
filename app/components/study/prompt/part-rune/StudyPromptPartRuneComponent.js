@@ -204,13 +204,13 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     }
 
     if (this.prompt.reviews.isTeachable() || this.prompt.review.get('showTeaching')) {
-      this.teachCharacter();
+      this.startTeachingCharacter();
     }
 
     if (this.prompt.review.item && this.prompt.review.item.isLeech()) {
       this.prompt.$('#leech-ribbon').removeClass('hidden');
       this.prompt.review.item.consecutiveWrong = 0;
-      this.teachCharacter();
+      this.startTeachingCharacter();
     } else {
       this.prompt.$('#leech-ribbon').addClass('hidden');
     }
@@ -445,7 +445,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method handlePromptToolbarActionTeach
    */
   handlePromptToolbarActionTeach: function() {
-    this.teachCharacter();
+    this.startTeachingCharacter();
   },
 
   /**
@@ -549,26 +549,34 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     );
   },
 
+  startTeachingCharacter() {
+    this.prompt.review.set('score', 1);
+    this.prompt.review.set('showTeaching', true);
+
+    this.prompt.canvas.clearLayer('character-teach');
+    this.prompt.canvas.drawShape(
+      'character-teach',
+      this.prompt.review.character.getTargetShape(),
+      {color: '#e8ded2'}
+    );
+
+    this.teachCharacter();
+  },
+
   /**
    * @method teachCharacter
    */
   teachCharacter: function() {
     if (!this.prompt.review.isComplete()) {
       var stroke = this.prompt.review.character.getExpectedStroke();
+      this.prompt.canvas.removeTweensFromLayer('character-teach');
       if (stroke) {
-        this.prompt.review.set('score', 1);
-        this.prompt.review.set('showTeaching', true);
-        this.prompt.canvas.clearLayer('character-teach');
-        this.prompt.canvas.drawShape(
-          'character-teach',
-          this.prompt.review.character.getTargetShape(),
-          {color: '#e8ded2'}
-        );
-        this.prompt.canvas.drawShape(
-          'character-teach',
-          stroke.getTargetShape(),
-          {color: '#e8ded2'}
-        );
+
+        // this.prompt.canvas.drawShape(
+        //   'character-teach',
+        //   stroke.getTargetShape(),
+        //   {color: '#e8ded2'}
+        // );
         this.prompt.canvas.tracePath(
           'character-teach',
           stroke.getParamPath()
