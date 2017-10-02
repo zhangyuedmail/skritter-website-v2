@@ -14,7 +14,7 @@ const OfflineModel = GelatoModel.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(attributes, options) {
+  initialize: function (attributes, options) {
     options = _.defaults(options, {});
 
     this.database = null;
@@ -44,7 +44,7 @@ const OfflineModel = GelatoModel.extend({
    * @property defaults
    * @type {Object}
    */
-  defaults: function() {
+  defaults: function () {
     return {
       lastSync: 0
     };
@@ -104,8 +104,9 @@ const OfflineModel = GelatoModel.extend({
         return true;
       });
 
-      // STEP 2: load items that are due next
+      // STEP 2: load items that are due next and remove related prompts
       result.Items = await queryItemResult.toArray();
+      result.Items = _.uniqBy(result.Items, item =>  item.id.split('-')[2]);
 
       // STEP 3: load vocabs based on items
       result.Vocabs = await this.loadVocabsFromItems(result.Items);
