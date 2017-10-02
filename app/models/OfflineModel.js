@@ -436,10 +436,10 @@ const OfflineModel = GelatoModel.extend({
     const vocabIdChunks = _.chunk(vocabIds, 100);
     let vocabs = [];
 
-    return new Promise((resolve, reject) => {
+    await new Promise((resolve, reject) => {
       async.eachLimit(vocabIdChunks, 10,
         async (chunk, callback) => {
-          const result = await this._fetchVocabs({ids: chunk});
+          const result = await this._fetchVocabs({ids: chunk, include_contained: true});
 
           if (result.data.length) {
             vocabs = vocabs.concat(result.data);
@@ -458,6 +458,36 @@ const OfflineModel = GelatoModel.extend({
         }
       );
     });
+
+    const loadedVocabIds = _.map(vocabs, 'id');
+    const containedVocabIds = _.chain(vocabs).map('containedVocabIds').without(undefined).flatten().uniq().value();
+    const containedVocabIdDiff = _.difference(containedVocabIds, loadedVocabIds);
+    const containedVocabIdChunks = _.chunk(containedVocabIdDiff, 100);
+
+    await new Promise((resolve, reject) => {
+      async.eachLimit(containedVocabIdChunks, 10,
+        async (chunk, callback) => {
+          const result = await this._fetchVocabs({ids: chunk, include_contained: true});
+
+          if (result.data.length) {
+            vocabs = vocabs.concat(result.data);
+          }
+
+          callback();
+        },
+        async error => {
+          if (error) {
+            reject(error);
+          } else {
+            await this.database.vocabs.bulkPut(vocabs);
+
+            resolve(vocabs);
+          }
+        }
+      );
+    });
+
+    return vocabs;
   },
 
   /**
