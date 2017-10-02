@@ -83,10 +83,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.prompt.canvas.grid = true;
     this.prompt.canvas.reset();
     this.prompt.shortcuts.tone.stop_listening();
-    this.prompt.toolbarAction.buttonCorrect = true;
-    this.prompt.toolbarAction.buttonErase = true;
-    this.prompt.toolbarAction.buttonShow = true;
-    this.prompt.toolbarAction.buttonTeach = true;
+    this.prompt.toolbarAction.setPromptType('rune');
 
     if (app.isMobile()) {
       this.prompt.vocabDefinition.render();
@@ -131,7 +128,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.prompt.canvas.disableInput();
 
     this.prompt.navigation.update();
-    this.prompt.toolbarAction.render();
+    this.prompt.toolbarAction.update();
     this.prompt.toolbarGrading.render({delayEvents: true});
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.vocabReading.render();
@@ -189,7 +186,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.prompt.canvas.enableInput();
 
     this.prompt.navigation.update();
-    this.prompt.toolbarAction.render();
+    this.prompt.toolbarAction.update();
     this.prompt.toolbarGrading.render();
     this.prompt.vocabReading.render();
     this.prompt.vocabWriting.render();
@@ -420,7 +417,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
           this.prompt.review.getGradingColor()
         );
       }
-      this.prompt.toolbarAction.render();
+      this.prompt.toolbarAction.update();
     } else {
       this.completeCharacter();
     }

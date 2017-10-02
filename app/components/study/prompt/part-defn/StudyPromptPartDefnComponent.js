@@ -51,10 +51,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
     this.prompt.canvas.grid = false;
     this.prompt.canvas.reset();
     this.prompt.shortcuts.tone.stop_listening();
-    this.prompt.toolbarAction.buttonCorrect = true;
-    this.prompt.toolbarAction.buttonErase = false;
-    this.prompt.toolbarAction.buttonShow = false;
-    this.prompt.toolbarAction.buttonTeach = false;
+    this.prompt.toolbarAction.setPromptType('defn');
     if (this.prompt.review.isComplete()) {
       this.renderComplete();
     } else {
@@ -78,7 +75,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
     this.prompt.review.set('complete', true);
     this.prompt.navigation.update();
     this.prompt.shortcuts.grading.listen();
-    this.prompt.toolbarAction.render();
+    this.prompt.toolbarAction.update();
     this.prompt.toolbarGrading.render();
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.toolbarVocab.render();
@@ -107,7 +104,8 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
     this.prompt.review.start();
     this.prompt.review.set('complete', false);
     this.prompt.shortcuts.grading.stop_listening();
-    this.prompt.toolbarAction.render();
+    this.prompt.toolbarAction.update();
+
     this.prompt.toolbarGrading.render();
     this.prompt.toolbarVocab.render();
     this.prompt.vocabContained.render();

@@ -70,10 +70,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
       {color: this.prompt.review.getGradingColor()}
     );
 
-    this.prompt.toolbarAction.buttonCorrect = true;
-    this.prompt.toolbarAction.buttonErase = false;
-    this.prompt.toolbarAction.buttonShow = false;
-    this.prompt.toolbarAction.buttonTeach = false;
+    this.prompt.toolbarAction.setPromptType('tone', false);
 
     if (app.isMobile()) {
       this.prompt.vocabDefinition.render();
@@ -112,7 +109,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.navigation.update();
     this.prompt.shortcuts.grading.listen();
     this.prompt.shortcuts.tone.stop_listening();
-    this.prompt.toolbarAction.render();
+    this.prompt.toolbarAction.update();
     this.prompt.toolbarGrading.render().select(this.prompt.review.get('score'));
     this.prompt.vocabReading.render();
 
@@ -151,7 +148,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.navigation.update();
     this.prompt.shortcuts.grading.stop_listening();
     this.prompt.shortcuts.tone.listen();
-    this.prompt.toolbarAction.render();
+    this.prompt.toolbarAction.update();
     this.prompt.toolbarGrading.render();
     this.prompt.vocabReading.render();
 
@@ -259,7 +256,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
 
     if (this.prompt.review.character.isComplete()) {
       this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
-      this.prompt.toolbarAction.render();
+      this.prompt.toolbarAction.update();
       this.prompt.canvas.injectLayerColor(
         'character',
         this.prompt.review.getGradingColor()
