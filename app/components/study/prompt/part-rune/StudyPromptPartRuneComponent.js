@@ -424,7 +424,6 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     } else {
       this.completeCharacter();
     }
-
   },
 
   /**
@@ -445,7 +444,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method handlePromptToolbarActionTeach
    */
   handlePromptToolbarActionTeach: function() {
-    this.startTeachingCharacter();
+      this.startTeachingCharacter();
   },
 
   /**
@@ -522,6 +521,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.prompt.review.character.reset();
     this.prompt.review.character.add(this.prompt.review.character.targets[0].models);
     this.render();
+    this.prompt.canvas.displayStage.update();
   },
 
   /**
@@ -549,7 +549,16 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     );
   },
 
+  /**
+   * Sets up a prompt for teaching mode. Updates the score and other
+   * review properties, then draws the character in the background to be
+   * traced over. Highlights the first stroke.
+   */
   startTeachingCharacter() {
+    if (this.prompt.review.isComplete()) {
+      this.eraseCharacter();
+    }
+
     this.prompt.review.set('score', 1);
     this.prompt.review.set('showTeaching', true);
 
@@ -560,23 +569,28 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
       {color: '#e8ded2'}
     );
 
+    this.prompt.canvas.startAnimation('teaching');
+
+    // this.prompt.canvas.drawShape(
+    //   'character-teach',
+    //   stroke.getTargetShape(),
+    //   {color: '#e8ded2'}
+    // );
+
     this.teachCharacter();
   },
 
   /**
+   * Updates an already initialized teaching mode prompt to highlight
+   * the current stroke that needs to be written
    * @method teachCharacter
    */
   teachCharacter: function() {
     if (!this.prompt.review.isComplete()) {
-      var stroke = this.prompt.review.character.getExpectedStroke();
+      const stroke = this.prompt.review.character.getExpectedStroke();
       this.prompt.canvas.removeTweensFromLayer('character-teach');
-      if (stroke) {
 
-        // this.prompt.canvas.drawShape(
-        //   'character-teach',
-        //   stroke.getTargetShape(),
-        //   {color: '#e8ded2'}
-        // );
+      if (stroke) {
         this.prompt.canvas.tracePath(
           'character-teach',
           stroke.getParamPath()

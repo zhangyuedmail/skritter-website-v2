@@ -262,7 +262,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.stopAutoAdvance();
     this.review.stop();
 
-
+    this.canvas.stopAnimations();
     if (skip || this.reviews.isLast()) {
       if (skip) {
         this.reviews.skip = true;
@@ -293,6 +293,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    */
   previous: function() {
     this.review.stop();
+    this.canvas.stopAnimations();
 
     if (this.reviews.isFirst()) {
       if (this.editing) {
