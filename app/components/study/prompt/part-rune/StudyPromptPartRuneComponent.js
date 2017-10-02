@@ -129,8 +129,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
 
     this.prompt.navigation.update();
     this.prompt.toolbarAction.update();
-    this.prompt.toolbarGrading.render({delayEvents: true});
-    this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
+    this.prompt.toolbarGrading.update(this.prompt.review.get('score'), true);
     this.prompt.vocabReading.render();
     this.prompt.vocabWriting.render();
 
@@ -187,7 +186,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
 
     this.prompt.navigation.update();
     this.prompt.toolbarAction.update();
-    this.prompt.toolbarGrading.render();
+    this.prompt.toolbarGrading.update();
     this.prompt.vocabReading.render();
     this.prompt.vocabWriting.render();
 

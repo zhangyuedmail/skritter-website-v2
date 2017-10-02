@@ -110,7 +110,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.shortcuts.grading.listen();
     this.prompt.shortcuts.tone.stop_listening();
     this.prompt.toolbarAction.update();
-    this.prompt.toolbarGrading.render().select(this.prompt.review.get('score'));
+    this.prompt.toolbarGrading.update(this.prompt.review.get('score'));
     this.prompt.vocabReading.render();
 
     if (!app.isMobile()) {
@@ -149,7 +149,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.shortcuts.grading.stop_listening();
     this.prompt.shortcuts.tone.listen();
     this.prompt.toolbarAction.update();
-    this.prompt.toolbarGrading.render();
+    this.prompt.toolbarGrading.update();
     this.prompt.vocabReading.render();
 
     if (!app.isMobile()) {

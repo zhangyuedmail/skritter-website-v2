@@ -56,11 +56,31 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
 
     this.renderTemplate(options);
 
+    this.update();
     if (options.delayEvents) {
       this._delayEvents();
     }
 
     return this;
+  },
+
+  update(selectVal, delayEvents) {
+    const hideGradingBtns = !this.prompt.review || !this.prompt.review.isComplete() || app.user.get('disableGradingColor');
+    this.$('gelato-component').toggleClass('hidden', hideGradingBtns);
+    this.$('.tap-to-advance-wrapper').toggleClass('hidden', !((this.prompt.review && this.prompt.review.get('showTeaching')) || this.prompt.showTapToAdvanceText));
+    this.$('.grading-btn-wrapper').toggleClass('hidden', (this.prompt.review && this.prompt.review.get('showTeaching')) || !this.prompt.showGradingButtons);
+
+    // highlight correct grade
+    this.$('.grading-btn').removeClass('selected');
+    this.$('.grading-btn.grade' + this.value).addClass('selected');
+
+    if (selectVal) {
+      this.select(selectVal);
+    }
+
+    if (delayEvents) {
+      this._delayEvents();
+    }
   },
 
   /**
