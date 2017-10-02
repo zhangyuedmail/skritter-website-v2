@@ -218,6 +218,8 @@ const ItemModel = SkritterModel.extend({
 
     // check if initial values are available
     if (!last || !next) {
+      this._readiness = 9999;
+
       return 9999;
     }
 
@@ -260,6 +262,8 @@ const ItemModel = SkritterModel.extend({
          readiness = 3.5 - Math.pow(readiness * 0.4, 0.33333);
       }
     }
+
+    this._readiness = readiness;
 
     return readiness;
   },
