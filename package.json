@@ -52,7 +52,7 @@
     "cors": "2.8.x",
     "d3": "4.10.x",
     "dexie": "2.0.x",
-    "express": "4.15.x",
+    "express": "4.16.x",
     "font-awesome": "4.7.x",
     "helmet": "3.8.x",
     "highcharts": "5.0.x",
