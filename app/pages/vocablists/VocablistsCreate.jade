@@ -7,20 +7,20 @@ gelato-page(data-name='vocablists-create')
         span.glyphicon.glyphicon-chevron-left
         span cancel and go back
 
-      .title Create a new list
+      .title(class=app.isMobile() ? 'hidden' : '') Create a new list
 
       hr
 
       form#new-list-form.form
         .form-group
-          label.header(for="#name") Name
+          label.header(for="name") Name
           input#name.form-control(name='name', value='')
 
         .form-group
-          label.header(for="#description") Description (optional)
+          label.header(for="description") Description (optional)
           textarea#description.form-control(name='description')
 
-        #submit-area
+        #submit-area.clearfix
           if view.errorMessage
             .alert.alert-danger= view.errorMessage
 
