@@ -171,7 +171,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
 
     if (useTicker) {
       const ticker = createjs.Ticker;
-      ticker.framerate = app.isMobile() ? 32 : 60;
+      ticker.framerate = 60;
 
       if (tickerUpdateFn) {
         ticker.removeEventListener('tick', tickerUpdateFn);
