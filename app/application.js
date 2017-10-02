@@ -927,7 +927,7 @@ module.exports = GelatoApplication.extend({
         },
         async callback => {
           // skip offline stuff when disabled, no user or mobile not detected
-          if (!this.config.offlineEnabled || !this.user.isLoggedIn() || !this.isMobile()) {
+          if (!this.config.offlineEnabled || !this.user.get('offlineEnabled') || !this.user.isLoggedIn() || !this.isMobile()) {
             callback();
 
             return;

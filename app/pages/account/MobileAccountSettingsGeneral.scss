@@ -40,6 +40,12 @@ gelato-page[data-name='mobile-account-settings-general'] {
     padding: 0;
   }
 
+  .option-desc {
+    clear: both;
+    margin: 0 15px;
+    color: $white6;
+  }
+
   #section-content {
     background-color: $white1;
     border-radius: 0;

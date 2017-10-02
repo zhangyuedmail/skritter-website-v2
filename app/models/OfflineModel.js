@@ -62,7 +62,7 @@ const OfflineModel = GelatoModel.extend({
    * @returns {boolean}
    */
   isReady: function () {
-    return app.config.offlineEnabled && !!this.get('lastSync');
+    return app.config.offlineEnabled && this.user.get('offlineEnabled') && !!this.get('lastSync');
   },
 
   /**
@@ -287,7 +287,7 @@ const OfflineModel = GelatoModel.extend({
   /**
    * Removes offline sync meta data from localStorage.
    */
-  uncache: function () {
+  uncache: async function () {
     this.status = 'uncaching';
 
     this.trigger('status', this.status);
@@ -295,6 +295,12 @@ const OfflineModel = GelatoModel.extend({
     this.set(this.defaults());
 
     app.removeLocalStorage(this.user.id + '-offline');
+
+    await this.database.characters.clear();
+    await this.database.items.clear();
+    await this.database.lists.clear();
+    await this.database.reviews.clear();
+    await this.database.vocabs.clear();
 
     this.status = 'standby';
 

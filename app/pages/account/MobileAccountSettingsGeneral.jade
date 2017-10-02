@@ -100,6 +100,19 @@ gelato-page(data-name='mobile-account-settings-general')
                   else
                     option(value=timezone)= timezone.replace(/_/g, ' ')
 
+          hr
+
+          .form-group
+            label.col-xs-9.control-label(for="field-offline-enabled") Offline enabled
+            .col-xs-3
+              .checkbox
+                label.toggle-switch
+                  input#field-offline-enabled(type="checkbox", checked=user.get('offlineEnabled'))
+                  .toggle-switch-slider.round
+            .option-desc Turning this setting on will download all your account data and allow you to study while offline.
+
+          hr
+
           .form-group
             .col-xs-12.option-buttons
               #error-alert.alert.alert-danger.hidden

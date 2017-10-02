@@ -43,6 +43,7 @@ const UserModel = SkritterModel.extend({
     goalValues: {ja: {item: 100, time: 10}, zh: {item: 100, time: 10}},
     lastChineseItemUpdate: 0,
     lastJapaneseItemUpdate: 0,
+    offlineEnabled: false,
     readingChinese: 'pinyin',
     readingJapanese: 'kana',
     spaceItems: false,

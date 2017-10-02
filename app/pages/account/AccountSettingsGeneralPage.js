@@ -128,7 +128,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method handleClickButtonSave
    * @param {Event} event
    */
-  handleClickButtonSave: function(event) {
+  handleClickButtonSave: async function(event) {
     const formData = this._getFormData();
 
     event.preventDefault();
@@ -138,6 +138,22 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     }
 
     this.$('#error-alert').addClass('hidden');
+
+    if (formData.offlineEnabled !== app.user.get('offlineEnabled')) {
+      ScreenLoader.show();
+
+      if (formData.offlineEnabled) {
+        ScreenLoader.post('Enabling offline mode');
+
+        await app.user.offline.prepare();
+        await app.user.offline.uncache();
+        await app.user.offline.sync();
+      } else {
+        ScreenLoader.post('Disabling offline mode');
+
+        await app.user.offline.uncache();
+      }
+    }
 
     app.user.set(formData);
     app.user.cache();
@@ -161,7 +177,10 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
         this.displayErrorMessage(msg);
       },
       success: (model) => {
+        ScreenLoader.hide();
+
         model.cache();
+
         app.notifyUser({
           message: app.locale('pages.accountGeneral.saveSuccess'),
           type: 'pastel-success'
@@ -265,6 +284,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
       email: this.$('#field-email').val().trim(),
       eccentric: this.$('#field-eccentric').is(':checked'),
       name: this.$('#field-name').val().trim(),
+      offlineEnabled: this.$('#field-offline-enabled').is(':checked'),
       private: this.$('#field-private').is(':checked'),
       timezone: this.$('#field-timezone :selected').val()
     };

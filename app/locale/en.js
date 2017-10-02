@@ -85,7 +85,7 @@ module.exports = {
     "accountGeneral": {
       "title": "General Settings - Skritter",
       "pageTitle": "General Settings",
-      "aboutMeLabel": "About Me",
+      "aboutMeLabel": "About me",
       "aboutMeDescription": "Tell people about yourself",
       "accountUpdated": "Account settings updated",
       "avatarLabel": "Avatar",
@@ -107,7 +107,7 @@ module.exports = {
       "newsletterDescription": "Subscribe to the monthly newsletter",
       "passwordLabel": "Password",
       "passwordDescription": "The password you use to log in",
-      "privateLabel": "Private Account",
+      "privateLabel": "Private account",
       "privateDescription": "Excludes your account from leaderboard rankings",
       "saveSuccess": "Settings saved",
       "resetAllData": "Reset All Data",
