@@ -82,15 +82,18 @@ const ItemModel = SkritterModel.extend({
    * @returns {Array}
    */
   getContainedItems: function() {
-    let containedItems = [];
-    let part = this.get('part');
+    const containedItems = [];
+    const part = this.get('part');
+
     if (['rune', 'tone'].indexOf(part) > -1) {
-      let containedVocabs = this.getContainedVocabs();
+      const containedVocabs = this.getContainedVocabs();
+
       for (let i = 0, length = containedVocabs.length; i < length; i++) {
-        let vocabId = containedVocabs[i].id;
-        let splitId = vocabId.split('-');
-        let fallbackId = [app.user.id, splitId[0], splitId[1], 0, part].join('-');
-        let intendedId = [app.user.id, vocabId, part].join('-');
+        const vocabId = containedVocabs[i].id;
+        const splitId = vocabId.split('-');
+        const fallbackId = [app.user.id, splitId[0], splitId[1], 0, part].join('-');
+        const intendedId = [app.user.id, vocabId, part].join('-');
+
         if (this.collection.get(intendedId)) {
           containedItems.push(this.collection.get(intendedId));
         } else if (this.collection.get(fallbackId)) {
@@ -101,11 +104,14 @@ const ItemModel = SkritterModel.extend({
               id: fallbackId,
               writing: splitId[1]
             },
-            {merge: true}
+            {
+              merge: true
+            }
           ));
         }
       }
     }
+
     return containedItems;
   },
 
@@ -114,7 +120,8 @@ const ItemModel = SkritterModel.extend({
    * @returns {Array}
    */
   getContainedVocabs: function() {
-    let vocab = this.getVocab();
+    const vocab = this.getVocab();
+
     return vocab ? vocab.getContained() : [];
   },
 

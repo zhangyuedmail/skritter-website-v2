@@ -129,10 +129,18 @@ const OfflineModel = GelatoModel.extend({
    * @returns {Promise.<Array>}
    */
   loadVocabsFromItems: async function (items) {
+    // check for vocabs not loaded
     const vocabIds = _.chain(items).map('vocabIds').flatten().uniq().value();
-    const requests = _.map(vocabIds, vocabId => this.database.vocabs.get(vocabId));
+    const vocabRequests = _.map(vocabIds, vocabId => this.database.vocabs.get(vocabId));
+    const vocabs = await Promise.all(vocabRequests);
 
-    return Promise.all(requests);
+    // check for contained vocabs not loaded
+    const loadedVocabIds = _.map(vocabs, 'id');
+    const containedVocabIds = _.chain(vocabs).map('containedVocabIds').without(undefined).flatten().uniq().value();
+    const containedVocabRequests = _.chain(containedVocabIds).difference(loadedVocabIds).map(vocabId => this.database.vocabs.get(vocabId)).value();
+    const containedVocabs = await Promise.all(containedVocabRequests);
+
+    return _.without(vocabs.concat(containedVocabs), undefined);
   },
 
   /**

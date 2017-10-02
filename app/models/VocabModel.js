@@ -134,12 +134,14 @@ const VocabModel = SkritterModel.extend({
    * @returns {Array}
    */
   getContained: function(excludeFillers) {
-    let containedVocabs = [];
-    let characters = this.getCharacters();
-    let lang = this.get('lang');
+    const containedVocabs = [];
+    const characters = this.getCharacters();
+    const lang = this.get('lang');
+
     for (let i = 0, length = characters.length; i < length; i++) {
-      let base = app.fn.mapper.toBase(characters[i], {lang: lang});
+      const base = app.fn.mapper.toBase(characters[i], {lang: lang});
       let containedVocab = this.collection.get(base);
+
       if (!containedVocab) {
         containedVocab = new VocabModel({
           id: base,
@@ -150,13 +152,14 @@ const VocabModel = SkritterModel.extend({
 
         this.collection.add(containedVocab);
       }
+
       containedVocabs.push(containedVocab);
     }
+
     if (excludeFillers) {
-      return containedVocabs.filter(function(vocab) {
-        return !vocab.get('filler');
-      });
+      return _.filter(containedVocabs, vocab => !vocab.get('filler'));
     }
+
     return containedVocabs;
   },
 
@@ -387,24 +390,30 @@ const VocabModel = SkritterModel.extend({
    */
   getTones: function() {
     if (this.isChinese()) {
-      let tones = [];
-      let contained = this.get('containedVocabIds') ? this.getContained() : [this];
-      let readings = this.get('reading').split(', ');
+      const tones = [];
+      const contained = this.get('containedVocabIds') ? this.getContained() : [this];
+      const readings = this.get('reading').replace(' ', '').split(',');
+
       for (let a = 0, lengthA = readings.length; a < lengthA; a++) {
-        let reading = readings[a].match(/[1-5]+/g);
+        const reading = readings[a].match(/[1-5]+/g);
+
         for (let b = 0, lengthB = reading.length; b < lengthB; b++) {
-          let tone = parseInt(reading[b], 10);
-          let containedWriting = contained[b].get('writing');
-          let wordWriting = this.get('writing');
+          const tone = parseInt(reading[b], 10);
+          const containedWriting = contained[b].get('writing');
+          const wordWriting = this.get('writing');
+
           tones[b] = Array.isArray(tones[b]) ? tones[b].concat(tone) : [tone];
+
           //TODO: make tests to verify neutral tone wimps
           if (NeutralTones.isWimp(containedWriting, wordWriting, b)) {
             tones[b] = tones[b].concat(contained[b].getTones()[0]);
           }
         }
       }
+
       return tones;
     }
+
     return [];
   },
 

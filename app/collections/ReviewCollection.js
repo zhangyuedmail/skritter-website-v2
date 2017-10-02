@@ -103,7 +103,6 @@ const ReviewCollection = BaseSkritterCollection.extend({
       return;
     }
 
-
     this.state = 'posting';
     this.trigger('state', this.state, this);
     this.trigger('state:' + this.state, this);
