@@ -39,13 +39,15 @@ gelato-page(data-name='dashboard')
       .row
         .col-xs-12
           .content-block
-            .title Stats
+            .title
+              a(href='/stats') Stats
             .content
               #dashboard-progress-container
 
     .row
       .col-xs-12
         .content-block
-          .title= app.locale('pages.dashboard.lists')
+          .title
+            a(href='/vocablists/queue')= app.locale('pages.dashboard.lists')
           .content
             #dashboard-queue-container

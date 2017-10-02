@@ -39,15 +39,18 @@ gelato-page[data-name='dashboard'] {
 
   .content-block {
     padding-top: 30px;
+
     .options {
-      i {
-        cursor: pointer;
-      }
       color: $grey2;
       position: absolute;
       right: 20px;
       top: 20px;
+
+      i {
+        cursor: pointer;
+      }
     }
+
     .title {
       font-family: $font-slab;
       font-size: 12px;
@@ -56,6 +59,10 @@ gelato-page[data-name='dashboard'] {
       position: absolute;
       text-transform: uppercase;
       top: 10px;
+
+      a {
+        color: #333;
+      }
     }
   }
 
