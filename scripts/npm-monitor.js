@@ -3,7 +3,7 @@
 const shell = require('shelljs');
 
 // for whether to use local backend
-process.env.THINK_LOCALLY = process.argv.length > 2  && process.argv[2] === 'thinkLocally';
+process.env.THINK_LOCALLY = process.argv.length > 2 && process.argv[2] === 'thinkLocally';
 
 // use this for better brunch logs
 // process.env.LOGGY_STACKS = true;
