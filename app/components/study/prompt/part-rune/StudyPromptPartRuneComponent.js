@@ -134,7 +134,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
 
 
     if (!app.isMobile()) {
-      this.prompt.toolbarVocab.render();
+      this.prompt.toolbarVocab.update();
       this.prompt.vocabContained.render();
       this.prompt.vocabDefinition.render();
       this.prompt.vocabMnemonic.render();
@@ -190,7 +190,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.prompt.vocabWriting.render();
 
     if (!app.isMobile()) {
-      this.prompt.toolbarVocab.render();
+      this.prompt.toolbarVocab.update();
       this.prompt.vocabContained.render();
       this.prompt.vocabDefinition.render();
       this.prompt.vocabMnemonic.render();

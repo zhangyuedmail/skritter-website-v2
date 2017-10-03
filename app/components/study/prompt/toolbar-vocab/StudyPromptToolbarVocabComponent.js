@@ -48,32 +48,36 @@ module.exports = GelatoComponent.extend({
     this.$vocabInfo = this.$('#button-vocab-info');
     this.$banBtn = this.$('#button-vocab-ban');
     this.$editBtn = this.$('#button-vocab-edit');
+
+    this.update();
+
     return this;
   },
 
-  update() {
+  update () {
     const reviews = this.prompt.reviews;
-    const item = (reviews && reviews.item) ? item : null;
+    const item = (reviews && reviews.item) ? reviews.item : null;
     const isStarred = item && reviews.vocab.isStarred();
 
-    this.$starBtn.toggleClass('hidden', reviews);
-    this.$lastStudied.toggleClass('hidden', item);
-    this.$vocabInfo.toggleClass('hidden', item);
-    this.$editBtn.toggleClass('hidden', item);
-    this.$banBtn.toggleClass('hidden', item);
+    this.$starBtn.toggleClass('hidden', !reviews);
+    this.$lastStudied.toggleClass('hidden', !item);
+    this.$vocabInfo.toggleClass('hidden', !item);
+    this.$editBtn.toggleClass('hidden', !item);
+    this.$banBtn.toggleClass('hidden', !item);
 
     if (isStarred) {
-      this.$starBtn.removeClass('.icon-study-word-star');
-      this.$starBtn.addClass('.icon-study-word-star-filled');
+      this.$starBtn.removeClass('icon-study-word-star');
+      this.$starBtn.addClass('icon-study-word-star-filled');
     } else {
-      this.$starBtn.removeClass('.icon-study-word-star-filled');
-      this.$starBtn.addClass('.icon-study-word-star');
+      this.$starBtn.removeClass('icon-study-word-star-filled');
+      this.$starBtn.addClass('icon-study-word-star');
     }
 
     this.$lastStudied.text(this.getLastStudiedValue());
+
   },
 
-  getLastStudiedValue() {
+  getLastStudiedValue () {
     const reviews = this.prompt.reviews;
     const item = (reviews && reviews.item) ? reviews.item : null;
     const lastStudied = item ? item.get('last') : null;
@@ -176,6 +180,6 @@ module.exports = GelatoComponent.extend({
     event.preventDefault();
     this.prompt.reviews.vocab.toggleStarred();
     this.prompt.reviews.vocab.save();
-    this.render();
+    this.update();
   },
 });

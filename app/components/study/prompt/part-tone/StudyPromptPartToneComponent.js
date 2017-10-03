@@ -114,7 +114,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.vocabReading.render();
 
     if (!app.isMobile()) {
-      this.prompt.toolbarVocab.render();
+      this.prompt.toolbarVocab.update();
       this.prompt.vocabContained.render();
       this.prompt.vocabDefinition.render();
       this.prompt.vocabMnemonic.render();
@@ -153,7 +153,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.vocabReading.render();
 
     if (!app.isMobile()) {
-      this.prompt.toolbarVocab.render();
+      this.prompt.toolbarVocab.update();
       this.prompt.vocabContained.render();
       this.prompt.vocabDefinition.render();
       this.prompt.vocabMnemonic.render();

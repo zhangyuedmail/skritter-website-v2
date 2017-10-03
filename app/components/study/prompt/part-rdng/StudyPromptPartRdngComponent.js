@@ -105,7 +105,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     this.prompt.shortcuts.grading.listen();
     this.prompt.toolbarAction.update();
     this.prompt.toolbarGrading.update(this.prompt.review.get('score'));
-    this.prompt.toolbarVocab.render();
+    this.prompt.toolbarVocab.update();
     this.prompt.vocabContained.render();
     this.prompt.vocabDefinition.render();
     this.prompt.vocabMnemonic.render();
@@ -140,7 +140,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     this.prompt.shortcuts.grading.stop_listening();
     this.prompt.toolbarAction.update();
     this.prompt.toolbarGrading.update();
-    this.prompt.toolbarVocab.render();
+    this.prompt.toolbarVocab.update();
     this.prompt.vocabContained.render();
     this.prompt.vocabDefinition.render();
     this.prompt.vocabMnemonic.render();
