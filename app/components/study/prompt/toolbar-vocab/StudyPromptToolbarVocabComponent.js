@@ -48,7 +48,7 @@ module.exports = GelatoComponent.extend({
     this.$vocabInfo = this.$('#button-vocab-info');
     this.$banBtn = this.$('#button-vocab-ban');
     this.$editBtn = this.$('#button-vocab-edit');
-
+    this.$addedFrom = this.$('#item-added-from');
     this.update();
 
     return this;
@@ -74,7 +74,7 @@ module.exports = GelatoComponent.extend({
     }
 
     this.$lastStudied.text(this.getLastStudiedValue());
-
+    this.$addedFrom.text(this.getListAddedFrom());
   },
 
   getLastStudiedValue () {
@@ -82,7 +82,33 @@ module.exports = GelatoComponent.extend({
     const item = (reviews && reviews.item) ? reviews.item : null;
     const lastStudied = item ? item.get('last') : null;
 
-    return lastStudied ? ('studied ' + moment(lastStudied * 1000).fromNow()) : '';
+    if (lastStudied) {
+      const readiness = Math.floor(item.getReadiness() * 100);
+      const readinessStr = readiness > 250 ? 'due now' : readiness + '% due';
+      return 'studied ' + moment(lastStudied * 1000).fromNow() + ' (' + readinessStr + ')';
+    }
+
+    return '';
+  },
+
+  /**
+   * Gets the name of the first list this item was added from
+   * @returns {string} the name of the list added from
+   */
+  getListAddedFrom () {
+    const reviews = this.prompt.reviews;
+    const item = (reviews && reviews.item) ? reviews.item : null;
+    const lists = item ? item.get('vocabListIds') : null;
+
+    if (lists && lists.length) {
+      const list = this.prompt.page.vocablists.get(lists[0]);
+
+      if (list) {
+        return 'added from ' + list.get('name')
+      }
+    }
+
+    return '';
   },
 
   /**
