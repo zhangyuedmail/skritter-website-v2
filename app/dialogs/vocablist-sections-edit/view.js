@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class VocablistSectionsEdit
@@ -12,7 +12,7 @@ module.exports = BootstrapDialog.extend({
   initialize: function(options) {
     this.vocablist = options.vocablist;
     if (!this.vocablist) {
-      throw new Error('VocablistSectionsEdit requires a vocablist passed in!')
+      throw new Error('VocablistSectionsEdit requires a vocablist passed in!');
     }
   },
   /**
@@ -29,7 +29,7 @@ module.exports = BootstrapDialog.extend({
 
     // jquery-ui doesn't hook into this.$, so use global $ instead
     $(this.el).find('.list-group').sortable({
-      handle: '.glyphicon-option-vertical'
+      handle: '.glyphicon-option-vertical',
     });
     return this;
   },
@@ -41,7 +41,7 @@ module.exports = BootstrapDialog.extend({
     'click #confirm-btn': 'handleClickConfirmButton',
     'click #cancel-btn': 'handleClickCancelButton',
     'click .glyphicon-remove': 'handleClickRemoveLink',
-    'click #add-section-btn': 'handleClickAddSectionButton'
+    'click #add-section-btn': 'handleClickAddSectionButton',
   },
   /**
    * @method handleClickCloseButton
@@ -55,13 +55,13 @@ module.exports = BootstrapDialog.extend({
    * @param {Event} e
    */
   handleClickConfirmButton: function() {
-    var sections = [];
+    let sections = [];
     $.each(this.$('.list-group-item'), function(i, el) {
-      var id = ($(el).data('section-id') || '').toString();
+      let id = ($(el).data('section-id') || '').toString();
 
-      var section = {
+      let section = {
         name: $(el).find('input').val(),
-        deleted: $(el).hasClass('hide')
+        deleted: $(el).hasClass('hide'),
       };
 
       if (id) {
@@ -84,7 +84,7 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickAddSectionButton
    */
   handleClickAddSectionButton: function() {
-    var newRow = this.$('#new-section-template').clone().removeClass('hide');
+    let newRow = this.$('#new-section-template').clone().removeClass('hide');
     this.$('.list-group').append(newRow);
-  }
+  },
 });

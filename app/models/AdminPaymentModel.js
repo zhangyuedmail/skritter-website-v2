@@ -31,7 +31,7 @@ const AdminPaymentModel = GelatoModel.extend({
    */
   isInitialPayment: function() {
     return this.getAllPayments().length === 1;
-  }
+  },
 
 });
 

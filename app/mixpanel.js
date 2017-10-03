@@ -5,7 +5,7 @@ function init(token) {
       identify: function() {},
       init: function() {},
       register: function() {},
-      track: function() {}
+      track: function() {},
     };
     console.warn('Unable to init mixpanel');
   } else {
@@ -19,5 +19,5 @@ function track(eventName, properties) {
 
 module.exports = {
   init: init,
-  track: track
+  track: track,
 };

@@ -43,7 +43,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    */
   render: function() {
     if (app.isMobile()) {
-      this.template = require('./MobileStudyPromptPartDefnComponent.jade')
+      this.template = require('./MobileStudyPromptPartDefnComponent.jade');
     }
 
     this.renderTemplate();
@@ -149,7 +149,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
     if (app.user.get('autoAdvancePrompts')) {
       this.prompt.startAutoAdvance();
     }
-  }
+  },
 
 });
 

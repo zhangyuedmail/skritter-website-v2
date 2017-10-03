@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/component');
+let GelatoComponent = require('gelato/component');
 
 /**
  * @class AddVocabContent
@@ -20,7 +20,7 @@ module.exports = GelatoComponent.extend({
    */
   events: {
     'click #button-publish': 'handleClickButtonPublish',
-    'click #is-textbook': 'handleClickIsTextbook'
+    'click #is-textbook': 'handleClickIsTextbook',
   },
 
   /**
@@ -45,7 +45,7 @@ module.exports = GelatoComponent.extend({
    */
   getFormData: function() {
     return {
-      isTextbook: this.$('#is-textbook').prop('checked')
+      isTextbook: this.$('#is-textbook').prop('checked'),
     };
   },
 
@@ -55,7 +55,7 @@ module.exports = GelatoComponent.extend({
    */
   handleClickButtonPublish: function(event) {
     event.preventDefault();
-    var formData = this.getFormData();
+    let formData = this.getFormData();
 
     this.dialog.trigger('publish', formData);
     this.$('#form').addClass('hidden');
@@ -69,5 +69,5 @@ module.exports = GelatoComponent.extend({
    */
   handleClickIsTextbook: function(event) {
     this.$('#textbook-info').toggleClass('hidden');
-  }
+  },
 });

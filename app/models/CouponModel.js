@@ -48,7 +48,7 @@ const CouponModel = SkritterModel.extend({
     this.listenToOnce(this, 'error', this.useError);
     return this.save(null, {
       url: app.getApiUrl() + 'coupons/' + this.get('code') + '/use',
-      method: 'POST'
+      method: 'POST',
     });
   },
 
@@ -71,7 +71,7 @@ const CouponModel = SkritterModel.extend({
     this.wasUsed = true;
     this.stopListening(this, 'error', this.useError);
     this.trigger('state', this);
-  }
+  },
 
 });
 

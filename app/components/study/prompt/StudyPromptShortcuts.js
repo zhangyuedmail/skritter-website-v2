@@ -101,7 +101,6 @@ StudyPromptShortcuts.prototype._handleGradingKeyup = function(value) {
  * @private
  */
 StudyPromptShortcuts.prototype._handleGradingToggle = function() {
-
   // because num lock
   if (arguments[0].code === 'Numpad2') {
     return;
@@ -178,8 +177,8 @@ StudyPromptShortcuts.prototype._handleNavigateReveal = function() {
  * @private
  */
 StudyPromptShortcuts.prototype._handleToneKeydown = function(value) {
-  var possibleTones = this.prompt.review.getTones();
-  var expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
+  let possibleTones = this.prompt.review.getTones();
+  let expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
   if (possibleTones.indexOf(value) > -1) {
     this.prompt.review.set('score', 3);
     this.prompt.review.character.reset();
@@ -215,43 +214,43 @@ StudyPromptShortcuts.prototype._registerAction = function() {
     {
       'keys': 'apostrophe',
       'on_keydown': _.bind(this._handleActionAudio, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'up',
       'on_keydown': _.bind(this._handleActionShow, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '.',
       'on_keydown': _.bind(this._handleActionErase, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'a',
       'on_keydown': _.bind(this._handleActionAudio, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'l',
       'on_keydown': _.bind(this._handleActionShow, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 's',
       'on_keydown': _.bind(this._handleActionShow, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 't',
       'on_keydown': _.bind(this._handleActionTeach, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'x',
       'on_keydown': _.bind(this._handleActionErase, this),
-      'prevent_repeat': true
-    }
+      'prevent_repeat': true,
+    },
   ]);
 };
 
@@ -264,90 +263,90 @@ StudyPromptShortcuts.prototype._registerGrading = function() {
     {
       'keys': 'down',
       'on_keydown': _.bind(this._handleGradingToggle, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'm',
       'on_keydown': _.bind(this._handleGradingToggle, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'v',
       'on_keydown': _.bind(this._handleGradingToggle, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '1',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 1),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 1),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '6',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 1),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 1),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '2',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 2),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 2),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '7',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 2),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 2),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '3',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 3),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 3),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '8',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 3),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 3),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '4',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 4),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 4),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '9',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 4),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 4),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'num_1',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 1),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 1),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'num_2',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 2),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 2),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'num_3',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 3),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 3),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'num_4',
       'on_keydown': _.bind(this._handleGradingKeydown, this, 4),
       'on_keyup': _.bind(this._handleGradingKeyup, this, 4),
-      'prevent_repeat': true
-    }
+      'prevent_repeat': true,
+    },
   ]);
 };
 
@@ -360,23 +359,23 @@ StudyPromptShortcuts.prototype._registerNavigate = function() {
     {
       'keys': 'enter',
       'on_keydown': _.bind(this._handleNavigateReveal, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'left',
       'on_keydown': _.bind(this._handleNavigatePrevious, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'right',
       'on_keydown': _.bind(this._handleNavigateNext, this),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'space',
       'on_keydown': _.bind(this._handleNavigateReveal, this),
-      'prevent_repeat': true
-    }
+      'prevent_repeat': true,
+    },
   ]);
 };
 
@@ -389,78 +388,78 @@ StudyPromptShortcuts.prototype._registerTone = function() {
     {
       'keys': '1',
       'on_keydown': _.bind(this._handleToneKeydown, this, 1),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '6',
       'on_keydown': _.bind(this._handleToneKeydown, this, 1),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '2',
       'on_keydown': _.bind(this._handleToneKeydown, this, 2),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '7',
       'on_keydown': _.bind(this._handleToneKeydown, this, 2),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '3',
       'on_keydown': _.bind(this._handleToneKeydown, this, 3),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '8',
       'on_keydown': _.bind(this._handleToneKeydown, this, 3),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '4',
       'on_keydown': _.bind(this._handleToneKeydown, this, 4),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '9',
       'on_keydown': _.bind(this._handleToneKeydown, this, 4),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '5',
       'on_keydown': _.bind(this._handleToneKeydown, this, 5),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': '0',
       'on_keydown': _.bind(this._handleToneKeydown, this, 5),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'num_1',
       'on_keydown': _.bind(this._handleToneKeydown, this, 1),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'num_2',
       'on_keydown': _.bind(this._handleToneKeydown, this, 2),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'num_3',
       'on_keydown': _.bind(this._handleToneKeydown, this, 3),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'num_4',
       'on_keydown': _.bind(this._handleToneKeydown, this, 4),
-      'prevent_repeat': true
+      'prevent_repeat': true,
     },
     {
       'keys': 'num_5',
       'on_keydown': _.bind(this._handleToneKeydown, this, 5),
-      'prevent_repeat': true
-    }
+      'prevent_repeat': true,
+    },
   ]);
 };
 

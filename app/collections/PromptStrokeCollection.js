@@ -58,7 +58,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
       }
     }
 
-    let best = scores[scores.indexOf(Math.max.apply(Math, scores))];
+    let best = scores[scores.indexOf(Math.max(...scores))];
 
     for (let c = 0, lengthC = scores.length; c < lengthC; c++) {
       if (scores[c] === best) {
@@ -210,7 +210,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
         return this.add(stroke);
       }
     }
-  }
+  },
 });
 
 module.exports = PromptStrokeCollection;

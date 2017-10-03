@@ -48,7 +48,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    */
   render: function() {
     if (app.isMobile()) {
-      this.template = require('./MobileStudyPromptPartToneComponent.jade')
+      this.template = require('./MobileStudyPromptPartToneComponent.jade');
     }
 
     this.prompt.review = this.prompt.reviews.current();
@@ -60,7 +60,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
       this.prompt.review.vocab.get('writing'),
       {
         color: '#e8ded2',
-        font: this.prompt.review.vocab.getFontName()
+        font: this.prompt.review.vocab.getFontName(),
       }
     );
 
@@ -186,13 +186,13 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @param {createjs.Shape} shape
    */
   handlePromptCanvasInputUp: function(points, shape) {
-    var possibleTones = this.prompt.review.getTones();
-    var expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
-    var stroke = this.prompt.review.character.recognize(points, shape);
+    let possibleTones = this.prompt.review.getTones();
+    let expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
+    let stroke = this.prompt.review.character.recognize(points, shape);
 
     if (stroke && app.fn.getLength(points) > 30) {
-      var targetShape = stroke.getTargetShape();
-      var userShape = stroke.getUserShape();
+      let targetShape = stroke.getTargetShape();
+      let userShape = stroke.getUserShape();
 
       if (possibleTones.indexOf(stroke.get('tone')) > -1) {
         this.prompt.review.set('score', 3);
@@ -345,7 +345,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.review.character.add(expectedTone);
 
     this.render();
-  }
+  },
 
 });
 

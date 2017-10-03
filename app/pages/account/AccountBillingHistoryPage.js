@@ -13,7 +13,7 @@ const AccountBillingHistoryPage = GelatoPage.extend({
    * @type {Object}
    */
   events: {
-    'click #load-more-btn': 'handleClickLoadMoreButton'
+    'click #load-more-btn': 'handleClickLoadMoreButton',
   },
 
   /**
@@ -65,9 +65,9 @@ const AccountBillingHistoryPage = GelatoPage.extend({
     this.payments.fetch({
       data: {
         cursor: cursor || '',
-        limit: 100
+        limit: 100,
       },
-      remove: false
+      remove: false,
     });
   },
 
@@ -86,7 +86,7 @@ const AccountBillingHistoryPage = GelatoPage.extend({
   remove: function() {
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 
 });
 

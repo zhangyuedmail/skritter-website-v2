@@ -27,7 +27,7 @@ const PromptStrokeModel = GelatoModel.extend({
    */
   defaults: function() {
     return {
-      tweening: false
+      tweening: false,
     };
   },
 
@@ -44,7 +44,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @returns {ParamModel}
    */
   getParamPath: function() {
-    //TODO: make sure to get the trace parameter
+    // TODO: make sure to get the trace parameter
     let matrix = this.getTargetShape().getMatrix();
     let param = this.get('params')[0];
     if (!param) {
@@ -130,8 +130,8 @@ const PromptStrokeModel = GelatoModel.extend({
    * @returns {createjs.Shape}
    */
   getUserShape: function() {
-    //TODO: improve stroke position and size
-    //let size = this.getSize();
+    // TODO: improve stroke position and size
+    // let size = this.getSize();
     let shape = this.getTargetShape();
     let bounds = shape.getBounds();
     let rect = this.getUserRectangle();
@@ -164,7 +164,7 @@ const PromptStrokeModel = GelatoModel.extend({
       y: data.y * size,
       scaleX: data.scaleX * size,
       scaleY: data.scaleY * size,
-      rotation: data.rotation
+      rotation: data.rotation,
     };
   },
 
@@ -184,7 +184,7 @@ const PromptStrokeModel = GelatoModel.extend({
     let points = _.clone(this.get('points'));
     this.set('corners', app.fn.shortstraw.process(points));
     return this;
-  }
+  },
 
 });
 

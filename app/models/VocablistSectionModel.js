@@ -26,8 +26,8 @@ const VocablistSectionModel = SkritterModel.extend({
    * @returns {Array}
    */
   getUniqueVocabIds: function() {
-    var vocabIds = _.map(this.get('rows'), 'vocabId');
-    var tradVocabIds = [];
+    let vocabIds = _.map(this.get('rows'), 'vocabId');
+    let tradVocabIds = [];
 
     if (app.getLanguage() === 'zh') {
       tradVocabIds = _.map(this.get('rows'), 'tradVocabId');
@@ -50,7 +50,7 @@ const VocablistSectionModel = SkritterModel.extend({
    */
   urlRoot: function() {
     return 'vocablists/' + this.vocablistId + '/sections';
-  }
+  },
 
 });
 

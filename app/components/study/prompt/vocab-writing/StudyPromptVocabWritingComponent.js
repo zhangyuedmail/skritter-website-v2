@@ -40,7 +40,7 @@ const StudyPromptVocabWritingComponent = GelatoComponent.extend({
     this.renderTemplate();
 
     return this;
-  }
+  },
 
 });
 

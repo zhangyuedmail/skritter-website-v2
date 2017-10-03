@@ -2,7 +2,7 @@
  * @class GelatoCollection
  * @extends {Backbone.Collection}
  */
-var GelatoCollection = Backbone.Collection.extend({
+let GelatoCollection = Backbone.Collection.extend({
   /**
    * @property state
    * @type {String}
@@ -25,19 +25,19 @@ var GelatoCollection = Backbone.Collection.extend({
    * @private
    */
   _handleRequestEvent: function(options) {
-    var originalOptions = _.clone(options);
+    let originalOptions = _.clone(options);
     options.error = (function() {
       this.state = 'standby';
       this._triggerState();
       if (typeof originalOptions.error === 'function') {
-        originalOptions.error.apply(originalOptions, arguments);
+        originalOptions.error(...arguments);
       }
     }).bind(this);
     options.success = (function() {
       this.state = 'standby';
       this._triggerState();
       if (typeof originalOptions.success === 'function') {
-        originalOptions.success.apply(originalOptions, arguments);
+        originalOptions.success(...arguments);
       }
     }).bind(this);
   },
@@ -48,7 +48,7 @@ var GelatoCollection = Backbone.Collection.extend({
   _triggerState: function() {
     this.trigger('state', this.state, this);
     this.trigger('state:' + this.state, this);
-  }
+  },
 });
 
 module.exports = GelatoCollection;

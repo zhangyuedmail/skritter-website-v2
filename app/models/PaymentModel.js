@@ -36,8 +36,8 @@ const PaymentModel = SkritterModel.extend({
     if (!this.get('charged')) {
       return '';
     }
-    return '$' + parseFloat(this.get('charged')).toFixed(2)
-  }
+    return '$' + parseFloat(this.get('charged')).toFixed(2);
+  },
 
 });
 

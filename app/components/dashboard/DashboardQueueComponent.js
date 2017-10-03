@@ -6,7 +6,7 @@ const GelatoComponent = require('gelato/component');
  */
 const DashboardQueueComponent = GelatoComponent.extend({
   events: {
-    'click #load-lists': 'handleRetryButtonClick'
+    'click #load-lists': 'handleRetryButtonClick',
   },
 
   /**
@@ -49,11 +49,11 @@ const DashboardQueueComponent = GelatoComponent.extend({
         sort: 'studying',
         include_percent_done: 'true',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
+        languageCode: app.getLanguage(),
       },
       error: () => {
         this.handleErrorLoadingLists();
-      }
+      },
     };
 
     if (cursor) {
@@ -93,7 +93,7 @@ const DashboardQueueComponent = GelatoComponent.extend({
     this.renderTemplate();
 
     return this;
-  }
+  },
 
 });
 

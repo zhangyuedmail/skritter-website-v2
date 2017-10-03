@@ -17,7 +17,7 @@ const DemoProgressComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click #skip-btn': 'handleSkipButtonClick'
+    'click #skip-btn': 'handleSkipButtonClick',
   },
 
   /**
@@ -38,36 +38,36 @@ const DemoProgressComponent = GelatoComponent.extend({
   stepData: [
     {
       id: 'languageSelection',
-      name: 'Language Selection'
+      name: 'Language Selection',
     },
     {
       id: 'teachDemoChar1',
-      name: 'First Characters'
+      name: 'First Characters',
     },
     {
       id: 'writeDemoChar1',
-      name: 'Getting Hints'
+      name: 'Getting Hints',
     },
     {
       id: 'erasingCharacters',
-      name: 'Erasing Characters'
+      name: 'Erasing Characters',
     },
     {
       id: 'definitionPrompts',
-      name: 'Definition Prompts'
+      name: 'Definition Prompts',
     },
     {
       id: 'spacedRepetition',
-      name: 'Spaced Repetition'
+      name: 'Spaced Repetition',
     },
     {
       id: 'readingPrompts',
-      name: 'Reading Prompts'
+      name: 'Reading Prompts',
     },
     {
       id: 'demoComplete',
-      name: 'Demo Complete'
-    }
+      name: 'Demo Complete',
+    },
   ],
 
   /**
@@ -83,7 +83,7 @@ const DemoProgressComponent = GelatoComponent.extend({
     if (this.demoPage.lang === 'zh') {
       this.stepData.splice(this.stepData.length - 2, 0, {
         id: 'tonePrompts',
-        name: 'Tone Prompts'
+        name: 'Tone Prompts',
       });
     }
 
@@ -128,7 +128,7 @@ const DemoProgressComponent = GelatoComponent.extend({
     this.$('.progress-bar').attr('style', 'width: ' + progressPercent + '%');
     this.$('#step-num').text('Step ' + (i + 1));
     this.$('#step-text').text(stepInfo.name);
-  }
+  },
 
 });
 

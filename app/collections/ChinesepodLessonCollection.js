@@ -26,7 +26,7 @@ const ChinesePodLessonCollection = BaseSkritterCollection.extend({
    */
   parse: function(response) {
     return response.ChinesePodLists;
-  }
+  },
 });
 
 module.exports = ChinesePodLessonCollection;

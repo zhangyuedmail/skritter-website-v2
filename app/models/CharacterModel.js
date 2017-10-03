@@ -19,7 +19,7 @@ const CharacterModel = GelatoModel.extend({
    * @type {String}
    */
   url: function() {
-    return app.getApiUrl(2) + 'characters'
+    return app.getApiUrl(2) + 'characters';
   },
 
   /**
@@ -60,7 +60,7 @@ const CharacterModel = GelatoModel.extend({
           shape: strokeShape,
           strokeId: strokeId,
           tone: rune === 'tones' ? a + 1 : null,
-          variationId: variationId
+          variationId: variationId,
         });
 
         strokePosition += strokeContains.length || 1;
@@ -83,7 +83,7 @@ const CharacterModel = GelatoModel.extend({
    */
   isKana: function() {
     return app.fn.isKana(this.get('writing'));
-  }
+  },
 
 });
 

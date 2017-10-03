@@ -129,7 +129,7 @@ const PromptItemCollection = GelatoCollection.extend({
       score: this.getBaseScore(),
       submitTime: this.getBaseSubmitTime(),
       thinkingTime: this.getBaseThinkingTime(),
-      wordGroup: this.group
+      wordGroup: this.group,
     };
   },
 
@@ -146,8 +146,8 @@ const PromptItemCollection = GelatoCollection.extend({
    * @returns {Number}
    */
   getBaseReviewingTime: function() {
-    var reviewingTime = 0;
-    for (var i = 0, length = this.length; i < length; i++) {
+    let reviewingTime = 0;
+    for (let i = 0, length = this.length; i < length; i++) {
       reviewingTime += this.at(i).getReviewingTime();
     }
     return reviewingTime;
@@ -158,13 +158,13 @@ const PromptItemCollection = GelatoCollection.extend({
    * @returns {Number}
    */
   getBaseScore: function() {
-    var score = null;
+    let score = null;
     if (this.length > 1) {
-      var totalCount = this.length;
-      var totalScore = 0;
-      var totalWrong = 0;
-      for (var i = 0, length = this.length; i < length; i++) {
-        var reviewScore = this.at(i).get('score');
+      let totalCount = this.length;
+      let totalScore = 0;
+      let totalWrong = 0;
+      for (let i = 0, length = this.length; i < length; i++) {
+        let reviewScore = this.at(i).get('score');
         totalScore += reviewScore;
         if (reviewScore === 1) {
           totalWrong++;
@@ -186,8 +186,8 @@ const PromptItemCollection = GelatoCollection.extend({
    * @returns {Number}
    */
   getBaseThinkingTime: function() {
-    var thinkingTime = 0;
-    for (var i = 0, length = this.length; i < length; i++) {
+    let thinkingTime = 0;
+    for (let i = 0, length = this.length; i < length; i++) {
       thinkingTime += this.at(i).getThinkingTime();
     }
     return thinkingTime;
@@ -210,7 +210,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @returns {Object}
    */
   getReview: function() {
-    var reviews = [this.getBaseReviewData()];
+    let reviews = [this.getBaseReviewData()];
 
     if (this.length > 1) {
       reviews = reviews.concat(this.getChildReviewData());
@@ -220,7 +220,7 @@ const PromptItemCollection = GelatoCollection.extend({
       created: this.created,
       data: reviews,
       group: this.group,
-      promptItems: this
+      promptItems: this,
     };
   },
 
@@ -336,7 +336,7 @@ const PromptItemCollection = GelatoCollection.extend({
     this.forEach(function(review) {
       review.set('showTeaching', true);
     });
-  }
+  },
 });
 
 module.exports = PromptItemCollection;

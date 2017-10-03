@@ -28,7 +28,7 @@ const StudyPromptVocabStyleComponent = GelatoComponent.extend({
   render: function() {
     this.renderTemplate();
     return this;
-  }
+  },
 
 });
 

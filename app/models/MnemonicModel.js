@@ -43,7 +43,7 @@ const MnemonicModel = SkritterModel.extend({
    */
   getFormattedText: function() {
     return MenomonicHelpers.textToHTML(this.get('text'));
-  }
+  },
 });
 
 module.exports = MnemonicModel;

@@ -1,10 +1,10 @@
-var GelatoView = require('./view');
+let GelatoView = require('./view');
 
 /**
  * @class GelatoDialog
  * @extends {GelatoView}
  */
-var GelatoDialog = GelatoView.extend({
+let GelatoDialog = GelatoView.extend({
   /**
    * @property el
    * @type {String}
@@ -88,14 +88,14 @@ var GelatoDialog = GelatoView.extend({
         backdrop: 'static',
         keyboard: false,
         show: true,
-        remote: false
+        remote: false,
       }
     );
     this.render();
     this.element.modal(options);
 
     return this;
-  }
+  },
 });
 
 module.exports = GelatoDialog;

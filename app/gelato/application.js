@@ -85,7 +85,7 @@ const GelatoApplication = Backbone.View.extend({
    * Renders the footer for the context
    * @method renderNavbar
    */
-  renderFooter: function () {
+  renderFooter: function() {
     this.$('#footer-container').html(this._views['footer'].render().el);
 
     return this;
@@ -186,7 +186,6 @@ const GelatoApplication = Backbone.View.extend({
    */
   go: function(path, options) {
     if (this._views['page']) {
-
       if (this._views['page'].dialog) {
         this._views['page'].dialog.close();
       }
@@ -219,7 +218,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method isCordova
    * @returns {Boolean}
    */
-  isCordova: function () {
+  isCordova: function() {
     return !!window.cordova;
   },
 
@@ -286,7 +285,7 @@ const GelatoApplication = Backbone.View.extend({
    * @returns {*}
    */
   locale: function(path, code) {
-    var locale = {};
+    let locale = {};
     try {
       locale = require('locale/' + code || app.get('locale'));
     } catch (error) {
@@ -436,7 +435,7 @@ const GelatoApplication = Backbone.View.extend({
     this.$('#main-app-container').addClass(this._views['page'].background || 'default');
 
     vent.trigger('page:switch', page, path);
-  }
+  },
 });
 
 module.exports = GelatoApplication;

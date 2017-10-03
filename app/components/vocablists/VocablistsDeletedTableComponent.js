@@ -13,7 +13,7 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    */
   events: {
     'click #load-more-btn': 'handleClickLoadMoreButton',
-    'click .restore-link': 'handleClickRestoreLink'
+    'click .restore-link': 'handleClickRestoreLink',
   },
 
   /**
@@ -34,8 +34,8 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
         limit: 10,
         sort: 'deleted',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
-      }
+        languageCode: app.getLanguage(),
+      },
     });
   },
 
@@ -54,8 +54,8 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    */
   handleClickRestoreLink: function(event) {
     event.preventDefault();
-    var listID = $(event.target).closest('.restore-link').data('vocablist-id');
-    var vocablist = this.vocablists.get(listID);
+    let listID = $(event.target).closest('.restore-link').data('vocablist-id');
+    let vocablist = this.vocablists.get(listID);
     vocablist.set({disabled: false, studyingMode: 'not studying'});
     vocablist.save(null, {patch: true});
     this.render();
@@ -76,12 +76,12 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
         limit: 10,
         sort: 'custom',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
+        languageCode: app.getLanguage(),
       },
-      remove: false
+      remove: false,
     });
     this.render();
-  }
+  },
 
 });
 

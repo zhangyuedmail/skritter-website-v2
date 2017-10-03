@@ -1,10 +1,10 @@
-var GelatoDialog = require('base/gelato-dialog');
+let GelatoDialog = require('base/gelato-dialog');
 
 /**
  * @class ConfirmItemBanDialog
  * @extends {GelatoDialog}
  */
-var Dialog = GelatoDialog.extend({
+let Dialog = GelatoDialog.extend({
   /**
    * @property events
    * @type {Object}
@@ -12,7 +12,7 @@ var Dialog = GelatoDialog.extend({
   events: {
     'click #button-ban-all': 'handleClickButtonBanAll',
     'click #button-ban-part': 'handleClickButtonBanPart',
-    'click #button-cancel': 'handleClickButtonCancel'
+    'click #button-cancel': 'handleClickButtonCancel',
   },
   /**
    * @property template
@@ -63,7 +63,7 @@ var Dialog = GelatoDialog.extend({
     this.vocab.banPart(this.item.get('part'));
     this.vocab.save();
     this.trigger('confirm');
-  }
+  },
 });
 
 module.exports = Dialog;

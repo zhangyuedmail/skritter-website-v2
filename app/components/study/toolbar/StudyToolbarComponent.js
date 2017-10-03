@@ -16,7 +16,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
   events: {
     'click .add-amt': 'handleAddWordAmountClick',
     'click #button-add-item': 'handleClickAddItem',
-    'click #button-study-settings': 'handleClickStudySettings'
+    'click #button-study-settings': 'handleClickStudySettings',
   },
 
   /**
@@ -69,7 +69,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * @method checkSubscription
    */
   checkSubscription: function() {
-    var self = this;
+    let self = this;
 
     app.user.isSubscriptionActive(function(active) {
       if (!active) {
@@ -83,7 +83,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * @returns {Number}
    */
   getDueCountWithOffset: function() {
-    var dueCount = this.page.items.dueCount - this.dueCountOffset;
+    let dueCount = this.page.items.dueCount - this.dueCountOffset;
     return dueCount > 0 ? dueCount : 0;
   },
 
@@ -115,7 +115,6 @@ const StudyToolbarComponent = GelatoComponent.extend({
 
     this.toggleAddWordsPopup(null, true);
   },
-
 
 
   /**
@@ -156,7 +155,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
    */
   toggleAddWordsPopup: function(event, show) {
     if (event && event.stopPropagation()) {
-      event.stopPropagation()
+      event.stopPropagation();
     }
 
     this.$('#add-popup').toggleClass('hidden', !show);
@@ -185,7 +184,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
    */
   updateTimerOffset: function(stats) {
     this.timer.setServerOffset(stats.getDailyTimeStudied());
-  }
+  },
 
 });
 

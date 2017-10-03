@@ -23,7 +23,7 @@ const CancellationModel = SkritterModel.extend({
    */
   parse: function(response) {
     return response.Cancellation || response;
-  }
+  },
 
 });
 

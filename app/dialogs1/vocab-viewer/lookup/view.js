@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/component');
+let GelatoComponent = require('gelato/component');
 
 /**
  * @class VocabViewerLookup
@@ -18,7 +18,7 @@ module.exports = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click #button-lookup': 'handleClickLookup'
+    'click #button-lookup': 'handleClickLookup',
   },
   /**
    * @property template
@@ -39,7 +39,7 @@ module.exports = GelatoComponent.extend({
    */
   handleClickLookup: function(event) {
     event.preventDefault();
-    var $selected = this.$('select option:selected');
+    let $selected = this.$('select option:selected');
     window.open($selected.val().replace('href-', ''), '_blank');
     app.user.set('wordDictionary', $selected.text()).cache();
   },
@@ -55,5 +55,5 @@ module.exports = GelatoComponent.extend({
       this.links = [];
     }
     return this.render();
-  }
+  },
 });

@@ -81,7 +81,7 @@ Recognizer.prototype.runChecks = function(userStroke, targetStroke) {
       scores.distance = this.checkDistance(userStroke, param);
     }
 
-    _.forEach(scores, score => {
+    _.forEach(scores, (score) => {
       if (score > -1) {
         total += score;
       } else {
@@ -99,7 +99,7 @@ Recognizer.prototype.runChecks = function(userStroke, targetStroke) {
       shape: targetStroke.get('shape'),
       strokeId: targetStroke.get('strokeId'),
       variationId: targetStroke.get('variationId'),
-      tone: targetStroke.get('tone')
+      tone: targetStroke.get('tone'),
     });
 
     result.scores = scores;

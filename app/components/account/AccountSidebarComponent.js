@@ -23,7 +23,7 @@ const AccountSidebarComponent = GelatoComponent.extend({
         $(el).addClass('active');
       }
     });
-  }
+  },
 
 });
 

@@ -41,8 +41,8 @@ const shortstraw = new Shortstraw();
  * @returns {Number}
  */
 function addAllObjectAttributes(array, attribute) {
-  var total = 0;
-  for (var i = 0, length = array.length; i < length; i++) {
+  let total = 0;
+  for (let i = 0, length = array.length; i < length; i++) {
     if (array[i][attribute]) {
       total += array[i][attribute];
     }
@@ -78,9 +78,9 @@ function arrayToInt(array) {
  * @returns {String}
  */
 function convertBytesToSize(bytes) {
-  var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  let sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   if (bytes > 0) {
-    var value = parseFloat(Math.floor(Math.log(bytes) / Math.log(1024)));
+    let value = parseFloat(Math.floor(Math.log(bytes) / Math.log(1024)));
     return (bytes / Math.pow(1024, value)).toFixed(2) + ' ' + sizes[value];
   }
   return '0 B';
@@ -91,11 +91,11 @@ function convertBytesToSize(bytes) {
  * @param {Number} time
  */
 function convertTimeToClock(time) {
-  var hours = (time / (3600 * 1000)) >> 0;
+  let hours = (time / (3600 * 1000)) >> 0;
   time = time % (3600 * 1000);
-  var minutes = (time / (60 * 1000)) >> 0;
+  let minutes = (time / (60 * 1000)) >> 0;
   time = time % (60 * 1000);
-  var seconds = (time / 1000) >> 0;
+  let seconds = (time / 1000) >> 0;
   if (hours > 0) {
     return pad(hours, 0, 2) + ':' + pad(minutes, 0, 2) + ':' + pad(seconds, 0, 2);
   }
@@ -117,10 +117,10 @@ function formatDate(timestamp) {
  * @return {Number}
  */
 function getAngle(point1, point2) {
-  var p1 = Array.isArray(point1) ? point1[0] : point1;
-  var p2 = Array.isArray(point1) ? point1[point1.length - 1] : point2;
-  var xDiff = p2.x - p1.x;
-  var yDiff = p2.y - p1.y;
+  let p1 = Array.isArray(point1) ? point1[0] : point1;
+  let p2 = Array.isArray(point1) ? point1[point1.length - 1] : point2;
+  let xDiff = p2.x - p1.x;
+  let yDiff = p2.y - p1.y;
   return (Math.atan2(yDiff, xDiff)) * (180 / Math.PI);
 }
 
@@ -133,25 +133,29 @@ function getAngle(point1, point2) {
  * @return {Object}
  */
 function getBoundingRectangle(points, areaWidth, areaHeight, pointRadius) {
-  var left = areaWidth;
-  var top = 0.0;
-  var right = 0.0;
-  var bottom = areaHeight;
-  for (var i = 0, length = points.length; i < length; i++) {
-    var x = points[i].x;
-    var y = points[i].y;
-    if (x - pointRadius < left)
-      left = x - pointRadius;
-    if (y + pointRadius > top)
-      top = y + pointRadius;
-    if (x + pointRadius > right)
-      right = x + pointRadius;
-    if (y - pointRadius < bottom)
-      bottom = y - pointRadius;
+  let left = areaWidth;
+  let top = 0.0;
+  let right = 0.0;
+  let bottom = areaHeight;
+  for (let i = 0, length = points.length; i < length; i++) {
+    let x = points[i].x;
+    let y = points[i].y;
+    if (x - pointRadius < left) {
+left = x - pointRadius;
+}
+    if (y + pointRadius > top) {
+top = y + pointRadius;
+}
+    if (x + pointRadius > right) {
+right = x + pointRadius;
+}
+    if (y - pointRadius < bottom) {
+bottom = y - pointRadius;
+}
   }
-  var width = right - left;
-  var height = top - bottom;
-  var center = {x: width / 2 + left, y: height / 2 + bottom};
+  let width = right - left;
+  let height = top - bottom;
+  let center = {x: width / 2 + left, y: height / 2 + bottom};
   return {x: left, y: bottom, width: width, height: height, center: center};
 }
 
@@ -161,10 +165,10 @@ function getBoundingRectangle(points, areaWidth, areaHeight, pointRadius) {
  * @returns {String}
  */
 function getCookie(name) {
-  var value = "; " + document.cookie;
-  var parts = value.split("; " + name + "=");
+  let value = '; ' + document.cookie;
+  let parts = value.split('; ' + name + '=');
   if (parts.length == 2) {
-    return parts.pop().split(";").shift();
+    return parts.pop().split(';').shift();
   }
 }
 
@@ -175,9 +179,9 @@ function getCookie(name) {
  * @return {Number}
  */
 function getDistance(point1, point2) {
-  var xs = point2.x - point1.x;
+  let xs = point2.x - point1.x;
   xs = xs * xs;
-  var ys = point2.y - point1.y;
+  let ys = point2.y - point1.y;
   ys = ys * ys;
   return Math.sqrt(xs + ys);
 }
@@ -196,9 +200,9 @@ function getGuid() {
  * @return {Number}
  */
 function getLength(points) {
-  var total = 0;
+  let total = 0;
   if (points.length > 1) {
-    for (var i = 1, length = points.length; i < length; i++) {
+    for (let i = 1, length = points.length; i < length; i++) {
       total += getDistance(points[i - 1], points[i]);
     }
   }
@@ -213,12 +217,12 @@ function getLength(points) {
  */
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
-  name = name.replace(/[\[\]]/g, "\\$&");
-  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+  name = name.replace(/[\[\]]/g, '\\$&');
+  let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
     results = regex.exec(url);
   if (!results) return null;
   if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, " "));
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
 /**
@@ -227,10 +231,10 @@ function getParameterByName(name, url) {
  * @returns {Boolean}
  */
 function hasKana(text) {
-  var chars = text.split('');
+  let chars = text.split('');
   if (chars.length > 0) {
-    for (var i = 0, length = chars.length; i < length; i++) {
-      var charCode = text.charCodeAt(i);
+    for (let i = 0, length = chars.length; i < length; i++) {
+      let charCode = text.charCodeAt(i);
       if ((charCode >= 12353 && charCode <= 12436) ||
         (charCode >= 12449 && charCode <= 12540)) {
         return true;
@@ -246,11 +250,11 @@ function hasKana(text) {
  * @returns {Boolean}
  */
 function isKana(text) {
-  var chars = text.split('');
+  let chars = text.split('');
 
   if (chars.length > 0) {
-    for (var i = 0, length = chars.length; i < length; i++) {
-      var charCode = text.charCodeAt(i);
+    for (let i = 0, length = chars.length; i < length; i++) {
+      let charCode = text.charCodeAt(i);
 
       if (!(charCode >= 12353 && charCode <= 12436) &&
         !(charCode >= 12449 && charCode <= 12540)) {
@@ -269,7 +273,7 @@ function isKana(text) {
  * @param {Function} [callbackError]
  */
 function imageExists(src, callbackSuccess, callbackError) {
-  var image = new Image();
+  let image = new Image();
   image.onload = function() {
     callbackSuccess(image);
   };
@@ -296,7 +300,7 @@ function isNumber() {
  * @returns {Object}
  */
 function mergeObjectArrays(object1, object2) {
-  for (var key in object2) {
+  for (let key in object2) {
     if (object1[key]) {
       if (Array.isArray(object1[key])) {
         object1[key] = object1[key].concat(object2[key]);
@@ -319,7 +323,7 @@ function mergeObjectArrays(object1, object2) {
  */
 function pad(text, value, size) {
   value = '' + value;
-  var string = text + '';
+  let string = text + '';
   while (string.length < size) {
     string = value + '' + string;
   }
@@ -397,5 +401,5 @@ module.exports = {
   randomDecimal: randomDecimal,
   textToHTML: textToHTML,
   toLowerCase: toLowerCase,
-  toUpperCase: toUpperCase
+  toUpperCase: toUpperCase,
 };

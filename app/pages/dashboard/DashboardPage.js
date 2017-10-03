@@ -20,7 +20,7 @@ const DashboardPage = GelatoPage.extend({
     'click #feedback-btn': 'onFeedbackBtnClicked',
     'click #goal-setting': 'onGoalSettingClicked',
     'click #rating-btn': 'onRatingBtnClicked',
-    'click #rating-cancel-btn': 'onRatingCancelBtnClicked'
+    'click #rating-cancel-btn': 'onRatingCancelBtnClicked',
   },
 
   /**
@@ -30,7 +30,7 @@ const DashboardPage = GelatoPage.extend({
   mobileNavbar: MobileNavbar,
 
   navbarOptions: {
-    showSyncBtn: true
+    showSyncBtn: true,
   },
 
   /**
@@ -81,7 +81,7 @@ const DashboardPage = GelatoPage.extend({
       this.componentsLoaded = {
         goal: false,
         month: false,
-        queue: false
+        queue: false,
       };
       this.loadAlreadyTimed = false;
 
@@ -210,7 +210,7 @@ const DashboardPage = GelatoPage.extend({
     }
 
     $ratingNotice.removeClass('hidden');
-  }
+  },
 });
 
 module.exports = DashboardPage;

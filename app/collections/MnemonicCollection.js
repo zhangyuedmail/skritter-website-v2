@@ -67,7 +67,7 @@ const MnemonicCollection = GelatoCollection.extend({
   setVocab: function(vocab) {
     this.vocab = vocab;
     this.reset();
-  }
+  },
 });
 
 module.exports = MnemonicCollection;

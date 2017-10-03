@@ -35,7 +35,7 @@ const VocablistsHistoryTableComponent = GelatoComponent.extend({
     this.delegateEvents();
 
     return this;
-  }
+  },
 
 });
 

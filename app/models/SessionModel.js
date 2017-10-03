@@ -18,7 +18,7 @@ const SessionModel = SkritterModel.extend({
    */
   defaults: {
     created: 0,
-    expires_in: 0
+    expires_in: 0,
   },
   /**
    * @property url
@@ -51,7 +51,7 @@ const SessionModel = SkritterModel.extend({
         client_id: this.getClientId(),
         grant_type: type,
         password: password,
-        username: username
+        username: username,
       },
       type: 'post',
       success: _.bind(function(model) {
@@ -60,7 +60,7 @@ const SessionModel = SkritterModel.extend({
       }, this),
       error: _.bind(function(model, error) {
         callbackError(error, model);
-      }, this)
+      }, this),
     });
   },
 
@@ -160,7 +160,7 @@ const SessionModel = SkritterModel.extend({
       data: {
         client_id: this.getClientId(),
         grant_type: 'refresh_token',
-        refresh_token: this.get('refresh_token')
+        refresh_token: this.get('refresh_token'),
       },
       type: 'POST',
       success: _.bind(function(model) {
@@ -169,9 +169,9 @@ const SessionModel = SkritterModel.extend({
       }, this),
       error: _.bind(function(model, error) {
         callbackError(error, model);
-      }, this)
+      }, this),
     });
-  }
+  },
 
 });
 

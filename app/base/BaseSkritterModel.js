@@ -28,7 +28,7 @@ const BaseSkritterModel = GelatoModel.extend({
     }
 
     GelatoModel.prototype.sync.call(this, method, model, options);
-  }
+  },
 });
 
 module.exports = BaseSkritterModel;

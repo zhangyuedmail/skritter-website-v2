@@ -1,5 +1,5 @@
-var GelatoComponent = require('gelato/component');
-var Vocabs = require('collections/VocabCollection');
+let GelatoComponent = require('gelato/component');
+let Vocabs = require('collections/VocabCollection');
 
 /**
  * @class AddVocabContent
@@ -25,7 +25,7 @@ module.exports = GelatoComponent.extend({
     'click #button-add': 'handleClickButtonAdd',
     'click #button-clear': 'handleClickButtonClear',
     'click #button-search': 'handleClickButtonSearch',
-    'keyup #vocab-input': 'handleKeyupVocabInput'
+    'keyup #vocab-input': 'handleKeyupVocabInput',
   },
   /**
    * @property template
@@ -60,7 +60,7 @@ module.exports = GelatoComponent.extend({
     return {
       listId: this.$('#vocab-list').val(),
       sectionId: this.$('#vocab-list-section').val(),
-      vocabId: this.$('#vocab-result').val()
+      vocabId: this.$('#vocab-result').val(),
     };
   },
   /**
@@ -69,11 +69,11 @@ module.exports = GelatoComponent.extend({
    */
   handleClickButtonAdd: function(event) {
     event.preventDefault();
-    var self = this;
-    var formData = this.getFormData();
-    var section = this.vocablist.getSectionById(formData.sectionId);
-    var group = this.groups[formData.vocabId];
-    var row = {};
+    let self = this;
+    let formData = this.getFormData();
+    let section = this.vocablist.getSectionById(formData.sectionId);
+    let group = this.groups[formData.vocabId];
+    let row = {};
     if (group[0].isChinese()) {
       row.vocabId = group[0].id;
       if (group.length > 1) {
@@ -98,7 +98,7 @@ module.exports = GelatoComponent.extend({
       },
       success: function() {
         self.dialog.close();
-      }
+      },
     });
   },
   /**
@@ -134,9 +134,9 @@ module.exports = GelatoComponent.extend({
    * @param {String} value
    */
   search: function(value) {
-    var self = this;
-    var formData = this.getFormData();
-    var vocablist = this.dialog.vocablists.get(formData.listId);
+    let self = this;
+    let formData = this.getFormData();
+    let vocablist = this.dialog.vocablists.get(formData.listId);
     async.series(
       [
         function(callback) {
@@ -147,14 +147,14 @@ module.exports = GelatoComponent.extend({
             success: function() {
               self.vocablist = vocablist;
               callback();
-            }
+            },
           });
         },
         function(callback) {
           self.vocabs.fetch({
             data: {
               lang: app.getLanguage(),
-              q: value
+              q: value,
             },
             error: function(error) {
               console.error(error);
@@ -163,9 +163,9 @@ module.exports = GelatoComponent.extend({
             },
             success: function() {
               callback();
-            }
+            },
           });
-        }
+        },
       ],
       function() {
         self.groups = self.vocabs.groupBy(function(vocab) {
@@ -174,5 +174,5 @@ module.exports = GelatoComponent.extend({
         self.render();
       }
     );
-  }
+  },
 });

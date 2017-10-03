@@ -47,13 +47,13 @@ const DashboardMonthComponent = GelatoComponent.extend({
       range: 1,
       start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
       subDomain: 'x_day',
-      subDomainTextFormat: "%d"
+      subDomainTextFormat: '%d',
     };
 
     const mobileSettings = {
       cellSize: 20,
       cellPadding: 2,
-      cellRadius: 5
+      cellRadius: 5,
     };
 
     this.heatmap.init(_.extend(settings, app.isMobile() ? mobileSettings : {}));
@@ -107,7 +107,7 @@ const DashboardMonthComponent = GelatoComponent.extend({
     if (this.stats.length) {
       this.$('#streak .value').text(this.stats.getMonthlyStreak());
     }
-  }
+  },
 });
 
 module.exports = DashboardMonthComponent;

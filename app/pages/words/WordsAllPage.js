@@ -22,7 +22,7 @@ module.exports = GelatoPage.extend({
     'click #previous-sort-link': 'handleClickPreviousSortLink',
     'change input[type="checkbox"]': 'handleChangeCheckbox',
     'change #action-select': 'handleChangeActionSelect',
-    'change #word-search-input': 'handleChangeWordSearchInput'
+    'change #word-search-input': 'handleChangeWordSearchInput',
   },
 
   /**
@@ -99,7 +99,7 @@ module.exports = GelatoPage.extend({
         lang: app.getLanguage(),
         limit: this.limit,
         include_vocabs: true,
-        cursor: cursor || ''
+        cursor: cursor || '',
       },
       remove: false,
       sort: false,
@@ -107,7 +107,7 @@ module.exports = GelatoPage.extend({
         if (app.config.recordLoadTimes) {
           self._recordLoadTime();
         }
-      }
+      },
     });
   },
 
@@ -123,12 +123,12 @@ module.exports = GelatoPage.extend({
 
     this.stopListening(this.searchVocabItems);
     this.searchVocabItems = new Items(null, {
-      vocabs: vocabs
+      vocabs: vocabs,
     });
     this.searchVocabItems.fetch({
       data: {
-        vocab_ids: _.map(vocabs, 'id').join('|')
-      }
+        vocab_ids: _.map(vocabs, 'id').join('|'),
+      },
     });
 
     this.listenToOnce(this.searchVocabItems, 'sync', this.fetchItemsForSearchVocabsSync);
@@ -213,11 +213,10 @@ module.exports = GelatoPage.extend({
         data: {
           q: this.searchString,
           limit: this.limit,
-          include_containing: true
-        }
+          include_containing: true,
+        },
       });
-    }
-    else {
+    } else {
       this.fetchItems();
     }
   },
@@ -233,12 +232,11 @@ module.exports = GelatoPage.extend({
           cursor: this.searchVocabs.cursor,
           containing_cursor: this.searchVocabs.containingCursor,
           limit: this.limit,
-          include_containing: true
+          include_containing: true,
         },
-        remove: false
-      })
-    }
-    else {
+        remove: false,
+      });
+    } else {
       this.fetchItems(this.items.cursor);
     }
   },
@@ -301,7 +299,7 @@ module.exports = GelatoPage.extend({
     this.listenTo(this.searchVocabs, 'state', this.renderTable);
     this.listenTo(this.searchVocabs, 'add', function(vocab) {
       this.vocabsToFetchItemsFor.add(vocab);
-      vocab.set('itemState', 'queued')
+      vocab.set('itemState', 'queued');
     });
     this.listenTo(this.searchVocabs, 'sync', this.fetchItemsForSearchVocabs);
   },
@@ -328,7 +326,7 @@ module.exports = GelatoPage.extend({
     this.loadAlreadyTimed = true;
     const loadTime = window.performance.now() - this.loadStart;
     app.loadTimes.pages.words.push(loadTime);
-  }
+  },
 });
 
 _.extend(module.exports.prototype, VocabActionMixin);

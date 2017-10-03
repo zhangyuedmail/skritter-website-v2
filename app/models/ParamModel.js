@@ -20,7 +20,7 @@ const ParamModel = GelatoModel.extend({
     return {
       contains: [],
       corners: [],
-      strokeId: undefined
+      strokeId: undefined,
     };
   },
 
@@ -45,9 +45,9 @@ const ParamModel = GelatoModel.extend({
    * @returns {Number}
    */
   getLength: function() {
-    var cornersLength = 0;
-    var corners = _.clone(this.get('corners'));
-    for (var i = 0, length = corners.length - 1; i < length; i++) {
+    let cornersLength = 0;
+    let corners = _.clone(this.get('corners'));
+    for (let i = 0, length = corners.length - 1; i < length; i++) {
       cornersLength += app.fn.getDistance(corners[i], corners[i + 1]);
     }
     return cornersLength;
@@ -58,9 +58,9 @@ const ParamModel = GelatoModel.extend({
    * @returns {Object}
    */
   getRectangle: function() {
-    var corners = _.clone(this.get('corners'));
+    let corners = _.clone(this.get('corners'));
     return app.fn.getBoundingRectangle(corners, this.size, this.size, 18);
-  }
+  },
 
 });
 

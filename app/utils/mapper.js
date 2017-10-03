@@ -46,30 +46,31 @@ function toBase(word, options) {
   let style = 'simp';
   let variation = 0;
 
-  //set default option values
+  // set default option values
   options = _.defaults(options, {
-    lang: 'zh'
+    lang: 'zh',
   });
 
-  //return base variations for japanese
+  // return base variations for japanese
   if (options.lang === 'ja') {
     return ['ja', word, '0'].join('-');
   }
 
-  //cycle through each rune in a word
+  // cycle through each rune in a word
   for (let i in runes) {
-    //get the mapped information for the rune
+    // get the mapped information for the rune
     for (let key in map) {
-      //check the map values for the rune
+      // check the map values for the rune
       const valueIndex = map[key].indexOf(runes[i]) + 1;
 
       if (valueIndex > 0) {
-        //flag trad variants that map to multiple runes
+        // flag trad variants that map to multiple runes
         mappedRunes.push(key);
         variation = variation < valueIndex ? valueIndex : variation;
 
-        if (key !== runes[i])
-          style = 'trad';
+        if (key !== runes[i]) {
+style = 'trad';
+}
         if (map[key].split('').length > 1) {
           multiple = true;
 
@@ -77,13 +78,13 @@ function toBase(word, options) {
         }
       }
     }
-    //push the simp rune if no match was found
+    // push the simp rune if no match was found
     if (!mappedRunes[i]) {
       mappedRunes.push(runes[i]);
     }
   }
 
-  //determines the variation based on mapping results
+  // determines the variation based on mapping results
   if (runes.length === 1) {
     if (style === 'simp') {
       variation = 0;
@@ -183,5 +184,5 @@ module.exports = {
   toBase: toBase,
   toSimplified: toSimplified,
   toTraditional: toTraditional,
-  simpCharToTrad: simpCharToTrad
+  simpCharToTrad: simpCharToTrad,
 };

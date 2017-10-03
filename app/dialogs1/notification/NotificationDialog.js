@@ -6,7 +6,7 @@ const GelatoDialog = require('gelato/dialog');
  */
 module.exports = GelatoDialog.extend({
   events: {
-    'click #notification-button': 'handleNotificationButtonClicked'
+    'click #notification-button': 'handleNotificationButtonClicked',
   },
 
   /**
@@ -34,7 +34,7 @@ module.exports = GelatoDialog.extend({
       showTitle: this.showTitle,
       body: this.body,
       buttonText: this.buttonText,
-      showConfirmButton: this.showConfirmButton
+      showConfirmButton: this.showConfirmButton,
     });
 
     if (this.style) {
@@ -121,5 +121,5 @@ module.exports = GelatoDialog.extend({
     if (this.showConfirmButton) {
       this.$('#notification-button').text(this.buttonText || 'OK');
     }
-  }
+  },
 });

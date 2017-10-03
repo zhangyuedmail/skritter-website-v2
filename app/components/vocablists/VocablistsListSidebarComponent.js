@@ -1,12 +1,12 @@
 const GelatoComponent = require('gelato/component');
 
-var AddVocabDialog = require('dialogs1/add-vocab/view');
-var ConfirmDialog = require('dialogs/confirm/view');
-var ExportVocablistDialog = require('dialogs1/export-vocablist/view');
-var HistoryVocablistDialog = require('dialogs1/vocablist-history/view');
-var PublishDialog = require('dialogs1/publish-vocablist/content/view');
-var VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
-var ViewDialog = require('dialogs1/view-dialog/view');
+let AddVocabDialog = require('dialogs1/add-vocab/view');
+let ConfirmDialog = require('dialogs/confirm/view');
+let ExportVocablistDialog = require('dialogs1/export-vocablist/view');
+let HistoryVocablistDialog = require('dialogs1/vocablist-history/view');
+let PublishDialog = require('dialogs1/publish-vocablist/content/view');
+let VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
+let ViewDialog = require('dialogs1/view-dialog/view');
 
 /**
  * @class VocablistsListSidebarComponent
@@ -28,7 +28,7 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
     'click #publish-link-sidebar': 'handleClickPublishLink',
     'click #quick-add-link-sidebar': 'handleClickQuickAddLink',
     'click #study-settings-link-sidebar': 'handleClickStudySettingsLink',
-    'click #image-upload-link-sidebar': 'handleClickImageUploadLink'
+    'click #image-upload-link-sidebar': 'handleClickImageUploadLink',
   },
 
   /**
@@ -46,14 +46,14 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
     this.vocablist = options.vocablist;
 
     this._views['publishDialog'] = new ViewDialog({
-      content: PublishDialog
+      content: PublishDialog,
     });
 
     this._views['historyDialog'] = new ViewDialog({
       content: HistoryVocablistDialog,
       contentOptions: {
-        vocablist: this.vocablist
-      }
+        vocablist: this.vocablist,
+      },
     });
 
     this.listenTo(this._views['publishDialog'], 'publish', this.publishList);
@@ -76,12 +76,12 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @param {Event} event
    */
   handleChangeImageUploadInput: function(event) {
-    var file = event.target.files[0];
-    var data = new FormData().append('image', file);
+    let file = event.target.files[0];
+    let data = new FormData().append('image', file);
     this.$('#list-img-wrapper .fa-spinner').removeClass('hide');
     this.$('#list-img').remove();
     this.$('#missing-image-stub').removeClass('hide');
-    var imageUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/image';
+    let imageUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/image';
     $.ajax({
       url: imageUrl,
       method: 'POST',
@@ -91,7 +91,7 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
       contentType: false,
       success: function() {
         document.location.reload();
-      }
+      },
     });
   },
 
@@ -116,7 +116,7 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
       title: 'Confirm Copy',
       body: 'Are you sure you want to make a copy of this list?',
       okText: 'Yes - Copy!',
-      onConfirm: 'show-spinner'
+      onConfirm: 'show-spinner',
     });
 
     event.preventDefault();
@@ -131,7 +131,7 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
         success: function(response) {
           app.router.navigate('/vocablists/view/' + response.VocabList.id, {trigger: true});
           confirmDialog.close();
-        }
+        },
       });
     });
 
@@ -144,11 +144,11 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    */
   handleClickDeleteLink: function(event) {
     event.preventDefault();
-    var confirmDialog = new ConfirmDialog({
+    let confirmDialog = new ConfirmDialog({
       title: 'Confirm Delete',
       body: 'Are you sure you want to delete this list?',
       okText: 'Yes - Delete!',
-      onConfirm: 'show-spinner'
+      onConfirm: 'show-spinner',
     });
     this.listenTo(confirmDialog, 'confirm', function() {
       this.vocablist.save({disabled: true, studyingMode: 'not studying'}, {patch: true});
@@ -217,7 +217,7 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
     event.preventDefault();
     this.dialog = new VocablistSettingsDialog({vocablist: this.vocablist});
     this.dialog.render().open();
-  }
+  },
 
 });
 

@@ -51,7 +51,7 @@ const UserModel = SkritterModel.extend({
     teachingMode: true,
     timezone: 'America/New_York',
     volume: 1.0,
-    wordDictionary: null
+    wordDictionary: null,
   },
 
   /**
@@ -114,7 +114,7 @@ const UserModel = SkritterModel.extend({
     }
 
     // these are really weird properties
-    ['ballerSubscriptions', 'isBallerFor'].forEach(prop => {
+    ['ballerSubscriptions', 'isBallerFor'].forEach((prop) => {
       if (typeof model.get(prop) === 'object' && model.get(prop).length === 1) {
         if (model.get(prop)[0] === '') {
           model.set(prop, []);
@@ -131,7 +131,6 @@ const UserModel = SkritterModel.extend({
   },
 
   validate: function() {
-
     // because the backend checks for data it didn't
     if (typeof this.get('disabled') !== 'boolean') {
       this.set('disabled', Boolean(this.get('disabled')));
@@ -183,7 +182,7 @@ const UserModel = SkritterModel.extend({
    * @returns {Array}
    */
   getFilteredParts: function() {
-    var filteredParts = app.isChinese() ? this.get('filteredChineseParts') : this.get('filteredJapaneseParts');
+    let filteredParts = app.isChinese() ? this.get('filteredChineseParts') : this.get('filteredJapaneseParts');
 
     return _.intersection(this.getStudyParts(), filteredParts);
   },
@@ -203,7 +202,7 @@ const UserModel = SkritterModel.extend({
    * @returns {Number}
    */
   getLastItemUpdate: function() {
-    return app.isChinese() ? this.get('lastChineseItemUpdate') : this.get('lastJapaneseItemUpdate')
+    return app.isChinese() ? this.get('lastChineseItemUpdate') : this.get('lastJapaneseItemUpdate');
   },
 
   /**
@@ -249,7 +248,7 @@ const UserModel = SkritterModel.extend({
    * @returns {Array}
    */
   getStudyStyles: function() {
-    var styles = ['both'];
+    let styles = ['both'];
 
     if (app.isChinese()) {
       if (this.get('reviewSimplified')) {
@@ -268,7 +267,7 @@ const UserModel = SkritterModel.extend({
    * @returns {Array}
    */
   getRaygunTags: function() {
-    var tags = [];
+    let tags = [];
     if (app.isChinese()) {
       tags.push('chinese');
       if (this.get('reviewSimplified')) {
@@ -357,7 +356,6 @@ const UserModel = SkritterModel.extend({
     const self = this;
 
     if (this.subscription.isFetched) {
-
       if (_.isFunction(callback)) {
         callback(this.subscription.getStatus() !== 'Expired');
       }
@@ -374,7 +372,7 @@ const UserModel = SkritterModel.extend({
           if (callbackError) {
             callbackError(error);
           }
-        }
+        },
       });
     }
   },
@@ -385,7 +383,7 @@ const UserModel = SkritterModel.extend({
    * @returns {User}
    */
   load: function(callback) {
-    var self = this;
+    let self = this;
     if (!this.isLoggedIn()) {
       callback();
       return this;
@@ -397,7 +395,7 @@ const UserModel = SkritterModel.extend({
         },
         function(callback) {
           self.updateItems(callback);
-        }
+        },
       ],
       callback
     );
@@ -411,7 +409,7 @@ const UserModel = SkritterModel.extend({
    * @param {Function} callback
    */
   login: function(username, password, callback) {
-    var self = this;
+    let self = this;
     async.waterfall([
       function(callback) {
         self.session.authenticate('password', username, password,
@@ -429,9 +427,9 @@ const UserModel = SkritterModel.extend({
           },
           success: function(user) {
             callback(null, user);
-          }
-        })
-      }
+          },
+        });
+      },
     ], function(error, user) {
       if (error) {
         callback(error);
@@ -452,12 +450,12 @@ const UserModel = SkritterModel.extend({
    * @method logout
    */
   logout: function() {
-    var self = this;
+    let self = this;
 
     if (app.user.db) {
       app.user.db.delete()
         .then(function() {
-          self._removeUserLocalStorageData()
+          self._removeUserLocalStorageData();
         })
         .catch(function(error) {
           console.error(error);
@@ -476,7 +474,7 @@ const UserModel = SkritterModel.extend({
    * @returns {User}
    */
   openDatabase: function(callback) {
-    var self = this;
+    let self = this;
     if (!this.isLoggedIn()) {
       callback();
       return this;
@@ -485,13 +483,13 @@ const UserModel = SkritterModel.extend({
     this.db.version(2).stores(
       {
         items: 'id, *changed, *last, *next',
-        reviews: 'group, *created'
+        reviews: 'group, *created',
       }
     ).upgrade(app.reset);
     this.db.version(3).stores(
       {
         items: 'id, *changed, *lang, *last, *next',
-        reviews: 'group, *created'
+        reviews: 'group, *created',
       }
     ).upgrade(app.reset);
     this.db.open()
@@ -499,7 +497,7 @@ const UserModel = SkritterModel.extend({
         callback();
       })
       .catch(function(error) {
-        //specially handle error code 8 for safari
+        // specially handle error code 8 for safari
         if (error && error.code === 8) {
           callback();
         } else {
@@ -555,12 +553,12 @@ const UserModel = SkritterModel.extend({
    * @returns {User}
    */
   updateItems: function(callback) {
-    var self = this;
-    var cursor = undefined;
-    var index = 0;
-    var limit = 2500;
-    var now = moment().unix();
-    var retries = 0;
+    let self = this;
+    let cursor = undefined;
+    let index = 0;
+    let limit = 2500;
+    let now = moment().unix();
+    let retries = 0;
     if (!this.isLoggedIn()) {
       callback();
       return this;
@@ -584,7 +582,7 @@ const UserModel = SkritterModel.extend({
             limit: limit,
             offset: self.getLastItemUpdate(),
             order: 'changed',
-            token: self.session.get('access_token')
+            token: self.session.get('access_token'),
           },
           error: function(error) {
             if (retries > 2) {
@@ -616,7 +614,7 @@ const UserModel = SkritterModel.extend({
                 setTimeout(callback, 1000);
               }
             });
-          }
+          },
         });
       },
       function(error) {
@@ -639,7 +637,7 @@ const UserModel = SkritterModel.extend({
     app.removeSetting('user');
     app.removeSetting('siteRef');
     app.reload();
-  }
+  },
 
 });
 

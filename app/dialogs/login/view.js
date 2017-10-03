@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class LoginDialog
@@ -23,7 +23,7 @@ module.exports = BootstrapDialog.extend({
    * @type {Object}
    */
   events: {
-    'click #button-login': 'handleClickLogin'
+    'click #button-login': 'handleClickLogin',
   },
   /**
    * @method handleClickLogin
@@ -31,9 +31,9 @@ module.exports = BootstrapDialog.extend({
    */
   handleClickLogin: function(event) {
     event.preventDefault();
-    var self = this;
-    var password = this.$('#login-password').val();
-    var username = this.$('#login-username').val();
+    let self = this;
+    let password = this.$('#login-password').val();
+    let username = this.$('#login-username').val();
     this.$('#login-message').empty();
     this.$('#login-form').prop('disabled', true);
     app.user.login(username, password, function() {
@@ -43,5 +43,5 @@ module.exports = BootstrapDialog.extend({
       self.$('#login-message').text(error.message);
       self.$('#login-form').prop('disabled', false);
     });
-  }
+  },
 });

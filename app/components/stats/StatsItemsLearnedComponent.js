@@ -102,47 +102,47 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
         plotBorderWidth: null,
         plotShadow: false,
         type: 'pie',
-        spacing: [0, 0, 0, 0]
+        spacing: [0, 0, 0, 0],
       },
       colors: ['#87a64b', '#c5da4b'],
       credits: {
-        enabled: false
+        enabled: false,
       },
       plotOptions: {
         pie: {
           allowPointSelect: false,
           cursor: 'pointer',
           dataLabels: {
-            enabled: false
+            enabled: false,
           },
-          borderWidth: 0
-        }
+          borderWidth: 0,
+        },
       },
       series: [{
         title: null,
         colorByPoint: true,
         data: [{
           name: 'Words',
-          y: 0
+          y: 0,
         }, {
           name: 'Characters',
-          y: 0
+          y: 0,
         }],
         states: {
           hover: {
             enabled: false,
             halo: {
-              size: 0
-            }
-          }
-        }
+              size: 0,
+            },
+          },
+        },
       }],
       title: {
-        text: null
+        text: null,
       },
       tooltip: {
-        enabled: false
-      }
+        enabled: false,
+      },
 
     });
   },
@@ -186,7 +186,7 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
       this.loaded = true;
       this.trigger('component:loaded', 'allTime');
     }
-  }
+  },
 
 });
 

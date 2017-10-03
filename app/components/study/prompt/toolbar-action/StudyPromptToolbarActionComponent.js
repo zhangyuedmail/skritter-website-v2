@@ -13,7 +13,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
     'click #toolbar-correct': 'handleClickToolbarCorrect',
     'click #toolbar-erase': 'handleClickToolbarErase',
     'click #toolbar-show': 'handleClickToolbarShow',
-    'click #toolbar-stroke-order': 'handleClickToolbarStrokeOrder'
+    'click #toolbar-stroke-order': 'handleClickToolbarStrokeOrder',
   },
 
   /**
@@ -129,7 +129,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
   },
 
   setPromptType(type, update) {
-    switch(type) {
+    switch (type) {
       case 'rune':
         this.buttonCorrect = true;
         this.buttonErase = true;
@@ -146,7 +146,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
     if (update) {
       this.update();
     }
-  }
+  },
 
 });
 

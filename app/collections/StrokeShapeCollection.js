@@ -19,7 +19,7 @@ const StrokeShapeCollection = GelatoCollection.extend({
    */
   initialize: function() {
     this.add(ShapeData.getData());
-  }
+  },
 });
 
 module.exports = StrokeShapeCollection;

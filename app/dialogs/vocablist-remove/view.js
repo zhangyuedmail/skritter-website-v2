@@ -11,7 +11,7 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #confirm-btn': 'handleClickConfirmButton',
-    'click #cancel-btn': 'handleClickCancelButton'
+    'click #cancel-btn': 'handleClickCancelButton',
   },
 
   /**
@@ -34,7 +34,7 @@ module.exports = BootstrapDialog.extend({
     this.itemsCursor = '';
     this.itemsRemoved = 0;
     this.itemsToRemove = 0;
-    this.toRemove = ["item", "sect_complete"];
+    this.toRemove = ['item', 'sect_complete'];
 
     if (!this.vocablist) {
       throw new Error('VocablistRemoveDialog requires a vocablist passed in');
@@ -60,7 +60,6 @@ module.exports = BootstrapDialog.extend({
     }
 
     this.fetchingCount.then(() => {
-
       // TODO: update UI with count
       this._removeVocab().then(() => {
         this.close();
@@ -99,7 +98,7 @@ module.exports = BootstrapDialog.extend({
           } else {
             resolve();
           }
-        }
+        },
       });
     });
   },
@@ -129,7 +128,7 @@ module.exports = BootstrapDialog.extend({
       error: (error) => {
         this.resetUI();
         this.showError('There was a problem deleting the list. Please try again.');
-      }
+      },
     });
 
     this.$('.step-1').addClass('hidden');
@@ -178,9 +177,9 @@ module.exports = BootstrapDialog.extend({
     percentDone = parseInt(Math.min(99, percentDone), 10);
 
     let toGo = this.itemsToRemove - this.itemsRemoved;
-    let statusText = percentDone + "% complete ";
+    let statusText = percentDone + '% complete ';
     if (toGo > 0) {
-      statusText += "(" + toGo + " items still to process)";
+      statusText += '(' + toGo + ' items still to process)';
     }
 
     if (this.toRemove[0] !== 'item') {
@@ -203,7 +202,7 @@ module.exports = BootstrapDialog.extend({
         headers: app.user.session.getHeaders(),
         data: {
           kind: this.toRemove[0],
-          offset: this.itemsRemoved
+          offset: this.itemsRemoved,
         },
         error: function(error) {
           reject();
@@ -234,8 +233,8 @@ module.exports = BootstrapDialog.extend({
               resolve();
             }
           }
-        }
+        },
       });
     });
-  }
+  },
 });

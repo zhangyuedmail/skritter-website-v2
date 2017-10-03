@@ -12,7 +12,7 @@ const FeedbackComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click #send-feedback': 'onSendFeedbackClicked'
+    'click #send-feedback': 'onSendFeedbackClicked',
   },
 
   /**
@@ -53,7 +53,7 @@ const FeedbackComponent = GelatoComponent.extend({
 
       app.notifyUser({
         message: 'Feedback successfully sent! ' + thanks,
-        type: 'pastel-success'
+        type: 'pastel-success',
       });
     }
   },
@@ -122,7 +122,7 @@ const FeedbackComponent = GelatoComponent.extend({
       email: email,
       subject: 'Feedback',
       message: 'Feedback widget feedback!\nUser ' + userId + ' (' + displayName + '), email: ' + email +
-        ' while studying ' + app.getLanguage() + ' on the page ' + page + " left us the following feedback:\n" + feedbackText
+        ' while studying ' + app.getLanguage() + ' on the page ' + page + ' left us the following feedback:\n' + feedbackText,
     };
 
     $.ajax({
@@ -136,13 +136,13 @@ const FeedbackComponent = GelatoComponent.extend({
       },
       error: function() {
         self.feedbackSubmittedError();
-      }
+      },
     });
   },
 
   showError: function(msg) {
     this.$('#error-msg').text(msg).removeClass('hidden');
-  }
+  },
 
 });
 

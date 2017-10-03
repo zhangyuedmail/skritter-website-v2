@@ -1,4 +1,4 @@
-var GelatoView = require('gelato/view');
+let GelatoView = require('gelato/view');
 
 /**
  * @class BootstrapDialog
@@ -75,5 +75,5 @@ module.exports = GelatoView.extend({
     options.remote = options.remote || false;
     this.render().element.modal(options);
     return this;
-  }
+  },
 });

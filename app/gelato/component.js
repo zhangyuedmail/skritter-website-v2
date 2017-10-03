@@ -29,7 +29,7 @@ const GelatoComponent = GelatoView.extend({
    */
   remove: function() {
     return GelatoView.prototype.remove.call(this);
-  }
+  },
 });
 
 module.exports = GelatoComponent;

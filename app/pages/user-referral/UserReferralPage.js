@@ -1,4 +1,4 @@
-var GelatoPage = require('gelato/page');
+let GelatoPage = require('gelato/page');
 
 /**
  * A page that explains the foundation of Skritter, our learning philosophy,
@@ -15,7 +15,7 @@ module.exports = GelatoPage.extend({
    * @type {Object<String, String>}
    */
   events: {
-    'click #user-link': 'handleUserLinkClicked'
+    'click #user-link': 'handleUserLinkClicked',
   },
 
   /**
@@ -48,7 +48,7 @@ module.exports = GelatoPage.extend({
    */
   render: function() {
     this.renderTemplate();
-    var self = this;
+    let self = this;
 
     _.defer(function() {
       self.$('#user-link').select().focus();
@@ -71,5 +71,5 @@ module.exports = GelatoPage.extend({
    */
   handleUserLinkClicked: function() {
     this.$('#user-link').select();
-  }
+  },
 });

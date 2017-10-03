@@ -11,7 +11,7 @@ const SentencesCollection = GelatoCollection.extend({
    * @property model
    * @type {SentenceModel}
    */
-  model: SentenceModel
+  model: SentenceModel,
 });
 
 module.exports = SentencesCollection;

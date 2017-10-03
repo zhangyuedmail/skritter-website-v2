@@ -1,10 +1,10 @@
-var GelatoPage = require('gelato/page');
+let GelatoPage = require('gelato/page');
 
 /**
  * @class MailUnsubscribePage
  * @extends {GelatoPage}
  */
-var MailUnsubscribe = GelatoPage.extend({
+let MailUnsubscribe = GelatoPage.extend({
 
   /**
    * Describes a CSS class name for what type of background this page should have.
@@ -56,7 +56,7 @@ var MailUnsubscribe = GelatoPage.extend({
    */
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 });
 
 module.exports = MailUnsubscribe;

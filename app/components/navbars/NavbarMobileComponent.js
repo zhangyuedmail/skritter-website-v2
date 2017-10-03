@@ -68,7 +68,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     this._views['subNavbar'] = new navbar({
       page: page,
       rootMenu: this,
-      viewOptions: page.navbarOptions
+      viewOptions: page.navbarOptions,
     });
 
     this.renderSubNavbar();
@@ -102,7 +102,6 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     let navbar = page.mobileNavbar;
 
     if (!navbar) {
-
       // Hack until all pages get their own mobile navbars made
       // TODO: make default mobile navbar with just a hamburger button and
       // "Skritter" for the title?
@@ -110,7 +109,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     }
 
     return navbar;
-  }
+  },
 });
 
 module.exports = NavbarMobileComponent;

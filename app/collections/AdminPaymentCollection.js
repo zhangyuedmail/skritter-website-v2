@@ -35,8 +35,8 @@ const AdminPaymentCollection = GelatoCollection.extend({
      * @returns {Object}
      */
     getTotalByDate: function() {
-        var totals = {};
-        var groups = _.groupBy(
+        let totals = {};
+        let groups = _.groupBy(
             this.models,
             function(payment) {
                 return payment.get('date');
@@ -45,7 +45,7 @@ const AdminPaymentCollection = GelatoCollection.extend({
         _.forEach(
             groups,
             function(payments, key) {
-                 var date = {
+                 let date = {
                      newTotal: 0,
                      newApple: 0,
                      newGoogle: 0,
@@ -55,7 +55,7 @@ const AdminPaymentCollection = GelatoCollection.extend({
                      returningApple: 0,
                      returningGoogle: 0,
                      returningPaypal: 0,
-                     returningStripe: 0
+                     returningStripe: 0,
                  };
                 _.forEach(
                     payments,
@@ -100,7 +100,7 @@ const AdminPaymentCollection = GelatoCollection.extend({
         );
 
         return totals;
-    }
+    },
 });
 
 module.exports = AdminPaymentCollection;

@@ -15,7 +15,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
     'click #title-sort': 'handleClickTitleSort',
     'click #popularity-sort': 'handleClickPopularitySort',
     'click .add-to-queue-link': 'handleClickAddToQueueLink',
-    'error #grid img': 'handleLoadImageError'
+    'error #grid img': 'handleLoadImageError',
   },
 
   /**
@@ -66,7 +66,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
     const data = _.defaults(params, {
       lang: app.getLanguage(),
       languageCode: app.getLanguage(),
-      sort: 'official'
+      sort: 'official',
     });
 
     options = _.defaults({data, remove: false}, options || {});
@@ -97,7 +97,9 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
   fetchOfficialLists: function() {
     return new Promise((resolve, reject) => {
       this.fetchLists({sort: 'official'}, {success: (collection, resp) => {
-        this.fetchLists({sort: 'official', cursor: resp.cursor}, {success: () => {resolve();}, error: reject});
+        this.fetchLists({sort: 'official', cursor: resp.cursor}, {success: () => {
+resolve();
+}, error: reject});
       }, error: reject});
     });
   },
@@ -158,9 +160,9 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
           this.render();
 
           app.notifyUser({
-            message: app.locale('pages.vocabLists.errorAddingList')
+            message: app.locale('pages.vocabLists.errorAddingList'),
           });
-        }
+        },
       });
     }
   },
@@ -225,7 +227,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @method updateFilter
    */
   updateFilter: function() {
-    this._lists = _.filter(this._lists, vocablist => {
+    this._lists = _.filter(this._lists, (vocablist) => {
       if (this._filterType !== 'published' && this._filterString !== '') {
         const name = vocablist.get('name') && vocablist.get('name').toLowerCase();
         const shortName = vocablist.get('shortName') && vocablist.get('shortName').toLowerCase();
@@ -255,7 +257,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
       }
       return vocablist.get('name');
     }).bind(this));
-  }
+  },
 
 });
 

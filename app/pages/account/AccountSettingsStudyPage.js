@@ -17,7 +17,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
     // 'change input[type="checkbox"]': 'handleChangeCheckbox',
     // 'change #field-target-language': 'handleChangeTargetLanguage',
     'change #field-goal-type': 'handleChangeGoalType',
-    'click #button-save': 'handleClickButtonSave'
+    'click #button-save': 'handleClickButtonSave',
   },
 
   /**
@@ -70,7 +70,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * @returns {Array}
    */
   getSelectedParts: function() {
-    var parts = [];
+    let parts = [];
     this.$('#field-parts :checked').each(function() {
       parts.push($(this).val());
     });
@@ -143,7 +143,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
         addTraditional: this.$('#field-styles [value="trad"]').is(':checked'),
         chineseStudyParts: this.getSelectedParts(),
         disablePinyinReadingPromptInput: this.$('#field-pinyin-input').is(':checked'),
-        readingChinese: this.$('#field-bopomofo').is(':checked') ? 'zhuyin' : 'pinyin'
+        readingChinese: this.$('#field-bopomofo').is(':checked') ? 'zhuyin' : 'pinyin',
       });
     }
 
@@ -153,13 +153,13 @@ const AccountSettingsStudyPage = GelatoPage.extend({
         readingJapanese: this.$('#field-romaji').is(':checked') ? 'romaji' : 'kana',
         studyKana: this.$('#field-study-kana').is(':checked'),
         studyRareWritings: this.$('#field-study-rare-writings').is(':checked'),
-        studyAllListWritings: this.$('#field-study-all-list-writings').is(':checked')
+        studyAllListWritings: this.$('#field-study-all-list-writings').is(':checked'),
       });
     }
 
     zhStudyStyleChanged = (app.isChinese() && app.user.hasChanged('addSimplified') || app.user.hasChanged('addTraditional'));
 
-    app.user.setGoal(this.$('#field-goal-type').val(), parseInt(this.$('#field-goal-value').val(), 10))
+    app.user.setGoal(this.$('#field-goal-type').val(), parseInt(this.$('#field-goal-value').val(), 10));
 
     app.user.cache();
 
@@ -176,9 +176,9 @@ const AccountSettingsStudyPage = GelatoPage.extend({
 
         app.notifyUser({
           message: 'Settings saved.',
-          type: 'pastel-success'
+          type: 'pastel-success',
         });
-      }
+      },
     });
   },
 
@@ -189,7 +189,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
   remove: function() {
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 
 });
 

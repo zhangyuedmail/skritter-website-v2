@@ -41,7 +41,7 @@ const FeaturesPage = GelatoPage.extend({
     this.renderTemplate();
 
     return this;
-  }
+  },
 });
 
 module.exports = FeaturesPage;

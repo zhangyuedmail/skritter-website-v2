@@ -26,7 +26,7 @@ const ConfirmGenericConfirm = GelatoDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-confirm': 'handleClickButtonConfirm'
+    'click #button-confirm': 'handleClickButtonConfirm',
   },
 
   /**
@@ -60,7 +60,7 @@ const ConfirmGenericConfirm = GelatoDialog.extend({
   handleClickButtonConfirm: function(event) {
     event.preventDefault();
     this.trigger('confirm');
-  }
+  },
 
 });
 

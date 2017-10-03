@@ -42,7 +42,7 @@ const VocablistHistoryModel = SkritterModel.extend({
     }
 
     return app.locale('dialogs.vocablistHistory.unknownChange');
-  }
+  },
 });
 
 module.exports = VocablistHistoryModel;

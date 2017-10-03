@@ -17,7 +17,7 @@ const ProgressStatModel = GelatoModel.extend({
    * @returns {Number}
    */
   getStudiedCount: function() {
-    var count = 0;
+    let count = 0;
     count += this.get('char').defn.studied.day;
     count += this.get('char').rdng.studied.day;
     count += this.get('char').rune.studied.day;
@@ -35,7 +35,7 @@ const ProgressStatModel = GelatoModel.extend({
    */
   hasBeenStudied: function() {
     return this.getStudiedCount() > 0;
-  }
+  },
 
 });
 

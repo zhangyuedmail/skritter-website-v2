@@ -16,7 +16,7 @@ const VocablistsReviewingTableComponent = GelatoComponent.extend({
   events: {
     'click .restart-adding-link': 'handleClickRestartAddingLink',
     'click .list-settings-span': 'handleClickListSettingsSpan',
-    'click .remove-list-span': 'handleClickRemoveListSpan'
+    'click .remove-list-span': 'handleClickRemoveListSpan',
   },
 
   /**
@@ -53,8 +53,8 @@ const VocablistsReviewingTableComponent = GelatoComponent.extend({
    * @param {Event} event
    */
   handleClickRestartAddingLink: function(event) {
-    var listID = $(event.target).closest('.row').data('list-id');
-    var list = this.vocablists.get(listID.toString());
+    let listID = $(event.target).closest('.row').data('list-id');
+    let list = this.vocablists.get(listID.toString());
     list.save({'studyingMode': 'adding'}, {patch: true});
     this.render();
   },
@@ -64,8 +64,8 @@ const VocablistsReviewingTableComponent = GelatoComponent.extend({
    * @param {Event} event
    */
   handleClickListSettingsSpan: function(event) {
-    var listID = $(event.target).closest('.row').data('list-id');
-    var list = this.vocablists.get(listID.toString());
+    let listID = $(event.target).closest('.row').data('list-id');
+    let list = this.vocablists.get(listID.toString());
     this.dialog = new VocablistSettings({vocablist: list});
     this.dialog.render().open();
   },
@@ -75,11 +75,11 @@ const VocablistsReviewingTableComponent = GelatoComponent.extend({
    * @param {Event} event
    */
   handleClickRemoveListSpan: function(event) {
-    var listID = $(event.target).closest('.row').data('list-id');
-    var list = this.vocablists.get(listID.toString());
+    let listID = $(event.target).closest('.row').data('list-id');
+    let list = this.vocablists.get(listID.toString());
     this.dialog = new VocablistRemoveDialog({vocablist: list});
     this.dialog.render().open();
-  }
+  },
 
 });
 

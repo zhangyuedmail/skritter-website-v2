@@ -13,7 +13,7 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
    */
   events: {
     'click #load-more-btn': 'handleClickLoadMoreButton',
-    'click .add-to-queue-link': 'handleClickAddToQueueLink'
+    'click .add-to-queue-link': 'handleClickAddToQueueLink',
   },
 
   /**
@@ -34,8 +34,8 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
         limit: 10,
         sort: 'custom',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
-      }
+        languageCode: app.getLanguage(),
+      },
     });
   },
 
@@ -54,8 +54,8 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
    */
   handleClickAddToQueueLink: function(event) {
     event.preventDefault();
-    var listID = $(event.target).closest('.add-to-queue-link').data('vocablist-id');
-    var vocablist = this.vocablists.get(listID);
+    let listID = $(event.target).closest('.add-to-queue-link').data('vocablist-id');
+    let vocablist = this.vocablists.get(listID);
     if (vocablist.get('studyingMode') !== 'not studying') {
       return;
     }
@@ -78,12 +78,12 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
         limit: 10,
         sort: 'custom',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
+        languageCode: app.getLanguage(),
       },
-      remove: false
+      remove: false,
     });
     this.render();
-  }
+  },
 
 });
 

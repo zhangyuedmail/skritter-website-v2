@@ -77,7 +77,7 @@ const VocablistCollection = BaseSkritterCollection.extend({
     return _.filter(
       this.models,
       function(vocablist) {
-        return _.includes(['reviewing', 'finished'], vocablist.get('studyingMode'))
+        return _.includes(['reviewing', 'finished'], vocablist.get('studyingMode'));
       }
     );
   },
@@ -133,14 +133,14 @@ const VocablistCollection = BaseSkritterCollection.extend({
         'adding': 0,
         'active': 101,
         'reviewing': 201,
-        'finished': 301
+        'finished': 301,
       };
 
       const aValue = studyingModes[a.get('studyingMode')] + a.get('percentDone');
 
       return aValue;
-    }
-  }
+    },
+  },
 });
 
 module.exports = VocablistCollection;

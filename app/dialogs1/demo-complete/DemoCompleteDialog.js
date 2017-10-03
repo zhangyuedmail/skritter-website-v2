@@ -1,4 +1,4 @@
-var GelatoDialog = require('base/gelato-dialog');
+let GelatoDialog = require('base/gelato-dialog');
 
 /**
  * @class DemoCallToActionDialog
@@ -17,7 +17,7 @@ module.exports = GelatoDialog.extend({
    */
   events: {
     'click #button-back': 'handleClickButtonBack',
-    'click #button-signup': 'handleClickButtonSignup'
+    'click #button-signup': 'handleClickButtonSignup',
   },
   /**
    * @property template
@@ -42,7 +42,6 @@ module.exports = GelatoDialog.extend({
     this.once('hidden', function() {
       app.router.navigate('', {trigger: true});
     });
-
   },
   /**
    * @method handleClickButtonSignup
@@ -54,5 +53,5 @@ module.exports = GelatoDialog.extend({
     this.once('hidden', function() {
       app.router.navigate('signup', {trigger: true});
     });
-  }
+  },
 });

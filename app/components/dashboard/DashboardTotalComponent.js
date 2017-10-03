@@ -41,7 +41,7 @@ const DashboardTotalComponent = GelatoComponent.extend({
       this.$('#characters-learned .value').text(this.stats.getAllTimeCharactersLearned());
       this.$('#words-learned .value').text(this.stats.getAllTimeWordsLearned());
     }
-  }
+  },
 
 });
 

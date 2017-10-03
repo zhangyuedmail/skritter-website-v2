@@ -97,7 +97,7 @@ module.exports = {
     rune: 30,
     rdng: 30,
     defn: 30,
-    tone: 15
+    tone: 15,
   },
 
   nodeApiRoot: 'https://api-dot-write-way.appspot.com',
@@ -146,10 +146,10 @@ module.exports = {
     subscriptions: false,
     users: false,
     vocablists: false,
-    vocabs: false
+    vocabs: false,
   },
 
   version: '{!application-version!}',
 
-  writingFillers: [' ', '~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？']
+  writingFillers: [' ', '~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？'],
 };

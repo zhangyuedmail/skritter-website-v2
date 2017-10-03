@@ -1,6 +1,6 @@
-var GelatoPage = require('gelato/page');
-var Vocabs = require('collections/VocabCollection');
-var Prompt = require('components/study/prompt/StudyPromptComponent');
+let GelatoPage = require('gelato/page');
+let Vocabs = require('collections/VocabCollection');
+let Prompt = require('components/study/prompt/StudyPromptComponent');
 
 /**
  * @class ScratchpadPage
@@ -62,14 +62,14 @@ module.exports = GelatoPage.extend({
             include_decomps: true,
             include_sentences: true,
             include_strokes: true,
-            ids: this.vocabId
+            ids: this.vocabId,
           },
           error: function(vocabs, error) {
             callback(error);
           },
           success: function(vocabs) {
             callback(null, vocabs.at(0));
-          }
+          },
         });
       }, this),
       _.bind(function(vocab, callback) {
@@ -79,7 +79,7 @@ module.exports = GelatoPage.extend({
               include_decomps: true,
               include_sentences: true,
               include_strokes: true,
-              ids: vocab.get('containedVocabIds').join('|')
+              ids: vocab.get('containedVocabIds').join('|'),
             },
             error: function(error) {
               callback(error);
@@ -87,15 +87,15 @@ module.exports = GelatoPage.extend({
             remove: false,
             success: function() {
               callback(null, vocab);
-            }
+            },
           });
         } else {
           callback(null, vocab);
         }
-      }, this)
+      }, this),
     ], _.bind(function(error, vocab) {
       if (error) {
-        //TODO: display error message to user
+        // TODO: display error message to user
         console.error('SCRATCHPAD LOAD ERROR:', error);
       } else {
         this.reviews = vocab.getPromptItems(this.part || 'rune');
@@ -112,5 +112,5 @@ module.exports = GelatoPage.extend({
   remove: function() {
     this.prompt.remove();
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 });

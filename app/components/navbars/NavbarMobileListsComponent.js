@@ -4,7 +4,7 @@ const vent = require('vent');
 const NavbarMobileListsComponent = NavbarDefaultComponent.extend({
 
   events: {
-    'click #toggle-menu': 'handleToggleMenuClick'
+    'click #toggle-menu': 'handleToggleMenuClick',
   },
 
   /**
@@ -19,7 +19,7 @@ const NavbarMobileListsComponent = NavbarDefaultComponent.extend({
   handleToggleMenuClick: function(event) {
     event.preventDefault();
     vent.trigger('mobileNavMenu:toggle');
-  }
+  },
 });
 
 module.exports = NavbarMobileListsComponent;

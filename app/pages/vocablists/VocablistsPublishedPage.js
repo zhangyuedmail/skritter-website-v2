@@ -17,7 +17,7 @@ module.exports = GelatoPage.extend({
    */
   events: {
     'keyup #list-search-input': 'handleKeypressListSearchInput',
-    'click #clear-search': 'handleClickClearSearch'
+    'click #clear-search': 'handleClickClearSearch',
   },
 
   /**
@@ -49,7 +49,7 @@ module.exports = GelatoPage.extend({
 
     if (app.config.recordLoadTimes) {
       this.componentsLoaded = {
-        table: false
+        table: false,
       };
       this.listenTo(this._views['table'], 'component:loaded', this._onComponentLoaded);
     }
@@ -105,14 +105,14 @@ module.exports = GelatoPage.extend({
    */
   updateQueryResultsText: function(needle) {
     const multiWordSearch = (needle.length > 1);
-    let s = "Showing results for <i>" + needle[0] + "</i>.";
+    let s = 'Showing results for <i>' + needle[0] + '</i>.';
 
     if (app.config.useV2Gets.vocablists) {
-      s = "Showing results for <i>" + needle.join(' ') + "</i>.";
+      s = 'Showing results for <i>' + needle.join(' ') + '</i>.';
     }
 
     if (multiWordSearch && !app.config.useV2Gets.vocablists) {
-      s += " Search currently only supports one-word queries, sorry!";
+      s += ' Search currently only supports one-word queries, sorry!';
     }
 
     this.$('#query-results-text').html(s).removeClass('invisible');
@@ -151,5 +151,5 @@ module.exports = GelatoPage.extend({
     this.loadAlreadyTimed = true;
     const loadTime = window.performance.now() - this.loadStart;
     app.loadTimes.pages.vocablistsPublished.push(loadTime);
-  }
+  },
 });

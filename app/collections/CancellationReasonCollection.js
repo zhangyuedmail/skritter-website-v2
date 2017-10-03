@@ -31,7 +31,7 @@ const CancellationReasonCollection = BaseSkritterCollection.extend({
    */
   parse: function(response) {
     return response.CancellationReasons;
-  }
+  },
 });
 
 module.exports = CancellationReasonCollection;

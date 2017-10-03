@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class ConfirmLogoutDialog
@@ -24,7 +24,7 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-logout': 'handleClickButtonLogout'
+    'click #button-logout': 'handleClickButtonLogout',
   },
   /**
    * @method handleClickButtonLogout
@@ -41,5 +41,5 @@ module.exports = BootstrapDialog.extend({
   handleClickButtonCancel: function(event) {
     event.preventDefault();
     this.close();
-  }
+  },
 });

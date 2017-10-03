@@ -20,7 +20,7 @@ const ResetVocablistPositionDialog = GelatoDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-reset': 'handleClickButtonReset'
+    'click #button-reset': 'handleClickButtonReset',
   },
 
   /**
@@ -66,10 +66,10 @@ const ResetVocablistPositionDialog = GelatoDialog.extend({
         },
         function(callback) {
           self.vocablists.resetAllPositions(callback);
-        }
+        },
       ],
       function() {
-        self.close()
+        self.close();
       }
     );
   },
@@ -85,7 +85,7 @@ const ResetVocablistPositionDialog = GelatoDialog.extend({
         function(callback) {
           self.vocablists.fetch({
             data: {
-              sort: 'studying'
+              sort: 'studying',
             },
             remove: false,
             error: function(error) {
@@ -93,13 +93,13 @@ const ResetVocablistPositionDialog = GelatoDialog.extend({
             },
             success: function() {
               callback();
-            }
+            },
           });
-        }
+        },
       ],
       callback
     );
-  }
+  },
 });
 
 module.exports = ResetVocablistPositionDialog;

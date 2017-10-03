@@ -1,10 +1,10 @@
-var ProgressDialog = require('dialogs/progress/view');
+let ProgressDialog = require('dialogs/progress/view');
 
-var availableVocabActions = [
+let availableVocabActions = [
   'ban',
   'unban',
   'delete-mnemonic',
-  'remove-star'
+  'remove-star',
 ];
 
 module.exports = {
@@ -44,7 +44,7 @@ module.exports = {
       name: action,
       queue: vocabs,
       total: vocabs.size(),
-      dialog: progressDialog
+      dialog: progressDialog,
     };
 
     this.runVocabAction();
@@ -140,5 +140,5 @@ module.exports = {
     vocab.unbanAll();
 
     return {bannedParts: vocab.get('bannedParts')};
-  }
-}
+  },
+};

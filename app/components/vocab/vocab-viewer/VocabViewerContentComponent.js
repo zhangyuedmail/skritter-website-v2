@@ -28,7 +28,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     'click #pleco-icon': 'handleClickPlecoIcon',
     'click #show-more-contained': 'handleClickShowMoreContained',
     'click #edit-vocab': 'handleClickEditVocab',
-    'click #save-vocab': 'handleClickSaveVocab'
+    'click #save-vocab': 'handleClickSaveVocab',
   },
 
   /**
@@ -80,7 +80,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @returns {Array}
    */
   getContainingCharacters: function() {
-    var baseWriting = this.vocabs.at(0).get('writing');
+    let baseWriting = this.vocabs.at(0).get('writing');
     return _.filter(
       this.vocabs.models,
       function(vocab) {
@@ -220,7 +220,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     this.vocab.set({
       customDefinition: definitionText,
-      mnemonic: {public: false, text: mnemonicText}
+      mnemonic: {public: false, text: mnemonicText},
     });
 
     this.vocab.save();
@@ -337,7 +337,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                     include_heisigs: true,
                     include_sentences: false,
                     include_top_mnemonics: true,
-                    ids: vocabId
+                    ids: vocabId,
                   },
                   error: function(error) {
                     callback(error);
@@ -345,13 +345,12 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                   success: function(vocabs) {
                     wordVocabs = vocabs;
                     callback();
-                  }
+                  },
                 });
               },
               function(callback) {
-
                 if (!self.vocabs.at(0).sentenceFetched) {
-                  self.vocabs.at(0).fetchSentence().then(sentence => {
+                  self.vocabs.at(0).fetchSentence().then((sentence) => {
                     self.vocabs.sentences.add(sentence);
                     callback();
                   });
@@ -363,7 +362,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                 if (self.vocabs.at(0).has('containedVocabIds')) {
                   self.vocabs.fetch({
                     data: {
-                      ids: self.vocabs.at(0).get('containedVocabIds').join('|')
+                      ids: self.vocabs.at(0).get('containedVocabIds').join('|'),
                     },
                     remove: false,
                     error: function(error) {
@@ -372,7 +371,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                     success: function(vocabs) {
                       wordVocabs = vocabs;
                       callback(null);
-                    }
+                    },
                   });
                 } else {
                   callback();
@@ -382,7 +381,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                 if (app.router.page.title.indexOf('Demo') === -1) {
                   self.items.fetch({
                     data: {
-                      vocab_ids: vocabId
+                      vocab_ids: vocabId,
                     },
                     error: function(error) {
                       callback(error);
@@ -390,24 +389,23 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                     success: function(items) {
                       wordItems = items;
                       callback(null);
-                    }
+                    },
                   });
                 } else {
-
                   // skip fetch for the demo--user isn't logged in and
                   // doesn't have items to fetch
                   callback();
                 }
-              }
+              },
             ],
             callback
-          )
+          );
         },
         function(callback) {
           self.vocabsContaining.fetch({
             data: {
               include_containing: true,
-              q: app.fn.mapper.fromBase(vocabId)
+              q: app.fn.mapper.fromBase(vocabId),
             },
             error: function(error) {
               callback(error);
@@ -415,9 +413,9 @@ const VocabViewerContentComponent = GelatoComponent.extend({
             success: function(vocabs) {
               wordVocabsContaining = vocabs;
               callback();
-            }
+            },
           });
-        }
+        },
       ],
       function(error) {
         if (error) {
@@ -438,7 +436,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
         }
       }
     );
-  }
+  },
 });
 
 module.exports = VocabViewerContentComponent;

@@ -20,12 +20,12 @@ const LoginPage = GelatoPage.extend({
   events: {
     'keyup #login-password': 'handleKeyUpLoginPassword',
     'click #button-login': 'handleClickLoginButton',
-    'click #button-skeleton': 'handleClickSkeleton'
+    'click #button-skeleton': 'handleClickSkeleton',
   },
 
   navbarOptions: {
     showBackBtn: true,
-    showSyncBtn: false
+    showSyncBtn: false,
   },
 
   /**
@@ -77,8 +77,8 @@ const LoginPage = GelatoPage.extend({
   getFormData: function() {
     return {
       password: this.$('#login-password').val(),
-      username: this.$('#login-username').val()
-    }
+      username: this.$('#login-username').val(),
+    };
   },
 
   /**
@@ -125,8 +125,8 @@ const LoginPage = GelatoPage.extend({
    * @method login
    */
   login: function() {
-    var self = this;
-    var formData = this.getFormData();
+    let self = this;
+    let formData = this.getFormData();
     this.$('#login-message').empty();
     this.$('#login-form').prop('disabled', true);
     ScreenLoader.show();
@@ -153,7 +153,7 @@ const LoginPage = GelatoPage.extend({
    */
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 });
 
 module.exports = LoginPage;

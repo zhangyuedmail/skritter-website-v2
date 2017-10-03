@@ -84,7 +84,9 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.displayStage = null;
     this.backgroundStage = null;
 
-    this.listenTo(this.prompt, 'character:erased', () => {this.stopAnimations()});
+    this.listenTo(this.prompt, 'character:erased', () => {
+this.stopAnimations();
+});
   },
 
   /**
@@ -98,7 +100,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.displayStage = this.createStage('display-canvas', false, {
       useTicker: true,
       tickerUpdateFn: this.onDisplayStageTick,
-      startTickerPaused: true
+      startTickerPaused: true,
     });
     this.backgroundStage = this.createStage('background-canvas');
 
@@ -461,7 +463,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     // console.log(strokeSize, (bestDelta * 10), (strokeSize - (bestDelta * 10)));
     this.marker.graphics.unstore();
     this.marker.graphics
-      .setStrokeStyle(strokeSize, 'round', 'round') //(strokeSize - (bestDelta * 25))
+      .setStrokeStyle(strokeSize, 'round', 'round') // (strokeSize - (bestDelta * 25))
       .moveTo(midPoint.x, midPoint.y)
       .curveTo(this.oldPoint.x, this.oldPoint.y, this.oldMidPoint.x, this.oldMidPoint.y);
     this.oldPoint = point;
@@ -546,11 +548,11 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {String} color
    */
   injectColor: function(object, color) {
-    var customFill = new createjs.Graphics.Fill(color);
-    var customStroke = new createjs.Graphics.Stroke(color);
+    let customFill = new createjs.Graphics.Fill(color);
+    let customStroke = new createjs.Graphics.Stroke(color);
     (function inject(object) {
       if (object.children) {
-        for (var i = 0, length = object.children.length; i < length; i++) {
+        for (let i = 0, length = object.children.length; i < length; i++) {
           inject(object.children[i]);
         }
       } else if (object.graphics) {
@@ -670,7 +672,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       this.drawGrid();
     }
 
-    //TODO: depreciate usage of global canvas size
+    // TODO: depreciate usage of global canvas size
     app.set('canvasSize', size);
 
     return this;
@@ -728,12 +730,12 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     }
 
     options.fill = options.fill || this.defaultTraceFill;
-    var size = this.size;
-    var circle = this.drawCircle(layerName, path[0].x, path[0].y, 10, {alpha: 0.6, fill: options.fill});
-    var tween = createjs.Tween.get(circle, {loop: true});
-    for (var i = 1, length = path.length; i < length; i++) {
-      var adjustedPoint = new createjs.Point(path[i].x - path[0].x, path[i].y - path[0].y);
-      var throttle = (app.fn.getDistance(path[i], path[i - 1]) / size) * 2000;
+    let size = this.size;
+    let circle = this.drawCircle(layerName, path[0].x, path[0].y, 10, {alpha: 0.6, fill: options.fill});
+    let tween = createjs.Tween.get(circle, {loop: true});
+    for (let i = 1, length = path.length; i < length; i++) {
+      let adjustedPoint = new createjs.Point(path[i].x - path[0].x, path[i].y - path[0].y);
+      let throttle = (app.fn.getDistance(path[i], path[i - 1]) / size) * 2000;
       if (path.length < 3) {
         tween.to({x: adjustedPoint.x, y: adjustedPoint.y}, 1000);
       } else {
@@ -889,7 +891,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
         x: toShape.x,
         y: toShape.y,
         scaleX: toShape.scaleX,
-        scaleY: toShape.scaleY
+        scaleY: toShape.scaleY,
       }, options.speed, options.easing)
       .call(() => {
         if (typeof callback === 'function') {
@@ -899,7 +901,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       });
 
     return this;
-  }
+  },
 
 });
 

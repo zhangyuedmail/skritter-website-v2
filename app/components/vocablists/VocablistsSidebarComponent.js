@@ -22,13 +22,13 @@ const VocablistsSidebarComponent = GelatoComponent.extend({
       this.$('.options > a:first-child').addClass('active');
     } else {
       this.$('.options > a').each(function(index, element) {
-        var $element = $(element);
+        let $element = $(element);
         if ($element.attr('href') === document.location.pathname) {
           $element.addClass('active');
         }
       });
     }
-  }
+  },
 
 });
 

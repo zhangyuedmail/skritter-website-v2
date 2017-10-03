@@ -4,7 +4,7 @@ const ReviewingTable = require('components/vocablists/VocablistsReviewingTableCo
 const Sidebar = require('components/vocablists/VocablistsSidebarComponent');
 const Vocablists = require('collections/VocablistCollection');
 
-/**\
+/** \
  * @class VocablistsQueue
  * @extends {GelatoPage}
  */
@@ -17,7 +17,7 @@ module.exports = GelatoPage.extend({
   title: app.locale('pages.vocablists.titleQueue'),
 
   navbarOptions: {
-    showCreateListBtn: true
+    showCreateListBtn: true,
   },
 
   section: 'Lists',
@@ -57,9 +57,9 @@ module.exports = GelatoPage.extend({
               sort: 'studying',
               include_percent_done: 'true',
               lang: app.getLanguage(),
-              languageCode: app.getLanguage()
+              languageCode: app.getLanguage(),
             },
-            remove: false
+            remove: false,
           });
         } else {
           if (app.config.recordLoadTimes) {
@@ -75,10 +75,9 @@ module.exports = GelatoPage.extend({
         sort: 'studying',
         include_percent_done: 'true',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
-      }
+        languageCode: app.getLanguage(),
+      },
     });
-
   },
 
   /**
@@ -122,6 +121,6 @@ module.exports = GelatoPage.extend({
     this.loadAlreadyTimed = true;
     const loadTime = window.performance.now() - this.loadStart;
     app.loadTimes.pages.vocablistsQueue.push(loadTime);
-  }
+  },
 
 });

@@ -16,7 +16,7 @@ const ExportVocablist = GelatoDialog.extend({
     options = options || {};
     this.content = new Content({dialog: this});
     this.vocablist = new Vocablist({id: options.id});
-    this.vocablist.fetch()
+    this.vocablist.fetch();
   },
   /**
    * @property events
@@ -24,7 +24,7 @@ const ExportVocablist = GelatoDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-export': 'handleClickButtonExport'
+    'click #button-export': 'handleClickButtonExport',
   },
   /**
    * @property template
@@ -95,7 +95,7 @@ const ExportVocablist = GelatoDialog.extend({
 
         vocabs.fetch({
           data: {
-            ids: vocabIds.join('|')
+            ids: vocabIds.join('|'),
           },
           remove: false,
           error: (error) => callback(error),
@@ -106,7 +106,7 @@ const ExportVocablist = GelatoDialog.extend({
               .css('width', (groupsCompleted / groups.length) * 100 + '%');
 
             callback();
-          }
+          },
         });
       },
       (error) => {
@@ -140,8 +140,8 @@ const ExportVocablist = GelatoDialog.extend({
           this.close();
         }
       }
-    )
-  }
+    );
+  },
 });
 
 module.exports = ExportVocablist;

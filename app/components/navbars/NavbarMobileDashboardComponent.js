@@ -8,7 +8,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     'click #toggle-menu': 'handleToggleMenuClick',
     'click #back-btn': 'handleBackClick',
     'click #create-list-btn': 'handleCreateListClick',
-    'click #sync-btn': 'handleSyncClick'
+    'click #sync-btn': 'handleSyncClick',
   },
 
   /**
@@ -30,12 +30,10 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
 
     this.showBackBtn = viewOptions.showBackBtn;
     this.showCreateListBtn = viewOptions.showCreateListBtn;
-    this.showSyncBtn = app.config.offlineEnabled && viewOptions.showSyncBtn
+    this.showSyncBtn = app.config.offlineEnabled && viewOptions.showSyncBtn;
 
 
     this.listenTo(app.user.offline, 'status', this.handleOfflineStatus);
-
-
   },
 
   /**
@@ -84,7 +82,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     event.preventDefault();
     app.user.offline.sync();
     app.user.stats.fetchMonth();
-  }
+  },
 });
 
 module.exports = NavbarMobileComponent;

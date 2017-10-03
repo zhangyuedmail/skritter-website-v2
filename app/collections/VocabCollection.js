@@ -44,11 +44,11 @@ const VocabCollection = BaseSkritterCollection.extend({
    * @method getUniqueWritings
    * @returns Array
    */
-  getUniqueWritings: function () {
+  getUniqueWritings: function() {
     return _
       .chain(this.models)
       .map(
-        function (value) {
+        function(value) {
           return value.get('writing').split('');
         }
       )
@@ -80,7 +80,7 @@ const VocabCollection = BaseSkritterCollection.extend({
     this.sentences.reset();
 
     return BaseSkritterCollection.prototype.reset.apply(this, arguments);
-  }
+  },
 });
 
 module.exports = VocabCollection;

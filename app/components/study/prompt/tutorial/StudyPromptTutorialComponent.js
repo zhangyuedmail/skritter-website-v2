@@ -49,7 +49,7 @@ const StudyPromptTutorialComponent = GelatoComponent.extend({
   setMessage: function(value) {
     this.message = value;
     this.render();
-  }
+  },
 
 });
 

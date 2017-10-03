@@ -14,7 +14,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    */
   events: {
     'click #hide-sub-expired': 'handleHideSubscriptionExpiredNotice',
-    'click #reload-page-btn': 'handleClickReloadPage'
+    'click #reload-page-btn': 'handleClickReloadPage',
   },
 
   /**
@@ -92,7 +92,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
     let hideNotification, networkError;
 
     if (this.hideable) {
-      hideNotification = sub.getStatus() !== 'Expired' || hide
+      hideNotification = sub.getStatus() !== 'Expired' || hide;
     } else {
       hideNotification = sub.getStatus() !== 'Expired';
     }
@@ -117,7 +117,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
         this.$('gelato-component').css({display: 'block'});
       }
     }
-  }
+  },
 
 });
 

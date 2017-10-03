@@ -1,4 +1,4 @@
-var Router = require('gelato/router');
+let Router = require('gelato/router');
 
 /**
  * @class DefaultRouter
@@ -24,9 +24,9 @@ module.exports = Router.extend({
     'account/billing/history': 'navigateAccountBillingHistory',
     'account/billing/subscription': 'navigateAccountBillingSubscription',
     'account/settings/general': 'navigateAccountSettingsGeneral',
-    'account/settings-general': 'navigateAccountSettingsGeneral', //LEGACY
+    'account/settings-general': 'navigateAccountSettingsGeneral', // LEGACY
     'account/settings/study': 'navigateAccountSettingsStudy',
-    'account/settings-study': 'navigateAccountSettingsStudy', //LEGACY
+    'account/settings-study': 'navigateAccountSettingsStudy', // LEGACY
     'account/setup': 'navigateAccountSetup',
     'admin': 'navigateAdmin',
     'contact': 'navigateContact',
@@ -65,7 +65,7 @@ module.exports = Router.extend({
     'words/banned': 'navigateWordsBanned',
     'words/mnemonics': 'navigateWordsMnemonics',
     'words/starred': 'navigateWordsStarred',
-    '*route': 'navigateNotFound'
+    '*route': 'navigateNotFound',
   },
 
   /**
@@ -205,7 +205,7 @@ module.exports = Router.extend({
    * @param {String} userId the id of the existing user that referred the new user
    */
   navigateApplyUserReferral: function(userId) {
-    var signedIn = app.user.isLoggedIn();
+    let signedIn = app.user.isLoggedIn();
     app.setUserReferral(userId, signedIn);
 
     if (signedIn) {
@@ -251,7 +251,7 @@ module.exports = Router.extend({
    * @method navigateDiscourseLogin
    */
   navigateDiscourseLogin: function() {
-    //TODO: redirect to legacy until support is added
+    // TODO: redirect to legacy until support is added
     location.href = location.href.toString().replace('https://www.', 'http://legacy.');
   },
 
@@ -372,8 +372,8 @@ module.exports = Router.extend({
   navigateStudy: function(listId, sectionId) {
     if (app.user.isLoggedIn()) {
       if (sectionId) {
-        //TODO: replace when single list section study ready for action
-        //this.go('pages/study-section', {listId: listId, sectionId: sectionId});
+        // TODO: replace when single list section study ready for action
+        // this.go('pages/study-section', {listId: listId, sectionId: sectionId});
         this.go('pages/study/StudyPage');
       } else if (listId) {
         this.go('pages/study-list/StudyListPage.js', {listId: listId});
@@ -574,6 +574,6 @@ module.exports = Router.extend({
     } else {
       this.navigateLogin();
     }
-  }
+  },
 
 });

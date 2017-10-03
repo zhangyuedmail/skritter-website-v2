@@ -13,7 +13,7 @@ const VocabSentenceComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click .sentence-writing': 'handleClickValue'
+    'click .sentence-writing': 'handleClickValue',
   },
 
   /**
@@ -121,7 +121,7 @@ const VocabSentenceComponent = GelatoComponent.extend({
    */
   toggleFetchingSpinner: function(show) {
     this.$('.fa-spinner').toggleClass('hidden', !show);
-  }
+  },
 
 });
 

@@ -1,5 +1,5 @@
-var GelatoPage = require('gelato/page');
-var Vocablist = require('models/VocablistModel');
+let GelatoPage = require('gelato/page');
+let Vocablist = require('models/VocablistModel');
 
 /**
  * @class NewVocablistPage
@@ -12,7 +12,7 @@ module.exports = GelatoPage.extend({
    * @type {Object}
    */
   events: {
-    'submit #new-list-form': 'handleSubmitNewListForm'
+    'submit #new-list-form': 'handleSubmitNewListForm',
   },
 
   /**
@@ -61,7 +61,7 @@ module.exports = GelatoPage.extend({
       description: this.$('#description').val(),
       sections: [{name: 'Section 1', rows: []}],
       singleSect: false,
-      lang: app.getLanguage()
+      lang: app.getLanguage(),
     });
 
     if (!this.validateListAttrs()) {
@@ -126,5 +126,5 @@ module.exports = GelatoPage.extend({
     }
 
     return true;
-  }
+  },
 });

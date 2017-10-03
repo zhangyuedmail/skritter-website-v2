@@ -1,4 +1,4 @@
-var GelatoPage = require('gelato/page');
+let GelatoPage = require('gelato/page');
 
 /**
  * @class NotFoundPage
@@ -47,5 +47,5 @@ module.exports = GelatoPage.extend({
    */
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 });

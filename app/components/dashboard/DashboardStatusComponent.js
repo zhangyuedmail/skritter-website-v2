@@ -51,7 +51,7 @@ const DashboardStatusComponent = GelatoComponent.extend({
         lang: app.getLanguage(),
         languageCode: app.getLanguage(),
         parts: app.user.getFilteredParts().join(','),
-        styles: app.user.getFilteredStyles().join(',')
+        styles: app.user.getFilteredStyles().join(','),
       },
       error: function(error) {
         this.dueCount = '-';
@@ -69,9 +69,9 @@ const DashboardStatusComponent = GelatoComponent.extend({
         this.dueCount = count;
         this.render();
         this.trigger('component:loaded', 'goal');
-      }
+      },
     });
-  }
+  },
 
 });
 

@@ -12,7 +12,7 @@ const CommonRecipesComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click #recipe': 'cookNewDish'
+    'click #recipe': 'cookNewDish',
   },
 
   /**
@@ -98,7 +98,7 @@ const CommonRecipesComponent = GelatoComponent.extend({
     this.timer = setInterval(function() {
       self.cookNewDish();
     }, 120000);
-  }
+  },
 
 });
 

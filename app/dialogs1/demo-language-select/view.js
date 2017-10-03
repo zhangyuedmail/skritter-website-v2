@@ -12,7 +12,7 @@ module.exports = GelatoDialog.extend({
    */
   events: {
     'click #button-select-chinese': 'handleClickButtonSelectChinese',
-    'click #button-select-japanese': 'handleClickButtonSelectJapanese'
+    'click #button-select-japanese': 'handleClickButtonSelectJapanese',
   },
 
   /**
@@ -48,5 +48,5 @@ module.exports = GelatoDialog.extend({
     event.preventDefault();
     this.trigger('select', null, 'ja');
     this.close();
-  }
+  },
 });

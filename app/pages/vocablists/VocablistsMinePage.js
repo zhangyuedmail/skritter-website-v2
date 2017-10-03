@@ -16,7 +16,7 @@ module.exports = GelatoPage.extend({
   template: require('./VocablistsMine'),
 
   navbarOptions: {
-    showCreateListBtn: true
+    showCreateListBtn: true,
   },
 
   /**
@@ -67,5 +67,5 @@ module.exports = GelatoPage.extend({
     this.sidebar.remove();
     this.table.remove();
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 });

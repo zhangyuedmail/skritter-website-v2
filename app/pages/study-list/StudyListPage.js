@@ -148,7 +148,7 @@ const StudyListPage = GelatoPage.extend({
       const addOptions = {
         lang: app.getLanguage(),
         limit: numToAdd,
-        lists: this.vocablist.id
+        lists: this.vocablist.id,
       };
 
       this.items.addItems(addOptions, function(error, result) {
@@ -178,19 +178,19 @@ const StudyListPage = GelatoPage.extend({
       if (this.itemsAddedToday >= this.getMaxItemsPerDay() && !this.userNotifiedAutoAddLimit) {
         app.notifyUser({
           message: 'You\'ve reached your daily auto-add limit today! You can still manually add more words if you want to progress faster.',
-          type: 'pastel-success'
+          type: 'pastel-success',
         });
         this.userNotifiedAutoAddLimit = true;
       } else {
         app.notifyUser({
           message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.',
-          type: 'pastel-success'
+          type: 'pastel-success',
         });
       }
     } else {
       app.notifyUser({
         message: 'No more words to add. <br><a href="/vocablists/browse">Add a new list</a>',
-        type: 'pastel-info'
+        type: 'pastel-info',
       });
     }
   },
@@ -212,7 +212,7 @@ const StudyListPage = GelatoPage.extend({
             },
             success: function() {
               callback();
-            }
+            },
           });
         },
         (callback) => {
@@ -227,9 +227,9 @@ const StudyListPage = GelatoPage.extend({
             },
             success: function() {
               callback();
-            }
+            },
           });
-        }
+        },
       ],
       () => {
         const active = app.user.isSubscriptionActive();
@@ -245,7 +245,7 @@ const StudyListPage = GelatoPage.extend({
               {
                 lang: app.getLanguage(),
                 limit: 5,
-                lists: this.vocablist.id
+                lists: this.vocablist.id,
               },
               function() {
                 app.reload();
@@ -400,7 +400,7 @@ const StudyListPage = GelatoPage.extend({
 
     dialog.open();
 
-    dialog.on('save', settings => {
+    dialog.on('save', (settings) => {
       ScreenLoader.show();
       ScreenLoader.post('Saving study settings');
       app.user.set(settings, {merge: true});
@@ -418,7 +418,7 @@ const StudyListPage = GelatoPage.extend({
             // dialog.close();
 
             app.reload();
-          }
+          },
         }
       );
     });
@@ -431,7 +431,7 @@ const StudyListPage = GelatoPage.extend({
   getMaxItemsPerDay: function() {
     const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
     const addFreqMultiplier = 1; // {0.7: .75, 0.8: 1, 0.9: 1.2};
-    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 4}; //12};
+    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 4}; // 12};
     const addFreq = app.user.get('addFrequency') / 100;
 
     return maxVocabsMap[addFreq] * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
@@ -493,7 +493,6 @@ const StudyListPage = GelatoPage.extend({
    * @param {Boolean} loading whether the prompt is loading
    */
   togglePromptLoading: function(loading) {
-
     // toggle it if it wasn't passed in
     if (loading === undefined) {
       loading = !(this.prompt.$panelLeft.css('opacity') === 0.4);
@@ -501,7 +500,7 @@ const StudyListPage = GelatoPage.extend({
 
     const componentName = app.isMobile() ? 'mobile-study-prompt' : 'study-prompt';
     this.prompt.$el.find('gelato-component[data-name="' + componentName + '"]').toggleClass('fetching-items', loading);
-  }
+  },
 });
 
 module.exports = StudyListPage;

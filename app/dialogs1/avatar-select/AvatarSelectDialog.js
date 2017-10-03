@@ -11,7 +11,7 @@ module.exports = GelatoDialog.extend({
    */
   events: {
     'click .avatar': 'handleClickAvatar',
-    'click .button-close': 'handleClickClose'
+    'click .button-close': 'handleClickClose',
   },
 
   /**
@@ -69,7 +69,7 @@ module.exports = GelatoDialog.extend({
     'the_future',
     'washington',
     'win',
-    'yarrr'
+    'yarrr',
   ],
 
   /**
@@ -114,5 +114,5 @@ module.exports = GelatoDialog.extend({
    */
   getFilePath: function() {
     return app.isCordova() ? 'media/avatars/' : '/media/avatars/';
-  }
+  },
 });

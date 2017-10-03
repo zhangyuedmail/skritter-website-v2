@@ -41,7 +41,7 @@ const TurkishPage = GelatoPage.extend({
    */
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 
 });
 

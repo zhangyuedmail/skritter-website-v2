@@ -14,7 +14,7 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
   events: {
     'click #show-contained': 'handleClickShowContained',
     'click .child-writing': 'handleClickChildWriting',
-    'click .decomp-writing': 'handleClickChildWriting'
+    'click .decomp-writing': 'handleClickChildWriting',
   },
 
   /**
@@ -50,7 +50,7 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
       reviews,
       contained,
       vocab,
-      hasContained
+      hasContained,
     });
 
     return this;
@@ -79,7 +79,7 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
       this.prompt.review.set('showContained', true);
     }
     this.render();
-  }
+  },
 
 });
 

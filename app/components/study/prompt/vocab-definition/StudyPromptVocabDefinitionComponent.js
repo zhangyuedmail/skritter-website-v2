@@ -11,7 +11,7 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click #show-definition': 'handleClickShowDefinition'
+    'click #show-definition': 'handleClickShowDefinition',
   },
 
   /**
@@ -37,7 +37,7 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
    */
   render: function() {
     if (app.isMobile()) {
-      this.template = require('./MobileStudyPromptVocabDefinitionComponent.jade')
+      this.template = require('./MobileStudyPromptVocabDefinitionComponent.jade');
     }
 
     if (this.prompt.reviews) {
@@ -76,7 +76,7 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
     });
 
     this.render();
-  }
+  },
 
 });
 

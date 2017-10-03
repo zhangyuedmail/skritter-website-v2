@@ -22,7 +22,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
     'click #logout-btn': 'handleLogoutButtonClick',
     'click #settings-btn': 'handleSettingsButtonClick',
     'click #menu-avatar': 'handleAvatarClick',
-    'click #username': 'handleAvatarClick'
+    'click #username': 'handleAvatarClick',
   },
 
   /**
@@ -61,7 +61,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * @method handleClickButtonBeacon
    * @param {Event} event
    */
-  handleClickButtonBeacon: function (event) {
+  handleClickButtonBeacon: function(event) {
     event.preventDefault();
 
     if (window.HS) {
@@ -80,7 +80,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
       showButtonCancel: true,
       buttonConfirm: 'Log Out',
       buttonConfirmClass: 'btn-danger',
-      title: 'Are you sure?'
+      title: 'Are you sure?',
     });
 
     this._views['dialog'].once(
@@ -124,7 +124,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    */
   updateUserInfo: function() {
     this.$('#username').text(this.user.get('name'));
-    this.$('#menu-avatar').attr('src', "data:image/png;base64, " + app.user.get('avatar'))
+    this.$('#menu-avatar').attr('src', 'data:image/png;base64, ' + app.user.get('avatar'));
   },
 
   /**
@@ -134,7 +134,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
   updateStats: function() {
     this.$('.num-chars').text(this.user.stats.getAllTimeCharactersLearned());
     this.$('.num-words').text(this.user.stats.getAllTimeWordsLearned());
-  }
+  },
 
 });
 

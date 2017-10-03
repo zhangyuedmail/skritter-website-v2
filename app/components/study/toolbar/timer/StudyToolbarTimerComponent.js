@@ -232,7 +232,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
 
       this.$('#time').text(app.fn.convertTimeToClock(this.time));
     }
-  }
+  },
 
 });
 

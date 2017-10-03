@@ -95,18 +95,18 @@ const SubscriptionModel = SkritterModel.extend({
   restoreSubscription: function() {
     if (app.isAndroid() && plugins.billing) {
       plugins.billing.getPurchases('subs')
-        .then(result => {
+        .then((result) => {
           if (result && result.length) {
               this.set('gplay_subscription', {
                 subscription: result[0].productId,
                 package: result[0].packageName,
-                token: result[0].purchaseToken
+                token: result[0].purchaseToken,
               }).save();
             }
           }
         );
     }
-  }
+  },
 
 });
 

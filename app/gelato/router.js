@@ -2,7 +2,7 @@
  * @class GelatoRouter
  * @extends {Backbone.Router}
  */
-var GelatoRouter = Backbone.Router.extend({
+let GelatoRouter = Backbone.Router.extend({
   /**
    * @method go
    * @param {String} path
@@ -23,14 +23,14 @@ var GelatoRouter = Backbone.Router.extend({
       options || {},
       {
         pushState: app.isWebsite(),
-        root: '/'
+        root: '/',
       }
     );
     return Backbone.history.start({
       pushState: options.pushState,
-      root: options.root
+      root: options.root,
     });
-  }
+  },
 });
 
 module.exports = GelatoRouter;

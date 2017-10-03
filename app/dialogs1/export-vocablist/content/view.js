@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/component');
+let GelatoComponent = require('gelato/component');
 
 /**
  * @class ExportVocablistContent
@@ -31,5 +31,5 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     this.listenToOnce(this.dialog.vocablist, 'state', this.render);
     return this;
-  }
+  },
 });

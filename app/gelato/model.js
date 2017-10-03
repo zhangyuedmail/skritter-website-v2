@@ -2,7 +2,7 @@
  * @class GelatoModel
  * @extends {Backbone.Model}
  */
-var GelatoModel = Backbone.Model.extend({
+let GelatoModel = Backbone.Model.extend({
   /**
    * Whether the model has been successfully fetched at least once
    * @property isFetched
@@ -45,19 +45,19 @@ var GelatoModel = Backbone.Model.extend({
    * @private
    */
   _handleRequestEvent: function(options) {
-    var originalOptions = _.clone(options);
+    let originalOptions = _.clone(options);
     options.error = (function() {
       this.state = 'standby';
       this._triggerState();
       if (typeof originalOptions.error === 'function') {
-        originalOptions.error.apply(originalOptions, arguments);
+        originalOptions.error(...arguments);
       }
     }).bind(this);
     options.success = (function() {
       this.state = 'standby';
       this._triggerState();
       if (typeof originalOptions.success === 'function') {
-        originalOptions.success.apply(originalOptions, arguments);
+        originalOptions.success(...arguments);
       }
       this.isFetched = true;
     }).bind(this);
@@ -69,7 +69,7 @@ var GelatoModel = Backbone.Model.extend({
   _triggerState: function() {
     this.trigger('state', this.state, this);
     this.trigger('state:' + this.state, this);
-  }
+  },
 });
 
 module.exports = GelatoModel;

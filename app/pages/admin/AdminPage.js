@@ -42,8 +42,8 @@ const AdminPage = GelatoPage.extend({
         endDate: this.dateEnd,
         maxDate: moment(),
         locale: {
-          format: 'YYYY-MM-DD'
-        }
+          format: 'YYYY-MM-DD',
+        },
       },
       _.bind(this.handleChangeDate, this)
     );
@@ -78,11 +78,11 @@ const AdminPage = GelatoPage.extend({
       data: {
         dateEnd: this.dateEnd.format('YYYY-MM-DD'),
         dateStart: this.dateStart.format('YYYY-MM-DD'),
-        limit: 5000
-      }
+        limit: 5000,
+      },
     });
     return this;
-  }
+  },
 
 });
 

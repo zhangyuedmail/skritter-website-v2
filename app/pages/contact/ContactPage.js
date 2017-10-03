@@ -11,7 +11,7 @@ const ContactPage = GelatoPage.extend({
    * @type Object
    */
   events: {
-    'click #contact-submit': 'handleClickContactSubmit'
+    'click #contact-submit': 'handleClickContactSubmit',
   },
 
   /**
@@ -54,7 +54,7 @@ const ContactPage = GelatoPage.extend({
     return {
       email: this.$('#field-email').val(),
       message: this.$('#field-message').val(),
-      subject: this.$('#field-topic').val()
+      subject: this.$('#field-topic').val(),
     };
   },
 
@@ -64,7 +64,7 @@ const ContactPage = GelatoPage.extend({
    */
   handleClickContactSubmit: function(event) {
     event.preventDefault();
-    var formData = this.getFormData();
+    let formData = this.getFormData();
     if (_.isEmpty(formData.email)) {
       this.$('#contact-message').removeClass();
       this.$('#contact-message').addClass('text-danger');
@@ -74,7 +74,7 @@ const ContactPage = GelatoPage.extend({
     if (_.isEmpty(formData.message)) {
       this.$('#contact-message').removeClass();
       this.$('#contact-message').addClass('text-danger');
-      this.$('#contact-message').text("Message field can't be blank.");
+      this.$('#contact-message').text('Message field can\'t be blank.');
       return;
     }
     this.disableForm('form');
@@ -95,7 +95,7 @@ const ContactPage = GelatoPage.extend({
         this.$('#contact-message').addClass('text-danger');
         this.$('#contact-message').text(JSON.stringify(error));
         this.enableForm('form');
-      }
+      },
     });
   },
 
@@ -105,7 +105,7 @@ const ContactPage = GelatoPage.extend({
    */
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 
 });
 

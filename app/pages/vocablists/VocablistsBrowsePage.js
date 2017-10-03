@@ -19,11 +19,11 @@ module.exports = GelatoPage.extend({
     'change input[type="checkbox"]': 'handleChangeCheckbox',
     'keyup #list-search-input': 'handleKeypressListSearchInput',
     'click #list-option': 'handleClickListOption',
-    'click #grid-option': 'handleClickGridOption'
+    'click #grid-option': 'handleClickGridOption',
   },
 
   navbarOptions: {
-    showCreateListBtn: true
+    showCreateListBtn: true,
   },
 
   /**
@@ -56,7 +56,7 @@ module.exports = GelatoPage.extend({
 
     if (app.config.recordLoadTimes) {
       this.componentsLoaded = {
-        table: false
+        table: false,
       };
       this.listenTo(this._views['table'], 'component:loaded', this._onComponentLoaded);
     }
@@ -144,7 +144,7 @@ module.exports = GelatoPage.extend({
    * @param {Event} event
    */
   handleKeypressListSearchInput: function(event) {
-    if (event.which === 13  || event.keyCode === 13) {
+    if (event.which === 13 || event.keyCode === 13) {
       const searchValue = event.target.value;
 
       if (this.filterType === 'published') {
@@ -186,7 +186,7 @@ module.exports = GelatoPage.extend({
       showButtonCancel: false,
       buttonConfirm: app.locale('pages.vocabLists.newUserBrowseDialogConfirm'),
       buttonConfirmClass: 'btn-primary',
-      title: app.locale('pages.vocabLists.newUserBrowseDialogTitle')
+      title: app.locale('pages.vocabLists.newUserBrowseDialogTitle'),
     });
     this._views['dialog'].once(
       'confirm',
@@ -232,5 +232,5 @@ module.exports = GelatoPage.extend({
     this.loadAlreadyTimed = true;
     const loadTime = window.performance.now() - this.loadStart;
     app.loadTimes.pages.vocablistsBrowse.push(loadTime);
-  }
+  },
 });

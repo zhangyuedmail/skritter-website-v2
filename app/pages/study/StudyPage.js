@@ -141,7 +141,7 @@ const StudyPage = GelatoPage.extend({
       const addOptions = {
         lang: app.getLanguage(),
         limit: numToAdd,
-        lists: app.user.getFilteredLists()
+        lists: app.user.getFilteredLists(),
       };
 
       this.items.addItems(addOptions, function(error, result) {
@@ -173,20 +173,20 @@ const StudyPage = GelatoPage.extend({
       if (this.itemsAddedToday >= this.getMaxItemsPerDay() && !this.userNotifiedAutoAddLimit && fromAutoAdd) {
         app.notifyUser({
           message: 'You\'ve reached your daily auto-add limit today! You can still manually add more words if you want to progress faster.',
-          type: 'pastel-success'
+          type: 'pastel-success',
         });
         this.userNotifiedAutoAddLimit = true;
       } else {
         app.notifyUser({
           message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.',
-          type: 'pastel-success'
+          type: 'pastel-success',
         });
       }
     } else {
       if (!fromAutoAdd) {
         app.notifyUser({
           message: 'No more words to add. <br><a href="/vocablists/browse">Add a new list</a>',
-          type: 'pastel-info'
+          type: 'pastel-info',
         });
       }
     }
@@ -209,7 +209,7 @@ const StudyPage = GelatoPage.extend({
             },
             success: function() {
               callback();
-            }
+            },
           });
         },
         (callback) => {
@@ -233,16 +233,16 @@ const StudyPage = GelatoPage.extend({
               languageCode: app.getLanguage(),
               limit: 1,
               lists: app.user.getFilteredLists(),
-              sort: 'adding'
+              sort: 'adding',
             },
             error: function() {
               callback();
             },
             success: function() {
               callback();
-            }
+            },
           });
-        }
+        },
       ],
       (error) => {
         if (error) {
@@ -269,7 +269,7 @@ const StudyPage = GelatoPage.extend({
               {
                 lang: app.getLanguage(),
                 limit: 5,
-                lists: app.user.getFilteredLists()
+                lists: app.user.getFilteredLists(),
               },
               function() {
                 app.reload();
@@ -441,7 +441,7 @@ const StudyPage = GelatoPage.extend({
   getMaxItemsPerDay: function() {
     const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
     const addFreqMultiplier = 1; // {0.7: .75, 0.8: 1, 0.9: 1.2};
-    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 4}; //12};
+    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 4}; // 12};
     const addFreq = app.user.get('addFrequency') / 100;
 
     return maxVocabsMap[addFreq] * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
@@ -507,7 +507,7 @@ const StudyPage = GelatoPage.extend({
 
     dialog.open();
 
-    dialog.on('save', settings => {
+    dialog.on('save', (settings) => {
       ScreenLoader.show();
       ScreenLoader.post('Saving study settings');
       app.user.set(settings, {merge: true});
@@ -525,7 +525,7 @@ const StudyPage = GelatoPage.extend({
             // dialog.close();
 
             app.reload();
-          }
+          },
         }
       );
     });
@@ -536,7 +536,6 @@ const StudyPage = GelatoPage.extend({
    * @param {Boolean} loading whether the prompt is loading
    */
   togglePromptLoading: function(loading) {
-
     // toggle it if it wasn't passed in
     if (loading === undefined) {
       loading = !(this.prompt.$panelLeft.css('opacity') === 0.4);
@@ -561,14 +560,14 @@ const StudyPage = GelatoPage.extend({
         context: this,
         data: {
           languageCode: app.getLanguage(),
-          startDate: today.format(app.config.dateFormatApp)
+          startDate: today.format(app.config.dateFormatApp),
         },
         error: (error) => {
-          resolve(this._getNumItemsAddedTodayFromLocalStorage())
+          resolve(this._getNumItemsAddedTodayFromLocalStorage());
         },
         success: function(result) {
           resolve(result.added);
-        }
+        },
       });
     });
   },
@@ -607,7 +606,7 @@ const StudyPage = GelatoPage.extend({
     this.loadAlreadyTimed = true;
     const loadTime = window.performance.now() - this.loadStart;
     app.loadTimes.pages.study.push(loadTime);
-  }
+  },
 
 });
 

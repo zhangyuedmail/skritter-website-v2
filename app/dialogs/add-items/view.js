@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class AddItemsDialog
@@ -11,7 +11,7 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click .button-add': 'handleClickButtonAdd',
-    'click #button-cancel': 'handleClickButtonCancel'
+    'click #button-cancel': 'handleClickButtonCancel',
   },
   /**
    * @property template
@@ -32,7 +32,7 @@ module.exports = BootstrapDialog.extend({
    */
   handleClickButtonAdd: function(event) {
     event.preventDefault();
-    var $button = $(event.target);
+    let $button = $(event.target);
     this.trigger('add', parseInt($button.data('value'), 10));
   },
   /**
@@ -42,5 +42,5 @@ module.exports = BootstrapDialog.extend({
   handleClickButtonCancel: function(event) {
     event.preventDefault();
     this.close();
-  }
+  },
 });

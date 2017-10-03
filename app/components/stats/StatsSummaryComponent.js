@@ -24,11 +24,11 @@ const StatsSummaryComponent = GelatoComponent.extend({
   initialize: function() {
     this._views['allTime'] = new StatsItemsLearnedComponent({
       collection: this.collection,
-      title: 'All Time'
+      title: 'All Time',
     });
 
     this._views['heatmap'] = new StatsHeatmapComponent({
-      collection: this.collection
+      collection: this.collection,
     });
 
     if (app.config.recordLoadTimes) {
@@ -73,7 +73,7 @@ const StatsSummaryComponent = GelatoComponent.extend({
       // but if everything's loaded, since this is a component, trigger an event
       this.trigger('component:loaded', 'summary');
     }
-  }
+  },
 });
 
 module.exports = StatsSummaryComponent;

@@ -14,7 +14,7 @@ const ResetAllDataDialog = GelatoDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-confirm': 'handleClickButtonConfirm'
+    'click #button-confirm': 'handleClickButtonConfirm',
   },
 
   /**
@@ -61,7 +61,9 @@ const ResetAllDataDialog = GelatoDialog.extend({
         app.user.cache();
         app.router.navigate('dashboard');
         app.reload();
-    }, (error) => {this.handleResetError(error);});
+    }, (error) => {
+this.handleResetError(error);
+});
   },
 
   /**
@@ -84,7 +86,7 @@ const ResetAllDataDialog = GelatoDialog.extend({
       $.ajax({
         data: {
           lang: app.getLanguage(),
-          password
+          password,
         },
         headers: app.user.session.getHeaders(),
         type: 'POST',
@@ -94,7 +96,7 @@ const ResetAllDataDialog = GelatoDialog.extend({
         },
         success: function() {
           resolve();
-        }
+        },
       });
     });
   },
@@ -108,7 +110,7 @@ const ResetAllDataDialog = GelatoDialog.extend({
     return new Promise((resolve, reject) => {
       $.ajax({
         data: {
-          lang: app.getLanguage()
+          lang: app.getLanguage(),
         },
         headers: app.user.session.getHeaders(),
         type: 'POST',
@@ -118,10 +120,10 @@ const ResetAllDataDialog = GelatoDialog.extend({
         },
         success: function() {
           resolve();
-        }
+        },
       });
     });
-  }
+  },
 });
 
 module.exports = ResetAllDataDialog;

@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class ListSettingsDialog
@@ -11,7 +11,7 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #button-close': 'handleClickClose',
-    'click #button-save': 'handleClickSave'
+    'click #button-save': 'handleClickSave',
   },
   /**
    * @property template
@@ -41,5 +41,5 @@ module.exports = BootstrapDialog.extend({
   handleClickSave: function(event) {
     event.preventDefault();
     this.close();
-  }
+  },
 });

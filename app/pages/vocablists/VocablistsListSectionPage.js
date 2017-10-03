@@ -19,7 +19,7 @@ module.exports = GelatoPage.extend({
     'click #back-link': 'handleClickBackLink',
     'click #discard-changes': 'handleClickDiscardChanges',
     'click #edit-section': 'handleClickEditSection',
-    'click #save-changes': 'handleClickSaveChanges'
+    'click #save-changes': 'handleClickSaveChanges',
   },
 
   /**
@@ -46,7 +46,7 @@ module.exports = GelatoPage.extend({
 
     let sectionData = {
       vocablistId: options.vocablistId,
-      id: options.sectionId
+      id: options.sectionId,
     };
 
     if (options.vocabListSection) {
@@ -58,7 +58,7 @@ module.exports = GelatoPage.extend({
     this.editor = new EditorRows({
       vocablist: this.vocablist,
       vocablistSection: this.vocablistSection,
-      editing: this.editing
+      editing: this.editing,
     });
 
     this.fetchListData();
@@ -106,7 +106,7 @@ module.exports = GelatoPage.extend({
           },
           success: function() {
             callback();
-          }
+          },
         });
       },
       (callback) => {
@@ -120,7 +120,7 @@ module.exports = GelatoPage.extend({
           },
           success: function() {
             callback();
-          }
+          },
         });
       },
       (callback) => {
@@ -130,9 +130,9 @@ module.exports = GelatoPage.extend({
           },
           success: function() {
             callback();
-          }
+          },
         });
-      }
+      },
     ], (error) => {
       const sections = this.vocablist.get('sections');
       const sectionIndex = _.findIndex(sections, {id: this.vocablistSection.id});
@@ -159,7 +159,7 @@ module.exports = GelatoPage.extend({
 
     if (error) {
       app.notifyUser({
-        message: app.locale('There was a problem loading the section. Please try again.')
+        message: app.locale('There was a problem loading the section. Please try again.'),
       });
     }
 
@@ -187,7 +187,7 @@ module.exports = GelatoPage.extend({
       this.dialog = new ConfirmGenericDialog({
         body: 'You have some unsaved changes that will be lost if you continue.',
         buttonConfirm: 'Continue',
-        title: 'Unsaved changes detected'
+        title: 'Unsaved changes detected',
       });
       this.dialog.once(
         'confirm',
@@ -224,7 +224,7 @@ module.exports = GelatoPage.extend({
     this.dialog = new ConfirmGenericDialog({
       body: 'This will discard all unsaved changes this current list section.',
       buttonConfirm: 'Discard',
-      title: 'Discard all changes?'
+      title: 'Discard all changes?',
     });
 
     this.dialog.once(
@@ -233,7 +233,6 @@ module.exports = GelatoPage.extend({
         self.editor.editing = false;
         self.editor.discardChanges();
         self.dialog.close();
-
       }
     );
     this.dialog.once(
@@ -284,18 +283,18 @@ module.exports = GelatoPage.extend({
         self.render();
         app.notifyUser({
           message: self.vocablistSection.get('name') + ' ' + app.locale('pages.vocabLists.successSavingSection'),
-          type: 'pastel-success'
+          type: 'pastel-success',
         });
       },
       error: function() {
         self.toggleInputs(true);
         app.notifyUser({
-          message: app.locale('pages.vocabLists.errorSavingSection')
+          message: app.locale('pages.vocabLists.errorSavingSection'),
         });
-      }
+      },
     });
 
-    //remove all results button
+    // remove all results button
     _.forEach(
       this.editor.rows,
       function(row) {
@@ -310,17 +309,16 @@ module.exports = GelatoPage.extend({
    */
   handleKeydownAddInput: function(event) {
     if (event.keyCode === 13) {
-
-      //limit adding to section
+      // limit adding to section
       if (this.editor.rows.length > 200) {
         event.preventDefault();
         this.$('#input-message .value').text('The max words per section is 200.');
         return;
       }
 
-      //split input based on spaces
-      var $input = $(event.target);
-      var rows = $input.val().split(/\s/);
+      // split input based on spaces
+      let $input = $(event.target);
+      let rows = $input.val().split(/\s/);
 
       this.$('#input-message .value').empty();
       this.editor.addRows(rows);
@@ -364,5 +362,5 @@ module.exports = GelatoPage.extend({
 
     // always leave the cancel button enabled to make the user feel good
     this.$('#discard-changes').prop('disabled', false);
-  }
+  },
 });

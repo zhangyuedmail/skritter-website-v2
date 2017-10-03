@@ -1,11 +1,11 @@
-var GelatoDialog = require('gelato/dialog');
-var Content = require('./content/view');
+let GelatoDialog = require('gelato/dialog');
+let Content = require('./content/view');
 
 /**
  * @class AddVocabConfirm
  * @extends {GelatoDialog}
  */
-var AddVocabConfirm = GelatoDialog.extend({
+let AddVocabConfirm = GelatoDialog.extend({
   /**
    * @method initialize
    * @param {Object} options
@@ -20,7 +20,7 @@ var AddVocabConfirm = GelatoDialog.extend({
    * @type {Function}
    */
   template: require('./template'),
-  
+
   /**
    * @method render
    * @returns {AddVocabConfirm}
@@ -28,9 +28,9 @@ var AddVocabConfirm = GelatoDialog.extend({
   render: function() {
     this.renderTemplate();
     this.content.setElement('#content-container').render();
-    
+
     return this;
-  }
+  },
 });
 
 module.exports = AddVocabConfirm;

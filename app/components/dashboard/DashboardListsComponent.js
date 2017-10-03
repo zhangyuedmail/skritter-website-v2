@@ -14,7 +14,7 @@ const DashboardListsComponent = GelatoComponent.extend({
    */
   events: {
     'click .button-sections': 'handleClickVocablistSections',
-    'click .button-show-lists': 'handleClickShowLists'
+    'click .button-show-lists': 'handleClickShowLists',
   },
   /**
    * @property template
@@ -36,8 +36,8 @@ const DashboardListsComponent = GelatoComponent.extend({
         sort: 'adding',
         include_percent_done: 'true',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
-      }
+        languageCode: app.getLanguage(),
+      },
     });
   },
 
@@ -56,8 +56,8 @@ const DashboardListsComponent = GelatoComponent.extend({
    */
   handleClickVocablistSections: function(event) {
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
-    var attributes = {id: $row.data('list-id')};
+    let $row = $(event.target).closest('.row');
+    let attributes = {id: $row.data('list-id')};
     this.vocablist = new Vocablist(attributes);
     this.listenToOnce(this.vocablist, 'state:standby', this.render);
     this.vocablist.fetch();
@@ -76,10 +76,10 @@ const DashboardListsComponent = GelatoComponent.extend({
         limit: 10,
         sort: 'adding',
         include_percent_done: 'true',
-        lang: app.getLanguage()
-      }
+        lang: app.getLanguage(),
+      },
     });
-  }
+  },
 
 });
 

@@ -18,7 +18,7 @@ module.exports = GelatoPage.extend({
     'click .vocab-row': 'handleClickVocabRow',
     'change input[type="checkbox"]': 'handleChangeCheckbox',
     'click #load-more-btn': 'handleClickLoadMoreButton',
-    'click #unban-vocabs-btn': 'handleClickUnbanVocabsButton'
+    'click #unban-vocabs-btn': 'handleClickUnbanVocabsButton',
   },
 
   /**
@@ -79,10 +79,10 @@ module.exports = GelatoPage.extend({
         sort: 'banned',
         lang: app.getLanguage(),
         limit: this.limit,
-        cursor: cursor || ''
+        cursor: cursor || '',
       },
       remove: false,
-      sort: false
+      sort: false,
     });
   },
 
@@ -91,11 +91,11 @@ module.exports = GelatoPage.extend({
    * @param {Event} event
    */
   handleChangeCheckbox: function(event) {
-    var checkbox = $(event.target);
+    let checkbox = $(event.target);
     if (checkbox.attr('id') === 'all-checkbox') {
       this.$('input[type="checkbox"]').prop('checked', checkbox.prop('checked'));
     }
-    var anyChecked = this.$('input[type="checkbox"]:checked').length;
+    let anyChecked = this.$('input[type="checkbox"]:checked').length;
     this.$('#unban-vocabs-btn').prop('disabled', !anyChecked);
   },
 
@@ -110,10 +110,10 @@ module.exports = GelatoPage.extend({
    * @method handleClickUnbanVocabsButton
    */
   handleClickUnbanVocabsButton: function() {
-    var self = this;
-    var vocabs = new Vocabs();
+    let self = this;
+    let vocabs = new Vocabs();
     _.forEach(this.$('input:checked'), function(el) {
-      var vocabID = $(el).closest('tr').data('vocab-id');
+      let vocabID = $(el).closest('tr').data('vocab-id');
       if (!vocabID) {
         return;
       }
@@ -143,11 +143,11 @@ module.exports = GelatoPage.extend({
    * @method renderTable
    */
   renderTable: function() {
-    var context = require('globals');
+    let context = require('globals');
     context.view = this;
-    var rendering = $(this.template(context));
+    let rendering = $(this.template(context));
     this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
-  }
+  },
 });
 
 _.extend(module.exports.prototype, VocabActionMixin);

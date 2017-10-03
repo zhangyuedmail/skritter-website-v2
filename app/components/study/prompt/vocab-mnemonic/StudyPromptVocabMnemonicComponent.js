@@ -15,7 +15,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    */
   events: {
     'click #show-mnemonic': 'handleClickShowMnemonic',
-    'click #add-mnemonic': 'handleClickAddMnemonic'
+    'click #add-mnemonic': 'handleClickAddMnemonic',
   },
 
   /**
@@ -37,7 +37,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
       showCloseButton: true,
       showTitle: true,
       dialogTitle: app.locale('pages.study.menmonicSelectorDialogTitle'),
-      content: MnemonicSelector
+      content: MnemonicSelector,
     });
 
     this.listenTo(vent, 'mnemonic:updated', this.render);
@@ -61,7 +61,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
     return {
       creator: app.user.id,
       public: false,
-      text: this.$('textarea').val()
+      text: this.$('textarea').val(),
     };
   },
 
@@ -88,7 +88,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
   reveal: function() {
     this.prompt.review.set('showMnemonic', true);
     this.render();
-  }
+  },
 
 });
 

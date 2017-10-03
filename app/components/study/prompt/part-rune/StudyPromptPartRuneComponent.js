@@ -32,7 +32,6 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
-
     /**
      * The parent prompt instance
      * @type {StudyPromptComponent}
@@ -223,10 +222,10 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method handleAttemptFail
    */
   handleAttemptFail: function() {
-    var character = this.prompt.review.character;
-    var failedConsecutive = this.prompt.review.get('failedConsecutive') + 1;
-    var failedTotal = this.prompt.review.get('failedTotal') + 1;
-    var maxStrokes = character.getMaxPosition();
+    let character = this.prompt.review.character;
+    let failedConsecutive = this.prompt.review.get('failedConsecutive') + 1;
+    let failedTotal = this.prompt.review.get('failedTotal') + 1;
+    let maxStrokes = character.getMaxPosition();
 
     this.prompt.review.set('failedConsecutive', failedConsecutive);
     this.prompt.review.set('failedTotal', failedTotal);
@@ -250,7 +249,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     }
 
     if (failedConsecutive > 2) {
-      var expectedStroke = character.getExpectedStroke();
+      let expectedStroke = character.getExpectedStroke();
       if (expectedStroke) {
         this.prompt.canvas.fadeShape('stroke-hint', expectedStroke.getTargetShape());
       }
@@ -284,7 +283,6 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
           this.prompt.startAutoAdvance();
         }
       });
-
     }
 
     if (this.prompt.review.get('showTeaching')) {
@@ -394,7 +392,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method handlePromptCanvasTap
    */
   handlePromptCanvasTap: function() {
-    var expectedStroke = this.prompt.review.character.getExpectedStroke();
+    let expectedStroke = this.prompt.review.character.getExpectedStroke();
     if (expectedStroke) {
       this.prompt.canvas.clearLayer('stroke-hint');
       this.prompt.canvas.fadeShape('stroke-hint', expectedStroke.getTargetShape());
@@ -593,7 +591,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
         );
       }
     }
-  }
+  },
 
 });
 

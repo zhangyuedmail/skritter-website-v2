@@ -1,6 +1,6 @@
-var GelatoPage = require('gelato/page');
-var Table = require('components/vocablists/VocablistsDeletedTableComponent');
-var Sidebar = require('components/vocablists/VocablistsSidebarComponent');
+let GelatoPage = require('gelato/page');
+let Table = require('components/vocablists/VocablistsDeletedTableComponent');
+let Sidebar = require('components/vocablists/VocablistsSidebarComponent');
 
 /**
  * @class VocablistDeleted
@@ -52,5 +52,5 @@ module.exports = GelatoPage.extend({
     this.sidebar.remove();
     this.table.remove();
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 });

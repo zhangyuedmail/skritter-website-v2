@@ -15,7 +15,7 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
   events: {
     'click .stop-adding-link': 'handleClickStopAddingLink',
     'click .list-settings-span': 'handleClickListSettingsSpan',
-    'click .remove-list-span': 'handleClickRemoveListSpan'
+    'click .remove-list-span': 'handleClickRemoveListSpan',
   },
 
   /**
@@ -87,7 +87,7 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
 
     this.dialog = new VocablistRemoveDialog({vocablist: list});
     this.dialog.render().open();
-  }
+  },
 
 });
 

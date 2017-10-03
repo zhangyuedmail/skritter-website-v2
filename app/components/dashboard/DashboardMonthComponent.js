@@ -46,7 +46,7 @@ const DashboardMonthComponent = GelatoComponent.extend({
       range: 1,
       start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
       subDomain: 'x_day',
-      subDomainTextFormat: "%d"
+      subDomainTextFormat: '%d',
     });
     this.updateHeatmap();
     this.updateStreak();
@@ -86,7 +86,7 @@ const DashboardMonthComponent = GelatoComponent.extend({
     if (this.stats.length) {
       this.$('#streak .value').text(this.stats.getMonthlyStreak());
     }
-  }
+  },
 });
 
 module.exports = DashboardMonthComponent;

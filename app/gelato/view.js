@@ -2,7 +2,7 @@
  * @class GelatoView
  * @extends {Backbone.View}
  */
-var GelatoView = Backbone.View.extend({
+let GelatoView = Backbone.View.extend({
 
   /**
    * Instantiates certain instance variables so they are setup correctly for inheritance
@@ -70,9 +70,9 @@ var GelatoView = Backbone.View.extend({
    * @param {Event} event
    */
   handleClickHref: function(event) {
-    var target = Backbone.$(event.currentTarget);
-    var href = target.attr('href');
-    var ignore = target.data('ignore');
+    let target = Backbone.$(event.currentTarget);
+    let href = target.attr('href');
+    let ignore = target.data('ignore');
     if (window.app !== undefined &&
       window.app.router !== undefined &&
       !ignore &&
@@ -81,13 +81,13 @@ var GelatoView = Backbone.View.extend({
       href.indexOf('http://') !== 0 &&
       href.indexOf('https://') !== 0) {
       event.preventDefault();
-      var dataReplace = target.data('replace');
-      var dataTrigger = target.data('trigger');
+      let dataReplace = target.data('replace');
+      let dataTrigger = target.data('trigger');
       window.app.router.navigate(
         href,
         {
           replace: dataReplace !== undefined ? dataReplace : false,
-          trigger: dataTrigger !== undefined ? dataTrigger : true
+          trigger: dataTrigger !== undefined ? dataTrigger : true,
         }
       );
     }
@@ -106,7 +106,7 @@ var GelatoView = Backbone.View.extend({
     const appState = {
       app: window.app,
       locale: window.app.locale,
-      view: this
+      view: this,
     };
 
     const renderContext = Backbone.$.extend(true, {}, globals, appState, context || {});
@@ -145,7 +145,7 @@ var GelatoView = Backbone.View.extend({
     this.stopListening();
     this.undelegateEvents();
 
-    for (var view in this._views) {
+    for (let view in this._views) {
       if (this._views.hasOwnProperty(view)) {
         this._views[view].remove();
       }
@@ -196,7 +196,7 @@ var GelatoView = Backbone.View.extend({
   show: function() {
     this.$view.show(arguments.length ? arguments : 0);
     return this;
-  }
+  },
 });
 
 module.exports = GelatoView;

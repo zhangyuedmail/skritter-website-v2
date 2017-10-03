@@ -28,7 +28,7 @@ const BaseSkritterCollection = GelatoCollection.extend({
     }
 
     GelatoCollection.prototype.sync.call(this, method, model, options);
-  }
+  },
 });
 
 module.exports = BaseSkritterCollection;

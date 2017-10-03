@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class ConfirmBanDialog
@@ -24,7 +24,7 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #button-ban': 'handleClickButtonBan',
-    'click #button-cancel': 'handleClickButtonCancel'
+    'click #button-cancel': 'handleClickButtonCancel',
   },
   /**
    * @method handleClickButtonBan
@@ -41,5 +41,5 @@ module.exports = BootstrapDialog.extend({
   handleClickButtonCancel: function(event) {
     event.preventDefault();
     this.close();
-  }
+  },
 });

@@ -1,12 +1,12 @@
-var GelatoPage = require('gelato/page');
-var EditorSections = require('components/vocablists/VocablistsSectionEditorComponent');
-var Sidebar = require('components/vocablists/VocablistsListSidebarComponent');
-var Vocablist = require('models/VocablistModel');
-var VocablistSection = require('models/VocablistSectionModel');
+let GelatoPage = require('gelato/page');
+let EditorSections = require('components/vocablists/VocablistsSectionEditorComponent');
+let Sidebar = require('components/vocablists/VocablistsListSidebarComponent');
+let Vocablist = require('models/VocablistModel');
+let VocablistSection = require('models/VocablistSectionModel');
 
-var ConfirmDialog = require('dialogs/confirm/view');
-var PublishDialog = require('dialogs1/publish-vocablist/content/view');
-var ViewDialog = require('dialogs1/view-dialog/view');
+let ConfirmDialog = require('dialogs/confirm/view');
+let PublishDialog = require('dialogs1/publish-vocablist/content/view');
+let ViewDialog = require('dialogs1/view-dialog/view');
 
 /**
  * @class VocablistsListPage
@@ -27,7 +27,7 @@ module.exports = GelatoPage.extend({
 
     'click #copy-link': 'handleClickCopyLink',
     'click #delete-link': 'handleClickDeleteLink',
-    'click #publish-link': 'handleClickPublishLink'
+    'click #publish-link': 'handleClickPublishLink',
   },
 
   /**
@@ -54,7 +54,7 @@ module.exports = GelatoPage.extend({
     this.sidebar = new Sidebar({vocablist: this.vocablist});
 
     this._views['publishDialog'] = new ViewDialog({
-      content: PublishDialog
+      content: PublishDialog,
     });
 
     this.fetchList();
@@ -105,17 +105,17 @@ module.exports = GelatoPage.extend({
         self.vocablist.fetch({
           data: {
             include_user_names: 'true',
-            includeSectionCompletion: 'true'
+            includeSectionCompletion: 'true',
           },
           error: function() {
             callback();
           },
           success: function() {
             callback();
-          }
+          },
         });
       },
-      _.bind(self.fetchVocablistSections, this)
+      _.bind(self.fetchVocablistSections, this),
     ], function(error) {
       self.listenTo(self.vocablist, 'state:standby', self.handleVocablistState);
       self.render();
@@ -132,14 +132,14 @@ module.exports = GelatoPage.extend({
       this.vocablistSection.fetch({
         data: {
           include_user_names: 'true',
-          includeSectionCompletion: 'true'
+          includeSectionCompletion: 'true',
         },
         error: function(error) {
           callback(error);
         },
         success: function() {
           callback();
-        }
+        },
       });
     } else {
       callback();
@@ -176,7 +176,7 @@ module.exports = GelatoPage.extend({
       title: 'Confirm Copy',
       body: 'Are you sure you want to make a copy of this list?',
       okText: 'Yes - Copy!',
-      onConfirm: 'show-spinner'
+      onConfirm: 'show-spinner',
     });
 
     event.preventDefault();
@@ -188,11 +188,11 @@ module.exports = GelatoPage.extend({
         url: copyUrl,
         method: 'POST',
         headers: app.user.headers(),
-        success: response => {
+        success: (response) => {
           app.router.navigate('/vocablists/view/' + response.VocabList.id, {trigger: true});
 
           confirmDialog.close();
-        }
+        },
       });
     });
 
@@ -205,11 +205,11 @@ module.exports = GelatoPage.extend({
    */
   handleClickDeleteLink: function(event) {
     event.preventDefault();
-    var confirmDialog = new ConfirmDialog({
+    let confirmDialog = new ConfirmDialog({
       title: 'Confirm Delete',
       body: 'Are you sure you want to delete this list?',
       okText: 'Yes - Delete!',
-      onConfirm: 'show-spinner'
+      onConfirm: 'show-spinner',
     });
     this.listenTo(confirmDialog, 'confirm', function() {
       this.vocablist.save({disabled: true, studyingMode: 'not studying'}, {patch: true});
@@ -283,7 +283,7 @@ module.exports = GelatoPage.extend({
   updateVocablist: function() {
     this.vocablist.set({
       description: this.$('.list-description').val(),
-      name: this.$('.list-name').val()
+      name: this.$('.list-name').val(),
     });
-  }
+  },
 });

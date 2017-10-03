@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class ConfirmDialog
@@ -34,7 +34,7 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-confirm': 'handleClickButtonConfirm'
+    'click #button-confirm': 'handleClickButtonConfirm',
   },
   /**
    * @method handleClickButtonCancel
@@ -53,13 +53,11 @@ module.exports = BootstrapDialog.extend({
     this.trigger('confirm');
     if (this.onConfirm === 'close') {
       this.close();
-    }
-    else if (this.onConfirm === 'show-spinner') {
+    } else if (this.onConfirm === 'show-spinner') {
       this.$('#buttons').hide();
       this.$('#spinner-p').removeClass('hide');
-    }
-    else if (_.isFunction(this.onConfirm)) {
+    } else if (_.isFunction(this.onConfirm)) {
       this.onConfirm();
     }
-  }
+  },
 });

@@ -50,7 +50,7 @@ const PromptItemModel = GelatoModel.extend({
       showReading: false,
       showTeaching: false,
       submitTime: 0,
-      thinkingStop: 0
+      thinkingStop: 0,
     };
   },
 
@@ -85,7 +85,7 @@ const PromptItemModel = GelatoModel.extend({
       score: this.get('score'),
       submitTime: this.get('submitTime'),
       thinkingTime: this.getThinkingTime(),
-      wordGroup: this.collection.group
+      wordGroup: this.collection.group,
     };
   },
 
@@ -94,7 +94,7 @@ const PromptItemModel = GelatoModel.extend({
    * @returns {Number}
    */
   getReviewingTime: function() {
-    var reviewingTime = (this.get('reviewingStop') - this.get('reviewingStart')) / 1000;
+    let reviewingTime = (this.get('reviewingStop') - this.get('reviewingStart')) / 1000;
     if (this.collection.part === 'tone') {
       return reviewingTime > 15 ? 15 : reviewingTime;
     }
@@ -106,7 +106,7 @@ const PromptItemModel = GelatoModel.extend({
    * @returns {Number}
    */
   getThinkingTime: function() {
-    var thinkingTime = (this.get('thinkingStop') - this.get('reviewingStart')) / 1000;
+    let thinkingTime = (this.get('thinkingStop') - this.get('reviewingStart')) / 1000;
     if (this.collection.part === 'tone') {
       return thinkingTime > 10 ? 10 : thinkingTime;
     }
@@ -173,7 +173,7 @@ const PromptItemModel = GelatoModel.extend({
     if (this.get('reviewingStart') === 0) {
       this.set({
         reviewingStart: now,
-        submitTime: now / 1000
+        submitTime: now / 1000,
       });
     }
 
@@ -219,7 +219,7 @@ const PromptItemModel = GelatoModel.extend({
       this.set('thinkingStop', timestamp || Date.now());
     }
     return this;
-  }
+  },
 
 });
 

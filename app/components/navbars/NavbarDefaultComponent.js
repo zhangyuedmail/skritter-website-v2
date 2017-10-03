@@ -14,7 +14,7 @@ module.exports = GelatoComponent.extend({
     'click #button-beacon': 'handleClickButtonBeacon',
     'click #refer-link': 'handleClickReferLink',
     'click #switch-targetLang': 'handleClickSwitchTargetLang',
-    'click .item-dropdown': 'handleClickDropdown'
+    'click .item-dropdown': 'handleClickDropdown',
   },
 
   /**
@@ -40,13 +40,13 @@ module.exports = GelatoComponent.extend({
    * @returns {String} The section of the site the user is currently on.
    */
   getCurrentSection: function() {
-    var history = null;
+    let history = null;
 
     // this could null out on app initialization.
     // should refactor whatever calls this before routing has officially started.
     try {
-      history = Backbone.history.getFragment() || "".split('/')[0];
-    } catch(e) {}
+      history = Backbone.history.getFragment() || ''.split('/')[0];
+    } catch (e) {}
 
     return history;
   },
@@ -92,7 +92,7 @@ module.exports = GelatoComponent.extend({
   handleClickDropdown: function(event) {
     event.preventDefault();
 
-    var $dropdown = this.$('.item-dropdown');
+    let $dropdown = this.$('.item-dropdown');
     if ($dropdown.find('.dropdown').hasClass('hidden')) {
       $dropdown.addClass('open');
       $dropdown.find('.dropdown').removeClass('hidden');
@@ -122,24 +122,24 @@ module.exports = GelatoComponent.extend({
     e.preventDefault();
     e.stopPropagation();
 
-    var toSwitchCode = app.user.get('targetLang') === 'zh' ? 'ja' : 'zh';
+    let toSwitchCode = app.user.get('targetLang') === 'zh' ? 'ja' : 'zh';
     app.user.save({
-      targetLang: toSwitchCode
+      targetLang: toSwitchCode,
     }, {
       error: function(model, error) {
         ScreenLoader.hide();
 
         app.notifyUser({
-          message: error.responseJSON.message
+          message: error.responseJSON.message,
         });
       },
       success: function() {
         app.reload(false);
-      }
+      },
     });
 
-    var loadingMessage = toSwitchCode === 'zh' ? 'Switching to Chinese' : 'Switching to Japanese';
+    let loadingMessage = toSwitchCode === 'zh' ? 'Switching to Chinese' : 'Switching to Japanese';
     ScreenLoader.show();
     ScreenLoader.post(loadingMessage);
-  }
+  },
 });

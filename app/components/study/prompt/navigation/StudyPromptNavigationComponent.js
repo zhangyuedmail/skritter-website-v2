@@ -12,7 +12,7 @@ const StudyPromptNavigationComponent = GelatoComponent.extend({
    */
   events: {
     'click #navigate-next': 'handleClickNavigateNext',
-    'click #navigate-previous': 'handleClickNavigatePrevious'
+    'click #navigate-previous': 'handleClickNavigatePrevious',
   },
 
   /**
@@ -87,7 +87,7 @@ const StudyPromptNavigationComponent = GelatoComponent.extend({
   handleClickNavigatePrevious: function(event) {
     event.preventDefault();
     this.prompt.previous();
-  }
+  },
 
 });
 

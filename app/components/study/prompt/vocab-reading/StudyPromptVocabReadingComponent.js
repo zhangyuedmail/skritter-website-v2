@@ -11,7 +11,7 @@ const StudyPromptVocabReadingComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click .show-reading': 'handleClickShowReading'
+    'click .show-reading': 'handleClickShowReading',
   },
 
   /**
@@ -36,7 +36,7 @@ const StudyPromptVocabReadingComponent = GelatoComponent.extend({
    */
   render: function() {
     if (app.isMobile()) {
-      this.template = require('./MobileStudyPromptVocabReadingComponent.jade')
+      this.template = require('./MobileStudyPromptVocabReadingComponent.jade');
     }
 
     if (this.prompt.reviews) {
@@ -60,11 +60,11 @@ const StudyPromptVocabReadingComponent = GelatoComponent.extend({
    */
   handleClickShowReading: function(event) {
     event.preventDefault();
-    var $reading = $(event.target).parent('.reading');
-    var position = parseInt($reading.data('position'), 10);
+    let $reading = $(event.target).parent('.reading');
+    let position = parseInt($reading.data('position'), 10);
     this.prompt.reviews.at(position).set('showReading', true);
     this.render();
-  }
+  },
 
 });
 

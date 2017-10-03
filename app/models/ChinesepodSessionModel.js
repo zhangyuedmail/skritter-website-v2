@@ -24,7 +24,7 @@ const ChinesepodSessionModel = SkritterModel.extend({
    */
   parse: function(response) {
     return response.ChinesePodSession || response;
-  }
+  },
 
 });
 

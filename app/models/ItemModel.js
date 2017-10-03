@@ -52,7 +52,7 @@ const ItemModel = SkritterModel.extend({
       type: 'PUT',
       headers: app.user.session.getHeaders(),
       data: JSON.stringify(update),
-      success: result => this.set(result.Item, {merge: true})
+      success: (result) => this.set(result.Item, {merge: true}),
     });
 
     return this;
@@ -65,7 +65,7 @@ const ItemModel = SkritterModel.extend({
   defaults: function() {
     return {
       vocabIds: [],
-      vocabListIds: []
+      vocabListIds: [],
     };
   },
 
@@ -102,10 +102,10 @@ const ItemModel = SkritterModel.extend({
           containedItems.push(this.collection.add(
             {
               id: fallbackId,
-              writing: splitId[1]
+              writing: splitId[1],
             },
             {
-              merge: true
+              merge: true,
             }
           ));
         }
@@ -255,7 +255,7 @@ const ItemModel = SkritterModel.extend({
       // 0.0000115740740741 = the ratio of a day elapsed in a second, 1/86400
       let ageBonus = 0.1 * Math.log(1 + (2 * timeElapsedSinceLastAttempt) * 0.0000115740740741);
       const readiness2 = readiness > 1.0 ? 0.0 : 1.0 - readiness;
-      ageBonus *= readiness2 * readiness2;  // Less bonus if ready
+      ageBonus *= readiness2 * readiness2; // Less bonus if ready
       readiness += ageBonus;
     }
 
@@ -353,7 +353,7 @@ const ItemModel = SkritterModel.extend({
     let vocabCharacters = this.getVocab().getCharactersWithoutFillers();
     let loadedCharacters = app.user.characters.pluck('writing');
 
-    return _.every(vocabCharacters, character => _.includes(loadedCharacters, character));
+    return _.every(vocabCharacters, (character) => _.includes(loadedCharacters, character));
   },
 
   /**
@@ -452,7 +452,7 @@ const ItemModel = SkritterModel.extend({
     $.ajax({
       url: app.getApiUrl(2) + 'queue/skip/' + this.id,
       type: 'POST',
-      headers: app.user.session.getHeaders()
+      headers: app.user.session.getHeaders(),
     });
   },
 
@@ -461,7 +461,7 @@ const ItemModel = SkritterModel.extend({
    */
   unban: function() {
     this.getVocab().unbanPart(this.get('part'));
-  }
+  },
 
 });
 

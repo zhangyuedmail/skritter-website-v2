@@ -20,9 +20,9 @@ const StrokeShapeModel = GelatoModel.extend({
     return {
       contains: [],
       corners: [],
-      strokeId: undefined
+      strokeId: undefined,
     };
-  }
+  },
 
 });
 

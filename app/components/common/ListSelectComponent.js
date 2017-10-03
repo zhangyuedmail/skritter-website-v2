@@ -13,7 +13,7 @@ const ListSelectComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click #send-feedback': 'onSendFeedbackClicked'
+    'click #send-feedback': 'onSendFeedbackClicked',
   },
 
   /**
@@ -30,7 +30,7 @@ const ListSelectComponent = GelatoComponent.extend({
     this.vocablists = new VocablistCollection();
 
     // hack in a quick comparator for sorting by name
-    this.vocablists.comparator = function (list) {
+    this.vocablists.comparator = function(list) {
       return list.get('shortName') || list.get('name');
     };
 
@@ -40,8 +40,8 @@ const ListSelectComponent = GelatoComponent.extend({
       data: {
         limit: 10,
         sort: 'studying',
-        lang: app.getLanguage()
-      }
+        lang: app.getLanguage(),
+      },
     });
   },
 
@@ -64,7 +64,7 @@ const ListSelectComponent = GelatoComponent.extend({
     return this.$('#field-lists option:selected').map(function() {
       return $(this).val();
     }).get();
-  }
+  },
 
 });
 

@@ -39,7 +39,7 @@ const LegalPage = GelatoPage.extend({
     this.renderTemplate();
 
     return this;
-  }
+  },
 });
 
 module.exports = LegalPage;

@@ -1,11 +1,11 @@
-var GelatoDialog = require('gelato/dialog');
-var Vocab = require('models/VocabModel');
+let GelatoDialog = require('gelato/dialog');
+let Vocab = require('models/VocabModel');
 
 /**
  * @class VocabCreatorDialog
  * @extends {GelatoDialog}
  */
-var VocabCreatorDialog = GelatoDialog.extend({
+let VocabCreatorDialog = GelatoDialog.extend({
   /**
    * @method initialize
    * @param {Object} options
@@ -19,7 +19,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
    */
   events: {
     'click #button-add-word': 'handleClickButtonAddWord',
-    'click #button-cancel': 'handleClickButtonCancel'
+    'click #button-cancel': 'handleClickButtonCancel',
   },
   /**
    * @property template
@@ -83,12 +83,12 @@ var VocabCreatorDialog = GelatoDialog.extend({
       headers: app.user.session.getHeaders(),
       data: JSON.stringify({
         definitions: {
-          en: formData.definition
+          en: formData.definition,
         },
         lang: formData.lang,
         reading: formData.reading,
         writing: formData.writing,
-        writingTraditional: formData.writingTraditional
+        writingTraditional: formData.writingTraditional,
       }),
       error: function(error) {
         self.$('#error-message').text(JSON.stringify(error));
@@ -96,7 +96,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
       success: function(result) {
         self.trigger('vocab', new Vocab(result.Vocab));
         self.close();
-      }
+      },
     });
   },
   /**
@@ -104,11 +104,11 @@ var VocabCreatorDialog = GelatoDialog.extend({
    * @returns {Object}
    */
   getFormData: function() {
-    var formData = {
+    let formData = {
       definition: this.$('#word-definition-input textarea').val(),
       lang: this.row.lang,
       reading: this.$('#word-reading-input input').val(),
-      writing: this.row.writing
+      writing: this.row.writing,
     };
     if (this.row.lang === 'zh') {
       if (this.row.writingTrads.length) {
@@ -126,7 +126,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
   open: function(options) {
     this.row = options.row;
     return GelatoDialog.prototype.open.call(this, options);
-  }
+  },
 });
 
 module.exports = VocabCreatorDialog;

@@ -10,10 +10,10 @@ const numberSyllables = require('../data/pinyin-number-syllables');
 
 function analyzePinyinAnswer(answer, correctAnswer) {
   // regex uses a greedy algorithm, put larger initials first
-  var doubleInitials = /(zh)|(ch)|(sh)/;
-  var initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)/;
+  let doubleInitials = /(zh)|(ch)|(sh)/;
+  let initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)/;
 
-  var initial = answer.substr(0,2);
+  let initial = answer.substr(0, 2);
 
   return {};
 }
@@ -27,8 +27,8 @@ function getData() {
 }
 
 function getPinyinArray() {
-  var pinyin = [];
-  for (var item in data) {
+  let pinyin = [];
+  for (let item in data) {
     pinyin.push(data[item].pinyin);
   }
   return pinyin;
@@ -42,18 +42,18 @@ function getPinyinArray() {
  */
 function pinyinToTone(text, includeSpaces) {
   text = text.toLowerCase();
-  var textArray = [];
+  let textArray = [];
   if (includeSpaces) {
     textArray = text.match(/[a-z|A-Z]+[0-9]+|\s|,\s|\s\.\.\.\s|'/g);
   } else {
     textArray = text.match(/[a-z|A-Z]+[0-9]+|,\s|\s\.\.\.\s|'/g);
   }
   if (textArray) {
-    for (var i = 0, length = textArray.length; i < length; i++) {
-      var textItem = textArray[i];
+    for (let i = 0, length = textArray.length; i < length; i++) {
+      let textItem = textArray[i];
       if (textItem !== ' ... ' &&
-        textItem !== "'" &&
-        textItem !== ", " &&
+        textItem !== '\'' &&
+        textItem !== ', ' &&
         textItem !== ' ') {
         if (data[textItem]) {
           textArray[i] = data[textItem].pinyin;
@@ -75,20 +75,20 @@ function pinyinToTone(text, includeSpaces) {
 function pinyinToZhuyin(text, excludeTones) {
   text = text.toLowerCase();
 
-  var zhuyinArray = [];
-  var textArray = text.match(/[a-z|A-Z]+[0-9]+|,\s|'|\s\.\.\.\s/g);
+  let zhuyinArray = [];
+  let textArray = text.match(/[a-z|A-Z]+[0-9]+|,\s|'|\s\.\.\.\s/g);
 
   if (textArray) {
-    for (var i = 0, length = textArray.length; i < length; i++) {
-      var textItem = textArray[i];
-      var toneItem = textItem.match(/[0-9]+/g);
-      if (textItem !== " ... " && textItem !== "'" && textItem !== ", ") {
+    for (let i = 0, length = textArray.length; i < length; i++) {
+      let textItem = textArray[i];
+      let toneItem = textItem.match(/[0-9]+/g);
+      if (textItem !== ' ... ' && textItem !== '\'' && textItem !== ', ') {
         zhuyinArray.push(data[textItem].zhuyin);
         if (!excludeTones && toneItem) {
           zhuyinArray.push(data[toneItem].zhuyin);
         }
       }
-      if (textItem === ", ") {
+      if (textItem === ', ') {
         zhuyinArray.push(textItem);
       }
     }
@@ -106,8 +106,8 @@ function pinyinToZhuyin(text, excludeTones) {
 function removeToneMarks(text) {
   text = text.toLowerCase();
 
-  for (var syllable in syllables) {
-    var letter = syllables[syllable];
+  for (let syllable in syllables) {
+    let letter = syllables[syllable];
     text = text.replace(syllable, letter);
   }
   return text;
@@ -122,8 +122,8 @@ function removeToneMarks(text) {
 function hasToneMarks(text) {
   text = text.toLowerCase();
 
-  for (var syllable in syllables) {
-    var letter = syllables[syllable];
+  for (let syllable in syllables) {
+    let letter = syllables[syllable];
     if (text.replace(syllable, letter) !== text) {
       return true;
     }
@@ -151,5 +151,5 @@ module.exports = {
   toTone: pinyinToTone,
   toZhuyin: pinyinToZhuyin,
   removeToneMarks: removeToneMarks,
-  removeToneNumbers: removeToneNumbers
+  removeToneNumbers: removeToneNumbers,
 };

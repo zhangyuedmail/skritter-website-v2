@@ -37,28 +37,28 @@ const DashboardGoalComponent = GelatoComponent.extend({
         plotShadow: false,
         renderTo: 'goal-doughnut',
         type: 'pie',
-        width: this.getSize()
+        width: this.getSize(),
       },
       credits: {
-        enabled: false
+        enabled: false,
       },
       plotOptions: {
         pie: {
           cursor: 'pointer',
           dataLabels: {
-            enabled: false
-          }
-        }
+            enabled: false,
+          },
+        },
       },
       series: [{
-        name: "Goal",
+        name: 'Goal',
         animation: false,
         colorByPoint: true,
         data: [
-          {name: "Completed", color: '#c5da4b', y: 0},
-          {name: "Remaining", color: '#efeef3', y: 100}
+          {name: 'Completed', color: '#c5da4b', y: 0},
+          {name: 'Remaining', color: '#efeef3', y: 100},
         ],
-        innerSize: '80%'
+        innerSize: '80%',
       }],
       title: {
         text: '',
@@ -66,14 +66,14 @@ const DashboardGoalComponent = GelatoComponent.extend({
         style: {
           color: '#87a64b',
           fontSize: '24px',
-          fontWeight: '300'
+          fontWeight: '300',
         },
         verticalAlign: 'middle',
-        y: 0
+        y: 0,
       },
       tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-      }
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+      },
     });
 
     this.listenTo(app.user.stats, 'sync', this.updateDoughnut);
@@ -118,10 +118,10 @@ const DashboardGoalComponent = GelatoComponent.extend({
       const totalReviews = app.user.stats.getDailyItemsReviewed();
 
         this.doughnut.setTitle({
-          text: totalReviews + ' / ' + (goal.value || 0)  + '<br>items',
+          text: totalReviews + ' / ' + (goal.value || 0) + '<br>items',
           align: 'center',
           verticalAlign: 'middle',
-          y: 0
+          y: 0,
         });
 
         percent = app.user.stats.getGoalItemPercent();
@@ -131,10 +131,10 @@ const DashboardGoalComponent = GelatoComponent.extend({
         const totalTime = app.user.stats.getDailyTimeStudied();
 
         this.doughnut.setTitle({
-          text: moment(totalTime * 1000).format('m') + ' / '  + (goal.value || 0) + '<br>minutes',
+          text: moment(totalTime * 1000).format('m') + ' / ' + (goal.value || 0) + '<br>minutes',
           align: 'center',
           verticalAlign: 'middle',
-          y: 0
+          y: 0,
         });
 
         percent = app.user.stats.getGoalTimePercent();
@@ -143,8 +143,8 @@ const DashboardGoalComponent = GelatoComponent.extend({
     }
 
     this.doughnut.series[0].setData([
-      {name: "Completed", color: '#c5da4b', y: percent},
-      {name: "Remaining", color: '#efeef3', y: 100 - percent}
+      {name: 'Completed', color: '#c5da4b', y: percent},
+      {name: 'Remaining', color: '#efeef3', y: 100 - percent},
     ], true);
   },
 
@@ -158,7 +158,7 @@ const DashboardGoalComponent = GelatoComponent.extend({
     // if (app.user.data.stats.length) {
     //   this.$('#items-reviewed .value').text(app.user.data.stats.getDailyItemsReviewed());
     // }
-  }
+  },
 
 });
 

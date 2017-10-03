@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class VacationDialog
@@ -31,7 +31,7 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-confirm': 'handleClickButtonConfirm'
+    'click #button-confirm': 'handleClickButtonConfirm',
   },
   /**
    * @method handleClickButtonCancel
@@ -49,25 +49,25 @@ module.exports = BootstrapDialog.extend({
     event.preventDefault();
     this.$('#button-confirm').hide();
     this.$('.fa-spinner').removeClass('hide');
-    var option = this.$('select option:selected');
-    var startDate = moment().add(2, 'days');
-    var endDate = startDate.clone().add(
+    let option = this.$('select option:selected');
+    let startDate = moment().add(2, 'days');
+    let endDate = startDate.clone().add(
       option.data('number'), option.data('unit')
     );
-    var format = 'YYYY-MM-DD';
-    var attrs = {
+    let format = 'YYYY-MM-DD';
+    let attrs = {
       'vacation': {
         start: startDate.format(format),
-        end: endDate.format(format)
-      }
+        end: endDate.format(format),
+      },
     };
-    var dialog = this;
+    let dialog = this;
     this.subscription.save(attrs, {
       parse: true,
       method: 'PUT',
       complete: function() {
         dialog.close();
-      }
+      },
     });
-  }
+  },
 });

@@ -18,7 +18,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
    * @type {Event}
    */
   events: {
-    'change #granularity-selector': 'onTimelineUnitsChanged'
+    'change #granularity-selector': 'onTimelineUnitsChanged',
   },
 
   /**
@@ -32,12 +32,11 @@ const StatsTimelineComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
-
     // TODO: get actual selectable range
-    var userTZ = app.user.get('timezone');
-    var now = moment().tz(userTZ).subtract(4, 'hours').startOf('day')
+    let userTZ = app.user.get('timezone');
+    let now = moment().tz(userTZ).subtract(4, 'hours').startOf('day')
       .format('YYYY-MM-DD');
-    var past = moment().tz(userTZ).subtract(4, 'hours').subtract(6, 'days')
+    let past = moment().tz(userTZ).subtract(4, 'hours').subtract(6, 'days')
       .startOf('day').format('YYYY-MM-DD');
 
     /**
@@ -47,7 +46,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
      */
     this.range = {
       start: past,
-      end: now
+      end: now,
     };
 
     /**
@@ -61,19 +60,19 @@ const StatsTimelineComponent = GelatoComponent.extend({
     // TODO: check localStorage for user-set granularity config?
     this._views['bargraph'] = new TimeStudiedBargraphComponent({
       collection: this.collection,
-      granularity: 'minutes'
+      granularity: 'minutes',
     });
 
     this._views['items-learned'] = new ItemsLearnedGraphComponent({
       collection: this.collection,
       showNumReviews: false,
       showTimeStudied: false,
-      range: this.range
+      range: this.range,
     });
 
     this._views['daysStudied'] = new TimeStudiedCircleComponent({
       collection: this.collection,
-      range: this.range
+      range: this.range,
     });
 
 
@@ -82,7 +81,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
       graphTitle: app.isMobile() ? 'Characters' : '',
       range: this.range,
       type: 'char',
-      part: 'rune'
+      part: 'rune',
     });
 
     this._views['lineCharDefinition'] = new StudyPartLinegraphComponent({
@@ -90,7 +89,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
       graphTitle: app.isMobile() ? 'Characters' : '',
       range: this.range,
       type: 'char',
-      part: 'defn'
+      part: 'defn',
     });
 
     this._views['lineCharReading'] = new StudyPartLinegraphComponent({
@@ -98,7 +97,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
       graphTitle: app.isMobile() ? 'Characters' : '',
       range: this.range,
       type: 'char',
-      part: 'rdng'
+      part: 'rdng',
     });
 
     this._views['lineWordWriting'] = new StudyPartLinegraphComponent({
@@ -106,7 +105,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
       graphTitle: app.isMobile() ? 'Words' : '',
       range: this.range,
       type: 'word',
-      part: 'rune'
+      part: 'rune',
     });
 
     this._views['lineWordDefinition'] = new StudyPartLinegraphComponent({
@@ -114,7 +113,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
       graphTitle: app.isMobile() ? 'Words' : '',
       range: this.range,
       type: 'word',
-      part: 'defn'
+      part: 'defn',
     });
 
     this._views['lineWordReading'] = new StudyPartLinegraphComponent({
@@ -122,7 +121,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
       graphTitle: app.isMobile() ? 'Words' : '',
       range: this.range,
       type: 'word',
-      part: 'rdng'
+      part: 'rdng',
     });
 
     if (app.isChinese()) {
@@ -131,7 +130,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
         graphTitle: app.isMobile() ? 'Characters' : '',
         range: this.range,
         type: 'char',
-        part: 'tone'
+        part: 'tone',
       });
 
       this._views['lineWordTone'] = new StudyPartLinegraphComponent({
@@ -139,7 +138,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
         graphTitle: app.isMobile() ? 'Words' : '',
         range: this.range,
         type: 'word',
-        part: 'tone'
+        part: 'tone',
       });
     }
 
@@ -163,7 +162,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
       maxDate: now,
       minDate: moment(app.user.get('created') * 1000),
       locale: {
-        format: app.config.dateFormatApp
+        format: app.config.dateFormatApp,
       },
       opens: app.isMobile() ? 'center' : 'left',
 
@@ -172,8 +171,8 @@ const StatsTimelineComponent = GelatoComponent.extend({
         'Last 7 Days': [moment(now).subtract(6, 'days'), now],
         'Last 30 Days': [moment(now).subtract(29, 'days'), now],
         'This Month': [moment(now).startOf('month'), moment(now).endOf('month')],
-        'Last Month': [moment(now).subtract(1, 'month').startOf('month'), moment(now).subtract(1, 'month').endOf('month')]
-      }
+        'Last Month': [moment(now).subtract(1, 'month').startOf('month'), moment(now).subtract(1, 'month').endOf('month')],
+      },
     });
 
     this.$('#date-range-picker').on('apply.daterangepicker', $.proxy(this.onDatePickerUpdated, this));
@@ -244,7 +243,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
           self.$('#end-date').text(oldRangeEnd.format('MMM DD, YYYY')).removeClass('fetching');
           self.range.start = oldRangeStart.format(config.dateFormatApp);
           self.range.end = oldRangeEnd.format(config.dateFormatApp);
-        }
+        },
       }
     );
   },
@@ -266,7 +265,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
    */
   onTimelineUnitsChanged: function(event) {
     event.preventDefault();
-    var units = event.target.value;
+    let units = event.target.value;
 
     this._views['bargraph'].updateUnits(units);
   },
@@ -283,7 +282,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
       this.loaded = true;
       this.trigger('component:loaded', 'timeline');
     }
-  }
+  },
 
 });
 

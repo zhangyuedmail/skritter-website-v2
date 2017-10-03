@@ -40,7 +40,6 @@ const SentenceModel = GelatoModel.extend({
     let writing = this.get('sentenceRune');
 
     if (app.getLanguage() === 'zh') {
-
       if (vocab) {
         if (vocab.get('style') === 'trad' ||
           (vocab.get('style') === 'both' && !app.user.get('reviewSimplified'))) {
@@ -67,7 +66,7 @@ const SentenceModel = GelatoModel.extend({
     }
 
     return writing.replace(/\s+/g, '');
-  }
+  },
 
 });
 

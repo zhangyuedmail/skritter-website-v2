@@ -18,7 +18,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
     'click .add-mnemonic': 'handleClickAddMnemonic',
     'click #save': 'handleClickSaveMnemonic',
     'click #remove-mnem': 'handleClickRemoveMnemonic',
-    'keydown #custom-mnemonic': 'handleKeydown'
+    'keydown #custom-mnemonic': 'handleKeydown',
   },
 
   /**
@@ -97,7 +97,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
     return {
       creator: app.user.id,
       public: false,
-      text: this.$('textarea').val()
+      text: this.$('textarea').val(),
     };
   },
 
@@ -167,7 +167,6 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
     let listHTML = '';
     const vocab = this.collection.vocab;
     this.collection.models.forEach((m) => {
-
       // don't list the currenly selected mnemonic.
       if (m.isCurrentForVocab(vocab)) {
         return;
@@ -175,7 +174,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
 
       listHTML += this.listItemTemplate({
         vocab: this.collection.vocab,
-        model: m
+        model: m,
       });
     });
 
@@ -194,14 +193,14 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
       this.collection.vocab.save({mnemonic: {
         creator: creator || app.user.id,
         public: isPublic || false,
-        text: mnemonic
+        text: mnemonic,
       }}, {
         success: function() {
           resolve();
         },
         error: function() {
           reject();
-        }
+        },
       });
     });
   },

@@ -49,7 +49,7 @@ const MarketingFooterComponent = GelatoComponent.extend({
     }
 
     return this;
-  }
+  },
 
 });
 

@@ -1,5 +1,5 @@
-var GelatoPage = require('gelato/page');
-var User = require('models/UserModel');
+let GelatoPage = require('gelato/page');
+let User = require('models/UserModel');
 
 /**
  * A page that allows a user to create account for Skritter by entering
@@ -23,12 +23,12 @@ module.exports = GelatoPage.extend({
   events: {
     'change #signup-payment-method': 'handleChangeSignupPaymentMethod',
     'click #signup-submit': 'handleClickSignupSubmit',
-    'click #send-validation-email': 'handleClickValidateSchoolEmail'
+    'click #send-validation-email': 'handleClickValidateSchoolEmail',
   },
 
   navbarOptions: {
     showBackBtn: true,
-    showSyncBtn: false
+    showSyncBtn: false,
   },
 
   /**
@@ -41,29 +41,29 @@ module.exports = GelatoPage.extend({
       'key': 'one_month',
       'months': 1,
       'name': '1 month',
-      'price': '14.99'
+      'price': '14.99',
     },
     {
       'fullName': '$59.99/6 months ($10.00/month)',
       'key': 'six_months',
       'months': 6,
       'name': '6 months',
-      'price': '59.99'
+      'price': '59.99',
     },
     {
       'fullName': '$99.99/12 months ($8.33/month)',
       'key': 'twelve_months',
       'months': 12,
       'name': '1 year',
-      'price': '99.99'
+      'price': '99.99',
     },
     {
       'fullName': '$179.99/24 months ($7.50/month)',
       'key': 'twenty_four_months',
       'months': 24,
       'name': '2 years',
-      'price': '179.99'
-    }
+      'price': '179.99',
+    },
   ],
 
   /**
@@ -131,8 +131,8 @@ module.exports = GelatoPage.extend({
    * @param {Function} callback called when all requests relating to user creation have completed
    */
   createUser: function(formData, callback) {
-    var self = this;
-    var siteRef = app.getRefererId();
+    let self = this;
+    let siteRef = app.getRefererId();
 
     this.user.set({
       email: formData.email,
@@ -140,13 +140,13 @@ module.exports = GelatoPage.extend({
       name: formData.username,
       password: formData.password1,
       recaptcha: formData.recaptcha,
-      siteRef: siteRef
+      siteRef: siteRef,
     });
 
     if (formData.method === 'credit') {
       this.user.set({
         plan: formData.plan,
-        token: formData.token
+        token: formData.token,
       });
     } else if (formData.method === 'coupon') {
       this.user.set('couponCode', formData.coupon);
@@ -182,7 +182,7 @@ module.exports = GelatoPage.extend({
                 {
                   'Display Name': self.user.get('name'),
                   'Method': formData.method,
-                  'Plan': formData.plan
+                  'Plan': formData.plan,
                 }
               );
 
@@ -198,9 +198,9 @@ module.exports = GelatoPage.extend({
               callback();
             }
           }
-        )
+        );
       },
-      this._processUserReferral
+      this._processUserReferral,
     ], callback);
   },
 
@@ -221,7 +221,7 @@ module.exports = GelatoPage.extend({
       card: {
         expires_month: this.$('#card-month-select').val(),
         expires_year: this.$('#card-year-select').val(),
-        number: _.trim(this.$('#signup-card-number').val())
+        number: _.trim(this.$('#signup-card-number').val()),
       },
       coupon: _.trim(this.$('#signup-coupon-code').val()),
       email: _.trim(this.$('#signup-email').val()),
@@ -231,12 +231,12 @@ module.exports = GelatoPage.extend({
       plan: this.$('#signup-plan').val(),
       username: _.trim(this.$('#signup-username').val()),
       validationCode: _.trim(this.$('#signup-validation-code').val()),
-      recaptcha: window.grecaptcha ? window.grecaptcha.getResponse() : null
+      recaptcha: window.grecaptcha ? window.grecaptcha.getResponse() : null,
     };
   },
 
   getTrialExpirationDate: function() {
-    var expiration = moment().add(7, 'days');
+    let expiration = moment().add(7, 'days');
 
     if (this.userReferral) {
       expiration.add(14, 'days');
@@ -251,7 +251,7 @@ module.exports = GelatoPage.extend({
    */
   handleChangeSignupPaymentMethod: function(event) {
     event.preventDefault();
-    var formData = this.getFormData();
+    let formData = this.getFormData();
     if (formData.method === 'credit') {
       this.$('#signup-input-coupon').addClass('hidden');
       this.$('#signup-input-credit').removeClass('hidden');
@@ -309,7 +309,7 @@ module.exports = GelatoPage.extend({
       this.$('#signup-email').addClass('alert-warning');
       try {
         this.$('#signup-error-alert')[0].scrollIntoView(false);
-      } catch(e) {}
+      } catch (e) {}
 
       this.subscribing = false;
       ScreenLoader.hide();
@@ -325,7 +325,7 @@ module.exports = GelatoPage.extend({
         ScreenLoader.post('Sending validation email');
         self.subscribing = true;
         self.sendValidationEmail(formData.email, callback);
-      }
+      },
     ], function(error) {
       ScreenLoader.hide();
 
@@ -347,7 +347,7 @@ module.exports = GelatoPage.extend({
       method: 'POST',
       headers: app.user.headers(),
       data: {
-        email: email
+        email: email,
       },
       success: function() {
         if (_.isFunction(callback)) {
@@ -358,7 +358,7 @@ module.exports = GelatoPage.extend({
         if (_.isFunction(callback)) {
           callback(error);
         }
-      }
+      },
     });
   },
 
@@ -395,7 +395,7 @@ module.exports = GelatoPage.extend({
         ScreenLoader.show();
         ScreenLoader.post('Creating a new user');
         self.createUser(formData, callback);
-      }
+      },
     ], function(error) {
       if (error) {
         self._handleSubmittedProcessError(error.responseJSON || error);
@@ -425,7 +425,7 @@ module.exports = GelatoPage.extend({
         ScreenLoader.show();
         ScreenLoader.post('Creating a new user');
         self.createUser(formData, callback);
-      }
+      },
     ], function(error) {
       ScreenLoader.hide();
       if (error) {
@@ -467,7 +467,7 @@ module.exports = GelatoPage.extend({
           {
             exp_month: formData.card.expires_month,
             exp_year: formData.card.expires_year,
-            number: formData.card.number
+            number: formData.card.number,
           },
           function(status, response) {
             if (response.error) {
@@ -482,7 +482,7 @@ module.exports = GelatoPage.extend({
       function(callback) {
         ScreenLoader.post('Creating a new user');
         self.createUser(formData, callback);
-      }
+      },
     ], function(error) {
       ScreenLoader.hide();
       if (error) {
@@ -498,7 +498,7 @@ module.exports = GelatoPage.extend({
    * @param {object} formData the submitted data
    */
   subscribeSchool: function(formData) {
-    var self = this;
+    let self = this;
 
     if (!this._validateUserData(formData)) {
       this.subscribing = false;
@@ -511,7 +511,7 @@ module.exports = GelatoPage.extend({
         ScreenLoader.show();
         ScreenLoader.post('Creating a new user');
         self.createUser(formData, callback);
-      }
+      },
     ], function(error) {
       ScreenLoader.hide();
       if (error) {
@@ -548,42 +548,42 @@ module.exports = GelatoPage.extend({
       return;
     }
 
-    var errorMsg = app.locale('pages.signup.errorDefault');
+    let errorMsg = app.locale('pages.signup.errorDefault');
 
     // user API errors
     if (error.statusCode === 404) {
-      if (error.message === "Coupon not found.") {
+      if (error.message === 'Coupon not found.') {
         errorMsg = app.locale('pages.signup.errorCouponInvalid');
       }
     }
 
     if (error.statusCode === 400) {
-      switch(error.message) {
-        case "Another user is already using that display name.":
+      switch (error.message) {
+        case 'Another user is already using that display name.':
           errorMsg = app.locale('pages.signup.errorDuplicateUsername').replace('#{username}', this.user.get('name'));
           break;
-        case "This coupon is expired.":
+        case 'This coupon is expired.':
           errorMsg = app.locale('pages.signup.errorCouponExpired');
           break;
-        case "Code has already been used.":
+        case 'Code has already been used.':
           errorMsg = app.locale('pages.signup.errorCouponAlreadyUsed');
           break;
-        case "Coupon is not ready for use. Try again later.":
+        case 'Coupon is not ready for use. Try again later.':
           errorMsg = app.locale('pages.signup.errorCouponNotReady');
           break;
-        case "This code has been exhausted.":
+        case 'This code has been exhausted.':
           errorMsg = app.locale('pages.signup.errorCouponExhausted');
           break;
-        case "The email entered has already been used.":
+        case 'The email entered has already been used.':
           errorMsg = app.locale('pages.signup.errorSchoolEmailAlreadyUsed');
           break;
-        case "School validation cannot add time to this account.":
+        case 'School validation cannot add time to this account.':
           errorMsg = app.locale('pages.signup.errorSchoolCantAddTime');
           break;
-        case "The email entered is not an eligible email.":
+        case 'The email entered is not an eligible email.':
           errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
           break;
-        case "Invalid code entered.":
+        case 'Invalid code entered.':
           errorMsg = app.locale('pages.signup.errorInvalidEmailValidationCode');
           break;
         case 'Property "name" must be no longer than 20 characters long.':
@@ -592,16 +592,16 @@ module.exports = GelatoPage.extend({
         case 'Property "password" must be no longer than 20 characters long.':
           errorMsg = app.locale('pages.signup.errorPasswordLengthTooLong');
           break;
-        case "InvalidValidationCode":
+        case 'InvalidValidationCode':
           errorMsg = app.locale('pages.signup.errorInvalidEmailValidationCode');
           break;
-        case "NoValidationCode":
+        case 'NoValidationCode':
           errorMsg = app.locale('pages.signup.errorValidationCodeNotEntered');
           break;
-        case "IneligibleSchoolEmail":
+        case 'IneligibleSchoolEmail':
           errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
           break;
-        case "EmailTaken":
+        case 'EmailTaken':
           errorMsg = app.locale('pages.signup.errorEmailTaken');
           break;
         default:
@@ -646,8 +646,8 @@ module.exports = GelatoPage.extend({
    * @private
    */
   _processUserReferral: function(callback) {
-    var dfd = app.processUserReferral(true);
-    var siteRef = app.getRefererId();
+    let dfd = app.processUserReferral(true);
+    let siteRef = app.getRefererId();
 
     // affiliate referrals take priority over user referrals,
     // only process 1 of them.
@@ -657,12 +657,11 @@ module.exports = GelatoPage.extend({
       })
         .fail(function(error) {
           app.notifyUser({
-            message: app.locale('common.errorUserReferralFailed')
+            message: app.locale('common.errorUserReferralFailed'),
           });
           callback();
         });
     } else {
-
       // no user referral to process
       callback();
     }
@@ -686,13 +685,13 @@ module.exports = GelatoPage.extend({
         success: function(user) {
           app.removeSetting('siteRef');
           callback();
-        }
+        },
       }
     );
   },
 
   _validateEmail: function(email) {
-    var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    let emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
     return (!_.isEmpty(email) && email.match(emailRegex));
   },
@@ -737,10 +736,10 @@ module.exports = GelatoPage.extend({
     }
 
     if (formData.method === 'credit') {
-      var cardYear = formData.card.expires_year;
-      var cardMonth = formData.card.expires_month;
-      var cardNumber = formData.card.number;
-      var ccRegexp = /^[0-9]+$/;
+      let cardYear = formData.card.expires_year;
+      let cardMonth = formData.card.expires_month;
+      let cardNumber = formData.card.number;
+      let ccRegexp = /^[0-9]+$/;
       if (!cardNumber) {
         this.displayErrorMessage(app.locale('pages.signup.errorNoCCNmber'));
         return false;
@@ -792,7 +791,7 @@ module.exports = GelatoPage.extend({
           lang: app.getLanguage(),
           version: app.config.version,
           uuid: localStorage.getItem('skrit-uuid'),
-          step
+          step,
         };
 
         if (app.user.id && app.user.id !== 'application') {
@@ -809,7 +808,7 @@ module.exports = GelatoPage.extend({
           },
           success: function() {
             resolve();
-          }
+          },
         });
       } else {
         resolve();

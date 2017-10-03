@@ -10,7 +10,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
     'click #add': 'handleAddClick',
     'click #play': 'handlePlayClick',
     'click #info': 'handleInfoClick',
-    'click #options': 'handleOptionsClick'
+    'click #options': 'handleOptionsClick',
   },
 
   /**
@@ -21,7 +21,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
   initialize: function(options) {
     NavbarDefaultComponent.prototype.initialize.apply(this, arguments);
     this._views['timer'] = new StudyToolbarTimerComponent({
-      showIcon: true
+      showIcon: true,
     });
     this.page = options.page;
 
@@ -104,7 +104,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    */
   toggleAddWordsPopup: function(event, show) {
     if (event && event.stopPropagation()) {
-      event.stopPropagation()
+      event.stopPropagation();
     }
 
     this.$('#add-popup').toggleClass('hidden', !show);

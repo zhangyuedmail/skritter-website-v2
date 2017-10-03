@@ -50,5 +50,5 @@ module.exports = GelatoDialog.extend({
     this.content.remove();
 
     return GelatoDialog.prototype.remove.call(this);
-  }
+  },
 });

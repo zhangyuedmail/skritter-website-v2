@@ -15,7 +15,7 @@ const AccountSetupPage = GelatoPage.extend({
     'change #field-language': 'handleChangeFieldLanguage',
     'click #button-continue': 'handleClickButtonContinue',
     'click .lang-option': 'handleClickLangOption',
-    'click .char-option': 'handleClickCharOption'
+    'click .char-option': 'handleClickCharOption',
   },
 
   /**
@@ -28,7 +28,7 @@ const AccountSetupPage = GelatoPage.extend({
     addBoth: false,
     country: 'US',
     targetLang: app.get('demoLang'),
-    timezone: 'America/New_York'
+    timezone: 'America/New_York',
   },
 
   /**
@@ -93,11 +93,11 @@ const AccountSetupPage = GelatoPage.extend({
    * @param {Event} event
    */
   handleClickButtonContinue: function(event) {
-    var self = this;
+    let self = this;
     event.preventDefault();
-    var settings = this.getSettings();
+    let settings = this.getSettings();
 
-    var invalidSettings = this.validateSettings(settings);
+    let invalidSettings = this.validateSettings(settings);
     if (invalidSettings) {
       this.$('#error-message').text(invalidSettings.message).removeClass('hidden');
       return;
@@ -121,19 +121,19 @@ const AccountSetupPage = GelatoPage.extend({
           app.setSetting('newuser-' + app.user.id, true);
           app.router.navigate('vocablists/browse');
           app.reload();
-        }
+        },
       }
     );
     this.render();
   },
 
   handleClickCharOption: function(event) {
-    var id = event.currentTarget.id;
-    if (id === "traditional") {
+    let id = event.currentTarget.id;
+    if (id === 'traditional') {
       this.settings.addTraditional = true;
       this.settings.addBoth = false;
       this.settings.addSimplified = false;
-    } else if (id === "both") {
+    } else if (id === 'both') {
       this.settings.addBoth = true;
       this.settings.addTraditional = false;
       this.settings.addSimplified = false;
@@ -148,7 +148,7 @@ const AccountSetupPage = GelatoPage.extend({
 
   handleClickLangOption: function(event) {
     event.preventDefault();
-    var id = (event.currentTarget.id || '-').split('-')[1];
+    let id = (event.currentTarget.id || '-').split('-')[1];
     this.settings.targetLang = id || 'zh';
     this.render();
   },
@@ -159,8 +159,8 @@ const AccountSetupPage = GelatoPage.extend({
    * @returns {Object}
    */
   getSettings: function() {
-    var settings = {};
-    var targetLang = this.settings.targetLang;
+    let settings = {};
+    let targetLang = this.settings.targetLang;
     if (targetLang === 'zh') {
       settings.addSimplified = this.settings.addSimplified || this.settings.addBoth;
       settings.addTraditional = this.settings.addTraditional || this.settings.addBoth;
@@ -188,7 +188,7 @@ const AccountSetupPage = GelatoPage.extend({
    * @returns {Object} null if no error, object with a 'message' if there's a problem
    */
   validateSettings: function(settings) {
-    var error = {};
+    let error = {};
 
     // user selected
     if (settings.targetLang === 'zh' && !settings.addSimplified && !settings.addTraditional) {
@@ -197,7 +197,7 @@ const AccountSetupPage = GelatoPage.extend({
     }
 
     return null;
-  }
+  },
 
 });
 

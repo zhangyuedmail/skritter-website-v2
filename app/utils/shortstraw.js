@@ -15,12 +15,12 @@ function Shortstraw() {
  * @returns {Object}
  */
 Shortstraw.prototype.boundingBox = function(points) {
-  var minX = Number.POSITIVE_INFINITY;
-  var maxX = Number.NEGATIVE_INFINITY;
-  var minY = Number.POSITIVE_INFINITY;
-  var maxY = Number.NEGATIVE_INFINITY;
-  for (var i = 0, len = points.length; i < len; i++) {
-    var p = points[i];
+  let minX = Number.POSITIVE_INFINITY;
+  let maxX = Number.NEGATIVE_INFINITY;
+  let minY = Number.POSITIVE_INFINITY;
+  let maxY = Number.NEGATIVE_INFINITY;
+  for (let i = 0, len = points.length; i < len; i++) {
+    let p = points[i];
     if (p.x < minX) {
       minX = p.x;
     }
@@ -43,10 +43,10 @@ Shortstraw.prototype.boundingBox = function(points) {
  * @returns {Number}
  */
 Shortstraw.prototype.determineResampleSpacing = function(points) {
-  var b = this.boundingBox(points);
-  var p1 = {x: b.x, y: b.y};
-  var p2 = {x: b.x + b.w, y: b.y + b.h};
-  var d = this.distance(p1, p2);
+  let b = this.boundingBox(points);
+  let p1 = {x: b.x, y: b.y};
+  let p2 = {x: b.x + b.w, y: b.y + b.h};
+  let d = this.distance(p1, p2);
   return d / this.DIAGONAL_INTERVAL;
 };
 
@@ -57,8 +57,8 @@ Shortstraw.prototype.determineResampleSpacing = function(points) {
  * @returns {Number}
  */
 Shortstraw.prototype.distance = function(p1, p2) {
-  var dx = p2.x - p1.x;
-  var dy = p2.y - p1.y;
+  let dx = p2.x - p1.x;
+  let dy = p2.y - p1.y;
   return Math.pow((dx * dx + dy * dy), 1 / 2);
 };
 
@@ -68,25 +68,24 @@ Shortstraw.prototype.distance = function(p1, p2) {
  * @returns {Array}
  */
 Shortstraw.prototype.getCorners = function(points) {
-  var corners = [0];
-  var w = this.STRAW_WINDOW;
-  var straws = [];
-  var i;
+  let corners = [0];
+  let w = this.STRAW_WINDOW;
+  let straws = [];
+  let i;
   for (i = w; i < points.length - w; i++) {
     straws[i] = (this.distance(points[i - w], points[i + w]));
   }
-  var t = this.median(straws) * this.MEDIAN_THRESHOLD;
+  let t = this.median(straws) * this.MEDIAN_THRESHOLD;
   for (i = w; i < points.length - w; i++) {
     if (straws[i] < t) {
-      var localMin = Number.POSITIVE_INFINITY;
-      var localMinIndex = i;
+      let localMin = Number.POSITIVE_INFINITY;
+      let localMinIndex = i;
       while (i < straws.length && straws[i] < t) {
         if (straws[i] < localMin) {
           localMin = straws[i];
           localMinIndex = i;
         }
         i++;
-
       }
       corners.push(localMinIndex);
     }
@@ -104,10 +103,10 @@ Shortstraw.prototype.getCorners = function(points) {
  * @returns {Number}
  */
 Shortstraw.prototype.halfwayCorner = function(straws, a, b) {
-  var quarter = (b - a) / 4;
-  var minValue = Number.POSITIVE_INFINITY;
-  var minIndex;
-  for (var i = a + quarter; i < (b - quarter); i++) {
+  let quarter = (b - a) / 4;
+  let minValue = Number.POSITIVE_INFINITY;
+  let minIndex;
+  for (let i = a + quarter; i < (b - quarter); i++) {
     if (straws[i] < minValue) {
       minValue = straws[i];
       minIndex = i;
@@ -124,8 +123,8 @@ Shortstraw.prototype.halfwayCorner = function(straws, a, b) {
  * @returns {Boolean}
  */
 Shortstraw.prototype.isLine = function(points, a, b) {
-  var distance = this.distance(points[a], points[b]);
-  var pathDistance = this.pathDistance(points, a, b);
+  let distance = this.distance(points[a], points[b]);
+  let pathDistance = this.pathDistance(points, a, b);
   return (distance / pathDistance) > this.LINE_THRESHOLD;
 };
 
@@ -135,9 +134,9 @@ Shortstraw.prototype.isLine = function(points, a, b) {
  * @returns {Number}
  */
 Shortstraw.prototype.median = function(values) {
-  var s = values.concat();
+  let s = values.concat();
   s.sort();
-  var m;
+  let m;
   if (s.length % 2 === 0) {
     m = s.length / 2;
     return (s[m - 1] + s[m]) / 2;
@@ -154,8 +153,8 @@ Shortstraw.prototype.median = function(values) {
  * @returns {Number}
  */
 Shortstraw.prototype.pathDistance = function(points, a, b) {
-  var d = 0;
-  for (var i = a; i < b; i++) {
+  let d = 0;
+  for (let i = a; i < b; i++) {
     d += this.distance(points[i], points[i + 1]);
   }
   return d;
@@ -169,15 +168,15 @@ Shortstraw.prototype.pathDistance = function(points, a, b) {
  * @returns {Array}
  */
 Shortstraw.prototype.postProcessCorners = function(points, corners, straws) {
-  var go = false;
-  var i, c1, c2;
+  let go = false;
+  let i, c1, c2;
   while (!go) {
     go = true;
     for (i = 1; i < corners.length; i++) {
       c1 = corners[i - 1];
       c2 = corners[i];
       if (!this.isLine(points, c1, c2)) {
-        var newCorner = this.halfwayCorner(straws, c1, c2);
+        let newCorner = this.halfwayCorner(straws, c1, c2);
         if (newCorner > c1 && newCorner < c2) {
           corners.splice(i, 0, newCorner);
           go = false;
@@ -203,12 +202,13 @@ Shortstraw.prototype.postProcessCorners = function(points, corners, straws) {
  */
 Shortstraw.prototype.process = function(points) {
   if (points && Array.isArray(points) && points.length > 0) {
-    var s = this.determineResampleSpacing(points);
-    var resampled = this.resamplePoints(points, s);
-    var corners = this.getCorners(resampled);
-    var cornerPoints = [];
-    for (var i = 0, len = corners.length; i < len; i++)
-      cornerPoints.push(resampled[corners[i]]);
+    let s = this.determineResampleSpacing(points);
+    let resampled = this.resamplePoints(points, s);
+    let corners = this.getCorners(resampled);
+    let cornerPoints = [];
+    for (let i = 0, len = corners.length; i < len; i++) {
+cornerPoints.push(resampled[corners[i]]);
+}
     return cornerPoints;
   } else {
     return [];
@@ -222,17 +222,17 @@ Shortstraw.prototype.process = function(points) {
  * @returns {Array}
  */
 Shortstraw.prototype.resamplePoints = function(points, s) {
-  var distance = 0;
-  var resampled = [];
+  let distance = 0;
+  let resampled = [];
   resampled.push(points[0]);
-  for (var i = 1; i < points.length; i++) {
-    var p1 = points[i - 1];
-    var p2 = points[i];
-    var d2 = this.distance(p1, p2);
+  for (let i = 1; i < points.length; i++) {
+    let p1 = points[i - 1];
+    let p2 = points[i];
+    let d2 = this.distance(p1, p2);
     if ((distance + d2) >= s) {
-      var qx = p1.x + ((s - distance) / d2) * (p2.x - p1.x);
-      var qy = p1.y + ((s - distance) / d2) * (p2.y - p1.y);
-      var q = {x: qx, y: qy};
+      let qx = p1.x + ((s - distance) / d2) * (p2.x - p1.x);
+      let qy = p1.y + ((s - distance) / d2) * (p2.y - p1.y);
+      let q = {x: qx, y: qy};
       resampled.push(q);
       points.splice(i, 0, q);
       distance = 0;

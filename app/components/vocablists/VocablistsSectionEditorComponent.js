@@ -14,7 +14,7 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
     'click .section-link': 'handleClickSectionLink',
     'click #restore-section': 'handleClickRestoreSection',
     'click #remove-section': 'handleClickRemoveSection',
-    'keyup .last-section': 'handleKeyupLastSection'
+    'keyup .last-section': 'handleKeyupLastSection',
   },
 
   /**
@@ -72,7 +72,7 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
    */
   handleClickRemoveSection: function(event) {
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
+    let $row = $(event.target).closest('.row');
     this.vocablist.get('sections')[$row.data('index')].deleted = true;
     this.render();
   },
@@ -83,7 +83,7 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
    */
   handleClickRestoreSection: function(event) {
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
+    let $row = $(event.target).closest('.row');
     this.vocablist.get('sections')[$row.data('index')].deleted = false;
     this.render();
   },
@@ -99,7 +99,7 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
     const url = $(event.currentTarget).attr('href').split('/');
     const listId = this.vocablist.id;
     const sectionId = url[url.length - 1];
-    const section = (this.vocablist.get('sections').filter(s => s.id === sectionId) || [])[0];
+    const section = (this.vocablist.get('sections').filter((s) => s.id === sectionId) || [])[0];
     app.router.navigateVocablist(listId, sectionId, false, this.vocablist, section);
     app.router.navigate('vocablists/view/' + this.vocablist.id + '/' + sectionId, {trigger: false});
   },
@@ -124,11 +124,11 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
     this.$('#vocablist-sections')
       .children('.row')
       .each((function(index, element) {
-        var name = $(element).find('#section-name').val();
-        var section = this.vocablist.get('sections')[index];
+        let name = $(element).find('#section-name').val();
+        let section = this.vocablist.get('sections')[index];
         section.name = name;
       }).bind(this));
-  }
+  },
 
 });
 

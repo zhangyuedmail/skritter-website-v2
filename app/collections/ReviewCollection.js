@@ -52,14 +52,14 @@ const ReviewCollection = BaseSkritterCollection.extend({
       type: 'GET',
       data: {
         limit: 100,
-        offset: moment().startOf('year').unix()
+        offset: moment().startOf('year').unix(),
       },
       error: function(error) {
         console.error(error);
       },
       success: function(result) {
         console.log(result);
-      }
+      },
     });
   },
 
@@ -70,9 +70,9 @@ const ReviewCollection = BaseSkritterCollection.extend({
    */
   getByItemId: function(itemId) {
     return _.chain(this.models)
-      .map(model => model.get('data'))
+      .map((model) => model.get('data'))
       .flatten()
-      .filter(model => model.itemId === itemId)
+      .filter((model) => model.itemId === itemId)
       .sortBy('submitTime')
       .value();
   },
@@ -85,7 +85,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
     const reviews = _.flatten(this.map('data'));
     let offset = this.postCountOffset - this.addCountOffset;
 
-    _.forEach(reviews, review => {
+    _.forEach(reviews, (review) => {
       if (review.due) offset++;
     });
 
@@ -116,9 +116,9 @@ const ReviewCollection = BaseSkritterCollection.extend({
           (chunk, callback) => {
             const data = _
               .chain(chunk)
-              .map(review => review.get('data'))
+              .map((review) => review.get('data'))
               .flatten()
-              .uniqBy(review => [review.itemId, review.currentInterval, review.newInterval].join(''))
+              .uniqBy((review) => [review.itemId, review.currentInterval, review.newInterval].join(''))
               .value();
 
             $.ajax({
@@ -152,14 +152,14 @@ const ReviewCollection = BaseSkritterCollection.extend({
                   app.user.offline.updateItems(chunk);
                 }
 
-                _.forEach(data, review => {
+                _.forEach(data, (review) => {
                   if (review.due) this.postCountOffset++;
                 });
 
                 this.trigger('update:due', true);
 
                 setTimeout(callback, 1000);
-              }
+              },
             });
           },
           (error) => {
@@ -237,7 +237,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
     this.trigger('update:due', true);
 
     return updatedReviews;
-  }
+  },
 
 });
 

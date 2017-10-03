@@ -14,7 +14,7 @@ module.exports = GelatoDialog.extend({
     'click #button-close': 'handleClickClose',
     'click #button-save': 'handleClickSave',
     'click .part-checkbox': 'handleClickVocabPart',
-    'click #more-settings-btn': 'handleClickMoreSettings'
+    'click #more-settings-btn': 'handleClickMoreSettings',
   },
 
   /**
@@ -77,7 +77,7 @@ module.exports = GelatoDialog.extend({
     const settings = {
       audioEnabled: this.$('#field-audio input').is(':checked'),
       squigs: this.$('#field-squigs input').is(':checked'),
-      volume: this.volumeSlider.bootstrapSlider('getValue')
+      volume: this.volumeSlider.bootstrapSlider('getValue'),
     };
 
     if (app.isChinese()) {
@@ -134,5 +134,5 @@ module.exports = GelatoDialog.extend({
     if (checked.length === 0) {
       $(event.target).prop('checked', true);
     }
-  }
+  },
 });

@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * Displays study settings that a user can customize for a VocabList.
@@ -15,14 +15,14 @@ module.exports = BootstrapDialog.extend({
   initialize: function(options) {
     this.vocablist = options.vocablist;
     if (!this.vocablist) {
-      throw new Error('VocablistSettingsDialog requires a vocablist passed in!')
+      throw new Error('VocablistSettingsDialog requires a vocablist passed in!');
     }
     if (!this.vocablist.get('sections')) {
       this.vocablist.fetch({
         data: {
           include_user_names: 'true',
-          includeSectionCompletion: 'true'
-        }
+          includeSectionCompletion: 'true',
+        },
       });
 
       // hack until state event and property works
@@ -49,7 +49,7 @@ module.exports = BootstrapDialog.extend({
    * @method renderContent
    */
   renderContent: function() {
-    var rendering = $(this.template(this.getContext()));
+    let rendering = $(this.template(this.getContext()));
     this.$('.modal-content').replaceWith(rendering.find('.modal-content'));
   },
   /**
@@ -58,7 +58,7 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #close-btn': 'handleClickCloseButton',
-    'click #save-btn': 'handleClickSaveButton'
+    'click #save-btn': 'handleClickSaveButton',
   },
   /**
    * @method handleClickCloseButton
@@ -71,35 +71,35 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickSaveButton
    */
   handleClickSaveButton: function() {
-    var sections = this.vocablist.get('sections');
-    var getVals = function(el) {
+    let sections = this.vocablist.get('sections');
+    let getVals = function(el) {
       return $(el).val();
     };
 
-    var attributes = {
+    let attributes = {
       id: this.vocablist.id,
       studyingMode: this.$el.find('input[name="studyingMode"]:checked').val(),
       partsStudying: $.map(this.$el.find('input[name="partsStudying"]:checked'), getVals),
       limitSentenceParts: this.$el.find('input[name="limitSentenceParts"]').is(':checked'),
     };
 
-    var studyAllListWritingsEl = this.$el.find('input[name="studyAllListWritings"]');
+    let studyAllListWritingsEl = this.$el.find('input[name="studyAllListWritings"]');
     if (studyAllListWritingsEl.length) {
       attributes.studyAllListWritings = studyAllListWritingsEl.is(':checked');
     }
 
-    var currentSectionSelect = this.$el.find('select[name="currentSection"]');
+    let currentSectionSelect = this.$el.find('select[name="currentSection"]');
     if (currentSectionSelect.length) {
       attributes.currentSection = currentSectionSelect.val();
     }
 
-    var skipSectionsInputs = this.$el.find('input[name="sectionsSkipping"]');
+    let skipSectionsInputs = this.$el.find('input[name="sectionsSkipping"]');
     if (skipSectionsInputs.length) {
-      var skippingInputs = skipSectionsInputs.filter(':not(:checked)');
+      let skippingInputs = skipSectionsInputs.filter(':not(:checked)');
       attributes.sectionsSkipping = $.map(skippingInputs, getVals);
     }
 
-    var autoSectionMovementEl = this.$el.find('input[name="autoSectionMovement"]');
+    let autoSectionMovementEl = this.$el.find('input[name="autoSectionMovement"]');
     if (autoSectionMovementEl.length) {
       attributes.autoSectionMovement = autoSectionMovementEl.is(':not(:checked)');
     }
@@ -110,9 +110,9 @@ module.exports = BootstrapDialog.extend({
 
     this.vocablist.set(attributes).save(attributes, {
       patch: true,
-      url: app.getApiUrl() + this.vocablist.url() + "?includeSectionCompletion=true"
+      url: app.getApiUrl() + this.vocablist.url() + '?includeSectionCompletion=true',
     });
 
     this.close();
-  }
+  },
 });

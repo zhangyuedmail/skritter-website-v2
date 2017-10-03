@@ -11,7 +11,7 @@ const StudyPromptReviewStatusComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click #save-reviews': 'handleClickSaveReviews'
+    'click #save-reviews': 'handleClickSaveReviews',
   },
 
   /**
@@ -48,7 +48,7 @@ const StudyPromptReviewStatusComponent = GelatoComponent.extend({
   handleClickSaveReviews: function(event) {
     event.preventDefault();
     this.prompt.page.items.reviews.post();
-  }
+  },
 
 });
 

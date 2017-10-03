@@ -53,7 +53,7 @@ const VocabModel = SkritterModel.extend({
       definitions: {},
       filler: false,
       kana: false,
-      vocabIds: []
+      vocabIds: [],
     };
   },
 
@@ -98,7 +98,7 @@ const VocabModel = SkritterModel.extend({
           }
           self.state = 'standby';
           resolve(sentence);
-        }
+        },
       });
     });
   },
@@ -124,7 +124,7 @@ const VocabModel = SkritterModel.extend({
    * @returns {Array}
    */
   getCharactersWithoutFillers: function() {
-    return _.filter(this.get('writing').split(''), writing => {
+    return _.filter(this.get('writing').split(''), (writing) => {
       return !_.includes(app.config.writingFillers, writing);
     });
   },
@@ -147,7 +147,7 @@ const VocabModel = SkritterModel.extend({
           id: base,
           filler: true,
           lang: lang,
-          writing: characters[i]
+          writing: characters[i],
         });
 
         this.collection.add(containedVocab);
@@ -157,7 +157,7 @@ const VocabModel = SkritterModel.extend({
     }
 
     if (excludeFillers) {
-      return _.filter(containedVocabs, vocab => !vocab.get('filler'));
+      return _.filter(containedVocabs, (vocab) => !vocab.get('filler'));
     }
 
     return containedVocabs;
@@ -404,7 +404,7 @@ const VocabModel = SkritterModel.extend({
 
           tones[b] = Array.isArray(tones[b]) ? tones[b].concat(tone) : [tone];
 
-          //TODO: make tests to verify neutral tone wimps
+          // TODO: make tests to verify neutral tone wimps
           if (NeutralTones.isWimp(containedWriting, wordWriting, b)) {
             tones[b] = tones[b].concat(contained[b].getTones()[0]);
           }
@@ -455,7 +455,7 @@ const VocabModel = SkritterModel.extend({
     if (_.isObject(vocabId)) {
       writing = vocabId.get('writing');
       vocabId = vocabId.id;
-    } else if (_.isString(vocabId)){
+    } else if (_.isString(vocabId)) {
       writing = app.fn.mapper.fromBase(vocabId);
     } else {
       vocabId = this.id;
@@ -466,7 +466,6 @@ const VocabModel = SkritterModel.extend({
       this.get('writing').split(),
       writing.split(),
       function(thisChar, otherChar) {
-
         // the simplified character
         let idChar = vocabId.split('-')[1];
 
@@ -474,7 +473,6 @@ const VocabModel = SkritterModel.extend({
         let res = null;
 
         if (thisChar === otherChar) {
-
           // Means we got two traditional characters back.
           // The id char is simplified, so send that back
           if (thisChar !== idChar) {
@@ -493,7 +491,7 @@ const VocabModel = SkritterModel.extend({
    * @method getDefinitionFontSize
    * @returns {number}
    */
-  getDefinitionFontSize () {
+  getDefinitionFontSize() {
     const definition = this.getDefinition();
     const definitionLength = definition.length;
     const screenWidth = app.getWidth();
@@ -632,7 +630,7 @@ const VocabModel = SkritterModel.extend({
       new Howl({
         src: [audio.url],
         format: ['mp3'],
-        volume: app.user.get('volume')
+        volume: app.user.get('volume'),
       }).play();
     }
 
@@ -657,14 +655,14 @@ const VocabModel = SkritterModel.extend({
         lang: app.getLanguage(),
         reading: this.get('reading'),
         traditionalWriting: this.get('writingTraditional'),
-        writing: this.get('writing')
+        writing: this.get('writing'),
       },
       error: function(error) {
         typeof callback === 'function' && callback(error);
       },
       success: function(result) {
         typeof callback === 'function' && callback(null, this.set(result.Vocab, {merge: true}));
-      }
+      },
     });
   },
 
@@ -744,7 +742,7 @@ const VocabModel = SkritterModel.extend({
       media.play();
       media.setVolume(app.user.get('volume'));
     }
-  }
+  },
 });
 
 module.exports = VocabModel;

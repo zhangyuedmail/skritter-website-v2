@@ -51,8 +51,8 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
    * @method renderGraph
    */
   renderGraph: function() {
-    var self = this;
-    var $linegraph = this.$('#linegraph');
+    let self = this;
+    let $linegraph = this.$('#linegraph');
 
     $linegraph.highcharts({
       chart: {
@@ -63,29 +63,29 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
       title: null,
       yAxis: {
         title: {
-          text: ''
+          text: '',
         },
         lineWidth: 0,
         minorGridLineWidth: 0,
         lineColor: 'transparent',
         labels: {
-          enabled: false
+          enabled: false,
         },
         minorTickLength: 0,
-        tickLength: 0
+        tickLength: 0,
       },
       xAxis: {
         lineWidth: 0,
         minorGridLineWidth: 0,
         lineColor: 'transparent',
         labels: {
-          enabled: false
+          enabled: false,
         },
         minorTickLength: 0,
-        tickLength: 0
+        tickLength: 0,
       },
       credits: {
-        enabled: false
+        enabled: false,
       },
       series: [{
         data: [0, 0, 0, 0, 0, 0, 0],
@@ -94,30 +94,30 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
           enabled: false,
           states: {
             hover: {
-              radius: 5
-            }
-          }
-        }
+              radius: 5,
+            },
+          },
+        },
       }],
       tooltip: {
         formatter: function() {
-          var partName = self.partName;
-          var date = self._getDateFromRangeOffset(this.key);
-          var verb = this.point.y >= 0 ? app.locale('pages.stats.learned') : app.locale('pages.stats.forgot');
-          var absY = Math.abs(this.point.y);
+          let partName = self.partName;
+          let date = self._getDateFromRangeOffset(this.key);
+          let verb = this.point.y >= 0 ? app.locale('pages.stats.learned') : app.locale('pages.stats.forgot');
+          let absY = Math.abs(this.point.y);
 
           // TODO: plural hack--get a proper string key for like defnPlural or something
           partName = absY !== 1 ? partName : partName.substring(0, partName.length - 1);
           return date + ' : ' + verb + ' <b>' + absY + '</b> ' + partName;
-        }
-      }
+        },
+      },
     });
 
     this._graph = $linegraph.highcharts();
   },
 
   _getDateFromRangeOffset: function(offset) {
-    var date = moment(this.range.start, 'YYYY-MM-DD');
+    let date = moment(this.range.start, 'YYYY-MM-DD');
     date.add(offset, 'days');
 
     return date.format('MM/DD');
@@ -132,9 +132,9 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
   setYAxisLabelText: function(text) {
     this._graph.yAxis[0].update({
       title: {
-        text: text || this.getYAxisLabelText()
+        text: text || this.getYAxisLabelText(),
       },
-      dateTimeLabelFormats: this._getYAxisDateTimeLabelFormats()
+      dateTimeLabelFormats: this._getYAxisDateTimeLabelFormats(),
     });
   },
 
@@ -150,10 +150,10 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
     const rangeData = this.getRangeData();
 
     // total change number
-    let totalStr = "";
+    let totalStr = '';
 
     if (rangeData.totalChangeLearned > 0) {
-      totalStr = "+";
+      totalStr = '+';
     }
 
     totalStr += rangeData.totalChangeLearned;
@@ -163,7 +163,7 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
     chartData.setData(rangeData.chartData);
 
 
-    this.$('#num-learned').text(totalStr !== "0" ? totalStr : '')
+    this.$('#num-learned').text(totalStr !== '0' ? totalStr : '')
       .toggleClass('good', rangeData.totalChangeLearned > 0)
       .toggleClass('bad', rangeData.totalChangeLearned < 0);
 
@@ -215,7 +215,7 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
       studied,
       remembered,
       retentionRate,
-      added: this._getAdded(stats)
+      added: this._getAdded(stats),
     };
   },
 
@@ -224,15 +224,15 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
       return 0;
     }
 
-    var start = stats[0];
-    var end = stats[stats.length - 1];
+    let start = stats[0];
+    let end = stats[stats.length - 1];
 
-    var addedStartDate = start.learned.all + start.learning.all;
-    var addedEndDate = end.learned.all + end.learning.all;
-    var totalAdded = addedEndDate - addedStartDate;
+    let addedStartDate = start.learned.all + start.learning.all;
+    let addedEndDate = end.learned.all + end.learning.all;
+    let totalAdded = addedEndDate - addedStartDate;
 
     return totalAdded;
-  }
+  },
 
 });
 

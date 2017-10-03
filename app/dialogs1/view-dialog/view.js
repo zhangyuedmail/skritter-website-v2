@@ -8,7 +8,7 @@ const GelatoDialog = require('gelato/dialog');
 const ViewDialog = GelatoDialog.extend({
 
   events: {
-    'click #button-cancel': 'handleClickButtonCancel'
+    'click #button-cancel': 'handleClickButtonCancel',
   },
 
   /**
@@ -19,7 +19,7 @@ const ViewDialog = GelatoDialog.extend({
    */
   initialize: function(options) {
     if (!options || !options.content || typeof options.content !== 'function') {
-      throw "View constructor function must be sent as option to dialog";
+      throw 'View constructor function must be sent as option to dialog';
     }
 
     this.showCloseButton = options.showCloseButton || false;
@@ -55,7 +55,7 @@ const ViewDialog = GelatoDialog.extend({
   handleClickButtonCancel: function(event) {
     event.preventDefault();
     this.close();
-  }
+  },
 });
 
 module.exports = ViewDialog;

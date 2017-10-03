@@ -17,7 +17,7 @@ module.exports = GelatoComponent.extend({
     'click #button-vocab-ban': 'handleClickButtonVocabBan',
     'click #button-vocab-edit': 'handleClickButtonVocabEdit',
     'click #button-vocab-info': 'handleClickButtonVocabInfo',
-    'click #button-vocab-star': 'handleClickButtonVocabStar'
+    'click #button-vocab-star': 'handleClickButtonVocabStar',
   },
 
   /**
@@ -93,11 +93,11 @@ module.exports = GelatoComponent.extend({
    * @param {Event} event
    */
   handleClickButtonVocabBan: function(event) {
-    var self = this;
+    let self = this;
     event.preventDefault();
     this.dialog = new ConfirmItemBanDialog({
       item: this.prompt.reviews.item,
-      vocab: this.prompt.reviews.vocab
+      vocab: this.prompt.reviews.vocab,
     });
     this.dialog.once('confirm', function() {
       self.prompt.next(true);
@@ -141,5 +141,5 @@ module.exports = GelatoComponent.extend({
     this.prompt.reviews.vocab.toggleStarred();
     this.prompt.reviews.vocab.save();
     this.render();
-  }
+  },
 });

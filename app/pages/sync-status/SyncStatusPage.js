@@ -12,7 +12,7 @@ const SyncStatusPage = GelatoPage.extend({
    */
   events: {
     'click #reset-now': 'handleResetNow',
-    'click #sync-now': 'handleSyncNow'
+    'click #sync-now': 'handleSyncNow',
   },
 
   /**
@@ -65,7 +65,7 @@ const SyncStatusPage = GelatoPage.extend({
    */
   remove: function() {
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 
 });
 

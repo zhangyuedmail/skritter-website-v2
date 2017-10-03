@@ -36,7 +36,7 @@ const PaymentCollection = BaseSkritterCollection.extend({
     this.cursor = response.cursor;
 
     return response.Payments;
-  }
+  },
 });
 
 module.exports = PaymentCollection;

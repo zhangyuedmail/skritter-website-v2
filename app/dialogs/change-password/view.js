@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class ChangePasswordDialog
@@ -24,7 +24,7 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #button-change': 'handleClickButtonChange',
-    'click #button-close': 'handleClickButtonClose'
+    'click #button-close': 'handleClickButtonClose',
   },
   /**
    * @method handleClickButtonClose
@@ -40,18 +40,18 @@ module.exports = BootstrapDialog.extend({
    */
   handleClickButtonChange: function(event) {
     event.preventDefault();
-    var password1 = this.$('#field-password1').val();
-    var password2 = this.$('#field-password2').val();
+    let password1 = this.$('#field-password1').val();
+    let password2 = this.$('#field-password2').val();
     this.$('#error-message').empty();
     this.$('form').prop('disabled', true);
     if (password1 !== password2) {
-      this.$('#error-message').text("Passwords must match.");
+      this.$('#error-message').text('Passwords must match.');
       this.$('form').prop('disabled', false);
       return;
     }
     app.user.save(
       {
-        password: password1
+        password: password1,
       },
       {
         error: (function(error) {
@@ -60,8 +60,8 @@ module.exports = BootstrapDialog.extend({
         }).bind(this),
         success: (function() {
           this.close();
-        }).bind(this)
+        }).bind(this),
       }
     );
-  }
+  },
 });

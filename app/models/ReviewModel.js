@@ -18,9 +18,9 @@ const ReviewModel = SkritterModel.extend({
    */
   defaults: function() {
     return {
-      data: []
+      data: [],
     };
-  }
+  },
 
 });
 

@@ -13,7 +13,7 @@ module.exports = GelatoPage.extend({
    * @type {Object}
    */
   events: {
-    'click .stats-section-selector': 'handleStatsSectionSelectorClicked'
+    'click .stats-section-selector': 'handleStatsSectionSelectorClicked',
   },
 
   /**
@@ -47,10 +47,10 @@ module.exports = GelatoPage.extend({
     }});
 
     this._views['summary'] = new StatsSummaryComponent({
-      collection: app.user.stats
+      collection: app.user.stats,
     });
     this._views['timeline'] = new StatsTimelineComponent({
-      collection: app.user.stats
+      collection: app.user.stats,
     });
 
     // if (app.config.recordLoadTimes) {
@@ -81,7 +81,6 @@ module.exports = GelatoPage.extend({
    * @param {jQuery.Event} event a click event
    */
   handleStatsSectionSelectorClicked: function(event) {
-
     // TODO: re-enable when we have enough stats to call for dividing this into sections
     return;
 
@@ -149,5 +148,5 @@ module.exports = GelatoPage.extend({
     this.loadAlreadyTimed = true;
     const loadTime = window.performance.now() - this.loadStart;
     app.loadTimes.pages.stats.push(loadTime);
-  }
+  },
 });

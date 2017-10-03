@@ -13,7 +13,7 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
    */
   events: {
     'click .add-to-queue-link': 'handleClickAddToQueueLink',
-    'click #load-more-btn': 'handleClickLoadMoreButton'
+    'click #load-more-btn': 'handleClickLoadMoreButton',
   },
 
   /**
@@ -37,11 +37,11 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
         lang: app.getLanguage(),
         languageCode: app.getLanguage(),
         limit: 20,
-        sort: 'published'
+        sort: 'published',
       },
       success: function() {
         self.trigger('component:loaded', 'table');
-      }
+      },
     });
   },
 
@@ -60,8 +60,8 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
    */
   handleClickAddToQueueLink: function(event) {
     event.preventDefault();
-    var listID = $(event.target).closest('.add-to-queue-link').data('vocablist-id');
-    var vocablist = this.vocablists.get(listID);
+    let listID = $(event.target).closest('.add-to-queue-link').data('vocablist-id');
+    let vocablist = this.vocablists.get(listID);
     if (vocablist.get('studyingMode') !== 'not studying') {
       return;
     }
@@ -85,9 +85,9 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
         lang: app.getLanguage(),
         languageCode: app.getLanguage(),
         limit: 20,
-        sort: 'published'
+        sort: 'published',
       },
-      remove: false
+      remove: false,
     });
     this.render();
   },
@@ -99,7 +99,6 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
   searchFor: function(value) {
     if (value) {
       if (app.config.recordLoadTimes) {
-
        // we actually want var here because of block scoping stuff.
        var searchStartTime = window.performance.now();
       }
@@ -110,7 +109,7 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
           lang: app.getLanguage(),
           languageCode: app.getLanguage(),
           sort: 'search',
-          q: value
+          q: value,
         },
         remove: true,
         success: function() {
@@ -118,7 +117,7 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
             const loadTime = window.performance.now() - searchStartTime;
             app.loadTimes.pages.vocablistsSearch.push(loadTime);
           }
-        }
+        },
       });
     } else {
       this.vocablists.fetch({
@@ -127,14 +126,14 @@ const VocablistsPublishedTableComponents = GelatoComponent.extend({
           lang: app.getLanguage(),
           languageCode: app.getLanguage(),
           limit: 20,
-          sort: 'published'
+          sort: 'published',
         },
-        remove: true
+        remove: true,
       });
     }
     this.vocablists.reset();
     this.render();
-  }
+  },
 
 });
 

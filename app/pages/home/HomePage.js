@@ -12,7 +12,7 @@ const HomePage = GelatoPage.extend({
    */
   events: {
     'click #link-apple-store': 'handleClickLinkAppleStore',
-    'click #link-google-store': 'handleClickLinkGoogleStore'
+    'click #link-google-store': 'handleClickLinkGoogleStore',
   },
 
   /**
@@ -101,11 +101,11 @@ const HomePage = GelatoPage.extend({
         height: '360',
         width: '640',
         events: {
-          onStateChange: this.handleYouTubeStateChangePromoVideo.bind(this)
-        }
+          onStateChange: this.handleYouTubeStateChangePromoVideo.bind(this),
+        },
       }
     );
-  }
+  },
 });
 
 module.exports = HomePage;

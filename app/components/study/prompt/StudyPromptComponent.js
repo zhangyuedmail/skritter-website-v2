@@ -43,7 +43,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click .dropdown-toggle': 'handleClickDropdownToggle'
+    'click .dropdown-toggle': 'handleClickDropdownToggle',
   },
 
   /**
@@ -55,7 +55,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     _.bindAll(this, 'stopAutoAdvance');
     options = options || {};
 
-    //properties
+    // properties
     this.$inputContainer = null;
     this.$panelLeft = null;
     this.$panelRight = null;
@@ -80,7 +80,7 @@ const StudyPromptComponent = GelatoComponent.extend({
      */
     this.showGradingButtons = options.showGradingButtons !== undefined ? options.showGradingButtons : true;
 
-    //components
+    // components
     this.canvas = new Canvas({prompt: this});
     this.navigation = new Navigation({prompt: this});
     this.reviewStatus = new ReviewStatus({prompt: this});
@@ -116,7 +116,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    */
   render: function() {
     if (app.isMobile()) {
-      this.template = require('./MobileStudyPromptComponent.jade')
+      this.template = require('./MobileStudyPromptComponent.jade');
     }
 
     this.renderTemplate();
@@ -132,7 +132,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.toolbarAction.setElement('#toolbar-action-container').render();
     this.toolbarGrading.setElement('#toolbar-grading-container').render({
       showGradingButtons: this.showGradingButtons,
-      showTapToAdvanceText: this.showTapToAdvanceText
+      showTapToAdvanceText: this.showTapToAdvanceText,
     });
     this.toolbarVocab.setElement('#toolbar-vocab-container').render();
     this.tutorial.setElement('#tutorial-container').render().hide();
@@ -357,13 +357,12 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @returns {StudyPromptComponent}
    */
   resize: function() {
-
     // need to set these values first before getInputSize will return the
     // right value on mobile since it relies on the #panel-left height
     // to calculate
     if (app.isMobile()) {
       // set prompt height based on toolbar and screen height
-      this.$el.height(app.getHeight() - $('#navbar-container').height() -  ($('.demo-progress-component').height() || 0) - 10);
+      this.$el.height(app.getHeight() - $('#navbar-container').height() - ($('.demo-progress-component').height() || 0) - 10);
 
       // set size of panel left for absolute positioning of toolbar buttons
       this.$panelLeft.height(this.getHeight() - this.$panelRight.height());
@@ -380,7 +379,6 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.canvas.resize();
 
     if (app.isMobile()) {
-
       // use vh to make button height more dynamic on different screen sizes
       this.$toolbarContainer.css({height: '5vh'});
     } else {
@@ -455,7 +453,6 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.$('#navigate-next').attr('style', styleStr);
 
     if (this.review.get('showTeaching')) {
-
       score = 3;
     }
 
@@ -464,7 +461,6 @@ const StudyPromptComponent = GelatoComponent.extend({
     }
 
     this._autoAdvanceListenerId = setTimeout(() => {
-
       // if by some other means this listener should have already been stopped,
       // make sure we don't double fire
       if (!this._autoAdvanceListenerId) {
@@ -529,7 +525,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * Preloads vocab information for popup dialog.
    * @private
    */
-  _preloadVocabInfo: function () {
+  _preloadVocabInfo: function() {
     const self = this;
     const vocabId = this.reviews.vocab.id;
     const items = new Items();
@@ -554,7 +550,7 @@ const StudyPromptComponent = GelatoComponent.extend({
                     include_heisigs: true,
                     include_sentences: false,
                     include_top_mnemonics: true,
-                    ids: vocabId
+                    ids: vocabId,
                   },
                   error: function(error) {
                     callback(error);
@@ -562,11 +558,11 @@ const StudyPromptComponent = GelatoComponent.extend({
                   success: function(vocabs) {
                     wordVocabs = vocabs;
                     callback();
-                  }
+                  },
                 });
               },
               function(callback) {
-                vocabs.at(0).fetchSentence().then(sentence => {
+                vocabs.at(0).fetchSentence().then((sentence) => {
                   vocabs.sentences.add(sentence);
                   callback();
                 });
@@ -575,7 +571,7 @@ const StudyPromptComponent = GelatoComponent.extend({
                 if (vocabs.at(0).has('containedVocabIds')) {
                   vocabs.fetch({
                     data: {
-                      ids: vocabs.at(0).get('containedVocabIds').join('|')
+                      ids: vocabs.at(0).get('containedVocabIds').join('|'),
                     },
                     remove: false,
                     error: function(error) {
@@ -584,7 +580,7 @@ const StudyPromptComponent = GelatoComponent.extend({
                     success: function(vocabs) {
                       wordVocabs = vocabs;
                       callback(null);
-                    }
+                    },
                   });
                 } else {
                   callback();
@@ -594,7 +590,7 @@ const StudyPromptComponent = GelatoComponent.extend({
                 if (app.router.page.title.indexOf('Demo') === -1) {
                   items.fetch({
                     data: {
-                      vocab_ids: vocabId
+                      vocab_ids: vocabId,
                     },
                     error: function(error) {
                       callback(error);
@@ -602,24 +598,23 @@ const StudyPromptComponent = GelatoComponent.extend({
                     success: function(items) {
                       wordItems = items;
                       callback(null);
-                    }
+                    },
                   });
                 } else {
-
                   // skip fetch for the demo--user isn't logged in and
                   // doesn't have items to fetch
                   callback();
                 }
-              }
+              },
             ],
             callback
-          )
+          );
         },
         function(callback) {
           vocabsContaining.fetch({
             data: {
               include_containing: true,
-              q: vocabId
+              q: vocabId,
             },
             error: function(error) {
               callback(error);
@@ -627,9 +622,9 @@ const StudyPromptComponent = GelatoComponent.extend({
             success: function(vocabs) {
               wordVocabsContaining = vocabs;
               callback();
-            }
+            },
           });
-        }
+        },
       ],
       function(error) {
         if (error) {
@@ -639,7 +634,7 @@ const StudyPromptComponent = GelatoComponent.extend({
             id: wordVocabs.at(0).id,
             items: wordItems,
             vocabs: wordVocabs,
-            vocabsContaining: wordVocabsContaining
+            vocabsContaining: wordVocabsContaining,
           };
 
           vocabInfo.vocabsContaining.remove(vocabId);
@@ -651,7 +646,7 @@ const StudyPromptComponent = GelatoComponent.extend({
         }
       }
     );
-  }
+  },
 });
 
 module.exports = StudyPromptComponent;
