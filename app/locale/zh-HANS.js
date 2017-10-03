@@ -1,12 +1,12 @@
 module.exports = {
 
-  "code": "zh-HANS",
-  "languageEnglish": "Chinese (Simplified)",
-  "languageNative": "中文",
-  "title": "Skritter",
+  'code': 'zh-HANS',
+  'languageEnglish': 'Chinese (Simplified)',
+  'languageNative': '中文',
+  'title': 'Skritter',
 
-  "pages": {
-    "home": {}
-  }
+  'pages': {
+    'home': {},
+  },
 
 };

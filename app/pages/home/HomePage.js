@@ -12,7 +12,7 @@ const HomePage = GelatoPage.extend({
    */
   events: {
     'click #link-apple-store': 'handleClickLinkAppleStore',
-    'click #link-google-store': 'handleClickLinkGoogleStore'
+    'click #link-google-store': 'handleClickLinkGoogleStore',
   },
 
   /**
@@ -38,7 +38,7 @@ const HomePage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     app.mixpanel.track('Viewed home page');
   },
 
@@ -46,7 +46,7 @@ const HomePage = GelatoPage.extend({
    * @method render
    * @returns {HomePage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileHome');
       this.showFooter = false;
@@ -65,7 +65,7 @@ const HomePage = GelatoPage.extend({
    * @method handleClickLinkAppleStore
    * @param {Event} event
    */
-  handleClickLinkAppleStore: function(event) {
+  handleClickLinkAppleStore: function (event) {
     event.preventDefault();
     app.mixpanel.track('Clicked ios app button');
     window.open('https://itunes.apple.com/us/artist/inkren-llc/id402280587', '_blank');
@@ -75,7 +75,7 @@ const HomePage = GelatoPage.extend({
    * @method handleClickLinkGoogleStore
    * @param {Event} event
    */
-  handleClickLinkGoogleStore: function(event) {
+  handleClickLinkGoogleStore: function (event) {
     event.preventDefault();
     app.mixpanel.track('Clicked android app button');
     window.open('https://play.google.com/store/apps/developer?id=Skritter', '_blank');
@@ -84,7 +84,7 @@ const HomePage = GelatoPage.extend({
   /**
    * @method handleYouTubeStateChangePromoVideo
    */
-  handleYouTubeStateChangePromoVideo: function(event) {
+  handleYouTubeStateChangePromoVideo: function (event) {
     if (event.data === -1) {
       app.mixpanel.track('Started home promo video');
     }
@@ -93,7 +93,7 @@ const HomePage = GelatoPage.extend({
   /**
    * @method handleYouTubeIframeAPIReady
    */
-  handleYouTubeIframeAPIReady: function() {
+  handleYouTubeIframeAPIReady: function () {
     new YT.Player(
       'promo-video',
       {
@@ -101,11 +101,11 @@ const HomePage = GelatoPage.extend({
         height: '360',
         width: '640',
         events: {
-          onStateChange: this.handleYouTubeStateChangePromoVideo.bind(this)
-        }
+          onStateChange: this.handleYouTubeStateChangePromoVideo.bind(this),
+        },
       }
     );
-  }
+  },
 });
 
 module.exports = HomePage;

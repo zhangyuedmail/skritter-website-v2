@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class ProgressDialog
@@ -14,7 +14,7 @@ module.exports = BootstrapDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.title = _.result(options, 'title');
     this.showBar = _.result(options, 'showBar', true);
   },
@@ -22,7 +22,7 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {ProgressDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -31,7 +31,7 @@ module.exports = BootstrapDialog.extend({
    * @method setProgress
    * @param {Number} percent
    */
-  setProgress: function(percent) {
-    this.$('.progress-bar').css('width', percent + '%')
-  }
+  setProgress: function (percent) {
+    this.$('.progress-bar').css('width', percent + '%');
+  },
 });

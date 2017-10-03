@@ -30,7 +30,7 @@ const GelatoPage = GelatoView.extend({
    */
   showNavbar: true,
 
-  constructor: function() {
+  constructor: function () {
     GelatoView.prototype.constructor.apply(this, arguments);
   },
 
@@ -39,7 +39,7 @@ const GelatoPage = GelatoView.extend({
    * @param {Object} [context]
    * @returns {GelatoPage}
    */
-  renderTemplate: function(context) {
+  renderTemplate: function (context) {
     app.setTitle(this.title);
 
     GelatoView.prototype.renderTemplate.call(this, context);
@@ -51,9 +51,9 @@ const GelatoPage = GelatoView.extend({
    * @method remove
    * @returns {GelatoPage}
    */
-  remove: function() {
+  remove: function () {
     return GelatoView.prototype.remove.call(this);
-  }
+  },
 });
 
 module.exports = GelatoPage;

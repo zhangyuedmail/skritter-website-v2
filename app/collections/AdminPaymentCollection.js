@@ -18,7 +18,7 @@ const AdminPaymentCollection = GelatoCollection.extend({
      * @param {Object} response
      * @returns Array
      */
-    parse: function(response) {
+    parse: function (response) {
         return response.Payments;
     },
 
@@ -26,7 +26,7 @@ const AdminPaymentCollection = GelatoCollection.extend({
      * @property url
      * @type {String}
      */
-    url: function() {
+    url: function () {
         return app.get('nodeApiRoot') + '/v1/admin/payments?token=' + app.user.session.get('access_token');
     },
 
@@ -34,18 +34,18 @@ const AdminPaymentCollection = GelatoCollection.extend({
      * @method getTotalByDate
      * @returns {Object}
      */
-    getTotalByDate: function() {
-        var totals = {};
-        var groups = _.groupBy(
+    getTotalByDate: function () {
+        let totals = {};
+        let groups = _.groupBy(
             this.models,
-            function(payment) {
+            function (payment) {
                 return payment.get('date');
             }
         );
         _.forEach(
             groups,
-            function(payments, key) {
-                 var date = {
+            function (payments, key) {
+                 let date = {
                      newTotal: 0,
                      newApple: 0,
                      newGoogle: 0,
@@ -55,11 +55,11 @@ const AdminPaymentCollection = GelatoCollection.extend({
                      returningApple: 0,
                      returningGoogle: 0,
                      returningPaypal: 0,
-                     returningStripe: 0
+                     returningStripe: 0,
                  };
                 _.forEach(
                     payments,
-                    function(payment) {
+                    function (payment) {
                         if (payment.isInitialPayment()) {
                             date.newTotal++;
                             switch (payment.get('method')) {
@@ -100,7 +100,7 @@ const AdminPaymentCollection = GelatoCollection.extend({
         );
 
         return totals;
-    }
+    },
 });
 
 module.exports = AdminPaymentCollection;

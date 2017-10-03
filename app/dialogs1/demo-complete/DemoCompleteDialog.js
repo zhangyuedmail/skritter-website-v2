@@ -1,4 +1,4 @@
-var GelatoDialog = require('base/gelato-dialog');
+let GelatoDialog = require('base/gelato-dialog');
 
 /**
  * @class DemoCallToActionDialog
@@ -9,7 +9,7 @@ module.exports = GelatoDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
   },
   /**
    * @property events
@@ -17,7 +17,7 @@ module.exports = GelatoDialog.extend({
    */
   events: {
     'click #button-back': 'handleClickButtonBack',
-    'click #button-signup': 'handleClickButtonSignup'
+    'click #button-signup': 'handleClickButtonSignup',
   },
   /**
    * @property template
@@ -28,7 +28,7 @@ module.exports = GelatoDialog.extend({
    * @method render
    * @returns {DemoCallToActionDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -36,23 +36,22 @@ module.exports = GelatoDialog.extend({
    * @method handleClickButtonBack
    * @param {Event} event
    */
-  handleClickButtonBack: function(event) {
+  handleClickButtonBack: function (event) {
     event.preventDefault();
     this.close();
-    this.once('hidden', function() {
+    this.once('hidden', function () {
       app.router.navigate('', {trigger: true});
     });
-
   },
   /**
    * @method handleClickButtonSignup
    * @param {Event} event
    */
-  handleClickButtonSignup: function(event) {
+  handleClickButtonSignup: function (event) {
     event.preventDefault();
     this.close();
-    this.once('hidden', function() {
+    this.once('hidden', function () {
       app.router.navigate('signup', {trigger: true});
     });
-  }
+  },
 });

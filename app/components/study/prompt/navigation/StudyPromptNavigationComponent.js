@@ -12,7 +12,7 @@ const StudyPromptNavigationComponent = GelatoComponent.extend({
    */
   events: {
     'click #navigate-next': 'handleClickNavigateNext',
-    'click #navigate-previous': 'handleClickNavigatePrevious'
+    'click #navigate-previous': 'handleClickNavigatePrevious',
   },
 
   /**
@@ -26,7 +26,7 @@ const StudyPromptNavigationComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
     this.showLeft = true;
     this.showRight = true;
@@ -40,7 +40,7 @@ const StudyPromptNavigationComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptNavigationComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this.$leftArrow = this.$('#navigate-previous');
@@ -57,7 +57,7 @@ const StudyPromptNavigationComponent = GelatoComponent.extend({
   /**
    * Updates view elements based on the current state of the application
    */
-  update: function() {
+  update: function () {
     if (this.prompt.reviews) {
       const shouldShowLeftArrow = this.showLeft &&
         !this.prompt.reviews.isFirst() && this.prompt.page.items.reviews.length &&
@@ -75,7 +75,7 @@ const StudyPromptNavigationComponent = GelatoComponent.extend({
    * @method handleClickNavigateNext
    * @param {Event} event
    */
-  handleClickNavigateNext: function(event) {
+  handleClickNavigateNext: function (event) {
     event.preventDefault();
     this.prompt.next();
   },
@@ -84,10 +84,10 @@ const StudyPromptNavigationComponent = GelatoComponent.extend({
    * @method handleClickNavigatePrevious
    * @param {Event} event
    */
-  handleClickNavigatePrevious: function(event) {
+  handleClickNavigatePrevious: function (event) {
     event.preventDefault();
     this.prompt.previous();
-  }
+  },
 
 });
 

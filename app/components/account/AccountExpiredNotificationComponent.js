@@ -14,7 +14,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    */
   events: {
     'click #hide-sub-expired': 'handleHideSubscriptionExpiredNotice',
-    'click #reload-page-btn': 'handleClickReloadPage'
+    'click #reload-page-btn': 'handleClickReloadPage',
   },
 
   /**
@@ -27,7 +27,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    * @method initialize
    * @param {Object} [options]
    */
-  initialize: function(options) {
+  initialize: function (options) {
     _.bindAll(this, 'updateSubscriptionState', 'errorFetchingSubscription');
 
     this.errorFetchingData = false;
@@ -41,7 +41,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    * @method render
    * @returns {ExpiredNotificationComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     app.user.isSubscriptionActive(this.updateSubscriptionState, this.errorFetchingSubscription);
@@ -54,7 +54,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    * Notifies the user of network issues.
    * @param error
    */
-  errorFetchingSubscription: function(error) {
+  errorFetchingSubscription: function (error) {
     this.errorFetchingData = true;
     this.updateSubscriptionState();
     this.trigger('data-fetch:failed', 'accountExpired');
@@ -64,7 +64,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    * Reloads the page so that all the network requests can be retried
    * @param {jQuery.Event} event
    */
-  handleClickReloadPage: function(event) {
+  handleClickReloadPage: function (event) {
     app.reload();
   },
 
@@ -73,7 +73,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    * @param {jQuery.Event} event
    * @method handleHideSubscriptionExpiredNotice
    */
-  handleHideSubscriptionExpiredNotice: function(event) {
+  handleHideSubscriptionExpiredNotice: function (event) {
     event.preventDefault();
 
     app.setSetting('hideSubscriptionNotification', true);
@@ -86,13 +86,14 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
    * subscription status
    * @method updateSubscriptionState
    */
-  updateSubscriptionState: function() {
+  updateSubscriptionState: function () {
     const sub = app.user.subscription;
     const hide = app.getSetting('hideSubscriptionNotification');
-    let hideNotification, networkError;
+    let hideNotification;
+    let networkError;
 
     if (this.hideable) {
-      hideNotification = sub.getStatus() !== 'Expired' || hide
+      hideNotification = sub.getStatus() !== 'Expired' || hide;
     } else {
       hideNotification = sub.getStatus() !== 'Expired';
     }
@@ -117,7 +118,7 @@ const ExpiredNotificationComponent = GelatoComponent.extend({
         this.$('gelato-component').css({display: 'block'});
       }
     }
-  }
+  },
 
 });
 

@@ -21,7 +21,7 @@ const SubscriptionModel = SkritterModel.extend({
    * @method parse
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.Subscription || response;
   },
 
@@ -31,7 +31,7 @@ const SubscriptionModel = SkritterModel.extend({
    * @param {Model} model
    * @param {Object} options
    */
-  sync: function(method, model, options) {
+  sync: function (method, model, options) {
     options.headers = _.result(this, 'headers');
 
     if (!options.url) {
@@ -48,7 +48,7 @@ const SubscriptionModel = SkritterModel.extend({
   /**
    * @method getStatus
    */
-  getStatus: function() {
+  getStatus: function () {
     const subscribed = this.get('subscribed');
 
     if (subscribed === 'gplay') {
@@ -77,7 +77,7 @@ const SubscriptionModel = SkritterModel.extend({
    * @method isExpired
    * @returns {boolean}
    */
-  isExpired: function() {
+  isExpired: function () {
     return this.getStatus() === 'Expired';
   },
 
@@ -85,28 +85,28 @@ const SubscriptionModel = SkritterModel.extend({
    * @method isSubscribed
    * @returns {boolean}
    */
-  isSubscribed: function() {
+  isSubscribed: function () {
     return this.get('subscribed');
   },
 
   /**
    * @method restoreSubscription
    */
-  restoreSubscription: function() {
+  restoreSubscription: function () {
     if (app.isAndroid() && plugins.billing) {
       plugins.billing.getPurchases('subs')
-        .then(result => {
+        .then((result) => {
           if (result && result.length) {
               this.set('gplay_subscription', {
                 subscription: result[0].productId,
                 package: result[0].packageName,
-                token: result[0].purchaseToken
+                token: result[0].purchaseToken,
               }).save();
             }
           }
         );
     }
-  }
+  },
 
 });
 

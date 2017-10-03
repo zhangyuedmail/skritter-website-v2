@@ -16,7 +16,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
   events: {
     'click .add-amt': 'handleAddWordAmountClick',
     'click #button-add-item': 'handleClickAddItem',
-    'click #button-study-settings': 'handleClickStudySettings'
+    'click #button-study-settings': 'handleClickStudySettings',
   },
 
   /**
@@ -29,7 +29,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.dueCountOffset = 0;
     this.page = options.page;
 
@@ -54,7 +54,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyToolbarComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.timer.setElement('#timer-container').render();
 
@@ -68,10 +68,10 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * won't work if it's not active.
    * @method checkSubscription
    */
-  checkSubscription: function() {
-    var self = this;
+  checkSubscription: function () {
+    let self = this;
 
-    app.user.isSubscriptionActive(function(active) {
+    app.user.isSubscriptionActive(function (active) {
       if (!active) {
         self.$('#button-add-item').hide();
       }
@@ -82,8 +82,8 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * @method getDueCountWithOffset
    * @returns {Number}
    */
-  getDueCountWithOffset: function() {
-    var dueCount = this.page.items.dueCount - this.dueCountOffset;
+  getDueCountWithOffset: function () {
+    let dueCount = this.page.items.dueCount - this.dueCountOffset;
     return dueCount > 0 ? dueCount : 0;
   },
 
@@ -92,7 +92,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * Triggers an event to start the add item process for that amount.
    * @param {jQuery.Event} event the click event
    */
-  handleAddWordAmountClick: function(event) {
+  handleAddWordAmountClick: function (event) {
     const numItemsToAdd = $(event.target).data('amt');
 
     this.toggleAddWordsPopup();
@@ -106,7 +106,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * @param {jQuery.ClickEvent} event
    * @triggers items:add
    */
-  handleClickAddItem: function(event) {
+  handleClickAddItem: function (event) {
     if (this._adding) {
       return;
     }
@@ -117,14 +117,13 @@ const StudyToolbarComponent = GelatoComponent.extend({
   },
 
 
-
   /**
    * Triggers an event to show a study settings popup.
    * @method handleClickStudySettings
    * @param {jQuery.ClickEvent} event
    * @triggers studySettings:show
    */
-  handleClickStudySettings: function(event) {
+  handleClickStudySettings: function (event) {
     event.preventDefault();
 
     vent.trigger('studySettings:show');
@@ -133,7 +132,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
   /**
    * @method handleUpdateDueCount
    */
-  handleUpdateDueCount: function() {
+  handleUpdateDueCount: function () {
     this.dueCountOffset = 0;
     this.render();
   },
@@ -142,7 +141,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * @function remove
    * @returns {StudyToolbarComponent}
    */
-  remove: function() {
+  remove: function () {
     this.timer.remove();
     $(document).off('click', this.toggleAddWordsPopup);
 
@@ -154,9 +153,9 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * @param event
    * @param show
    */
-  toggleAddWordsPopup: function(event, show) {
+  toggleAddWordsPopup: function (event, show) {
     if (event && event.stopPropagation()) {
-      event.stopPropagation()
+      event.stopPropagation();
     }
 
     this.$('#add-popup').toggleClass('hidden', !show);
@@ -173,7 +172,7 @@ const StudyToolbarComponent = GelatoComponent.extend({
    * @param {Number} [num] the number of items added
    * @param {Boolean} [adding] whether items are currently being added
    */
-  updateAddButton: function(num, adding) {
+  updateAddButton: function (num, adding) {
     adding = adding || false;
 
     this._adding = adding;
@@ -183,9 +182,9 @@ const StudyToolbarComponent = GelatoComponent.extend({
   /**
    * @method updateTimerOffset
    */
-  updateTimerOffset: function(stats) {
+  updateTimerOffset: function (stats) {
     this.timer.setServerOffset(stats.getDailyTimeStudied());
-  }
+  },
 
 });
 

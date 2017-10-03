@@ -31,7 +31,7 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
     'click #send-validation-email-btn': 'handleClickValidationEmailButton',
     'click #update-school-subscription-btn': 'handleClickSubscribeSchoolButton',
     'click .restore-android': 'handleClickRestoreAndroid',
-    'click .subscribe-android': 'handleClickSubscribeAndroid'
+    'click .subscribe-android': 'handleClickSubscribeAndroid',
   },
 
   /**
@@ -41,12 +41,12 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   paypalPlans: [
     {
       key: 'Month Plan',
-      fullName: 'Month Plan : $14.99 USD - monthly'
+      fullName: 'Month Plan : $14.99 USD - monthly',
     },
     {
       key: 'Year Plan',
-      fullName: 'Year Plan : $99.99 USD - yearly'
-    }
+      fullName: 'Year Plan : $99.99 USD - yearly',
+    },
   ],
 
   /**
@@ -65,7 +65,7 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     StripeLoader.load();
 
     this.coupon = new Coupon({code: app.getStoredCouponCode() || ''});
@@ -74,7 +74,7 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
 
     this.listenTo(this.subscription, 'state', this.render);
     this.listenTo(this.coupon, 'state', this.render);
-    this.listenTo(this.coupon, 'sync', function(model, response) {
+    this.listenTo(this.coupon, 'sync', function (model, response) {
       this.subscription.set(response.Subscription);
       this.coupon.unset('code');
     });
@@ -86,7 +86,7 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
    * @method render
    * @returns {AccountBillingSubscriptionPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileAccountBillingSubscription.jade');
     }
@@ -100,8 +100,8 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   /**
    * @method handleChangePaymentMethod
    */
-  handleChangePaymentMethod: function() {
-    var method = this.$('input[name="payment-method"]:checked').val();
+  handleChangePaymentMethod: function () {
+    let method = this.$('input[name="payment-method"]:checked').val();
     this.$('.credit-card-form-group').toggleClass('hide', method !== 'stripe');
     this.$('.paypal-form-group').toggleClass('hide', method !== 'paypal');
     this.$('.school-form-group').toggleClass('hide', method !== 'school');
@@ -110,10 +110,10 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   /**
    * @method handleClickCancelVacationLink
    */
-  handleClickCancelVacationLink: function() {
+  handleClickCancelVacationLink: function () {
     this.subscription.save({vacation: false}, {
       parse: true,
-      method: 'PUT'
+      method: 'PUT',
     });
 
     this.$('#cancel-vacation-spinner').removeClass('hide');
@@ -123,14 +123,14 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   /**
    * @method handleClickGoOnVacationLink
    */
-  handleClickGoOnVacationLink: function() {
+  handleClickGoOnVacationLink: function () {
     this.openVacationDialog();
   },
 
   /**
    * @method handleClickRedeemCodeButton
    */
-  handleClickRedeemCodeButton: function() {
+  handleClickRedeemCodeButton: function () {
     this.coupon.set('code', this.$('#code-input').val());
     this.coupon.use();
     this.render();
@@ -140,11 +140,11 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
    * @method handleClickSpoofButtonAreaButton
    * @param {Event} event
    */
-  handleClickSpoofButtonAreaButton: function(event) {
-    var subscribed = $(event.target).data('subscribed');
-    var client = $(event.target).data('client');
-    var discount = $(event.target).data('discount');
-    var vacation = $(event.target).data('vacation');
+  handleClickSpoofButtonAreaButton: function (event) {
+    let subscribed = $(event.target).data('subscribed');
+    let client = $(event.target).data('client');
+    let discount = $(event.target).data('discount');
+    let vacation = $(event.target).data('vacation');
     if (subscribed) {
       // reset first
       this.subscription.set({
@@ -153,14 +153,14 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
         gplay: false,
         stripe: false,
         anet: false,
-        paypal: false
+        paypal: false,
       });
       if (subscribed === 'ios') {
         this.subscription.set({
           subscribed: 'ios',
           ios: {
-            'localizedPrice': '£9.99 (localized price test)'
-          }
+            'localizedPrice': '£9.99 (localized price test)',
+          },
         });
       }
       if (subscribed === 'gplay') {
@@ -169,16 +169,16 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
           gplay: {
             'subscription': 'one.month.sub',
             'token': '-- gplay token id --',
-            'package': 'com.inkren.skritter.chinese'
-          }
+            'package': 'com.inkren.skritter.chinese',
+          },
         });
       }
       if (subscribed === 'paypal') {
         this.subscription.set({
           subscribed: 'paypal',
           paypal: {
-            'plan': 'Month Plan'
-          }
+            'plan': 'Month Plan',
+          },
         });
       }
       if (subscribed === 'stripe') {
@@ -189,8 +189,8 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
             cardNumber: '1234',
             price: '9.99',
             months: 1,
-            discount: false
-          }
+            discount: false,
+          },
         });
       }
       if (subscribed === 'anet') {
@@ -201,51 +201,51 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
             cardNumber: '1234',
             price: '9.99',
             months: 1,
-            discount: false
-          }
+            discount: false,
+          },
         });
       }
     }
     if (client) {
       if (client === 'site') {
-        app.isWebsite = function() {
+        app.isWebsite = function () {
           return true;
         };
-        app.isMobile = function() {
+        app.isMobile = function () {
           return false;
         };
-        app.isAndroid = function() {
+        app.isAndroid = function () {
           return false;
         };
-        app.isIOS = function() {
+        app.isIOS = function () {
           return false;
         };
       }
       if (client === 'ios') {
-        app.isWebsite = function() {
+        app.isWebsite = function () {
           return false;
         };
-        app.isMobile = function() {
+        app.isMobile = function () {
           return true;
         };
-        app.isAndroid = function() {
+        app.isAndroid = function () {
           return false;
         };
-        app.isIOS = function() {
+        app.isIOS = function () {
           return true;
         };
       }
       if (client === 'android') {
-        app.isWebsite = function() {
+        app.isWebsite = function () {
           return false;
         };
-        app.isMobile = function() {
+        app.isMobile = function () {
           return true;
         };
-        app.isAndroid = function() {
+        app.isAndroid = function () {
           return true;
         };
-        app.isIOS = function() {
+        app.isIOS = function () {
           return false;
         };
       }
@@ -255,29 +255,29 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
         this.subscription.set({
           discount: {
             price: 4.99,
-            expires: "2020-01-01"
+            expires: '2020-01-01',
           },
           availablePlans: [{
-            "name": "1 month",
-            "price": "4.99",
-            "months": 1,
-            "discount": true,
-            "key": "one_month",
-            "fullName": "$4.99/month (discount)"
-          }]
+            'name': '1 month',
+            'price': '4.99',
+            'months': 1,
+            'discount': true,
+            'key': 'one_month',
+            'fullName': '$4.99/month (discount)',
+          }],
         });
       }
       if (discount === 'off') {
         this.subscription.set({
           discount: false,
           availablePlans: [{
-            "name": "1 month",
-            "price": "14.99",
-            "months": 1,
-            "discount": true,
-            "key": "one_month",
-            "fullName": "$14.99/month"
-          }]
+            'name': '1 month',
+            'price': '14.99',
+            'months': 1,
+            'discount': true,
+            'key': 'one_month',
+            'fullName': '$14.99/month',
+          }],
         });
       }
     }
@@ -286,8 +286,8 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
         this.subscription.set({
           vacation: {
             start: moment().subtract('1', 'month').format('YYYY-MM-DD'),
-            end: moment().add('1', 'month').format('YYYY-MM-DD')
-          }
+            end: moment().add('1', 'month').format('YYYY-MM-DD'),
+          },
         });
       }
       if (vacation === 'off') {
@@ -302,8 +302,8 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   /**
    * @method handleClickSubscribePaypalButton
    */
-  handleClickSubscribePaypalButton: function() {
-    var plan = this.$('#paypal-plan-select').val();
+  handleClickSubscribePaypalButton: function () {
+    let plan = this.$('#paypal-plan-select').val();
     this.$('#paypal-subscribe-select').val(plan);
     this.$('#paypal-subscribe-form').submit();
   },
@@ -311,12 +311,12 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   /**
    * @method handleClickSubscribeSchoolButton
    */
-  handleClickSubscribeSchoolButton: function() {
-    var self = this;
-    var validationCode = this.$('#signup-validation-code').val().trim();
-    var data = {
+  handleClickSubscribeSchoolButton: function () {
+    let self = this;
+    let validationCode = this.$('#signup-validation-code').val().trim();
+    let data = {
       email: app.user.get('email'),
-      code: validationCode
+      code: validationCode,
     };
 
     if (!validationCode) {
@@ -332,34 +332,34 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
       method: 'POST',
       data: data,
       context: this,
-      success: function(response) {
+      success: function (response) {
         app.mixpanel.track(
           'Subscribe',
           {
-            'Method': 'school'
+            'Method': 'school',
           }
         );
         self.subscription.set(response.Subscription);
         self.render();
       },
-      error: function(response) {
+      error: function (response) {
         self._handleValidationError(response);
         self.$('#update-school-subscription-btn span').removeClass('hide');
         self.$('#update-school-subscription-btn i').addClass('hide');
-      }
+      },
     });
   },
 
   /**
    * @method handleClickSubscribeStripeButton
    */
-  handleClickSubscribeStripeButton: function() {
-    var cardData = {
+  handleClickSubscribeStripeButton: function () {
+    let cardData = {
       number: this.$('#card-number-input').val(),
       exp_month: this.$('#card-month-select').val(),
-      exp_year: this.$('#card-year-select').val()
+      exp_year: this.$('#card-year-select').val(),
     };
-    var handler = _.bind(this.handleClickSubscribeStripeButtonResponse, this);
+    let handler = _.bind(this.handleClickSubscribeStripeButtonResponse, this);
     Stripe.setPublishableKey(app.getStripeKey());
     Stripe.card.createToken(cardData, handler);
     this.setSubscribeStripeButtonDisabled(true);
@@ -369,21 +369,20 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   /**
    * @method this.handleClickSubscribeStripeButtonResponse
    */
-  handleClickSubscribeStripeButtonResponse: function(status, response) {
+  handleClickSubscribeStripeButtonResponse: function (status, response) {
     if (response.error) {
       this.setSubscribeStripeButtonDisabled(false);
       this.$('#card-error-alert')
         .text(response.error.message)
         .removeClass('hide');
-    }
-    else {
-      var token = response.id;
-      var url = app.getApiUrl() + this.subscription.url() + '/stripe/subscribe';
-      var headers = app.user.session.getHeaders();
-      var self = this;
-      var data = {
+    } else {
+      let token = response.id;
+      let url = app.getApiUrl() + this.subscription.url() + '/stripe/subscribe';
+      let headers = app.user.session.getHeaders();
+      let self = this;
+      let data = {
         token: token,
-        plan: this.$('#plan-select').val()
+        plan: this.$('#plan-select').val(),
       };
       $.ajax({
         url: url,
@@ -391,32 +390,32 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
         method: 'POST',
         data: data,
         context: this,
-        success: function(response) {
+        success: function (response) {
           app.mixpanel.track(
             'Subscribe',
             {
               'Method': 'credit',
-              'Plan': data.plan
+              'Plan': data.plan,
             }
           );
           self.subscription.set(response.Subscription);
           self.render();
-        }
-      })
+        },
+      });
     }
   },
 
   /**
    * @method handleClickUnsubscribeButton
    */
-  handleClickUnsubscribeButton: function() {
-    var dialog = new CancelSubscriptionDialog({
-      subscription: this.subscription
+  handleClickUnsubscribeButton: function () {
+    let dialog = new CancelSubscriptionDialog({
+      subscription: this.subscription,
     });
     dialog.render().open();
-    this.listenToOnce(dialog, 'hidden', function() {
+    this.listenToOnce(dialog, 'hidden', function () {
       if (dialog.choseVacation) {
-        var open = _.bind(this.openVacationDialog, this);
+        let open = _.bind(this.openVacationDialog, this);
         _.delay(open, 200);
       }
     });
@@ -425,10 +424,10 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   /**
    * @method handleClickUnsubscribeITunesButton
    */
-  handleClickUnsubscribeITunesButton: function() {
-    var url = app.getApiUrl() + this.subscription.url() + '/ios/cancel';
-    var headers = app.user.session.getHeaders();
-    var self = this;
+  handleClickUnsubscribeITunesButton: function () {
+    let url = app.getApiUrl() + this.subscription.url() + '/ios/cancel';
+    let headers = app.user.session.getHeaders();
+    let self = this;
 
     this.$('#unsubscribe-itunes-btn *').toggleClass('hide');
     $.ajax({
@@ -436,50 +435,50 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
       headers: headers,
       method: 'POST',
       context: this,
-      success: function(response) {
+      success: function (response) {
         self.subscription.set(response.Subscription);
         self.render();
-      }
+      },
     });
   },
 
   /**
    * @method handleClickUpdateStripeSubscriptionButton
    */
-  handleClickUpdateStripeSubscriptionButton: function() {
-    var cardData = {
+  handleClickUpdateStripeSubscriptionButton: function () {
+    let cardData = {
       number: this.$('#card-number-input').val(),
       exp_month: this.$('#card-month-select').val(),
-      exp_year: this.$('#card-year-select').val()
+      exp_year: this.$('#card-year-select').val(),
     };
 
     if (cardData.number) {
-      var handler = _.bind(this.handleClickUpdateStripeSubscriptionButtonResponse, this);
+      let handler = _.bind(this.handleClickUpdateStripeSubscriptionButtonResponse, this);
       Stripe.setPublishableKey(app.getStripeKey());
       Stripe.card.createToken(cardData, handler);
       this.setSubscribeStripeButtonDisabled(true);
     } else {
-      var url = (app.getApiUrl() + this.subscription.url() + '/stripe');
-      var headers = app.user.session.getHeaders();
-      var data = {plan: this.$('#plan-select').val()};
-      var self = this;
+      let url = (app.getApiUrl() + this.subscription.url() + '/stripe');
+      let headers = app.user.session.getHeaders();
+      let data = {plan: this.$('#plan-select').val()};
+      let self = this;
       $.ajax({
         url: url,
         headers: headers,
         method: 'PUT',
-        contentType: "application/json",
+        contentType: 'application/json',
         data: JSON.stringify(data),
         context: this,
-        success: function(response) {
+        success: function (response) {
           self.subscription.set(response.Subscription);
           self.render();
         },
-        error: function(response) {
+        error: function (response) {
           self.setSubscribeStripeButtonDisabled(false);
           self.$('#card-error-alert')
             .text(response.error.message)
             .removeClass('hide');
-        }
+        },
       });
 
       this.setSubscribeStripeButtonDisabled(true);
@@ -491,33 +490,33 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   /**
    * @method handleClickSubscribeStripeButtonResponse
    */
-  handleClickUpdateStripeSubscriptionButtonResponse: function(status, response) {
+  handleClickUpdateStripeSubscriptionButtonResponse: function (status, response) {
     if (response.error) {
       this.setSubscribeStripeButtonDisabled(false);
       this.$('#card-error-alert')
         .text(response.error.message)
         .removeClass('hide');
     } else {
-      var self = this;
-      var token = response.id;
-      var url = (app.getApiUrl() + this.subscription.url() + '/stripe');
-      var headers = app.user.session.getHeaders();
-      var data = {
+      let self = this;
+      let token = response.id;
+      let url = (app.getApiUrl() + this.subscription.url() + '/stripe');
+      let headers = app.user.session.getHeaders();
+      let data = {
         token: token,
-        plan: this.$('#plan-select').val()
+        plan: this.$('#plan-select').val(),
       };
 
       $.ajax({
         url: url,
         headers: headers,
         method: 'PUT',
-        contentType: "application/json",
+        contentType: 'application/json',
         data: JSON.stringify(data),
         context: this,
-        success: function(response) {
+        success: function (response) {
           self.subscription.set(response.Subscription);
           self.render();
-        }
+        },
       });
     }
   },
@@ -525,9 +524,9 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
   /**
    * @method handleClickValidationEmailButton
    */
-  handleClickValidationEmailButton: function() {
-    var self = this;
-    var email = this.$('#school-validation-email').val().trim();
+  handleClickValidationEmailButton: function () {
+    let self = this;
+    let email = this.$('#school-validation-email').val().trim();
 
     if (!email || email.indexOf('@') < 1 || email.indexOf('.') < 2) {
       this._displayValidationErrorMessage(app.locale('pages.signup.errorInvalidEmail'));
@@ -540,10 +539,10 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
     this.$('#sending-validation-email-notice').removeClass('hide');
 
     async.series([
-      function(callback) {
+      function (callback) {
         self.sendValidationEmail(email, callback);
-      }
-    ], function(error) {
+      },
+    ], function (error) {
       self.$('#send-validation-email-btn').removeClass('hide');
       self.$('#sending-validation-email-notice').addClass('hide');
 
@@ -561,34 +560,34 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
    * @param {String} email the email address to send to
    * @param {Function} callback called when the email has been sent
    */
-  sendValidationEmail: function(email, callback) {
-    var validationUrl = app.getApiUrl() + 'email-validation/send';
+  sendValidationEmail: function (email, callback) {
+    let validationUrl = app.getApiUrl() + 'email-validation/send';
 
     $.ajax({
       url: validationUrl,
       method: 'POST',
       headers: app.user.headers(),
       data: {
-        email: email
+        email: email,
       },
-      success: function() {
+      success: function () {
         if (_.isFunction(callback)) {
           callback();
         }
       },
-      error: function(error) {
+      error: function (error) {
         if (_.isFunction(callback)) {
           callback(error);
         }
-      }
+      },
     });
   },
 
   /**
    * @method openVacationDialog
    */
-  openVacationDialog: function() {
-    var dialog = new VacationDialog({subscription: this.subscription});
+  openVacationDialog: function () {
+    let dialog = new VacationDialog({subscription: this.subscription});
     dialog.render().open();
   },
 
@@ -596,34 +595,34 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
    * @method setSubscribeStripeButtonDisabled
    * @param {Boolean} disabled
    */
-  setSubscribeStripeButtonDisabled: function(disabled) {
-    var button = this.$('#update-stripe-subscription-btn, #subscribe-stripe-btn');
+  setSubscribeStripeButtonDisabled: function (disabled) {
+    let button = this.$('#update-stripe-subscription-btn, #subscribe-stripe-btn');
     button.attr('disabled', disabled);
     button.find('span').toggleClass('hide', disabled);
     button.find('i').toggleClass('hide', !disabled);
   },
 
-  handleClickRestoreAndroid: function(event) {
-    var $element = $(event.target);
+  handleClickRestoreAndroid: function (event) {
+    // let $element = $(event.target);
 
     if (app.isAndroid()) {
       app.user.subscription.restoreSubscription();
     }
   },
 
-  handleClickSubscribeAndroid: function(event) {
-    var $element = $(event.target);
-    var type = $element.data('type');
+  handleClickSubscribeAndroid: function (event) {
+    let $element = $(event.target);
+    let type = $element.data('type');
 
     if (app.isAndroid()) {
       plugins.billing.makePurchase(type, 'subs')
         .then(
-          function(sub) {
+          function (sub) {
             if (sub && sub.orderId) {
               app.user.subscription.set('gplay_subscription', {
                   subscription: sub.productId,
                   package: sub.packageName,
-                  token: sub.purchaseToken
+                  token: sub.purchaseToken,
               });
 
               app.user.subscription.save();
@@ -633,31 +632,31 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
     }
   },
 
-  _handleValidationError: function(error) {
+  _handleValidationError: function (error) {
     // For when the error is a jQuery XHR object, we just want the plain error object
     if (_.isFunction(error.error)) {
       error = error.responseJSON;
     }
 
-    var errorMsg = app.locale('pages.signup.errorDefault');
+    let errorMsg = app.locale('pages.signup.errorDefault');
     if (error.statusCode === 400) {
-      switch(error.message) {
-        case "This code has been exhausted.":
+      switch (error.message) {
+        case 'This code has been exhausted.':
           errorMsg = app.locale('pages.signup.errorCouponExhausted');
           break;
-        case "The email entered has already been used.":
+        case 'The email entered has already been used.':
           errorMsg = app.locale('pages.signup.errorSchoolEmailAlreadyUsed');
           break;
-        case "School validation cannot add time to this account.":
+        case 'School validation cannot add time to this account.':
           errorMsg = app.locale('pages.signup.errorSchoolCantAddTime');
           break;
-        case "The email entered is not an eligible email.":
+        case 'The email entered is not an eligible email.':
           errorMsg = app.locale('pages.signup.errorNotSchoolEmail');
           break;
-        case "Invalid code entered.":
+        case 'Invalid code entered.':
           errorMsg = app.locale('pages.signup.errorInvalidEmailValidationCode');
           break;
-        case "<email> is not in params: {u'email': u''}":
+        case '<email> is not in params: {u\'email\': u\'\'}':
           errorMsg = app.locale('pages.signup.errorInvalidEmail');
           break;
         default:
@@ -668,9 +667,9 @@ const AccountBillingSubscriptionPage = GelatoPage.extend({
     this._displayValidationErrorMessage(errorMsg);
   },
 
-  _displayValidationErrorMessage: function(message) {
+  _displayValidationErrorMessage: function (message) {
     this.$('#validation-error-alert').text(message).removeClass('hide');
-  }
+  },
 
 });
 

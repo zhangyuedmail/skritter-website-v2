@@ -17,7 +17,7 @@ const StatsHeatmapComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.heatmap = new CalHeatMap();
     this.listenTo(this.collection, 'state:standby', this.update);
 
@@ -28,14 +28,14 @@ const StatsHeatmapComponent = GelatoComponent.extend({
    * @method render
    * @returns {StatsHeatmapComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.renderGraph();
 
     return this;
   },
 
-  renderGraph: function() {
+  renderGraph: function () {
     this.heatmap.init({
       cellSize: 22,
       cellPadding: 5,
@@ -48,13 +48,13 @@ const StatsHeatmapComponent = GelatoComponent.extend({
       range: 1,
       start: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
       subDomain: 'x_day',
-      subDomainTextFormat: "%d"
+      subDomainTextFormat: '%d',
     });
 
     this.update();
   },
 
-  update: function() {
+  update: function () {
     this.heatmap.update(this.collection.getMonthlyHeatmapData());
     this.$('#current-streak').text(this.collection.getMonthlyStreak(true));
     this.$('#longest-streak').text(this.collection.getMonthlyStreak());
@@ -72,7 +72,7 @@ const StatsHeatmapComponent = GelatoComponent.extend({
       this.loaded = true;
       this.trigger('component:loaded', 'heatmap');
     }
-  }
+  },
 
 });
 

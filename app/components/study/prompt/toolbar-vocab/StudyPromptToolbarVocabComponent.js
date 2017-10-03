@@ -17,7 +17,7 @@ module.exports = GelatoComponent.extend({
     'click #button-vocab-ban': 'handleClickButtonVocabBan',
     'click #button-vocab-edit': 'handleClickButtonVocabEdit',
     'click #button-vocab-info': 'handleClickButtonVocabInfo',
-    'click #button-vocab-star': 'handleClickButtonVocabStar'
+    'click #button-vocab-star': 'handleClickButtonVocabStar',
   },
 
   /**
@@ -31,7 +31,7 @@ module.exports = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.dialog = null;
     this.prompt = options.prompt;
   },
@@ -40,7 +40,7 @@ module.exports = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptToolbarVocab}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -49,7 +49,7 @@ module.exports = GelatoComponent.extend({
    * @method disableEditing
    * @returns {StudyPromptToolbarVocab}
    */
-  disableEditing: function() {
+  disableEditing: function () {
     this.prompt.editing = false;
     this.prompt.vocabDefinition.editing = false;
     this.prompt.vocabMnemonic.editing = false;
@@ -70,7 +70,7 @@ module.exports = GelatoComponent.extend({
    * @method enableEditing
    * @returns {StudyPromptToolbarVocab}
    */
-  enableEditing: function() {
+  enableEditing: function () {
     this.prompt.editing = true;
     this.prompt.vocabDefinition.editing = true;
     this.prompt.shortcuts.unregisterAll();
@@ -83,7 +83,7 @@ module.exports = GelatoComponent.extend({
    * @method handleClickButtonVocabAudio
    * @param {Event} event
    */
-  handleClickButtonVocabAudio: function(event) {
+  handleClickButtonVocabAudio: function (event) {
     event.preventDefault();
     vent.trigger('vocab:play');
   },
@@ -92,14 +92,14 @@ module.exports = GelatoComponent.extend({
    * @method handleClickButtonVocabBan
    * @param {Event} event
    */
-  handleClickButtonVocabBan: function(event) {
-    var self = this;
+  handleClickButtonVocabBan: function (event) {
+    let self = this;
     event.preventDefault();
     this.dialog = new ConfirmItemBanDialog({
       item: this.prompt.reviews.item,
-      vocab: this.prompt.reviews.vocab
+      vocab: this.prompt.reviews.vocab,
     });
-    this.dialog.once('confirm', function() {
+    this.dialog.once('confirm', function () {
       self.prompt.next(true);
       self.dialog.close();
     });
@@ -110,7 +110,7 @@ module.exports = GelatoComponent.extend({
    * @method handleClickButtonVocabEdit
    * @param {Event} event
    */
-  handleClickButtonVocabEdit: function(event) {
+  handleClickButtonVocabEdit: function (event) {
     event.preventDefault();
     if (this.prompt.editing) {
       this.prompt.reviews.vocab.set('customDefinition', this.prompt.vocabDefinition.getValue());
@@ -127,7 +127,7 @@ module.exports = GelatoComponent.extend({
    * @method handleClickButtonVocabInfo
    * @param {Event} event
    */
-  handleClickButtonVocabInfo: function(event) {
+  handleClickButtonVocabInfo: function (event) {
     event.preventDefault();
     vent.trigger('studyPromptVocabInfo:show', this.prompt.reviews.vocab.id);
   },
@@ -136,10 +136,10 @@ module.exports = GelatoComponent.extend({
    * @method handleClickButtonVocabStar
    * @param {Event} event
    */
-  handleClickButtonVocabStar: function(event) {
+  handleClickButtonVocabStar: function (event) {
     event.preventDefault();
     this.prompt.reviews.vocab.toggleStarred();
     this.prompt.reviews.vocab.save();
     this.render();
-  }
+  },
 });

@@ -1,12 +1,12 @@
 const GelatoComponent = require('gelato/component');
 
-var AddVocabDialog = require('dialogs1/add-vocab/view');
-var ConfirmDialog = require('dialogs/confirm/view');
-var ExportVocablistDialog = require('dialogs1/export-vocablist/view');
-var HistoryVocablistDialog = require('dialogs1/vocablist-history/view');
-var PublishDialog = require('dialogs1/publish-vocablist/content/view');
-var VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
-var ViewDialog = require('dialogs1/view-dialog/view');
+let AddVocabDialog = require('dialogs1/add-vocab/view');
+let ConfirmDialog = require('dialogs/confirm/view');
+let ExportVocablistDialog = require('dialogs1/export-vocablist/view');
+let HistoryVocablistDialog = require('dialogs1/vocablist-history/view');
+let PublishDialog = require('dialogs1/publish-vocablist/content/view');
+let VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
+let ViewDialog = require('dialogs1/view-dialog/view');
 
 /**
  * @class VocablistsListSidebarComponent
@@ -28,7 +28,7 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
     'click #publish-link-sidebar': 'handleClickPublishLink',
     'click #quick-add-link-sidebar': 'handleClickQuickAddLink',
     'click #study-settings-link-sidebar': 'handleClickStudySettingsLink',
-    'click #image-upload-link-sidebar': 'handleClickImageUploadLink'
+    'click #image-upload-link-sidebar': 'handleClickImageUploadLink',
   },
 
   /**
@@ -42,18 +42,18 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.vocablist = options.vocablist;
 
     this._views['publishDialog'] = new ViewDialog({
-      content: PublishDialog
+      content: PublishDialog,
     });
 
     this._views['historyDialog'] = new ViewDialog({
       content: HistoryVocablistDialog,
       contentOptions: {
-        vocablist: this.vocablist
-      }
+        vocablist: this.vocablist,
+      },
     });
 
     this.listenTo(this._views['publishDialog'], 'publish', this.publishList);
@@ -63,7 +63,7 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistsListSidebarComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this._views['publishDialog'].render();
@@ -75,13 +75,13 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @method handleChangeImageUploadInput
    * @param {Event} event
    */
-  handleChangeImageUploadInput: function(event) {
-    var file = event.target.files[0];
-    var data = new FormData().append('image', file);
+  handleChangeImageUploadInput: function (event) {
+    let file = event.target.files[0];
+    let data = new FormData().append('image', file);
     this.$('#list-img-wrapper .fa-spinner').removeClass('hide');
     this.$('#list-img').remove();
     this.$('#missing-image-stub').removeClass('hide');
-    var imageUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/image';
+    let imageUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/image';
     $.ajax({
       url: imageUrl,
       method: 'POST',
@@ -89,9 +89,9 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
       data: data,
       processData: false,
       contentType: false,
-      success: function() {
+      success: function () {
         document.location.reload();
-      }
+      },
     });
   },
 
@@ -99,7 +99,7 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @method handleClickAddToQueue
    * @param {Event} event
    */
-  handleClickAddToQueue: function(event) {
+  handleClickAddToQueue: function (event) {
     event.preventDefault();
     if (this.vocablist.get('studyingMode') === 'not studying') {
       this.vocablist.save({'studyingMode': 'adding'}, {patch: true});
@@ -111,27 +111,27 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @method handleClickCopyLink
    * @param {Event} event
    */
-  handleClickCopyLink: function(event) {
+  handleClickCopyLink: function (event) {
     const confirmDialog = new ConfirmDialog({
       title: 'Confirm Copy',
       body: 'Are you sure you want to make a copy of this list?',
       okText: 'Yes - Copy!',
-      onConfirm: 'show-spinner'
+      onConfirm: 'show-spinner',
     });
 
     event.preventDefault();
 
-    this.listenTo(confirmDialog, 'confirm', function() {
+    this.listenTo(confirmDialog, 'confirm', function () {
       const copyUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/copy';
 
       $.ajax({
         url: copyUrl,
         method: 'POST',
         headers: app.user.headers(),
-        success: function(response) {
+        success: function (response) {
           app.router.navigate('/vocablists/view/' + response.VocabList.id, {trigger: true});
           confirmDialog.close();
-        }
+        },
       });
     });
 
@@ -142,17 +142,17 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @method handleClickDeleteLink
    * @param {Event} event
    */
-  handleClickDeleteLink: function(event) {
+  handleClickDeleteLink: function (event) {
     event.preventDefault();
-    var confirmDialog = new ConfirmDialog({
+    let confirmDialog = new ConfirmDialog({
       title: 'Confirm Delete',
       body: 'Are you sure you want to delete this list?',
       okText: 'Yes - Delete!',
-      onConfirm: 'show-spinner'
+      onConfirm: 'show-spinner',
     });
-    this.listenTo(confirmDialog, 'confirm', function() {
+    this.listenTo(confirmDialog, 'confirm', function () {
       this.vocablist.save({disabled: true, studyingMode: 'not studying'}, {patch: true});
-      this.listenToOnce(this.vocablist, 'state', function() {
+      this.listenToOnce(this.vocablist, 'state', function () {
         app.router.navigate('/vocablists/my-lists', {trigger: true});
         confirmDialog.close();
       });
@@ -164,12 +164,12 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @method handleClickExportLink
    * @param {Event} event
    */
-  handleClickExportLink: function(event) {
+  handleClickExportLink: function (event) {
     event.preventDefault();
     new ExportVocablistDialog({id: this.vocablist.id}).open();
   },
 
-  handleClickHistoryLink: function(event) {
+  handleClickHistoryLink: function (event) {
     event.preventDefault();
     this._views['historyDialog'].open();
   },
@@ -178,7 +178,7 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @method handleClickImageUploadLink
    * @param {Event} event
    */
-  handleClickImageUploadLink: function(event) {
+  handleClickImageUploadLink: function (event) {
     event.preventDefault();
     this.$('#image-upload-input').trigger('click');
   },
@@ -188,11 +188,11 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @method handleClickPublishLink
    * @param {Event} event
    */
-  handleClickPublishLink: function(event) {
+  handleClickPublishLink: function (event) {
     this._views['publishDialog'].open();
   },
 
-  handleClickQuickAddLink: function(event) {
+  handleClickQuickAddLink: function (event) {
     event.preventDefault();
     new AddVocabDialog().open();
   },
@@ -202,9 +202,9 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @param {Object} formData options from the popup about the list to publish
    * @param {Boolean} formData.isTextbook whether the list is for a textbook
    */
-  publishList: function(formData) {
+  publishList: function (formData) {
     this.vocablist.set('isTextbook', formData.isTextbook);
-    this.vocablist.publish(function(success) {
+    this.vocablist.publish(function (success) {
       document.location.reload();
     });
   },
@@ -213,11 +213,11 @@ const VocablistsListSidebarComponent = GelatoComponent.extend({
    * @method handleClickStudySettingsLink
    * @param {Event} event
    */
-  handleClickStudySettingsLink: function(event) {
+  handleClickStudySettingsLink: function (event) {
     event.preventDefault();
     this.dialog = new VocablistSettingsDialog({vocablist: this.vocablist});
     this.dialog.render().open();
-  }
+  },
 
 });
 

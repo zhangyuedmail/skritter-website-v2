@@ -15,7 +15,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    */
   events: {
     'click #show-mnemonic': 'handleClickShowMnemonic',
-    'click #add-mnemonic': 'handleClickAddMnemonic'
+    'click #add-mnemonic': 'handleClickAddMnemonic',
   },
 
   /**
@@ -29,7 +29,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.editing = false;
     this.prompt = options.prompt;
 
@@ -37,7 +37,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
       showCloseButton: true,
       showTitle: true,
       dialogTitle: app.locale('pages.study.menmonicSelectorDialogTitle'),
-      content: MnemonicSelector
+      content: MnemonicSelector,
     });
 
     this.listenTo(vent, 'mnemonic:updated', this.render);
@@ -47,7 +47,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptVocabMnemonicComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -57,11 +57,11 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    * @method getValue
    * @returns {Object}
    */
-  getValue: function() {
+  getValue: function () {
     return {
       creator: app.user.id,
       public: false,
-      text: this.$('textarea').val()
+      text: this.$('textarea').val(),
     };
   },
 
@@ -69,7 +69,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
    * @method handleClickShowMnemonic
    * @param {Event} event
    */
-  handleClickShowMnemonic: function(event) {
+  handleClickShowMnemonic: function (event) {
     event.preventDefault();
     this.reveal();
   },
@@ -77,7 +77,7 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
   /**
    * Opens a popup that allows a user to add a mnemonic for a word
    */
-  handleClickAddMnemonic: function() {
+  handleClickAddMnemonic: function () {
     this._views['selector'].content.setVocab(this.prompt.reviews.vocab);
     this._views['selector'].open();
   },
@@ -85,10 +85,10 @@ const StudyPromptVocabMnemonicComponent = GelatoComponent.extend({
   /**
    * @method reveal
    */
-  reveal: function() {
+  reveal: function () {
     this.prompt.review.set('showMnemonic', true);
     this.render();
-  }
+  },
 
 });
 

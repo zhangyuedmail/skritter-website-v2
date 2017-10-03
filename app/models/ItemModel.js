@@ -29,7 +29,7 @@ const ItemModel = SkritterModel.extend({
   /**
    * @method ban
    */
-  ban: function() {
+  ban: function () {
     this.getVocab().banPart(this.get('part'));
   },
 
@@ -38,7 +38,7 @@ const ItemModel = SkritterModel.extend({
    * @method bump
    * @returns {ItemModel}
    */
-  bump: function() {
+  bump: function () {
     const update = {id: this.id};
 
     if (!this.get('next') || this.get('next') < moment().unix()) {
@@ -52,7 +52,7 @@ const ItemModel = SkritterModel.extend({
       type: 'PUT',
       headers: app.user.session.getHeaders(),
       data: JSON.stringify(update),
-      success: result => this.set(result.Item, {merge: true})
+      success: (result) => this.set(result.Item, {merge: true}),
     });
 
     return this;
@@ -62,10 +62,10 @@ const ItemModel = SkritterModel.extend({
    * @property defaults
    * @type {Object}
    */
-  defaults: function() {
+  defaults: function () {
     return {
       vocabIds: [],
-      vocabListIds: []
+      vocabListIds: [],
     };
   },
 
@@ -73,7 +73,7 @@ const ItemModel = SkritterModel.extend({
    * @method getBase
    * @returns {String}
    */
-  getBase: function() {
+  getBase: function () {
     return this.id.split('-')[2];
   },
 
@@ -81,7 +81,7 @@ const ItemModel = SkritterModel.extend({
    * @method getContainedItems
    * @returns {Array}
    */
-  getContainedItems: function() {
+  getContainedItems: function () {
     const containedItems = [];
     const part = this.get('part');
 
@@ -102,10 +102,10 @@ const ItemModel = SkritterModel.extend({
           containedItems.push(this.collection.add(
             {
               id: fallbackId,
-              writing: splitId[1]
+              writing: splitId[1],
             },
             {
-              merge: true
+              merge: true,
             }
           ));
         }
@@ -119,7 +119,7 @@ const ItemModel = SkritterModel.extend({
    * @method getContainedVocabs
    * @returns {Array}
    */
-  getContainedVocabs: function() {
+  getContainedVocabs: function () {
     const vocab = this.getVocab();
 
     return vocab ? vocab.getContained() : [];
@@ -129,7 +129,7 @@ const ItemModel = SkritterModel.extend({
    * @method getPromptItems
    * @returns {PromptItemCollection}
    */
-  getPromptItems: function() {
+  getPromptItems: function () {
     let promptItems = new PromptItemCollection();
     let containedItems = this.getContainedItems();
     let containedVocabs = this.getContainedVocabs();
@@ -205,7 +205,7 @@ const ItemModel = SkritterModel.extend({
    *                              time when the function is called if not provided.
    * @returns {Number} the item's readiness
    */
-  getReadiness: function(startingAt) {
+  getReadiness: function (startingAt) {
     let readiness = 0;
     let last = this.get('last');
     let next = this.get('next');
@@ -250,12 +250,12 @@ const ItemModel = SkritterModel.extend({
 
     // The boost should drop off quickly for items that have some readiness themselves.
     if (readiness > 0 && timeElapsedSinceLastAttempt > 9000) {
-      const dayBonus = 1.0;
+      // const dayBonus = 1.0;
 
       // 0.0000115740740741 = the ratio of a day elapsed in a second, 1/86400
       let ageBonus = 0.1 * Math.log(1 + (2 * timeElapsedSinceLastAttempt) * 0.0000115740740741);
       const readiness2 = readiness > 1.0 ? 0.0 : 1.0 - readiness;
-      ageBonus *= readiness2 * readiness2;  // Less bonus if ready
+      ageBonus *= readiness2 * readiness2; // Less bonus if ready
       readiness += ageBonus;
     }
 
@@ -279,7 +279,7 @@ const ItemModel = SkritterModel.extend({
    * @method getVariation
    * @returns {Number}
    */
-  getVariation: function() {
+  getVariation: function () {
     return parseInt(this.id.split('-')[3], 10);
   },
 
@@ -287,7 +287,7 @@ const ItemModel = SkritterModel.extend({
    * @method getVocab
    * @returns {Vocab}
    */
-  getVocab: function() {
+  getVocab: function () {
     let vocabs = this.getVocabs();
     return vocabs[this.get('reviews') % vocabs.length];
   },
@@ -296,7 +296,7 @@ const ItemModel = SkritterModel.extend({
    * @method getVocabs
    * @returns {Array}
    */
-  getVocabs: function() {
+  getVocabs: function () {
     let vocabs = [];
     let vocabIds = this.get('vocabIds');
     let reviewSimplified = app.user.get('reviewSimplified');
@@ -327,7 +327,7 @@ const ItemModel = SkritterModel.extend({
    * @method isActive
    * @returns {Boolean}
    */
-  isActive: function() {
+  isActive: function () {
     return this.get('vocabIds').length > 0;
   },
 
@@ -336,7 +336,7 @@ const ItemModel = SkritterModel.extend({
    * @method isBanned
    * @returns {Boolean}
    */
-  isBanned: function() {
+  isBanned: function () {
     const vocab = this.getVocab();
     if (vocab) {
       return _.includes(this.getVocab().get('bannedParts'), this.get('part'));
@@ -349,18 +349,18 @@ const ItemModel = SkritterModel.extend({
    * @method isCharacterDataLoaded
    * @returns {Boolean}
    */
-  isCharacterDataLoaded: function() {
+  isCharacterDataLoaded: function () {
     let vocabCharacters = this.getVocab().getCharactersWithoutFillers();
     let loadedCharacters = app.user.characters.pluck('writing');
 
-    return _.every(vocabCharacters, character => _.includes(loadedCharacters, character));
+    return _.every(vocabCharacters, (character) => _.includes(loadedCharacters, character));
   },
 
   /**
    * @method isChinese
    * @returns {Boolean}
    */
-  isChinese: function() {
+  isChinese: function () {
     return this.get('lang') === 'zh';
   },
 
@@ -368,7 +368,7 @@ const ItemModel = SkritterModel.extend({
    * @method isDue
    * @returns {Boolean}
    */
-  isDue: function() {
+  isDue: function () {
     return !!this.get('vocabIds').length && this.getReadiness() >= 1.0;
   },
 
@@ -376,7 +376,7 @@ const ItemModel = SkritterModel.extend({
    * @method isJapanese
    * @returns {Boolean}
    */
-  isJapanese: function() {
+  isJapanese: function () {
     return this.get('lang') === 'ja';
   },
 
@@ -384,7 +384,7 @@ const ItemModel = SkritterModel.extend({
    * @method isKana
    * @returns {Boolean}
    */
-  isKana: function() {
+  isKana: function () {
     return app.fn.isKana(this.getBase());
   },
 
@@ -392,7 +392,7 @@ const ItemModel = SkritterModel.extend({
    * @method isLeech
    * @returns {Boolean}
    */
-  isLeech: function() {
+  isLeech: function () {
     return !this.isNew() && this.consecutiveWrong > 2;
   },
 
@@ -400,7 +400,7 @@ const ItemModel = SkritterModel.extend({
    * @method isNew
    * @returns {Boolean}
    */
-  isNew: function() {
+  isNew: function () {
     return !this.get('reviews');
   },
 
@@ -408,7 +408,7 @@ const ItemModel = SkritterModel.extend({
    * @method isPartDefn
    * @returns {Boolean}
    */
-  isPartDefn: function() {
+  isPartDefn: function () {
     return this.get('part') === 'defn';
   },
 
@@ -416,7 +416,7 @@ const ItemModel = SkritterModel.extend({
    * @method isPartRdng
    * @returns {Boolean}
    */
-  isPartRdng: function() {
+  isPartRdng: function () {
     return this.get('part') === 'rdng';
   },
 
@@ -424,7 +424,7 @@ const ItemModel = SkritterModel.extend({
    * @method isPartRune
    * @returns {Boolean}
    */
-  isPartRune: function() {
+  isPartRune: function () {
     return this.get('part') === 'rune';
   },
 
@@ -432,7 +432,7 @@ const ItemModel = SkritterModel.extend({
    * @method isPartTone
    * @returns {Boolean}
    */
-  isPartTone: function() {
+  isPartTone: function () {
     return this.get('part') === 'tone';
   },
 
@@ -441,27 +441,27 @@ const ItemModel = SkritterModel.extend({
    * @param {Object} response
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.Item || response;
   },
 
   /**
    * @method skip
    */
-  skip: function() {
+  skip: function () {
     $.ajax({
       url: app.getApiUrl(2) + 'queue/skip/' + this.id,
       type: 'POST',
-      headers: app.user.session.getHeaders()
+      headers: app.user.session.getHeaders(),
     });
   },
 
   /**
    * @method unban
    */
-  unban: function() {
+  unban: function () {
     this.getVocab().unbanPart(this.get('part'));
-  }
+  },
 
 });
 

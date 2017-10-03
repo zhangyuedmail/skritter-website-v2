@@ -20,7 +20,7 @@ const MnemonicCollection = GelatoCollection.extend({
    * @param {Model} model
    * @param {Object} options
    */
-  sync: function(method, model, options) {
+  sync: function (method, model, options) {
     options.headers = app.user.session.getHeaders();
 
     GelatoCollection.prototype.sync.call(this, method, model, options);
@@ -30,7 +30,7 @@ const MnemonicCollection = GelatoCollection.extend({
    * @property url
    * @type {String}
    */
-  url: function() {
+  url: function () {
     return app.getApiUrl(2) + 'mnemonics/?languageCode=' + app.user.get('targetLang') + '&vocabId=' + this.vocab.id;
   },
 
@@ -38,7 +38,7 @@ const MnemonicCollection = GelatoCollection.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(models, options) {
+  initialize: function (models, options) {
     options = options || {};
 
     this.vocab = options.vocab;
@@ -50,12 +50,12 @@ const MnemonicCollection = GelatoCollection.extend({
    * @param {Object} [mnemonic] a current mnemonic to test against
    * @return {Number} the number of unlinked mnemonics in the collection for the current user
    */
-  getUnusedLength: function(mnemonic) {
+  getUnusedLength: function (mnemonic) {
     if (!mnemonic) {
       return this.models.length;
     }
 
-    return this.models.filter(function(model) {
+    return this.models.filter(function (model) {
       return model.get('text') !== mnemonic.text && model.get('author') !== mnemonic.creator;
     }).length;
   },
@@ -64,10 +64,10 @@ const MnemonicCollection = GelatoCollection.extend({
    *
    * @param {VocabModel} vocab a vocab to fetch mnemonics by
    */
-  setVocab: function(vocab) {
+  setVocab: function (vocab) {
     this.vocab = vocab;
     this.reset();
-  }
+  },
 });
 
 module.exports = MnemonicCollection;

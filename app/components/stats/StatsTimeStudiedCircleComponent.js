@@ -21,7 +21,7 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
    * @param {Object} options a map of initial options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
 
     this.listenTo(this.collection, 'state:standby', this.update);
@@ -41,7 +41,7 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
    * @method render
    * @returns {StatsTimeStudiedCircleComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.renderGraph();
 
@@ -52,9 +52,8 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
    * Instantiates a new instance of the graph with some default values.
    * @method renderGraph
    */
-  renderGraph: function() {
-    var self = this;
-    var $circle = this.$('#circle');
+  renderGraph: function () {
+    let $circle = this.$('#circle');
 
     $circle.highcharts({
       chart: {
@@ -62,29 +61,29 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,
-        type: 'pie'
+        type: 'pie',
       },
       credits: {
-        enabled: false
+        enabled: false,
       },
       plotOptions: {
         pie: {
           cursor: 'pointer',
           dataLabels: {
-            enabled: false
+            enabled: false,
           },
-          borderWidth: 0
-        }
+          borderWidth: 0,
+        },
       },
       series: [{
         name: ' ',
         animation: true,
         colorByPoint: true,
         data: [
-          {name: "Studied", color: '#c5da4b', y: 0},
-          {name: "Didn't Study", color: '#efeef3', y: 7}
+          {name: 'Studied', color: '#c5da4b', y: 0},
+          {name: 'Didn\'t Study', color: '#efeef3', y: 7},
         ],
-        innerSize: '80%'
+        innerSize: '80%',
       }],
       title: {
         text: '',
@@ -92,17 +91,17 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
         style: {
           color: '#87a64b',
           fontSize: '24px',
-          fontWeight: '300'
+          fontWeight: '300',
         },
         verticalAlign: 'middle',
-        y: 0
+        y: 0,
       },
       tooltip: {
         backgroundColor: '#efeef3',
-        formatter: function() {
+        formatter: function () {
           return this.key + ' : <b>'+this.point.y+'</b> days';
-        }
-      }
+        },
+      },
     });
 
     this._graph = $circle.highcharts();
@@ -112,15 +111,15 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
    * Updates the data and axes when needed and redraws the graph.
    * @method update
    */
-  update: function() {
+  update: function () {
     if (!this.collection.length) {
       return;
     }
 
-    var timeStudied = this.collection.getTimeStudiedForPeriod(this.range.start, this.range.end, true);
-    var avgTimeStudied = this.collection.convertToLargestTimeUnit(timeStudied / 7);
+    let timeStudied = this.collection.getTimeStudiedForPeriod(this.range.start, this.range.end, true);
+    let avgTimeStudied = this.collection.convertToLargestTimeUnit(timeStudied / 7);
 
-    var daysRange = moment(this.range.end, config.dateFormatApp).diff(
+    let daysRange = moment(this.range.end, config.dateFormatApp).diff(
       moment(this.range.start, config.dateFormatApp), 'days'
     ) + 1;
 
@@ -130,7 +129,7 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
     this.$('#time-per-day-units').text(avgTimeStudied.units + ' per day');
 
     // retention rate
-    var retentionRate = this.collection.getRetentionRateForPeriod(
+    let retentionRate = this.collection.getRetentionRateForPeriod(
       this.range.start, this.range.end, 'word', 'rune');
 
     if (retentionRate === 0) {
@@ -141,17 +140,17 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
     this.$('#num-retention-rate').text(Math.round(retentionRate) + '%');
 
     // circle inner vals
-    var daysStudied = this.collection.getNumDaysStudiedInPeriod(this.range.start, this.range.end);
+    let daysStudied = this.collection.getNumDaysStudiedInPeriod(this.range.start, this.range.end);
     this.$('#num-days-studied').text(daysStudied);
 
     // circle graph
-    var daysNotStudied = daysRange - daysStudied;
+    let daysNotStudied = daysRange - daysStudied;
 
     this._graph.series[0].setData([
-      {name: "Studied", color: '#c5da4b', y: daysStudied},
-      {name: "Didn't Study", color: '#efeef3', y: daysNotStudied}
+      {name: 'Studied', color: '#c5da4b', y: daysStudied},
+      {name: 'Didn\'t Study', color: '#efeef3', y: daysNotStudied},
     ], true);
-  }
+  },
 
 });
 

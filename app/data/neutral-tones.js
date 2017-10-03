@@ -1,6 +1,6 @@
-var strings = '边面里下来去起嗽方道明力话友是处煩亮情欢睛事股识经分楚心生意人涂闹候服牌戚姐头花西亲计白快少们系到烦难夫害书问寸监付误家食发法星袋务应实神度声忽晨置负萄酬泼指拾磨致顾他唐复就形拇屈耐议扮农同数辑指试场蚤疾靠';
+let strings = '边面里下来去起嗽方道明力话友是处煩亮情欢睛事股识经分楚心生意人涂闹候服牌戚姐头花西亲计白快少们系到烦难夫害书问寸监付误家食发法星袋务应实神度声忽晨置负萄酬泼指拾磨致顾他唐复就形拇屈耐议扮农同数辑指试场蚤疾靠';
 
-var words = {
+let words = {
   '上': ['不上', '关上', '谈不上', '晚上', '早上', '合上 ', '说不上', '身上', '地上'],
   '个': ['几个', '一个'],
   '愤': ['气愤'],
@@ -148,14 +148,14 @@ var words = {
   '白': ['明白', '不明白'],
   '賣': ['買賣'],
   '係': ['關係網'],
-  '婆': ['老婆']
+  '婆': ['老婆'],
 };
 
 /**
  * @method getStrings
  * @returns {Array}
  */
-function getStrings() {
+function getStrings () {
   return strings.split('');
 }
 
@@ -164,7 +164,7 @@ function getStrings() {
  * @param {String} character
  * @returns {Object}
  */
-function getWords(character) {
+function getWords (character) {
   return words[character] || [];
 }
 
@@ -175,7 +175,7 @@ function getWords(character) {
  * @param {Number} index
  * @returns {Boolean}
  */
-function isWimp(character, word, index) {
+function isWimp (character, word, index) {
   if (word.length > 1) {
     if (index + 1 === word.length) {
       if (this.getStrings().indexOf(character) > -1) {
@@ -192,5 +192,5 @@ function isWimp(character, word, index) {
 module.exports = {
   getStrings: getStrings,
   getWords: getWords,
-  isWimp: isWimp
+  isWimp: isWimp,
 };

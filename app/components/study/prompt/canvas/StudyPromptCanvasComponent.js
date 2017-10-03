@@ -45,7 +45,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     _.bindAll(this, 'onDisplayStageTick', 'onInputMove');
 
     this.brushScale = 0.025;
@@ -84,21 +84,23 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.displayStage = null;
     this.backgroundStage = null;
 
-    this.listenTo(this.prompt, 'character:erased', () => {this.stopAnimations()});
+    this.listenTo(this.prompt, 'character:erased', () => {
+this.stopAnimations();
+});
   },
 
   /**
    * @method render
    * @returns {StudyPromptCanvasComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this.inputStage = this.createStage('input-canvas', true);
     this.displayStage = this.createStage('display-canvas', false, {
       useTicker: true,
       tickerUpdateFn: this.onDisplayStageTick,
-      startTickerPaused: true
+      startTickerPaused: true,
     });
     this.backgroundStage = this.createStage('background-canvas');
 
@@ -115,7 +117,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {String} name
    * @returns {StudyPromptCanvasComponent}
    */
-  clearLayer: function(name) {
+  clearLayer: function (name) {
     const layer = this.getLayer(name);
     const stage = _layerMap[name];
 
@@ -135,7 +137,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {String} name the name of the layer to create
    * @returns {createjs.Container}
    */
-  createLayer: function(stage, name) {
+  createLayer: function (stage, name) {
     const layer = new createjs.Container();
     layer.name = 'layer-' + name;
     stage.addChild(layer);
@@ -156,7 +158,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method createStage
    * @returns {createjs.Stage}
    */
-  createStage(canvasId, enableDOMEvents, tickerOptions) {
+  createStage (canvasId, enableDOMEvents, tickerOptions) {
     const canvas = this.$('#' + canvasId).get(0);
     let stage;
     tickerOptions = tickerOptions || {};
@@ -204,7 +206,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   /**
    * Creates layers in the appropriate canvas stages
    */
-  createStageLayers: function() {
+  createStageLayers: function () {
     this.createLayer(this.backgroundStage, 'character-grid');
 
     this.createLayer(this.displayStage, 'character-hint');
@@ -220,7 +222,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method disableCanvas
    * @returns {Canvas}
    */
-  disableCanvas: function() {
+  disableCanvas: function () {
     this.inputStage.removeEventListener('stagemousedown', _.bind(this.triggerCanvasMouseDown, this));
     this.inputStage.removeEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
     return this;
@@ -230,7 +232,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method disableGrid
    * @returns {StudyPromptCanvasComponent}
    */
-  disableGrid: function() {
+  disableGrid: function () {
     this.clearLayer('character-grid');
     this.grid = false;
     return this;
@@ -240,7 +242,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method disableInput
    * @returns {StudyPromptCanvasComponent}
    */
-  disableInput: function() {
+  disableInput: function () {
     this.$('#input-canvas').off('.Input');
     this.inputStage.removeEventListener('stagemousedown', this.downListener);
     this.inputStage.removeEventListener('stagemousemove', this.moveListener);
@@ -258,7 +260,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {Object} options
    * @returns {createjs.Shape}
    */
-  drawCircle: function(layerName, x, y, radius, options) {
+  drawCircle: function (layerName, x, y, radius, options) {
     const circle = new createjs.Shape();
 
     options = options ? options : {};
@@ -282,7 +284,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method drawGrid
    * @returns {StudyPromptCanvasComponent}
    */
-  drawGrid: function() {
+  drawGrid: function () {
     const grid = new createjs.Shape();
 
     this.clearLayer('character-grid');
@@ -309,7 +311,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {Object} [options]
    * @returns {createjs.Text}
    */
-  drawCharacter: function(layerName, character, options) {
+  drawCharacter: function (layerName, character, options) {
     options = options || {};
     options.color = options.color || '#000000';
     options.font = options.font || 'Arial';
@@ -334,7 +336,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {Object} [options]
    * @returns {createjs.Shape}
    */
-  drawShape: function(layerName, shape, options) {
+  drawShape: function (layerName, shape, options) {
     options = options || {};
 
     if (options.color) {
@@ -351,7 +353,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method enableCanvas
    * @returns {Canvas}
    */
-  enableCanvas: function() {
+  enableCanvas: function () {
     this.inputStage.addEventListener('stagemousedown', _.bind(this.triggerCanvasMouseDown, this));
     this.inputStage.addEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
     return this;
@@ -361,7 +363,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method disableGrid
    * @returns {StudyPromptCanvasComponent}
    */
-  enableGrid: function() {
+  enableGrid: function () {
     this.drawGrid();
     this.grid = true;
     return this;
@@ -375,14 +377,14 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @TODO refactor these inner functions and local vars into instance fns
    * and variables--this function does too much!
    */
-  enableInput: function() {
+  enableInput: function () {
     const self = this;
     const strokeSize = this.size * this.brushScale;
 
     this.disableInput();
     this.downListener = self.inputStage.addEventListener('stagemousedown', onInputDown);
 
-    function onInputDown(event) {
+    function onInputDown (event) {
       self.points = [];
       self.marker = new createjs.Shape();
       self.marker.graphics.setStrokeStyle(strokeSize, 'round', 'round');
@@ -398,7 +400,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       self.canvasDirty = true;
       self.inputStage.update();
 
-      function updateInputStage() {
+      function updateInputStage () {
         if (self.canvasDirty) {
           self.inputStage.update();
           self.canvasDirty = false;
@@ -412,11 +414,11 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       self.leaveListener = self.inputStage.addEventListener('mouseleave', onInputLeave);
     }
 
-    function onInputLeave(event) {
+    function onInputLeave (event) {
       onInputUp(event);
     }
 
-    function onInputUp(event) {
+    function onInputUp (event) {
       self.inputStage.removeEventListener('stagemousemove', self.onInputMove);
       self.inputStage.removeEventListener('stagemouseup', onInputUp);
       self.inputStage.removeEventListener('mouseleave', onInputLeave);
@@ -447,7 +449,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * Handles input down movement that draws a line on the canvas
    * @param event
    */
-  onInputMove: function(event) {
+  onInputMove: function (event) {
     const strokeSize = this.size * this.brushScale;
 
     const point = new createjs.Point(event.stageX, event.stageY);
@@ -461,7 +463,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     // console.log(strokeSize, (bestDelta * 10), (strokeSize - (bestDelta * 10)));
     this.marker.graphics.unstore();
     this.marker.graphics
-      .setStrokeStyle(strokeSize, 'round', 'round') //(strokeSize - (bestDelta * 25))
+      .setStrokeStyle(strokeSize, 'round', 'round') // (strokeSize - (bestDelta * 25))
       .moveTo(midPoint.x, midPoint.y)
       .curveTo(this.oldPoint.x, this.oldPoint.y, this.oldMidPoint.x, this.oldMidPoint.y);
     this.oldPoint = point;
@@ -477,7 +479,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {Object} [options]
    * @param {Function} [callback]
    */
-  fadeLayer: function(layerName, options, callback) {
+  fadeLayer: function (layerName, options, callback) {
     const layer = this.getLayer(layerName);
     let animRemoved = false;
     options = options || {};
@@ -511,7 +513,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {Object} [options]
    * @param {Function} [callback]
    */
-  fadeShape: function(layerName, shape, options, callback) {
+  fadeShape: function (layerName, shape, options, callback) {
     const layer = this.getLayer(layerName);
     options = options || {};
     options.easing = options.easing || this.defaultFadeEasing;
@@ -535,7 +537,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {String} name
    * @returns {createjs.Container}
    */
-  getLayer: function(name) {
+  getLayer: function (name) {
     const stage = _layerMap[name];
     return stage.getChildByName('layer-' + name);
   },
@@ -545,12 +547,12 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {createjs.Container|createjs.Shape} object
    * @param {String} color
    */
-  injectColor: function(object, color) {
-    var customFill = new createjs.Graphics.Fill(color);
-    var customStroke = new createjs.Graphics.Stroke(color);
-    (function inject(object) {
+  injectColor: function (object, color) {
+    let customFill = new createjs.Graphics.Fill(color);
+    let customStroke = new createjs.Graphics.Stroke(color);
+    (function inject (object) {
       if (object.children) {
-        for (var i = 0, length = object.children.length; i < length; i++) {
+        for (let i = 0, length = object.children.length; i < length; i++) {
           inject(object.children[i]);
         }
       } else if (object.graphics) {
@@ -576,7 +578,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {String} color
    * @returns {StudyPromptCanvasComponent}
    */
-  injectLayerColor: function(layerName, color) {
+  injectLayerColor: function (layerName, color) {
     return this.injectColor(this.getLayer(layerName), color);
   },
 
@@ -584,7 +586,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * Performs dirty check logic to determine if the canvas is dirty and needs
    * to be updated on the tick
    */
-  onDisplayStageTick: function(event) {
+  onDisplayStageTick: function (event) {
     if (!event.paused) {
       this.displayStage.update();
     }
@@ -594,12 +596,12 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method remove
    * @returns {StudyPromptCanvasComponent}
    */
-  remove: function() {
+  remove: function () {
     $('#fps-counter').remove();
     return GelatoComponent.prototype.remove.call(this);
   },
 
-  removeTweensFromLayer: function(layerName) {
+  removeTweensFromLayer: function (layerName) {
     const layer = this.getLayer(layerName);
     createjs.Tween.removeTweens(layer);
   },
@@ -608,7 +610,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method reset
    * @returns {StudyPromptCanvasComponent}
    */
-  reset: function() {
+  reset: function () {
     clearTimeout(this.mouseTapTimeout);
 
     // this.inputStage.children.forEach((layer) => {
@@ -635,7 +637,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method resize
    * @returns {StudyPromptCanvasComponent}
    */
-  resize: function(size) {
+  resize: function (size) {
     if (size) {
       this.canvasSizeOverride = size;
     }
@@ -670,7 +672,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       this.drawGrid();
     }
 
-    //TODO: depreciate usage of global canvas size
+    // TODO: depreciate usage of global canvas size
     app.set('canvasSize', size);
 
     return this;
@@ -680,7 +682,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * Adds an animation to the animation queue
    * @param {String} name the name of the type of animation to start
    */
-  startAnimation(name) {
+  startAnimation (name) {
     _animations.push(name);
 
     this._startOrStopTicker();
@@ -690,7 +692,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * Stops all current animations and updates the ticker
    * @param {String[]} [names] names of animations to finish
    */
-  stopAnimations(names) {
+  stopAnimations (names) {
     names = names || [];
 
     for (let i = 0; i < names.length; i++) {
@@ -709,7 +711,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * animations still playing
    * @private
    */
-  _startOrStopTicker() {
+  _startOrStopTicker () {
       this.displayStage.ticker.paused = !_animations.length;
   },
 
@@ -719,7 +721,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {Array} path
    * @param {Object} [options]
    */
-  tracePath: function(layerName, path, options) {
+  tracePath: function (layerName, path, options) {
     options = options || {};
 
     if (!options.perservePrevTracingCircle && _tracingCircle.circle) {
@@ -728,12 +730,12 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     }
 
     options.fill = options.fill || this.defaultTraceFill;
-    var size = this.size;
-    var circle = this.drawCircle(layerName, path[0].x, path[0].y, 10, {alpha: 0.6, fill: options.fill});
-    var tween = createjs.Tween.get(circle, {loop: true});
-    for (var i = 1, length = path.length; i < length; i++) {
-      var adjustedPoint = new createjs.Point(path[i].x - path[0].x, path[i].y - path[0].y);
-      var throttle = (app.fn.getDistance(path[i], path[i - 1]) / size) * 2000;
+    let size = this.size;
+    let circle = this.drawCircle(layerName, path[0].x, path[0].y, 10, {alpha: 0.6, fill: options.fill});
+    let tween = createjs.Tween.get(circle, {loop: true});
+    for (let i = 1, length = path.length; i < length; i++) {
+      let adjustedPoint = new createjs.Point(path[i].x - path[0].x, path[i].y - path[0].y);
+      let throttle = (app.fn.getDistance(path[i], path[i - 1]) / size) * 2000;
       if (path.length < 3) {
         tween.to({x: adjustedPoint.x, y: adjustedPoint.y}, 1000);
       } else {
@@ -753,7 +755,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method triggerCanvasMouseDown
    * @param {Object} event
    */
-  triggerCanvasMouseDown: function(event) {
+  triggerCanvasMouseDown: function (event) {
     event.preventDefault();
     this.mouseDownEvent = event;
     this.trigger('mousedown', event);
@@ -763,7 +765,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method triggerCanvasMouseUp
    * @param {Object} event
    */
-  triggerCanvasMouseUp: function(event) {
+  triggerCanvasMouseUp: function (event) {
     event.preventDefault();
 
     this.mouseLastDownEvent = this.mouseDownEvent;
@@ -807,7 +809,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
 
     if (this.mouseUpEvent) {
       if (lineDistance < 5 && lineDuration < 1000) {
-        this.mouseTapTimeout = setTimeout((function() {
+        this.mouseTapTimeout = setTimeout((function () {
           this.trigger('tap', event);
         }).bind(this), 200);
       }
@@ -820,7 +822,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method triggerInputDown
    * @param {createjs.Point} point
    */
-  triggerInputDown: function(point) {
+  triggerInputDown: function (point) {
     this.trigger('input:down', point);
   },
 
@@ -828,7 +830,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method triggerInputMove
    * @param {createjs.Point} point
    */
-  triggerInputMove: function(point) {
+  triggerInputMove: function (point) {
     this.trigger('input:move', point);
   },
 
@@ -837,7 +839,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {Array} points
    * @param {createjs.Shape} shape
    */
-  triggerInputUp: function(points, shape) {
+  triggerInputUp: function (points, shape) {
     this.trigger('input:up', points, shape);
   },
 
@@ -845,7 +847,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method triggerNavigateNext
    * @param {Event} event
    */
-  triggerNavigateNext: function(event) {
+  triggerNavigateNext: function (event) {
     event.preventDefault();
     this.stopAnimations();
     this.trigger('navigate:next');
@@ -855,7 +857,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @method triggerNavigatePrevious
    * @param {Event} event
    */
-  triggerNavigatePrevious: function(event) {
+  triggerNavigatePrevious: function (event) {
     event.preventDefault();
     this.stopAnimations();
     this.trigger('navigate:previous');
@@ -870,7 +872,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {Function} [callback]
    * @returns {StudyPromptCanvasComponent}
    */
-  tweenShape: function(layerName, fromShape, toShape, options, callback) {
+  tweenShape: function (layerName, fromShape, toShape, options, callback) {
     const bounds = fromShape.getBounds();
     const layer = this.getLayer(layerName);
 
@@ -889,7 +891,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
         x: toShape.x,
         y: toShape.y,
         scaleX: toShape.scaleX,
-        scaleY: toShape.scaleY
+        scaleY: toShape.scaleY,
       }, options.speed, options.easing)
       .call(() => {
         if (typeof callback === 'function') {
@@ -899,7 +901,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       });
 
     return this;
-  }
+  },
 
 });
 

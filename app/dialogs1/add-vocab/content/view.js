@@ -1,5 +1,5 @@
-var GelatoComponent = require('gelato/component');
-var Vocabs = require('collections/VocabCollection');
+let GelatoComponent = require('gelato/component');
+let Vocabs = require('collections/VocabCollection');
 
 /**
  * @class AddVocabContent
@@ -11,7 +11,7 @@ module.exports = GelatoComponent.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.dialog = options.dialog;
     this.groups = [];
     this.vocablist = null;
@@ -25,7 +25,7 @@ module.exports = GelatoComponent.extend({
     'click #button-add': 'handleClickButtonAdd',
     'click #button-clear': 'handleClickButtonClear',
     'click #button-search': 'handleClickButtonSearch',
-    'keyup #vocab-input': 'handleKeyupVocabInput'
+    'keyup #vocab-input': 'handleKeyupVocabInput',
   },
   /**
    * @property template
@@ -36,7 +36,7 @@ module.exports = GelatoComponent.extend({
    * @method render
    * @returns {AddVocabContent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.listenToOnce(this.dialog.vocablists, 'state', this.render);
     return this;
@@ -45,7 +45,7 @@ module.exports = GelatoComponent.extend({
    * Returns a vocablist if a page has one declared.
    * @returns {null}
    */
-  getCurrentList: function() {
+  getCurrentList: function () {
     if (!app.router.page.vocablist) {
       return null;
     }
@@ -56,24 +56,24 @@ module.exports = GelatoComponent.extend({
    * @method getFormData
    * @returns {Object}
    */
-  getFormData: function() {
+  getFormData: function () {
     return {
       listId: this.$('#vocab-list').val(),
       sectionId: this.$('#vocab-list-section').val(),
-      vocabId: this.$('#vocab-result').val()
+      vocabId: this.$('#vocab-result').val(),
     };
   },
   /**
    * @method handleClickButtonAdd
    * @param {Event} event
    */
-  handleClickButtonAdd: function(event) {
+  handleClickButtonAdd: function (event) {
     event.preventDefault();
-    var self = this;
-    var formData = this.getFormData();
-    var section = this.vocablist.getSectionById(formData.sectionId);
-    var group = this.groups[formData.vocabId];
-    var row = {};
+    let self = this;
+    let formData = this.getFormData();
+    let section = this.vocablist.getSectionById(formData.sectionId);
+    let group = this.groups[formData.vocabId];
+    let row = {};
     if (group[0].isChinese()) {
       row.vocabId = group[0].id;
       if (group.length > 1) {
@@ -93,19 +93,19 @@ module.exports = GelatoComponent.extend({
       type: 'PUT',
       headers: app.user.session.getHeaders(),
       data: JSON.stringify(section),
-      error: function(error) {
+      error: function (error) {
         console.log(error);
       },
-      success: function() {
+      success: function () {
         self.dialog.close();
-      }
+      },
     });
   },
   /**
    * @method handleClickButtonClear
    * @param {Event} event
    */
-  handleClickButtonClear: function(event) {
+  handleClickButtonClear: function (event) {
     event.preventDefault();
     this.vocablist = null;
     this.vocabs.reset();
@@ -115,7 +115,7 @@ module.exports = GelatoComponent.extend({
    * @method handleClickButtonSearch
    * @param {Event} event
    */
-  handleClickButtonSearch: function(event) {
+  handleClickButtonSearch: function (event) {
     event.preventDefault();
     this.search(this.$('#vocab-input').val());
   },
@@ -123,7 +123,7 @@ module.exports = GelatoComponent.extend({
    * @method handleKeyupVocabInput
    * @param {Event} event
    */
-  handleKeyupVocabInput: function(event) {
+  handleKeyupVocabInput: function (event) {
     event.preventDefault();
     if (event.which == 13 || event.keyCode == 13) {
       this.search(this.$('#vocab-input').val());
@@ -133,46 +133,46 @@ module.exports = GelatoComponent.extend({
    * @method search
    * @param {String} value
    */
-  search: function(value) {
-    var self = this;
-    var formData = this.getFormData();
-    var vocablist = this.dialog.vocablists.get(formData.listId);
+  search: function (value) {
+    let self = this;
+    let formData = this.getFormData();
+    let vocablist = this.dialog.vocablists.get(formData.listId);
     async.series(
       [
-        function(callback) {
+        function (callback) {
           vocablist.fetch({
-            error: function(error) {
+            error: function (error) {
               callback(error);
             },
-            success: function() {
+            success: function () {
               self.vocablist = vocablist;
               callback();
-            }
+            },
           });
         },
-        function(callback) {
+        function (callback) {
           self.vocabs.fetch({
             data: {
               lang: app.getLanguage(),
-              q: value
+              q: value,
             },
-            error: function(error) {
+            error: function (error) {
               console.error(error);
               self.vocabs.reset();
               callback(error);
             },
-            success: function() {
+            success: function () {
               callback();
-            }
+            },
           });
-        }
+        },
       ],
-      function() {
-        self.groups = self.vocabs.groupBy(function(vocab) {
+      function () {
+        self.groups = self.vocabs.groupBy(function (vocab) {
           return vocab.getBase();
         });
         self.render();
       }
     );
-  }
+  },
 });

@@ -21,7 +21,7 @@ const CouponModel = SkritterModel.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.wasUsed = false;
     this.error = '';
   },
@@ -30,7 +30,7 @@ const CouponModel = SkritterModel.extend({
    * @method parse
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.Coupon || response;
   },
 
@@ -38,7 +38,7 @@ const CouponModel = SkritterModel.extend({
    * @method use
    * @returns {jqXHR|null}
    */
-  use: function() {
+  use: function () {
     this.error = '';
     if (!this.get('code')) {
       this.error = 'No code provided';
@@ -48,7 +48,7 @@ const CouponModel = SkritterModel.extend({
     this.listenToOnce(this, 'error', this.useError);
     return this.save(null, {
       url: app.getApiUrl() + 'coupons/' + this.get('code') + '/use',
-      method: 'POST'
+      method: 'POST',
     });
   },
 
@@ -57,7 +57,7 @@ const CouponModel = SkritterModel.extend({
    * @param {CouponModel} model
    * @param {jqXHR} jqxhr
    */
-  useError: function(model, jqxhr) {
+  useError: function (model, jqxhr) {
     this.error = jqxhr.responseJSON.message;
     this.stopListening(this, 'sync', this.useSync);
     this.trigger('state', this);
@@ -66,12 +66,12 @@ const CouponModel = SkritterModel.extend({
   /**
    * @method useSync
    */
-  useSync: function(model, response) {
+  useSync: function (model, response) {
     this.subscriptionAttributes = response.Subscription;
     this.wasUsed = true;
     this.stopListening(this, 'error', this.useError);
     this.trigger('state', this);
-  }
+  },
 
 });
 

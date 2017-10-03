@@ -8,7 +8,7 @@ const GelatoDialog = require('gelato/dialog');
 const ViewDialog = GelatoDialog.extend({
 
   events: {
-    'click #button-cancel': 'handleClickButtonCancel'
+    'click #button-cancel': 'handleClickButtonCancel',
   },
 
   /**
@@ -17,9 +17,9 @@ const ViewDialog = GelatoDialog.extend({
    * @param {Function} options.content the constructor function for the view to display
    * @param {object} [options.contentOptions] any additional options to send to the subview
    */
-  initialize: function(options) {
+  initialize: function (options) {
     if (!options || !options.content || typeof options.content !== 'function') {
-      throw "View constructor function must be sent as option to dialog";
+      throw Error('View constructor function must be sent as option to dialog');
     }
 
     this.showCloseButton = options.showCloseButton || false;
@@ -27,8 +27,9 @@ const ViewDialog = GelatoDialog.extend({
     this.dialogTitle = options.dialogTitle || '';
 
     const contentOptions = _.extend(options.contentOptions || {}, {dialog: this});
+    const ContentView = options.content;
 
-    this.content = new options.content(contentOptions);
+    this.content = new ContentView(contentOptions);
   },
 
   /**
@@ -41,7 +42,7 @@ const ViewDialog = GelatoDialog.extend({
    * @method render
    * @returns {ViewDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.content.setElement('#content-container').render();
 
@@ -52,10 +53,10 @@ const ViewDialog = GelatoDialog.extend({
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
     this.close();
-  }
+  },
 });
 
 module.exports = ViewDialog;

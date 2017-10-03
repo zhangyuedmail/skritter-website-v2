@@ -17,7 +17,7 @@ const DemoProgressComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click #skip-btn': 'handleSkipButtonClick'
+    'click #skip-btn': 'handleSkipButtonClick',
   },
 
   /**
@@ -38,36 +38,36 @@ const DemoProgressComponent = GelatoComponent.extend({
   stepData: [
     {
       id: 'languageSelection',
-      name: 'Language Selection'
+      name: 'Language Selection',
     },
     {
       id: 'teachDemoChar1',
-      name: 'First Characters'
+      name: 'First Characters',
     },
     {
       id: 'writeDemoChar1',
-      name: 'Getting Hints'
+      name: 'Getting Hints',
     },
     {
       id: 'erasingCharacters',
-      name: 'Erasing Characters'
+      name: 'Erasing Characters',
     },
     {
       id: 'definitionPrompts',
-      name: 'Definition Prompts'
+      name: 'Definition Prompts',
     },
     {
       id: 'spacedRepetition',
-      name: 'Spaced Repetition'
+      name: 'Spaced Repetition',
     },
     {
       id: 'readingPrompts',
-      name: 'Reading Prompts'
+      name: 'Reading Prompts',
     },
     {
       id: 'demoComplete',
-      name: 'Demo Complete'
-    }
+      name: 'Demo Complete',
+    },
   ],
 
   /**
@@ -76,21 +76,21 @@ const DemoProgressComponent = GelatoComponent.extend({
    * @param {UserModel} options.user the app's usermodel. Must be passed in
    *                                 due to global app variable not available yet.
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.demoPage = options.demoPage;
     this.firstStep = options.firstStep || this.stepData[0];
 
     if (this.demoPage.lang === 'zh') {
       this.stepData.splice(this.stepData.length - 2, 0, {
         id: 'tonePrompts',
-        name: 'Tone Prompts'
+        name: 'Tone Prompts',
       });
     }
 
     this.listenTo(this.demoPage, 'step:update', this.updateStep);
   },
 
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this.updateStep(this.firstStep);
@@ -103,7 +103,7 @@ const DemoProgressComponent = GelatoComponent.extend({
    * the settings page.
    * @param {jQuery.Event} e the click event
    */
-  handleSkipButtonClick: function(e) {
+  handleSkipButtonClick: function (e) {
     this.trigger('demo:skip');
   },
 
@@ -112,7 +112,7 @@ const DemoProgressComponent = GelatoComponent.extend({
    * the user is currently on
    * @param {String} step the current step
    */
-  updateStep: function(step) {
+  updateStep: function (step) {
     let i = 0;
     let stepInfo;
 
@@ -128,7 +128,7 @@ const DemoProgressComponent = GelatoComponent.extend({
     this.$('.progress-bar').attr('style', 'width: ' + progressPercent + '%');
     this.$('#step-num').text('Step ' + (i + 1));
     this.$('#step-text').text(stepInfo.name);
-  }
+  },
 
 });
 

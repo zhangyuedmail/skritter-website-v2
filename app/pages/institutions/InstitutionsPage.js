@@ -13,7 +13,7 @@ const InstitutionsPage = GelatoPage.extend({
   events: {
     'click #purchase-license': 'handleClickRequestPurchase',
     'click #request-trial': 'handleClickRequestTrial',
-    'click #request-submit': 'handleClickRequestSubmit'
+    'click #request-submit': 'handleClickRequestSubmit',
   },
 
   /**
@@ -39,7 +39,7 @@ const InstitutionsPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     app.mixpanel.track('Viewed institutions page');
   },
 
@@ -47,12 +47,12 @@ const InstitutionsPage = GelatoPage.extend({
    * @method render
    * @returns {InstitutionsPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.$('#institution-when').daterangepicker({
       locale: {format: 'YYYY-MM-DD'},
       singleDatePicker: true,
-      startDate: moment()
+      startDate: moment(),
     });
 
     return this;
@@ -62,10 +62,10 @@ const InstitutionsPage = GelatoPage.extend({
    * @method handleClickRequestPurchase
    * @param {Event} event
    */
-  handleClickRequestPurchase: function(event) {
+  handleClickRequestPurchase: function (event) {
     event.preventDefault();
-    var section = this.$('#section-request');
-    var students = $(event.currentTarget).data('students');
+    let section = this.$('#section-request');
+    let students = $(event.currentTarget).data('students');
     $('html, body').animate({scrollTop: section.offset().top}, 1000);
     this.$('#institution-request-type [value="purchase"]').prop('checked', 'checked');
     this.$('#institution-number option[value="' + students + '"]').prop('selected', 'selected');
@@ -75,20 +75,20 @@ const InstitutionsPage = GelatoPage.extend({
    * @method handleClickRequestSubmit
    * @param {Event} event
    */
-  handleClickRequestSubmit: function(event) {
+  handleClickRequestSubmit: function (event) {
     event.preventDefault();
 
-    var self = this;
-    var email = this.$('#institution-contact-email').val();
-    var language = this.$('#institution-language option:selected').text();
-    var message = this.$('#institution-message').val();
-    var name = this.$('#institution-contact-name').val();
-    var requestType = this.$('#institution-request-type [name="request-type"]:checked').val();
-    var schoolAddress = this.$('#institution-address').val();
-    var schoolName = this.$('#institution-name').val();
-    var schoolType = this.$('#institution-type option:selected').text();
-    var schoolStudents = this.$('#institution-number option:selected').text();
-    var when = this.$('#institution-when').val();
+    let self = this;
+    let email = this.$('#institution-contact-email').val();
+    let language = this.$('#institution-language option:selected').text();
+    let message = this.$('#institution-message').val();
+    let name = this.$('#institution-contact-name').val();
+    let requestType = this.$('#institution-request-type [name="request-type"]:checked').val();
+    let schoolAddress = this.$('#institution-address').val();
+    let schoolName = this.$('#institution-name').val();
+    let schoolType = this.$('#institution-type option:selected').text();
+    let schoolStudents = this.$('#institution-number option:selected').text();
+    let when = this.$('#institution-when').val();
 
     if (_.isEmpty(schoolName)) {
       return this._setRequestError('School name is required.');
@@ -124,13 +124,13 @@ const InstitutionsPage = GelatoPage.extend({
           'Contact Name': name,
           'Contact Email': email,
           'Organization Address': schoolAddress,
-          'Start Date': when
-        }
-      })
-    }).then(function() {
+          'Start Date': when,
+        },
+      }),
+    }).then(function () {
       self._setRequestSuccess();
       self.$('form').hide(500);
-    }).fail(function(error) {
+    }).fail(function (error) {
       self._setRequestError(JSON.stringify(error));
       self.enableForm('form');
     });
@@ -140,9 +140,9 @@ const InstitutionsPage = GelatoPage.extend({
    * @method handleClickRequestTrial
    * @param {Event} event
    */
-  handleClickRequestTrial: function(event) {
+  handleClickRequestTrial: function (event) {
     event.preventDefault();
-    var section = this.$('#section-request');
+    let section = this.$('#section-request');
     $('html, body').animate({scrollTop: section.offset().top}, 1000);
     this.$('#institution-request-type [value="trial"]').prop('checked', 'checked');
   },
@@ -152,7 +152,7 @@ const InstitutionsPage = GelatoPage.extend({
    * @param error
    * @private
    */
-  _setRequestError: function(error) {
+  _setRequestError: function (error) {
     this.$('#request-message').removeClass('text-success');
     this.$('#request-message').addClass('text-danger');
     this.$('#request-message').text(error);
@@ -162,11 +162,11 @@ const InstitutionsPage = GelatoPage.extend({
    * Set success message with good institutional requests.
    * @private
    */
-  _setRequestSuccess: function() {
+  _setRequestSuccess: function () {
     this.$('#request-message').removeClass('text-danger');
     this.$('#request-message').addClass('text-success');
     this.$('#request-message').text('Your request has been successfully sent.');
-  }
+  },
 });
 
 module.exports = InstitutionsPage;

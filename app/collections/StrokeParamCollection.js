@@ -6,7 +6,7 @@ const ParamData = require('data/param-data');
  * @class StrokeParamCollection
  * @extends {GelatoCollection}
  */
-const StrokeParamCollection =  GelatoCollection.extend({
+const StrokeParamCollection = GelatoCollection.extend({
 
   /**
    * @property model
@@ -18,9 +18,9 @@ const StrokeParamCollection =  GelatoCollection.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.add(ParamData.getData());
-  }
+  },
 });
 
 module.exports = StrokeParamCollection;

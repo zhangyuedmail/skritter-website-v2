@@ -10,7 +10,7 @@ const BaseSkritterCollection = GelatoCollection.extend({
    * @method headers
    * @returns {Object}
    */
-  headers: function() {
+  headers: function () {
     return app.user.session.getHeaders();
   },
 
@@ -20,7 +20,7 @@ const BaseSkritterCollection = GelatoCollection.extend({
    * @param {Model} model
    * @param {Object} options
    */
-  sync: function(method, model, options) {
+  sync: function (method, model, options) {
     options.headers = _.result(this, 'headers');
 
     if (!options.url) {
@@ -28,7 +28,7 @@ const BaseSkritterCollection = GelatoCollection.extend({
     }
 
     GelatoCollection.prototype.sync.call(this, method, model, options);
-  }
+  },
 });
 
 module.exports = BaseSkritterCollection;

@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class LoadingDialog
@@ -14,8 +14,8 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {LoadingDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
-  }
+  },
 });

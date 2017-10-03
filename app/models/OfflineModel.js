@@ -46,7 +46,7 @@ const OfflineModel = GelatoModel.extend({
    */
   defaults: function () {
     return {
-      lastSync: 0
+      lastSync: 0,
     };
   },
 
@@ -74,14 +74,14 @@ const OfflineModel = GelatoModel.extend({
       limit: 100,
       lists: [],
       parts: this.user.getFilteredParts(),
-      styles: this.user.getFilteredStyles()
+      styles: this.user.getFilteredStyles(),
     });
 
-    return new Promise(async resolve => {
+    return new Promise(async (resolve) => {
       const result = {Characters: [], ContainedItems: [], ContainedVocabs: [], Items: [], Vocabs: []};
 
       // STEP 1: Order and fetch items to be studied next
-      const queryItemResult = await this.database.items.orderBy('next').limit(query.limit).filter(item => {
+      const queryItemResult = await this.database.items.orderBy('next').limit(query.limit).filter((item) => {
         // exclude when no active vocab ids
         if (!item.vocabIds || item.vocabIds.length === 0) {
           return false;
@@ -106,14 +106,14 @@ const OfflineModel = GelatoModel.extend({
 
       // STEP 2: load items that are due next and remove related prompts
       result.Items = await queryItemResult.toArray();
-      result.Items = _.uniqBy(result.Items, item =>  item.id.split('-')[2]);
+      result.Items = _.uniqBy(result.Items, (item) => item.id.split('-')[2]);
 
       // STEP 3: load vocabs based on items
       result.Vocabs = await this.loadVocabsFromItems(result.Items);
 
       // STEP 4: load more items based on vocabs
-      const containedVocabIds = _.chain(result.Vocabs).filter(vocab => vocab.containedVocabIds).map('containedVocabIds').flatten().uniq().value();
-      const queryRelatedItemResult = await this.database.items.filter(item => _.some(containedVocabIds, vocabId => item.id.indexOf(vocabId) > -1));
+      const containedVocabIds = _.chain(result.Vocabs).filter((vocab) => vocab.containedVocabIds).map('containedVocabIds').flatten().uniq().value();
+      const queryRelatedItemResult = await this.database.items.filter((item) => _.some(containedVocabIds, (vocabId) => item.id.indexOf(vocabId) > -1));
 
       result.ContainedItems = await queryRelatedItemResult.toArray();
 
@@ -131,13 +131,13 @@ const OfflineModel = GelatoModel.extend({
   loadVocabsFromItems: async function (items) {
     // check for vocabs not loaded
     const vocabIds = _.chain(items).map('vocabIds').flatten().uniq().value();
-    const vocabRequests = _.map(vocabIds, vocabId => this.database.vocabs.get(vocabId));
+    const vocabRequests = _.map(vocabIds, (vocabId) => this.database.vocabs.get(vocabId));
     const vocabs = await Promise.all(vocabRequests);
 
     // check for contained vocabs not loaded
     const loadedVocabIds = _.map(vocabs, 'id');
     const containedVocabIds = _.chain(vocabs).map('containedVocabIds').without(undefined).flatten().uniq().value();
-    const containedVocabRequests = _.chain(containedVocabIds).difference(loadedVocabIds).map(vocabId => this.database.vocabs.get(vocabId)).value();
+    const containedVocabRequests = _.chain(containedVocabIds).difference(loadedVocabIds).map((vocabId) => this.database.vocabs.get(vocabId)).value();
     const containedVocabs = await Promise.all(containedVocabRequests);
 
     return _.without(vocabs.concat(containedVocabs), undefined);
@@ -149,7 +149,7 @@ const OfflineModel = GelatoModel.extend({
    */
   loadCharactersFromVocabs: function (vocabs) {
     const writings = _.chain(vocabs).map('writing').join('').split('').uniq().value();
-    const requests = _.map(writings, writing => this.database.characters.where('writing').equals(writing).first());
+    const requests = _.map(writings, (writing) => this.database.characters.where('writing').equals(writing).first());
 
     return Promise.all(requests);
   },
@@ -199,11 +199,11 @@ const OfflineModel = GelatoModel.extend({
         const review = reviews[a];
         const reviewIndex = _.findIndex(this.reviews, {group: review.id});
         const reviewJSON = review.toJSON();
-        const reviewCache = {};
+        // const reviewCache = {};
 
         delete reviewJSON.promptItems;
 
-        _.forEach(reviewJSON.data, data => delete data.item);
+        _.forEach(reviewJSON.data, (data) => delete data.item);
 
         if (reviewIndex) {
           this.reviews[reviewIndex] = reviewJSON;
@@ -241,7 +241,7 @@ const OfflineModel = GelatoModel.extend({
       items: 'id,next,part,style',
       lists: 'id,name,studyingMode',
       reviews: 'group,created',
-      vocabs: 'id,writing'
+      vocabs: 'id,writing',
     });
   },
 
@@ -252,7 +252,7 @@ const OfflineModel = GelatoModel.extend({
    */
   removeReviews: function (reviews) {
     const reviewArray = _.isArray(reviews) ? reviews: [reviews];
-    const groupIds = _.map(reviews, 'id');
+    const groupIds = _.map(reviewArray, 'id');
 
     return this.database.reviews.bulkDelete(groupIds);
   },
@@ -271,11 +271,11 @@ const OfflineModel = GelatoModel.extend({
 
     let items = await this._downloadItems(offset);
     let vocabs = await this._downloadItemVocabs(items);
-    let characters = await this._downloadVocabCharacters(vocabs);
+
+    await this._downloadVocabCharacters(vocabs);
 
     items = undefined;
     vocabs = undefined;
-    characters = undefined;
 
     this.set('lastSync', now).cache();
 
@@ -316,7 +316,7 @@ const OfflineModel = GelatoModel.extend({
     reviews = _.isArray(reviews) ? reviews : [reviews];
 
     return new Promise(async (resolve, reject) => {
-      const reviewData = [];
+      // const reviewData = [];
       const updatedItems = [];
 
       for (let a = 0, lengthA = reviews.length; a < lengthA; a++) {
@@ -370,9 +370,9 @@ const OfflineModel = GelatoModel.extend({
         () => {
           return cursor !== null;
         },
-        async callback => {
+        async (callback) => {
           try {
-            const result = await this._fetchItems({sort: 'changed', offset, cursor });
+            const result = await this._fetchItems({sort: 'changed', offset, cursor});
 
             await this.database.items.bulkPut(result.data);
 
@@ -385,7 +385,7 @@ const OfflineModel = GelatoModel.extend({
             callback(error);
           }
         },
-        error => {
+        (error) => {
           if (error) {
             reject(error);
           } else {
@@ -420,7 +420,7 @@ const OfflineModel = GelatoModel.extend({
             callback(error);
           }
         },
-        error => {
+        (error) => {
           if (error) {
             reject(error);
           } else {
@@ -453,7 +453,7 @@ const OfflineModel = GelatoModel.extend({
 
           callback();
         },
-        async error => {
+        async (error) => {
           if (error) {
             reject(error);
           } else {
@@ -481,7 +481,7 @@ const OfflineModel = GelatoModel.extend({
 
           callback();
         },
-        async error => {
+        async (error) => {
           if (error) {
             reject(error);
           } else {
@@ -522,7 +522,7 @@ const OfflineModel = GelatoModel.extend({
 
           callback();
         },
-        async error => {
+        async (error) => {
           if (error) {
             reject(error);
           } else {
@@ -543,7 +543,7 @@ const OfflineModel = GelatoModel.extend({
    */
   _fetchCharacters: async function (params) {
     params = _.defaults(params, {
-      lang: app.getLanguage()
+      lang: app.getLanguage(),
     });
 
     if (params.writings && _.isArray(params.writings)) {
@@ -554,7 +554,7 @@ const OfflineModel = GelatoModel.extend({
       url: app.getApiUrl(2) + 'characters',
       method: 'GET',
       headers: app.user.session.getHeaders(),
-      data: params
+      data: params,
     });
 
     return {data: response, cursor: null};
@@ -568,7 +568,7 @@ const OfflineModel = GelatoModel.extend({
    */
   _fetchItems: async function (params) {
     params = _.defaults(params, {
-      lang: app.getLanguage()
+      lang: app.getLanguage(),
     });
 
     if (params.ids && _.isArray(params.ids)) {
@@ -579,7 +579,7 @@ const OfflineModel = GelatoModel.extend({
       url: app.getApiUrl() + 'items',
       method: 'GET',
       headers: app.user.session.getHeaders(),
-      data: params
+      data: params,
     });
 
     const responseCursor = response.cursor || null;
@@ -598,7 +598,7 @@ const OfflineModel = GelatoModel.extend({
     const response = await $.ajax({
       url: app.getApiUrl() + 'vocablists/' + listId,
       method: 'GET',
-      headers: app.user.session.getHeaders()
+      headers: app.user.session.getHeaders(),
     });
 
     const responseCursor = response.cursor || null;
@@ -615,7 +615,7 @@ const OfflineModel = GelatoModel.extend({
    */
   _fetchLists: async function (params) {
     params = _.defaults(params, {
-      lang: app.getLanguage()
+      lang: app.getLanguage(),
     });
 
     if (params.ids && _.isArray(params.ids)) {
@@ -626,7 +626,7 @@ const OfflineModel = GelatoModel.extend({
       url: app.getApiUrl() + 'vocablists',
       method: 'GET',
       headers: app.user.session.getHeaders(),
-      data: params
+      data: params,
     });
 
     const responseCursor = response.cursor || null;
@@ -643,7 +643,7 @@ const OfflineModel = GelatoModel.extend({
    */
   _fetchVocabs: async function (params) {
     params = _.defaults(params, {
-      lang: app.getLanguage()
+      lang: app.getLanguage(),
     });
 
     if (params.ids && _.isArray(params.ids)) {
@@ -654,14 +654,14 @@ const OfflineModel = GelatoModel.extend({
       url: app.getApiUrl() + 'vocabs',
       method: 'GET',
       headers: app.user.session.getHeaders(),
-      data: params
+      data: params,
     });
 
     const responseCursor = response.cursor || null;
     const responseVocabs = response.Vocabs || [];
 
     return {data: responseVocabs, cursor: responseCursor};
-  }
+  },
 
 });
 

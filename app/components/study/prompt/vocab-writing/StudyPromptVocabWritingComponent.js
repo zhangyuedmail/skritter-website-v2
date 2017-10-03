@@ -17,7 +17,7 @@ const StudyPromptVocabWritingComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
     this.visible = false;
   },
@@ -26,7 +26,7 @@ const StudyPromptVocabWritingComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptVocabWritingComponent}
    */
-  render: function() {
+  render: function () {
     if (this.prompt.reviews) {
       if (app.isMobile() && _.includes(['defn', 'rdng'], this.prompt.reviews.part)) {
         this.visible = false;
@@ -40,7 +40,7 @@ const StudyPromptVocabWritingComponent = GelatoComponent.extend({
     this.renderTemplate();
 
     return this;
-  }
+  },
 
 });
 

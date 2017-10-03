@@ -2,7 +2,7 @@
  * @class GelatoCollection
  * @extends {Backbone.Collection}
  */
-var GelatoCollection = Backbone.Collection.extend({
+let GelatoCollection = Backbone.Collection.extend({
   /**
    * @property state
    * @type {String}
@@ -12,7 +12,7 @@ var GelatoCollection = Backbone.Collection.extend({
    * @method fetch
    * @param {Object} [options]
    */
-  fetch: function(options) {
+  fetch: function (options) {
     options = options || {};
     this.state = 'fetching';
     this._triggerState();
@@ -24,20 +24,20 @@ var GelatoCollection = Backbone.Collection.extend({
    * @param {Object} options
    * @private
    */
-  _handleRequestEvent: function(options) {
-    var originalOptions = _.clone(options);
-    options.error = (function() {
+  _handleRequestEvent: function (options) {
+    let originalOptions = _.clone(options);
+    options.error = (function () {
       this.state = 'standby';
       this._triggerState();
       if (typeof originalOptions.error === 'function') {
-        originalOptions.error.apply(originalOptions, arguments);
+        originalOptions.error(...arguments);
       }
     }).bind(this);
-    options.success = (function() {
+    options.success = (function () {
       this.state = 'standby';
       this._triggerState();
       if (typeof originalOptions.success === 'function') {
-        originalOptions.success.apply(originalOptions, arguments);
+        originalOptions.success(...arguments);
       }
     }).bind(this);
   },
@@ -45,10 +45,10 @@ var GelatoCollection = Backbone.Collection.extend({
    * @method _triggerState
    * @private
    */
-  _triggerState: function() {
+  _triggerState: function () {
     this.trigger('state', this.state, this);
     this.trigger('state:' + this.state, this);
-  }
+  },
 });
 
 module.exports = GelatoCollection;

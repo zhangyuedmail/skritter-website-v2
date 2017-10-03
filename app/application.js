@@ -27,7 +27,7 @@ const vent = require('vent');
 module.exports = GelatoApplication.extend({
 
   events: {
-    'click #main-app-container-overlay': 'handleOverlayClick'
+    'click #main-app-container-overlay': 'handleOverlayClick',
   },
 
   /**
@@ -48,7 +48,7 @@ module.exports = GelatoApplication.extend({
     thinkLocally: '{!application-thinkLocally!}' === 'true',
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
-    version: '{!application-version!}'
+    version: '{!application-version!}',
   },
 
   /**
@@ -57,7 +57,7 @@ module.exports = GelatoApplication.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     GelatoApplication.prototype.initialize.apply(this, arguments);
 
     this.config = config;
@@ -89,7 +89,7 @@ module.exports = GelatoApplication.extend({
         config.sentryUrl,
         {
           ignoreUrls: [/localhost/],
-          release: this.getVersionWithBuildTimestamp()
+          release: this.getVersionWithBuildTimestamp(),
         }
       ).install();
     }
@@ -113,7 +113,7 @@ module.exports = GelatoApplication.extend({
     this.initEventListeners();
   },
 
-  render: function() {
+  render: function () {
     GelatoApplication.prototype.render.apply(this, arguments);
 
     if (config.recordLoadTimes) {
@@ -130,25 +130,27 @@ module.exports = GelatoApplication.extend({
   get: function (key) {
     return this.config[key];
   },
-  set: function(key, value) { this.config[key] = value; },
+  set: function (key, value) {
+ this.config[key] = value;
+},
 
   /**
    * A dictionary of app-level dialogs. Should be initialized after render.
    */
   dialogs: {
-    vocabViewer: null
+    vocabViewer: null,
   },
   /**
    * Sends a request to the api and records usage information.
    */
-  capturePlatformInfo: function() {
+  capturePlatformInfo: function () {
     if (!this.isDevelopment() && this.user.isLoggedIn()) {
       const platformData = {
         client: (this.isAndroid() && 'android') || (this.isIOS() && 'ios') || 'web',
         // device: this.isMobile() && window.cordova ? : navigator.userAgent,
         lang: this.getLanguage(),
         user: this.user.id,
-        version: config.version
+        version: config.version,
       };
       try {
         $.ajax({
@@ -157,10 +159,10 @@ module.exports = GelatoApplication.extend({
           context: this,
           type: 'POST',
           data: platformData,
-          error: function(error) {}
+          error: function (error) {},
         });
-      } catch(e) {
-
+      } catch (e) {
+        console.log(e);
       }
     }
   },
@@ -173,7 +175,7 @@ module.exports = GelatoApplication.extend({
    * instance variable for the lifetime of the session.
    * @method checkAndSetReferralInfo
    */
-  checkAndSetReferralInfo: function() {
+  checkAndSetReferralInfo: function () {
     let siteRef = Functions.getParameterByName('siteref') || this.getSetting('siteRef');
     let couponCode = Functions.getParameterByName('coupon') || this.getSetting('coupon');
 
@@ -182,7 +184,7 @@ module.exports = GelatoApplication.extend({
       this.setSetting('siteRef', {
         referer: siteRef,
         expiration: expiration,
-        couponCode: couponCode
+        couponCode: couponCode,
       });
     } else if (couponCode) {
       this.couponCode = couponCode;
@@ -195,7 +197,7 @@ module.exports = GelatoApplication.extend({
    * @param {number} version the version of the API to get
    * @returns {String} the base URL for the API
    */
-  getApiUrl: function(version) {
+  getApiUrl: function (version) {
     if (version) {
       if (version === 2) {
         // return 'http://localhost:3210/v2/';
@@ -215,7 +217,7 @@ module.exports = GelatoApplication.extend({
    * of a referral take precedence.
    * @returns {String} the coupon code, if it exists
    */
-  getStoredCouponCode: function() {
+  getStoredCouponCode: function () {
     let ref = (this.getSetting('siteRef') || {});
     let expiration = ref['expiration'];
     let couponCode = ref['couponCode'];
@@ -238,7 +240,7 @@ module.exports = GelatoApplication.extend({
    * @method getLanguage
    * @returns {String}
    */
-  getLanguage: function() {
+  getLanguage: function () {
     return _.isEmpty(this.config.language) ? this.user.get('targetLang') : this.config.language;
   },
 
@@ -254,7 +256,7 @@ module.exports = GelatoApplication.extend({
    * @method getMixpanelKey
    * @returns {String}
    */
-  getMixpanelKey: function() {
+  getMixpanelKey: function () {
     if (this.isProduction()) {
       return '8ee755b0ebe4f1141cda5dd09186cdca';
     } else {
@@ -268,7 +270,7 @@ module.exports = GelatoApplication.extend({
    * http://english.stackexchange.com/a/42636
    * @returns {null}
    */
-  getRefererId: function() {
+  getRefererId: function () {
     let ref = (this.getSetting('siteRef') || {});
     let referer = ref['referer'];
     let expiration = ref['expiration'];
@@ -291,7 +293,7 @@ module.exports = GelatoApplication.extend({
    * @method getStripeKey
    * @returns {String}
    */
-  getStripeKey: function() {
+  getStripeKey: function () {
     if (this.isProduction()) {
       return 'pk_live_pWk0Lg3fgazBwkmSrzxOJ0fc';
     } else {
@@ -305,7 +307,7 @@ module.exports = GelatoApplication.extend({
    * the referral setting.
    * @returns {String} The referrer id if found and valid, or null
    */
-  getUserReferral: function() {
+  getUserReferral: function () {
     let referral = this.getSetting('referral');
 
     if (!referral) {
@@ -327,7 +329,7 @@ module.exports = GelatoApplication.extend({
    * Returns the version number with an appended build timestamp.
    * @returns {string}
    */
-  getVersionWithBuildTimestamp: function() {
+  getVersionWithBuildTimestamp: function () {
     return this.config.version + '.' + moment().unix();
   },
 
@@ -337,7 +339,7 @@ module.exports = GelatoApplication.extend({
    * is prevented. If nothing is found, default action happens (app exit).
    * @param event
    */
-  handleAndroidBackButtonPressed: function(event) {
+  handleAndroidBackButtonPressed: function (event) {
     const backAction = this._backButtonStack.pop();
 
     if (backAction) {
@@ -353,7 +355,7 @@ module.exports = GelatoApplication.extend({
    * Toggles the main menu on Android when the menu key is pressed.
    * @param event
    */
-  handleAndroidMenuKeyPressed: function(event) {
+  handleAndroidMenuKeyPressed: function (event) {
     this.toggleSideMenu();
   },
 
@@ -364,10 +366,10 @@ module.exports = GelatoApplication.extend({
    * @param {Number} [line]
    * @returns {Boolean}
    */
-  handleError: function(message, url, line) {
+  handleError: function (message, url, line) {
     app.notifyUser({
       title: app.locale('common.errorApplication'),
-      message: message
+      message: message,
     });
 
     return false;
@@ -378,7 +380,7 @@ module.exports = GelatoApplication.extend({
    * Hides the mobile menus when clicked.
    * @param {jQuery.Event} e the click event
    */
-  handleOverlayClick: function(e) {
+  handleOverlayClick: function (e) {
     this.hideAllMenus();
   },
 
@@ -387,7 +389,7 @@ module.exports = GelatoApplication.extend({
    * @param {String[]} [exceptions] an optional array of menus not to hide
    * @method hideAllMenus
    */
-  hideAllMenus: function(exceptions) {
+  hideAllMenus: function (exceptions) {
     exceptions = exceptions || [];
 
     if (exceptions.indexOf('left-side-app-container') === -1) {
@@ -403,7 +405,7 @@ module.exports = GelatoApplication.extend({
    * Initializes analytics platforms
    * @method initAnalytics
    */
-  initAnalytics: function() {
+  initAnalytics: function () {
     if (window.ga && this.isProduction()) {
       ga('create', 'UA-4642573-1', 'auto');
       ga('set', 'forceSSL', true);
@@ -413,11 +415,11 @@ module.exports = GelatoApplication.extend({
       this.mixpanel.init(this.getMixpanelKey());
     } else {
       window.mixpanel = {
-        alias: function() {},
-        identify: function() {},
-        init: function() {},
-        register: function() {},
-        track: function() {}
+        alias: function () {},
+        identify: function () {},
+        init: function () {},
+        register: function () {},
+        track: function () {},
       };
     }
 
@@ -427,7 +429,7 @@ module.exports = GelatoApplication.extend({
   /**
    * Sets a UUID for the user if they don't have one
    */
-  checkAndSetUUID: function() {
+  checkAndSetUUID: function () {
     if (localStorage && !localStorage.getItem('skrit-uuid')) {
       localStorage.setItem('skrit-uuid', '' + Date.now() + Math.floor(Math.random() * 1000000));
     }
@@ -438,7 +440,7 @@ module.exports = GelatoApplication.extend({
    * @method initEventListeners
    *
    */
-  initEventListeners: function() {
+  initEventListeners: function () {
     this.listenTo(vent, 'vocabInfo:toggle', this.toggleVocabInfo);
     this.listenTo(vent, 'notification:show', this.showNotification);
     this.listenTo(vent, 'notification:close', this.closeNotification);
@@ -446,12 +448,18 @@ module.exports = GelatoApplication.extend({
 
     if (this.isMobile()) {
       this.listenTo(vent, 'mobileNavMenu:toggle', this.toggleSideMenu);
-      this.listenTo(vent, 'page:switch', () => { this.toggleSideMenu(false); });
+      this.listenTo(vent, 'page:switch', () => {
+ this.toggleSideMenu(false);
+});
 
       if (this.isAndroid()) {
         this._backButtonStack = [];
-        document.addEventListener('menubutton', (e) => {this.handleAndroidMenuKeyPressed(e);}, false);
-        document.addEventListener('backbutton', (e) => {this.handleAndroidBackButtonPressed(e);}, false);
+        document.addEventListener('menubutton', (e) => {
+this.handleAndroidMenuKeyPressed(e);
+}, false);
+        document.addEventListener('backbutton', (e) => {
+this.handleAndroidBackButtonPressed(e);
+}, false);
       }
     }
   },
@@ -460,9 +468,9 @@ module.exports = GelatoApplication.extend({
    * Initializes the footer component for the application
    * @method initFooter
    */
-  initFooter: function() {
+  initFooter: function () {
     if (!this.isMobile()) {
-      this._views['footer'] =  new MarketingFooter();
+      this._views['footer'] = new MarketingFooter();
     }
   },
 
@@ -471,8 +479,7 @@ module.exports = GelatoApplication.extend({
    * of the device.
    * @method initNavbar
    */
-  initNavbar: function() {
-
+  initNavbar: function () {
     // TODO: replace this with isAndroid || isIOS
     if (this.isMobile()) {
       this._views['navbar'] = new MobileNavbar();
@@ -485,13 +492,13 @@ module.exports = GelatoApplication.extend({
    * Sets up objects and methods related to recording the application's performance timing.
    * @method initPerfRecording
    */
-  initPerfRecording: function() {
+  initPerfRecording: function () {
     this.loadTimes = {
       _loading: {
         pages: {
-          app: null
+          app: null,
         },
-        api: {}
+        api: {},
       },
       pages: {
         app: null,
@@ -504,28 +511,31 @@ module.exports = GelatoApplication.extend({
         vocablistsQueue: [],
         vocablistsSearch: [],
         vocabInfoViewer: [],
-        words: []
+        words: [],
       },
       api: {},
-      report: function() {
+      report: function () {
         if (!this.pages.app) {
           console.log('Nothing to report yet, sir!');
         }
         console.log('The app took ' + parseInt(this.pages.app, 10) + ' ms to load until application.js rendered.');
         console.log('And the app took ' + parseInt(this.pages.appScreenloaderHide, 10) + ' ms to load until the screenloader disappeared.');
-        ["dashboard", "stats", "study", "vocablistsBrowse",
-          "vocablistsPublished", "vocablistsQueue", "vocablistsSearch",
-          "vocabInfoViewer", "words"].forEach((section) => {
+        ['dashboard', 'stats', 'study', 'vocablistsBrowse',
+          'vocablistsPublished', 'vocablistsQueue', 'vocablistsSearch',
+          'vocabInfoViewer', 'words'].forEach((section) => {
           if (this.pages[section].length) {
-            let avgTime = this.pages[section].reduce(function(n, val) {
-                return n + val;}, 0) / this.pages[section].length;
+            let avgTime = this.pages[section].reduce(function (n, val) {
+                return n + val;
+}, 0) / this.pages[section].length;
             console.log('The ' + section + ' averaged ' +
               parseInt(avgTime, 10) + ' ms across ' +
               this.pages[section].length + ' loads.');
-            console.log('\tdata: ' + this.pages[section].map(v => {return parseInt(v, 10);}));
+            console.log('\tdata: ' + this.pages[section].map((v) => {
+return parseInt(v, 10);
+}));
           }
         });
-      }
+      },
     };
 
     if (window._appLoadStartTime) {
@@ -538,10 +548,10 @@ module.exports = GelatoApplication.extend({
    * the main application frame.
    * @method initSideViews
    */
-  initSideViews: function() {
+  initSideViews: function () {
     if (this.isMobile()) {
       this._views['leftSide'] = new MobileSideMenuComponent({
-        user: this.user
+        user: this.user,
       });
 
       this._views['rightSide'] = new VocabInfoContent();
@@ -553,7 +563,7 @@ module.exports = GelatoApplication.extend({
    * @method isChinese
    * @returns {Boolean}
    */
-  isChinese: function() {
+  isChinese: function () {
     return this.getLanguage() === 'zh';
   },
 
@@ -562,14 +572,14 @@ module.exports = GelatoApplication.extend({
    * @method isJapanese
    * @returns {Boolean}
    */
-  isJapanese: function() {
+  isJapanese: function () {
     return this.getLanguage() === 'ja';
   },
 
   /**
    * @method loadHelpscout
    */
-  loadHelpscout: function() {
+  loadHelpscout: function () {
     const parent = document.getElementsByTagName('script')[0];
     const script = document.createElement('script');
     const HSCW = {config: {}};
@@ -579,14 +589,14 @@ module.exports = GelatoApplication.extend({
     HSCW.config = {
       contact: {
         enabled: true,
-        formId: '34a3fef0-62f6-11e5-8846-0e599dc12a51'
+        formId: '34a3fef0-62f6-11e5-8846-0e599dc12a51',
       },
       docs: {
         enabled: !app.isMobile(),
-        baseUrl: 'https://docs.skritter.com'
-      }
+        baseUrl: 'https://docs.skritter.com',
+      },
     };
-    HS.beacon.ready = function(callback) {
+    HS.beacon.ready = function (callback) {
       this.readyQueue.push(callback);
     };
     HS.beacon.userConfig = {
@@ -594,16 +604,16 @@ module.exports = GelatoApplication.extend({
       autoInit: true,
       color: '#32a8d9',
       icon: 'question',
-      instructions: "Bugs, comments or suggestions? We'd love to hear from you!",
+      instructions: 'Bugs, comments or suggestions? We\'d love to hear from you!',
       modal: true,
       poweredBy: false,
-      zIndex: 9999
+      zIndex: 9999,
     };
-    HS.beacon.ready(function(beacon) {
+    HS.beacon.ready(function (beacon) {
       if (self.user.isLoggedIn()) {
         this.identify({
           email: self.user.get('email'),
-          name: self.user.get('name')
+          name: self.user.get('name'),
         });
       }
     });
@@ -622,7 +632,7 @@ module.exports = GelatoApplication.extend({
    * @param {String} [code]
    * @returns {*}
    */
-  locale: function(path, code) {
+  locale: function (path, code) {
     let locale;
     try {
       locale = require('locale/' + (code || app.get('locale')));
@@ -636,24 +646,24 @@ module.exports = GelatoApplication.extend({
    *
    * @param {Object} options
    */
-  notifyUser: function(options) {
+  notifyUser: function (options) {
     $.notify(
       {
         title: options.title,
-        message: options.message
+        message: options.message,
       },
       {
         offset: {
           x: 20,
-          y: app.isMobile() ? 100 : 20
+          y: app.isMobile() ? 100 : 20,
         },
         type: options.type || 'pastel-danger',
         animate: {
           enter: options.animateEnter || 'animated fadeInDown',
-          exit: options.animateExit || 'animated fadeOutUp'
+          exit: options.animateExit || 'animated fadeOutUp',
         },
         delay: options.delay || 5000,
-        icon_type: options.iconType || 'class'
+        icon_type: options.iconType || 'class',
       }
     );
   },
@@ -665,7 +675,7 @@ module.exports = GelatoApplication.extend({
    *                                      this method.
    * @method processUserReferral
    */
-  processUserReferral: function(suppressMessages) {
+  processUserReferral: function (suppressMessages) {
     let referral = this.getSetting('referral');
 
     if (!referral) {
@@ -674,7 +684,8 @@ module.exports = GelatoApplication.extend({
 
     let now = moment();
     let expiration = moment(referral.expiration, config.dateFormatApp);
-    let dfd = $.Deferred();
+    let deferred = $.Deferred;
+    let dfd = deferred;
     let self = this;
 
     if (expiration.diff(now, 'days') > 0) {
@@ -682,11 +693,11 @@ module.exports = GelatoApplication.extend({
         type: 'post',
         url: this.getApiUrl() + 'referrals',
         headers: {
-          'Authorization': 'bearer ' + this.user.session.get('access_token')
+          'Authorization': 'bearer ' + this.user.session.get('access_token'),
         },
         data: {
-          referrer: referral.referrer
-        }
+          referrer: referral.referrer,
+        },
       })
         .done(function (response) {
           self.removeSetting('referral');
@@ -695,18 +706,18 @@ module.exports = GelatoApplication.extend({
             self.notifyUser({
               title: 'Referral successful',
               message: app.locale('common.userReferralSuccessful'),
-              type: 'alert-pastel-info'
+              type: 'alert-pastel-info',
             });
           }
         })
-        .fail(function(error) {
+        .fail(function (error) {
           dfd.reject('common.errorUserReferralFailed');
           // TODO
         });
     } else {
       this.removeSetting('referral');
       this.notifyUser({
-        message: this.locale('common.errorUserReferralExpired')
+        message: this.locale('common.errorUserReferralExpired'),
       });
       dfd.reject('common.errorUserReferralExpired');
     }
@@ -718,12 +729,12 @@ module.exports = GelatoApplication.extend({
    * Gets an object with the install state of various dictionaries on Android.
    * @method refreshAvailableDicts
    */
-  refreshAvailableDicts: function() {
+  refreshAvailableDicts: function () {
     const dicts = {
       pleco: false,
       hanpingLite: false,
       hanpingPro: false,
-      hanpingYue: false
+      hanpingYue: false,
     };
 
     if (!app.isAndroid()) {
@@ -767,7 +778,7 @@ module.exports = GelatoApplication.extend({
               callback();
             }
           );
-        }
+        },
       ],
       () => {
         this.dicts = dicts;
@@ -781,11 +792,11 @@ module.exports = GelatoApplication.extend({
    * @param {Boolean} [processImmediately] whether to immediately fire off an API request
    * @method setUserReferral
    */
-  setUserReferral: function(userId, processImmediately) {
+  setUserReferral: function (userId, processImmediately) {
     let expiration = moment().add(2, 'weeks').format(config.dateFormatApp);
     this.setSetting('referral', {
       referrer: userId,
-      expiration: expiration
+      expiration: expiration,
     });
 
     if (processImmediately) {
@@ -796,20 +807,20 @@ module.exports = GelatoApplication.extend({
   /**
    * Shows a simple dialog the user can send us feedback through.
    */
-  showFeedbackDialog: function() {
+  showFeedbackDialog: function () {
     if (!this.feedbackDialog) {
       this.feedbackDailog = new ViewDialog({
         content: FeedbackComponent,
         showCloseButton: true,
         showTitle: true,
-        dialogTitle: 'Leave us feedback'
+        dialogTitle: 'Leave us feedback',
       });
     }
 
     this.feedbackDailog.open();
   },
 
-  closeNotification: function() {
+  closeNotification: function () {
     $('gelato-application').removeClass('no-scroll');
 
     if (this._views['notification-dialog']) {
@@ -833,7 +844,7 @@ module.exports = GelatoApplication.extend({
    * @param {Object} [options.style] object containing CSS properties for the
    *                                 'dialog' and the 'backdrop'
    */
-  showNotification: function(options) {
+  showNotification: function (options) {
     if (options.keepAlive && this._views['notification-dialog']) {
       this._views['notification-dialog'].set(options);
       return;
@@ -848,7 +859,7 @@ module.exports = GelatoApplication.extend({
   /**
    * @method start
    */
-  start: function() {
+  start: function () {
     GelatoApplication.prototype.start.apply(this, arguments);
 
     // sets a global app object with installed dictionary states
@@ -864,7 +875,7 @@ module.exports = GelatoApplication.extend({
     if (this.user.isLoggedIn()) {
       Raven.setUserContext({
         id: this.user.id,
-        email: this.user.get('email')
+        email: this.user.get('email'),
       });
 
       mixpanel.identify(this.user.id);
@@ -872,7 +883,7 @@ module.exports = GelatoApplication.extend({
         'Client': 'Website',
         'Client Version': '2.0',
         'Display Name': this.user.get('name'),
-        'Language Code': app.getLanguage()
+        'Language Code': app.getLanguage(),
       });
 
       // cleanup unused indexedDB instance
@@ -884,7 +895,7 @@ module.exports = GelatoApplication.extend({
       this.listener = new window.keypress.Listener();
       this.listener.simple_combo(
         'shift a',
-        function(event) {
+        function (event) {
           if ($(event.target).is('textarea')) {
             return true;
           }
@@ -898,26 +909,25 @@ module.exports = GelatoApplication.extend({
           return false;
         }
       );
-
     } else {
       mixpanel.register({
         'Client': 'Website',
         'Client Version': '2.0',
         'Display Name': null,
-        'Language Code': null
+        'Language Code': null,
       });
     }
 
     Raven.setTagsContext({
       'language.code': this.getLanguage(),
       'locale.code': this.config.locale,
-      'platform': this.getPlatform()
+      'platform': this.getPlatform(),
     });
 
     // use async for cleaner loading code
     async.series(
       [
-        async callback => {
+        async (callback) => {
           // check for user authentication type
           if (app.user.id === 'application') {
             this._checkClientRefreshToken().then(callback);
@@ -925,7 +935,7 @@ module.exports = GelatoApplication.extend({
             this._checkUserRefreshToken().then(callback);
           }
         },
-        async callback => {
+        async (callback) => {
           // skip offline stuff when disabled, no user or mobile not detected
           if (!this.config.offlineEnabled || !this.user.get('offlineEnabled') || !this.user.isLoggedIn() || !this.isMobile()) {
             callback();
@@ -950,10 +960,10 @@ module.exports = GelatoApplication.extend({
           await this.user.offline.sync();
 
           callback();
-        }
+        },
       ],
       () => {
-        setTimeout(function() {
+        setTimeout(function () {
           if (app.config.recordLoadTimes) {
             const loadTime = window.performance.now() - window._appLoadStartTime;
             app.loadTimes.pages.appScreenloaderHide = loadTime;
@@ -983,15 +993,18 @@ module.exports = GelatoApplication.extend({
    * @param {Boolean} show whether to show or hide
    * @param {Object} options
    */
-  toggleAppCallToActionGuide: function(show, options) {
+  toggleAppCallToActionGuide: function (show, options) {
     $('#app-call-to-action-guide').toggleClass('hidden', !show);
 
     if (show && options) {
       let styleStr = '';
 
       for (let key in options) {
-        styleStr += key + ': ' + options[key] + ';';
+        if (options.hasOwnProperty(key)) {
+          styleStr += key + ': ' + options[key] + ';';
+        }
       }
+
       $('#app-call-to-action-guide').attr('style', styleStr);
     }
   },
@@ -1000,7 +1013,7 @@ module.exports = GelatoApplication.extend({
    * Hides all other menus and shows the side container of the application
    * @param {Boolean} [show] whether to show the side element
    */
-  toggleSideMenu: function(show) {
+  toggleSideMenu: function (show) {
     this.hideAllMenus(['left-side-app-container']);
     $('gelato-application').toggleClass('no-overflow', show);
     this.$('#main-app-container').toggleClass('push-right', show);
@@ -1028,7 +1041,7 @@ module.exports = GelatoApplication.extend({
    * @param {String} vocabId the vocab id
    * @param {Object} [vocabInfo] data required for displaying dialog
    */
-  toggleVocabInfo: function(vocabId, vocabInfo) {
+  toggleVocabInfo: function (vocabId, vocabInfo) {
     if (!this.isMobile()) {
       return this.openDesktopVocabViewer(vocabId, vocabInfo);
     }
@@ -1059,7 +1072,7 @@ module.exports = GelatoApplication.extend({
    * Shows a vocab info side view on mobile devices.
    * @param {String} vocabId the vocab id
    */
-  openDesktopVocabViewer: function(vocabId, vocab) {
+  openDesktopVocabViewer: function (vocabId, vocab) {
     if (this.isMobile()) {
       return;
     }
@@ -1076,16 +1089,16 @@ module.exports = GelatoApplication.extend({
    * Checks if a client session token is refreshable and refreshes it if needed.
    * @returns {Promise}
    */
-  _checkClientRefreshToken: function() {
-    return new Promise(resolve => {
+  _checkClientRefreshToken: function () {
+    return new Promise((resolve) => {
       app.user.session.authenticate(
         'client_credentials',
         null,
         null,
-        function() {
+        function () {
           resolve();
         },
-        function() {
+        function () {
           resolve();
         }
       );
@@ -1096,15 +1109,15 @@ module.exports = GelatoApplication.extend({
    * Checks if a user session token is refreshable and refreshes it if needed.
    * @returns {Promise}
    */
-  _checkUserRefreshToken: function() {
-    return new Promise(resolve => {
+  _checkUserRefreshToken: function () {
+    return new Promise((resolve) => {
       // only attempt to refresh token that are about to expire
       if (app.user.session.isRefreshable()) {
         app.user.session.refresh(
-          function() {
+          function () {
             resolve();
           },
-          function(error) {
+          function (error) {
             // log user out if the refresh token does not exist
             if (error.responseJSON && _.includes(error.responseJSON.message, 'No such refresh token')) {
               app.user.logout();
@@ -1117,5 +1130,5 @@ module.exports = GelatoApplication.extend({
         resolve();
       }
     });
-  }
+  },
 });

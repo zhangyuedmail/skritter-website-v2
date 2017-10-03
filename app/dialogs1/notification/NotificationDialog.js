@@ -6,7 +6,7 @@ const GelatoDialog = require('gelato/dialog');
  */
 module.exports = GelatoDialog.extend({
   events: {
-    'click #notification-button': 'handleNotificationButtonClicked'
+    'click #notification-button': 'handleNotificationButtonClicked',
   },
 
   /**
@@ -19,7 +19,7 @@ module.exports = GelatoDialog.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     // options.ignoreBackdropClick = options.ignoreBackdropClick !== undefined ? options.ignoreBackgdropClick : true;
     this.set(options);
   },
@@ -28,13 +28,13 @@ module.exports = GelatoDialog.extend({
    * @method render
    * @returns {VocabViewer}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate({
       dialogTitle: this.dialogTitle,
       showTitle: this.showTitle,
       body: this.body,
       buttonText: this.buttonText,
-      showConfirmButton: this.showConfirmButton
+      showConfirmButton: this.showConfirmButton,
     });
 
     if (this.style) {
@@ -51,7 +51,7 @@ module.exports = GelatoDialog.extend({
    *
    * @param {jQuery.Event}event
    */
-  handleNotificationButtonClicked: function(event) {
+  handleNotificationButtonClicked: function (event) {
     if (this.next) {
       this.set(this.next);
       return;
@@ -69,7 +69,7 @@ module.exports = GelatoDialog.extend({
    * @param {String} [options.buttonText] the text for the confirm/close button
    * @param {Boolean} [options.showConfirmButton] whether to show a button to confirm/close the dialog
    */
-  set: function(options) {
+  set: function (options) {
     options = options || {};
 
     this.dialogTitle = options.dialogTitle;
@@ -95,11 +95,13 @@ module.exports = GelatoDialog.extend({
    * @param {Object} [style.dialog] style options for the dialog
    * @param {Object} [style.backdrop] style options for the backdrop
    */
-  setStyle: function(style) {
+  setStyle: function (style) {
     if (style.dialog) {
       let dialogStyle = 'display: block;';
       for (let key in style.dialog) {
-        dialogStyle += key + ': ' + style.dialog[key] + ';';
+        if (style.dialog.hasOwnProperty(key)) {
+          dialogStyle += key + ': ' + style.dialog[key] + ';';
+        }
       }
 
       this.$('.modal').attr('style', dialogStyle);
@@ -108,18 +110,20 @@ module.exports = GelatoDialog.extend({
     if (style.backdrop) {
       let backdropStyle = '';
       for (let key in style.backdrop) {
-        backdropStyle += key + ': ' + style.backdrop[key] + ';';
+        if (style.backdrop.hasOwnProperty(key)) {
+          backdropStyle += key + ': ' + style.backdrop[key] + ';';
+        }
       }
       $('.modal-backdrop').attr('style', backdropStyle);
     }
   },
 
-  updateValues: function() {
+  updateValues: function () {
     this.$('.dialog-title').toggleClass('hidden', !this.dialogTitle || !this.showTitle).text(this.dialogTitle);
     this.$('.button-wrapper').toggleClass('hidden', !this.showConfirmButton);
     this.$('.modal-body').html(this.body);
     if (this.showConfirmButton) {
       this.$('#notification-button').text(this.buttonText || 'OK');
     }
-  }
+  },
 });

@@ -15,7 +15,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
     'click #title-sort': 'handleClickTitleSort',
     'click #popularity-sort': 'handleClickPopularitySort',
     'click .add-to-queue-link': 'handleClickAddToQueueLink',
-    'error #grid img': 'handleLoadImageError'
+    'error #grid img': 'handleLoadImageError',
   },
 
   /**
@@ -28,7 +28,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this._lists = [];
     this._filterString = app.get('lastVocablistBrowseSearch');
     this._filterType = [];
@@ -46,7 +46,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
     this.fetchOfficialLists();
 
     this.listenTo(this.vocablists, 'state', this.render);
-    this.listenTo(this.vocablists, 'sync', function(collection, response, options) {
+    this.listenTo(this.vocablists, 'sync', function (collection, response, options) {
       if (options.data && options.data.sort === 'official' && response.cursor) {
         // TODO: figure out why this goes into an infinite loop
         // this.fetchLists({data: {cursor: response.cursor, sort: 'official'}});
@@ -62,11 +62,11 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @param {Object} [params] parameters to use in the request
    * @param {Object} [options] options to send to the fetch function
    */
-  fetchLists: function(params, options) {
+  fetchLists: function (params, options) {
     const data = _.defaults(params, {
       lang: app.getLanguage(),
       languageCode: app.getLanguage(),
-      sort: 'official'
+      sort: 'official',
     });
 
     options = _.defaults({data, remove: false}, options || {});
@@ -79,7 +79,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistsBrowseTableComponent}
    */
-  render: function(state) {
+  render: function (state) {
     if (state === 'saving') {
       return;
     }
@@ -94,10 +94,12 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * Fetches all the official textbook lists in batches.
    * @returns {Promise} resolves when all the lists have been fetched
    */
-  fetchOfficialLists: function() {
+  fetchOfficialLists: function () {
     return new Promise((resolve, reject) => {
       this.fetchLists({sort: 'official'}, {success: (collection, resp) => {
-        this.fetchLists({sort: 'official', cursor: resp.cursor}, {success: () => {resolve();}, error: reject});
+        this.fetchLists({sort: 'official', cursor: resp.cursor}, {success: () => {
+resolve();
+}, error: reject});
       }, error: reject});
     });
   },
@@ -106,7 +108,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @method handleClickTitleSort
    * @param {Event} event
    */
-  handleClickTitleSort: function(event) {
+  handleClickTitleSort: function (event) {
     event.preventDefault();
     this._sortType = 'title';
     this.render();
@@ -116,7 +118,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @method handleClickPopularitySort
    * @param {Event} event
    */
-  handleClickPopularitySort: function(event) {
+  handleClickPopularitySort: function (event) {
     event.preventDefault();
     this._sortType = 'popularity';
     this.render();
@@ -126,7 +128,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @method handleClickAddToQueueLink
    * @param {Event} event
    */
-  handleClickAddToQueueLink: function(event) {
+  handleClickAddToQueueLink: function (event) {
     const target = $(event.currentTarget);
     const listId = target.data('vocablist-id');
     const vocablist = this.vocablists.get(listId);
@@ -158,9 +160,9 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
           this.render();
 
           app.notifyUser({
-            message: app.locale('pages.vocabLists.errorAddingList')
+            message: app.locale('pages.vocabLists.errorAddingList'),
           });
-        }
+        },
       });
     }
   },
@@ -169,7 +171,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @method handleLoadImageError
    * @param {Event} event
    */
-  handleLoadImageError: function(event) {
+  handleLoadImageError: function (event) {
     this.$(event.target).remove();
   },
 
@@ -177,7 +179,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @method setFilterString
    * @param {String} value
    */
-  setFilterString: function(value) {
+  setFilterString: function (value) {
     const searchValue = value.toLowerCase();
 
     app.set('lastVocablistBrowseSearch', searchValue);
@@ -191,7 +193,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @method setFilterString
    * @param {String} value
    */
-  setFilterType: function(value) {
+  setFilterType: function (value) {
     const searchType = value.toLowerCase();
 
     app.set('lastVocablistBrowseOption', searchType);
@@ -205,7 +207,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @method setLayout
    * @param {String} value
    */
-  setLayout: function(value) {
+  setLayout: function (value) {
     this._layout = value.toLowerCase();
     this.render();
   },
@@ -214,7 +216,7 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
    * @method update
    * @returns {VocablistsBrowseTableComponent}
    */
-  update: function() {
+  update: function () {
     this._lists = this.vocablists.models;
     this.updateFilter();
     this.updateSort();
@@ -224,8 +226,8 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
   /**
    * @method updateFilter
    */
-  updateFilter: function() {
-    this._lists = _.filter(this._lists, vocablist => {
+  updateFilter: function () {
+    this._lists = _.filter(this._lists, (vocablist) => {
       if (this._filterType !== 'published' && this._filterString !== '') {
         const name = vocablist.get('name') && vocablist.get('name').toLowerCase();
         const shortName = vocablist.get('shortName') && vocablist.get('shortName').toLowerCase();
@@ -248,14 +250,14 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
   /**
    * @method updateSort
    */
-  updateSort: function() {
-    this._lists = _.sortBy(this._lists, (function(vocablist) {
+  updateSort: function () {
+    this._lists = _.sortBy(this._lists, (function (vocablist) {
       if (this._sortType === 'popularity') {
         return -vocablist.get('peopleStudying');
       }
       return vocablist.get('name');
     }).bind(this));
-  }
+  },
 
 });
 

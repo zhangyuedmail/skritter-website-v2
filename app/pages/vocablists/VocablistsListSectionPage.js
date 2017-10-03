@@ -19,7 +19,7 @@ module.exports = GelatoPage.extend({
     'click #back-link': 'handleClickBackLink',
     'click #discard-changes': 'handleClickDiscardChanges',
     'click #edit-section': 'handleClickEditSection',
-    'click #save-changes': 'handleClickSaveChanges'
+    'click #save-changes': 'handleClickSaveChanges',
   },
 
   /**
@@ -38,7 +38,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.editing = options.editMode || false;
     this.fetching = false;
 
@@ -46,7 +46,7 @@ module.exports = GelatoPage.extend({
 
     let sectionData = {
       vocablistId: options.vocablistId,
-      id: options.sectionId
+      id: options.sectionId,
     };
 
     if (options.vocabListSection) {
@@ -58,7 +58,7 @@ module.exports = GelatoPage.extend({
     this.editor = new EditorRows({
       vocablist: this.vocablist,
       vocablistSection: this.vocablistSection,
-      editing: this.editing
+      editing: this.editing,
     });
 
     this.fetchListData();
@@ -68,7 +68,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {VocablistsListSectionPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsListSection.jade');
     }
@@ -91,7 +91,7 @@ module.exports = GelatoPage.extend({
    * Fetches all the necessary list data to show the view to the user
    * @method fetchListData
    */
-  fetchListData: function() {
+  fetchListData: function () {
     this.fetching = true;
     async.series([
       (callback) => {
@@ -101,12 +101,12 @@ module.exports = GelatoPage.extend({
         }
 
         this.vocablist.fetch({
-          error: function(error) {
+          error: function (error) {
             callback(error);
           },
-          success: function() {
+          success: function () {
             callback();
-          }
+          },
         });
       },
       (callback) => {
@@ -115,24 +115,24 @@ module.exports = GelatoPage.extend({
           return;
         }
         this.vocablistSection.fetch({
-          error: function(error) {
+          error: function (error) {
             callback(error);
           },
-          success: function() {
+          success: function () {
             callback();
-          }
+          },
         });
       },
       (callback) => {
         this.editor.loadRows({
-          error: function(error) {
+          error: function (error) {
             callback(error);
           },
-          success: function() {
+          success: function () {
             callback();
-          }
+          },
         });
-      }
+      },
     ], (error) => {
       const sections = this.vocablist.get('sections');
       const sectionIndex = _.findIndex(sections, {id: this.vocablistSection.id});
@@ -154,12 +154,12 @@ module.exports = GelatoPage.extend({
    * and finally re-renders the page.
    * @param {Object} [error]
    */
-  listDataLoaded: function(error) {
+  listDataLoaded: function (error) {
     this.fetching = false;
 
     if (error) {
       app.notifyUser({
-        message: app.locale('There was a problem loading the section. Please try again.')
+        message: app.locale('There was a problem loading the section. Please try again.'),
       });
     }
 
@@ -179,7 +179,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickBackLink
    * @param {Event} event
    */
-  handleClickBackLink: function(event) {
+  handleClickBackLink: function (event) {
     const self = this;
 
     if (this.editor.editing) {
@@ -187,11 +187,11 @@ module.exports = GelatoPage.extend({
       this.dialog = new ConfirmGenericDialog({
         body: 'You have some unsaved changes that will be lost if you continue.',
         buttonConfirm: 'Continue',
-        title: 'Unsaved changes detected'
+        title: 'Unsaved changes detected',
       });
       this.dialog.once(
         'confirm',
-        function() {
+        function () {
           app.router.navigate('vocablists/view/' + self.vocablist.id, {trigger: true});
           self.dialog.close();
         }
@@ -208,7 +208,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickDiscardChanges
    * @param {Event} event
    */
-  handleClickDiscardChanges: function(event) {
+  handleClickDiscardChanges: function (event) {
     const self = this;
     event.preventDefault();
 
@@ -224,21 +224,20 @@ module.exports = GelatoPage.extend({
     this.dialog = new ConfirmGenericDialog({
       body: 'This will discard all unsaved changes this current list section.',
       buttonConfirm: 'Discard',
-      title: 'Discard all changes?'
+      title: 'Discard all changes?',
     });
 
     this.dialog.once(
       'confirm',
-      function() {
+      function () {
         self.editor.editing = false;
         self.editor.discardChanges();
         self.dialog.close();
-
       }
     );
     this.dialog.once(
       'hidden',
-      function() {
+      function () {
         self.render();
       }
     );
@@ -249,7 +248,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickEditSection
    * @param {Event} event
    */
-  handleClickEditSection: function(event) {
+  handleClickEditSection: function (event) {
     event.preventDefault();
     this.editor.editing = !this.editor.editing;
     this.render();
@@ -261,7 +260,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickSaveChanges
    * @param {Event} event
    */
-  handleClickSaveChanges: function(event) {
+  handleClickSaveChanges: function (event) {
     event.preventDefault();
     const self = this;
 
@@ -279,26 +278,26 @@ module.exports = GelatoPage.extend({
 
     this.toggleInputs();
     this.vocablistSection.save(null, {
-      success: function() {
+      success: function () {
         self.editor.editing = false;
         self.render();
         app.notifyUser({
           message: self.vocablistSection.get('name') + ' ' + app.locale('pages.vocabLists.successSavingSection'),
-          type: 'pastel-success'
+          type: 'pastel-success',
         });
       },
-      error: function() {
+      error: function () {
         self.toggleInputs(true);
         app.notifyUser({
-          message: app.locale('pages.vocabLists.errorSavingSection')
+          message: app.locale('pages.vocabLists.errorSavingSection'),
         });
-      }
+      },
     });
 
-    //remove all results button
+    // remove all results button
     _.forEach(
       this.editor.rows,
-      function(row) {
+      function (row) {
         delete row.results;
       }
     );
@@ -308,19 +307,18 @@ module.exports = GelatoPage.extend({
    * @method handleKeydownAddInput
    * @param {Event} event
    */
-  handleKeydownAddInput: function(event) {
+  handleKeydownAddInput: function (event) {
     if (event.keyCode === 13) {
-
-      //limit adding to section
+      // limit adding to section
       if (this.editor.rows.length > 200) {
         event.preventDefault();
         this.$('#input-message .value').text('The max words per section is 200.');
         return;
       }
 
-      //split input based on spaces
-      var $input = $(event.target);
-      var rows = $input.val().split(/\s/);
+      // split input based on spaces
+      let $input = $(event.target);
+      let rows = $input.val().split(/\s/);
 
       this.$('#input-message .value').empty();
       this.editor.addRows(rows);
@@ -333,14 +331,14 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleVocablistState
    */
-  handleVocablistState: function() {
+  handleVocablistState: function () {
     this.render();
   },
 
   /**
    * @method handleVocablistState
    */
-  handleVocablistSectionState: function() {
+  handleVocablistSectionState: function () {
     this.render();
   },
 
@@ -348,7 +346,7 @@ module.exports = GelatoPage.extend({
    * @method remove
    * @returns {VocablistsListSectionPage}
    */
-  remove: function() {
+  remove: function () {
     this.editor.remove();
     return GelatoPage.prototype.remove.call(this);
   },
@@ -357,12 +355,12 @@ module.exports = GelatoPage.extend({
    * Toggles the enabled/disabled state of the inputs and buttons on the editor
    * @param {boolean} [enabled] whether to enable the inputs
    */
-  toggleInputs: function(enabled) {
+  toggleInputs: function (enabled) {
     this.$('button').prop('disabled', !enabled);
     this.$('#section-name').prop('disabled', !enabled);
     this.$('#add-input').prop('disabled', !enabled);
 
     // always leave the cancel button enabled to make the user feel good
     this.$('#discard-changes').prop('disabled', false);
-  }
+  },
 });

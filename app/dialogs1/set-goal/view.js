@@ -1,4 +1,4 @@
-var GelatoDialog = require('base/gelato-dialog');
+let GelatoDialog = require('base/gelato-dialog');
 
 /**
  * @class SetGoal
@@ -9,7 +9,7 @@ module.exports = GelatoDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
   },
   /**
    * @property events
@@ -17,7 +17,7 @@ module.exports = GelatoDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-set': 'handleClickSetChange'
+    'click #button-set': 'handleClickSetChange',
   },
   /**
    * @property template
@@ -28,7 +28,7 @@ module.exports = GelatoDialog.extend({
    * @method render
    * @returns {ConfirmDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -37,7 +37,7 @@ module.exports = GelatoDialog.extend({
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
 
     this.close();
@@ -46,8 +46,7 @@ module.exports = GelatoDialog.extend({
    * @method handleClickButtonChange
    * @param {Event} event
    */
-  handleClickSetChange: function(event) {
+  handleClickSetChange: function (event) {
     event.preventDefault();
-
-  }
+  },
 });

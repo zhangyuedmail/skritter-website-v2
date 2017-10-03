@@ -12,7 +12,7 @@ const FeedbackComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click #send-feedback': 'onSendFeedbackClicked'
+    'click #send-feedback': 'onSendFeedbackClicked',
   },
 
   /**
@@ -21,7 +21,7 @@ const FeedbackComponent = GelatoComponent.extend({
    */
   template: require('./Feedback'),
 
-  initialize: function(options) {
+  initialize: function (options) {
     this.dialog = options.dialog;
   },
 
@@ -29,7 +29,7 @@ const FeedbackComponent = GelatoComponent.extend({
    * @method render
    * @returns {FeedbackComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -39,7 +39,7 @@ const FeedbackComponent = GelatoComponent.extend({
    * Resets the dialog and displays a success/thank you message
    * to the user for giving feedback.
    */
-  feedbackSubmittedSuccess: function() {
+  feedbackSubmittedSuccess: function () {
     this.resetView();
     if (this.dialog) {
       this.dialog.close();
@@ -53,7 +53,7 @@ const FeedbackComponent = GelatoComponent.extend({
 
       app.notifyUser({
         message: 'Feedback successfully sent! ' + thanks,
-        type: 'pastel-success'
+        type: 'pastel-success',
       });
     }
   },
@@ -62,7 +62,7 @@ const FeedbackComponent = GelatoComponent.extend({
    * Shows an error message to the user in the component when there was
    * a problem sending the feedback.
    */
-  feedbackSubmittedError: function() {
+  feedbackSubmittedError: function () {
     this.resetView();
     this.showError('There was a problem on our end saving the feedback. Please try again.');
   },
@@ -71,7 +71,7 @@ const FeedbackComponent = GelatoComponent.extend({
    * Handles user clicking the send button. Validates the data, and if valid,
    * kicks off a function to save the feedback.
    */
-  onSendFeedbackClicked: function() {
+  onSendFeedbackClicked: function () {
     const feedbackText = this.$('textarea').val().trim();
     const userId = app.user.id;
     const displayName = app.user.get('name');
@@ -98,7 +98,7 @@ const FeedbackComponent = GelatoComponent.extend({
   /**
    * Resets (re-enables) all buttons, messages, and inputs to their initial state
    */
-  resetView: function() {
+  resetView: function () {
     this.$('#error-msg').addClass('hidden');
 
     this.$('#send-feedback')
@@ -116,13 +116,13 @@ const FeedbackComponent = GelatoComponent.extend({
    * @param {String} email the user's email address
    * @param {String} page the page the user was on when the request was submitted.
    */
-  sendFeedback: function(feedbackText, userId, displayName, email, page) {
+  sendFeedback: function (feedbackText, userId, displayName, email, page) {
     const self = this;
     const feedbackData = {
       email: email,
       subject: 'Feedback',
       message: 'Feedback widget feedback!\nUser ' + userId + ' (' + displayName + '), email: ' + email +
-        ' while studying ' + app.getLanguage() + ' on the page ' + page + " left us the following feedback:\n" + feedbackText
+        ' while studying ' + app.getLanguage() + ' on the page ' + page + ' left us the following feedback:\n' + feedbackText,
     };
 
     $.ajax({
@@ -131,18 +131,18 @@ const FeedbackComponent = GelatoComponent.extend({
       context: this,
       type: 'POST',
       data: JSON.stringify(feedbackData),
-      success: function() {
+      success: function () {
         self.feedbackSubmittedSuccess();
       },
-      error: function() {
+      error: function () {
         self.feedbackSubmittedError();
-      }
+      },
     });
   },
 
-  showError: function(msg) {
+  showError: function (msg) {
     this.$('#error-msg').text(msg).removeClass('hidden');
-  }
+  },
 
 });
 

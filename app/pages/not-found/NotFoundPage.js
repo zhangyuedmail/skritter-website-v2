@@ -1,4 +1,4 @@
-var GelatoPage = require('gelato/page');
+let GelatoPage = require('gelato/page');
 
 /**
  * @class NotFoundPage
@@ -35,7 +35,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {NotFoundPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -45,7 +45,7 @@ module.exports = GelatoPage.extend({
    * @method remove
    * @returns {Contact}
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 });

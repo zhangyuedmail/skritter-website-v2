@@ -14,7 +14,7 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
     'click .section-link': 'handleClickSectionLink',
     'click #restore-section': 'handleClickRestoreSection',
     'click #remove-section': 'handleClickRemoveSection',
-    'keyup .last-section': 'handleKeyupLastSection'
+    'keyup .last-section': 'handleKeyupLastSection',
   },
 
   /**
@@ -28,7 +28,7 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.editing = false;
     this.vocablist = options.vocablist;
   },
@@ -37,7 +37,7 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistsSectionEditorComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this.listenTo(this.vocablist, 'change:sections', this.render);
@@ -52,7 +52,7 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
    * @method addSection
    * @param {String} [name] the name of the new section
    */
-  addSection: function(name) {
+  addSection: function (name) {
     this.updateVocablist();
     const sections = this.vocablist.get('sections');
     const sectionsLength = sections.length;
@@ -70,9 +70,9 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
    * @method handleClickRemoveSection
    * @param {Event} event
    */
-  handleClickRemoveSection: function(event) {
+  handleClickRemoveSection: function (event) {
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
+    let $row = $(event.target).closest('.row');
     this.vocablist.get('sections')[$row.data('index')].deleted = true;
     this.render();
   },
@@ -81,9 +81,9 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
    * @method handleClickRestoreSection
    * @param {Event} event
    */
-  handleClickRestoreSection: function(event) {
+  handleClickRestoreSection: function (event) {
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
+    let $row = $(event.target).closest('.row');
     this.vocablist.get('sections')[$row.data('index')].deleted = false;
     this.render();
   },
@@ -92,14 +92,14 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
    *
    * @param event
    */
-  handleClickSectionLink: function(event) {
+  handleClickSectionLink: function (event) {
     event.preventDefault();
     event.stopPropagation();
 
     const url = $(event.currentTarget).attr('href').split('/');
     const listId = this.vocablist.id;
     const sectionId = url[url.length - 1];
-    const section = (this.vocablist.get('sections').filter(s => s.id === sectionId) || [])[0];
+    const section = (this.vocablist.get('sections').filter((s) => s.id === sectionId) || [])[0];
     app.router.navigateVocablist(listId, sectionId, false, this.vocablist, section);
     app.router.navigate('vocablists/view/' + this.vocablist.id + '/' + sectionId, {trigger: false});
   },
@@ -108,7 +108,7 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
    * @method handleKeyupLastSection
    * @param {Event} event
    */
-  handleKeyupLastSection: function(event) {
+  handleKeyupLastSection: function (event) {
     event.preventDefault();
     if (event.which === 13 || event.keyCode === 13) {
       if (!this.vocablist.get('singleSect')) {
@@ -120,15 +120,15 @@ const VocablistsSectionEditorComponent = GelatoComponent.extend({
   /**
    * @method updateVocablist
    */
-  updateVocablist: function() {
+  updateVocablist: function () {
     this.$('#vocablist-sections')
       .children('.row')
-      .each((function(index, element) {
-        var name = $(element).find('#section-name').val();
-        var section = this.vocablist.get('sections')[index];
+      .each((function (index, element) {
+        let name = $(element).find('#section-name').val();
+        let section = this.vocablist.get('sections')[index];
         section.name = name;
       }).bind(this));
-  }
+  },
 
 });
 

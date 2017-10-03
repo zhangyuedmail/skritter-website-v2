@@ -1,5 +1,5 @@
 const GelatoComponent = require('gelato/component');
-const config = require('config');
+// const config = require('config');
 
 /**
  * @class StudyPromptPartToneComponent
@@ -30,7 +30,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
     this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
     this.listenTo(this.prompt.canvas, 'input:up', this.handlePromptCanvasInputUp);
@@ -46,9 +46,9 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptPartToneComponent}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
-      this.template = require('./MobileStudyPromptPartToneComponent.jade')
+      this.template = require('./MobileStudyPromptPartToneComponent.jade');
     }
 
     this.prompt.review = this.prompt.reviews.current();
@@ -60,7 +60,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
       this.prompt.review.vocab.get('writing'),
       {
         color: '#e8ded2',
-        font: this.prompt.review.vocab.getFontName()
+        font: this.prompt.review.vocab.getFontName(),
       }
     );
 
@@ -95,7 +95,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @method renderComplete
    * @returns {StudyPromptPartToneComponent}
    */
-  renderComplete: function() {
+  renderComplete: function () {
     this.prompt.review.stop();
     this.prompt.review.set('complete', true);
 
@@ -139,7 +139,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @method renderIncomplete
    * @returns {StudyPromptPartToneComponent}
    */
-  renderIncomplete: function() {
+  renderIncomplete: function () {
     this.prompt.review.start();
     this.prompt.review.set('complete', false);
 
@@ -170,7 +170,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
   /**
    * @method handlePromptCanvasClick
    */
-  handlePromptCanvasClick: function() {
+  handlePromptCanvasClick: function () {
     if (this.prompt.review.isComplete()) {
       if (this.prompt.isAutoAdvancing) {
         this.prompt.stopAutoAdvance();
@@ -185,14 +185,14 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @param {Array} points
    * @param {createjs.Shape} shape
    */
-  handlePromptCanvasInputUp: function(points, shape) {
-    var possibleTones = this.prompt.review.getTones();
-    var expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
-    var stroke = this.prompt.review.character.recognize(points, shape);
+  handlePromptCanvasInputUp: function (points, shape) {
+    let possibleTones = this.prompt.review.getTones();
+    let expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
+    let stroke = this.prompt.review.character.recognize(points, shape);
 
     if (stroke && app.fn.getLength(points) > 30) {
-      var targetShape = stroke.getTargetShape();
-      var userShape = stroke.getUserShape();
+      let targetShape = stroke.getTargetShape();
+      let userShape = stroke.getUserShape();
 
       if (possibleTones.indexOf(stroke.get('tone')) > -1) {
         this.prompt.review.set('score', 3);
@@ -250,7 +250,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
   /**
    * @method handlePromptToolbarActionCorrect
    */
-  handlePromptToolbarActionCorrect: function() {
+  handlePromptToolbarActionCorrect: function () {
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.review.set('complete', true);
 
@@ -278,7 +278,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @method handlePromptToolbarGradingMousedown
    * @param {Number} score the new grade to apply
    */
-  handlePromptToolbarGradingMousedown: function(score) {
+  handlePromptToolbarGradingMousedown: function (score) {
     this._mouseDown = true;
     if (this.prompt.review.isComplete()) {
       this.prompt.review.set('score', score);
@@ -295,7 +295,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @method handlePromptToolbarGradingMousemove
    * @param {Number} score the new grade to apply
    */
-  handlePromptToolbarGradingMousemove: function(score) {
+  handlePromptToolbarGradingMousemove: function (score) {
     if (!this._mouseDown) {
       return;
     }
@@ -309,7 +309,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * @method handlePromptToolbarGradingMouseup
    * @param {Number} score the new grade to apply
    */
-  handlePromptToolbarGradingMouseup: function(score) {
+  handlePromptToolbarGradingMouseup: function (score) {
     this._mouseDown = false;
     this.prompt.stopAutoAdvance();
     this.changeReviewScore(score);
@@ -324,7 +324,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    * Stops any auto-advance features.
    * @param {Number} score the score to change the review to
    */
-  changeReviewScore: function(score) {
+  changeReviewScore: function (score) {
     this.prompt.review.set('score', score);
     this.prompt.canvas.injectLayerColor(
       'character',
@@ -335,7 +335,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
   /**
    * @method completeTone
    */
-  completeTone: function() {
+  completeTone: function () {
     const possibleTones = this.prompt.review.getTones();
     const expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
 
@@ -345,7 +345,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.review.character.add(expectedTone);
 
     this.render();
-  }
+  },
 
 });
 

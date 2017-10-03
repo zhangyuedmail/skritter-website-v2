@@ -17,7 +17,7 @@ module.exports = GelatoPage.extend({
    */
   events: {
     'keyup #list-search-input': 'handleKeypressListSearchInput',
-    'click #clear-search': 'handleClickClearSearch'
+    'click #clear-search': 'handleClickClearSearch',
   },
 
   /**
@@ -37,7 +37,7 @@ module.exports = GelatoPage.extend({
    * Initializes the view. Instantiates subviews.
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
       this.loadAlreadyTimed = false;
@@ -49,7 +49,7 @@ module.exports = GelatoPage.extend({
 
     if (app.config.recordLoadTimes) {
       this.componentsLoaded = {
-        table: false
+        table: false,
       };
       this.listenTo(this._views['table'], 'component:loaded', this._onComponentLoaded);
     }
@@ -59,7 +59,7 @@ module.exports = GelatoPage.extend({
    * Renders the view
    * @returns {VocablistBrowse}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsPublished.jade');
     }
@@ -76,7 +76,7 @@ module.exports = GelatoPage.extend({
    * @param {jQuery.Event} e
    * @method handleClickClearSearch
    */
-  handleClickClearSearch: function(e) {
+  handleClickClearSearch: function (e) {
     this.$('#clear-search').addClass('hidden');
     this.$('#query-results-text').addClass('invisible');
     this.$('#list-search-input').val('');
@@ -89,7 +89,7 @@ module.exports = GelatoPage.extend({
    * @param {jQuery.Event} event the keyup event
    * @method handleKeypressListSearchInput
    */
-  handleKeypressListSearchInput: function(event) {
+  handleKeypressListSearchInput: function (event) {
     if (event.which === 13 || event.keyCode === 13) {
       const needle = ($(event.target).val() || '').trim().toLowerCase();
       const searchTerm = app.config.useV2Gets.vocablists ? needle : needle.split(' ')[0];
@@ -103,16 +103,16 @@ module.exports = GelatoPage.extend({
    * @param {String[]} needle
    * @method updateQueryResultsText
    */
-  updateQueryResultsText: function(needle) {
+  updateQueryResultsText: function (needle) {
     const multiWordSearch = (needle.length > 1);
-    let s = "Showing results for <i>" + needle[0] + "</i>.";
+    let s = 'Showing results for <i>' + needle[0] + '</i>.';
 
     if (app.config.useV2Gets.vocablists) {
-      s = "Showing results for <i>" + needle.join(' ') + "</i>.";
+      s = 'Showing results for <i>' + needle.join(' ') + '</i>.';
     }
 
     if (multiWordSearch && !app.config.useV2Gets.vocablists) {
-      s += " Search currently only supports one-word queries, sorry!";
+      s += ' Search currently only supports one-word queries, sorry!';
     }
 
     this.$('#query-results-text').html(s).removeClass('invisible');
@@ -125,7 +125,7 @@ module.exports = GelatoPage.extend({
    * @param {String} component the name of the component that was loaded
    * @private
    */
-  _onComponentLoaded: function(component) {
+  _onComponentLoaded: function (component) {
     this.componentsLoaded[component] = true;
 
     // return if any component is still not loaded
@@ -143,7 +143,7 @@ module.exports = GelatoPage.extend({
    * Records the load time for this page once.
    * @private
    */
-  _recordLoadTime: function() {
+  _recordLoadTime: function () {
     if (this.loadAlreadyTimed || !app.config.recordLoadTimes) {
       return;
     }
@@ -151,5 +151,5 @@ module.exports = GelatoPage.extend({
     this.loadAlreadyTimed = true;
     const loadTime = window.performance.now() - this.loadStart;
     app.loadTimes.pages.vocablistsPublished.push(loadTime);
-  }
+  },
 });

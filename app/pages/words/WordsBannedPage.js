@@ -18,7 +18,7 @@ module.exports = GelatoPage.extend({
     'click .vocab-row': 'handleClickVocabRow',
     'change input[type="checkbox"]': 'handleChangeCheckbox',
     'click #load-more-btn': 'handleClickLoadMoreButton',
-    'click #unban-vocabs-btn': 'handleClickUnbanVocabsButton'
+    'click #unban-vocabs-btn': 'handleClickUnbanVocabsButton',
   },
 
   /**
@@ -37,7 +37,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.sidebar = new WordsSidebar();
     this.bannedVocabs = new Vocabs();
     this.limit = 20;
@@ -48,7 +48,7 @@ module.exports = GelatoPage.extend({
   /**
    * @method remove
    */
-  remove: function() {
+  remove: function () {
     this.sidebar.remove();
 
     return GelatoPage.prototype.remove.call(this);
@@ -58,7 +58,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {VocablistBrowse}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileWordsBanned.jade');
     }
@@ -73,16 +73,16 @@ module.exports = GelatoPage.extend({
    * @method fetchItems
    * @param {string} [cursor]
    */
-  fetchBannedVocabs: function(cursor) {
+  fetchBannedVocabs: function (cursor) {
     this.bannedVocabs.fetch({
       data: {
         sort: 'banned',
         lang: app.getLanguage(),
         limit: this.limit,
-        cursor: cursor || ''
+        cursor: cursor || '',
       },
       remove: false,
-      sort: false
+      sort: false,
     });
   },
 
@@ -90,30 +90,30 @@ module.exports = GelatoPage.extend({
    * @method handleChangeCheckbox
    * @param {Event} event
    */
-  handleChangeCheckbox: function(event) {
-    var checkbox = $(event.target);
+  handleChangeCheckbox: function (event) {
+    let checkbox = $(event.target);
     if (checkbox.attr('id') === 'all-checkbox') {
       this.$('input[type="checkbox"]').prop('checked', checkbox.prop('checked'));
     }
-    var anyChecked = this.$('input[type="checkbox"]:checked').length;
+    let anyChecked = this.$('input[type="checkbox"]:checked').length;
     this.$('#unban-vocabs-btn').prop('disabled', !anyChecked);
   },
 
   /**
    * @method handleClickLoadMoreButton
    */
-  handleClickLoadMoreButton: function() {
+  handleClickLoadMoreButton: function () {
     this.fetchBannedVocabs(this.bannedVocabs.cursor);
   },
 
   /**
    * @method handleClickUnbanVocabsButton
    */
-  handleClickUnbanVocabsButton: function() {
-    var self = this;
-    var vocabs = new Vocabs();
-    _.forEach(this.$('input:checked'), function(el) {
-      var vocabID = $(el).closest('tr').data('vocab-id');
+  handleClickUnbanVocabsButton: function () {
+    let self = this;
+    let vocabs = new Vocabs();
+    _.forEach(this.$('input:checked'), function (el) {
+      let vocabID = $(el).closest('tr').data('vocab-id');
       if (!vocabID) {
         return;
       }
@@ -129,7 +129,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickVocabRow
    * @param {Event} event
    */
-  handleClickVocabRow: function(event) {
+  handleClickVocabRow: function (event) {
     event.preventDefault();
     const row = $(event.target).parent('tr');
     const vocabId = row.data('vocab-id');
@@ -142,12 +142,12 @@ module.exports = GelatoPage.extend({
   /**
    * @method renderTable
    */
-  renderTable: function() {
-    var context = require('globals');
+  renderTable: function () {
+    let context = require('globals');
     context.view = this;
-    var rendering = $(this.template(context));
+    let rendering = $(this.template(context));
     this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
-  }
+  },
 });
 
 _.extend(module.exports.prototype, VocabActionMixin);

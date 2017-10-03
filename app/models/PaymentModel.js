@@ -21,7 +21,7 @@ const PaymentModel = SkritterModel.extend({
    * @method parse
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.Payment || response;
   },
 
@@ -29,15 +29,15 @@ const PaymentModel = SkritterModel.extend({
    * @method getChargedAmount
    * @returns {String}
    */
-  getChargedAmount: function() {
+  getChargedAmount: function () {
     if (this.get('localCharged')) {
       return this.get('localCharged');
     }
     if (!this.get('charged')) {
       return '';
     }
-    return '$' + parseFloat(this.get('charged')).toFixed(2)
-  }
+    return '$' + parseFloat(this.get('charged')).toFixed(2);
+  },
 
 });
 

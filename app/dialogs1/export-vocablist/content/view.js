@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/component');
+let GelatoComponent = require('gelato/component');
 
 /**
  * @class ExportVocablistContent
@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.dialog = options.dialog;
   },
   /**
@@ -27,9 +27,9 @@ module.exports = GelatoComponent.extend({
    * @method render
    * @returns {ExportVocablistContent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.listenToOnce(this.dialog.vocablist, 'state', this.render);
     return this;
-  }
+  },
 });

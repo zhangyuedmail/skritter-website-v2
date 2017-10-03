@@ -3,5 +3,5 @@ module.exports = {
   app: window.app,
   user: window.app.user,
   kana: window.wanakana,
-  moment: window.moment
+  moment: window.moment,
 };

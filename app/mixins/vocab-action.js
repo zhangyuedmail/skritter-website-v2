@@ -1,10 +1,10 @@
-var ProgressDialog = require('dialogs/progress/view');
+let ProgressDialog = require('dialogs/progress/view');
 
-var availableVocabActions = [
+let availableVocabActions = [
   'ban',
   'unban',
   'delete-mnemonic',
-  'remove-star'
+  'remove-star',
 ];
 
 module.exports = {
@@ -13,7 +13,7 @@ module.exports = {
    * @param {Vocab} vocab
    * @returns {Object|null} Vocab attrs to be saved, if any
    */
-  banVocabAction: function(vocab) {
+  banVocabAction: function (vocab) {
     if (vocab.isBanned()) {
       return null;
     }
@@ -29,7 +29,7 @@ module.exports = {
    * @param {String} action
    * @param {Vocabs} vocabs
    */
-  beginVocabAction: function(action, vocabs) {
+  beginVocabAction: function (action, vocabs) {
     if (!_.includes(availableVocabActions, action)) {
       throw new Error('Invalid action, must be one of: ' + availableVocabActions.join(', '));
     }
@@ -44,7 +44,7 @@ module.exports = {
       name: action,
       queue: vocabs,
       total: vocabs.size(),
-      dialog: progressDialog
+      dialog: progressDialog,
     };
 
     this.runVocabAction();
@@ -55,7 +55,7 @@ module.exports = {
    * @param {Vocab} vocab
    * @returns {Object|null} Vocab attrs to be saved, if any
    */
-  deleteVocabMnemonicAction: function(vocab) {
+  deleteVocabMnemonicAction: function (vocab) {
     const mnemonic = vocab.get('mnemonic') || {};
 
     if (!mnemonic.text) {
@@ -70,7 +70,7 @@ module.exports = {
    * @param {Vocab} vocab
    * @returns {Object|null} Vocab attrs to be saved, if any
    */
-  removeStarVocabAction: function(vocab) {
+  removeStarVocabAction: function (vocab) {
     if (!vocab.has('starred')) {
       return null;
     }
@@ -81,7 +81,7 @@ module.exports = {
   /**
    * @method runVocabAction
    */
-  runVocabAction: function() {
+  runVocabAction: function () {
     const vocab = this.action.queue.shift();
 
     if (!vocab) {
@@ -112,7 +112,7 @@ module.exports = {
     vocabAttrs.id = vocab.id;
     vocab.save(vocabAttrs, {method: 'PUT', patch: true});
 
-    this.listenToOnce(vocab, 'sync', function() {
+    this.listenToOnce(vocab, 'sync', function () {
       this.action.dialog.setProgress(100 * (this.action.total - this.action.queue.size()) / this.action.total);
       this.runVocabAction();
     });
@@ -121,7 +121,7 @@ module.exports = {
   /**
    * @method finishVocabAction
    */
-  finishVocabAction: function() {
+  finishVocabAction: function () {
     this.action.dialog.close();
     this.action = {};
     this.trigger('vocab-action-complete');
@@ -132,7 +132,7 @@ module.exports = {
    * @param {Vocab} vocab
    * @returns {Object|null} Vocab attrs to be saved, if any
    */
-  unbanVocabAction: function(vocab) {
+  unbanVocabAction: function (vocab) {
     if (!vocab.isBanned()) {
       return null;
     }
@@ -140,5 +140,5 @@ module.exports = {
     vocab.unbanAll();
 
     return {bannedParts: vocab.get('bannedParts')};
-  }
-}
+  },
+};

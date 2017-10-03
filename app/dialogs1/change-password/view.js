@@ -1,4 +1,4 @@
-var GelatoDialog = require('base/gelato-dialog');
+let GelatoDialog = require('base/gelato-dialog');
 
 /**
  * @class ChangePasswordDialog
@@ -9,7 +9,7 @@ module.exports = GelatoDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
   },
   /**
    * @property events
@@ -17,7 +17,7 @@ module.exports = GelatoDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-change': 'handleClickButtonChange'
+    'click #button-change': 'handleClickButtonChange',
   },
   /**
    * @property template
@@ -28,7 +28,7 @@ module.exports = GelatoDialog.extend({
    * @method render
    * @returns {ConfirmDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -36,7 +36,7 @@ module.exports = GelatoDialog.extend({
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
     this.close();
   },
@@ -44,20 +44,20 @@ module.exports = GelatoDialog.extend({
    * @method handleClickButtonChange
    * @param {Event} event
    */
-  handleClickButtonChange: function(event) {
-    var self = this;
+  handleClickButtonChange: function (event) {
+    let self = this;
     event.preventDefault();
-    var password1 = this.$('#field-password1').val();
-    var password2 = this.$('#field-password2').val();
+    let password1 = this.$('#field-password1').val();
+    let password2 = this.$('#field-password2').val();
     this.$('#error-message').empty();
     this.$('form').prop('disabled', true);
     if (password1.length < 6) {
-      this.$('#error-message').text("Password must be at least 6 characters.");
+      this.$('#error-message').text('Password must be at least 6 characters.');
       this.$('form').prop('disabled', false);
-      return
+      return;
     }
     if (password1 !== password2) {
-      this.$('#error-message').text("Passwords must match.");
+      this.$('#error-message').text('Passwords must match.');
       this.$('form').prop('disabled', false);
       return;
     }
@@ -66,25 +66,25 @@ module.exports = GelatoDialog.extend({
     $.ajax({
       data: JSON.stringify({
         id: app.user.id,
-        password: password1
+        password: password1,
       }),
       headers: app.user.session.getHeaders(),
       type: 'PUT',
       url: app.getApiUrl() + 'users',
-      error: function(error) {
+      error: function (error) {
         ScreenLoader.hide();
         self.$('#error-message').text(error.responseJSON.message);
         self.$('form').prop('disabled', false);
       },
-      success: function() {
+      success: function () {
         self.close();
         setTimeout(
-          function() {
+          function () {
             ScreenLoader.hide();
           },
           1000
         );
-      }
+      },
     });
-  }
+  },
 });

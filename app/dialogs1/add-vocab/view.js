@@ -1,17 +1,17 @@
-var GelatoDialog = require('gelato/dialog');
-var Content = require('./content/view');
-var Vocablists = require('collections/VocablistCollection');
+let GelatoDialog = require('gelato/dialog');
+let Content = require('./content/view');
+let Vocablists = require('collections/VocablistCollection');
 
 /**
  * @class AddVocabConfirm
  * @extends {GelatoDialog}
  */
-var AddVocabConfirm = GelatoDialog.extend({
+let AddVocabConfirm = GelatoDialog.extend({
   /**
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
     this.content = new Content({dialog: this});
     this.vocablists = new Vocablists();
@@ -20,8 +20,8 @@ var AddVocabConfirm = GelatoDialog.extend({
         limit: 10,
         sort: 'custom',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
-      }
+        languageCode: app.getLanguage(),
+      },
     });
   },
   /**
@@ -38,11 +38,11 @@ var AddVocabConfirm = GelatoDialog.extend({
    * @method render
    * @returns {AddVocabConfirm}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.content.setElement('#content-container').render();
     return this;
-  }
+  },
 });
 
 module.exports = AddVocabConfirm;

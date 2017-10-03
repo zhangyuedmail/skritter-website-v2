@@ -24,9 +24,8 @@ require('moment-timezone');
 
 const Application = require('./application');
 
-module.exports = (function() {
-
-  function start() {
+module.exports = (function () {
+  function start () {
     window.ScreenLoader = new (require('../startup/screen-loader/ScreenLoaderComponent'))();
     window.ScreenLoader.post('Loading application');
 
@@ -35,8 +34,8 @@ module.exports = (function() {
     WebFont.load({
       custom: {
         families: ['DFKaiSho-Md', 'KaiTi', 'Roboto Slab', 'Ubuntu'],
-        urls: window.cordova ? ['fonts-cordova.css'] : ['/fonts.css']
-      }
+        urls: window.cordova ? ['fonts-cordova.css'] : ['/fonts.css'],
+      },
     });
 
     window.app.start();
@@ -51,5 +50,4 @@ module.exports = (function() {
   } else {
     $(document).ready(start);
   }
-
 })();

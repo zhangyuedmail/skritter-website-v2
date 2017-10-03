@@ -18,15 +18,15 @@ const CharacterModel = GelatoModel.extend({
    * @property url
    * @type {String}
    */
-  url: function() {
-    return app.getApiUrl(2) + 'characters'
+  url: function () {
+    return app.getApiUrl(2) + 'characters';
   },
 
   /**
    * @method getPromptCharacter
    * @returns {PromptStrokeCollection}
    */
-  getPromptCharacter: function() {
+  getPromptCharacter: function () {
     let character = new PromptStrokeCollection();
     let strokes = this.clone().get('strokeData');
     let variations = this.clone().get('strokeVariations');
@@ -60,7 +60,7 @@ const CharacterModel = GelatoModel.extend({
           shape: strokeShape,
           strokeId: strokeId,
           tone: rune === 'tones' ? a + 1 : null,
-          variationId: variationId
+          variationId: variationId,
         });
 
         strokePosition += strokeContains.length || 1;
@@ -81,9 +81,9 @@ const CharacterModel = GelatoModel.extend({
    * @method isKana
    * @returns {Boolean}
    */
-  isKana: function() {
+  isKana: function () {
     return app.fn.isKana(this.get('writing'));
-  }
+  },
 
 });
 

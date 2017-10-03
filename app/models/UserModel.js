@@ -51,7 +51,7 @@ const UserModel = SkritterModel.extend({
     teachingMode: true,
     timezone: 'America/New_York',
     volume: 1.0,
-    wordDictionary: null
+    wordDictionary: null,
   },
 
   /**
@@ -78,7 +78,7 @@ const UserModel = SkritterModel.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.characters = new CharacterCollection();
     this.offline = new OfflineModel(null, {user: this});
     this.session = new SessionModel(null, {user: this});
@@ -91,7 +91,7 @@ const UserModel = SkritterModel.extend({
    * @param {Model} model
    * @param {Object} options
    */
-  sync: function(method, model, options) {
+  sync: function (method, model, options) {
     options.headers = _.result(this, 'headers');
 
     if (!options.url) {
@@ -114,7 +114,7 @@ const UserModel = SkritterModel.extend({
     }
 
     // these are really weird properties
-    ['ballerSubscriptions', 'isBallerFor'].forEach(prop => {
+    ['ballerSubscriptions', 'isBallerFor'].forEach((prop) => {
       if (typeof model.get(prop) === 'object' && model.get(prop).length === 1) {
         if (model.get(prop)[0] === '') {
           model.set(prop, []);
@@ -130,8 +130,7 @@ const UserModel = SkritterModel.extend({
     GelatoCollection.prototype.sync.call(this, method, model, options);
   },
 
-  validate: function() {
-
+  validate: function () {
     // because the backend checks for data it didn't
     if (typeof this.get('disabled') !== 'boolean') {
       this.set('disabled', Boolean(this.get('disabled')));
@@ -141,7 +140,7 @@ const UserModel = SkritterModel.extend({
   /**
    * @method cache
    */
-  cache: function() {
+  cache: function () {
     app.setLocalStorage(this.id + '-user', this.toJSON());
   },
 
@@ -150,7 +149,7 @@ const UserModel = SkritterModel.extend({
    * @param {String} [unit]
    * @returns {Number}
    */
-  getAccountAgeBy: function(unit) {
+  getAccountAgeBy: function (unit) {
     return moment().diff(this.get('created') * 1000, unit || 'days');
   },
 
@@ -158,7 +157,7 @@ const UserModel = SkritterModel.extend({
    * @method getAllStudyParts
    * @returns {Array}
    */
-  getAllStudyParts: function() {
+  getAllStudyParts: function () {
     return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
   },
 
@@ -166,7 +165,7 @@ const UserModel = SkritterModel.extend({
    * @method getAllStudyStyles
    * @returns {Array}
    */
-  getAllStudyStyles: function() {
+  getAllStudyStyles: function () {
     return app.isChinese() ? ['both', 'simp', 'trad'] : ['none'];
   },
 
@@ -174,7 +173,7 @@ const UserModel = SkritterModel.extend({
    * @method getFilterParts
    * @returns {Array}
    */
-  getFilteredLists: function() {
+  getFilteredLists: function () {
     return app.isChinese() ? this.get('filteredChineseLists') : this.get('filteredJapaneseLists');
   },
 
@@ -182,8 +181,8 @@ const UserModel = SkritterModel.extend({
    * @method getFilterParts
    * @returns {Array}
    */
-  getFilteredParts: function() {
-    var filteredParts = app.isChinese() ? this.get('filteredChineseParts') : this.get('filteredJapaneseParts');
+  getFilteredParts: function () {
+    let filteredParts = app.isChinese() ? this.get('filteredChineseParts') : this.get('filteredJapaneseParts');
 
     return _.intersection(this.getStudyParts(), filteredParts);
   },
@@ -192,7 +191,7 @@ const UserModel = SkritterModel.extend({
    * @method getFilteredStyles
    * @returns {Array}
    */
-  getFilteredStyles: function() {
+  getFilteredStyles: function () {
     const filteredStyles = app.isChinese() ? this.get('filteredChineseStyles') : this.get('filteredJapaneseStyles');
 
     return _.intersection(this.getStudyStyles(), filteredStyles);
@@ -202,15 +201,15 @@ const UserModel = SkritterModel.extend({
    * @method getLastItemUpdate
    * @returns {Number}
    */
-  getLastItemUpdate: function() {
-    return app.isChinese() ? this.get('lastChineseItemUpdate') : this.get('lastJapaneseItemUpdate')
+  getLastItemUpdate: function () {
+    return app.isChinese() ? this.get('lastChineseItemUpdate') : this.get('lastJapaneseItemUpdate');
   },
 
   /**
    * @method getGoal
    * @returns {Object}
    */
-  getGoal: function() {
+  getGoal: function () {
     const type = this.get('goalType');
     const values = this.get('goalValues')[app.getLanguage()];
 
@@ -224,7 +223,7 @@ const UserModel = SkritterModel.extend({
    * @param {String} [ja] the ja version of the string. Defaults to trad zh or simp if not provided
    * @return {String} the variant that the user prefers
    */
-  getPreferredCharSet: function(simp, trad, ja) {
+  getPreferredCharSet: function (simp, trad, ja) {
     if (app.isChinese()) {
       if (this.get('reviewTraditional') && !this.get('reviewSimplified')) {
         return trad || simp;
@@ -240,7 +239,7 @@ const UserModel = SkritterModel.extend({
    * @method getStudyParts
    * @returns {Array}
    */
-  getStudyParts: function() {
+  getStudyParts: function () {
     return app.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
   },
 
@@ -248,8 +247,8 @@ const UserModel = SkritterModel.extend({
    * @method getStudyStyles
    * @returns {Array}
    */
-  getStudyStyles: function() {
-    var styles = ['both'];
+  getStudyStyles: function () {
+    let styles = ['both'];
 
     if (app.isChinese()) {
       if (this.get('reviewSimplified')) {
@@ -267,8 +266,8 @@ const UserModel = SkritterModel.extend({
    * @method getRaygunTags
    * @returns {Array}
    */
-  getRaygunTags: function() {
-    var tags = [];
+  getRaygunTags: function () {
+    let tags = [];
     if (app.isChinese()) {
       tags.push('chinese');
       if (this.get('reviewSimplified')) {
@@ -288,7 +287,7 @@ const UserModel = SkritterModel.extend({
    * @param {String} part
    * @returns {Boolean}
    */
-  isAddingPart: function(part) {
+  isAddingPart: function (part) {
     return _.includes(this.getStudyParts(), part);
   },
 
@@ -297,7 +296,7 @@ const UserModel = SkritterModel.extend({
    * @param {String} style
    * @returns {Boolean}
    */
-  isAddingStyle: function(style) {
+  isAddingStyle: function (style) {
     return _.includes(this.getStudyStyles(), style);
   },
 
@@ -305,7 +304,7 @@ const UserModel = SkritterModel.extend({
    * @method isAudioEnabled
    * @returns {Boolean}
    */
-  isAudioEnabled: function() {
+  isAudioEnabled: function () {
     return !!this.get('audioEnabled');
   },
 
@@ -313,7 +312,7 @@ const UserModel = SkritterModel.extend({
    * @method isItemAddingAllowed
    * @returns {Boolean}
    */
-  isItemAddingAllowed: function() {
+  isItemAddingAllowed: function () {
     return this.get('addFrequency') > 0;
   },
 
@@ -321,7 +320,7 @@ const UserModel = SkritterModel.extend({
    * @method isLoggedIn
    * @returns {Boolean}
    */
-  isLoggedIn: function() {
+  isLoggedIn: function () {
     return this.session.has('user_id');
   },
 
@@ -330,7 +329,7 @@ const UserModel = SkritterModel.extend({
    * @param {String} part
    * @returns {Boolean}
    */
-  isReviewingPart: function(part) {
+  isReviewingPart: function (part) {
     return _.includes(this.getFilteredParts(), part);
   },
 
@@ -339,7 +338,7 @@ const UserModel = SkritterModel.extend({
    * @param {String} style
    * @returns {Boolean}
    */
-  isReviewingStyle: function(style) {
+  isReviewingStyle: function (style) {
     return _.includes(this.getFilteredStyles(), style);
   },
 
@@ -353,11 +352,10 @@ const UserModel = SkritterModel.extend({
    * @param {Function} [callbackError] called when there's a problem getting
    *                                   the subscription
    */
-  isSubscriptionActive: function(callback, callbackError) {
+  isSubscriptionActive: function (callback, callbackError) {
     const self = this;
 
     if (this.subscription.isFetched) {
-
       if (_.isFunction(callback)) {
         callback(this.subscription.getStatus() !== 'Expired');
       }
@@ -365,16 +363,16 @@ const UserModel = SkritterModel.extend({
       return this.subscription.getStatus() !== 'Expired';
     } else {
       this.subscription.fetch({
-        success: function() {
+        success: function () {
           if (_.isFunction(callback)) {
             callback(self.subscription.getStatus() !== 'Expired');
           }
         },
-        error: function(error) {
+        error: function (error) {
           if (callbackError) {
             callbackError(error);
           }
-        }
+        },
       });
     }
   },
@@ -384,20 +382,20 @@ const UserModel = SkritterModel.extend({
    * @param {Function} callback
    * @returns {User}
    */
-  load: function(callback) {
-    var self = this;
+  load: function (callback) {
+    let self = this;
     if (!this.isLoggedIn()) {
       callback();
       return this;
     }
     async.series(
       [
-        function(callback) {
+        function (callback) {
           self.openDatabase(callback);
         },
-        function(callback) {
+        function (callback) {
           self.updateItems(callback);
-        }
+        },
       ],
       callback
     );
@@ -410,29 +408,29 @@ const UserModel = SkritterModel.extend({
    * @param {String} password
    * @param {Function} callback
    */
-  login: function(username, password, callback) {
-    var self = this;
+  login: function (username, password, callback) {
+    let self = this;
     async.waterfall([
-      function(callback) {
+      function (callback) {
         self.session.authenticate('password', username, password,
-          function(result) {
+          function (result) {
             callback(null, result);
-          }, function(error) {
+          }, function (error) {
             callback(error);
           });
       },
-      function(result, callback) {
+      function (result, callback) {
         self.set('id', result.id);
         self.fetch({
-          error: function(error) {
+          error: function (error) {
             callback(error);
           },
-          success: function(user) {
+          success: function (user) {
             callback(null, user);
-          }
-        })
-      }
-    ], function(error, user) {
+          },
+        });
+      },
+    ], function (error, user) {
       if (error) {
         callback(error);
       } else {
@@ -451,15 +449,15 @@ const UserModel = SkritterModel.extend({
    * Logs out a user
    * @method logout
    */
-  logout: function() {
-    var self = this;
+  logout: function () {
+    let self = this;
 
     if (app.user.db) {
       app.user.db.delete()
-        .then(function() {
-          self._removeUserLocalStorageData()
+        .then(function () {
+          self._removeUserLocalStorageData();
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.error(error);
           app.reload();
         });
@@ -475,8 +473,8 @@ const UserModel = SkritterModel.extend({
    * @param {Function} callback
    * @returns {User}
    */
-  openDatabase: function(callback) {
-    var self = this;
+  openDatabase: function (callback) {
+    let self = this;
     if (!this.isLoggedIn()) {
       callback();
       return this;
@@ -485,21 +483,21 @@ const UserModel = SkritterModel.extend({
     this.db.version(2).stores(
       {
         items: 'id, *changed, *last, *next',
-        reviews: 'group, *created'
+        reviews: 'group, *created',
       }
     ).upgrade(app.reset);
     this.db.version(3).stores(
       {
         items: 'id, *changed, *lang, *last, *next',
-        reviews: 'group, *created'
+        reviews: 'group, *created',
       }
     ).upgrade(app.reset);
     this.db.open()
-      .then(function() {
+      .then(function () {
         callback();
       })
-      .catch(function(error) {
-        //specially handle error code 8 for safari
+      .catch(function (error) {
+        // specially handle error code 8 for safari
         if (error && error.code === 8) {
           callback();
         } else {
@@ -514,7 +512,7 @@ const UserModel = SkritterModel.extend({
    * @param {Object} response
    * @returns Array
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.User;
   },
 
@@ -524,7 +522,7 @@ const UserModel = SkritterModel.extend({
    * @param {String} value
    * @returns {Object}
    */
-  setGoal: function(type, value) {
+  setGoal: function (type, value) {
     const goal = this.get('goalValues');
 
     goal[app.getLanguage()][type] = value;
@@ -540,7 +538,7 @@ const UserModel = SkritterModel.extend({
    * @param {Number} value
    * @returns {User}
    */
-  setLastItemUpdate: function(value) {
+  setLastItemUpdate: function (value) {
     if (app.isChinese()) {
       this.set('lastChineseItemUpdate', value);
     } else {
@@ -554,23 +552,23 @@ const UserModel = SkritterModel.extend({
    * @param {Function} callback
    * @returns {User}
    */
-  updateItems: function(callback) {
-    var self = this;
-    var cursor = undefined;
-    var index = 0;
-    var limit = 2500;
-    var now = moment().unix();
-    var retries = 0;
+  updateItems: function (callback) {
+    let self = this;
+    let cursor = undefined;
+    let index = 0;
+    let limit = 2500;
+    let now = moment().unix();
+    let retries = 0;
     if (!this.isLoggedIn()) {
       callback();
       return this;
     }
     async.whilst(
-      function() {
+      function () {
         index++;
         return cursor !== null;
       },
-      function(callback) {
+      function (callback) {
         if (index > 4) {
           ScreenLoader.notice('(loading can take awhile on larger accounts)');
         }
@@ -584,9 +582,9 @@ const UserModel = SkritterModel.extend({
             limit: limit,
             offset: self.getLastItemUpdate(),
             order: 'changed',
-            token: self.session.get('access_token')
+            token: self.session.get('access_token'),
           },
-          error: function(error) {
+          error: function (error) {
             if (retries > 2) {
               callback(error);
             } else {
@@ -595,19 +593,19 @@ const UserModel = SkritterModel.extend({
               setTimeout(callback, 1000);
             }
           },
-          success: function(result) {
+          success: function (result) {
             self.db.transaction(
               'rw',
               self.db.items,
-              function() {
-                result.Items.forEach(function(item) {
+              function () {
+                result.Items.forEach(function (item) {
                   self.db.items.put(item);
                 });
               }
-            ).then(function() {
+            ).then(function () {
               cursor = result.cursor;
               setTimeout(callback, 100);
-            }).catch(function(error) {
+            }).catch(function (error) {
               if (retries > 2) {
                 callback(error);
               } else {
@@ -616,10 +614,10 @@ const UserModel = SkritterModel.extend({
                 setTimeout(callback, 1000);
               }
             });
-          }
+          },
         });
       },
-      function(error) {
+      function (error) {
         self.setLastItemUpdate(now);
         self.cache();
         callback(error);
@@ -633,13 +631,13 @@ const UserModel = SkritterModel.extend({
    * @method _removeUserLocalStorageData
    * @private
    */
-  _removeUserLocalStorageData: function() {
+  _removeUserLocalStorageData: function () {
     app.removeLocalStorage(self.id + '-session');
     app.removeLocalStorage(self.id + '-user');
     app.removeSetting('user');
     app.removeSetting('siteRef');
     app.reload();
-  }
+  },
 
 });
 

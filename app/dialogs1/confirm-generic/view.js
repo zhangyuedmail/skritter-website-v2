@@ -10,7 +10,7 @@ const ConfirmGenericConfirm = GelatoDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
     this.dialogBody = options.body || '';
     this.showButtonCancel = !_.isUndefined(options.showButtonCancel) ? options.showButtonCancel : true;
@@ -26,7 +26,7 @@ const ConfirmGenericConfirm = GelatoDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-confirm': 'handleClickButtonConfirm'
+    'click #button-confirm': 'handleClickButtonConfirm',
   },
 
   /**
@@ -39,7 +39,7 @@ const ConfirmGenericConfirm = GelatoDialog.extend({
    * @method render
    * @returns {ConfirmGenericConfirm}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -48,7 +48,7 @@ const ConfirmGenericConfirm = GelatoDialog.extend({
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
     this.close();
   },
@@ -57,10 +57,10 @@ const ConfirmGenericConfirm = GelatoDialog.extend({
    * @method handleClickButtonConfirm
    * @param {Event} event
    */
-  handleClickButtonConfirm: function(event) {
+  handleClickButtonConfirm: function (event) {
     event.preventDefault();
     this.trigger('confirm');
-  }
+  },
 
 });
 

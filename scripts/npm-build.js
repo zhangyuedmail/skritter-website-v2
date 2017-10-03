@@ -3,6 +3,7 @@
 const shell = require('shelljs');
 
 shell.rm('-rf', './public');
+shell.exec('npm run lint');
 shell.exec('brunch build');
 shell.rm('-rf', './build');
 shell.mkdir('-p', './build');
