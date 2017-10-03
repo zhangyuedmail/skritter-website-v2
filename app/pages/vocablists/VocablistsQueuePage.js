@@ -2,9 +2,9 @@ const GelatoPage = require('gelato/page');
 const AddingTable = require('components/vocablists/VocablistsAddingTableComponent');
 const ReviewingTable = require('components/vocablists/VocablistsReviewingTableComponent');
 const Sidebar = require('components/vocablists/VocablistsSidebarComponent');
-const Vocablists = require('collections/VocablistCollection');
+// const Vocablists = require('collections/VocablistCollection');
 
-/** \
+/**
  * @class VocablistsQueue
  * @extends {GelatoPage}
  */
@@ -32,7 +32,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
       this.loadAlreadyTimed = false;
@@ -45,7 +45,7 @@ module.exports = GelatoPage.extend({
 
     this.listenTo(
       this.vocablists, 'state:standby',
-      function() {
+      function () {
         if (!this.vocablists.length) {
           app.router.navigate('vocablists/browse', {trigger: true});
         }
@@ -84,7 +84,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {VocablistsQueue}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsQueue.jade');
     }
@@ -101,7 +101,7 @@ module.exports = GelatoPage.extend({
    * @method remove
    * @returns {VocablistsQueue}
    */
-  remove: function() {
+  remove: function () {
     this.addingTable.remove();
     this.reviewingTable.remove();
     this.sidebar.remove();
@@ -113,7 +113,7 @@ module.exports = GelatoPage.extend({
    * Records the load time for this page once.
    * @private
    */
-  _recordLoadTime: function() {
+  _recordLoadTime: function () {
     if (this.loadAlreadyTimed || !app.config.recordLoadTimes) {
       return;
     }

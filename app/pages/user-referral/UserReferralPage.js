@@ -34,7 +34,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     if (app.user.getAccountAgeBy('days') < 4) {
       app.router.navigate('dashboard');
     }
@@ -46,11 +46,11 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {About}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     let self = this;
 
-    _.defer(function() {
+    _.defer(function () {
       self.$('#user-link').select().focus();
     });
 
@@ -61,7 +61,7 @@ module.exports = GelatoPage.extend({
    * @method remove
    * @returns {About}
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
   },
 
@@ -69,7 +69,7 @@ module.exports = GelatoPage.extend({
    * Selects the user's referral link when they click on it.
    * @method handleUserLinkClicked
    */
-  handleUserLinkClicked: function() {
+  handleUserLinkClicked: function () {
     this.$('#user-link').select();
   },
 });

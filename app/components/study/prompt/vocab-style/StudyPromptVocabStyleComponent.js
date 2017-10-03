@@ -17,7 +17,7 @@ const StudyPromptVocabStyleComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
   },
 
@@ -25,7 +25,7 @@ const StudyPromptVocabStyleComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptVocabStyleComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },

@@ -35,7 +35,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method defaults
    * @returns {Object}
    */
-  defaults: function() {
+  defaults: function () {
     return {
       complete: false,
       failedConsecutive: 0,
@@ -58,7 +58,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method getGradingColor
    * @returns {String}
    */
-  getGradingColor: function() {
+  getGradingColor: function () {
     return app.user.get('gradingColors')[this.get('score')];
   },
 
@@ -66,7 +66,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method getPosition
    * @returns {Number}
    */
-  getPosition: function() {
+  getPosition: function () {
     return this.collection.indexOf(this);
   },
 
@@ -74,7 +74,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method getReviewData
    * @returns {Object}
    */
-  getReviewData: function() {
+  getReviewData: function () {
     return {
       item: this.item,
       itemId: this.item ? this.item.id : this.vocab.id,
@@ -93,7 +93,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method getReviewingTime
    * @returns {Number}
    */
-  getReviewingTime: function() {
+  getReviewingTime: function () {
     let reviewingTime = (this.get('reviewingStop') - this.get('reviewingStart')) / 1000;
     if (this.collection.part === 'tone') {
       return reviewingTime > 15 ? 15 : reviewingTime;
@@ -105,7 +105,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method getThinkingTime
    * @returns {Number}
    */
-  getThinkingTime: function() {
+  getThinkingTime: function () {
     let thinkingTime = (this.get('thinkingStop') - this.get('reviewingStart')) / 1000;
     if (this.collection.part === 'tone') {
       return thinkingTime > 10 ? 10 : thinkingTime;
@@ -117,7 +117,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method getTones
    * @returns {Array}
    */
-  getTones: function() {
+  getTones: function () {
     return this.collection.vocab.getTones()[this.getPosition()];
   },
 
@@ -125,7 +125,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method isChinese
    * @returns {Boolean}
    */
-  isChinese: function() {
+  isChinese: function () {
     return this.vocab.isChinese();
   },
 
@@ -133,7 +133,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method isComplete
    * @returns {Boolean}
    */
-  isComplete: function() {
+  isComplete: function () {
     return this.get('complete');
   },
 
@@ -141,7 +141,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method isJapanese
    * @returns {Boolean}
    */
-  isJapanese: function() {
+  isJapanese: function () {
     return this.vocab.isJapanese();
   },
 
@@ -149,7 +149,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method isReadingHidden
    * @returns {Boolean}
    */
-  isReadingHidden: function() {
+  isReadingHidden: function () {
     if (this.get('showReading')) {
       return false;
     }
@@ -167,7 +167,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method start
    * @returns {PromptItemModel}
    */
-  start: function() {
+  start: function () {
     const now = Date.now();
 
     if (this.get('reviewingStart') === 0) {
@@ -186,7 +186,7 @@ const PromptItemModel = GelatoModel.extend({
    * @method stop
    * @returns {PromptItemModel}
    */
-  stop: function() {
+  stop: function () {
     const timestamp = new Date().getTime();
 
     this.stopReviewing(timestamp);
@@ -202,7 +202,7 @@ const PromptItemModel = GelatoModel.extend({
    * @param {Number} [timestamp]
    * @returns {PromptItemModel}
    */
-  stopReviewing: function(timestamp) {
+  stopReviewing: function (timestamp) {
     if (this.get('reviewingStop') === 0) {
       this.set('reviewingStop', timestamp || Date.now());
     }
@@ -214,7 +214,7 @@ const PromptItemModel = GelatoModel.extend({
    * @param {Number} [timestamp]
    * @returns {PromptItemModel}
    */
-  stopThinking: function(timestamp) {
+  stopThinking: function (timestamp) {
     if (this.get('thinkingStop') === 0) {
       this.set('thinkingStop', timestamp || Date.now());
     }

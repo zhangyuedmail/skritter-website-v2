@@ -36,7 +36,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.sidebar = new AccountSidebar();
     this.sourceLanguages = require('data/source-languages');
     this.listenTo(app.user, 'state', this.render);
@@ -47,7 +47,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * @method render
    * @returns {AccountSettingsStudyPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileAccountSettingsStudy.jade');
     }
@@ -61,7 +61,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * Displays an error message to the user.
    * @param {String} msg the message to display to the user
    */
-  displayErrorMessage: function(msg) {
+  displayErrorMessage: function (msg) {
     this.$('#error-alert').text(msg).removeClass('hidden');
   },
 
@@ -69,9 +69,9 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * @method getSelectedParts
    * @returns {Array}
    */
-  getSelectedParts: function() {
+  getSelectedParts: function () {
     let parts = [];
-    this.$('#field-parts :checked').each(function() {
+    this.$('#field-parts :checked').each(function () {
       parts.push($(this).val());
     });
     return parts;
@@ -81,11 +81,11 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * Responds to the user changing a checkbox input's value
    * @param {jQuery.Event} event
    */
-  handleChangeCheckbox: function(event) {
+  handleChangeCheckbox: function (event) {
     this.handleClickButtonSave(event);
   },
 
-  handleChangeGoalType: function(event) {
+  handleChangeGoalType: function (event) {
     const goalType = $(event.target).val();
     const goalValue = app.user.get('goalValues')[app.getLanguage()][goalType];
 
@@ -98,7 +98,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * Responds to the user changing a select input's value
    * @param {jQuery.Event} event
    */
-  handleChangeSelect: function(event) {
+  handleChangeSelect: function (event) {
     this.handleClickButtonSave(event);
   },
 
@@ -106,7 +106,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * @method handleChangeTargetLanguage
    * @param {Event} event
    */
-  handleChangeTargetLanguage: function(event) {
+  handleChangeTargetLanguage: function (event) {
     event.preventDefault();
     app.user.set('targetLang', this.$('#field-target-language').val());
     this.render();
@@ -116,7 +116,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * @method handleClickButtonSave
    * @param {Event} event
    */
-  handleClickButtonSave: function(event) {
+  handleClickButtonSave: function (event) {
     event.preventDefault();
 
     let zhStudyStyleChanged;
@@ -186,7 +186,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * @method remove
    * @returns {AccountSettingsStudyPage}
    */
-  remove: function() {
+  remove: function () {
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
   },

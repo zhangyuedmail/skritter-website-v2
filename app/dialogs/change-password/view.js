@@ -14,7 +14,7 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {ChangePasswordDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -30,7 +30,7 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickButtonClose
    * @param {Event} event
    */
-  handleClickButtonClose: function(event) {
+  handleClickButtonClose: function (event) {
     event.preventDefault();
     this.close();
   },
@@ -38,7 +38,7 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickButtonChange
    * @param {Event} event
    */
-  handleClickButtonChange: function(event) {
+  handleClickButtonChange: function (event) {
     event.preventDefault();
     let password1 = this.$('#field-password1').val();
     let password2 = this.$('#field-password2').val();
@@ -54,11 +54,11 @@ module.exports = BootstrapDialog.extend({
         password: password1,
       },
       {
-        error: (function(error) {
+        error: (function (error) {
           this.$('#error-message').text(JSON.stringify(error));
           this.$('form').prop('disabled', false);
         }).bind(this),
-        success: (function() {
+        success: (function () {
           this.close();
         }).bind(this),
       }

@@ -20,7 +20,7 @@ let GelatoDialog = GelatoView.extend({
    * @param {Object} [context]
    * @returns {GelatoDialog}
    */
-  renderTemplate: function(context) {
+  renderTemplate: function (context) {
     GelatoView.prototype.renderTemplate.call(this, context);
     this.element = this.$('[role="dialog"]');
     this.element.on('hide.bs.modal', this.handleElementHide.bind(this));
@@ -33,33 +33,33 @@ let GelatoDialog = GelatoView.extend({
    * @method close
    * @returns {GelatoDialog}
    */
-  close: function() {
+  close: function () {
     this.element.modal('hide');
     return this;
   },
   /**
    * @method handleElementHide
    */
-  handleElementHide: function() {
+  handleElementHide: function () {
     this.trigger('hide');
   },
   /**
    * @method handleElementHidden
    */
-  handleElementHidden: function() {
+  handleElementHidden: function () {
     this.trigger('hidden');
     this.remove();
   },
   /**
    * @method handleElementShow
    */
-  handleElementShow: function() {
+  handleElementShow: function () {
     this.trigger('show');
   },
   /**
    * @method handleElementShown
    */
-  handleElementShown: function() {
+  handleElementShown: function () {
     this.trigger('shown');
   },
   /**
@@ -67,7 +67,7 @@ let GelatoDialog = GelatoView.extend({
    * @param {Object} [options]
    * @returns {GelatoDialog}
    */
-  open: function(options) {
+  open: function (options) {
     options = _.defaults(
       options || {},
       {

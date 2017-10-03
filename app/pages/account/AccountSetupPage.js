@@ -53,7 +53,7 @@ const AccountSetupPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.countries = require('data/country-codes');
     this.timezones = require('data/country-timezones');
   },
@@ -62,7 +62,7 @@ const AccountSetupPage = GelatoPage.extend({
    * @method render
    * @returns {AccountSetupPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -72,7 +72,7 @@ const AccountSetupPage = GelatoPage.extend({
    * @method handleChangeFieldCountry
    * @param {Event} event
    */
-  handleChangeFieldCountry: function(event) {
+  handleChangeFieldCountry: function (event) {
     event.preventDefault();
     this.settings.country = this.$('#field-country :selected').val() || 'US';
     this.render();
@@ -82,7 +82,7 @@ const AccountSetupPage = GelatoPage.extend({
    * @method handleChangeFieldLanguage
    * @param {Event} event
    */
-  handleChangeFieldLanguage: function(event) {
+  handleChangeFieldLanguage: function (event) {
     event.preventDefault();
     this.settings.targetLang = this.$('#field-language').val() || 'zh';
     this.render();
@@ -92,7 +92,7 @@ const AccountSetupPage = GelatoPage.extend({
    * @method handleClickButtonContinue
    * @param {Event} event
    */
-  handleClickButtonContinue: function(event) {
+  handleClickButtonContinue: function (event) {
     let self = this;
     event.preventDefault();
     let settings = this.getSettings();
@@ -113,11 +113,11 @@ const AccountSetupPage = GelatoPage.extend({
       settings,
       {
         patch: true,
-        error: function(user, error) {
+        error: function (user, error) {
           self.$('#error-message').text(error.responseJSON.message);
           ScreenLoader.hide();
         },
-        success: function() {
+        success: function () {
           app.setSetting('newuser-' + app.user.id, true);
           app.router.navigate('vocablists/browse');
           app.reload();
@@ -127,7 +127,7 @@ const AccountSetupPage = GelatoPage.extend({
     this.render();
   },
 
-  handleClickCharOption: function(event) {
+  handleClickCharOption: function (event) {
     let id = event.currentTarget.id;
     if (id === 'traditional') {
       this.settings.addTraditional = true;
@@ -146,7 +146,7 @@ const AccountSetupPage = GelatoPage.extend({
     this.render();
   },
 
-  handleClickLangOption: function(event) {
+  handleClickLangOption: function (event) {
     event.preventDefault();
     let id = (event.currentTarget.id || '-').split('-')[1];
     this.settings.targetLang = id || 'zh';
@@ -158,7 +158,7 @@ const AccountSetupPage = GelatoPage.extend({
    * @method getSettings
    * @returns {Object}
    */
-  getSettings: function() {
+  getSettings: function () {
     let settings = {};
     let targetLang = this.settings.targetLang;
     if (targetLang === 'zh') {
@@ -178,7 +178,7 @@ const AccountSetupPage = GelatoPage.extend({
    * @method remove
    * @returns {Study}
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
   },
 
@@ -187,7 +187,7 @@ const AccountSetupPage = GelatoPage.extend({
    * @param {Object} settings form settings to validate
    * @returns {Object} null if no error, object with a 'message' if there's a problem
    */
-  validateSettings: function(settings) {
+  validateSettings: function (settings) {
     let error = {};
 
     // user selected

@@ -1,5 +1,5 @@
 const GelatoComponent = require('gelato/component');
-const Vocablists = require('collections/VocablistCollection');
+// const Vocablists = require('collections/VocablistCollection');
 const VocablistSettings = require('dialogs/vocablist-settings/view');
 const VocablistRemoveDialog = require('dialogs/vocablist-remove/view');
 
@@ -29,7 +29,7 @@ const VocablistsReviewingTableComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.vocablists = options.vocablists;
     this.listenTo(this.vocablists, 'state', this.render);
   },
@@ -38,7 +38,7 @@ const VocablistsReviewingTableComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistsReviewingTableComponent}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsReviewingTable.jade');
     }
@@ -52,7 +52,7 @@ const VocablistsReviewingTableComponent = GelatoComponent.extend({
    * @method handleClickRestartAddingLink
    * @param {Event} event
    */
-  handleClickRestartAddingLink: function(event) {
+  handleClickRestartAddingLink: function (event) {
     let listID = $(event.target).closest('.row').data('list-id');
     let list = this.vocablists.get(listID.toString());
     list.save({'studyingMode': 'adding'}, {patch: true});
@@ -63,7 +63,7 @@ const VocablistsReviewingTableComponent = GelatoComponent.extend({
    * @method handleClickListSettingsSpan
    * @param {Event} event
    */
-  handleClickListSettingsSpan: function(event) {
+  handleClickListSettingsSpan: function (event) {
     let listID = $(event.target).closest('.row').data('list-id');
     let list = this.vocablists.get(listID.toString());
     this.dialog = new VocablistSettings({vocablist: list});
@@ -74,7 +74,7 @@ const VocablistsReviewingTableComponent = GelatoComponent.extend({
    * @method handleClickRemoveListSpan
    * @param {Event} event
    */
-  handleClickRemoveListSpan: function(event) {
+  handleClickRemoveListSpan: function (event) {
     let listID = $(event.target).closest('.row').data('list-id');
     let list = this.vocablists.get(listID.toString());
     this.dialog = new VocablistRemoveDialog({vocablist: list});

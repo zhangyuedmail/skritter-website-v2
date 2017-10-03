@@ -10,7 +10,7 @@ let AddVocabConfirm = GelatoDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
     this.content = new Content({dialog: this});
   },
@@ -25,7 +25,7 @@ let AddVocabConfirm = GelatoDialog.extend({
    * @method render
    * @returns {AddVocabConfirm}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.content.setElement('#content-container').render();
 

@@ -31,7 +31,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     // TODO: get actual selectable range
     let userTZ = app.user.get('timezone');
     let now = moment().tz(userTZ).subtract(4, 'hours').startOf('day')
@@ -149,7 +149,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistSideBar}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     const userTZ = app.user.get('timezone');
@@ -195,7 +195,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
     }
   },
 
-  remove: function() {
+  remove: function () {
     this.$('#date-range-picker').off();
 
     GelatoComponent.prototype.remove.call(this);
@@ -205,7 +205,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
    * Gets the total amount of time a user has studied in the selected time period
    * @returns {Object} a larget units time object from progress-stats
    */
-  getTimeStudied: function() {
+  getTimeStudied: function () {
     return this.collection.getTimeStudiedForPeriod(this.range.start, this.range.end);
   },
 
@@ -214,7 +214,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
    * @param {Event} event
    * @param {DateRangePicker} picker
    */
-  onDatePickerUpdated: function(event, picker) {
+  onDatePickerUpdated: function (event, picker) {
     const startDate = picker.startDate;
     const endDate = picker.endDate;
     const self = this;
@@ -253,7 +253,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
    * should be performed when this section of the stats page is made visible.
    * @method onTabVisible
    */
-  onTabVisible: function() {
+  onTabVisible: function () {
     this._views['bargraph'].redrawGraph();
   },
 
@@ -263,7 +263,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
    * @param {jQuery.Event} event the change event
    * @method onTimelineUnitsChanged
    */
-  onTimelineUnitsChanged: function(event) {
+  onTimelineUnitsChanged: function (event) {
     event.preventDefault();
     let units = event.target.value;
 
@@ -273,7 +273,7 @@ const StatsTimelineComponent = GelatoComponent.extend({
   /**
    * Updates the amount of time studied. Child graphs should update themselves independently of this method.
    */
-  update: function() {
+  update: function () {
     const timeStudied = this.getTimeStudied();
     this.$('#time-studied').text(timeStudied.amount);
     this.$('#time-studied-units-label').text(timeStudied.units);

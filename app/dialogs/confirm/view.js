@@ -9,7 +9,7 @@ module.exports = BootstrapDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.title = options.title;
     this.body = options.body;
     this.okText = options.okText;
@@ -24,7 +24,7 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {ConfirmDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -40,7 +40,7 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
     this.close();
   },
@@ -48,7 +48,7 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickButtonConfirm
    * @param {Event} event
    */
-  handleClickButtonConfirm: function(event) {
+  handleClickButtonConfirm: function (event) {
     event.preventDefault();
     this.trigger('confirm');
     if (this.onConfirm === 'close') {

@@ -10,7 +10,7 @@ const ResetVocablistPositionDialog = GelatoDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.vocablists = new Vocablists();
   },
 
@@ -33,7 +33,7 @@ const ResetVocablistPositionDialog = GelatoDialog.extend({
    * @method render
    * @returns {ResetVocablistPositionDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -43,7 +43,7 @@ const ResetVocablistPositionDialog = GelatoDialog.extend({
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
     this.close();
   },
@@ -52,7 +52,7 @@ const ResetVocablistPositionDialog = GelatoDialog.extend({
    * @method handleClickButtonReset
    * @param {Event} event
    */
-  handleClickButtonReset: function(event) {
+  handleClickButtonReset: function (event) {
     const self = this;
     event.preventDefault();
 
@@ -61,14 +61,14 @@ const ResetVocablistPositionDialog = GelatoDialog.extend({
 
     async.series(
       [
-        function(callback) {
+        function (callback) {
           self.loadVocablists(callback);
         },
-        function(callback) {
+        function (callback) {
           self.vocablists.resetAllPositions(callback);
         },
       ],
-      function() {
+      function () {
         self.close();
       }
     );
@@ -77,21 +77,21 @@ const ResetVocablistPositionDialog = GelatoDialog.extend({
   /**
    * @method loadVocablists
    */
-  loadVocablists: function(callback) {
+  loadVocablists: function (callback) {
     const self = this;
 
     async.parallel(
       [
-        function(callback) {
+        function (callback) {
           self.vocablists.fetch({
             data: {
               sort: 'studying',
             },
             remove: false,
-            error: function(error) {
+            error: function (error) {
               callback(error);
             },
-            success: function() {
+            success: function () {
               callback();
             },
           });

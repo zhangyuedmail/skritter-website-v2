@@ -1,5 +1,5 @@
 const GelatoComponent = require('gelato/component');
-const config = require('config');
+// const config = require('config');
 
 /**
  * @class StudyPromptPartDefnComponent
@@ -30,7 +30,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
     this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
@@ -41,7 +41,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptPartDefnComponent}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileStudyPromptPartDefnComponent.jade');
     }
@@ -70,7 +70,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    * @method renderComplete
    * @returns {StudyPromptPartDefnComponent}
    */
-  renderComplete: function() {
+  renderComplete: function () {
     this.prompt.review.stop();
     this.prompt.review.set('complete', true);
     this.prompt.navigation.update();
@@ -99,7 +99,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    * @method renderIncomplete
    * @returns {StudyPromptPartDefnComponent}
    */
-  renderIncomplete: function() {
+  renderIncomplete: function () {
     this.prompt.review.start();
     this.prompt.review.set('complete', false);
     this.prompt.shortcuts.grading.stop_listening();
@@ -121,7 +121,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
   /**
    * @method handlePromptCanvasClick
    */
-  handlePromptCanvasClick: function() {
+  handlePromptCanvasClick: function () {
     if (this.prompt.review.isComplete()) {
       this.prompt.next();
     } else {
@@ -133,7 +133,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
   /**
    * @method handlePromptToolbarActionCorrect
    */
-  handlePromptToolbarActionCorrect: function() {
+  handlePromptToolbarActionCorrect: function () {
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.review.set('complete', true);
@@ -143,7 +143,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
   /**
    * @method handlePromptToolbarGradingMouseup
    */
-  handlePromptToolbarGradingMouseup: function(value) {
+  handlePromptToolbarGradingMouseup: function (value) {
     this.prompt.review.set('score', value);
 
     if (app.user.get('autoAdvancePrompts')) {

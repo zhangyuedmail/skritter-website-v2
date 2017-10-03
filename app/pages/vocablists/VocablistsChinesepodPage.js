@@ -37,7 +37,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.sidebar = new VocablistSidebar();
     this.chinesepodSession = new ChinesePodSession();
     this.chinesepodLabels = new ChinesePodLabels();
@@ -61,7 +61,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {VocablistsChinesepodPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsChinesepod.jade');
     }
@@ -75,7 +75,7 @@ module.exports = GelatoPage.extend({
    * @method remove
    * @returns {VocablistBrowse}
    */
-  remove: function() {
+  remove: function () {
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
   },
@@ -83,7 +83,7 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleChinesepodSessionLoaded
    */
-  handleChinesepodSessionLoaded: function() {
+  handleChinesepodSessionLoaded: function () {
     this.render();
     if (!this.chinesepodSession.isNew()) {
       this.chinesepodLabels.fetch();
@@ -95,7 +95,7 @@ module.exports = GelatoPage.extend({
    * @method handleSubmitLoginForm
    * @param {Event} event
    */
-  handleSubmitLoginForm: function(event) {
+  handleSubmitLoginForm: function (event) {
     event.preventDefault();
     this.email = this.$('#email').val();
     this.password = this.$('#password').val();
@@ -105,10 +105,10 @@ module.exports = GelatoPage.extend({
       password: this.password,
     });
     this.chinesepodSession.save();
-    this.listenToOnce(this.chinesepodSession, 'sync', function() {
+    this.listenToOnce(this.chinesepodSession, 'sync', function () {
       document.location.reload();
     });
-    this.listenToOnce(this.chinesepodSession, 'error', function(model, jqxhr) {
+    this.listenToOnce(this.chinesepodSession, 'error', function (model, jqxhr) {
       this.errorMessage = jqxhr.responseJSON.message;
       this.stopListening(this.chinesepodSession);
       this.render();
@@ -119,9 +119,9 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleClickLogoutChineseLink
    */
-  handleClickLogoutChineseLink: function() {
+  handleClickLogoutChineseLink: function () {
     this.chinesepodSession.destroy();
-    this.listenToOnce(this.chinesepodSession, 'sync', function() {
+    this.listenToOnce(this.chinesepodSession, 'sync', function () {
       document.location.reload();
     });
   },
@@ -129,7 +129,7 @@ module.exports = GelatoPage.extend({
    * @method handleChangeSearchInput
    * @param {Event} e
    */
-  handleChangeSearchInput: _.throttle(function(e) {
+  handleChangeSearchInput: _.throttle(function (e) {
     this.searchString = $(e.target).val().toLowerCase();
     this.renderTable();
   }, 500),
@@ -139,7 +139,7 @@ module.exports = GelatoPage.extend({
    * @param {Collection} collection
    * @param {jqXHR} jqxhr
    */
-  handleChinesePodError: function(collection, jqxhr) {
+  handleChinesePodError: function (collection, jqxhr) {
     if (jqxhr.status === 504) {
       collection.fetch();
     }
@@ -148,7 +148,7 @@ module.exports = GelatoPage.extend({
   /**
    * @method renderTable
    */
-  renderTable: function() {
+  renderTable: function () {
     let context = require('globals');
     context.view = this;
     let rendering = $(this.template(context));
@@ -158,7 +158,7 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleChangeViewOption
    */
-  handleChangeViewOption: function() {
+  handleChangeViewOption: function () {
     this.viewOption = $('input[name="view-option"]:checked').val();
     this.renderTable();
   },
@@ -166,7 +166,7 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleClickLookupLink
    */
-  handleClickLookupLink: function(e) {
+  handleClickLookupLink: function (e) {
     let lookupToken = $(e.target).data('lookup-token');
     let url = app.getApiUrl() + 'cpod/list/' + lookupToken;
     let headers = app.user.session.getHeaders();
@@ -174,7 +174,7 @@ module.exports = GelatoPage.extend({
     $.ajax({
       url: url,
       headers: headers,
-      success: function(response) {
+      success: function (response) {
         document.location.href = '/vocablists/view/' + response.vocabListID;
       },
     });

@@ -21,7 +21,7 @@ const CancellationModel = SkritterModel.extend({
    * @method parse
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.Cancellation || response;
   },
 

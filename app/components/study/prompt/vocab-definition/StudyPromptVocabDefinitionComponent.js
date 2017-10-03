@@ -25,7 +25,7 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.editing = false;
     this.prompt = options.prompt;
     this.visible = false;
@@ -35,7 +35,7 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptVocabDefinitionComponent}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileStudyPromptVocabDefinitionComponent.jade');
     }
@@ -59,7 +59,7 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
    * @method getValue
    * @returns {Object}
    */
-  getValue: function() {
+  getValue: function () {
     return this.$('textarea').val();
   },
 
@@ -67,11 +67,11 @@ const StudyPromptVocabDefinitionComponent = GelatoComponent.extend({
    * @method handleClickShowDefinition
    * @param {Event} event
    */
-  handleClickShowDefinition: function(event) {
+  handleClickShowDefinition: function (event) {
     event.preventDefault();
 
     this.prompt.reviews.showDefinition = true;
-    this.prompt.reviews.forEach(function(review) {
+    this.prompt.reviews.forEach(function (review) {
       review.set('showDefinition', true);
     });
 

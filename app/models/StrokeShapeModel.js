@@ -16,7 +16,7 @@ const StrokeShapeModel = GelatoModel.extend({
    * @method defaults
    * @returns {Object}
    */
-  defaults: function() {
+  defaults: function () {
     return {
       contains: [],
       corners: [],

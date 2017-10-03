@@ -28,7 +28,7 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
   },
 
@@ -36,7 +36,7 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptVocabContainedComponent}
    */
-  render: function() {
+  render: function () {
     const prompt = this.prompt;
     const reviews = prompt.reviews;
     const contained = reviews ? reviews.vocab.getContained(true) : [];
@@ -56,7 +56,7 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
     return this;
   },
 
-  handleClickChildWriting: function(event) {
+  handleClickChildWriting: function (event) {
     const id = $(event.target).data('vocabid');
 
     // disable this for the demo
@@ -71,7 +71,7 @@ const StudyPromptVocabContainedComponent = GelatoComponent.extend({
    * @method handleClickShowContained
    * @param {Event} event
    */
-  handleClickShowContained: function(event) {
+  handleClickShowContained: function (event) {
     event.preventDefault();
     if (_.includes(['rune', 'tone'], this.prompt.reviews.part)) {
       this.prompt.review.showContained = true;

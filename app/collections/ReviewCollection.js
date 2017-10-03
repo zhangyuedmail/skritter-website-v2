@@ -25,7 +25,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(models, options) {
+  initialize: function (models, options) {
     options = options || {};
     this.items = options.items;
     this.addCountOffset = 0;
@@ -37,7 +37,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @param {ReviewModel} review
    * @return {String}
    */
-  comparator: function(review) {
+  comparator: function (review) {
     return review.get('created');
   },
 
@@ -45,7 +45,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @method fetchReviewErrors
    * @param {Function} [callback]
    */
-  fetchReviewErrors: function(callback) {
+  fetchReviewErrors: function (callback) {
     $.ajax({
       url: app.getApiUrl() + 'reviews/errors',
       headers: app.user.session.getHeaders(),
@@ -54,10 +54,10 @@ const ReviewCollection = BaseSkritterCollection.extend({
         limit: 100,
         offset: moment().startOf('year').unix(),
       },
-      error: function(error) {
+      error: function (error) {
         console.error(error);
       },
-      success: function(result) {
+      success: function (result) {
         console.log(result);
       },
     });
@@ -68,7 +68,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @param {String} itemId
    * @returns {Object[]}
    */
-  getByItemId: function(itemId) {
+  getByItemId: function (itemId) {
     return _.chain(this.models)
       .map((model) => model.get('data'))
       .flatten()
@@ -81,7 +81,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @method getDueCountOffset
    * @returns {Number}
    */
-  getDueCountOffset: function() {
+  getDueCountOffset: function () {
     const reviews = _.flatten(this.map('data'));
     let offset = this.postCountOffset - this.addCountOffset;
 
@@ -96,7 +96,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @method post
    * @param {Object} [options]
    */
-  post: function(options) {
+  post: function (options) {
     options = _.defaults(options || {}, {async: true, skip: 0});
 
     if (this.state !== 'standby') {
@@ -186,7 +186,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @param {Object} [options]
    * @returns {Array}
    */
-  put: function(models, options) {
+  put: function (models, options) {
     const updatedReviews = [];
 
     models = _.isArray(models) ? models : [models];

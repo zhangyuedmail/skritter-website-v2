@@ -20,7 +20,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
     const viewOptions = options.viewOptions || {};
 
@@ -40,12 +40,12 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    * Handles the user
    * @param event
    */
-  handleBackClick: function(event) {
+  handleBackClick: function (event) {
     event.preventDefault();
     window.history.back();
   },
 
-  handleCreateListClick: function(event) {
+  handleCreateListClick: function (event) {
     event.preventDefault();
     app.router.navigate('vocablists/create', {trigger: true});
   },
@@ -54,7 +54,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    * Update sync button display based on offline sync status.
    * @method handleOfflineStatus
    */
-  handleOfflineStatus: function(value) {
+  handleOfflineStatus: function (value) {
     const $button = this.$('#sync-btn');
     const spinClass = 'fa-spin';
 
@@ -69,7 +69,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    *
    * @param event
    */
-  handleToggleMenuClick: function(event) {
+  handleToggleMenuClick: function (event) {
     event.preventDefault();
     vent.trigger('mobileNavMenu:toggle');
   },
@@ -78,7 +78,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    *
    * @param event
    */
-  handleSyncClick: function(event) {
+  handleSyncClick: function (event) {
     event.preventDefault();
     app.user.offline.sync();
     app.user.stats.fetchMonth();

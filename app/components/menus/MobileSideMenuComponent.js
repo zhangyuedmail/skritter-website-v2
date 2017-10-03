@@ -43,7 +43,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * @param {UserModel} options.user the app's usermodel. Must be passed in
    *                                 due to global app variable not available yet.
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.user = options.user;
     this.listenTo(this.user.stats, 'state:standby', this.updateStats);
     this.listenTo(this.user, 'change', this.updateUserInfo);
@@ -53,7 +53,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * Handles the user clicking on their avatar. Navigates to the user settings page
    * @param {jQuery} event
    */
-  handleAvatarClick: function(event) {
+  handleAvatarClick: function (event) {
     this.handleSettingsButtonClick(event);
   },
 
@@ -61,7 +61,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * @method handleClickButtonBeacon
    * @param {Event} event
    */
-  handleClickButtonBeacon: function(event) {
+  handleClickButtonBeacon: function (event) {
     event.preventDefault();
 
     if (window.HS) {
@@ -74,7 +74,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * the logout process.
    * @param {jQuery.Event} e the click event
    */
-  handleLogoutButtonClick: function(e) {
+  handleLogoutButtonClick: function (e) {
     this._views['dialog'] = new ConfirmGenericDialog({
       body: 'This will fully log you out of your current account and return to the log in screen.',
       showButtonCancel: true,
@@ -85,7 +85,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
 
     this._views['dialog'].once(
       'confirm',
-      function() {
+      function () {
         app.router.navigateLogout();
       }
     );
@@ -98,7 +98,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * the settings page.
    * @param {jQuery.Event} e the click event
    */
-  handleSettingsButtonClick: function(e) {
+  handleSettingsButtonClick: function (e) {
     app.router.navigateAccountSettingsGeneral();
   },
 
@@ -107,7 +107,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * Called when it visually enters and exits the main frame.
    * @param {Boolean} show whether this component is being shown
    */
-  toggleVisibility: function(show) {
+  toggleVisibility: function (show) {
     if (!show) {
       return;
     }
@@ -122,7 +122,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * Updates UI to reflect the user's current state
    * @method updateUserInfo
    */
-  updateUserInfo: function() {
+  updateUserInfo: function () {
     this.$('#username').text(this.user.get('name'));
     this.$('#menu-avatar').attr('src', 'data:image/png;base64, ' + app.user.get('avatar'));
   },
@@ -131,7 +131,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * Updates the UI to reflect current stats values
    * @method updateStats
    */
-  updateStats: function() {
+  updateStats: function () {
     this.$('.num-chars').text(this.user.stats.getAllTimeCharactersLearned());
     this.$('.num-words').text(this.user.stats.getAllTimeWordsLearned());
   },

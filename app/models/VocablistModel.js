@@ -26,7 +26,7 @@ const VocablistModel = SkritterModel.extend({
    * @param options
    * @method initialize
    */
-  initialize: function(models, options) {
+  initialize: function (models, options) {
     this.history = new VocablistHistoryCollection(null, {
       id: this.id,
     });
@@ -36,7 +36,7 @@ const VocablistModel = SkritterModel.extend({
    * @method parse
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.VocabList || response;
   },
 
@@ -46,7 +46,7 @@ const VocablistModel = SkritterModel.extend({
    * @param {Model} model
    * @param {Object} options
    */
-  sync: function(method, model, options) {
+  sync: function (method, model, options) {
     options.headers = _.result(this, 'headers');
 
     if (!options.url) {
@@ -65,7 +65,7 @@ const VocablistModel = SkritterModel.extend({
    * @method deletable
    * @returns {Boolean}
    */
-  deletable: function() {
+  deletable: function () {
     return _.every([
       !this.get('disabled'),
       !this.get('published'),
@@ -79,7 +79,7 @@ const VocablistModel = SkritterModel.extend({
    * @method copyable
    * @returns {Boolean}
    */
-  copyable: function() {
+  copyable: function () {
     return _.every([
       !this.get('disabled'),
       this.get('sort') !== 'chinesepod-lesson',
@@ -92,7 +92,7 @@ const VocablistModel = SkritterModel.extend({
    * @returns {Object} contains a label attribute with the section name
    *                    and a url attribute with the URL to the category.
    */
-  getCategoryAndUrl: function() {
+  getCategoryAndUrl: function () {
     const publisher = this.getPublisherName();
 
     if (publisher === 'Skritter') {
@@ -117,7 +117,7 @@ const VocablistModel = SkritterModel.extend({
    * Gets the changed date and presents it in a nice format.
    * @returns {String} a UI-printable representation of the publish date
    */
-  getFormattedChangedDate: function(format) {
+  getFormattedChangedDate: function (format) {
     format = format || 'l';
     let changed = moment(this.get('changed') * 1000);
 
@@ -132,7 +132,7 @@ const VocablistModel = SkritterModel.extend({
    * Gets the publish date and presents it in a nice format.
    * @returns {String} a UI-printable representation of the publish date
    */
-  getFormattedPublishedDate: function(format) {
+  getFormattedPublishedDate: function (format) {
     format = format || 'l';
     let published = moment(this.get('published') * 1000);
 
@@ -148,7 +148,7 @@ const VocablistModel = SkritterModel.extend({
    * @method getNormalizedStudyingMode
    * @returns {String}
    */
-  getNormalizedStudyingMode: function() {
+  getNormalizedStudyingMode: function () {
     if (_.includes(['adding', 'studing', 'studying'], this.get('studyingMode'))) {
       return 'studying';
     } else {
@@ -161,7 +161,7 @@ const VocablistModel = SkritterModel.extend({
    * @method getImageUrl
    * @returns {String} the URL to the image
    */
-  getImageUrl: function() {
+  getImageUrl: function () {
     return app.getApiUrl() + 'vocablists/' + this.id + '/image';
   },
 
@@ -170,7 +170,7 @@ const VocablistModel = SkritterModel.extend({
    * @method getPopularity
    * @returns {Number} the popularity of the list
    */
-  getPopularity: function() {
+  getPopularity: function () {
     let peopleStudying = this.get('peopleStudying');
     if (peopleStudying === 0) {
       return 0;
@@ -185,7 +185,7 @@ const VocablistModel = SkritterModel.extend({
    * @method getProgress
    * @returns {Object}
    */
-  getProgress: function() {
+  getProgress: function () {
     let added = 0;
     let passed = false;
     let total = 0;
@@ -226,7 +226,7 @@ const VocablistModel = SkritterModel.extend({
    * Gets a UI-printable version of the publisher of the list
    * @return {string}
    */
-  getPublisherName: function() {
+  getPublisherName: function () {
     if (this.get('sort') === 'official') {
       return 'Skritter';
     } else if (this.get('sort') === 'chinesepod-lesson') {
@@ -244,7 +244,7 @@ const VocablistModel = SkritterModel.extend({
    * @method getRows
    * @returns {Array}
    */
-  getRows: function() {
+  getRows: function () {
     return _
       .chain(this.get('sections'))
       .map('rows')
@@ -257,7 +257,7 @@ const VocablistModel = SkritterModel.extend({
    * @param {String} sectionId
    * @returns {Object}
    */
-  getSectionById: function(sectionId) {
+  getSectionById: function (sectionId) {
     return _.find(this.get('sections'), {id: sectionId});
   },
 
@@ -266,7 +266,7 @@ const VocablistModel = SkritterModel.extend({
    * @param {String} sectionId
    * @returns {Array}
    */
-  getSectionVocabIds: function(sectionId) {
+  getSectionVocabIds: function (sectionId) {
     let vocabIds = [];
     let section = this.getSectionById(sectionId);
     if (section) {
@@ -280,7 +280,7 @@ const VocablistModel = SkritterModel.extend({
    * @method getWordCount
    * @returns {Number}
    */
-  getWordCount: function() {
+  getWordCount: function () {
     let count = 0;
     let rows = _.map(this.get('sections'), 'rows');
     for (let i = 0, length = rows.length; i < length; i++) {
@@ -293,7 +293,7 @@ const VocablistModel = SkritterModel.extend({
    * @method isChinese
    * @returns {Boolean}
    */
-  isChinese: function() {
+  isChinese: function () {
     return this.get('lang') === 'zh';
   },
 
@@ -301,7 +301,7 @@ const VocablistModel = SkritterModel.extend({
    * @method isEditable
    * @returns {Boolean}
    */
-  isEditable: function() {
+  isEditable: function () {
     // give admin account full editing power
     if (app.user.get('isAdmin')) {
       return true;
@@ -325,7 +325,7 @@ const VocablistModel = SkritterModel.extend({
    * @method isFinished
    * @returns {Boolean}
    */
-  isFinished: function() {
+  isFinished: function () {
     return this.get('studyingMode') === 'finished';
   },
 
@@ -333,7 +333,7 @@ const VocablistModel = SkritterModel.extend({
    * @method isJapanese
    * @returns {Boolean}
    */
-  isJapanese: function() {
+  isJapanese: function () {
     return this.get('lang') === 'ja';
   },
 
@@ -341,7 +341,7 @@ const VocablistModel = SkritterModel.extend({
    * @method publishable
    * @returns {Boolean}
    */
-  publishable: function() {
+  publishable: function () {
     return _.every([
       !this.get('disabled'),
       !this.get('published'),
@@ -356,7 +356,7 @@ const VocablistModel = SkritterModel.extend({
    * @param {Function} callback
    * @method publish
    */
-  publish: function(callback) {
+  publish: function (callback) {
     let publishUrl = app.getApiUrl() + _.result(this, 'url') + '/publish';
 
     $.ajax({
@@ -366,12 +366,12 @@ const VocablistModel = SkritterModel.extend({
       data: {
         isTextbook: this.get('isTextbook'),
       },
-      success: function() {
+      success: function () {
         if (_.isFunction(callback)) {
           callback(true);
         }
       },
-      error: function(error) {
+      error: function (error) {
         if (_.isFunction(callback)) {
           callback(false, error);
         }
@@ -384,12 +384,12 @@ const VocablistModel = SkritterModel.extend({
    * @param {Function} callback
    * @returns {VocablistModel}
    */
-  resetPosition: function(callback) {
+  resetPosition: function (callback) {
     this.fetch({
-      error: function(error) {
+      error: function (error) {
         _.isFunction(callback) && callback(error);
       },
-      success: function(model) {
+      success: function (model) {
         let sections = model.get('sections');
         if (model.isEditable() && sections && sections.length) {
           $.ajax({
@@ -401,10 +401,10 @@ const VocablistModel = SkritterModel.extend({
               currentSection: model.get('sections')[0].id,
               id: model.id,
             },
-            error: function(error) {
+            error: function (error) {
               _.isFunction(callback) && callback(error);
             },
-            success: function(data) {
+            success: function (data) {
               model.set(data.VocabList);
               _.isFunction(callback) && callback();
             },

@@ -43,7 +43,7 @@ const StudyPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
       this.loadAlreadyTimed = false;
@@ -95,7 +95,7 @@ const StudyPage = GelatoPage.extend({
    * @method render
    * @returns {StudyPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileStudy');
     }
@@ -120,7 +120,7 @@ const StudyPage = GelatoPage.extend({
   /**
    * Event handler for when a call to add items from another component is reveived
    */
-  handleAddItems: function() {
+  handleAddItems: function () {
     this.addItems().then((added) => {
       this.showItemsAddedNotification(added);
     });
@@ -133,7 +133,7 @@ const StudyPage = GelatoPage.extend({
    * @param {Number} [numToAdd] the number of items to add. Defaults to 1.
    * whether to suppress messages to the user about the items added if nothing was added.
    */
-  addItems: function(silenceNoItems, numToAdd) {
+  addItems: function (silenceNoItems, numToAdd) {
     const self = this;
     numToAdd = numToAdd || 1;
 
@@ -144,7 +144,7 @@ const StudyPage = GelatoPage.extend({
         lists: app.user.getFilteredLists(),
       };
 
-      this.items.addItems(addOptions, function(error, result) {
+      this.items.addItems(addOptions, function (error, result) {
         if (!error) {
           let added = result.numVocabsAdded;
 
@@ -168,7 +168,7 @@ const StudyPage = GelatoPage.extend({
    * @param {Boolean} [fromAutoAdd] whether the add was triggered from auto-add.
    *                                Affects display of popups.
    */
-  showItemsAddedNotification: function(added, fromAutoAdd) {
+  showItemsAddedNotification: function (added, fromAutoAdd) {
     if (added) {
       if (this.itemsAddedToday >= this.getMaxItemsPerDay() && !this.userNotifiedAutoAddLimit && fromAutoAdd) {
         app.notifyUser({
@@ -195,7 +195,7 @@ const StudyPage = GelatoPage.extend({
   /**
    * @method checkRequirements
    */
-  checkRequirements: function() {
+  checkRequirements: function () {
     ScreenLoader.post('Preparing study');
 
     this.items.updateDueCount();
@@ -204,10 +204,10 @@ const StudyPage = GelatoPage.extend({
       [
         (callback) => {
           app.user.subscription.fetch({
-            error: function() {
+            error: function () {
               callback();
             },
-            success: function() {
+            success: function () {
               callback();
             },
           });
@@ -235,10 +235,10 @@ const StudyPage = GelatoPage.extend({
               lists: app.user.getFilteredLists(),
               sort: 'adding',
             },
-            error: function() {
+            error: function () {
               callback();
             },
-            success: function() {
+            success: function () {
               callback();
             },
           });
@@ -271,7 +271,7 @@ const StudyPage = GelatoPage.extend({
                 limit: 5,
                 lists: app.user.getFilteredLists(),
               },
-              function() {
+              function () {
                 app.reload();
               }
             );
@@ -293,7 +293,7 @@ const StudyPage = GelatoPage.extend({
   /**
    * @method handleItemPreload
    */
-  handleItemPreload: function() {
+  handleItemPreload: function () {
     if (!this.currentPromptItems) {
       this.next();
     }
@@ -302,7 +302,7 @@ const StudyPage = GelatoPage.extend({
   /**
    * @method handlePauseEvent
    */
-  handlePauseEvent: function() {
+  handlePauseEvent: function () {
     this.items.reviews.post(1);
   },
 
@@ -310,7 +310,7 @@ const StudyPage = GelatoPage.extend({
    * @method handlePromptNext
    * @param {PromptItemCollection} promptItems
    */
-  handlePromptNext: function(promptItems) {
+  handlePromptNext: function (promptItems) {
     this.items.reviews.put(promptItems.getReview());
 
     if (this.previousPrompt) {
@@ -337,7 +337,7 @@ const StudyPage = GelatoPage.extend({
    * @method handlePromptPrevious
    * @param {PromptItemCollection} promptItems
    */
-  handlePromptPrevious: function(promptItems) {
+  handlePromptPrevious: function (promptItems) {
     this.previousPrompt = true;
     this.currentPromptItems = promptItems;
     this.previous();
@@ -346,7 +346,7 @@ const StudyPage = GelatoPage.extend({
   /**
    * @method next
    */
-  next: function() {
+  next: function () {
     const items = this.items.getNext();
     const queue = this.items.getQueue();
 
@@ -410,7 +410,7 @@ const StudyPage = GelatoPage.extend({
   /**
    * @method previous
    */
-  previous: function() {
+  previous: function () {
     if (this.previousPromptItems) {
       this.togglePromptLoading(false);
       this.prompt.reviewStatus.render();
@@ -422,7 +422,7 @@ const StudyPage = GelatoPage.extend({
    * @method remove
    * @returns {StudyPage}
    */
-  remove: function() {
+  remove: function () {
     this.prompt.remove();
     this.toolbar.remove();
     this.items.reviews.post();
@@ -438,7 +438,7 @@ const StudyPage = GelatoPage.extend({
    * Gets the max number of items that can be auto-added in a day
    * @returns {number}
    */
-  getMaxItemsPerDay: function() {
+  getMaxItemsPerDay: function () {
     const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
     const addFreqMultiplier = 1; // {0.7: .75, 0.8: 1, 0.9: 1.2};
     const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 4}; // 12};
@@ -452,7 +452,7 @@ const StudyPage = GelatoPage.extend({
    * @param {UserItem} currentItem the current item that the user is studying
    * @returns {boolean} whether an item should be added
    */
-  shouldAutoAddItem: function(currentItem) {
+  shouldAutoAddItem: function (currentItem) {
     // TODO: figure out some good values for this
     const addFreq = app.user.get('addFrequency') / 100;
     const maxItemsPerDay = this.getMaxItemsPerDay();
@@ -502,7 +502,7 @@ const StudyPage = GelatoPage.extend({
    * Shows a dialog that allows the user to adjust their study settings
    * @method showStudySettings
    */
-  showStudySettings: function() {
+  showStudySettings: function () {
     const dialog = new QuickSettings();
 
     dialog.open();
@@ -535,7 +535,7 @@ const StudyPage = GelatoPage.extend({
    * Toggles the loading state on the canvas when fetching new items
    * @param {Boolean} loading whether the prompt is loading
    */
-  togglePromptLoading: function(loading) {
+  togglePromptLoading: function (loading) {
     // toggle it if it wasn't passed in
     if (loading === undefined) {
       loading = !(this.prompt.$panelLeft.css('opacity') === 0.4);
@@ -551,7 +551,7 @@ const StudyPage = GelatoPage.extend({
    * @returns {Promise}
    * @private
    */
-  _getNumItemsAddedToday: function(today) {
+  _getNumItemsAddedToday: function (today) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: app.getApiUrl(2) + 'gae/items/added',
@@ -565,7 +565,7 @@ const StudyPage = GelatoPage.extend({
         error: (error) => {
           resolve(this._getNumItemsAddedTodayFromLocalStorage());
         },
-        success: function(result) {
+        success: function (result) {
           resolve(result.added);
         },
       });
@@ -577,7 +577,7 @@ const StudyPage = GelatoPage.extend({
    * cleans up the cache so only today's data is saved.
    * @private
    */
-  _getNumItemsAddedTodayFromLocalStorage: function() {
+  _getNumItemsAddedTodayFromLocalStorage: function () {
     const itemsAdded = app.getSetting('itemsAutoAddedToday') || {};
     const today = moment().format(app.config.dateFormatApp);
 
@@ -598,7 +598,7 @@ const StudyPage = GelatoPage.extend({
    * Records the load time for this page once.
    * @private
    */
-  _recordLoadTime: function() {
+  _recordLoadTime: function () {
     if (this.loadAlreadyTimed) {
       return;
     }

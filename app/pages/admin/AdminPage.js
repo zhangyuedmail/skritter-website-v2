@@ -22,7 +22,7 @@ const AdminPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.payments = new AdminPayments();
     this.dateStart = moment().subtract(5, 'days');
     this.dateEnd = moment();
@@ -34,7 +34,7 @@ const AdminPage = GelatoPage.extend({
    * @method render
    * @returns {AdminPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.$('#date-range-picker').daterangepicker(
       {
@@ -54,7 +54,7 @@ const AdminPage = GelatoPage.extend({
    * @method remove
    * @returns {AdminPage}
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
   },
 
@@ -63,7 +63,7 @@ const AdminPage = GelatoPage.extend({
    * @params {String} start
    * @params {String} end
    */
-  handleChangeDate: function(start, end) {
+  handleChangeDate: function (start, end) {
     this.dateEnd = end;
     this.dateStart = start;
     this.loadSubscriptions();
@@ -73,7 +73,7 @@ const AdminPage = GelatoPage.extend({
    * @method loadSubscriptions
    * @returns {AdminPage}
    */
-  loadSubscriptions: function() {
+  loadSubscriptions: function () {
     this.payments.fetch({
       data: {
         dateEnd: this.dateEnd.format('YYYY-MM-DD'),

@@ -18,7 +18,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @param {PromptStrokeModel} stroke
    * @returns {Number}
    */
-  comparator: function(stroke) {
+  comparator: function (stroke) {
     return stroke.get('position');
   },
 
@@ -26,7 +26,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.attempts = 0;
     this.targets = [];
     this.writing = null;
@@ -36,7 +36,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @method getExpectedStroke
    * @returns {PromptStrokeModel}
    */
-  getExpectedStroke: function() {
+  getExpectedStroke: function () {
     return this.getExpectedTargets()[0].at(this.length);
   },
 
@@ -44,7 +44,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @method getExpectedTargets
    * @returns {Array}
    */
-  getExpectedTargets: function() {
+  getExpectedTargets: function () {
     let expected = [];
     let scores = [];
 
@@ -73,7 +73,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @method getExpectedTone
    * @returns {PromptStrokeModel}
    */
-  getExpectedTone: function() {
+  getExpectedTone: function () {
     return null;
   },
 
@@ -81,7 +81,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @method getMaxPosition
    * @returns {Number}
    */
-  getMaxPosition: function() {
+  getMaxPosition: function () {
     let max = 0;
 
     for (let i = 0, length = this.targets.length; i < length; i++) {
@@ -96,7 +96,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @method getPosition
    * @returns {Number}
    */
-  getPosition: function() {
+  getPosition: function () {
     let position = 0;
 
     for (let i = 0, length = this.length; i < length; i++) {
@@ -111,7 +111,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @method size
    * @returns {Number}
    */
-  getSize: function() {
+  getSize: function () {
     return app.get('canvasSize');
   },
 
@@ -120,7 +120,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @param {Number} [excludeStrokes]
    * @returns {createjs.Container}
    */
-  getTargetShape: function(excludeStrokes) {
+  getTargetShape: function (excludeStrokes) {
     let container = new createjs.Container();
     let target = this.getExpectedTargets()[0];
 
@@ -139,7 +139,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @param {Number} number
    * @returns {PromptStrokeModel}
    */
-  getTone: function(number) {
+  getTone: function (number) {
     return this.writing === 'tones' ? this.targets[number - 1].at(0) : null;
   },
 
@@ -148,7 +148,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @param {Number} [excludeStrokes]
    * @returns {createjs.Container}
    */
-  getUserShape: function(excludeStrokes) {
+  getUserShape: function (excludeStrokes) {
     let container = new createjs.Container();
 
     for (let i = 0, length = this.length; i < length; i++) {
@@ -166,7 +166,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @param {Number} [excludeStrokes]
    * @returns {createjs.Container}
    */
-  getUserSquig: function(excludeStrokes) {
+  getUserSquig: function (excludeStrokes) {
     let container = new createjs.Container();
     for (let i = 0, length = this.length; i < length; i++) {
       if (!excludeStrokes) {
@@ -181,7 +181,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @method isComplete
    * @returns {Boolean}
    */
-  isComplete: function() {
+  isComplete: function () {
     return this.getPosition() >= this.getMaxPosition();
   },
 
@@ -189,7 +189,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @method isTweening
    * @returns {Boolean}
    */
-  isTweening: function() {
+  isTweening: function () {
     return this.map('tweening').indexOf(true) > -1;
   },
 
@@ -199,7 +199,7 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @param {createjs.Shape} shape
    * @returns {PromptStrokeModel}
    */
-  recognize: function(points, shape) {
+  recognize: function (points, shape) {
     if (points && points.length > 1) {
       let newStroke = new PromptStrokeModel({points: points});
       let stroke = app.fn.recognizer.recognize(newStroke, this, this.getSize());

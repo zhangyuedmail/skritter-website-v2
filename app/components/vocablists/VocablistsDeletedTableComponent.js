@@ -26,7 +26,7 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.vocablists = new Vocablists();
     this.listenTo(this.vocablists, 'state', this.render);
     this.vocablists.fetch({
@@ -43,7 +43,7 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistsDeletedTableComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -52,7 +52,7 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    * @method handleClickRestoreLink
    * @param {Event} event
    */
-  handleClickRestoreLink: function(event) {
+  handleClickRestoreLink: function (event) {
     event.preventDefault();
     let listID = $(event.target).closest('.restore-link').data('vocablist-id');
     let vocablist = this.vocablists.get(listID);
@@ -65,7 +65,7 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    * @method handleClickLoadMoreButton
    * @param {Event} event
    */
-  handleClickLoadMoreButton: function(event) {
+  handleClickLoadMoreButton: function (event) {
     event.preventDefault();
     if (!this.vocablists.cursor) {
       return;

@@ -36,7 +36,7 @@ let MailUnsubscribe = GelatoPage.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.email = options.email;
   },
 
@@ -44,7 +44,7 @@ let MailUnsubscribe = GelatoPage.extend({
    * @method render
    * @returns {MailUnsubscribe}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -54,7 +54,7 @@ let MailUnsubscribe = GelatoPage.extend({
    * @method remove
    * @returns {MailUnsubscribe}
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
   },
 });

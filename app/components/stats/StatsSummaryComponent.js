@@ -21,7 +21,7 @@ const StatsSummaryComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this._views['allTime'] = new StatsItemsLearnedComponent({
       collection: this.collection,
       title: 'All Time',
@@ -34,8 +34,10 @@ const StatsSummaryComponent = GelatoComponent.extend({
     if (app.config.recordLoadTimes) {
       this.componentsLoaded = {};
       for (let component in this._views) {
-        this.componentsLoaded[component] = false;
-        this.listenTo(this._views[component], 'component:loaded', this._onComponentLoaded);
+        if (this._views.hasOwnProperty(component)) {
+          this.componentsLoaded[component] = false;
+          this.listenTo(this._views[component], 'component:loaded', this._onComponentLoaded);
+        }
       }
     }
   },
@@ -44,7 +46,7 @@ const StatsSummaryComponent = GelatoComponent.extend({
    * @method render
    * @returns {StatsSummaryComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this._views['allTime'].setElement('#stats-all-time-container').render();
     this._views['heatmap'].setElement('#stats-heatmap-container').render();
@@ -57,7 +59,7 @@ const StatsSummaryComponent = GelatoComponent.extend({
    * @param {String} component the name of the component that was loaded
    * @private
    */
-  _onComponentLoaded: function(component) {
+  _onComponentLoaded: function (component) {
     this.componentsLoaded[component] = true;
 
     // return if any component is still not loaded

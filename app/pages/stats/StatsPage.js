@@ -32,7 +32,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
       this.loadAlreadyTimed = false;
@@ -42,7 +42,7 @@ module.exports = GelatoPage.extend({
     const lastMonth = moment().subtract(1, 'month').format('YYYY-MM-DD');
 
     const self = this;
-    app.user.stats.fetchRange(lastMonth, today, {success: function() {
+    app.user.stats.fetchRange(lastMonth, today, {success: function () {
       self._recordLoadTime();
     }});
 
@@ -68,7 +68,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {StatsPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this._views['summary'].setElement('#stats-summary-container').render();
     this._views['timeline'].setElement('#stats-timeline-container').render();
@@ -80,30 +80,31 @@ module.exports = GelatoPage.extend({
    *
    * @param {jQuery.Event} event a click event
    */
-  handleStatsSectionSelectorClicked: function(event) {
+  handleStatsSectionSelectorClicked: function (event) {
+    event.preventDefault();
+
     // TODO: re-enable when we have enough stats to call for dividing this into sections
+
     return;
 
-    // event.preventDefault();
+    // const newSection = event.target.id.split('-')[0];
 
-    const newSection = event.target.id.split('-')[0];
+    // if (newSection === this.activeSection) {
+    //   return;
+    // }
 
-    if (newSection === this.activeSection) {
-      return;
-    }
+    // this.$('#' + this.activeSection + '-selector').removeClass('active');
+    // this.$('#' + newSection + '-selector').addClass('active');
+    // this.activeSection = newSection;
 
-    this.$('#' + this.activeSection + '-selector').removeClass('active');
-    this.$('#' + newSection + '-selector').addClass('active');
-    this.activeSection = newSection;
-
-    this.showStatsSection();
+    // this.showStatsSection();
   },
 
   /**
    *
    * @param {String} [section] the section to show. Defaults to activeSection.
    */
-  showStatsSection: function(section) {
+  showStatsSection: function (section) {
     const toShowSection = section || this.activeSection;
     const toHideSection = toShowSection === 'summary' ? 'timeline' : 'summary';
 
@@ -140,7 +141,7 @@ module.exports = GelatoPage.extend({
    * Records the load time for this page once.
    * @private
    */
-  _recordLoadTime: function() {
+  _recordLoadTime: function () {
     if (this.loadAlreadyTimed || !app.config.recordLoadTimes) {
       return;
     }

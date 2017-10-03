@@ -21,7 +21,7 @@ const CharacterCollection = GelatoCollection.extend({
    * @property url
    * @type {String}
    */
-  url: function() {
+  url: function () {
     return app.getApiUrl(2) + 'characters';
   },
 
@@ -29,7 +29,7 @@ const CharacterCollection = GelatoCollection.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.params = new StrokeParamsCollection();
     this.shapes = ShapeData;
     this.add(KanaStrokes.getData());
@@ -40,7 +40,7 @@ const CharacterCollection = GelatoCollection.extend({
    * @method getPromptTones
    * @returns {PromptCharacter}
    */
-  getPromptTones: function() {
+  getPromptTones: function () {
     return this.findWhere({writing: 'tones'}).getPromptCharacter();
   },
 
@@ -48,7 +48,7 @@ const CharacterCollection = GelatoCollection.extend({
    * @method reset
    * @returns {CharacterCollection}
    */
-  reset: function() {
+  reset: function () {
     GelatoCollection.prototype.reset.call(this);
     this.add(KanaStrokes.getData());
     this.add(ToneStrokes.getData());

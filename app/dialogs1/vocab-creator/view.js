@@ -10,7 +10,7 @@ let VocabCreatorDialog = GelatoDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.row = null;
   },
   /**
@@ -30,7 +30,7 @@ let VocabCreatorDialog = GelatoDialog.extend({
    * @method render
    * @returns {VocabCreatorDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -38,7 +38,7 @@ let VocabCreatorDialog = GelatoDialog.extend({
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
     this.close();
   },
@@ -46,7 +46,7 @@ let VocabCreatorDialog = GelatoDialog.extend({
    * @method handleClickButtonAddWord
    * @param {Event} event
    */
-  handleClickButtonAddWord: function(event) {
+  handleClickButtonAddWord: function (event) {
     const self = this;
     const formData = this.getFormData();
     event.preventDefault();
@@ -90,10 +90,10 @@ let VocabCreatorDialog = GelatoDialog.extend({
         writing: formData.writing,
         writingTraditional: formData.writingTraditional,
       }),
-      error: function(error) {
+      error: function (error) {
         self.$('#error-message').text(JSON.stringify(error));
       },
-      success: function(result) {
+      success: function (result) {
         self.trigger('vocab', new Vocab(result.Vocab));
         self.close();
       },
@@ -103,7 +103,7 @@ let VocabCreatorDialog = GelatoDialog.extend({
    * @method getFormData
    * @returns {Object}
    */
-  getFormData: function() {
+  getFormData: function () {
     let formData = {
       definition: this.$('#word-definition-input textarea').val(),
       lang: this.row.lang,
@@ -123,7 +123,7 @@ let VocabCreatorDialog = GelatoDialog.extend({
    * @method open
    * @param {Object} options
    */
-  open: function(options) {
+  open: function (options) {
     this.row = options.row;
     return GelatoDialog.prototype.open.call(this, options);
   },

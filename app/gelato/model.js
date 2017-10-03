@@ -20,7 +20,7 @@ let GelatoModel = Backbone.Model.extend({
    * @method fetch
    * @param {Object} [options]
    */
-  fetch: function(options) {
+  fetch: function (options) {
     options = options || {};
     this.state = 'fetching';
     this._triggerState();
@@ -32,7 +32,7 @@ let GelatoModel = Backbone.Model.extend({
    * @param [attributes]
    * @param [options]
    */
-  save: function(attributes, options) {
+  save: function (attributes, options) {
     options = options || {};
     this.state = 'saving';
     this._triggerState();
@@ -44,16 +44,16 @@ let GelatoModel = Backbone.Model.extend({
    * @param {Object} options
    * @private
    */
-  _handleRequestEvent: function(options) {
+  _handleRequestEvent: function (options) {
     let originalOptions = _.clone(options);
-    options.error = (function() {
+    options.error = (function () {
       this.state = 'standby';
       this._triggerState();
       if (typeof originalOptions.error === 'function') {
         originalOptions.error(...arguments);
       }
     }).bind(this);
-    options.success = (function() {
+    options.success = (function () {
       this.state = 'standby';
       this._triggerState();
       if (typeof originalOptions.success === 'function') {
@@ -66,7 +66,7 @@ let GelatoModel = Backbone.Model.extend({
    * @method _triggerState
    * @private
    */
-  _triggerState: function() {
+  _triggerState: function () {
     this.trigger('state', this.state, this);
     this.trigger('state:' + this.state, this);
   },

@@ -29,7 +29,7 @@ const TurkishPage = GelatoPage.extend({
    * @method render
    * @returns {TurkishPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -39,7 +39,7 @@ const TurkishPage = GelatoPage.extend({
    * @method remove
    * @returns {TurkishPage}
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
   },
 

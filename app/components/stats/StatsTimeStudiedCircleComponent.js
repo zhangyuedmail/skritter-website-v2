@@ -21,7 +21,7 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
    * @param {Object} options a map of initial options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
 
     this.listenTo(this.collection, 'state:standby', this.update);
@@ -41,7 +41,7 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
    * @method render
    * @returns {StatsTimeStudiedCircleComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.renderGraph();
 
@@ -52,8 +52,7 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
    * Instantiates a new instance of the graph with some default values.
    * @method renderGraph
    */
-  renderGraph: function() {
-    let self = this;
+  renderGraph: function () {
     let $circle = this.$('#circle');
 
     $circle.highcharts({
@@ -99,7 +98,7 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
       },
       tooltip: {
         backgroundColor: '#efeef3',
-        formatter: function() {
+        formatter: function () {
           return this.key + ' : <b>'+this.point.y+'</b> days';
         },
       },
@@ -112,7 +111,7 @@ const StatsTimeStudiedCircleComponent = GelatoComponent.extend({
    * Updates the data and axes when needed and redraws the graph.
    * @method update
    */
-  update: function() {
+  update: function () {
     if (!this.collection.length) {
       return;
     }

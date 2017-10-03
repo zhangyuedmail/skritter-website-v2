@@ -3,7 +3,7 @@
  * @param {Object} options
  * @constructor
  */
-function StudyPromptShortcuts(options) {
+function StudyPromptShortcuts (options) {
   this.prompt = options.prompt;
   this.action = new keypress.Listener();
   this.grading = new keypress.Listener();
@@ -14,7 +14,7 @@ function StudyPromptShortcuts(options) {
  * @method _handleActionAudio
  * @private
  */
-StudyPromptShortcuts.prototype._handleActionAudio = function() {
+StudyPromptShortcuts.prototype._handleActionAudio = function () {
   this.prompt.reviews.vocab.play();
 };
 
@@ -22,7 +22,7 @@ StudyPromptShortcuts.prototype._handleActionAudio = function() {
  * @method _handleActionErase
  * @private
  */
-StudyPromptShortcuts.prototype._handleActionErase = function() {
+StudyPromptShortcuts.prototype._handleActionErase = function () {
   switch (this.prompt.reviews.part) {
     case 'rune':
       this.prompt.part.eraseCharacter();
@@ -34,7 +34,7 @@ StudyPromptShortcuts.prototype._handleActionErase = function() {
  * @method _handleActionShow
  * @private
  */
-StudyPromptShortcuts.prototype._handleActionShow = function() {
+StudyPromptShortcuts.prototype._handleActionShow = function () {
   this.prompt.canvas.clearLayer('character-hint');
   switch (this.prompt.reviews.part) {
     case 'rune':
@@ -60,7 +60,7 @@ StudyPromptShortcuts.prototype._handleActionShow = function() {
  * @method _handleGradingKeyup
  * @private
  */
-StudyPromptShortcuts.prototype._handleActionTeach = function() {
+StudyPromptShortcuts.prototype._handleActionTeach = function () {
   switch (this.prompt.reviews.part) {
     case 'rune':
       this.prompt.part.startTeachingCharacter();
@@ -73,7 +73,7 @@ StudyPromptShortcuts.prototype._handleActionTeach = function() {
  * @param {Number} value
  * @private
  */
-StudyPromptShortcuts.prototype._handleGradingKeydown = function(value) {
+StudyPromptShortcuts.prototype._handleGradingKeydown = function (value) {
   if (this.prompt.review.isComplete()) {
     this.prompt.toolbarGrading.select(value);
     this.prompt.review.set('score', value);
@@ -89,7 +89,7 @@ StudyPromptShortcuts.prototype._handleGradingKeydown = function(value) {
  * @param {Number} value
  * @private
  */
-StudyPromptShortcuts.prototype._handleGradingKeyup = function(value) {
+StudyPromptShortcuts.prototype._handleGradingKeyup = function (value) {
   if (this.prompt.review.isComplete()) {
     this.prompt.review.set('score', value);
     this.prompt.next();
@@ -100,7 +100,7 @@ StudyPromptShortcuts.prototype._handleGradingKeyup = function(value) {
  * @method _handleGradingToggle
  * @private
  */
-StudyPromptShortcuts.prototype._handleGradingToggle = function() {
+StudyPromptShortcuts.prototype._handleGradingToggle = function () {
   // because num lock
   if (arguments[0].code === 'Numpad2') {
     return;
@@ -120,7 +120,7 @@ StudyPromptShortcuts.prototype._handleGradingToggle = function() {
  * @method _handleNavigateNext
  * @private
  */
-StudyPromptShortcuts.prototype._handleNavigateNext = function() {
+StudyPromptShortcuts.prototype._handleNavigateNext = function () {
   this.prompt.review.stop();
   this.prompt.next();
 };
@@ -129,7 +129,7 @@ StudyPromptShortcuts.prototype._handleNavigateNext = function() {
  * @method _handleNavigatePrevious
  * @private
  */
-StudyPromptShortcuts.prototype._handleNavigatePrevious = function() {
+StudyPromptShortcuts.prototype._handleNavigatePrevious = function () {
   this.prompt.review.stop();
   this.prompt.previous();
 };
@@ -138,7 +138,7 @@ StudyPromptShortcuts.prototype._handleNavigatePrevious = function() {
  * @method _handleNavigateReveal
  * @private
  */
-StudyPromptShortcuts.prototype._handleNavigateReveal = function() {
+StudyPromptShortcuts.prototype._handleNavigateReveal = function () {
   switch (this.prompt.reviews.part) {
     case 'rune':
       if (this.prompt.review.isComplete()) {
@@ -176,7 +176,7 @@ StudyPromptShortcuts.prototype._handleNavigateReveal = function() {
  * @param {Number} value
  * @private
  */
-StudyPromptShortcuts.prototype._handleToneKeydown = function(value) {
+StudyPromptShortcuts.prototype._handleToneKeydown = function (value) {
   let possibleTones = this.prompt.review.getTones();
   let expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
   if (possibleTones.indexOf(value) > -1) {
@@ -209,7 +209,7 @@ StudyPromptShortcuts.prototype._handleToneKeydown = function(value) {
  * @method _registerAction
  * @private
  */
-StudyPromptShortcuts.prototype._registerAction = function() {
+StudyPromptShortcuts.prototype._registerAction = function () {
   this.action.register_many([
     {
       'keys': 'apostrophe',
@@ -258,7 +258,7 @@ StudyPromptShortcuts.prototype._registerAction = function() {
  * @method _registerGrading
  * @private
  */
-StudyPromptShortcuts.prototype._registerGrading = function() {
+StudyPromptShortcuts.prototype._registerGrading = function () {
   this.grading.register_many([
     {
       'keys': 'down',
@@ -354,7 +354,7 @@ StudyPromptShortcuts.prototype._registerGrading = function() {
  * @method _registerNavigate
  * @private
  */
-StudyPromptShortcuts.prototype._registerNavigate = function() {
+StudyPromptShortcuts.prototype._registerNavigate = function () {
   this.navigate.register_many([
     {
       'keys': 'enter',
@@ -383,7 +383,7 @@ StudyPromptShortcuts.prototype._registerNavigate = function() {
  * @method _registerTone
  * @private
  */
-StudyPromptShortcuts.prototype._registerTone = function() {
+StudyPromptShortcuts.prototype._registerTone = function () {
   this.tone.register_many([
     {
       'keys': '1',
@@ -467,7 +467,7 @@ StudyPromptShortcuts.prototype._registerTone = function() {
  * @method registerAll
  * @returns {StudyPromptShortcuts}
  */
-StudyPromptShortcuts.prototype.registerAll = function() {
+StudyPromptShortcuts.prototype.registerAll = function () {
   this.unregisterAll();
   this._registerAction();
   this._registerGrading();
@@ -480,7 +480,7 @@ StudyPromptShortcuts.prototype.registerAll = function() {
  * @method unregisterAll
  * @returns {StudyPromptShortcuts}
  */
-StudyPromptShortcuts.prototype.unregisterAll = function() {
+StudyPromptShortcuts.prototype.unregisterAll = function () {
   this.action.reset();
   this.grading.reset();
   this.navigate.reset();

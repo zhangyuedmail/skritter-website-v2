@@ -76,7 +76,7 @@ const DemoProgressComponent = GelatoComponent.extend({
    * @param {UserModel} options.user the app's usermodel. Must be passed in
    *                                 due to global app variable not available yet.
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.demoPage = options.demoPage;
     this.firstStep = options.firstStep || this.stepData[0];
 
@@ -90,7 +90,7 @@ const DemoProgressComponent = GelatoComponent.extend({
     this.listenTo(this.demoPage, 'step:update', this.updateStep);
   },
 
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this.updateStep(this.firstStep);
@@ -103,7 +103,7 @@ const DemoProgressComponent = GelatoComponent.extend({
    * the settings page.
    * @param {jQuery.Event} e the click event
    */
-  handleSkipButtonClick: function(e) {
+  handleSkipButtonClick: function (e) {
     this.trigger('demo:skip');
   },
 
@@ -112,7 +112,7 @@ const DemoProgressComponent = GelatoComponent.extend({
    * the user is currently on
    * @param {String} step the current step
    */
-  updateStep: function(step) {
+  updateStep: function (step) {
     let i = 0;
     let stepInfo;
 

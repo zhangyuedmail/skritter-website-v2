@@ -7,7 +7,7 @@
  * @param {Number} dashLength how long an individual dash should be
  * @returns {createjs.Graphics}
  */
-createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
+createjs.Graphics.prototype.dashedLineTo = function (x1, y1, x2, y2, dashLength) {
   const dX = x2 - x1;
   const dY = y2 - y1;
   const dashes = Math.floor(Math.sqrt(dX * dX + dY * dY) / dashLength);

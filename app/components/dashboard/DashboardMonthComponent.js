@@ -1,5 +1,5 @@
 const GelatoComponent = require('gelato/component');
-const ProgressStats = require('collections/ProgressStatsCollection');
+// const ProgressStats = require('collections/ProgressStatsCollection');
 
 /**
  * @class DashboardMonthComponent
@@ -17,13 +17,13 @@ const DashboardMonthComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     const self = this;
 
     this.heatmap = new CalHeatMap();
     this.stats = app.user.stats;
     this.listenTo(this.stats, 'state:standby', this.statsFetched);
-    this.stats.fetchMonth(function() {
+    this.stats.fetchMonth(function () {
       self.trigger('component:loaded', 'month');
     });
   },
@@ -32,7 +32,7 @@ const DashboardMonthComponent = GelatoComponent.extend({
    * @method render
    * @returns {DashboardMonthComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.heatmap.init({
       cellSize: 22,
@@ -57,7 +57,7 @@ const DashboardMonthComponent = GelatoComponent.extend({
    * @method remove
    * @returns {DashboardMonthComponent}
    */
-  remove: function() {
+  remove: function () {
     this.heatmap.destroy();
     return GelatoComponent.prototype.remove.call(this);
   },
@@ -67,7 +67,7 @@ const DashboardMonthComponent = GelatoComponent.extend({
    * Reacts to the stats being loaded and triggers an event that the loading
    * of all the component's data has completed.
    */
-  statsFetched: function() {
+  statsFetched: function () {
     this.updateHeatmap();
     this.updateStreak();
   },
@@ -75,14 +75,14 @@ const DashboardMonthComponent = GelatoComponent.extend({
   /**
    * @method updateHeatmap
    */
-  updateHeatmap: function() {
+  updateHeatmap: function () {
     this.heatmap.update(this.stats.getMonthlyHeatmapData());
   },
 
   /**
    * @method updateStreak
    */
-  updateStreak: function() {
+  updateStreak: function () {
     if (this.stats.length) {
       this.$('#streak .value').text(this.stats.getMonthlyStreak());
     }

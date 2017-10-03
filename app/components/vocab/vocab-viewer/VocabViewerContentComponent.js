@@ -42,7 +42,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
     this._views['sentence'] = new VocabSentence();
     this._views['lookup'] = new VocabViewerLookup();
@@ -63,7 +63,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocabViewerContentComponent}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocabViewerContent.jade');
     }
@@ -79,11 +79,11 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method getContainingCharacters
    * @returns {Array}
    */
-  getContainingCharacters: function() {
+  getContainingCharacters: function () {
     let baseWriting = this.vocabs.at(0).get('writing');
     return _.filter(
       this.vocabs.models,
-      function(vocab) {
+      function (vocab) {
         return vocab.get('writing') !== baseWriting;
       }
     );
@@ -93,10 +93,10 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method getContainingWords
    * @returns {Array}
    */
-  getContainingWords: function() {
+  getContainingWords: function () {
     return _.filter(
       this.vocabsContaining.models,
-      function(vocab) {
+      function (vocab) {
         return vocab.get('writing').length > 1;
       }
     );
@@ -106,7 +106,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    *
    * @param event
    */
-  handleClickClose: function(event) {
+  handleClickClose: function (event) {
     if (app.isMobile()) {
       event.preventDefault();
       event.stopPropagation();
@@ -120,7 +120,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * true and rerenders the component.
    * @param event
    */
-  handleClickEditVocab: function(event) {
+  handleClickEditVocab: function (event) {
     event.preventDefault();
 
     this.editing = true;
@@ -131,7 +131,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method handleClickHanpingLiteIcon
    * @param event
    */
-  handleClickHanpingLiteIcon: function(event) {
+  handleClickHanpingLiteIcon: function (event) {
     event.preventDefault();
 
     if (app.isCordova()) {
@@ -145,7 +145,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method handleClickHanpingProIcon
    * @param event
    */
-  handleClickHanpingProIcon: function(event) {
+  handleClickHanpingProIcon: function (event) {
     event.preventDefault();
 
     if (app.isCordova()) {
@@ -159,7 +159,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method handleClickHanpingYueIcon
    * @param event
    */
-  handleClickHanpingYueIcon: function(event) {
+  handleClickHanpingYueIcon: function (event) {
     event.preventDefault();
 
     if (app.isCordova()) {
@@ -173,7 +173,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method handleClickItemBan
    * @param {Event} event
    */
-  handleClickItemBan: function(event) {
+  handleClickItemBan: function (event) {
     event.preventDefault();
     let vocab = this.vocabs.at(0);
     let $row = this.$(event.target).closest('tr');
@@ -185,7 +185,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method handleClickItemUnban
    * @param {Event} event
    */
-  handleClickItemUnban: function(event) {
+  handleClickItemUnban: function (event) {
     event.preventDefault();
     let vocab = this.vocabs.at(0);
     let $row = this.$(event.target).closest('tr');
@@ -197,7 +197,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method handleClickPlecoIcon
    * @param event
    */
-  handleClickPlecoIcon: function(event) {
+  handleClickPlecoIcon: function (event) {
     event.preventDefault();
 
     if (app.isCordova()) {
@@ -212,7 +212,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * resets the editing state and then rerenders the component.
    * @param event
    */
-  handleClickSaveVocab: function(event) {
+  handleClickSaveVocab: function (event) {
     event.preventDefault();
 
     const definitionText = this.$('#vocab-definition .definition').val() || '';
@@ -237,7 +237,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @param {Array} items
    * @returns {VocabViewerContentComponent}
    */
-  set: function(vocabs, vocabsContaining, items) {
+  set: function (vocabs, vocabsContaining, items) {
     this.items = items || null;
     this.vocab = vocabs.at(0) || null;
     this.vocabWriting = vocabs.at(0).get('writing');
@@ -250,7 +250,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
     return this.render();
   },
 
-  remove: function() {
+  remove: function () {
     this.vocabs.reset();
 
     return GelatoComponent.prototype.remove.call(this);
@@ -262,7 +262,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method handleClickVocabStar
    * @param {jQuery.Event} event the touch event to the icon
    */
-  handleClickVocabStar: function(event) {
+  handleClickVocabStar: function (event) {
     const vocab = this.vocabs.at(0);
 
     vocab.toggleStarred();
@@ -275,7 +275,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method handleClickShowMoreContained
    * @param event
    */
-  handleClickShowMoreContained: function(event) {
+  handleClickShowMoreContained: function (event) {
     this.$('#show-more-contained').hide();
     this.$('#vocab-words-containing').addClass('show-all');
   },
@@ -286,11 +286,11 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @method handleClickVocabStar
    * @param {jQuery.Event} event the touch event to the icon
    */
-  handleClickVocabBan: function(event) {
+  handleClickVocabBan: function (event) {
+    const vocab = this.vocabs.at(0);
+
     event.preventDefault();
 
-    const self = this;
-    const vocab = this.vocabs.at(0);
     vocab.banAll();
     vocab.save();
 
@@ -303,7 +303,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
    * @param {String} vocabId the id of the vocab to fetch data for
    * @param {VocabModel} [vocabInfo] the vocab model that would otherwise be fetched by id
    */
-  loadVocab: function(vocabId, vocabInfo) {
+  loadVocab: function (vocabId, vocabInfo) {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
     }
@@ -327,10 +327,10 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     async.parallel(
       [
-        function(callback) {
+        function (callback) {
           async.series(
             [
-              function(callback) {
+              function (callback) {
                 self.vocabs.fetch({
                   data: {
                     include_decomps: true,
@@ -339,16 +339,16 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                     include_top_mnemonics: true,
                     ids: vocabId,
                   },
-                  error: function(error) {
+                  error: function (error) {
                     callback(error);
                   },
-                  success: function(vocabs) {
+                  success: function (vocabs) {
                     wordVocabs = vocabs;
                     callback();
                   },
                 });
               },
-              function(callback) {
+              function (callback) {
                 if (!self.vocabs.at(0).sentenceFetched) {
                   self.vocabs.at(0).fetchSentence().then((sentence) => {
                     self.vocabs.sentences.add(sentence);
@@ -358,17 +358,17 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                   callback();
                 }
               },
-              function(callback) {
+              function (callback) {
                 if (self.vocabs.at(0).has('containedVocabIds')) {
                   self.vocabs.fetch({
                     data: {
                       ids: self.vocabs.at(0).get('containedVocabIds').join('|'),
                     },
                     remove: false,
-                    error: function(error) {
+                    error: function (error) {
                       callback(error);
                     },
-                    success: function(vocabs) {
+                    success: function (vocabs) {
                       wordVocabs = vocabs;
                       callback(null);
                     },
@@ -377,16 +377,16 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                   callback();
                 }
               },
-              function(callback) {
+              function (callback) {
                 if (app.router.page.title.indexOf('Demo') === -1) {
                   self.items.fetch({
                     data: {
                       vocab_ids: vocabId,
                     },
-                    error: function(error) {
+                    error: function (error) {
                       callback(error);
                     },
-                    success: function(items) {
+                    success: function (items) {
                       wordItems = items;
                       callback(null);
                     },
@@ -401,23 +401,23 @@ const VocabViewerContentComponent = GelatoComponent.extend({
             callback
           );
         },
-        function(callback) {
+        function (callback) {
           self.vocabsContaining.fetch({
             data: {
               include_containing: true,
               q: app.fn.mapper.fromBase(vocabId),
             },
-            error: function(error) {
+            error: function (error) {
               callback(error);
             },
-            success: function(vocabs) {
+            success: function (vocabs) {
               wordVocabsContaining = vocabs;
               callback();
             },
           });
         },
       ],
-      function(error) {
+      function (error) {
         if (error) {
           console.error('WORD DIALOG LOAD ERROR:', error);
         } else {

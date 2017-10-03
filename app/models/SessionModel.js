@@ -32,7 +32,7 @@ const SessionModel = SkritterModel.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(attributes, options) {
+  initialize: function (attributes, options) {
     options = options || {};
     this.user = options.user;
   },
@@ -45,7 +45,7 @@ const SessionModel = SkritterModel.extend({
    * @param {Function} callbackSuccess
    * @param {Function} callbackError
    */
-  authenticate: function(type, username, password, callbackSuccess, callbackError) {
+  authenticate: function (type, username, password, callbackSuccess, callbackError) {
     this.fetch({
       data: {
         client_id: this.getClientId(),
@@ -54,11 +54,11 @@ const SessionModel = SkritterModel.extend({
         username: username,
       },
       type: 'post',
-      success: _.bind(function(model) {
+      success: _.bind(function (model) {
         this.set('created', moment().unix(), {silent: true});
         callbackSuccess(model);
       }, this),
-      error: _.bind(function(model, error) {
+      error: _.bind(function (model, error) {
         callbackError(error, model);
       }, this),
     });
@@ -67,7 +67,7 @@ const SessionModel = SkritterModel.extend({
   /**
    * @method cache
    */
-  cache: function() {
+  cache: function () {
     app.setLocalStorage(this.user.id + '-session', this.toJSON());
   },
 
@@ -75,7 +75,7 @@ const SessionModel = SkritterModel.extend({
    * @method getClientId
    * @returns {String}
    */
-  getClientId: function() {
+  getClientId: function () {
     switch (app.getPlatform()) {
       case 'Android':
         return 'skritterandroid';
@@ -90,7 +90,7 @@ const SessionModel = SkritterModel.extend({
    * @method getExpires
    * @returns {Number}
    */
-  getExpires: function() {
+  getExpires: function () {
     return this.get('created') + this.get('expires_in');
   },
 
@@ -99,7 +99,7 @@ const SessionModel = SkritterModel.extend({
    * @method isExpired
    * @returns {Boolean}
    */
-  isExpired: function() {
+  isExpired: function () {
     return this.getExpires() < moment().unix();
   },
 
@@ -108,7 +108,7 @@ const SessionModel = SkritterModel.extend({
    * @method isRefreshable
    * @returns {Boolean}
    */
-  isRefreshable: function() {
+  isRefreshable: function () {
     return moment(this.getExpires() * 1000).subtract(1, 'week').unix() < moment().unix();
   },
 
@@ -116,7 +116,7 @@ const SessionModel = SkritterModel.extend({
    * @method getHeaders
    * @returns {Object}
    */
-  getHeaders: function() {
+  getHeaders: function () {
     return {'Authorization': 'bearer ' + this.get('access_token')};
   },
 
@@ -124,7 +124,7 @@ const SessionModel = SkritterModel.extend({
    * @method getLoginCredentials
    * @returns {String}
    */
-  getLoginCredentials: function() {
+  getLoginCredentials: function () {
     switch (app.getPlatform()) {
       case 'Android':
         return 'c2tyaXR0ZXJhbmRyb2lkOmRjOTEyYzAzNzAwMmE3ZGQzNWRkNjUxZjBiNTA3NA==';
@@ -138,7 +138,7 @@ const SessionModel = SkritterModel.extend({
    * @method getLoginHeaders
    * @returns {Object}
    */
-  getLoginHeaders: function() {
+  getLoginHeaders: function () {
     return {'Authorization': 'basic ' + this.getLoginCredentials()};
   },
 
@@ -146,7 +146,7 @@ const SessionModel = SkritterModel.extend({
    * @method headers
    * @returns {Object}
    */
-  headers: function() {
+  headers: function () {
     return this.getLoginHeaders();
   },
 
@@ -155,7 +155,7 @@ const SessionModel = SkritterModel.extend({
    * @param {Function} callbackSuccess
    * @param {Function} callbackError
    */
-  refresh: function(callbackSuccess, callbackError) {
+  refresh: function (callbackSuccess, callbackError) {
     this.fetch({
       data: {
         client_id: this.getClientId(),
@@ -163,11 +163,11 @@ const SessionModel = SkritterModel.extend({
         refresh_token: this.get('refresh_token'),
       },
       type: 'POST',
-      success: _.bind(function(model) {
+      success: _.bind(function (model) {
         this.set('created', moment().unix(), {silent: true});
         callbackSuccess(model);
       }, this),
-      error: _.bind(function(model, error) {
+      error: _.bind(function (model, error) {
         callbackError(error, model);
       }, this),
     });

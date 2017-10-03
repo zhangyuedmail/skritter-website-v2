@@ -38,7 +38,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.editing = options.editMode || false;
     this.fetching = false;
 
@@ -68,7 +68,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {VocablistsListSectionPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsListSection.jade');
     }
@@ -91,7 +91,7 @@ module.exports = GelatoPage.extend({
    * Fetches all the necessary list data to show the view to the user
    * @method fetchListData
    */
-  fetchListData: function() {
+  fetchListData: function () {
     this.fetching = true;
     async.series([
       (callback) => {
@@ -101,10 +101,10 @@ module.exports = GelatoPage.extend({
         }
 
         this.vocablist.fetch({
-          error: function(error) {
+          error: function (error) {
             callback(error);
           },
-          success: function() {
+          success: function () {
             callback();
           },
         });
@@ -115,20 +115,20 @@ module.exports = GelatoPage.extend({
           return;
         }
         this.vocablistSection.fetch({
-          error: function(error) {
+          error: function (error) {
             callback(error);
           },
-          success: function() {
+          success: function () {
             callback();
           },
         });
       },
       (callback) => {
         this.editor.loadRows({
-          error: function(error) {
+          error: function (error) {
             callback(error);
           },
-          success: function() {
+          success: function () {
             callback();
           },
         });
@@ -154,7 +154,7 @@ module.exports = GelatoPage.extend({
    * and finally re-renders the page.
    * @param {Object} [error]
    */
-  listDataLoaded: function(error) {
+  listDataLoaded: function (error) {
     this.fetching = false;
 
     if (error) {
@@ -179,7 +179,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickBackLink
    * @param {Event} event
    */
-  handleClickBackLink: function(event) {
+  handleClickBackLink: function (event) {
     const self = this;
 
     if (this.editor.editing) {
@@ -191,7 +191,7 @@ module.exports = GelatoPage.extend({
       });
       this.dialog.once(
         'confirm',
-        function() {
+        function () {
           app.router.navigate('vocablists/view/' + self.vocablist.id, {trigger: true});
           self.dialog.close();
         }
@@ -208,7 +208,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickDiscardChanges
    * @param {Event} event
    */
-  handleClickDiscardChanges: function(event) {
+  handleClickDiscardChanges: function (event) {
     const self = this;
     event.preventDefault();
 
@@ -229,7 +229,7 @@ module.exports = GelatoPage.extend({
 
     this.dialog.once(
       'confirm',
-      function() {
+      function () {
         self.editor.editing = false;
         self.editor.discardChanges();
         self.dialog.close();
@@ -237,7 +237,7 @@ module.exports = GelatoPage.extend({
     );
     this.dialog.once(
       'hidden',
-      function() {
+      function () {
         self.render();
       }
     );
@@ -248,7 +248,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickEditSection
    * @param {Event} event
    */
-  handleClickEditSection: function(event) {
+  handleClickEditSection: function (event) {
     event.preventDefault();
     this.editor.editing = !this.editor.editing;
     this.render();
@@ -260,7 +260,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickSaveChanges
    * @param {Event} event
    */
-  handleClickSaveChanges: function(event) {
+  handleClickSaveChanges: function (event) {
     event.preventDefault();
     const self = this;
 
@@ -278,7 +278,7 @@ module.exports = GelatoPage.extend({
 
     this.toggleInputs();
     this.vocablistSection.save(null, {
-      success: function() {
+      success: function () {
         self.editor.editing = false;
         self.render();
         app.notifyUser({
@@ -286,7 +286,7 @@ module.exports = GelatoPage.extend({
           type: 'pastel-success',
         });
       },
-      error: function() {
+      error: function () {
         self.toggleInputs(true);
         app.notifyUser({
           message: app.locale('pages.vocabLists.errorSavingSection'),
@@ -297,7 +297,7 @@ module.exports = GelatoPage.extend({
     // remove all results button
     _.forEach(
       this.editor.rows,
-      function(row) {
+      function (row) {
         delete row.results;
       }
     );
@@ -307,7 +307,7 @@ module.exports = GelatoPage.extend({
    * @method handleKeydownAddInput
    * @param {Event} event
    */
-  handleKeydownAddInput: function(event) {
+  handleKeydownAddInput: function (event) {
     if (event.keyCode === 13) {
       // limit adding to section
       if (this.editor.rows.length > 200) {
@@ -331,14 +331,14 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleVocablistState
    */
-  handleVocablistState: function() {
+  handleVocablistState: function () {
     this.render();
   },
 
   /**
    * @method handleVocablistState
    */
-  handleVocablistSectionState: function() {
+  handleVocablistSectionState: function () {
     this.render();
   },
 
@@ -346,7 +346,7 @@ module.exports = GelatoPage.extend({
    * @method remove
    * @returns {VocablistsListSectionPage}
    */
-  remove: function() {
+  remove: function () {
     this.editor.remove();
     return GelatoPage.prototype.remove.call(this);
   },
@@ -355,7 +355,7 @@ module.exports = GelatoPage.extend({
    * Toggles the enabled/disabled state of the inputs and buttons on the editor
    * @param {boolean} [enabled] whether to enable the inputs
    */
-  toggleInputs: function(enabled) {
+  toggleInputs: function (enabled) {
     this.$('button').prop('disabled', !enabled);
     this.$('#section-name').prop('disabled', !enabled);
     this.$('#add-input').prop('disabled', !enabled);

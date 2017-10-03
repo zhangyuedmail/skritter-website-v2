@@ -9,7 +9,7 @@ module.exports = GelatoDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
   },
   /**
    * @property events
@@ -28,7 +28,7 @@ module.exports = GelatoDialog.extend({
    * @method render
    * @returns {ConfirmDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -36,7 +36,7 @@ module.exports = GelatoDialog.extend({
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
     this.close();
   },
@@ -44,7 +44,7 @@ module.exports = GelatoDialog.extend({
    * @method handleClickButtonChange
    * @param {Event} event
    */
-  handleClickButtonChange: function(event) {
+  handleClickButtonChange: function (event) {
     let self = this;
     event.preventDefault();
     let password1 = this.$('#field-password1').val();
@@ -71,15 +71,15 @@ module.exports = GelatoDialog.extend({
       headers: app.user.session.getHeaders(),
       type: 'PUT',
       url: app.getApiUrl() + 'users',
-      error: function(error) {
+      error: function (error) {
         ScreenLoader.hide();
         self.$('#error-message').text(error.responseJSON.message);
         self.$('form').prop('disabled', false);
       },
-      success: function() {
+      success: function () {
         self.close();
         setTimeout(
-          function() {
+          function () {
             ScreenLoader.hide();
           },
           1000

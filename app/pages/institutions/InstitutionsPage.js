@@ -39,7 +39,7 @@ const InstitutionsPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     app.mixpanel.track('Viewed institutions page');
   },
 
@@ -47,7 +47,7 @@ const InstitutionsPage = GelatoPage.extend({
    * @method render
    * @returns {InstitutionsPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.$('#institution-when').daterangepicker({
       locale: {format: 'YYYY-MM-DD'},
@@ -62,7 +62,7 @@ const InstitutionsPage = GelatoPage.extend({
    * @method handleClickRequestPurchase
    * @param {Event} event
    */
-  handleClickRequestPurchase: function(event) {
+  handleClickRequestPurchase: function (event) {
     event.preventDefault();
     let section = this.$('#section-request');
     let students = $(event.currentTarget).data('students');
@@ -75,7 +75,7 @@ const InstitutionsPage = GelatoPage.extend({
    * @method handleClickRequestSubmit
    * @param {Event} event
    */
-  handleClickRequestSubmit: function(event) {
+  handleClickRequestSubmit: function (event) {
     event.preventDefault();
 
     let self = this;
@@ -127,10 +127,10 @@ const InstitutionsPage = GelatoPage.extend({
           'Start Date': when,
         },
       }),
-    }).then(function() {
+    }).then(function () {
       self._setRequestSuccess();
       self.$('form').hide(500);
-    }).fail(function(error) {
+    }).fail(function (error) {
       self._setRequestError(JSON.stringify(error));
       self.enableForm('form');
     });
@@ -140,7 +140,7 @@ const InstitutionsPage = GelatoPage.extend({
    * @method handleClickRequestTrial
    * @param {Event} event
    */
-  handleClickRequestTrial: function(event) {
+  handleClickRequestTrial: function (event) {
     event.preventDefault();
     let section = this.$('#section-request');
     $('html, body').animate({scrollTop: section.offset().top}, 1000);
@@ -152,7 +152,7 @@ const InstitutionsPage = GelatoPage.extend({
    * @param error
    * @private
    */
-  _setRequestError: function(error) {
+  _setRequestError: function (error) {
     this.$('#request-message').removeClass('text-success');
     this.$('#request-message').addClass('text-danger');
     this.$('#request-message').text(error);
@@ -162,7 +162,7 @@ const InstitutionsPage = GelatoPage.extend({
    * Set success message with good institutional requests.
    * @private
    */
-  _setRequestSuccess: function() {
+  _setRequestSuccess: function () {
     this.$('#request-message').removeClass('text-danger');
     this.$('#request-message').addClass('text-success');
     this.$('#request-message').text('Your request has been successfully sent.');

@@ -24,7 +24,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     'click #select-avatar': 'handleClickSelectAvatar',
     'click #upload-avatar': 'handleClickUploadAvatar',
     'click #field-change-password': 'handleClickChangePassword',
-    'click #reset-all-data': 'handleClickResetAllData'
+    'click #reset-all-data': 'handleClickResetAllData',
   },
 
   /**
@@ -43,7 +43,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.countries = require('data/country-codes');
     this.dialog = null;
     this.timezones = require('data/country-timezones');
@@ -59,7 +59,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method render
    * @returns {AccountSettingsGeneralPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileAccountSettingsGeneral.jade');
     }
@@ -72,14 +72,14 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     return this;
   },
 
-  convertFileToDataURL: function(url) {
+  convertFileToDataURL: function (url) {
     const xhr = new XMLHttpRequest();
 
-    return new Promise(resolve => {
-      xhr.onload = function() {
+    return new Promise((resolve) => {
+      xhr.onload = function () {
         const reader = new FileReader();
 
-        reader.onloadend = function() {
+        reader.onloadend = function () {
           resolve(reader.result);
         };
 
@@ -96,7 +96,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * Displays an error message to the user.
    * @param {String} msg the message to display to the user
    */
-  displayErrorMessage: function(msg) {
+  displayErrorMessage: function (msg) {
     this.$('#error-alert').text(msg).removeClass('hidden');
   },
 
@@ -104,7 +104,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method getSelectedCountryCode
    * @returns {String}
    */
-  getSelectedCountryCode: function() {
+  getSelectedCountryCode: function () {
     return this.$('#field-country :selected').val() || app.user.get('country');
   },
 
@@ -112,11 +112,11 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method handleChangeAvatarUploadInput
    * @param {Event} event
    */
-  handleChangeAvatarUploadInput: function(event) {
+  handleChangeAvatarUploadInput: function (event) {
     const file = event.target.files[0];
     const reader = new FileReader();
 
-    reader.onload = event => {
+    reader.onload = (event) => {
       this.$('#field-avatar').attr('src', event.target.result);
     };
 
@@ -128,7 +128,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method handleClickButtonSave
    * @param {Event} event
    */
-  handleClickButtonSave: async function(event) {
+  handleClickButtonSave: async function (event) {
     const formData = this._getFormData();
 
     event.preventDefault();
@@ -183,9 +183,9 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
 
         app.notifyUser({
           message: app.locale('pages.accountGeneral.saveSuccess'),
-          type: 'pastel-success'
+          type: 'pastel-success',
         });
-      }
+      },
     });
   },
 
@@ -193,12 +193,12 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method handleClickSelectAvatar
    * @param {Event} event
    */
-  handleClickSelectAvatar: function(event) {
+  handleClickSelectAvatar: function (event) {
     const dialog = new AvatarSelect();
 
     event.preventDefault();
 
-    dialog.on('select', async id => {
+    dialog.on('select', async (id) => {
       const path = app.isCordova() ? 'media/avatars/' : '/media/avatars/';
       const avatar = await this.convertFileToDataURL(path + id + '.png');
 
@@ -207,7 +207,6 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
       } else {
         this.$('#field-avatar').attr('src', defaultAvatar);
       }
-
     });
 
     dialog.open();
@@ -217,7 +216,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method handleClickUploadAvatar
    * @param {Event} event
    */
-  handleClickUploadAvatar: function(event) {
+  handleClickUploadAvatar: function (event) {
     event.preventDefault();
 
     this.$('#avatar-upload-input').trigger('click');
@@ -227,7 +226,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method handleClickChangePassword
    * @param {Event} event
    */
-  handleClickChangePassword: function(event) {
+  handleClickChangePassword: function (event) {
     event.preventDefault();
     this.dialog = new ChangePasswordDialog();
     this.dialog.render();
@@ -238,7 +237,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method handleClickResetAllData
    * @param {Event} event
    */
-  handleClickResetAllData: function(event) {
+  handleClickResetAllData: function (event) {
     event.preventDefault();
     this.dialog = new ResetAllDataDialog();
     this.dialog.render();
@@ -249,7 +248,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method handleSelectCountry
    * @param event
    */
-  handleSelectCountry: function(event) {
+  handleSelectCountry: function (event) {
     event.preventDefault();
     this.render();
   },
@@ -258,7 +257,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method remove
    * @returns {AccountSettingsGeneralPage}
    */
-  remove: function() {
+  remove: function () {
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
   },
@@ -269,7 +268,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method _getFormData
    * @private
    */
-  _getFormData: function() {
+  _getFormData: function () {
     let avatar = this.$('#field-avatar').get(0).src;
 
     avatar = avatar.replace('data:image/gif;base64,', '');
@@ -286,7 +285,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
       name: this.$('#field-name').val().trim(),
       offlineEnabled: this.$('#field-offline-enabled').is(':checked'),
       private: this.$('#field-private').is(':checked'),
-      timezone: this.$('#field-timezone :selected').val()
+      timezone: this.$('#field-timezone :selected').val(),
     };
   },
 
@@ -296,7 +295,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
    * @method _validateAccountData
    * @private
    */
-  _validateAccountData: function(formData) {
+  _validateAccountData: function (formData) {
     if (formData.email !== app.user.get('email')) {
       const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
@@ -312,7 +311,7 @@ const AccountSettingsGeneralPage = GelatoPage.extend({
     }
 
     return true;
-  }
+  },
 
 });
 

@@ -16,7 +16,7 @@ const DashboardTotalComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.stats = app.user.stats;
     this.listenTo(this.stats, 'state:standby', this.update);
     this.stats.fetchToday();
@@ -26,7 +26,7 @@ const DashboardTotalComponent = GelatoComponent.extend({
    * @method render
    * @returns {DashboardTotalComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.update();
     return this;
@@ -36,7 +36,7 @@ const DashboardTotalComponent = GelatoComponent.extend({
    * Updates the number of items a user has learned in total
    * @method update
    */
-  update: function() {
+  update: function () {
     if (this.stats.length) {
       this.$('#characters-learned .value').text(this.stats.getAllTimeCharactersLearned());
       this.$('#words-learned .value').text(this.stats.getAllTimeWordsLearned());

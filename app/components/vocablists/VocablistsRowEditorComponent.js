@@ -32,7 +32,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.changed = false;
     this.editing = options.editing || false;
     this.rows = [];
@@ -46,7 +46,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistsRowEditorComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     if (this.editing) {
@@ -58,7 +58,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method addRow
    * @param {String} query
    */
-  addRow: function(query) {
+  addRow: function (query) {
     let self = this;
     let queryVocabs = new Vocabs();
     let row = {lang: this.vocablist.get('lang'), query: query, state: 'loading'};
@@ -69,11 +69,11 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
         q: query,
         lang: this.vocablist.get('lang'),
       },
-      error: function(a, b) {
+      error: function (a, b) {
       },
-      success: _.bind(function(collection) {
+      success: _.bind(function (collection) {
         let results = [];
-        let groups = collection.groupBy(function(vocab) {
+        let groups = collection.groupBy(function (vocab) {
           return vocab.getBase();
         });
         for (let writing in groups) {
@@ -118,7 +118,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
     });
   },
 
-  addRows: function(rows) {
+  addRows: function (rows) {
     _.forEach(
       rows,
       (row) => {
@@ -132,7 +132,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
   /**
    * @method discardChanges
    */
-  discardChanges: function() {
+  discardChanges: function () {
     this.rows = _.clone(this.saved);
     this.render();
   },
@@ -143,10 +143,10 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method getRows
    * @returns {Array}
    */
-  getRows: function() {
+  getRows: function () {
     return _.filter(
       this.rows,
-      function(row) {
+      function (row) {
         return _.isString(row.vocabId);
       }
     );
@@ -157,7 +157,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleClickAddEntry
    * @param {Event} event the click event
    */
-  handleClickAddEntry: function(event) {
+  handleClickAddEntry: function (event) {
     event.preventDefault();
 
     const self = this;
@@ -169,7 +169,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
     this.dialog.open({row: row});
     this.dialog.on(
       'vocab',
-      function(vocab) {
+      function (vocab) {
         self.removeRow(index);
         self.addRow(vocab.get('writing'));
       }
@@ -180,7 +180,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleClickRemoveRow
    * @param {Event} event
    */
-  handleClickRemoveRow: function(event) {
+  handleClickRemoveRow: function (event) {
     event.preventDefault();
 
     const $row = $(event.target).closest('.row');
@@ -193,7 +193,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleClickResultRow
    * @param {Event} event
    */
-  handleClickResultRow: function(event) {
+  handleClickResultRow: function (event) {
     event.preventDefault();
 
     const $row = $(event.target).closest('.row');
@@ -212,7 +212,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleClickShowResults
    * @param {Event} event
    */
-  handleClickShowResults: function(event) {
+  handleClickShowResults: function (event) {
     event.preventDefault();
     let $row = $(event.target).closest('.row');
     let $resultRows = $row.children('.result-rows');
@@ -227,7 +227,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleClickStudyWriting
    * @param {Event} event
    */
-  handleClickStudyWriting: function(event) {
+  handleClickStudyWriting: function (event) {
     event.preventDefault();
     let $row = $(event.target).closest('.row');
     let $toggle = $row.find('.study-writing');
@@ -240,12 +240,12 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleUpdateSort
    * @param {Event} event
    */
-  handleUpdateSort: function(event) {
+  handleUpdateSort: function (event) {
     let rows = this.rows;
     let sortedRows = [];
     this.$('#vocablist-section-rows')
       .children('.row')
-      .map(function(index, element) {
+      .map(function (index, element) {
         let row = _.find(rows, {id: $(element).data('row-id')});
         sortedRows.push(row);
       });
@@ -257,28 +257,28 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method loadRows
    * @param {Object} [options]
    */
-  loadRows: function(options) {
+  loadRows: function (options) {
     let rows = this.vocablistSection.get('rows');
     let uniqueVocabIds = this.vocablistSection.getUniqueVocabIds();
     let vocabs = new Vocabs();
     async.each(
       _.chunk(uniqueVocabIds, 50),
-      _.bind(function(chunk, callback) {
+      _.bind(function (chunk, callback) {
         vocabs.fetch({
           data: {
             ids: chunk.join('|'),
           },
           remove: false,
-          error: function(error) {
+          error: function (error) {
             callback(error);
           },
-          success: function(vocabs) {
+          success: function (vocabs) {
             callback();
           },
         });
       }, this),
-      _.bind(function(error) {
-        rows.forEach(function(row) {
+      _.bind(function (error) {
+        rows.forEach(function (row) {
           let vocab1 = vocabs.get(row.vocabId);
           let vocab2 = vocabs.get(row.tradVocabId) || vocab1;
 
@@ -313,7 +313,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @param {Number} index
    * @returns {Object}
    */
-  removeRow: function(index) {
+  removeRow: function (index) {
     return this.rows.splice(index, 1);
   },
 

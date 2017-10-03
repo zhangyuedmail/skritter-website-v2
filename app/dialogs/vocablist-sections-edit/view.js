@@ -9,7 +9,7 @@ module.exports = BootstrapDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.vocablist = options.vocablist;
     if (!this.vocablist) {
       throw new Error('VocablistSectionsEdit requires a vocablist passed in!');
@@ -24,7 +24,7 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {VocablistSectionsEdit}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     // jquery-ui doesn't hook into this.$, so use global $ instead
@@ -47,16 +47,16 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickCloseButton
    * @param {Event} e
    */
-  handleClickCancelButton: function(e) {
+  handleClickCancelButton: function (e) {
     this.close();
   },
   /**
    * @method handleClickSaveButton
    * @param {Event} e
    */
-  handleClickConfirmButton: function() {
+  handleClickConfirmButton: function () {
     let sections = [];
-    $.each(this.$('.list-group-item'), function(i, el) {
+    $.each(this.$('.list-group-item'), function (i, el) {
       let id = ($(el).data('section-id') || '').toString();
 
       let section = {
@@ -77,13 +77,13 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickRemoveLink
    * @param {Event} e
    */
-  handleClickRemoveLink: function(e) {
+  handleClickRemoveLink: function (e) {
     $(e.target).closest('.list-group-item').addClass('hide');
   },
   /**
    * @method handleClickAddSectionButton
    */
-  handleClickAddSectionButton: function() {
+  handleClickAddSectionButton: function () {
     let newRow = this.$('#new-section-template').clone().removeClass('hide');
     this.$('.list-group').append(newRow);
   },

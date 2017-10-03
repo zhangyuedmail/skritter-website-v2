@@ -14,7 +14,7 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {LoginDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -29,17 +29,17 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickLogin
    * @param {Event} event
    */
-  handleClickLogin: function(event) {
+  handleClickLogin: function (event) {
     event.preventDefault();
     let self = this;
     let password = this.$('#login-password').val();
     let username = this.$('#login-username').val();
     this.$('#login-message').empty();
     this.$('#login-form').prop('disabled', true);
-    app.user.login(username, password, function() {
+    app.user.login(username, password, function () {
       app.router.navigate('dashboard', {trigger: false});
       app.reload();
-    }, function(error) {
+    }, function (error) {
       self.$('#login-message').text(error.message);
       self.$('#login-form').prop('disabled', false);
     });

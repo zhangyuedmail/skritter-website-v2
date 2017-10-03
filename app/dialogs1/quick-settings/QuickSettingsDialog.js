@@ -27,7 +27,7 @@ module.exports = GelatoDialog.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this._views['lists'] = new ListSelect();
   },
 
@@ -35,7 +35,7 @@ module.exports = GelatoDialog.extend({
    * @method render
    * @returns {QuickSettingsDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this._views['lists'].setElement('#list-select-container').render();
@@ -49,8 +49,8 @@ module.exports = GelatoDialog.extend({
    * @method getSelectedParts
    * @returns {Array}
    */
-  getSelectedParts: function() {
-    return this.$('#field-parts :checked').map(function() {
+  getSelectedParts: function () {
+    return this.$('#field-parts :checked').map(function () {
       return $(this).val();
     }).get();
   },
@@ -59,9 +59,9 @@ module.exports = GelatoDialog.extend({
    * @method getSelectedStyles
    * @returns {Array}
    */
-  getSelectedStyles: function() {
+  getSelectedStyles: function () {
     if (app.user.isAddingStyle('simp') && app.user.isAddingStyle('trad')) {
-      return ['both'].concat(this.$('#field-styles :checked').map(function() {
+      return ['both'].concat(this.$('#field-styles :checked').map(function () {
         return $(this).val();
       }).get());
     }
@@ -73,7 +73,7 @@ module.exports = GelatoDialog.extend({
    * @method getSettings
    * @returns {Object}
    */
-  getSettings: function() {
+  getSettings: function () {
     const settings = {
       audioEnabled: this.$('#field-audio input').is(':checked'),
       squigs: this.$('#field-squigs input').is(':checked'),
@@ -99,7 +99,7 @@ module.exports = GelatoDialog.extend({
    * @method handleClickClose
    * @param {Event} event
    */
-  handleClickClose: function(event) {
+  handleClickClose: function (event) {
     event.preventDefault();
 
     this.trigger('close');
@@ -107,7 +107,7 @@ module.exports = GelatoDialog.extend({
     $('body').removeClass('modal-open');
   },
 
-  handleClickMoreSettings: function(event) {
+  handleClickMoreSettings: function (event) {
     this.handleClickClose(event);
 
     app.router.navigate('account/settings/study', {trigger: true});
@@ -117,7 +117,7 @@ module.exports = GelatoDialog.extend({
    * @method handleClickSave
    * @param {Event} event
    */
-  handleClickSave: function(event) {
+  handleClickSave: function (event) {
     event.preventDefault();
 
     this.trigger('save', this.getSettings());
@@ -128,7 +128,7 @@ module.exports = GelatoDialog.extend({
    * Checks to prevent unchecking all study parts. User has to study something!
    * @param {jQuery.Event} event the click event on the checkbox
    */
-  handleClickVocabPart: function(event) {
+  handleClickVocabPart: function (event) {
     const checked = this.$('.part-checkbox:checked');
 
     if (checked.length === 0) {

@@ -5025,10 +5025,12 @@ let data = {
 };
 
 module.exports = {
-  getData: function() {
+  getData: function () {
     let params = [];
     for (let id in data) {
-      params = params.concat(data[id]);
+      if (data.hasOwnProperty(id)) {
+        params = params.concat(data[id]);
+      }
     }
     return params;
   },

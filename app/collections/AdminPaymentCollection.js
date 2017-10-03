@@ -18,7 +18,7 @@ const AdminPaymentCollection = GelatoCollection.extend({
      * @param {Object} response
      * @returns Array
      */
-    parse: function(response) {
+    parse: function (response) {
         return response.Payments;
     },
 
@@ -26,7 +26,7 @@ const AdminPaymentCollection = GelatoCollection.extend({
      * @property url
      * @type {String}
      */
-    url: function() {
+    url: function () {
         return app.get('nodeApiRoot') + '/v1/admin/payments?token=' + app.user.session.get('access_token');
     },
 
@@ -34,17 +34,17 @@ const AdminPaymentCollection = GelatoCollection.extend({
      * @method getTotalByDate
      * @returns {Object}
      */
-    getTotalByDate: function() {
+    getTotalByDate: function () {
         let totals = {};
         let groups = _.groupBy(
             this.models,
-            function(payment) {
+            function (payment) {
                 return payment.get('date');
             }
         );
         _.forEach(
             groups,
-            function(payments, key) {
+            function (payments, key) {
                  let date = {
                      newTotal: 0,
                      newApple: 0,
@@ -59,7 +59,7 @@ const AdminPaymentCollection = GelatoCollection.extend({
                  };
                 _.forEach(
                     payments,
-                    function(payment) {
+                    function (payment) {
                         if (payment.isInitialPayment()) {
                             date.newTotal++;
                             switch (payment.get('method')) {

@@ -18,7 +18,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    */
   template: require('./NavbarMobileStudy.jade'),
 
-  initialize: function(options) {
+  initialize: function (options) {
     NavbarDefaultComponent.prototype.initialize.apply(this, arguments);
     this._views['timer'] = new StudyToolbarTimerComponent({
       showIcon: true,
@@ -46,12 +46,12 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    *
    * @param event
    */
-  handleToggleMenuClick: function(event) {
+  handleToggleMenuClick: function (event) {
     event.preventDefault();
     vent.trigger('mobileNavMenu:toggle');
   },
 
-  render: function() {
+  render: function () {
     NavbarDefaultComponent.prototype.render.apply(this, arguments);
 
     this._views['timer'].setElement('#timer-container').render();
@@ -63,7 +63,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * @method getDueCountWithOffset
    * @returns {Number}
    */
-  getDueCountWithOffset: function() {
+  getDueCountWithOffset: function () {
     const dueCount = this.page.items.dueCount - this.dueCountOffset;
     return dueCount > 0 ? dueCount : 0;
   },
@@ -74,7 +74,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * @param {jQuery.ClickEvent} event
    * @triggers items:add
    */
-  handleAddClick: function(event) {
+  handleAddClick: function (event) {
     if (this._adding) {
       return;
     }
@@ -89,7 +89,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * Triggers an event to start the add item process for that amount.
    * @param {jQuery.Event} event the click event
    */
-  handleAddWordAmountClick: function(event) {
+  handleAddWordAmountClick: function (event) {
     const numItemsToAdd = $(event.target).data('amt');
 
     this.toggleAddWordsPopup();
@@ -102,7 +102,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * @param event
    * @param show
    */
-  toggleAddWordsPopup: function(event, show) {
+  toggleAddWordsPopup: function (event, show) {
     if (event && event.stopPropagation()) {
       event.stopPropagation();
     }
@@ -119,7 +119,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * Updates the UI to show the current due count
    * @method handleDueCountUpdated
    */
-  handleDueCountUpdated: function() {
+  handleDueCountUpdated: function () {
     this.dueCountOffset = 0;
     this.$('.due-count').text(this.getDueCountWithOffset());
   },
@@ -128,7 +128,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * Resets the state and UI after a group of words has been successfully added.
    * @method handleItemAdded
    */
-  handleItemAdded: function() {
+  handleItemAdded: function () {
     this.$('#add').removeClass('adding');
     this._adding = false;
   },
@@ -138,7 +138,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * @param {jQuery.ClickEvent} event
    * @method handlePlayClick
    */
-  handlePlayClick: function(event) {
+  handlePlayClick: function (event) {
     vent.trigger('vocab:play');
   },
 
@@ -147,7 +147,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * @param {jQuery.ClickEvent} event
    * @method handleInfoClick
    */
-  handleInfoClick: function(event) {
+  handleInfoClick: function (event) {
     app.hideAllMenus();
     vent.trigger('studyPromptVocabInfo:show');
   },
@@ -158,7 +158,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * @param {jQuery.ClickEvent} event
    * @triggers studySettings:show
    */
-  handleOptionsClick: function(event) {
+  handleOptionsClick: function (event) {
     vent.trigger('studySettings:show');
   },
 
@@ -166,7 +166,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * @method remove
    * @returns {NavbarMobileStudyComponent}
    */
-  remove: function() {
+  remove: function () {
     $(document).off('click', this.toggleAddWordsPopup);
 
     return NavbarDefaultComponent.prototype.remove.call(this);
@@ -177,7 +177,7 @@ const NavbarMobileStudyComponent = NavbarDefaultComponent.extend({
    * being added.
    * @param {Boolean} [adding] whether items are currently being added
    */
-  updateAddButton: function(adding) {
+  updateAddButton: function (adding) {
     adding = adding || false;
 
     this._adding = adding;

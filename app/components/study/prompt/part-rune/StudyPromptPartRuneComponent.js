@@ -1,5 +1,5 @@
 const GelatoComponent = require('gelato/component');
-const config = require('config');
+// const config = require('config');
 
 /**
  * @class StudyPromptPartRuneComponent
@@ -31,7 +31,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @param {StudyPromptComponent} options.prompt the prompt component
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     /**
      * The parent prompt instance
      * @type {StudyPromptComponent}
@@ -77,7 +77,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptPartRuneComponent}
    */
-  render: function() {
+  render: function () {
     this.prompt.review = this.prompt.reviews.current();
     this.prompt.canvas.grid = true;
     this.prompt.canvas.reset();
@@ -119,7 +119,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method renderComplete
    * @returns {StudyPromptPartRuneComponent}
    */
-  renderComplete: function() {
+  renderComplete: function () {
     this.prompt.review.stop();
     this.prompt.review.set('complete', true);
     this.prompt.shortcuts.grading.listen();
@@ -176,7 +176,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method renderIncomplete
    * @returns {StudyPromptPartRuneComponent}
    */
-  renderIncomplete: function() {
+  renderIncomplete: function () {
     this.prompt.review.start();
     this.prompt.review.set('complete', false);
     this.prompt.shortcuts.grading.stop_listening();
@@ -221,7 +221,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handleAttemptFail
    */
-  handleAttemptFail: function() {
+  handleAttemptFail: function () {
     let character = this.prompt.review.character;
     let failedConsecutive = this.prompt.review.get('failedConsecutive') + 1;
     let failedTotal = this.prompt.review.get('failedTotal') + 1;
@@ -259,7 +259,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handleAttemptSuccess
    */
-  handleAttemptSuccess: function() {
+  handleAttemptSuccess: function () {
     this.prompt.review.set('failedConsecutive', 0);
 
     if (this.prompt.review.character.isComplete()) {
@@ -293,7 +293,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handlePromptCanvasClick
    */
-  handlePromptCanvasClick: function() {
+  handlePromptCanvasClick: function () {
     if (this.prompt.review.isComplete()) {
       if (this.prompt.review.item) {
         if (this.prompt.review.get('score') === 1) {
@@ -322,7 +322,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @param {Array} points
    * @param {createjs.Shape} shape
    */
-  handlePromptCanvasInputUp: function(points, shape) {
+  handlePromptCanvasInputUp: function (points, shape) {
     if (app.fn.getLength(points) >= 5) {
       const stroke = this.prompt.review.character.recognize(points, shape);
 
@@ -358,7 +358,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * Handles a swipeup event from the canvas and erases/resets the canvas
    * @method handlePromptCanvasSwipeUp
    */
-  handlePromptCanvasSwipeUp: function() {
+  handlePromptCanvasSwipeUp: function () {
     this.prompt.review.set({
       failedConsecutive: 0,
       failedTotal: 0,
@@ -370,7 +370,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handlePromptDoubleTap
    */
-  handlePromptDoubleTap: function() {
+  handlePromptDoubleTap: function () {
     const expectedShape = this.prompt.review.character.getTargetShape();
 
     // make delay a little longer for double tap--could misinterpret two
@@ -391,7 +391,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handlePromptCanvasTap
    */
-  handlePromptCanvasTap: function() {
+  handlePromptCanvasTap: function () {
     let expectedStroke = this.prompt.review.character.getExpectedStroke();
     if (expectedStroke) {
       this.prompt.canvas.clearLayer('stroke-hint');
@@ -403,7 +403,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handlePromptToolbarActionCorrect
    */
-  handlePromptToolbarActionCorrect: function() {
+  handlePromptToolbarActionCorrect: function () {
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
 
@@ -423,21 +423,21 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handlePromptToolbarActionErase
    */
-  handlePromptToolbarActionErase: function() {
+  handlePromptToolbarActionErase: function () {
     this.eraseCharacter();
   },
 
   /**
    * @method handlePromptToolbarActionShow
    */
-  handlePromptToolbarActionShow: function() {
+  handlePromptToolbarActionShow: function () {
     this.showCharacter();
   },
 
   /**
    * @method handlePromptToolbarActionTeach
    */
-  handlePromptToolbarActionTeach: function() {
+  handlePromptToolbarActionTeach: function () {
       this.startTeachingCharacter();
   },
 
@@ -447,7 +447,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method handlePromptToolbarGradingMousedown
    * @param {Number} score the new grade to apply
    */
-  handlePromptToolbarGradingMousedown: function(score) {
+  handlePromptToolbarGradingMousedown: function (score) {
     this._mouseDown = true;
     if (this.prompt.review.isComplete()) {
       this.prompt.review.set('score', score);
@@ -466,7 +466,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method handlePromptToolbarGradingMousemove
    * @param {Number} score the new grade to apply
    */
-  handlePromptToolbarGradingMousemove: function(score) {
+  handlePromptToolbarGradingMousemove: function (score) {
     if (!this._mouseDown) {
       return;
     }
@@ -481,7 +481,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method handlePromptToolbarGradingMouseup
    * @param {Number} score the new grade to apply
    */
-  handlePromptToolbarGradingMouseup: function(score) {
+  handlePromptToolbarGradingMouseup: function (score) {
     this._mouseDown = false;
     this.prompt.stopAutoAdvance();
     this.changeReviewScore(score);
@@ -496,7 +496,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * Stops any auto-advance features.
    * @param {Number} score the score to change the review to
    */
-  changeReviewScore: function(score) {
+  changeReviewScore: function (score) {
     this.prompt.review.set('score', score);
     if (!app.user.get('disableGradingColor')) {
       this.prompt.canvas.injectLayerColor(
@@ -509,7 +509,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method completeCharacter
    */
-  completeCharacter: function() {
+  completeCharacter: function () {
     this.prompt.canvas.clearLayer('character');
     this.prompt.review.set('complete', true);
     this.prompt.review.character.reset();
@@ -521,7 +521,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method eraseCharacter
    */
-  eraseCharacter: function() {
+  eraseCharacter: function () {
     this.prompt.stopAutoAdvance();
     this.prompt.review.set({complete: false, showTeaching: false});
     this.prompt.review.character.reset();
@@ -533,7 +533,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method showCharacter
    */
-  showCharacter: function() {
+  showCharacter: function () {
     this.prompt.review.set('score', 1);
     this.prompt.canvas.clearLayer('character-hint');
     this.prompt.canvas.drawShape(
@@ -548,7 +548,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * review properties, then draws the character in the background to be
    * traced over. Highlights the first stroke.
    */
-  startTeachingCharacter() {
+  startTeachingCharacter () {
     if (this.prompt.review.isComplete()) {
       this.eraseCharacter();
     }
@@ -579,7 +579,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * the current stroke that needs to be written
    * @method teachCharacter
    */
-  teachCharacter: function() {
+  teachCharacter: function () {
     if (!this.prompt.review.isComplete()) {
       const stroke = this.prompt.review.character.getExpectedStroke();
       this.prompt.canvas.removeTweensFromLayer('character-teach');

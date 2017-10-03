@@ -18,7 +18,7 @@ const StrokeParamCollection = GelatoCollection.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.add(ParamData.getData());
   },
 });

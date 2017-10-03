@@ -23,7 +23,7 @@ const PaymentCollection = BaseSkritterCollection.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.cursor = null;
   },
 
@@ -32,7 +32,7 @@ const PaymentCollection = BaseSkritterCollection.extend({
    * @param {Object} response
    * @returns Array<Object>
    */
-  parse: function(response) {
+  parse: function (response) {
     this.cursor = response.cursor;
 
     return response.Payments;

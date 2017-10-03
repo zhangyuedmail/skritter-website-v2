@@ -1,5 +1,5 @@
 const SkritterModel = require('base/BaseSkritterModel');
-const VocabModel = require('models/VocabModel');
+// const VocabModel = require('models/VocabModel');
 
 /**
  * @class VocablistSectionModel
@@ -17,7 +17,7 @@ const VocablistSectionModel = SkritterModel.extend({
    * @property initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.vocablistId = _.result(options, 'vocablistId');
   },
 
@@ -25,7 +25,7 @@ const VocablistSectionModel = SkritterModel.extend({
    * @method getUniqueVocabIds
    * @returns {Array}
    */
-  getUniqueVocabIds: function() {
+  getUniqueVocabIds: function () {
     let vocabIds = _.map(this.get('rows'), 'vocabId');
     let tradVocabIds = [];
 
@@ -40,7 +40,7 @@ const VocablistSectionModel = SkritterModel.extend({
    * @method parse
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.VocabListSection || response;
   },
 
@@ -48,7 +48,7 @@ const VocablistSectionModel = SkritterModel.extend({
    * @method urlRoot
    * @returns {String}
    */
-  urlRoot: function() {
+  urlRoot: function () {
     return 'vocablists/' + this.vocablistId + '/sections';
   },
 

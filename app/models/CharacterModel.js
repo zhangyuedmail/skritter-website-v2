@@ -18,7 +18,7 @@ const CharacterModel = GelatoModel.extend({
    * @property url
    * @type {String}
    */
-  url: function() {
+  url: function () {
     return app.getApiUrl(2) + 'characters';
   },
 
@@ -26,7 +26,7 @@ const CharacterModel = GelatoModel.extend({
    * @method getPromptCharacter
    * @returns {PromptStrokeCollection}
    */
-  getPromptCharacter: function() {
+  getPromptCharacter: function () {
     let character = new PromptStrokeCollection();
     let strokes = this.clone().get('strokeData');
     let variations = this.clone().get('strokeVariations');
@@ -81,7 +81,7 @@ const CharacterModel = GelatoModel.extend({
    * @method isKana
    * @returns {Boolean}
    */
-  isKana: function() {
+  isKana: function () {
     return app.fn.isKana(this.get('writing'));
   },
 

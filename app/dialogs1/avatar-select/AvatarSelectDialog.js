@@ -76,13 +76,13 @@ module.exports = GelatoDialog.extend({
    * @method render
    * @returns {AvatarSelectDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
   },
 
-  handleClickAvatar: function(event) {
+  handleClickAvatar: function (event) {
     event.preventDefault();
 
     this.trigger('select', $(event.target).data('id'));
@@ -93,7 +93,7 @@ module.exports = GelatoDialog.extend({
    * @method handleClickClose
    * @param {Event} event
    */
-  handleClickClose: function(event) {
+  handleClickClose: function (event) {
     event.preventDefault();
 
     this.trigger('close');
@@ -104,7 +104,7 @@ module.exports = GelatoDialog.extend({
    * Returns an array of row groups for displaying avatars.
    * @returns {Array}
    */
-  getAvatarRows: function() {
+  getAvatarRows: function () {
     return _.chunk(this.avatars, 4);
   },
 
@@ -112,7 +112,7 @@ module.exports = GelatoDialog.extend({
    * Returns a string file path where the avatars are located.
    * @returns {String}
    */
-  getFilePath: function() {
+  getFilePath: function () {
     return app.isCordova() ? 'media/avatars/' : '/media/avatars/';
   },
 });

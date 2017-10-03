@@ -31,7 +31,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.vocablist = new Vocablist();
     this.errorMessage = '';
   },
@@ -40,7 +40,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {NewVocablistPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this.$('#name').focus();
@@ -53,7 +53,7 @@ module.exports = GelatoPage.extend({
    * @method handleSubmitNewListForm
    * @param {Event} event
    */
-  handleSubmitNewListForm: function(event) {
+  handleSubmitNewListForm: function (event) {
     event.preventDefault();
     this.errorMessage = '';
     this.vocablist.set({
@@ -73,10 +73,10 @@ module.exports = GelatoPage.extend({
 
     this.toggleInputs();
 
-    this.listenToOnce(this.vocablist, 'sync', function() {
+    this.listenToOnce(this.vocablist, 'sync', function () {
       this.onVocablistSaved();
     });
-    this.listenToOnce(this.vocablist, 'error', function(model, jqxhr) {
+    this.listenToOnce(this.vocablist, 'error', function (model, jqxhr) {
       this.errorMessage = jqxhr.responseJSON.message;
       this.stopListening(this.vocablist);
       this.toggleInputs(true);
@@ -88,7 +88,7 @@ module.exports = GelatoPage.extend({
   /**
    * Navigates the user to edit their new vocab list on a successful save.
    */
-  onVocablistSaved: function() {
+  onVocablistSaved: function () {
     let sect = this.vocablist.get('sections');
     if (sect && sect[0] && sect[0].id) {
       sect = sect[0].id;
@@ -100,7 +100,7 @@ module.exports = GelatoPage.extend({
   /**
    * @method remove
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
   },
 
@@ -108,7 +108,7 @@ module.exports = GelatoPage.extend({
    * Enables and disables the form's inputs
    * @param {Boolean} [enabled] whether to enable editing
    */
-  toggleInputs: function(enabled) {
+  toggleInputs: function (enabled) {
     this.$('#create-list-btn').prop('disabled', !enabled).text(enabled ? 'Create list' : 'Creating list');
     this.$('#description').prop('disabled', !enabled);
     this.$('#name').prop('disabled', !enabled);
@@ -119,7 +119,7 @@ module.exports = GelatoPage.extend({
    * an appropriate error message value (but does not display it).
    * @return {boolean} whether the list's attributes are valid
    */
-  validateListAttrs: function() {
+  validateListAttrs: function () {
     if (!this.vocablist.get('name')) {
       this.errorMessage = 'Your list still needs a name.';
       return false;

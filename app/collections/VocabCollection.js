@@ -29,7 +29,7 @@ const VocabCollection = BaseSkritterCollection.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(models, options) {
+  initialize: function (models, options) {
     options = options || {};
 
     this.cursor = null;
@@ -44,11 +44,11 @@ const VocabCollection = BaseSkritterCollection.extend({
    * @method getUniqueWritings
    * @returns Array
    */
-  getUniqueWritings: function() {
+  getUniqueWritings: function () {
     return _
       .chain(this.models)
       .map(
-        function(value) {
+        function (value) {
           return value.get('writing').split('');
         }
       )
@@ -62,7 +62,7 @@ const VocabCollection = BaseSkritterCollection.extend({
    * @param {Object} response
    * @returns Array
    */
-  parse: function(response) {
+  parse: function (response) {
     this.cursor = response.cursor;
     this.cursorContaining = response.containingCursor;
     this.decomps.add(response.Decomps);
@@ -75,7 +75,7 @@ const VocabCollection = BaseSkritterCollection.extend({
    * @method reset
    * @returns {VocabCollection}
    */
-  reset: function() {
+  reset: function () {
     this.decomps.reset();
     this.sentences.reset();
 

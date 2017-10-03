@@ -25,7 +25,7 @@ const VocabModel = SkritterModel.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.audioOffset = -1;
     this.audios = _.map(
       this.getUniqueAudios(),
@@ -34,8 +34,8 @@ const VocabModel = SkritterModel.extend({
         const url = data.mp3.replace('http://storage.googleapis.com/skritter_audio/', 'https://skritter.com/audio/');
 
         if (app.isCordova()) {
-          resolveLocalFileSystemURL(app.config.cordovaAudioUrl + name, null, function() {
-            new FileTransfer().download(url, app.config.cordovaAudioUrl + name);
+          window.resolveLocalFileSystemURL(app.config.cordovaAudioUrl + name, null, function () {
+            new window.FileTransfer().download(url, app.config.cordovaAudioUrl + name);
           });
         }
 
@@ -48,7 +48,7 @@ const VocabModel = SkritterModel.extend({
    * @method defaults
    * @returns {Object}
    */
-  defaults: function() {
+  defaults: function () {
     return {
       definitions: {},
       filler: false,
@@ -61,7 +61,7 @@ const VocabModel = SkritterModel.extend({
    * @method banAll
    * @returns {Vocab}
    */
-  banAll: function() {
+  banAll: function () {
     this.set('bannedParts', ['defn', 'rdng', 'rune', 'tone']);
     return this;
   },
@@ -71,13 +71,13 @@ const VocabModel = SkritterModel.extend({
    * @param {String} part
    * @returns {Vocab}
    */
-  banPart: function(part) {
+  banPart: function (part) {
     this.get('bannedParts').push(part);
     this.set('bannedParts', _.uniq(this.get('bannedParts')));
     return this;
   },
 
-  fetchSentence: function() {
+  fetchSentence: function () {
     const self = this;
 
     let url = app.getApiUrl(2) + 'sentences?languageCode=' + app.getLanguage() + '&vocabId=' + this.id + '&user=' + app.user.id;
@@ -89,10 +89,10 @@ const VocabModel = SkritterModel.extend({
         url,
         type: 'GET',
         headers: app.user.session.getHeaders(),
-        error: function(error) {
+        error: function (error) {
           reject();
         },
-        success: function(sentence) {
+        success: function (sentence) {
           if (self.collection) {
             self.collection.sentences.add(sentence);
           }
@@ -107,7 +107,7 @@ const VocabModel = SkritterModel.extend({
    * @method getBase
    * @returns {String}
    */
-  getBase: function() {
+  getBase: function () {
     return this.id.split('-')[1];
   },
 
@@ -115,7 +115,7 @@ const VocabModel = SkritterModel.extend({
    * @method getCharacters
    * @returns {Array}
    */
-  getCharacters: function() {
+  getCharacters: function () {
     return this.get('writing').split('');
   },
 
@@ -123,7 +123,7 @@ const VocabModel = SkritterModel.extend({
    * @method getCharactersWithoutFillers
    * @returns {Array}
    */
-  getCharactersWithoutFillers: function() {
+  getCharactersWithoutFillers: function () {
     return _.filter(this.get('writing').split(''), (writing) => {
       return !_.includes(app.config.writingFillers, writing);
     });
@@ -133,7 +133,7 @@ const VocabModel = SkritterModel.extend({
    * @method getContained
    * @returns {Array}
    */
-  getContained: function(excludeFillers) {
+  getContained: function (excludeFillers) {
     const containedVocabs = [];
     const characters = this.getCharacters();
     const lang = this.get('lang');
@@ -167,7 +167,7 @@ const VocabModel = SkritterModel.extend({
    * @method getDecomp
    * @returns {Decomp}
    */
-  getDecomp: function() {
+  getDecomp: function () {
     let decomp = this.collection.decomps.get(this.get('writing'));
     if (decomp && !decomp.get('atomic')) {
       return decomp;
@@ -181,7 +181,7 @@ const VocabModel = SkritterModel.extend({
    * @param {Boolean} [ignoreFormat]
    * @returns {String}
    */
-  getDefinition: function(ignoreFormat) {
+  getDefinition: function (ignoreFormat) {
     let customDefinition = this.get('customDefinition');
     let definition = this.get('definitions')[app.user.get('sourceLang')];
     if (customDefinition && customDefinition !== '') {
@@ -196,7 +196,7 @@ const VocabModel = SkritterModel.extend({
    * @method getFontClass
    * @returns {String}
    */
-  getFontClass: function() {
+  getFontClass: function () {
     return this.isChinese() ? 'text-chinese' : 'text-japanese';
   },
 
@@ -204,7 +204,7 @@ const VocabModel = SkritterModel.extend({
    * @method getFontName
    * @returns {String}
    */
-  getFontName: function() {
+  getFontName: function () {
     return this.isChinese() ? 'KaiTi' : 'DFKaiSho-Md';
   },
 
@@ -212,7 +212,7 @@ const VocabModel = SkritterModel.extend({
    * @method getMnemonic
    * @returns {Object}
    */
-  getMnemonic: function() {
+  getMnemonic: function () {
     if (this.get('mnemonic')) {
       return this.get('mnemonic');
     } else if (this.get('topMnemonic')) {
@@ -225,7 +225,7 @@ const VocabModel = SkritterModel.extend({
    * @method getPromptCharacters
    * @returns {Array}
    */
-  getPromptCharacters: function() {
+  getPromptCharacters: function () {
     let characters = [];
     let strokes = this.getStrokes();
     for (let i = 0, length = strokes.length; i < length; i++) {
@@ -244,7 +244,7 @@ const VocabModel = SkritterModel.extend({
    * @param {String} part
    * @returns {PromptItemCollection}
    */
-  getPromptItems: function(part) {
+  getPromptItems: function (part) {
     let promptItems = new PromptItemCollection();
     let containedVocabs = this.getContained();
     let characters = [];
@@ -282,7 +282,7 @@ const VocabModel = SkritterModel.extend({
    * @method getPromptTones
    * @returns {Array}
    */
-  getPromptTones: function() {
+  getPromptTones: function () {
     let tones = [];
     let strokes = this.getCharacters();
     for (let i = 0, length = strokes.length; i < length; i++) {
@@ -295,7 +295,7 @@ const VocabModel = SkritterModel.extend({
    * @method getReading
    * @returns {String}
    */
-  getReading: function() {
+  getReading: function () {
     if (this.isChinese()) {
       if (app.user.get('readingChinese') === 'zhuyin') {
         return app.fn.pinyin.toZhuyin(this.get('reading'));
@@ -311,7 +311,7 @@ const VocabModel = SkritterModel.extend({
    * @method getReadingObjects
    * @returns {Array}
    */
-  getReadingObjects: function() {
+  getReadingObjects: function () {
     let readings = [];
     let reading = this.get('reading');
 
@@ -332,7 +332,7 @@ const VocabModel = SkritterModel.extend({
     }
 
     return readings.map(
-      function(value) {
+      function (value) {
         if ([' ', ' ... ', '\''].indexOf(value) > -1) {
           return {type: 'filler', value: value};
         }
@@ -347,7 +347,7 @@ const VocabModel = SkritterModel.extend({
    * @method getSentence
    * @returns {Sentence} null if a sentence for the vocab isn't found
    */
-  getSentence: function() {
+  getSentence: function () {
     if (this.collection) {
       return this.collection.sentences.get(this.id);
     }
@@ -359,7 +359,7 @@ const VocabModel = SkritterModel.extend({
    * @method getStrokes
    * @returns {Array}
    */
-  getStrokes: function() {
+  getStrokes: function () {
     let strokes = [];
     let characters = this.getCharacters();
 
@@ -388,7 +388,7 @@ const VocabModel = SkritterModel.extend({
    * @method getTones
    * @returns {Array}
    */
-  getTones: function() {
+  getTones: function () {
     if (this.isChinese()) {
       const tones = [];
       const contained = this.get('containedVocabIds') ? this.getContained() : [this];
@@ -421,7 +421,7 @@ const VocabModel = SkritterModel.extend({
    * @method getUniqueAudios
    * @returns {Array}
    */
-  getUniqueAudios: function() {
+  getUniqueAudios: function () {
     return _.uniqBy(this.get('audios'), 'reading');
   },
 
@@ -429,7 +429,7 @@ const VocabModel = SkritterModel.extend({
    * @method getVariation
    * @returns {Number}
    */
-  getVariation: function() {
+  getVariation: function () {
     return parseInt(this.id.split('-')[2], 10);
   },
 
@@ -437,7 +437,7 @@ const VocabModel = SkritterModel.extend({
    * @method getWriting
    * @returns {String}
    */
-  getWriting: function() {
+  getWriting: function () {
     return this.get('writing');
   },
 
@@ -448,7 +448,7 @@ const VocabModel = SkritterModel.extend({
    * @param {VocabModel|String} vocabId
    * @returns {String}
    */
-  getWritingDifference: function(vocabId) {
+  getWritingDifference: function (vocabId) {
     let writing;
 
     // accept an actual vocab when calculating diff
@@ -465,7 +465,7 @@ const VocabModel = SkritterModel.extend({
     return _.zipWith(
       this.get('writing').split(),
       writing.split(),
-      function(thisChar, otherChar) {
+      function (thisChar, otherChar) {
         // the simplified character
         let idChar = vocabId.split('-')[1];
 
@@ -491,7 +491,7 @@ const VocabModel = SkritterModel.extend({
    * @method getDefinitionFontSize
    * @returns {number}
    */
-  getDefinitionFontSize() {
+  getDefinitionFontSize () {
     const definition = this.getDefinition();
     const definitionLength = definition.length;
     const screenWidth = app.getWidth();
@@ -504,7 +504,7 @@ const VocabModel = SkritterModel.extend({
    * @method getWritingFontSize
    * @returns {number}
    */
-  getWritingFontSize: function() {
+  getWritingFontSize: function () {
     const screenWidth = app.getWidth();
     const characterLength = this.getCharacters().length;
 
@@ -539,7 +539,7 @@ const VocabModel = SkritterModel.extend({
    * @method isBanned
    * @returns {Boolean}
    */
-  isBanned: function() {
+  isBanned: function () {
     return !!this.get('bannedParts').length;
   },
 
@@ -547,7 +547,7 @@ const VocabModel = SkritterModel.extend({
    * @method isChinese
    * @returns {Boolean}
    */
-  isChinese: function() {
+  isChinese: function () {
     return this.get('lang') === 'zh';
   },
 
@@ -555,7 +555,7 @@ const VocabModel = SkritterModel.extend({
    * @method isFiller
    * @returns {Boolean}
    */
-  isFiller: function() {
+  isFiller: function () {
     if (app.isJapanese()) {
       if (!app.user.get('studyKana') && this.isKana()) {
         return true;
@@ -569,7 +569,7 @@ const VocabModel = SkritterModel.extend({
    * @method isJapanese
    * @returns {Boolean}
    */
-  isJapanese: function() {
+  isJapanese: function () {
     return this.get('lang') === 'ja';
   },
 
@@ -577,7 +577,7 @@ const VocabModel = SkritterModel.extend({
    * @method isKana
    * @returns {Boolean}
    */
-  isKana: function() {
+  isKana: function () {
     return app.fn.isKana(this.get('writing'));
   },
 
@@ -585,7 +585,7 @@ const VocabModel = SkritterModel.extend({
    * @method isStarred
    * @returns {Boolean}
    */
-  isStarred: function() {
+  isStarred: function () {
     return this.get('starred');
   },
 
@@ -594,7 +594,7 @@ const VocabModel = SkritterModel.extend({
    * @param {Object} response
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     if (this.collection) {
       this.collection.decomps.add(response.Decomp);
       this.collection.sentences.add(response.Sentence);
@@ -607,7 +607,7 @@ const VocabModel = SkritterModel.extend({
    * @method play
    * @return {Boolean} whether the audio played when the function was called
    */
-  play: function() {
+  play: function () {
     if (!this.audios.length) {
       return false;
     }
@@ -627,7 +627,7 @@ const VocabModel = SkritterModel.extend({
       const cdvPath = app.config.cordovaAudioUrl + audio.name;
       this._playOrDownloadMobileAudio(audio, cdvPath);
     } else {
-      new Howl({
+      new window.Howl({
         src: [audio.url],
         format: ['mp3'],
         volume: app.user.get('volume'),
@@ -643,7 +643,7 @@ const VocabModel = SkritterModel.extend({
    * @method post
    * @param {Function} callback
    */
-  post: function(callback) {
+  post: function (callback) {
     $.ajax({
       context: this,
       url: app.getApiUrl() + 'vocabs',
@@ -657,17 +657,17 @@ const VocabModel = SkritterModel.extend({
         traditionalWriting: this.get('writingTraditional'),
         writing: this.get('writing'),
       },
-      error: function(error) {
+      error: function (error) {
         typeof callback === 'function' && callback(error);
       },
-      success: function(result) {
+      success: function (result) {
         typeof callback === 'function' && callback(null, this.set(result.Vocab, {merge: true}));
       },
     });
   },
 
 
-  resetAudioOffset: function() {
+  resetAudioOffset: function () {
     this.audioOffset = -1;
   },
 
@@ -675,7 +675,7 @@ const VocabModel = SkritterModel.extend({
    * @method toggleStarred
    * @returns {Boolean}
    */
-  toggleStarred: function() {
+  toggleStarred: function () {
     if (this.get('starred')) {
       this.set('starred', false);
       return false;
@@ -688,7 +688,7 @@ const VocabModel = SkritterModel.extend({
    * @method unbanAll
    * @returns {Vocab}
    */
-  unbanAll: function() {
+  unbanAll: function () {
     this.set('bannedParts', []);
     return this;
   },
@@ -698,7 +698,7 @@ const VocabModel = SkritterModel.extend({
    * @param {String} part
    * @returns {Vocab}
    */
-  unbanPart: function(part) {
+  unbanPart: function (part) {
     this.set('bannedParts', _.remove(this.get('bannedParts'), part));
     return this;
   },
@@ -710,12 +710,12 @@ const VocabModel = SkritterModel.extend({
    * @param {String} cdvPath the path of the local audio file
    * @private
    */
-  _playOrDownloadMobileAudio: function(audio, cdvPath) {
-    resolveLocalFileSystemURL(cdvPath, (entry) => {
+  _playOrDownloadMobileAudio: function (audio, cdvPath) {
+    window.resolveLocalFileSystemURL(cdvPath, (entry) => {
         this._playMobileAudio(cdvPath, entry);
       },
-      function() {
-        new FileTransfer().download(audio.url, cdvPath, (entry) => {
+      function () {
+        new window.FileTransfer().download(audio.url, cdvPath, (entry) => {
           this._playMobileAudio(cdvPath, entry);
         });
       }
@@ -728,13 +728,13 @@ const VocabModel = SkritterModel.extend({
    * @param {Object} audioInfo object with information about the audio file
    * @private
    */
-  _playMobileAudio: function(cdvPath, audioInfo) {
+  _playMobileAudio: function (cdvPath, audioInfo) {
     if (app.isAndroid()) {
       plugins.audio.play(audioInfo.toURL(), app.user.get('volume'));
     }
 
     if (app.isIOS()) {
-      const media = new Media(cdvPath, function() {
+      const media = new Media(cdvPath, function () {
         media.stop();
         media.release();
       });

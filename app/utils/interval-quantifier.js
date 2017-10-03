@@ -2,7 +2,7 @@
  * @class IntervalQuantifier
  * @constructor
  */
-function IntervalQuantifier() {
+function IntervalQuantifier () {
   this.initialWrongInterval = 600;
   this.initialRightInterval = 604800;
   this.rightFactors = [2.2, 2.2, 2.2, 2.2];
@@ -15,7 +15,7 @@ function IntervalQuantifier() {
  * @param {Number} score
  * @returns {Number}
  */
-IntervalQuantifier.prototype.quantify = function(item, score) {
+IntervalQuantifier.prototype.quantify = function (item, score) {
   let newInterval = 0;
   let now = moment().unix();
 
@@ -108,7 +108,7 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
  * @method randomizeInterval
  * @param {Number} value
  */
-IntervalQuantifier.prototype.randomizeInterval = function(value) {
+IntervalQuantifier.prototype.randomizeInterval = function (value) {
   return Math.round(value * (0.925 + (Math.random() * 0.15)));
 };
 

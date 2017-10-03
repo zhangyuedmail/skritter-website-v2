@@ -12,7 +12,7 @@ module.exports = BootstrapDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.vocablist = options.vocablist;
     if (!this.vocablist) {
       throw new Error('VocablistSettingsDialog requires a vocablist passed in!');
@@ -26,7 +26,7 @@ module.exports = BootstrapDialog.extend({
       });
 
       // hack until state event and property works
-      this.listenTo(this.vocablist, 'sync', function() {
+      this.listenTo(this.vocablist, 'sync', function () {
         this.vocablist.state = 'standby';
         this.renderContent();
       });
@@ -41,14 +41,14 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {VocablistSettingsDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
   /**
    * @method renderContent
    */
-  renderContent: function() {
+  renderContent: function () {
     let rendering = $(this.template(this.getContext()));
     this.$('.modal-content').replaceWith(rendering.find('.modal-content'));
   },
@@ -64,15 +64,15 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickCloseButton
    * @param {Event} event
    */
-  handleClickCloseButton: function(event) {
+  handleClickCloseButton: function (event) {
     this.close();
   },
   /**
    * @method handleClickSaveButton
    */
-  handleClickSaveButton: function() {
+  handleClickSaveButton: function () {
     let sections = this.vocablist.get('sections');
-    let getVals = function(el) {
+    let getVals = function (el) {
       return $(el).val();
     };
 

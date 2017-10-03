@@ -1,6 +1,6 @@
 const GelatoComponent = require('gelato/component');
 const MnemonicCollection = require('collections/MnemonicCollection');
-const MnemonicModel = require('models/MnemonicModel');
+// const MnemonicModel = require('models/MnemonicModel');
 const vent = require('vent');
 
 /**
@@ -32,7 +32,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.listItemTemplate = require('./StudyPromptMnemonicListItemComponent.jade');
 
     this.collection = new MnemonicCollection();
@@ -46,7 +46,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptVocabMnemonicComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     if (this.collection.length) {
@@ -61,7 +61,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * @param {String} msg the message to the user
    * @param {String} [type] class to add to the message box
    */
-  displayMessage: function(msg, type) {
+  displayMessage: function (msg, type) {
     this.$('#user-message').text(msg)
       .removeClass('hidden alert-success alert-danger alert-warning')
       .addClass(type || 'alert-success');
@@ -72,7 +72,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * @param {jQuery.Event} e the keydown event to stop from propagating
    * @method handleKeydown
    */
-  handleKeydown: function(e) {
+  handleKeydown: function (e) {
     e.stopPropagation();
   },
 
@@ -80,7 +80,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    *
    * @returns {string}
    */
-  getCurrentMnemonicText: function() {
+  getCurrentMnemonicText: function () {
     if (this.collection.vocab && this.collection.vocab.get('mnemonic')) {
       return this.collection.vocab.get('mnemonic').text;
     }
@@ -93,7 +93,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * @returns {Object}
    * @method getValue
    */
-  getValue: function() {
+  getValue: function () {
     return {
       creator: app.user.id,
       public: false,
@@ -107,7 +107,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * @param {Event} event
    * @method handleClickAddMnemonic
    */
-  handleClickAddMnemonic: function(event) {
+  handleClickAddMnemonic: function (event) {
     event.preventDefault();
     const btn = $(event.target);
     const id = btn.data('user');
@@ -126,7 +126,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
     });
   },
 
-  handleClickRemoveMnemonic: function(event) {
+  handleClickRemoveMnemonic: function (event) {
     event.preventDefault();
     this._disableInputs();
     this.saveMnemonic('').then(() => {
@@ -141,7 +141,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * @method handleClickSaveMnemonic
    * @param {jQuery.Event} event click event
    */
-  handleClickSaveMnemonic: function(event) {
+  handleClickSaveMnemonic: function (event) {
     event.preventDefault();
     const mnemonic = this.$('#custom-mnemonic').val().trim();
 
@@ -163,7 +163,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * Renders a list of other user's mnemonics for the current word with the
    * ability for a user to select one.
    */
-  renderMnemonicList: function() {
+  renderMnemonicList: function () {
     let listHTML = '';
     const vocab = this.collection.vocab;
     this.collection.models.forEach((m) => {
@@ -188,17 +188,17 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * @param {Boolean} [isPublic] whether the mnemonic is public
    * @returns {Promise} resolves when the vocab has been updated with the new definition
    */
-  saveMnemonic: function(mnemonic, creator, isPublic) {
+  saveMnemonic: function (mnemonic, creator, isPublic) {
     return new Promise((resolve, reject) => {
       this.collection.vocab.save({mnemonic: {
         creator: creator || app.user.id,
         public: isPublic || false,
         text: mnemonic,
       }}, {
-        success: function() {
+        success: function () {
           resolve();
         },
-        error: function() {
+        error: function () {
           reject();
         },
       });
@@ -209,7 +209,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * Sets the current vocab to set the menmonic for
    * @param {VocabModel} vocab the current vocab
    */
-  setVocab: function(vocab) {
+  setVocab: function (vocab) {
     this.collection.setVocab(vocab);
     this.collection.fetch();
   },
@@ -218,7 +218,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * Enables UI inputs
    * @private
    */
-  _enableInputs: function() {
+  _enableInputs: function () {
     this.$('#remove-mnem').removeClass('disabled');
     this.$('.add-mnemonic').removeClass('disabled');
     this.$('#save').removeClass('disabled');
@@ -229,7 +229,7 @@ const StudyPromptMnemonicSelectorComponent = GelatoComponent.extend({
    * Disables UI inputs
    * @private
    */
-  _disableInputs: function() {
+  _disableInputs: function () {
     this.$('#remove-mnem').addClass('disabled');
     this.$('.add-mnemonic').addClass('disabled');
     this.$('#save').addClass('disabled');

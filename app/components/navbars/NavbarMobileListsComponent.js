@@ -16,7 +16,7 @@ const NavbarMobileListsComponent = NavbarDefaultComponent.extend({
    *
    * @param event
    */
-  handleToggleMenuClick: function(event) {
+  handleToggleMenuClick: function (event) {
     event.preventDefault();
     vent.trigger('mobileNavMenu:toggle');
   },

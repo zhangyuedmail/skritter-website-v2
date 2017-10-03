@@ -16,7 +16,7 @@ const DashboardStatusComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.errorFetchingDueCount = false;
     this.dueCount = null;
     this.vocablists = app.user.vocablists;
@@ -28,7 +28,7 @@ const DashboardStatusComponent = GelatoComponent.extend({
    * @method render
    * @returns {DashboardStatusComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -36,7 +36,7 @@ const DashboardStatusComponent = GelatoComponent.extend({
   /**
    * @method updateDueCount
    */
-  updateDueCount: function() {
+  updateDueCount: function () {
     let url = app.getApiUrl() + 'items/due';
 
     if (app.config.useV2Gets.itemsdue) {
@@ -53,17 +53,21 @@ const DashboardStatusComponent = GelatoComponent.extend({
         parts: app.user.getFilteredParts().join(','),
         styles: app.user.getFilteredStyles().join(','),
       },
-      error: function(error) {
+      error: function (error) {
         this.dueCount = '-';
         this.errorFetchingDueCount = true;
         this.render();
         this.trigger('fetch-data:failed', 'goal');
       },
-      success: function(result) {
+      success: function (result) {
         let count = 0;
         for (let part in result.due) {
-          for (let style in result.due[part]) {
-            count += result.due[part][style];
+          if (result.due.hasOwnProperty(part)) {
+            for (let style in result.due[part]) {
+              if (result.due[part].hasOwnProperty(style)) {
+                count += result.due[part][style];
+              }
+            }
           }
         }
         this.dueCount = count;

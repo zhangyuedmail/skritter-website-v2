@@ -22,7 +22,7 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {ListSettingsDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -30,7 +30,7 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickClose
    * @param {Event} event
    */
-  handleClickClose: function(event) {
+  handleClickClose: function (event) {
     event.preventDefault();
     this.close();
   },
@@ -38,7 +38,7 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickSave
    * @param {Event} event
    */
-  handleClickSave: function(event) {
+  handleClickSave: function (event) {
     event.preventDefault();
     this.close();
   },

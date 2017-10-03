@@ -29,7 +29,7 @@ const MarketingFooterComponent = GelatoComponent.extend({
    * @param {Object} [options] a map of options for the view
    * @param {String} [options.theme] a CSS class to apply to the footer
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
 
     if (options.theme) {
@@ -41,7 +41,7 @@ const MarketingFooterComponent = GelatoComponent.extend({
    * @method render
    * @returns {MarketingFooterComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     if (this.className) {

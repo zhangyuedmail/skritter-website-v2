@@ -31,7 +31,7 @@ const SyncStatusPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.listenTo(app.user.offline, 'status', this.render);
   },
 
@@ -39,7 +39,7 @@ const SyncStatusPage = GelatoPage.extend({
    * @method render
    * @returns {SyncStatusPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -48,14 +48,14 @@ const SyncStatusPage = GelatoPage.extend({
   /**
    * @method handleResetNow
    */
-  handleResetNow: function() {
+  handleResetNow: function () {
     app.user.offline.uncache();
   },
 
   /**
    * @method handleSyncNow
    */
-  handleSyncNow: function() {
+  handleSyncNow: function () {
     app.user.offline.sync();
   },
 
@@ -63,7 +63,7 @@ const SyncStatusPage = GelatoPage.extend({
    * @method remove
    * @returns {SyncStatusPage}
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
   },
 

@@ -28,7 +28,7 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.vocablists = options.vocablists;
     this.listenTo(this.vocablists, 'state', this.render);
   },
@@ -37,7 +37,7 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistsAddingTableComponent}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsAddingTable.jade');
     }
@@ -51,7 +51,7 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
    * @method handleClickStopAddingLink
    * @param {Event} event
    */
-  handleClickStopAddingLink: function(event) {
+  handleClickStopAddingLink: function (event) {
     event.preventDefault();
 
     const listID = $(event.target).closest('.row').data('list-id');
@@ -65,7 +65,7 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
    * @method handleClickListSettingsSpan
    * @param {Event} event
    */
-  handleClickListSettingsSpan: function(event) {
+  handleClickListSettingsSpan: function (event) {
     event.preventDefault();
 
     const listID = $(event.target).closest('.row').data('list-id');
@@ -79,7 +79,7 @@ const VocablistsAddingTableComponent = GelatoComponent.extend({
    * @method handleClickRemoveListSpan
    * @param {Event} event
    */
-  handleClickRemoveListSpan: function(event) {
+  handleClickRemoveListSpan: function (event) {
     event.preventDefault();
 
     const listID = $(event.target).closest('.row').data('list-id');

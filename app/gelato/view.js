@@ -8,7 +8,7 @@ let GelatoView = Backbone.View.extend({
    * Instantiates certain instance variables so they are setup correctly for inheritance
    * @param {Object} [options]
    */
-  constructor: function(options) {
+  constructor: function (options) {
     /**
      * Dictionary that contains subviews this view manages
      * @property _views
@@ -35,7 +35,7 @@ let GelatoView = Backbone.View.extend({
    * @param {String} [selector]
    * @returns {GelatoView}
    */
-  disableForm: function(selector) {
+  disableForm: function (selector) {
     this.$((selector ? selector + ' ' : '') + ':input').prop('disabled', true);
     return this;
   },
@@ -44,7 +44,7 @@ let GelatoView = Backbone.View.extend({
    * @param {String} [selector]
    * @returns {GelatoView}
    */
-  enableForm: function(selector) {
+  enableForm: function (selector) {
     this.$((selector ? selector + ' ' : '') + ':input').prop('disabled', false);
     return this;
   },
@@ -53,7 +53,7 @@ let GelatoView = Backbone.View.extend({
    * @method getHeight
    * @returns {Number}
    */
-  getHeight: function() {
+  getHeight: function () {
     return this.$view.height();
   },
 
@@ -61,7 +61,7 @@ let GelatoView = Backbone.View.extend({
    * @method getWidth
    * @returns {Number}
    */
-  getWidth: function() {
+  getWidth: function () {
     return this.$view.width();
   },
 
@@ -69,7 +69,7 @@ let GelatoView = Backbone.View.extend({
    * @method handleClickHref
    * @param {Event} event
    */
-  handleClickHref: function(event) {
+  handleClickHref: function (event) {
     let target = Backbone.$(event.currentTarget);
     let href = target.attr('href');
     let ignore = target.data('ignore');
@@ -101,7 +101,7 @@ let GelatoView = Backbone.View.extend({
    * @returns {Object} a merged, unique object that holds all variables
    *                    available to a template at render time.
    */
-  getContext: function(context) {
+  getContext: function (context) {
     const globals = require('globals') || {};
     const appState = {
       app: window.app,
@@ -118,7 +118,7 @@ let GelatoView = Backbone.View.extend({
    * @method hide
    * @returns {GelatoView}
    */
-  hide: function() {
+  hide: function () {
     this.$view.hide(arguments.length ? arguments : 0);
     return this;
   },
@@ -129,7 +129,7 @@ let GelatoView = Backbone.View.extend({
    * @param {Object} [context]
    * @returns {Object}
    */
-  parseTemplate: function(template, context) {
+  parseTemplate: function (template, context) {
     if (typeof template === 'function') {
       return template(this.getContext(context));
     }
@@ -141,7 +141,7 @@ let GelatoView = Backbone.View.extend({
    * @method remove
    * @returns {GelatoView}
    */
-  remove: function() {
+  remove: function () {
     this.stopListening();
     this.undelegateEvents();
 
@@ -162,7 +162,7 @@ let GelatoView = Backbone.View.extend({
    * @method render
    * @returns {GelatoView}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -174,13 +174,13 @@ let GelatoView = Backbone.View.extend({
    * @param {Object} [context]
    * @returns {GelatoView}
    */
-  renderTemplate: function(context) {
+  renderTemplate: function (context) {
     this.$view = Backbone.$(this.parseTemplate(this.template, context));
     this.$el.html(this.$view);
     this.$('a[href]').on('click', this.handleClickHref);
-    Backbone.$(window).on('resize.View', (function(event) {
+    Backbone.$(window).on('resize.View', (function (event) {
       clearTimeout(this._resize);
-      this._resize = setTimeout((function() {
+      this._resize = setTimeout((function () {
         this._resize = null;
         this.trigger('resize', event);
       }).bind(this), 200);
@@ -193,7 +193,7 @@ let GelatoView = Backbone.View.extend({
    * @method show
    * @returns {GelatoView}
    */
-  show: function() {
+  show: function () {
     this.$view.show(arguments.length ? arguments : 0);
     return this;
   },

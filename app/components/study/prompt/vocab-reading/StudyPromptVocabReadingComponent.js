@@ -25,7 +25,7 @@ const StudyPromptVocabReadingComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
     this.visible = false;
   },
@@ -34,7 +34,7 @@ const StudyPromptVocabReadingComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptVocabReadingComponent}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileStudyPromptVocabReadingComponent.jade');
     }
@@ -58,7 +58,7 @@ const StudyPromptVocabReadingComponent = GelatoComponent.extend({
    * @method handleClickShowReading
    * @param {Event} event
    */
-  handleClickShowReading: function(event) {
+  handleClickShowReading: function (event) {
     event.preventDefault();
     let $reading = $(event.target).parent('.reading');
     let position = parseInt($reading.data('position'), 10);

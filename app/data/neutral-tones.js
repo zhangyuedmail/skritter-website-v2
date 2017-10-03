@@ -155,7 +155,7 @@ let words = {
  * @method getStrings
  * @returns {Array}
  */
-function getStrings() {
+function getStrings () {
   return strings.split('');
 }
 
@@ -164,7 +164,7 @@ function getStrings() {
  * @param {String} character
  * @returns {Object}
  */
-function getWords(character) {
+function getWords (character) {
   return words[character] || [];
 }
 
@@ -175,7 +175,7 @@ function getWords(character) {
  * @param {Number} index
  * @returns {Boolean}
  */
-function isWimp(character, word, index) {
+function isWimp (character, word, index) {
   if (word.length > 1) {
     if (index + 1 === word.length) {
       if (this.getStrings().indexOf(character) > -1) {

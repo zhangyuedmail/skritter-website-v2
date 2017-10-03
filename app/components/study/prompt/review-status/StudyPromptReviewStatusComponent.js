@@ -25,7 +25,7 @@ const StudyPromptReviewStatusComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
   },
 
@@ -33,7 +33,7 @@ const StudyPromptReviewStatusComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptReviewStatusComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.stopListening();
     this.listenTo(this.prompt.page.items.reviews, 'add', this.render);
@@ -45,7 +45,7 @@ const StudyPromptReviewStatusComponent = GelatoComponent.extend({
    * @method handleClickSaveReviews
    * @param {Event} event
    */
-  handleClickSaveReviews: function(event) {
+  handleClickSaveReviews: function (event) {
     event.preventDefault();
     this.prompt.page.items.reviews.post();
   },

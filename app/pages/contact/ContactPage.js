@@ -37,7 +37,7 @@ const ContactPage = GelatoPage.extend({
    * @method render
    * @returns {ContactPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     if (app.user.isLoggedIn()) {
       this.$('#field-email').val(app.user.get('email'));
@@ -50,7 +50,7 @@ const ContactPage = GelatoPage.extend({
    * @method getFormData
    * @returns {Object}
    */
-  getFormData: function() {
+  getFormData: function () {
     return {
       email: this.$('#field-email').val(),
       message: this.$('#field-message').val(),
@@ -62,7 +62,7 @@ const ContactPage = GelatoPage.extend({
    * @method handleClickContactSubmit
    * @param {Event} event
    */
-  handleClickContactSubmit: function(event) {
+  handleClickContactSubmit: function (event) {
     event.preventDefault();
     let formData = this.getFormData();
     if (_.isEmpty(formData.email)) {
@@ -103,7 +103,7 @@ const ContactPage = GelatoPage.extend({
    * @method remove
    * @returns {ContactPage}
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
   },
 

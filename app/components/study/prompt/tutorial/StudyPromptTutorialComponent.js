@@ -29,7 +29,7 @@ const StudyPromptTutorialComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
   },
 
@@ -37,7 +37,7 @@ const StudyPromptTutorialComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptTutorialComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -46,7 +46,7 @@ const StudyPromptTutorialComponent = GelatoComponent.extend({
    * @method setMessage
    * @param {String} value
    */
-  setMessage: function(value) {
+  setMessage: function (value) {
     this.message = value;
     this.render();
   },

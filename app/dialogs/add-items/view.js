@@ -22,7 +22,7 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {AddItemsDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -30,7 +30,7 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickButtonAdd
    * @param {Event} event
    */
-  handleClickButtonAdd: function(event) {
+  handleClickButtonAdd: function (event) {
     event.preventDefault();
     let $button = $(event.target);
     this.trigger('add', parseInt($button.data('value'), 10));
@@ -39,7 +39,7 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
     this.close();
   },

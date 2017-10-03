@@ -24,7 +24,7 @@ module.exports = BootstrapDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.choseVacation = false;
     this.subscription = options.subscription;
   },
@@ -33,7 +33,7 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {ListSettingsDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -42,7 +42,7 @@ module.exports = BootstrapDialog.extend({
   /**
    * @method handleClickGoOnVacationLink
    */
-  handleClickGoOnVacationLink: function() {
+  handleClickGoOnVacationLink: function () {
     this.choseVacation = true;
     this.close();
   },
@@ -50,7 +50,7 @@ module.exports = BootstrapDialog.extend({
   /**
    * @method handleClickSubmitButton
    */
-  handleClickSubmitButton: function() {
+  handleClickSubmitButton: function () {
     let service = this.subscription.get('subscribed');
 
     if (!_.includes(['stripe', 'gplay'], service)) {
@@ -60,7 +60,7 @@ module.exports = BootstrapDialog.extend({
     $.when(
       this.requestUnsubscribe(),
       this.requestUpdateReceiveNewsletter()
-    ).done(function() {
+    ).done(function () {
       if (app.user.getAccountAgeBy('days') > 7) {
         app.mixpanel.track('Unsubscribe', {'Trial': false});
       } else {
@@ -74,7 +74,7 @@ module.exports = BootstrapDialog.extend({
    * @method requestUnsubscribe
    * @return {jqxhr}
    */
-  requestUnsubscribe: function() {
+  requestUnsubscribe: function () {
     let service = this.subscription.get('subscribed');
     let url = app.getApiUrl() + this.subscription.url() + '/' + service + '/cancel';
     let headers = app.user.session.getHeaders();
@@ -90,7 +90,7 @@ module.exports = BootstrapDialog.extend({
   /**
    * @method requestUpdateReceiveNewsletter
    */
-  requestUpdateReceiveNewsletter: function() {
+  requestUpdateReceiveNewsletter: function () {
     let input = this.$('#receive-newsletters');
     let receiveNewsletters = input.is(':checked');
 

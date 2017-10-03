@@ -1,11 +1,45 @@
 {
   "env": {
     "browser": true,
-    "es6": true,
     "node": true
   },
   "extends": ["eslint:recommended", "google"],
+  "globals": {
+    "_": true,
+    "$": true,
+    "app": true,
+    "async": true,
+    "createjs": true,
+    "keypress": true,
+    "ga": true,
+    "mixpanel": true,
+    "moment": true,
+    "wanakana": true,
+    "plugins": true,
+    "Backbone": true,
+    "CalHeatMap": true,
+    "Dexie": true,
+    "Highcharts": true,
+    "Howler": true,
+    "HS": true,
+    "Media": true,
+    "Promise": true,
+    "Raven": true,
+    "ScreenLoader": true,
+    "StatusBar": true,
+    "Stripe": true,
+    "WebFont": true,
+    "YT": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 8
+  },
   "rules": {
-    "max-len": [1, {"ignoreComments": true, "ignoreTrailingComments": true}]
+    "max-len": [0],
+    "no-console": [0],
+    "prefer-rest-params": [0],
+    "require-jsdoc": [0],
+    "space-before-function-paren": [1, "always"],
+    "valid-jsdoc": [0]
   }
 }

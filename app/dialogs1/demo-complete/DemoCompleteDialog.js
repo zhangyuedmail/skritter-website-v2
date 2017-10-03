@@ -9,7 +9,7 @@ module.exports = GelatoDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
   },
   /**
    * @property events
@@ -28,7 +28,7 @@ module.exports = GelatoDialog.extend({
    * @method render
    * @returns {DemoCallToActionDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -36,10 +36,10 @@ module.exports = GelatoDialog.extend({
    * @method handleClickButtonBack
    * @param {Event} event
    */
-  handleClickButtonBack: function(event) {
+  handleClickButtonBack: function (event) {
     event.preventDefault();
     this.close();
-    this.once('hidden', function() {
+    this.once('hidden', function () {
       app.router.navigate('', {trigger: true});
     });
   },
@@ -47,10 +47,10 @@ module.exports = GelatoDialog.extend({
    * @method handleClickButtonSignup
    * @param {Event} event
    */
-  handleClickButtonSignup: function(event) {
+  handleClickButtonSignup: function (event) {
     event.preventDefault();
     this.close();
-    this.once('hidden', function() {
+    this.once('hidden', function () {
       app.router.navigate('signup', {trigger: true});
     });
   },

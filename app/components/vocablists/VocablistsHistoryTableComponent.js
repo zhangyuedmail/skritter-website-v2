@@ -16,13 +16,13 @@ const VocablistsHistoryTableComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.history = options.history;
 
     this.listenTo(this.history, 'state', this.render);
   },
 
-  getHistory: function() {
+  getHistory: function () {
     this.history.fetch();
   },
 
@@ -30,7 +30,7 @@ const VocablistsHistoryTableComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistsHistoryTableComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.delegateEvents();
 

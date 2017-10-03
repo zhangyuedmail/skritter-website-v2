@@ -2221,15 +2221,15 @@ let data = [
 ];
 
 module.exports = {
-  getData: function() {
+  getData: function () {
     return _.map(
       data,
-      function(row) {
+      function (row) {
         let strokeData = _
           .chain(row.strokes)
           .flatten()
           .map(
-            function(stroke, index) {
+            function (stroke, index) {
               return {
                 strokeId: index,
                 shapeId: stroke[0],
@@ -2247,12 +2247,12 @@ module.exports = {
         let strokeVariations = _
           .chain(row.strokes)
           .map(
-            function(stroke, index) {
+            function (stroke, index) {
               return {
                 variationId: index,
                 strokeIds: _.map(
                   stroke,
-                  function() {
+                  function () {
                     count++;
 
                     return count;

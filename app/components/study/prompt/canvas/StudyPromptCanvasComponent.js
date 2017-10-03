@@ -45,7 +45,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     _.bindAll(this, 'onDisplayStageTick', 'onInputMove');
 
     this.brushScale = 0.025;
@@ -93,7 +93,7 @@ this.stopAnimations();
    * @method render
    * @returns {StudyPromptCanvasComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this.inputStage = this.createStage('input-canvas', true);
@@ -117,7 +117,7 @@ this.stopAnimations();
    * @param {String} name
    * @returns {StudyPromptCanvasComponent}
    */
-  clearLayer: function(name) {
+  clearLayer: function (name) {
     const layer = this.getLayer(name);
     const stage = _layerMap[name];
 
@@ -137,7 +137,7 @@ this.stopAnimations();
    * @param {String} name the name of the layer to create
    * @returns {createjs.Container}
    */
-  createLayer: function(stage, name) {
+  createLayer: function (stage, name) {
     const layer = new createjs.Container();
     layer.name = 'layer-' + name;
     stage.addChild(layer);
@@ -158,7 +158,7 @@ this.stopAnimations();
    * @method createStage
    * @returns {createjs.Stage}
    */
-  createStage(canvasId, enableDOMEvents, tickerOptions) {
+  createStage (canvasId, enableDOMEvents, tickerOptions) {
     const canvas = this.$('#' + canvasId).get(0);
     let stage;
     tickerOptions = tickerOptions || {};
@@ -206,7 +206,7 @@ this.stopAnimations();
   /**
    * Creates layers in the appropriate canvas stages
    */
-  createStageLayers: function() {
+  createStageLayers: function () {
     this.createLayer(this.backgroundStage, 'character-grid');
 
     this.createLayer(this.displayStage, 'character-hint');
@@ -222,7 +222,7 @@ this.stopAnimations();
    * @method disableCanvas
    * @returns {Canvas}
    */
-  disableCanvas: function() {
+  disableCanvas: function () {
     this.inputStage.removeEventListener('stagemousedown', _.bind(this.triggerCanvasMouseDown, this));
     this.inputStage.removeEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
     return this;
@@ -232,7 +232,7 @@ this.stopAnimations();
    * @method disableGrid
    * @returns {StudyPromptCanvasComponent}
    */
-  disableGrid: function() {
+  disableGrid: function () {
     this.clearLayer('character-grid');
     this.grid = false;
     return this;
@@ -242,7 +242,7 @@ this.stopAnimations();
    * @method disableInput
    * @returns {StudyPromptCanvasComponent}
    */
-  disableInput: function() {
+  disableInput: function () {
     this.$('#input-canvas').off('.Input');
     this.inputStage.removeEventListener('stagemousedown', this.downListener);
     this.inputStage.removeEventListener('stagemousemove', this.moveListener);
@@ -260,7 +260,7 @@ this.stopAnimations();
    * @param {Object} options
    * @returns {createjs.Shape}
    */
-  drawCircle: function(layerName, x, y, radius, options) {
+  drawCircle: function (layerName, x, y, radius, options) {
     const circle = new createjs.Shape();
 
     options = options ? options : {};
@@ -284,7 +284,7 @@ this.stopAnimations();
    * @method drawGrid
    * @returns {StudyPromptCanvasComponent}
    */
-  drawGrid: function() {
+  drawGrid: function () {
     const grid = new createjs.Shape();
 
     this.clearLayer('character-grid');
@@ -311,7 +311,7 @@ this.stopAnimations();
    * @param {Object} [options]
    * @returns {createjs.Text}
    */
-  drawCharacter: function(layerName, character, options) {
+  drawCharacter: function (layerName, character, options) {
     options = options || {};
     options.color = options.color || '#000000';
     options.font = options.font || 'Arial';
@@ -336,7 +336,7 @@ this.stopAnimations();
    * @param {Object} [options]
    * @returns {createjs.Shape}
    */
-  drawShape: function(layerName, shape, options) {
+  drawShape: function (layerName, shape, options) {
     options = options || {};
 
     if (options.color) {
@@ -353,7 +353,7 @@ this.stopAnimations();
    * @method enableCanvas
    * @returns {Canvas}
    */
-  enableCanvas: function() {
+  enableCanvas: function () {
     this.inputStage.addEventListener('stagemousedown', _.bind(this.triggerCanvasMouseDown, this));
     this.inputStage.addEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
     return this;
@@ -363,7 +363,7 @@ this.stopAnimations();
    * @method disableGrid
    * @returns {StudyPromptCanvasComponent}
    */
-  enableGrid: function() {
+  enableGrid: function () {
     this.drawGrid();
     this.grid = true;
     return this;
@@ -377,14 +377,14 @@ this.stopAnimations();
    * @TODO refactor these inner functions and local vars into instance fns
    * and variables--this function does too much!
    */
-  enableInput: function() {
+  enableInput: function () {
     const self = this;
     const strokeSize = this.size * this.brushScale;
 
     this.disableInput();
     this.downListener = self.inputStage.addEventListener('stagemousedown', onInputDown);
 
-    function onInputDown(event) {
+    function onInputDown (event) {
       self.points = [];
       self.marker = new createjs.Shape();
       self.marker.graphics.setStrokeStyle(strokeSize, 'round', 'round');
@@ -400,7 +400,7 @@ this.stopAnimations();
       self.canvasDirty = true;
       self.inputStage.update();
 
-      function updateInputStage() {
+      function updateInputStage () {
         if (self.canvasDirty) {
           self.inputStage.update();
           self.canvasDirty = false;
@@ -414,11 +414,11 @@ this.stopAnimations();
       self.leaveListener = self.inputStage.addEventListener('mouseleave', onInputLeave);
     }
 
-    function onInputLeave(event) {
+    function onInputLeave (event) {
       onInputUp(event);
     }
 
-    function onInputUp(event) {
+    function onInputUp (event) {
       self.inputStage.removeEventListener('stagemousemove', self.onInputMove);
       self.inputStage.removeEventListener('stagemouseup', onInputUp);
       self.inputStage.removeEventListener('mouseleave', onInputLeave);
@@ -449,7 +449,7 @@ this.stopAnimations();
    * Handles input down movement that draws a line on the canvas
    * @param event
    */
-  onInputMove: function(event) {
+  onInputMove: function (event) {
     const strokeSize = this.size * this.brushScale;
 
     const point = new createjs.Point(event.stageX, event.stageY);
@@ -479,7 +479,7 @@ this.stopAnimations();
    * @param {Object} [options]
    * @param {Function} [callback]
    */
-  fadeLayer: function(layerName, options, callback) {
+  fadeLayer: function (layerName, options, callback) {
     const layer = this.getLayer(layerName);
     let animRemoved = false;
     options = options || {};
@@ -513,7 +513,7 @@ this.stopAnimations();
    * @param {Object} [options]
    * @param {Function} [callback]
    */
-  fadeShape: function(layerName, shape, options, callback) {
+  fadeShape: function (layerName, shape, options, callback) {
     const layer = this.getLayer(layerName);
     options = options || {};
     options.easing = options.easing || this.defaultFadeEasing;
@@ -537,7 +537,7 @@ this.stopAnimations();
    * @param {String} name
    * @returns {createjs.Container}
    */
-  getLayer: function(name) {
+  getLayer: function (name) {
     const stage = _layerMap[name];
     return stage.getChildByName('layer-' + name);
   },
@@ -547,10 +547,10 @@ this.stopAnimations();
    * @param {createjs.Container|createjs.Shape} object
    * @param {String} color
    */
-  injectColor: function(object, color) {
+  injectColor: function (object, color) {
     let customFill = new createjs.Graphics.Fill(color);
     let customStroke = new createjs.Graphics.Stroke(color);
-    (function inject(object) {
+    (function inject (object) {
       if (object.children) {
         for (let i = 0, length = object.children.length; i < length; i++) {
           inject(object.children[i]);
@@ -578,7 +578,7 @@ this.stopAnimations();
    * @param {String} color
    * @returns {StudyPromptCanvasComponent}
    */
-  injectLayerColor: function(layerName, color) {
+  injectLayerColor: function (layerName, color) {
     return this.injectColor(this.getLayer(layerName), color);
   },
 
@@ -586,7 +586,7 @@ this.stopAnimations();
    * Performs dirty check logic to determine if the canvas is dirty and needs
    * to be updated on the tick
    */
-  onDisplayStageTick: function(event) {
+  onDisplayStageTick: function (event) {
     if (!event.paused) {
       this.displayStage.update();
     }
@@ -596,12 +596,12 @@ this.stopAnimations();
    * @method remove
    * @returns {StudyPromptCanvasComponent}
    */
-  remove: function() {
+  remove: function () {
     $('#fps-counter').remove();
     return GelatoComponent.prototype.remove.call(this);
   },
 
-  removeTweensFromLayer: function(layerName) {
+  removeTweensFromLayer: function (layerName) {
     const layer = this.getLayer(layerName);
     createjs.Tween.removeTweens(layer);
   },
@@ -610,7 +610,7 @@ this.stopAnimations();
    * @method reset
    * @returns {StudyPromptCanvasComponent}
    */
-  reset: function() {
+  reset: function () {
     clearTimeout(this.mouseTapTimeout);
 
     // this.inputStage.children.forEach((layer) => {
@@ -637,7 +637,7 @@ this.stopAnimations();
    * @method resize
    * @returns {StudyPromptCanvasComponent}
    */
-  resize: function(size) {
+  resize: function (size) {
     if (size) {
       this.canvasSizeOverride = size;
     }
@@ -682,7 +682,7 @@ this.stopAnimations();
    * Adds an animation to the animation queue
    * @param {String} name the name of the type of animation to start
    */
-  startAnimation(name) {
+  startAnimation (name) {
     _animations.push(name);
 
     this._startOrStopTicker();
@@ -692,7 +692,7 @@ this.stopAnimations();
    * Stops all current animations and updates the ticker
    * @param {String[]} [names] names of animations to finish
    */
-  stopAnimations(names) {
+  stopAnimations (names) {
     names = names || [];
 
     for (let i = 0; i < names.length; i++) {
@@ -711,7 +711,7 @@ this.stopAnimations();
    * animations still playing
    * @private
    */
-  _startOrStopTicker() {
+  _startOrStopTicker () {
       this.displayStage.ticker.paused = !_animations.length;
   },
 
@@ -721,7 +721,7 @@ this.stopAnimations();
    * @param {Array} path
    * @param {Object} [options]
    */
-  tracePath: function(layerName, path, options) {
+  tracePath: function (layerName, path, options) {
     options = options || {};
 
     if (!options.perservePrevTracingCircle && _tracingCircle.circle) {
@@ -755,7 +755,7 @@ this.stopAnimations();
    * @method triggerCanvasMouseDown
    * @param {Object} event
    */
-  triggerCanvasMouseDown: function(event) {
+  triggerCanvasMouseDown: function (event) {
     event.preventDefault();
     this.mouseDownEvent = event;
     this.trigger('mousedown', event);
@@ -765,7 +765,7 @@ this.stopAnimations();
    * @method triggerCanvasMouseUp
    * @param {Object} event
    */
-  triggerCanvasMouseUp: function(event) {
+  triggerCanvasMouseUp: function (event) {
     event.preventDefault();
 
     this.mouseLastDownEvent = this.mouseDownEvent;
@@ -809,7 +809,7 @@ this.stopAnimations();
 
     if (this.mouseUpEvent) {
       if (lineDistance < 5 && lineDuration < 1000) {
-        this.mouseTapTimeout = setTimeout((function() {
+        this.mouseTapTimeout = setTimeout((function () {
           this.trigger('tap', event);
         }).bind(this), 200);
       }
@@ -822,7 +822,7 @@ this.stopAnimations();
    * @method triggerInputDown
    * @param {createjs.Point} point
    */
-  triggerInputDown: function(point) {
+  triggerInputDown: function (point) {
     this.trigger('input:down', point);
   },
 
@@ -830,7 +830,7 @@ this.stopAnimations();
    * @method triggerInputMove
    * @param {createjs.Point} point
    */
-  triggerInputMove: function(point) {
+  triggerInputMove: function (point) {
     this.trigger('input:move', point);
   },
 
@@ -839,7 +839,7 @@ this.stopAnimations();
    * @param {Array} points
    * @param {createjs.Shape} shape
    */
-  triggerInputUp: function(points, shape) {
+  triggerInputUp: function (points, shape) {
     this.trigger('input:up', points, shape);
   },
 
@@ -847,7 +847,7 @@ this.stopAnimations();
    * @method triggerNavigateNext
    * @param {Event} event
    */
-  triggerNavigateNext: function(event) {
+  triggerNavigateNext: function (event) {
     event.preventDefault();
     this.stopAnimations();
     this.trigger('navigate:next');
@@ -857,7 +857,7 @@ this.stopAnimations();
    * @method triggerNavigatePrevious
    * @param {Event} event
    */
-  triggerNavigatePrevious: function(event) {
+  triggerNavigatePrevious: function (event) {
     event.preventDefault();
     this.stopAnimations();
     this.trigger('navigate:previous');
@@ -872,7 +872,7 @@ this.stopAnimations();
    * @param {Function} [callback]
    * @returns {StudyPromptCanvasComponent}
    */
-  tweenShape: function(layerName, fromShape, toShape, options, callback) {
+  tweenShape: function (layerName, fromShape, toShape, options, callback) {
     const bounds = fromShape.getBounds();
     const layer = this.getLayer(layerName);
 

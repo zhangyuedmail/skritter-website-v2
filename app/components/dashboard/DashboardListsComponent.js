@@ -26,7 +26,7 @@ const DashboardListsComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.vocablist = null;
     this.vocablists = new Vocablists();
     this.listenTo(this.vocablists, 'state', this.render);
@@ -45,7 +45,7 @@ const DashboardListsComponent = GelatoComponent.extend({
    * @method render
    * @returns {DashboardListsComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -54,7 +54,7 @@ const DashboardListsComponent = GelatoComponent.extend({
    * @method handleClickVocablistSections
    * @param {Event} event
    */
-  handleClickVocablistSections: function(event) {
+  handleClickVocablistSections: function (event) {
     event.preventDefault();
     let $row = $(event.target).closest('.row');
     let attributes = {id: $row.data('list-id')};
@@ -67,7 +67,7 @@ const DashboardListsComponent = GelatoComponent.extend({
    * @method handleClickShowLists
    * @param {Event} event
    */
-  handleClickShowLists: function(event) {
+  handleClickShowLists: function (event) {
     event.preventDefault();
     this.vocablist = null;
     this.listenToOnce(this.vocablist, 'state:standby', this.render);

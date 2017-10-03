@@ -8,22 +8,22 @@ const config = require('config');
  * @class StudyToolbarStopwatch
  * @constructor
  */
-function Stopwatch() {
+function Stopwatch () {
   let startAt = 0;
   let lapTime = 0;
   let startTime = 0;
 
-  this.start = function() {
+  this.start = function () {
     startAt = startAt ? startAt : new Date().getTime();
     startTime = new Date().getTime();
   };
 
-  this.stop = function() {
+  this.stop = function () {
     lapTime = startAt ? lapTime + new Date().getTime() - startAt : lapTime;
     startAt = 0;
   };
 
-  this.reset = function() {
+  this.reset = function () {
     lapTime = startAt = 0;
   };
 
@@ -31,7 +31,7 @@ function Stopwatch() {
    * Gets the total time recorded by this timer
    * @return {number}
    */
-  this.time = function() {
+  this.time = function () {
     return lapTime + (startAt ? new Date().getTime() - startAt : 0);
   };
 
@@ -39,7 +39,7 @@ function Stopwatch() {
    * Gets the duration the timer has been running since it was last started.
    * @return {number} the number of ms elapsed
    */
-  this.getRunningTime = function() {
+  this.getRunningTime = function () {
     return (new Date().getTime() - startTime);
   };
 }
@@ -60,7 +60,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
 
     this.showIcon = options.showIcon;
@@ -80,7 +80,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @method remove
    * @returns {StudyToolbarTimerComponent}
    */
-  remove: function() {
+  remove: function () {
     this.interval = clearInterval(this.interval);
 
     return GelatoComponent.prototype.remove.call(this);
@@ -90,7 +90,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyToolbarTimerComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -100,7 +100,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @method addLocalOffset
    * @param {Number} value
    */
-  addLocalOffset: function(value) {
+  addLocalOffset: function (value) {
     this.localOffset += value;
     this.update();
   },
@@ -109,7 +109,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @method addServerOffset
    * @param {Number} value
    */
-  addServerOffset: function(value) {
+  addServerOffset: function (value) {
     this.serverOffset += value;
     this.update();
   },
@@ -118,7 +118,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @method getOffset
    * @returns {Number}
    */
-  getOffset: function() {
+  getOffset: function () {
     return (this.localOffset + this.serverOffset) * 1000;
   },
 
@@ -127,7 +127,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @param {Boolean} [printable] whether to return a user-friendly string representation of the time spent
    * @return {number|string} number of seconds the timer has been running, or a formatted string of that value
    */
-  getTotalRunningTime: function(printable) {
+  getTotalRunningTime: function (printable) {
     const totalRunningTime = this.stopwatch.time() + this.getOffset();
     const totalRunningSeconds = totalRunningTime / 1000 >> 0;
 
@@ -138,7 +138,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @method isStarted
    * @returns {Boolean}
    */
-  isStarted: function() {
+  isStarted: function () {
     return this.interval ? true : false;
   },
 
@@ -146,14 +146,14 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @method isStopped
    * @returns {Boolean}
    */
-  isStopped: function() {
+  isStopped: function () {
     return this.interval ? false : true;
   },
 
   /**
    * @method reset
    */
-  reset: function() {
+  reset: function () {
     this.stopwatch.reset();
     this.lapOffset = 0;
   },
@@ -162,7 +162,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @method setLocalOffset
    * @param {Number} value
    */
-  setLocalOffset: function(value) {
+  setLocalOffset: function (value) {
     this.localOffset = value;
     this.update();
   },
@@ -171,7 +171,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @method setServerOffset
    * @param {Number} value
    */
-  setServerOffset: function(value) {
+  setServerOffset: function (value) {
     this.serverOffset = value;
     this.update();
   },
@@ -183,7 +183,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * @param {ReviewCollection} [reviews] the current reviews
    * @method start
    */
-  start: function(reviews) {
+  start: function (reviews) {
     if (reviews && reviews.part) {
       this.promptType = reviews.part;
 
@@ -203,7 +203,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * Stops the timer if it was running
    * @method stop
    */
-  stop: function() {
+  stop: function () {
     if (this.isStarted()) {
       this.stopwatch.stop();
       this.interval = clearInterval(this.interval);
@@ -215,7 +215,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
    * and if the time display needs to be updated, updates the UI.
    * @method update
    */
-  update: function() {
+  update: function () {
     const time = this.stopwatch.getRunningTime();
     const seconds = time / 1000 >> 0;
     const totalRunningTime = this.stopwatch.time() + this.getOffset();

@@ -55,7 +55,7 @@ const DashboardPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
     }
@@ -102,7 +102,7 @@ const DashboardPage = GelatoPage.extend({
    * @method render
    * @returns {Dashboard}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     if (this._views['month']) {
@@ -128,7 +128,7 @@ const DashboardPage = GelatoPage.extend({
    *
    * @param {String} component the name/key of the component loaded
    */
-  onComponentLoaded: function(component) {
+  onComponentLoaded: function (component) {
     this.componentsLoaded[component] = true;
 
     if (this.loadAlreadyTimed) {
@@ -151,20 +151,20 @@ const DashboardPage = GelatoPage.extend({
   /**
    * Opens a dialog the user can leave app feedback in.
    */
-  onFeedbackBtnClicked: function() {
+  onFeedbackBtnClicked: function () {
     app.showFeedbackDialog();
   },
 
   /**
    * Opens the goal setting dialog for goal component options.
    */
-  onGoalSettingClicked: function(event) {
+  onGoalSettingClicked: function (event) {
     event.preventDefault();
 
     app.router.navigate('account/settings/study', {trigger: true});
   },
 
-  onRatingBtnClicked: function() {
+  onRatingBtnClicked: function () {
     if (app.isAndroid()) {
       if (app.getLanguage() === 'zh') {
         plugins.core.openGooglePlay('com.inkren.skritter.chinese');
@@ -187,14 +187,14 @@ const DashboardPage = GelatoPage.extend({
     app.user.cache();
   },
 
-  onRatingCancelBtnClicked: function() {
+  onRatingCancelBtnClicked: function () {
     this.$('.rating-notice').hide();
 
     app.user.set('hideRatingNotice', true);
     app.user.cache();
   },
 
-  onSubscriptionSync: function(sub) {
+  onSubscriptionSync: function (sub) {
     const $ratingNotice = this.$('.rating-notice');
 
     if (app.user.get('hideRatingNotice')) {

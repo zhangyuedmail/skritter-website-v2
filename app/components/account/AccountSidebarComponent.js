@@ -16,9 +16,9 @@ const AccountSidebarComponent = GelatoComponent.extend({
    * @method render
    * @returns {AccountSidebarComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
-    $.each(this.$('.options a'), function(i, el) {
+    $.each(this.$('.options a'), function (i, el) {
       if ($(el).attr('href') === document.location.pathname) {
         $(el).addClass('active');
       }

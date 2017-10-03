@@ -1,38 +1,38 @@
 const data = require('../data/pinyin-map');
 const syllables = require('../data/pinyin-syllables');
-const numberSyllables = require('../data/pinyin-number-syllables');
+// const numberSyllables = require('../data/pinyin-number-syllables');
 
-// var re1='(z)';	// Any Single Character 1
-//       var re2='(h)';	// Any Single Character 2
+// var re1='(z)';
+// var re2='(h)';
 //
 // var p = new RegExp(re1+re2,["i"]);
 // var m = p.exec(txt);
 
-function analyzePinyinAnswer(answer, correctAnswer) {
-  // regex uses a greedy algorithm, put larger initials first
-  let doubleInitials = /(zh)|(ch)|(sh)/;
-  let initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)/;
+// function analyzePinyinAnswer(answer, correctAnswer) {
+//   // regex uses a greedy algorithm, put larger initials first
+//   let doubleInitials = /(zh)|(ch)|(sh)/;
+//   let initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)/;
 
-  let initial = answer.substr(0, 2);
+//   let initial = answer.substr(0, 2);
 
-  return {};
-}
+//   return {};
+// }
 
 /**
  * @method getData
  * @returns {Object}
  */
-function getData() {
+function getData () {
   return data;
 }
 
-function getPinyinArray() {
-  let pinyin = [];
-  for (let item in data) {
-    pinyin.push(data[item].pinyin);
-  }
-  return pinyin;
-}
+// function getPinyinArray() {
+//   let pinyin = [];
+//   for (let item in data) {
+//     pinyin.push(data[item].pinyin);
+//   }
+//   return pinyin;
+// }
 
 /**
  * @method pinyinToTone
@@ -40,7 +40,7 @@ function getPinyinArray() {
  * @param {Boolean} [includeSpaces]
  * @returns {String}
  */
-function pinyinToTone(text, includeSpaces) {
+function pinyinToTone (text, includeSpaces) {
   text = text.toLowerCase();
   let textArray = [];
   if (includeSpaces) {
@@ -72,7 +72,7 @@ function pinyinToTone(text, includeSpaces) {
  * @param {Boolean} [excludeTones]
  * @returns {String}
  */
-function pinyinToZhuyin(text, excludeTones) {
+function pinyinToZhuyin (text, excludeTones) {
   text = text.toLowerCase();
 
   let zhuyinArray = [];
@@ -103,13 +103,15 @@ function pinyinToZhuyin(text, excludeTones) {
  * @param {String} text
  * @return {String}
  */
-function removeToneMarks(text) {
+function removeToneMarks (text) {
   text = text.toLowerCase();
 
   for (let syllable in syllables) {
-    let letter = syllables[syllable];
-    text = text.replace(syllable, letter);
+    if (syllables.hasOwnProperty(syllable)) {
+      text = text.replace(syllable, syllables[syllable]);
+    }
   }
+
   return text;
 }
 
@@ -119,13 +121,14 @@ function removeToneMarks(text) {
  * @param {String} text
  * @return {Boolean} whether tone-marked vowels are contained.
  */
-function hasToneMarks(text) {
+function hasToneMarks (text) {
   text = text.toLowerCase();
 
   for (let syllable in syllables) {
-    let letter = syllables[syllable];
-    if (text.replace(syllable, letter) !== text) {
-      return true;
+    if (syllables.hasOwnProperty(syllable)) {
+      if (text.replace(syllable, syllables[syllable]) !== text) {
+        return true;
+      }
     }
   }
 
@@ -137,7 +140,7 @@ function hasToneMarks(text) {
  * @param {String} text
  * @return {String}
  */
-function removeToneNumbers(text) {
+function removeToneNumbers (text) {
   text = text.toLowerCase();
   text = text.replace(/[0-9]/g, '');
   text = text.replace(/v/g, 'ü');

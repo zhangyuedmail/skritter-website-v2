@@ -12,7 +12,7 @@ const ExportVocablist = GelatoDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
     this.content = new Content({dialog: this});
     this.vocablist = new Vocablist({id: options.id});
@@ -35,7 +35,7 @@ const ExportVocablist = GelatoDialog.extend({
    * @method render
    * @returns {ExportVocablist}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this.content.setElement('#content-container').render();
@@ -47,7 +47,7 @@ const ExportVocablist = GelatoDialog.extend({
    * @param {String} filename
    * @param {String} text
    */
-  downloadFile: function(filename, text) {
+  downloadFile: function (filename, text) {
     const element = document.createElement('a');
 
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -64,7 +64,7 @@ const ExportVocablist = GelatoDialog.extend({
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
     this.close();
   },
@@ -72,7 +72,7 @@ const ExportVocablist = GelatoDialog.extend({
    * @method handleClickButtonExport
    * @param {Event} event
    */
-  handleClickButtonExport: function(event) {
+  handleClickButtonExport: function (event) {
     event.preventDefault();
 
     let vocabs = new Vocabs(null, {preloadAudio: false});
@@ -118,7 +118,7 @@ const ExportVocablist = GelatoDialog.extend({
         } else {
           const output = _.map(
             vocabs.models,
-            function(vocab) {
+            function (vocab) {
               let line = '';
 
               if (vocab.isChinese()) {

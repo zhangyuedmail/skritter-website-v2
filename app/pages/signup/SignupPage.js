@@ -83,7 +83,7 @@ module.exports = GelatoPage.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     _.bindAll(this, '_saveNewUser');
 
     this.plan = options.plan;
@@ -100,7 +100,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {SignupPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileSignup.jade');
     }
@@ -130,7 +130,7 @@ module.exports = GelatoPage.extend({
    * @param {Object} formData dictionary of user form data
    * @param {Function} callback called when all requests relating to user creation have completed
    */
-  createUser: function(formData, callback) {
+  createUser: function (formData, callback) {
     let self = this;
     let siteRef = app.getRefererId();
 
@@ -165,11 +165,11 @@ module.exports = GelatoPage.extend({
 
     async.series([
       this._saveNewUser,
-      function(callback) {
+      function (callback) {
         app.user.login(
           formData.username,
           formData.password1,
-          function(error) {
+          function (error) {
             if (error) {
               callback(error);
             } else {
@@ -208,7 +208,7 @@ module.exports = GelatoPage.extend({
    * Displays an error messsage about the form data to the user
    * @param {String} message the error to show to the user
    */
-  displayErrorMessage: function(message) {
+  displayErrorMessage: function (message) {
     this.$('#signup-error-alert').html(message).removeClass('hidden');
   },
 
@@ -216,7 +216,7 @@ module.exports = GelatoPage.extend({
    * @method getFormData
    * @returns {Object}
    */
-  getFormData: function() {
+  getFormData: function () {
     return {
       card: {
         expires_month: this.$('#card-month-select').val(),
@@ -235,7 +235,7 @@ module.exports = GelatoPage.extend({
     };
   },
 
-  getTrialExpirationDate: function() {
+  getTrialExpirationDate: function () {
     let expiration = moment().add(7, 'days');
 
     if (this.userReferral) {
@@ -249,7 +249,7 @@ module.exports = GelatoPage.extend({
    * @method handleChangeSignupPaymentMethod
    * @param {Event} event
    */
-  handleChangeSignupPaymentMethod: function(event) {
+  handleChangeSignupPaymentMethod: function (event) {
     event.preventDefault();
     let formData = this.getFormData();
     if (formData.method === 'credit') {
@@ -277,7 +277,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickSignupSubmit
    * @param {Event} event
    */
-  handleClickSignupSubmit: function(event) {
+  handleClickSignupSubmit: function (event) {
     event.preventDefault();
     if (!this.subscribing) {
       this.subscribing = true;
@@ -300,7 +300,7 @@ module.exports = GelatoPage.extend({
     }
   },
 
-  handleClickValidateSchoolEmail: function(event) {
+  handleClickValidateSchoolEmail: function (event) {
     const self = this;
     const formData = this.getFormData();
 
@@ -309,7 +309,9 @@ module.exports = GelatoPage.extend({
       this.$('#signup-email').addClass('alert-warning');
       try {
         this.$('#signup-error-alert')[0].scrollIntoView(false);
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
 
       this.subscribing = false;
       ScreenLoader.hide();
@@ -320,13 +322,13 @@ module.exports = GelatoPage.extend({
     this.$('#signup-error-alert').addClass('hidden');
 
     async.series([
-      function(callback) {
+      function (callback) {
         ScreenLoader.show();
         ScreenLoader.post('Sending validation email');
         self.subscribing = true;
         self.sendValidationEmail(formData.email, callback);
       },
-    ], function(error) {
+    ], function (error) {
       ScreenLoader.hide();
 
       if (error) {
@@ -339,7 +341,7 @@ module.exports = GelatoPage.extend({
     });
   },
 
-  sendValidationEmail: function(email, callback) {
+  sendValidationEmail: function (email, callback) {
     const validationUrl = app.getApiUrl() + 'email-validation/send';
 
     $.ajax({
@@ -349,12 +351,12 @@ module.exports = GelatoPage.extend({
       data: {
         email: email,
       },
-      success: function() {
+      success: function () {
         if (_.isFunction(callback)) {
           callback();
         }
       },
-      error: function(error) {
+      error: function (error) {
         if (_.isFunction(callback)) {
           callback(error);
         }
@@ -366,7 +368,7 @@ module.exports = GelatoPage.extend({
    * Given a coupon code,
    * @param {String} couponCode the code to set the input to
    */
-  setCouponCode: function(couponCode) {
+  setCouponCode: function (couponCode) {
     this.$('.credit').addClass('hidden');
     this.$('.school').addClass('hidden');
     this.$('.coupon').removeClass('hidden');
@@ -379,7 +381,7 @@ module.exports = GelatoPage.extend({
    * @method subscribeAndroid
    * @param {Object} formData
    */
-  subscribeAndroid: function(formData) {
+  subscribeAndroid: function (formData) {
     const self = this;
 
     formData.coupon = 'SKRITTERANDROID'; // use coupon code to bypass signup restriction
@@ -391,12 +393,12 @@ module.exports = GelatoPage.extend({
       return;
     }
     async.series([
-      function(callback) {
+      function (callback) {
         ScreenLoader.show();
         ScreenLoader.post('Creating a new user');
         self.createUser(formData, callback);
       },
-    ], function(error) {
+    ], function (error) {
       if (error) {
         self._handleSubmittedProcessError(error.responseJSON || error);
       } else {
@@ -411,7 +413,7 @@ module.exports = GelatoPage.extend({
    * @method subscribeCoupon
    * @param {Object} formData
    */
-  subscribeCoupon: function(formData) {
+  subscribeCoupon: function (formData) {
     const self = this;
 
     if (!this._validateUserData(formData)) {
@@ -421,12 +423,12 @@ module.exports = GelatoPage.extend({
     }
 
     async.series([
-      function(callback) {
+      function (callback) {
         ScreenLoader.show();
         ScreenLoader.post('Creating a new user');
         self.createUser(formData, callback);
       },
-    ], function(error) {
+    ], function (error) {
       ScreenLoader.hide();
       if (error) {
         self._handleSubmittedProcessError(error.responseJSON || error);
@@ -442,7 +444,7 @@ module.exports = GelatoPage.extend({
    * @method subscribeCredit
    * @param {Object} formData
    */
-  subscribeCredit: function(formData) {
+  subscribeCredit: function (formData) {
     const self = this;
 
     if (!this._validateUserData(formData)) {
@@ -452,7 +454,7 @@ module.exports = GelatoPage.extend({
     }
 
     async.series([
-      function(callback) {
+      function (callback) {
         ScreenLoader.show();
         if (window.Stripe) {
           callback();
@@ -461,7 +463,7 @@ module.exports = GelatoPage.extend({
           $.getScript('https://js.stripe.com/v2/', callback);
         }
       },
-      function(callback) {
+      function (callback) {
         Stripe.setPublishableKey(app.getStripeKey());
         Stripe.card.createToken(
           {
@@ -469,7 +471,7 @@ module.exports = GelatoPage.extend({
             exp_year: formData.card.expires_year,
             number: formData.card.number,
           },
-          function(status, response) {
+          function (status, response) {
             if (response.error) {
               callback(response.error);
             } else {
@@ -479,11 +481,11 @@ module.exports = GelatoPage.extend({
           }
         );
       },
-      function(callback) {
+      function (callback) {
         ScreenLoader.post('Creating a new user');
         self.createUser(formData, callback);
       },
-    ], function(error) {
+    ], function (error) {
       ScreenLoader.hide();
       if (error) {
         self._handleSubmittedProcessError(error.responseJSON || error);
@@ -497,7 +499,7 @@ module.exports = GelatoPage.extend({
    * Subscribes a user using a school subscription.
    * @param {object} formData the submitted data
    */
-  subscribeSchool: function(formData) {
+  subscribeSchool: function (formData) {
     let self = this;
 
     if (!this._validateUserData(formData)) {
@@ -507,12 +509,12 @@ module.exports = GelatoPage.extend({
     }
 
     async.series([
-      function(callback) {
+      function (callback) {
         ScreenLoader.show();
         ScreenLoader.post('Creating a new user');
         self.createUser(formData, callback);
       },
-    ], function(error) {
+    ], function (error) {
       ScreenLoader.hide();
       if (error) {
         self._handleSubmittedProcessError(error.responseJSON || error);
@@ -529,7 +531,7 @@ module.exports = GelatoPage.extend({
    * @todo Unhack
    * @private
    */
-  _handleSubmittedProcessError: function(error) {
+  _handleSubmittedProcessError: function (error) {
     ScreenLoader.hide();
 
     // Let the user actually subscribe again when submitting the form
@@ -616,7 +618,7 @@ module.exports = GelatoPage.extend({
    * Responds to a successful account registration process
    * @private
    */
-  _handleSubmittedProcessSuccess: function() {
+  _handleSubmittedProcessSuccess: function () {
     this._setSignupProgress('createdUser').then(() => {
       this._navigatePostSignup();
     }, () => {
@@ -628,7 +630,7 @@ module.exports = GelatoPage.extend({
    * Navigates the user to the appropriate area after the signup process has completed
    * @private
    */
-  _navigatePostSignup: function() {
+  _navigatePostSignup: function () {
     ScreenLoader.hide();
 
     if (app.isMobile()) {
@@ -645,17 +647,17 @@ module.exports = GelatoPage.extend({
    * @param {Function} callback called when the process is complete
    * @private
    */
-  _processUserReferral: function(callback) {
+  _processUserReferral: function (callback) {
     let dfd = app.processUserReferral(true);
     let siteRef = app.getRefererId();
 
     // affiliate referrals take priority over user referrals,
     // only process 1 of them.
     if (dfd && !siteRef) {
-      dfd.done(function(subscription) {
+      dfd.done(function (subscription) {
         callback();
       })
-        .fail(function(error) {
+        .fail(function (error) {
           app.notifyUser({
             message: app.locale('common.errorUserReferralFailed'),
           });
@@ -673,16 +675,16 @@ module.exports = GelatoPage.extend({
    * @param {Function} callback called when the user is saved
    * @private
    */
-  _saveNewUser: function(callback) {
+  _saveNewUser: function (callback) {
     ScreenLoader.post('Creating new user');
     this.user.isNewUser = true;
     this.user.save(
       null,
       {
-        error: function(user, error) {
+        error: function (user, error) {
           callback(error);
         },
-        success: function(user) {
+        success: function (user) {
           app.removeSetting('siteRef');
           callback();
         },
@@ -690,7 +692,7 @@ module.exports = GelatoPage.extend({
     );
   },
 
-  _validateEmail: function(email) {
+  _validateEmail: function (email) {
     let emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
     return (!_.isEmpty(email) && email.match(emailRegex));
@@ -703,7 +705,7 @@ module.exports = GelatoPage.extend({
    * @param {Object} formData dictionary of values to check
    * @return {Boolean} whether the data can be submitted
    */
-  _validateUserData: function(formData) {
+  _validateUserData: function (formData) {
     if (_.isEmpty(formData.username)) {
       this.displayErrorMessage(app.locale('pages.signup.errorNoUsername'));
       return false;
@@ -783,7 +785,7 @@ module.exports = GelatoPage.extend({
    * @return {Promise}
    * @private
    */
-  _setSignupProgress: function(step) {
+  _setSignupProgress: function (step) {
     return new Promise((resolve, reject) => {
       if (!app.isDevelopment()) {
         const platformData = {
@@ -803,10 +805,10 @@ module.exports = GelatoPage.extend({
           type: 'POST',
           headers: app.user.session.getHeaders(),
           data: platformData,
-          error: function(error) {
+          error: function (error) {
             reject();
           },
-          success: function() {
+          success: function () {
             resolve();
           },
         });

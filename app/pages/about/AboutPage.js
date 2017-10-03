@@ -29,7 +29,7 @@ const AboutPage = GelatoPage.extend({
    * @method render
    * @returns {AboutPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     if (app.user.isLoggedIn()) {
       this.$('#field-email').val(app.user.get('email'));
@@ -42,7 +42,7 @@ const AboutPage = GelatoPage.extend({
    * @method remove
    * @returns {About}
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
   },
 

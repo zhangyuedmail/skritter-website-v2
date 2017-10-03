@@ -26,11 +26,11 @@ const ListSelectComponent = GelatoComponent.extend({
    * @method initialize
    * @param {Object} [options]
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.vocablists = new VocablistCollection();
 
     // hack in a quick comparator for sorting by name
-    this.vocablists.comparator = function(list) {
+    this.vocablists.comparator = function (list) {
       return list.get('shortName') || list.get('name');
     };
 
@@ -49,7 +49,7 @@ const ListSelectComponent = GelatoComponent.extend({
    * @method render
    * @returns {ListSelectComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this.$('#field-lists').multiselect();
@@ -60,8 +60,8 @@ const ListSelectComponent = GelatoComponent.extend({
   /**
    * @method getSelected
    */
-  getSelected: function() {
-    return this.$('#field-lists option:selected').map(function() {
+  getSelected: function () {
+    return this.$('#field-lists option:selected').map(function () {
       return $(this).val();
     }).get();
   },

@@ -16,7 +16,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.on('change:points', this.updateCorners);
     this.updateCorners();
   },
@@ -25,7 +25,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method defaults
    * @returns {Object}
    */
-  defaults: function() {
+  defaults: function () {
     return {
       tweening: false,
     };
@@ -35,7 +35,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method getFirstAngle
    * @returns {Number}
    */
-  getFirstAngle: function() {
+  getFirstAngle: function () {
     return app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
   },
 
@@ -43,7 +43,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method getParamPath
    * @returns {ParamModel}
    */
-  getParamPath: function() {
+  getParamPath: function () {
     // TODO: make sure to get the trace parameter
     let matrix = this.getTargetShape().getMatrix();
     let param = this.get('params')[0];
@@ -66,7 +66,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method getParams
    * @returns {Array}
    */
-  getParams: function() {
+  getParams: function () {
     let inflatedParams = [];
     let size = this.getSize();
     let matrix = this.getTargetShape().getMatrix();
@@ -92,7 +92,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method size
    * @returns {Number}
    */
-  getSize: function() {
+  getSize: function () {
     return app.get('canvasSize');
   },
 
@@ -100,7 +100,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method getTargetShape
    * @return {createjs.Shape}
    */
-  getTargetShape: function() {
+  getTargetShape: function () {
     let data = this.inflateData();
     let shape = this.get('shape').clone(true);
 
@@ -119,7 +119,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method getUserRectangle
    * @returns {Object}
    */
-  getUserRectangle: function() {
+  getUserRectangle: function () {
     let size = this.getSize();
     let corners = _.clone(this.get('corners'));
     return app.fn.getBoundingRectangle(corners, size, size, 18);
@@ -129,7 +129,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method getUserShape
    * @returns {createjs.Shape}
    */
-  getUserShape: function() {
+  getUserShape: function () {
     // TODO: improve stroke position and size
     // let size = this.getSize();
     let shape = this.getTargetShape();
@@ -147,7 +147,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method getUserSquig
    * @returns {createjs.Shape}
    */
-  getUserSquig: function() {
+  getUserSquig: function () {
     return this.get('squig');
   },
 
@@ -155,7 +155,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method inflatedData
    * @return {Object}
    */
-  inflateData: function() {
+  inflateData: function () {
     let size = this.getSize();
     let data = this.get('data');
     return {
@@ -172,7 +172,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method isKana
    * @returns {Boolean}
    */
-  isKana: function() {
+  isKana: function () {
     return this.get('strokeId') >= 600 && this.get('strokeId') <= 834;
   },
 
@@ -180,7 +180,7 @@ const PromptStrokeModel = GelatoModel.extend({
    * @method updateCorners
    * @returns {PromptStrokeModel}
    */
-  updateCorners: function() {
+  updateCorners: function () {
     let points = _.clone(this.get('points'));
     this.set('corners', app.fn.shortstraw.process(points));
     return this;

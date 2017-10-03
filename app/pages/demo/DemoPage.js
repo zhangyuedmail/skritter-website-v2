@@ -49,7 +49,7 @@ const DemoPage = GelatoPage.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     _.bindAll(this, 'teachDemoChar1', 'teachDemoChar2', 'writeDemoChar1',
       'writeDemoChar2', 'completeDemo', 'switchToWriting', 'teachEraseDemoChar1',
       'teachDefinitionPrompt1', 'teachEraseDemoChar2', 'teachReadingPrompt1',
@@ -86,7 +86,7 @@ const DemoPage = GelatoPage.extend({
    * @method render
    * @returns {DemoPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     if (this._views['progress']) {
@@ -103,17 +103,17 @@ const DemoPage = GelatoPage.extend({
   /**
    * @method loadDemo
    */
-  loadDemo: function() {
+  loadDemo: function () {
     const self = this;
 
     async.waterfall(
       [
-        function(callback) {
+        function (callback) {
           self.dialog = new DemoLanguageSelectDialog();
           self.dialog.open();
           self.dialog.once('select', callback);
         },
-        function(lang, callback) {
+        function (lang, callback) {
           ScreenLoader.show();
           ScreenLoader.post('Loading demo word');
           app.mixpanel.track('Started demo', {'Language': lang});
@@ -132,7 +132,7 @@ const DemoPage = GelatoPage.extend({
           self.vocab = self.vocabs.at(0);
           callback(null, self.vocab);
         },
-        function(vocab, callback) {
+        function (vocab, callback) {
           if (vocab.has('containedVocabIds')) {
             self.vocabs.fetch({
               data: {
@@ -141,10 +141,10 @@ const DemoPage = GelatoPage.extend({
                 ids: vocab.get('containedVocabIds').join('|'),
               },
               remove: false,
-              error: function(error) {
+              error: function (error) {
                 callback(error);
               },
-              success: function() {
+              success: function () {
                 callback(null, vocab);
               },
             });
@@ -152,24 +152,24 @@ const DemoPage = GelatoPage.extend({
             callback(null, vocab);
           }
         },
-        function(vocab, callback) {
+        function (vocab, callback) {
           app.user.characters.fetch({
               data: {
                 languageCode: vocab.get('lang'),
                 writings: vocab.get('writing'),
               },
               remove: false,
-              error: function(error) {
+              error: function (error) {
                 callback(error);
               },
-              success: function() {
+              success: function () {
                 callback(null, vocab);
               },
             }
           );
         },
       ],
-      function(error, vocab) {
+      function (error, vocab) {
         ScreenLoader.hide();
         self.prompt.show();
         if (self.useNewDemo) {
@@ -190,7 +190,7 @@ const DemoPage = GelatoPage.extend({
   /**
    * Step that teaches users how to use the erase characters from the prompt
    */
-  teachEraseDemoChar1: function() {
+  teachEraseDemoChar1: function () {
     vent.trigger('notification:show', {
         dialogTitle: 'Erasing Characters',
         showTitle: !app.isMobile(),
@@ -237,7 +237,7 @@ const DemoPage = GelatoPage.extend({
   /**
    * Step that responds to a user erasing a character
    */
-  teachEraseDemoChar2: function() {
+  teachEraseDemoChar2: function () {
     vent.trigger('notification:show', {
       dialogTitle: 'Erasing Characters',
       showTitle: !app.isMobile(),
@@ -275,7 +275,7 @@ const DemoPage = GelatoPage.extend({
   /**
    * Step that teaches users how to answer a definition prompt
    */
-  teachDefinitionPrompt1: function() {
+  teachDefinitionPrompt1: function () {
     const defnItems = this.vocab.getPromptItems('defn');
     this.promptItems = defnItems;
     this.prompt.set(this.promptItems);
@@ -293,7 +293,7 @@ const DemoPage = GelatoPage.extend({
     this.prompt.review.once('change:complete', this.teachSRS1);
   },
 
-  teachSRS1: function() {
+  teachSRS1: function () {
     vent.trigger('notification:show', {
       dialogTitle: 'Spaced Repetition',
       showTitle: !app.isMobile(),
@@ -327,7 +327,7 @@ const DemoPage = GelatoPage.extend({
   /**
    * @method step1
    */
-  teachDemoChar1: function() {
+  teachDemoChar1: function () {
     if (!this.useNewDemo) {
       this.prompt.tutorial.show();
       this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step1')));
@@ -350,7 +350,7 @@ const DemoPage = GelatoPage.extend({
   /**
    * @method step3
    */
-  teachDemoChar2: function() {
+  teachDemoChar2: function () {
     app.mixpanel.track('Completed tracing demo character #1');
     this.setDemoProgress('teachDemoChar2', true);
 
@@ -365,7 +365,7 @@ const DemoPage = GelatoPage.extend({
   /**
    * Step that teaches users how to answer a reading prompt
    */
-  teachReadingPrompt1: function() {
+  teachReadingPrompt1: function () {
     const rdngItems = this.vocab.getPromptItems('rdng');
     this.promptItems = rdngItems;
     this.prompt.set(this.promptItems);
@@ -401,7 +401,7 @@ const DemoPage = GelatoPage.extend({
     /**
    * Step that teaches users how to answer a reading prompt
    */
-  teachTonePrompt1: function() {
+  teachTonePrompt1: function () {
     const toneItems = this.vocab.getPromptItems('tone');
     this.promptItems = toneItems;
     this.prompt.set(this.promptItems);
@@ -435,7 +435,7 @@ const DemoPage = GelatoPage.extend({
   /**
    * Erases the characters and goes back to the beginning of the review
    */
-  switchToWriting: function() {
+  switchToWriting: function () {
     this.prompt.part.eraseCharacter();
     this.prompt.previous();
     this.prompt.review.set('score', 3);
@@ -455,7 +455,7 @@ const DemoPage = GelatoPage.extend({
   /**
    * @method step2
    */
-  writeDemoChar1: function() {
+  writeDemoChar1: function () {
     this.switchToWriting();
     app.mixpanel.track('Completed tracing demo character #2');
     this.setDemoProgress('writeDemoChar1');
@@ -477,7 +477,7 @@ const DemoPage = GelatoPage.extend({
   /**
    * @method step4
    */
-  writeDemoChar2: function() {
+  writeDemoChar2: function () {
     app.mixpanel.track('Completed writing demo character #1');
     this.setDemoProgress('writeDemoChar2', true);
 
@@ -499,7 +499,7 @@ const DemoPage = GelatoPage.extend({
   /**
    * @method step5
    */
-  completeDemo: function() {
+  completeDemo: function () {
     app.mixpanel.track('Completed writing demo character #2');
     this.setDemoProgress('demoComplete');
 
@@ -554,7 +554,7 @@ const DemoPage = GelatoPage.extend({
    * Shows a popup that guides the user through the demo and
    * updates as the user progresses through it.
    */
-  showDemoGuidePopup: function() {
+  showDemoGuidePopup: function () {
     const mobile = app.isMobile();
 
     vent.trigger('notification:show', {
@@ -600,7 +600,7 @@ const DemoPage = GelatoPage.extend({
    * @param {String} step the id of the current step
    * @param {Boolean} [silent] whether to send analytics without triggering an event
    */
-  setDemoProgress: function(step, silent) {
+  setDemoProgress: function (step, silent) {
     if (!silent) {
       this.trigger('step:update', step);
     }
@@ -619,8 +619,8 @@ const DemoPage = GelatoPage.extend({
         type: 'POST',
         headers: app.user.session.getHeaders(),
         data: platformData,
-        error: function(error) {},
-        success: function() {},
+        error: function (error) {},
+        success: function () {},
       });
     }
   },
@@ -629,7 +629,7 @@ const DemoPage = GelatoPage.extend({
    * @method remove
    * @returns {DemoPage}
    */
-  remove: function() {
+  remove: function () {
     this.prompt.remove();
 
     return GelatoPage.prototype.remove.call(this);

@@ -25,7 +25,7 @@ module.exports = GelatoDialog.extend({
    * @method render
    * @returns {DemoLanguageSelectDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -34,7 +34,7 @@ module.exports = GelatoDialog.extend({
    * @method handleClickButtonSelectChinese
    * @param {Event} event
    */
-  handleClickButtonSelectChinese: function(event) {
+  handleClickButtonSelectChinese: function (event) {
     event.preventDefault();
     this.trigger('select', null, 'zh');
     this.close();
@@ -44,7 +44,7 @@ module.exports = GelatoDialog.extend({
    * @method handleClickButtonSelectJapanese
    * @param {Event} event
    */
-  handleClickButtonSelectJapanese: function(event) {
+  handleClickButtonSelectJapanese: function (event) {
     event.preventDefault();
     this.trigger('select', null, 'ja');
     this.close();

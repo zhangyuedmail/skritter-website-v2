@@ -16,10 +16,10 @@ const AdminPaymentModel = GelatoModel.extend({
    * @method getAllPayments
    * @returns {Array}
    */
-  getAllPayments: function() {
+  getAllPayments: function () {
     return _.filter(
       this.get('children'),
-      function(payment) {
+      function (payment) {
         return payment.charged && payment.service !== 'Coupon';
       }
     );
@@ -29,7 +29,7 @@ const AdminPaymentModel = GelatoModel.extend({
    * @method isInitialPayment
    * @returns {Boolean}
    */
-  isInitialPayment: function() {
+  isInitialPayment: function () {
     return this.getAllPayments().length === 1;
   },
 

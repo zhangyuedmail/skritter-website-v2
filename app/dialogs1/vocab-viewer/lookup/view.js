@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.links = [];
   },
   /**
@@ -29,7 +29,7 @@ module.exports = GelatoComponent.extend({
    * @method render
    * @returns {VocabViewerLookup}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -37,7 +37,7 @@ module.exports = GelatoComponent.extend({
    * @method handleClickLookup
    * @param {Event} event
    */
-  handleClickLookup: function(event) {
+  handleClickLookup: function (event) {
     event.preventDefault();
     let $selected = this.$('select option:selected');
     window.open($selected.val().replace('href-', ''), '_blank');
@@ -48,7 +48,7 @@ module.exports = GelatoComponent.extend({
    * @param {Vocabs} vocabs
    * @returns {VocabViewerLookup}
    */
-  set: function(vocabs) {
+  set: function (vocabs) {
     if (vocabs && vocabs.length) {
       this.links = vocabs.at(0).get('dictionaryLinks');
     } else {

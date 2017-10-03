@@ -51,7 +51,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
   },
 
@@ -59,13 +59,13 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptToolbarActionComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
   },
 
-  update() {
+  update () {
     const {showAnyButtons, showCorrectBtn} = this.getButtonProperties();
 
     this.$('gelato-component').toggleClass('hidden', !showAnyButtons);
@@ -83,7 +83,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
     this.$('.icon-study-dont-know').toggleClass('disabled', !this.buttonCorrect);
   },
 
-  getButtonProperties() {
+  getButtonProperties () {
     const showAnyButtons = this.prompt.review && !(app.isMobile() && this.prompt.review.isComplete());
     const showCorrectBtn = this.buttonCorrect &&
       this.prompt.review &&
@@ -96,7 +96,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
    * @method handleClickToolbarCorrect
    * @param {Event} event
    */
-  handleClickToolbarCorrect: function(event) {
+  handleClickToolbarCorrect: function (event) {
     event.preventDefault();
     this.trigger('click:correct');
   },
@@ -105,7 +105,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
    * @method handleClickToolbarErase
    * @param {Event} event
    */
-  handleClickToolbarErase: function(event) {
+  handleClickToolbarErase: function (event) {
     event.preventDefault();
     this.trigger('click:erase');
   },
@@ -114,7 +114,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
    * @method handleClickToolbarShow
    * @param {Event} event
    */
-  handleClickToolbarShow: function(event) {
+  handleClickToolbarShow: function (event) {
     event.preventDefault();
     this.trigger('click:show');
   },
@@ -123,12 +123,12 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
    * @method handleClickToolbarStrokeOrder
    * @param {Event} event
    */
-  handleClickToolbarStrokeOrder: function(event) {
+  handleClickToolbarStrokeOrder: function (event) {
     event.preventDefault();
     this.trigger('click:teach');
   },
 
-  setPromptType(type, update) {
+  setPromptType (type, update) {
     switch (type) {
       case 'rune':
         this.buttonCorrect = true;

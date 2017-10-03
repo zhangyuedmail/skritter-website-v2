@@ -9,7 +9,7 @@ let GelatoRouter = Backbone.Router.extend({
    * @param {Object} [options]
    * @returns {GelatoPage}
    */
-  go: function(path, options) {
+  go: function (path, options) {
     this.trigger('page:navigate', path, options);
   },
 
@@ -18,7 +18,7 @@ let GelatoRouter = Backbone.Router.extend({
    * @param {Object} [options]
    * @returns {Boolean}
    */
-  start: function(options) {
+  start: function (options) {
     options = _.defaults(
       options || {},
       {

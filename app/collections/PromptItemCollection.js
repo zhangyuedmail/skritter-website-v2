@@ -89,7 +89,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method current
    * @returns {PromptItemModel}
    */
-  current: function() {
+  current: function () {
     return this.getActive()[this.position];
   },
 
@@ -97,10 +97,10 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method getActive
    * @returns {Array}
    */
-  getActive: function() {
+  getActive: function () {
     return _.filter(
       this.models,
-      function(item) {
+      function (item) {
         return !item.get('filler');
       }
     );
@@ -110,7 +110,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method getActiveLength
    * @returns {Number}
    */
-  getActiveLength: function() {
+  getActiveLength: function () {
     return this.getActive().length;
   },
 
@@ -118,7 +118,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method getBaseReviewData
    * @returns {Object}
    */
-  getBaseReviewData: function() {
+  getBaseReviewData: function () {
     return {
       item: this.item,
       itemId: this.item ? this.item.id : this.vocab.id,
@@ -137,7 +137,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method getBaseSubmitTime
    * @returns {Number}
    */
-  getBaseSubmitTime: function() {
+  getBaseSubmitTime: function () {
     return this.at(0).get('submitTime');
   },
 
@@ -145,7 +145,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method getBaseReviewingTime
    * @returns {Number}
    */
-  getBaseReviewingTime: function() {
+  getBaseReviewingTime: function () {
     let reviewingTime = 0;
     for (let i = 0, length = this.length; i < length; i++) {
       reviewingTime += this.at(i).getReviewingTime();
@@ -157,7 +157,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method getBaseScore
    * @returns {Number}
    */
-  getBaseScore: function() {
+  getBaseScore: function () {
     let score = null;
     if (this.length > 1) {
       let totalCount = this.length;
@@ -185,7 +185,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method getBaseThinkingTime
    * @returns {Number}
    */
-  getBaseThinkingTime: function() {
+  getBaseThinkingTime: function () {
     let thinkingTime = 0;
     for (let i = 0, length = this.length; i < length; i++) {
       thinkingTime += this.at(i).getThinkingTime();
@@ -197,10 +197,10 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method getChildReviewData
    * @returns {Array}
    */
-  getChildReviewData: function() {
-    return this.filter(function(review) {
+  getChildReviewData: function () {
+    return this.filter(function (review) {
       return !review.get('filler') && !review.get('kana');
-    }).map(function(model) {
+    }).map(function (model) {
       return model.getReviewData();
     });
   },
@@ -209,7 +209,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method getReview
    * @returns {Object}
    */
-  getReview: function() {
+  getReview: function () {
     let reviews = [this.getBaseReviewData()];
 
     if (this.length > 1) {
@@ -228,7 +228,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method getLimit
    * @returns {Number}
    */
-  getLimit: function() {
+  getLimit: function () {
     return this.part === 'tone' ? 15000 : 30000;
   },
 
@@ -236,7 +236,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method isChinese
    * @returns {Boolean}
    */
-  isChinese: function() {
+  isChinese: function () {
     return this.vocab.isChinese();
   },
 
@@ -244,7 +244,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method isComplete
    * @returns {Boolean}
    */
-  isComplete: function() {
+  isComplete: function () {
     return this.complete || _.includes(this.map('complete'), false) === false;
   },
 
@@ -252,7 +252,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method isContainedShown
    * @returns {Boolean}
    */
-  isContainedShown: function() {
+  isContainedShown: function () {
     return this.showContained || this.current().get('showContained');
   },
 
@@ -260,7 +260,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method isDefinitionShown
    * @returns {Boolean}
    */
-  isDefinitionShown: function() {
+  isDefinitionShown: function () {
     return this.showDefinition || !app.user.get('hideDefinition') || this.isComplete();
   },
 
@@ -268,7 +268,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method isFirst
    * @returns {Boolean}
    */
-  isFirst: function() {
+  isFirst: function () {
     return this.position === 0;
   },
 
@@ -276,7 +276,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method isJapanese
    * @returns {Boolean}
    */
-  isJapanese: function() {
+  isJapanese: function () {
     return this.vocab.isJapanese();
   },
 
@@ -284,7 +284,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method isNew
    * @returns {Boolean}
    */
-  isNew: function() {
+  isNew: function () {
     return this.item ? this.item.isNew() : false;
   },
 
@@ -292,7 +292,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method isLast
    * @returns {Boolean}
    */
-  isLast: function() {
+  isLast: function () {
     return this.position >= this.getActiveLength() - 1;
   },
 
@@ -300,7 +300,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method isTeachable
    * @returns {Boolean}
    */
-  isTeachable: function() {
+  isTeachable: function () {
     if (this.item && app.user.get('teachingMode')) {
       return this.item.isNew();
     }
@@ -311,7 +311,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method next
    * @returns {PromptItemModel}
    */
-  next: function() {
+  next: function () {
     if (!this.isLast()) {
       this.position++;
     }
@@ -322,7 +322,7 @@ const PromptItemCollection = GelatoCollection.extend({
    * @method previous
    * @returns {PromptItemModel}
    */
-  previous: function() {
+  previous: function () {
     if (!this.isFirst()) {
       this.position--;
     }
@@ -332,8 +332,8 @@ const PromptItemCollection = GelatoCollection.extend({
   /**
    * @method teachAll
    */
-  teachAll: function() {
-    this.forEach(function(review) {
+  teachAll: function () {
+    this.forEach(function (review) {
       review.set('showTeaching', true);
     });
   },
