@@ -42,7 +42,43 @@ module.exports = GelatoComponent.extend({
    */
   render: function () {
     this.renderTemplate();
+
+    this.$starBtn = this.$('#button-vocab-star');
+    this.$lastStudied = this.$('#item-last-studied');
+    this.$vocabInfo = this.$('#button-vocab-info');
+    this.$banBtn = this.$('#button-vocab-ban');
+    this.$editBtn = this.$('#button-vocab-edit');
     return this;
+  },
+
+  update() {
+    const reviews = this.prompt.reviews;
+    const item = (reviews && reviews.item) ? item : null;
+    const isStarred = item && reviews.vocab.isStarred();
+
+    this.$starBtn.toggleClass('hidden', reviews);
+    this.$lastStudied.toggleClass('hidden', item);
+    this.$vocabInfo.toggleClass('hidden', item);
+    this.$editBtn.toggleClass('hidden', item);
+    this.$banBtn.toggleClass('hidden', item);
+
+    if (isStarred) {
+      this.$starBtn.removeClass('.icon-study-word-star');
+      this.$starBtn.addClass('.icon-study-word-star-filled');
+    } else {
+      this.$starBtn.removeClass('.icon-study-word-star-filled');
+      this.$starBtn.addClass('.icon-study-word-star');
+    }
+
+    this.$lastStudied.text(this.getLastStudiedValue());
+  },
+
+  getLastStudiedValue() {
+    const reviews = this.prompt.reviews;
+    const item = (reviews && reviews.item) ? reviews.item : null;
+    const lastStudied = item ? item.get('last') : null;
+
+    return lastStudied ? ('studied ' + moment(lastStudied * 1000).fromNow()) : '';
   },
 
   /**
