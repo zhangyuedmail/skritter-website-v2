@@ -69,7 +69,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * Gets the daily vocab auto-add limit for a user
    * @returns {Number}
    */
-  getAddLimit() {
+  getAddLimit () {
     const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 15}; // 12};
     const addFreq = app.user.get('addFrequency') / 100;
 
