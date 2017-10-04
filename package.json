@@ -65,6 +65,7 @@
     "moment": "2.18.x",
     "moment-timezone": "0.5.x",
     "morgan": "1.9.x",
+    "querystring": "^0.2.0",
     "wanakana": "2.3.x",
     "webfontloader": "1.6.x"
   },

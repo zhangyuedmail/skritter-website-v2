@@ -49,7 +49,7 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
    */
   getYAxisLabelText: function () {
     // TODO: i18n
-    return this._granularity === 'hours' ? 'hours:min' : 'min:sec';
+    return this._granularity === 'hours' ? 'hours:min' : 'hrs:min:sec';
   },
 
   /**
@@ -167,7 +167,7 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
    * @private
    */
   _getYAxisDateTimeLabelFormats: function () {
-    let dateTimeLabelFormat = this._granularity === 'hours' ? '%H:%M' : '%M:%S';
+    let dateTimeLabelFormat = this._granularity === 'hours' ? '%H:%M' : '%H:%M:%S';
 
     return {
       millisecond: dateTimeLabelFormat,
