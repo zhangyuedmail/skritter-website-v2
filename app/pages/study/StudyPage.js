@@ -445,7 +445,7 @@ const StudyPage = GelatoPage.extend({
     const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 15}; // 12};
     const addFreq = app.user.get('addFrequency') / 100;
 
-    return maxVocabsMap[addFreq] * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
+    return (app.user.get('dailyAddLimit') || maxVocabsMap[addFreq]) * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
   },
 
   /**

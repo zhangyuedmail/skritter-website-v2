@@ -66,6 +66,17 @@ const AccountSettingsStudyPage = GelatoPage.extend({
   },
 
   /**
+   * Gets the daily vocab auto-add limit for a user
+   * @returns {Number}
+   */
+  getAddLimit() {
+    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 15}; // 12};
+    const addFreq = app.user.get('addFrequency') / 100;
+
+    return app.user.get('dailyAddLimit') || maxVocabsMap[addFreq];
+  },
+
+  /**
    * @method getSelectedParts
    * @returns {Array}
    */
@@ -125,6 +136,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
       addFrequency: parseInt(this.$('#field-add-frequency').val(), 10) || app.user.get('addFrequency'),
       autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
       autoAdvancePrompts: this.$('#field-auto-advance').is(':checked') ? 1.0 : 0,
+      dailyAddLimit: this.$('#field-add-limit').val(),
       disableGradingColor: this.$('#field-disable-color').is(':checked'),
       goalEnabled: this.$('#field-goal-mode').is(':checked'),
       hideDefinition: this.$('#field-hide-definition').is(':checked'),
