@@ -54,7 +54,7 @@ module.exports = GelatoPage.extend({
     this.sidebar = new Sidebar({vocablist: this.vocablist});
 
     this._views['publishDialog'] = new ViewDialog({
-      View: PublishDialog,
+      content: PublishDialog,
     });
 
     this.fetchList();
