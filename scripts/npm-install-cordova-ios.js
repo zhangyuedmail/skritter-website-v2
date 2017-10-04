@@ -10,7 +10,7 @@ shell.cd('./cordova-ios');
 shell.exec('cordova platform add ios@4.5.1');
 
 // plugins
-shell.exec('cordova plugin add cordova-plugin-crosswalk-webview@2.3.0');
+shell.exec('cordova plugin add cordova-plugin-crosswalk-webview@2.2.0');
 shell.exec('cordova plugin add cordova-plugin-device@1.1.6');
 shell.exec('cordova plugin add cordova-plugin-file-transfer@1.6.3');
 shell.exec('cordova plugin add cordova-plugin-media@3.0.1');

@@ -1,2 +1,1 @@
-xwalk --force-gpu-rasterization
 xwalk --ignore-gpu-blacklist
