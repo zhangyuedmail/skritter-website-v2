@@ -5,8 +5,8 @@ const DemoCallToActionDialog = require('dialogs1/demo-complete/DemoCompleteDialo
 const DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
 const DemoProgressComponent = require('components/demo/DemoProgressComponent.js');
 const ItemsCollection = require('collections/ItemCollection');
+const NavbarMobileDemo = require('components/navbars/NavbarMobileDemoComponent.js');
 const vent = require('vent');
-
 /**
  * @class Demo
  * @extends {GelatoPage}
@@ -25,6 +25,8 @@ const DemoPage = GelatoPage.extend({
     showBackBtn: true,
     showSyncBtn: false,
   },
+
+  mobileNavbar: NavbarMobileDemo,
 
   /**
    * @property showFooter
@@ -71,14 +73,14 @@ const DemoPage = GelatoPage.extend({
     this.vocabs = new Vocabs();
     this.items = new ItemsCollection();
 
-    if (this.useNewDemo) {
+    if (!app.isMobile()) {
       this._views['progress'] = new DemoProgressComponent({
         demoPage: this,
         firstStep: 'languageSelection',
       });
-      this.listenTo(this._views['progress'], 'demo:skip', this.completeDemo);
     }
 
+    this.listenTo(vent, 'demo:skip', this.completeDemo);
     this.setDemoProgress('languageSelection');
   },
 

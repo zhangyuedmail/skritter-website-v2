@@ -1,4 +1,5 @@
 const GelatoComponent = require('gelato/component');
+const vent = require('vent');
 
 /**
  * A component that displays basic user info and provides a list of top-level
@@ -104,7 +105,7 @@ const DemoProgressComponent = GelatoComponent.extend({
    * @param {jQuery.Event} e the click event
    */
   handleSkipButtonClick: function (e) {
-    this.trigger('demo:skip');
+    vent.trigger('demo:skip');
   },
 
   /**

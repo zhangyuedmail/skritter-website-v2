@@ -1,0 +1,22 @@
+@import "../../styles/_variables";
+
+.navbar-mobile-dashboard-component {
+
+  nav {
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 7001;
+  }
+
+  .back-chevron {
+    padding: 10px 15px 10px 10px;
+  }
+
+  #progress-container {
+    position: absolute;
+    left: 35px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+  }
+}
