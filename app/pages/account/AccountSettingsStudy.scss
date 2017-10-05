@@ -29,7 +29,8 @@ gelato-page[data-name='account-settings-study'] {
       }
 
       &[type="email"],
-      &[type="text"] {
+      &[type="text"],
+      &[type="number"] {
         max-width: 300px;
         padding: 0 6px;
       }
