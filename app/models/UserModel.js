@@ -217,6 +217,19 @@ const UserModel = SkritterModel.extend({
   },
 
   /**
+   * Gets the max number of items that can be auto-added in a day
+   * @returns {number}
+   */
+  getMaxItemsPerDay () {
+    const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
+    const addFreqMultiplier = 1; // {0.7: .75, 0.8: 1, 0.9: 1.2};
+    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 4}; // 12};
+    const addFreq = app.user.get('addFrequency') / 100;
+
+    return maxVocabsMap[addFreq] * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
+  },
+
+  /**
    * Gets the preferred version of a string of characters given the current user's preferences
    * @param {String} simp the simplified zh version of the string
    * @param {String} [trad] the traditional zh version of the string. Defaults to simp if not provided

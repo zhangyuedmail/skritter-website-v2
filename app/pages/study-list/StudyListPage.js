@@ -425,19 +425,6 @@ const StudyListPage = GelatoPage.extend({
   },
 
   /**
-   * Gets the max number of items that can be auto-added in a day
-   * @returns {number}
-   */
-  getMaxItemsPerDay: function () {
-    const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
-    const addFreqMultiplier = 1; // {0.7: .75, 0.8: 1, 0.9: 1.2};
-    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 4}; // 12};
-    const addFreq = app.user.get('addFrequency') / 100;
-
-    return maxVocabsMap[addFreq] * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
-  },
-
-  /**
    * Determines whether an item should be auto-added based on its readiness and other heuristics about the queue
    * @param {UserItem} currentItem the current item that the user is studying
    * @returns {boolean} whether an item should be added
@@ -445,9 +432,9 @@ const StudyListPage = GelatoPage.extend({
   shouldAutoAddItem: function (currentItem) {
     // TODO: figure out some good values for this
     const addFreq = app.user.get('addFrequency') / 100;
-    const maxItemsPerDay = this.getMaxItemsPerDay();
+    const maxItemsPerDay = app.user.getMaxItemsPerDay();
 
-    if ((this.items.dueCount > 50 && (addFreq !== 0.9)) || this.itemsAddedToday > maxItemsPerDay) {
+    if ((this.items.dueCount > 50 && (addFreq !== 0.9)) || this.itemsAddedToday >= maxItemsPerDay) {
       return false;
     }
 

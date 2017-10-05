@@ -456,9 +456,9 @@ const StudyPage = GelatoPage.extend({
   shouldAutoAddItem: function (currentItem) {
     // TODO: figure out some good values for this
     const addFreq = app.user.get('addFrequency') / 100;
-    const maxItemsPerDay = this.getMaxItemsPerDay();
+    const maxItemsPerDay = app.user.getMaxItemsPerDay();
 
-    if ((this.items.dueCount > 50 && (addFreq !== 0.9)) || this.itemsAddedToday > maxItemsPerDay) {
+    if ((this.items.dueCount > 50 && (addFreq !== 0.9)) || this.itemsAddedToday >= maxItemsPerDay) {
       return false;
     }
 
