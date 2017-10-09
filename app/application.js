@@ -936,6 +936,13 @@ return parseInt(v, 10);
           }
         },
         async (callback) => {
+          // skip offline mode when indexeddb in missing from window
+          if (!window.indexedDB) {
+            callback();
+
+            return;
+          }
+
           // skip offline stuff when disabled, no user or mobile not detected
           if (!this.config.offlineEnabled || !this.user.get('offlineEnabled') || !this.user.isLoggedIn() || !this.isMobile()) {
             callback();
