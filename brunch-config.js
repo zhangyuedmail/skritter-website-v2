@@ -1,5 +1,6 @@
 'use strict';
 
+const shell = require('shelljs');
 const application = require('./package.json');
 
 
@@ -10,23 +11,22 @@ exports.config = {
         'js/application.js': /^app[\\/]/,
         'js/libraries.js': /^(node_modules|vendor)[\\/]/,
         'js/mobilelibs.js': /^mobilevendor[\\/]/,
-        'js/startup.js': /^startup[\\/]/
+        'js/startup.js': /^startup[\\/]/,
       },
     },
     stylesheets: {
       joinTo: {
         'styles/application.css': /^app[\\/]/,
         'styles/libraries.css': /^(node_modules|vendor)[\\/]/,
-        'styles/startup.css': /^startup[\\/]/
-      }
+        'styles/startup.css': /^startup[\\/]/,
+      },
     },
     templates: {
       joinTo: {
         'js/application.js': /^app[\\/]/,
-        'js/startup.js': /^startup[\\/]/
-      }
-
-    }
+        'js/startup.js': /^startup[\\/]/,
+      },
+    },
   },
   npm: {
     enabled: true,
@@ -38,20 +38,20 @@ exports.config = {
       'bootstrap-switch': ['dist/css/bootstrap3/bootstrap-switch.css'],
       'cal-heatmap': ['cal-heatmap.css'],
       'font-awesome': ['css/font-awesome.css'],
-      'jqueryui': ['css/jquery-ui.css']
-    }
+      'jqueryui': ['css/jquery-ui.css'],
+    },
   },
   paths: {
     public: 'public',
-    watched: ['app', 'startup', 'vendor']
+    watched: ['app', 'startup', 'vendor'],
   },
   plugins: {
     autoReload: {
-      delay: 100
+      delay: 100,
     },
     babel: {
       ignore: ['app/data/*', 'node_modules/*', 'vendor/*'],
-      presets: ['env']
+      presets: ['env'],
     },
     replace: {
       mappings: {
@@ -59,7 +59,7 @@ exports.config = {
         'application-language': process.env.PROJECT_LANG || '',
         'application-title': application.title,
         'application-version': application.version,
-        'application-thinkLocally': process.env.THINK_LOCALLY
+        'application-thinkLocally': process.env.THINK_LOCALLY,
       },
       paths: [
         'public/js/config.js',
@@ -68,8 +68,8 @@ exports.config = {
         'public/js/startup.js',
         'public/styles/application.css',
         'public/styles/libraries.css',
-        'public/styles/startup.css'
-      ]
-    }
-  }
+        'public/styles/startup.css',
+      ],
+    },
+  },
 };
