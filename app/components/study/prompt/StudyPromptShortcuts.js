@@ -464,6 +464,30 @@ StudyPromptShortcuts.prototype._registerTone = function () {
 };
 
 /**
+ * @method startListening
+ * @returns {StudyPromptShortcuts}
+ */
+StudyPromptShortcuts.prototype.startListening = function () {
+  this.action.listen();
+  this.grading.listen();
+  this.navigate.listen();
+  this.tone.listen();
+  return this;
+};
+
+/**
+ * @method stopListening
+ * @returns {StudyPromptShortcuts}
+ */
+StudyPromptShortcuts.prototype.stopListening = function () {
+  this.action.stop_listening();
+  this.grading.stop_listening();
+  this.navigate.stop_listening();
+  this.tone.stop_listening();
+  return this;
+};
+
+/**
  * @method registerAll
  * @returns {StudyPromptShortcuts}
  */

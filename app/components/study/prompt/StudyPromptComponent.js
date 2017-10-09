@@ -425,6 +425,11 @@ const StudyPromptComponent = GelatoComponent.extend({
       vent.trigger('vocabInfo:toggle', id || this.reviews.vocab.id, info || this.vocabInfo);
     } else {
       app.openDesktopVocabViewer(id || this.reviews.vocab.id, info || this.vocabInfo);
+
+      this.shortcuts.stopListening();
+      this.listenTo(app.dialogs.vocabViewer, 'hidden', () => {
+        this.shortcuts.startListening();
+      });
     }
   },
 
