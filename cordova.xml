@@ -31,6 +31,7 @@
 
   <preference name="AutoHideSplashScreen" value="false" />
   <preference name="BackgroundColor" value="0xff262b30" />
+  <preference name="BackupWebStorage" value="local" />
   <preference name="DisallowOverscroll" value="true" />
   <preference name="FadeSplashScreenDuration" value="100"/>
   <preference name="Fullscreen" value="false" />
