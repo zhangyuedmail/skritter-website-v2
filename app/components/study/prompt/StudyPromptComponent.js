@@ -423,12 +423,24 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     if (app.isMobile()) {
       vent.trigger('vocabInfo:toggle', id || this.reviews.vocab.id, info || this.vocabInfo);
+
+      // listen to right sidebar saves and update reviews vocab model
+      this.listenToOnce(app._views['rightSide'], 'save', (vocab) => {
+        this.reviews.vocab.set(vocab.toJSON());
+        this.vocabDefinition.render();
+      });
     } else {
       app.openDesktopVocabViewer(id || this.reviews.vocab.id, info || this.vocabInfo);
 
+      // stop listening to shortcuts while dialog is open
       this.shortcuts.stopListening();
-      this.listenTo(app.dialogs.vocabViewer, 'hidden', () => {
+
+      // start listening to shortcuts while dialog is hidden
+      this.listenToOnce(app.dialogs.vocabViewer, 'hidden', (vocab) => {
         this.shortcuts.startListening();
+
+        this.reviews.vocab.set(vocab.toJSON());
+        this.vocabDefinition.render();
       });
     }
   },

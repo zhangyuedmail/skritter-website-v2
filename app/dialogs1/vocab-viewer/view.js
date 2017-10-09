@@ -32,6 +32,35 @@ module.exports = GelatoDialog.extend({
   },
 
   /**
+   * @method handleElementHide
+   */
+  handleElementHide: function () {
+    this.trigger('hide', this.content.vocab);
+  },
+
+  /**
+   * @method handleElementHidden
+   */
+  handleElementHidden: function () {
+    this.trigger('hidden', this.content.vocab);
+    this.remove();
+  },
+
+  /**
+   * @method handleElementShow
+   */
+  handleElementShow: function () {
+    this.trigger('show', this.content.vocab);
+  },
+
+  /**
+   * @method handleElementShown
+   */
+  handleElementShown: function () {
+    this.trigger('shown', this.content.vocab);
+  },
+
+  /**
    * @method load
    * @param {String} vocabId
    * @returns {VocabViewer}

@@ -225,6 +225,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     this.vocab.save();
 
+    this.trigger('save', this.vocab);
+
     this.editing = false;
 
     this.render();
