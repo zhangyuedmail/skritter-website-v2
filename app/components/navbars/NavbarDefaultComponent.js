@@ -44,10 +44,10 @@ module.exports = GelatoComponent.extend({
 
     // this could null out on app initialization.
     // should refactor whatever calls this before routing has officially started.
-    try {
-      history = Backbone.history.getFragment() || ''.split('/')[0];
-    } catch (e) {
-      console.log(e);
+    if (Backbone.history.fragment) {
+      history = Backbone.history.getFragment();
+    } else {
+      history = window.location.pathname.replace('/', '');
     }
 
     return history;
