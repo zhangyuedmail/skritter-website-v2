@@ -6,7 +6,7 @@ const vent = require('vent');
 const NavbarMobileComponent = NavbarDefaultComponent.extend({
 
   events: {
-    'click #back-btn': 'handleBackClick'
+    'click #back-btn': 'handleBackClick',
   },
 
   /**
@@ -39,7 +39,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     this.listenTo(app.user.offline, 'status', this.handleOfflineStatus);
   },
 
-  render() {
+  render () {
     this.renderTemplate();
     this.$('#progress-container').html(this._views['progress'].render().el);
 
