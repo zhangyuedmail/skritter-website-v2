@@ -449,17 +449,17 @@ module.exports = GelatoApplication.extend({
     if (this.isMobile()) {
       this.listenTo(vent, 'mobileNavMenu:toggle', this.toggleSideMenu);
       this.listenTo(vent, 'page:switch', () => {
- this.toggleSideMenu(false);
-});
+        this.toggleSideMenu(false);
+      });
 
       if (this.isAndroid()) {
         this._backButtonStack = [];
         document.addEventListener('menubutton', (e) => {
-this.handleAndroidMenuKeyPressed(e);
-}, false);
+          this.handleAndroidMenuKeyPressed(e);
+        }, false);
         document.addEventListener('backbutton', (e) => {
-this.handleAndroidBackButtonPressed(e);
-}, false);
+          this.handleAndroidBackButtonPressed(e);
+        }, false);
       }
     }
   },
