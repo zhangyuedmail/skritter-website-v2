@@ -87,8 +87,8 @@ module.exports = GelatoComponent.extend({
       const readinessStr = readiness > 250 ? 'due now' : readiness + '% due';
       return 'studied ' + moment(lastStudied * 1000).fromNow() + ' (' + readinessStr + ')';
     }
-
-    return '';
+    
+    return 'just added (due now)';
   },
 
   /**
