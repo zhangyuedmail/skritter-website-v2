@@ -106,7 +106,6 @@ module.exports = GelatoApplication.extend({
       this.initPerfRecording();
     }
 
-    this.initNavbar();
     this.initFooter();
     this.initSideViews();
 
@@ -114,6 +113,7 @@ module.exports = GelatoApplication.extend({
   },
 
   render: function () {
+    this.initNavbar();
     GelatoApplication.prototype.render.apply(this, arguments);
 
     if (config.recordLoadTimes) {
