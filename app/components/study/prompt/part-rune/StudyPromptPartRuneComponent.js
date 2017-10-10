@@ -343,7 +343,8 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
           this.prompt.canvas.tweenShape(
             'character',
             userShape,
-            targetShape
+            targetShape,
+            {updateStage: true}
           );
         }
 

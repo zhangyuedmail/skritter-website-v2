@@ -900,6 +900,11 @@ this.stopAnimations();
         this.stopAnimations(['tweenShape']);
       });
 
+      if (options.updateStage) {
+        const stage = _layerMap[layerName];
+        stage.update();
+      }
+
     return this;
   },
 
