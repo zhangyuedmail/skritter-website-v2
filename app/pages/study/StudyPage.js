@@ -466,19 +466,17 @@ const StudyPage = GelatoPage.extend({
     const addRange = 0.4;
     const readiness = currentItem.getReadiness();
 
-
     // if they're currently studying a brand new item, let's wait until after they get through that
     if (readiness === 9999) {
       return false;
     }
 
     const diff = 1 - (readiness - addFreq) / addRange;
-
+    const isReadyToStudy = readiness > addFreq + addRange;
 
     // the most common add case--the current item has been sufficiently studied,
     // with a couple rate-limiting checks
-    if (diff*diff > 0.5 && this.promptsReviewed > 1 && this.promptsSinceLastAutoAdd > 4) {
-      console.log(`normal auto-add case: promptsSinceLastAutoAdd > 4 ${readiness}  diff: ${diff}  diff quad: ${diff*diff}`);
+    if (0.5 < diff*diff && this.promptsReviewed > 1 && this.promptsSinceLastAutoAdd > 4 && !isReadyToStudy) {
       return true;
     }
 
