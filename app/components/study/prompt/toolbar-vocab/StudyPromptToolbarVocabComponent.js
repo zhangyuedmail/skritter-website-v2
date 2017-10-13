@@ -101,7 +101,7 @@ module.exports = GelatoComponent.extend({
     const lists = item ? item.get('vocabListIds') : null;
 
     if (lists && lists.length) {
-      const list = this.prompt.page.vocablists.get(lists[0]);
+      const list = this.prompt.page.vocablist || this.prompt.page.vocablists.get(lists[0]);
 
       if (list) {
         return 'added from ' + list.get('name');
