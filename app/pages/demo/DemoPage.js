@@ -1,7 +1,6 @@
 const GelatoPage = require('gelato/page');
 const Vocabs = require('collections/VocabCollection');
 const Prompt = require('components/study/prompt/StudyPromptComponent.js');
-const DemoCallToActionDialog = require('dialogs1/demo-complete/DemoCompleteDialog.js');
 const DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
 const DemoProgressComponent = require('components/demo/DemoProgressComponent.js');
 const ItemsCollection = require('collections/ItemCollection');
