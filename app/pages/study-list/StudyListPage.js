@@ -118,15 +118,6 @@ const StudyListPage = GelatoPage.extend({
   },
 
   /**
-   * Event handler for when a call to add items from another component is reveived
-   */
-  handleAddItems: function () {
-    this.addItems().then((added) => {
-      this.showItemsAddedNotification(added);
-    });
-  },
-
-  /**
    * @method handlePauseEvent
    */
   handlePauseEvent: function () {
@@ -141,7 +132,6 @@ const StudyListPage = GelatoPage.extend({
    * whether to suppress messages to the user about the items added if nothing was added.
    */
   addItems: function (silenceNoItems, numToAdd) {
-    const self = this;
     numToAdd = numToAdd || 1;
 
     return new Promise((resolve, reject) => {
@@ -151,14 +141,14 @@ const StudyListPage = GelatoPage.extend({
         lists: this.vocablist.id,
       };
 
-      this.items.addItems(addOptions, function (error, result) {
+      this.items.addItems(addOptions, (error, result) => {
         if (!error) {
           let added = result.numVocabsAdded;
 
           if (added === 0) {
               resolve(0);
           } else {
-            self.itemsAddedToday += added;
+            this.itemsAddedToday += added;
             resolve(added);
           }
         } else {
@@ -268,6 +258,15 @@ const StudyListPage = GelatoPage.extend({
         }
       }
     );
+  },
+
+  /**
+   * Event handler for when a call to add items from another component is reveived
+   */
+  handleAddItems: function (silenceNoItems, numToAdd) {
+    this.addItems(silenceNoItems, numToAdd).then((added) => {
+      this.showItemsAddedNotification(added);
+    });
   },
 
   /**

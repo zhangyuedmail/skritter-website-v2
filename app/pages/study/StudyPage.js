@@ -118,15 +118,6 @@ const StudyPage = GelatoPage.extend({
   },
 
   /**
-   * Event handler for when a call to add items from another component is reveived
-   */
-  handleAddItems: function () {
-    this.addItems().then((added) => {
-      this.showItemsAddedNotification(added);
-    });
-  },
-
-  /**
    * Adds items to the study queue
    * @method addItem
    * @param {Boolean} [silenceNoItems] whether to hide a popup if no items are added
@@ -134,7 +125,6 @@ const StudyPage = GelatoPage.extend({
    * whether to suppress messages to the user about the items added if nothing was added.
    */
   addItems: function (silenceNoItems, numToAdd) {
-    const self = this;
     numToAdd = numToAdd || 1;
 
     return new Promise((resolve, reject) => {
@@ -144,7 +134,7 @@ const StudyPage = GelatoPage.extend({
         lists: app.user.getFilteredLists(),
       };
 
-      this.items.addItems(addOptions, function (error, result) {
+      this.items.addItems(addOptions, (error, result) => {
         if (!error) {
           let added = result.numVocabsAdded;
 
@@ -152,7 +142,7 @@ const StudyPage = GelatoPage.extend({
             resolve(0);
           } else {
             const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
-            self.itemsAddedToday += (added * (app.user.get(targetLangName + 'StudyParts').length));
+            this.itemsAddedToday += (added * (app.user.get(targetLangName + 'StudyParts').length));
             resolve(added);
           }
         } else {
@@ -289,6 +279,15 @@ const StudyPage = GelatoPage.extend({
         }
       }
     );
+  },
+
+  /**
+   * Event handler for when a call to add items from another component is reveived
+   */
+  handleAddItems: function (silenceNoItems, numToAdd) {
+    this.addItems(silenceNoItems, numToAdd).then((added) => {
+      this.showItemsAddedNotification(added);
+    });
   },
 
   /**
