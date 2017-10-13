@@ -1,6 +1,5 @@
 const NavbarDefaultComponent = require('./NavbarDefaultComponent.js');
 const DemoProgressComponent = require('components/demo/DemoProgressComponent.js');
-const vent = require('vent');
 
 
 const NavbarMobileComponent = NavbarDefaultComponent.extend({

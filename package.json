@@ -37,6 +37,7 @@
     "start": "node ./scripts/npm-start",
     "test": "node ./scripts/npm-test"
   },
+  "pre-commit": ["lint"],
   "dependencies": {
     "async": "2.5.x",
     "backbone": "1.3.x",
@@ -88,6 +89,7 @@
     "mocha": "4.0.x",
     "nightwatch": "0.9.x",
     "nodemon": "1.12.x",
+    "pre-commit": "1.2.x",
     "replace-brunch": "2.0.x",
     "sass-brunch": "2.10.x",
     "selenium-server-standalone-jar": "3.6.x",
