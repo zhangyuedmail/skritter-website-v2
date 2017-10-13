@@ -223,10 +223,11 @@ const UserModel = SkritterModel.extend({
   getMaxItemsPerDay () {
     const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
     const addFreqMultiplier = 1; // {0.7: .75, 0.8: 1, 0.9: 1.2};
-    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 4}; // 12};
+    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 15}; // 12};
     const addFreq = app.user.get('addFrequency') / 100;
+    const vocabLimit = this.get('dailyAddLimit') || maxVocabsMap[addFreq];
 
-    return maxVocabsMap[addFreq] * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
+    return vocabLimit * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
   },
 
   /**
