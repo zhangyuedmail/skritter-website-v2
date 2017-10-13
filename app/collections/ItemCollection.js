@@ -649,7 +649,7 @@ const ItemCollection = BaseSkritterCollection.extend({
       data: {
         lang: app.getLanguage(),
         languageCode: app.getLanguage(),
-        lists: this.listIds.join(','),
+        list: this.listIds.join(','),
         parts: app.user.getFilteredParts().join(','),
         styles: app.user.getFilteredStyles().join(','),
       },

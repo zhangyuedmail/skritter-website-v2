@@ -6,6 +6,7 @@ const Items = require('collections/ItemCollection.js');
 const Vocablist = require('models/VocablistModel.js');
 const MobileStudyNavbar = require('components/navbars/NavbarMobileStudyComponent.js');
 const QuickSettings = require('dialogs1/quick-settings/QuickSettingsDialog.js');
+
 const vent = require('vent');
 
 /**
@@ -44,6 +45,11 @@ const StudyListPage = GelatoPage.extend({
    * @constructor
    */
   initialize: function (options) {
+    if (app.config.recordLoadTimes) {
+      this.loadStart = window.performance.now();
+      this.loadAlreadyTimed = false;
+    }
+
     Howler.autoSuspend = false;
 
     ScreenLoader.show(true);
@@ -64,10 +70,11 @@ const StudyListPage = GelatoPage.extend({
       this.items.reviews.add(app.user.offline.reviews);
     }
 
-    // will hold a number that shows
+    // will hold a number that shows how many items have been added in the last 24 hours
     this.itemsAddedToday = null;
     this.promptsReviewed = 0;
     this.promptsSinceLastAutoAdd = 0;
+    this.userNotifiedAutoAddLimit = false;
 
     if (app.user.get('eccentric')) {
       this._views['recipe'] = new Recipes();
@@ -349,6 +356,12 @@ const StudyListPage = GelatoPage.extend({
       }
 
       return;
+    }
+
+    ScreenLoader.hide();
+
+    if (app.config.recordLoadTimes) {
+      this._recordLoadTime();
     }
 
     if (!queue.length) {
