@@ -631,7 +631,7 @@ const StudyPromptComponent = GelatoComponent.extend({
           vocabsContaining.fetch({
             data: {
               include_containing: true,
-              q: vocabId,
+              q: app.fn.mapper.fromBase(vocabId),
             },
             error: function (error) {
               callback(error);
