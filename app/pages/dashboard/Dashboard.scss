@@ -96,14 +96,12 @@ gelato-page[data-name='dashboard'] {
   gelato-page[data-name='dashboard'] {
     padding-top: 65px;
 
-    #first-row {
-      .content-block {
-        padding-top: 60px;
-        height: auto;
+    .goal-component-block {
+      padding-top: 0;
+      height: auto !important;
 
-        gelato-component {
-          margin-top: 0;
-        }
+      gelato-component {
+        margin-top: 0;
       }
     }
   }

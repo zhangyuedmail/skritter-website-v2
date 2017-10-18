@@ -1,8 +1,8 @@
 gelato-component(data-name='dashboard-goal')
   .row
-    #doughnut-column.col-xs-6
+    #doughnut-column.col-sm-6.col-xs-12
       #goal-doughnut
-    #option-column.col-xs-6
+    #option-column.col-sm-6.col-xs-12
       if view.dueCount !== 0 || (view.vocablists.state === 'standby' && view.vocablists.length > 0)
         a.btn.btn-fixed.btn-success(type="button", href="/study") Study
       else

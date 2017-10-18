@@ -1,11 +1,11 @@
 @import "../../styles/_variables";
 
 gelato-component[data-name='dashboard-goal'] {
-
   margin-top: 30px;
 
   .highcharts-container {
     margin-left: auto;
+
     .highcharts-title {
       font-family: $font-slab;
     }
@@ -18,5 +18,22 @@ gelato-component[data-name='dashboard-goal'] {
   #option-column {
     margin-top: 80px;
   }
+}
 
+.mobile {
+  gelato-component[data-name='dashboard-goal'] {
+    text-align: center;
+
+    #doughnut-column {
+      margin-top: 0;
+    }
+
+    #option-column {
+      margin-top: 0;
+    }
+
+    .highcharts-container {
+      margin: auto;
+    }
+  }
 }
