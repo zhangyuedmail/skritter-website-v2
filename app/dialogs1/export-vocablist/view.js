@@ -129,7 +129,7 @@ const ExportVocablist = GelatoDialog.extend({
               }
 
               line += vocab.get('reading') + delimiter;
-              line += vocab.getDefinition();
+              line += vocab.getDefinition(true);
 
               return line;
             }
