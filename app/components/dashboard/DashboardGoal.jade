@@ -1,7 +1,21 @@
 gelato-component(data-name='dashboard-goal')
   .row
+    if !app.isMobile()
+      #due-column.col-xs-12.text-center
+        a(href="/account")= user.get('name')
+        | , you have &nbsp;
+        span#review-count -
+        //span#review-parts= view.getReviewParts()
+        span &nbsp;items to review.
     #doughnut-column.col-sm-6.col-xs-12
       #goal-doughnut
+    if app.isMobile()
+      #due-column.col-xs-12.text-center
+        a(href="/account")= user.get('name')
+        | , you have &nbsp;
+        span#review-count -
+        //span#review-parts= view.getReviewParts()
+        span &nbsp;items to review.
     #option-column.col-sm-6.col-xs-12
       if view.dueCount !== 0 || (view.vocablists.state === 'standby' && view.vocablists.length > 0)
         a.btn.btn-fixed.btn-success(type="button", href="/study") Study

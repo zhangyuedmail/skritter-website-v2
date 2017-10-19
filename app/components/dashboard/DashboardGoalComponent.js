@@ -17,8 +17,13 @@ const DashboardGoalComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function () {
+    this.errorFetchingDueCount = false;
+    this.dueCount = null;
     this.doughnut = null;
+
+    this.listenTo(this.vocablists, 'state', this.updateDueCount);
     this.on('resize', this.resize);
+    this.getDueCount();
   },
 
   /**
@@ -92,6 +97,30 @@ const DashboardGoalComponent = GelatoComponent.extend({
   },
 
   /**
+   * Makes a readable string from the user's study parts for the target language
+   * @returns {string}
+   */
+  getReviewParts () {
+    const studyParts = (app.isChinese() ? 'chinese' : 'japanese') + 'StudyParts';
+    const partsList = app.user.get(studyParts).map((i) => app.locale('common.parts.' +i));
+    let partsStr = '';
+    for (let i = 0; i < partsList.length; i++) {
+      partsStr += partsList[i];
+      if (i === partsList.length - 2) {
+        if (partsList.length > 2) {
+          partsStr += ', and ';
+        } else {
+          partsStr += ' and ';
+        }
+      } else {
+        partsStr += ', ';
+      }
+    }
+
+    return partsStr.substr(0, partsStr.length - 2);
+  },
+
+  /**
    * @method getSize
    * @returns {Number}
    */
@@ -148,6 +177,64 @@ const DashboardGoalComponent = GelatoComponent.extend({
       {name: 'Completed', color: '#c5da4b', y: percent},
       {name: 'Remaining', color: '#efeef3', y: 100 - percent},
     ], true);
+  },
+
+  getDueCount () {
+    let url = app.getApiUrl() + 'items/due';
+
+    if (app.config.useV2Gets.itemsdue) {
+      url = app.getApiUrl(2) + 'gae/items/due';
+    }
+    $.ajax({
+      url: url,
+      type: 'GET',
+      headers: app.user.session.getHeaders(),
+      context: this,
+      data: {
+        lang: app.getLanguage(),
+        languageCode: app.getLanguage(),
+        parts: app.user.getFilteredParts().join(','),
+        styles: app.user.getFilteredStyles().join(','),
+      },
+      error: (error) => {
+        this.dueCount = '-';
+        this.errorFetchingDueCount = true;
+        this.updateDueCount(this.dueCount);
+        this.trigger('fetch-data:failed', 'goal');
+      },
+      success: function (result) {
+        let count = 0;
+        for (let part in result.due) {
+          if (result.due.hasOwnProperty(part)) {
+            for (let style in result.due[part]) {
+              if (result.due[part].hasOwnProperty(style)) {
+                count += result.due[part][style];
+              }
+            }
+          }
+        }
+        this.dueCount = count;
+        this.updateDueCount(count);
+        this.trigger('component:loaded', 'goal');
+      },
+    });
+  },
+
+  updateDueCount (count) {
+    console.log(count);
+    if (typeof count === 'object') {
+      count = this.dueCount;
+    }
+
+    if (this.dueCount) {
+      this.$('#review-count').text(count);
+    } else if (this.dueCount === 0 && this.vocablists.state === 'standby') {
+      this.$('#review-count').text('no');
+    } else if (this.errorFetchingDueCount) {
+      this.$('#review-count').text('');
+    } else {
+      this.$('#review-count').text('-');
+    }
   },
 
   /**
