@@ -278,16 +278,16 @@ const ItemCollection = BaseSkritterCollection.extend({
               async (callback) => {
                 const result = await app.user.offline.loadNext();
 
-                _.forEach(this.add(result.Items), (item) => {
+                _.forEach(this.add(result.Items, {merge: true}), (item) => {
                   item._loaded = true;
                   item._queue = true;
                 });
 
-                this.add(result.ContainedItems);
+                this.add(result.ContainedItems, {merge: true});
 
                 this.vocabs.add(result.Vocabs);
 
-                app.user.characters.add(result.Characters);
+                app.user.characters.add(result.Characters, {merge: true});
 
                 callback();
               },
@@ -338,7 +338,7 @@ const ItemCollection = BaseSkritterCollection.extend({
                     callback(error);
                   },
                   success: (result) => {
-                    _.forEach(this.add(result), (model) => {
+                    _.forEach(this.add(result, {merge: true}), (model) => {
                       model._queue = true;
                     });
 
@@ -514,6 +514,7 @@ const ItemCollection = BaseSkritterCollection.extend({
             include_top_mnemonics: true,
             include_vocabs: true,
           },
+          merge: true,
           remove: false,
           error: (error) => {
             reject(error);

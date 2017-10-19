@@ -325,6 +325,7 @@ const StudyPage = GelatoPage.extend({
         this.items.reviews.post({skip: 1});
       }
 
+      this.currentItem._loaded = false;
       this.currentItem._queue = false;
       this.currentPromptItems = null;
       this.previousPromptItems = promptItems;
