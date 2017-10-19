@@ -182,14 +182,16 @@ const VocabModel = SkritterModel.extend({
    * @returns {String}
    */
   getDefinition: function (ignoreFormat) {
-    let customDefinition = this.get('customDefinition');
+    const customDefinition = this.get('customDefinition');
     let definition = this.get('definitions')[app.user.get('sourceLang')];
+
     if (customDefinition && customDefinition !== '') {
       definition = this.get('customDefinition');
     } else if (!definition) {
       definition = this.get('definitions').en;
     }
-    return ignoreFormat === false ? definition : app.fn.textToHTML(definition);
+
+    return ignoreFormat ? definition : app.fn.textToHTML(definition);
   },
 
   /**
