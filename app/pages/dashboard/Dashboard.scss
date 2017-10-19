@@ -101,7 +101,11 @@ gelato-page[data-name='dashboard'] {
       height: auto !important;
 
       gelato-component {
-        margin-top: 0;
+        margin-top: 0
+      }
+
+      [data-name='dashboard-status'] {
+        padding-top: 75px;
       }
     }
   }
