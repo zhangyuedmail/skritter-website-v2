@@ -227,7 +227,7 @@ const DashboardGoalComponent = GelatoComponent.extend({
 
     if (this.dueCount) {
       this.$('#review-count').text(count);
-    } else if (this.dueCount === 0 && this.vocablists.state === 'standby') {
+    } else if (this.dueCount === 0 && app.user.vocablists.state === 'standby') {
       this.$('#review-count').text('no');
     } else if (this.errorFetchingDueCount) {
       this.$('#review-count').text('');
