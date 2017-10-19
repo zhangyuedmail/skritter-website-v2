@@ -221,7 +221,6 @@ const DashboardGoalComponent = GelatoComponent.extend({
   },
 
   updateDueCount (count) {
-    console.log(count);
     if (typeof count === 'object') {
       count = this.dueCount;
     }
