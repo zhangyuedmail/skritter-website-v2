@@ -163,13 +163,15 @@ const SessionModel = SkritterModel.extend({
         refresh_token: this.get('refresh_token'),
       },
       type: 'POST',
-      success: _.bind(function (model) {
+      success: (model) => {
         this.set('created', moment().unix(), {silent: true});
+        this.cache();
+
         callbackSuccess(model);
-      }, this),
-      error: _.bind(function (model, error) {
+      },
+      error: (model, error) => {
         callbackError(error, model);
-      }, this),
+      },
     });
   },
 
