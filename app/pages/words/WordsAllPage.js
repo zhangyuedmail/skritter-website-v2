@@ -212,6 +212,7 @@ module.exports = GelatoPage.extend({
       this.searchVocabs.fetch({
         data: {
           q: this.searchString,
+          lang: app.getLanguage(),
           limit: this.limit,
           include_containing: true,
         },
@@ -231,6 +232,7 @@ module.exports = GelatoPage.extend({
           q: this.searchString,
           cursor: this.searchVocabs.cursor,
           containing_cursor: this.searchVocabs.containingCursor,
+          lang: app.getLanguage(),
           limit: this.limit,
           include_containing: true,
         },
