@@ -1,10 +1,10 @@
 @import "../../styles/_variables";
 
 gelato-component[data-name='words-sidebar'] {
-
   color: $white1;
   margin: 45px auto 0 auto;
   width: 140px;
+
   button {
     height: 50px;
     padding: 0 20px;
@@ -17,27 +17,26 @@ gelato-component[data-name='words-sidebar'] {
     font-weight: 300;
     margin-top: 30px;
     padding: 10px;
-
-    > a {
-      color: $grey3;
-      display: block;
-      margin-bottom: 20px;
-      text-decoration: none;
-
-      &:hover {
-        color: $grey6;
-      }
-
-      &.active {
-        color: $grey9;
-      }
-
-      .glyphicon {
-        color: $green5;
-        margin-right: 5px;
-      }
-
-    }
   }
 
+  a {
+    color: $grey3;
+    display: block;
+    margin-bottom: 20px;
+    text-decoration: none;
+
+    &:hover {
+      color: $grey6;
+    }
+
+    &.active {
+      color: $green5;
+      font-weight: 400;
+    }
+
+    .glyphicon {
+      color: $green5;
+      margin-right: 5px;
+    }
+  }
 }
