@@ -66,7 +66,62 @@ const OfflineModel = GelatoModel.extend({
   },
 
   /**
+   * Returns a due count number  based on query parameters.
+   * @param {Object} [query]
+   * @returns {Promise.<Object>}
+   */
+  loadDueCount: function (query) {
+    query = _.defaults(query, {
+      lang: app.getLanguage(),
+      lists: [],
+      parts: this.user.getFilteredParts(),
+      styles: this.user.getFilteredStyles(),
+    });
+
+    return new Promise(async (resolve) => {
+      const now = moment().unix();
+      let result = 0;
+
+      await this.database.items.orderBy('next').each((item) => {
+        // exclude when no active vocab ids
+        if (!item.vocabIds || item.vocabIds.length === 0) {
+          return;
+        }
+
+        // exlude when not item from active language
+        if (item.lang !== query.lang) {
+          return;
+        }
+
+        // exclude part not including in user settings
+        if (!_.includes(query.parts, item.part)) {
+          return;
+        }
+
+        // exclude style not including in user settings
+        if (!_.includes(query.styles, item.style)) {
+          return;
+        }
+
+        if (query.lists.length && _.intersection(query.lists, item.vocabListIds).length === 0) {
+          return;
+        }
+
+        // exclude items not due based on next timestamp
+        if (item.next > now) {
+          return;
+        }
+
+        result++;
+      });
+
+      resolve(result);
+    });
+  },
+
+  /**
    * Gets next items based on specified query parameters.
+   * @param {Object} [query]
    * @returns {Promise.<Object>}
    */
   loadNext: async function (query) {
