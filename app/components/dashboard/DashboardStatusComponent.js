@@ -42,6 +42,17 @@ const DashboardStatusComponent = GelatoComponent.extend({
     if (app.config.useV2Gets.itemsdue) {
       url = app.getApiUrl(2) + 'gae/items/due';
     }
+
+    if (app.user.offline.isReady()) {
+      app.user.offline.loadDueCount({list: this.listIds}).then((result) => {
+        this.dueCount = result || 0;
+        this.render();
+        this.trigger('component:loaded', 'goal');
+      });
+
+      return;
+    }
+
     $.ajax({
       url: url,
       type: 'GET',

@@ -643,6 +643,29 @@ const ItemCollection = BaseSkritterCollection.extend({
       url = app.getApiUrl(2) + 'gae/items/due';
     }
 
+    if (app.user.offline.isReady()) {
+      let serverCount = 0;
+      let localCount = 0;
+
+      localCount = serverCount - this.reviews.getDueCountOffset();
+
+      if (localCount > 0) {
+        this.dueCount = localCount;
+      } else {
+        this.dueCount = 0;
+      }
+
+      app.user.offline.loadDueCount({list: this.listIds}).then((result) => {
+        this.dueCount += result;
+        this.dueCountServer = result;
+        this.dueCountState = 'standby';
+
+        this.trigger('update:due-count', this.dueCount);
+      });
+
+      return;
+    }
+
     $.ajax({
       url,
       type: 'GET',
