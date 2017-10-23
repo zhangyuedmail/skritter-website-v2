@@ -136,47 +136,32 @@ const DashboardGoalComponent = GelatoComponent.extend({
   },
 
   /**
+   * Calculates UI text and values for current daily goal completion and then
+   * updates the doughnut chart.
    * @method updateDoughnut
    */
   updateDoughnut: function () {
     const goal = app.user.getGoal();
-    let percent = 0;
+    let completion = 0;
+    let titleText;
 
     switch (goal.type) {
       case 'item': {
         const totalReviews = app.user.stats.getDailyItemsReviewed();
-
-        this.doughnut.setTitle({
-          text: totalReviews + ' / ' + (goal.value || 0) + '<br>items',
-          align: 'center',
-          verticalAlign: 'middle',
-          y: 0,
-        });
-
-        percent = app.user.stats.getGoalItemPercent();
-
+        titleText = totalReviews + ' / ' + (goal.value || 0) + '<br>items';
+        completion = app.user.stats.getGoalItemPercent();
         break;
       }
       case 'time': {
         const totalTime = app.user.stats.getDailyTimeStudied();
-
-        this.doughnut.setTitle({
-          text: moment(totalTime * 1000).format('m') + ' / ' + (goal.value || 0) + '<br>minutes',
-          align: 'center',
-          verticalAlign: 'middle',
-          y: 0,
-        });
-
-        percent = app.user.stats.getGoalTimePercent();
+        titleText = moment(totalTime * 1000).format('m') + ' / ' + (goal.value || 0) + '<br>minutes';
+        completion = app.user.stats.getGoalTimePercent();
 
         break;
       }
     }
 
-    this.doughnut.series[0].setData([
-      {name: 'Completed', color: '#c5da4b', y: percent},
-      {name: 'Remaining', color: '#efeef3', y: 100 - percent},
-    ], true);
+    this._updateDoughnutValues(titleText, completion);
   },
 
   getDueCount () {
@@ -248,16 +233,23 @@ const DashboardGoalComponent = GelatoComponent.extend({
   },
 
   /**
-   * @method updateText
+   * Calls API methods on the chart component to update its title and data values
+   * @param {String} titleText the textual representation of the goal
+   * @param {Number} completionPercentage the percent value of the daily goal reached
+   * @private
    */
-  updateText: function () {
-    // if (app.user.data.items.length) {
-    //   this.$('#items-added .value').text(app.user.data.items.getAddedCount());
-    // }
-    // if (app.user.data.stats.length) {
-    //   this.$('#items-reviewed .value').text(app.user.data.stats.getDailyItemsReviewed());
-    // }
-  },
+  _updateDoughnutValues (titleText, completionPercentage) {
+    this.doughnut.setTitle({
+      text: titleText,
+      align: 'center',
+      y: -8,
+    });
+
+    this.doughnut.series[0].setData([
+      {name: 'Completed', color: '#c5da4b', y: completionPercentage},
+      {name: 'Remaining', color: '#efeef3', y: 100 - completionPercentage},
+    ], true);
+  }
 
 });
 
