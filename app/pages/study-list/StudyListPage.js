@@ -6,14 +6,14 @@ const Items = require('collections/ItemCollection.js');
 const Vocablist = require('models/VocablistModel.js');
 const MobileStudyNavbar = require('components/navbars/NavbarMobileStudyComponent.js');
 const QuickSettings = require('dialogs1/quick-settings/QuickSettingsDialog.js');
-
+const StudyPage = require('pages/study/StudyPage.js');
 const vent = require('vent');
 
 /**
  * @class StudyListPage
- * @extends {GelatoPage}
+ * @extends {StudyPage}
  */
-const StudyListPage = GelatoPage.extend({
+const StudyListPage = StudyPage.extend({
 
   /**
    * @property showFooter
