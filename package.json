@@ -34,6 +34,7 @@
     "lint": "eslint --ext .js --fix ./app/**",
     "monitor": "node ./scripts/npm-monitor",
     "precommit": "npm run lint",
+    "prepush": "",
     "prune": "node ./scripts/npm-prune",
     "start": "node ./scripts/npm-start",
     "test": "node ./scripts/npm-test"

@@ -156,7 +156,7 @@ gelato-page(data-name='account-settings-study')
 
               .form-group
                 label.col-sm-3.control-label(for="field-goal-mode") Goal mode
-                  .option-desc
+                  .option-desc Tracks your daily progress against a target number of reviews or study period length
                 .col-sm-9
                   .checkbox
                     label.toggle-switch
@@ -171,6 +171,7 @@ gelato-page(data-name='account-settings-study')
                   select#field-goal-type.form-control.inline-block
                     option(value="item", selected=(app.user.get('goalType') === 'item')) Reviews
                     option(value="time", selected=(app.user.get('goalType') === 'time')) Minutes
+                  span.control-label &nbsp;per day
 
               hr
 
