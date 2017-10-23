@@ -123,7 +123,7 @@ module.exports = {
    * Whether app page load times should be stored to app.loadTimes
    * @type {Boolean}
    */
-  recordLoadTimes: true && window.performance,
+  recordLoadTimes: false && window.performance,
 
   /**
    * Whether to use a local backend instead of production
