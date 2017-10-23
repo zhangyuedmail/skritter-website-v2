@@ -71,6 +71,7 @@ const OfflineModel = GelatoModel.extend({
    */
   loadNext: async function (query) {
     query = _.defaults(query, {
+      lang: app.getLanguage(),
       limit: 100,
       lists: [],
       parts: this.user.getFilteredParts(),
@@ -84,6 +85,11 @@ const OfflineModel = GelatoModel.extend({
       const queryItemResult = await this.database.items.orderBy('next').limit(query.limit).filter((item) => {
         // exclude when no active vocab ids
         if (!item.vocabIds || item.vocabIds.length === 0) {
+          return false;
+        }
+
+        // exlude when not item from active language
+        if (item.lang !== query.lang) {
           return false;
         }
 
