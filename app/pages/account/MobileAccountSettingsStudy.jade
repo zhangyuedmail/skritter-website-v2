@@ -122,25 +122,25 @@ gelato-page(data-name='mobile-account-settings-study')
                   .toggle-switch-slider.round
 
           hr
+          section#goal-mode-section
+            .form-group
+              label.col-xs-3.control-label(for="field-goal-mode") Goal mode
+                .option-desc Tracks your daily progress against a target number of reviews or study period length
+              .col-xs-9
+                .checkbox
+                  label.toggle-switch
+                    input#field-goal-mode(type="checkbox", checked=user.get('goalEnabled'))
+                    .toggle-switch-slider.round
 
-          .form-group
-            label.col-xs-3.control-label(for="field-goal-mode") Goal mode
-              .option-desc Tracks your daily progress against a target number of reviews or study period length
-            .col-xs-9
-              .checkbox
-                label.toggle-switch
-                  input#field-goal-mode(type="checkbox", checked=user.get('goalEnabled'))
-                  .toggle-switch-slider.round
-
-          .form-group
-            label.col-xs-3.control-label(for="field-goal-value") Goal target
-              .option-desc
-            .col-xs-9
-              input#field-goal-value.form-control.inline-block(type="text", value=app.user.getGoal().value)
-              select#field-goal-type.form-control.inline-block
-                option(value="item", selected=(app.user.get('goalType') === 'item')) Reviews
-                option(value="time", selected=(app.user.get('goalType') === 'time')) Minutes
-              span.control-label &nbsp;per day
+            .form-group
+              label.col-xs-3.control-label(for="field-goal-value") Goal target
+                .option-desc
+              .col-xs-9
+                input#field-goal-value.form-control.inline-block(type="text", value=app.user.getGoal().value)
+                select#field-goal-type.form-control.inline-block
+                  option(value="item", selected=(app.user.get('goalType') === 'item')) Reviews
+                  option(value="time", selected=(app.user.get('goalType') === 'time')) Minutes
+                span.control-label &nbsp;per day
 
           if app.isJapanese()
             .form-group

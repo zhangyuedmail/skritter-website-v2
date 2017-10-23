@@ -1,7 +1,6 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='mobile-account-settings-study'] {
-
   background: $background-primary;
   padding-top: 100px;
 
@@ -106,6 +105,14 @@ gelato-page[data-name='mobile-account-settings-study'] {
       max-width: 100px;
       outline: 0;
     }
+  }
+
+  section {
+    padding: 10px 0;
+  }
+
+  .highlighted {
+    background-color: #ffffff;
   }
 
 }

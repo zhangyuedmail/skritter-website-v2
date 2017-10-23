@@ -161,7 +161,7 @@ const DashboardPage = GelatoPage.extend({
   onGoalSettingClicked: function (event) {
     event.preventDefault();
 
-    app.router.navigate('account/settings/study', {trigger: true});
+    app.router.navigateAccountSettingsStudy('goal-mode-section');
   },
 
   onRatingBtnClicked: function () {

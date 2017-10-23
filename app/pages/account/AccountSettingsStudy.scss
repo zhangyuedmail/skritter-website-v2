@@ -81,6 +81,14 @@ gelato-page[data-name='account-settings-study'] {
     }
   }
 
+  section {
+    padding: 10px 0;
+  }
+
+  .highlighted {
+    background-color: #ffffff;
+  }
+
   .option-desc {
     color: $grey3;
   }

@@ -166,11 +166,12 @@ module.exports = Router.extend({
 
   /**
    * @method navigateAccountSettingsStudy
+   * @param {String} [jumpToSetting] a section of settings to jump to once the page is navigated to
    */
-  navigateAccountSettingsStudy: function () {
+  navigateAccountSettingsStudy: function (jumpToSetting) {
     if (app.user.isLoggedIn()) {
       this.navigate('account/settings/study');
-      this.go('pages/account/AccountSettingsStudyPage');
+      this.go('pages/account/AccountSettingsStudyPage', {jumpToSetting});
     } else {
       this.navigateLogin();
     }

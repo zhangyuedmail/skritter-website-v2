@@ -190,6 +190,15 @@ let GelatoView = Backbone.View.extend({
   },
 
   /**
+   * Gets an element on the page's y-position and scrolls to that element
+   * @param {String} selector the jQuery selector for the element
+   */
+  scrollTo (selector) {
+    const yPos = this.$(selector).position().top;
+    window.scrollTo(0, yPos);
+  },
+
+  /**
    * @method show
    * @returns {GelatoView}
    */

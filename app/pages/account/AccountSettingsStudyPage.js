@@ -36,7 +36,10 @@ const AccountSettingsStudyPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function () {
+  initialize: function (options) {
+    options = options || {};
+    this.jumpToSetting = options.jumpToSetting;
+
     this.sidebar = new AccountSidebar();
     this.sourceLanguages = require('data/source-languages');
     this.listenTo(app.user, 'state', this.render);
@@ -54,6 +57,13 @@ const AccountSettingsStudyPage = GelatoPage.extend({
 
     this.renderTemplate();
     this.sidebar.setElement('#sidebar-container').render();
+
+    if (this.jumpToSetting) {
+      this.$('#' + this.jumpToSetting).addClass('highlighted');
+      _.defer(() => {
+        this.scrollTo('#' + this.jumpToSetting);
+      });
+    }
     return this;
   },
 
