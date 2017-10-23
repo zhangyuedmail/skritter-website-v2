@@ -6,6 +6,7 @@
 /node_modules/
 /output/
 /public/
+/app/assets/
 
 # Files
 *.apk
@@ -13,3 +14,5 @@
 *.log
 *.build.json
 *.billing.json
+*.scss
+*.jade

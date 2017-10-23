@@ -31,7 +31,7 @@
     "ios": "node ./scripts/npm-ios",
     "ios-build": "node ./scripts/npm-ios-build",
     "ios-release": "node ./scripts/npm-ios-release",
-    "lint": "eslint --ext js --fix ./app/**",
+    "lint": "eslint --ext .js --fix ./app/**",
     "monitor": "node ./scripts/npm-monitor",
     "precommit": "npm run lint",
     "prune": "node ./scripts/npm-prune",
