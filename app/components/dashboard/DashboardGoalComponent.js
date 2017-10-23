@@ -249,7 +249,7 @@ const DashboardGoalComponent = GelatoComponent.extend({
       {name: 'Completed', color: '#c5da4b', y: completionPercentage},
       {name: 'Remaining', color: '#efeef3', y: 100 - completionPercentage},
     ], true);
-  }
+  },
 
 });
 
