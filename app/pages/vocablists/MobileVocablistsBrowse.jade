@@ -22,7 +22,7 @@ gelato-page(data-name='mobile-vocablists-browse')
   section.container
     #expiration-container
     .content-block
-      .row
+      .row.search-filter-options
         .col-md-12
           #table-options
             .row
@@ -33,15 +33,14 @@ gelato-page(data-name='mobile-vocablists-browse')
                   input#list-search-input.form-control(type="text", placeholder="Type to search by title")
 
             .form-inline#field-filter-list
-              label View only:
-              .checkbox
-                label
-                  input(type="checkbox" value='textbook', checked)
-                  span Textbooks
-              .checkbox
-                label
-                  input(type="checkbox" value='published')
-                  span User published
+              .filter-switch-wrapper
+                span.view-only View only:
+                span.textbook-label.filter-label.selected Textbooks
+                .checkbox
+                  label.toggle-switch
+                    input#textbook-filter-toggle-input(type="checkbox" value='textbook', checked=false)
+                    .toggle-switch-slider.round.always-enabled
+                span.published-label.filter-label User published
 
       .row
         .col-md-12.main-content

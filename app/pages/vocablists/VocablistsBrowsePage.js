@@ -17,6 +17,7 @@ module.exports = GelatoPage.extend({
    */
   events: {
     'change input[type="checkbox"]': 'handleChangeCheckbox',
+    'click .filter-label': 'handleClickFilterLabel',
     'keyup #list-search-input': 'handleKeypressListSearchInput',
     'click #list-option': 'handleClickListOption',
     'click #grid-option': 'handleClickGridOption',
@@ -89,7 +90,7 @@ module.exports = GelatoPage.extend({
   handleChangeCheckbox: function (event) {
     const searchValue = this.$('#list-search-input').val();
 
-    this.filterType = this.$(event.target).val();
+    this.filterType = this.$('#textbook-filter-toggle-input').is(':checked') ? 'published' : 'textbook';
 
     this._views['table'].vocablists.reset();
 
@@ -106,15 +107,23 @@ module.exports = GelatoPage.extend({
       }
     }
 
-    this.$('#field-filter-list input[type="checkbox"]').each((index, element) => {
-      if (element.value === this.filterType) {
-        element.checked = true;
-      } else {
-        element.checked = false;
-      }
-    });
+    this.$('.textbook-label').toggleClass('selected', this.filterType === 'textbook');
+    this.$('.published-label').toggleClass('selected', this.filterType === 'published');
   },
 
+  /**
+   * Handles when the
+   * @param {jQuery.Event} event
+   */
+  handleClickFilterLabel (event) {
+    const el = $(event.target);
+
+    if (el.hasClass('selected')) {
+      return;
+    }
+
+    this.$('#textbook-filter-toggle-input').trigger('click');
+  },
   /**
    * @method onClickListOption
    * @param {Event} event

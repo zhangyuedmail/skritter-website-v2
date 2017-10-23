@@ -27,13 +27,11 @@ gelato-page(data-name='vocablists-browse')
 
             .form-inline#field-filter-list
               label View only:
+              span.filter-label.textbook-label.selected Textbooks
               .checkbox
-                label
-                  input(type="checkbox" value='textbook', checked)
-                  span Textbooks
-              .checkbox
-                label
-                  input(type="checkbox" value='published')
-                  span User published
+                label.toggle-switch
+                  input#textbook-filter-toggle-input(type="checkbox" value='textbook', checked=false)
+                  .toggle-switch-slider.round.always-enabled
+              span.filter-label.published-label User published
 
           #vocablist-container

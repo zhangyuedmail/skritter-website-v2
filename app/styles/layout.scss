@@ -101,6 +101,10 @@ gelato-page > .container > .content-block {
   transition: .1s;
 }
 
+.toggle-switch-slider.always-enabled {
+  background-color: $green5;
+}
+
 .toggle-switch-slider:before {
   position: absolute;
   content: "";
