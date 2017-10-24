@@ -199,7 +199,7 @@ let GelatoView = Backbone.View.extend({
     if (app.isMobile()) {
       try {
         el[0].scrollIntoView({block: 'end'});
-      } catch(e) {
+      } catch (e) {
         el[0].scrollIntoView();
       }
     } else {
