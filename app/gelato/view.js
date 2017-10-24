@@ -194,8 +194,17 @@ let GelatoView = Backbone.View.extend({
    * @param {String} selector the jQuery selector for the element
    */
   scrollTo (selector) {
-    const yPos = this.$(selector).position().top;
-    window.scrollTo(0, yPos);
+    const el = this.$(selector);
+    const yPos = el.position().top;
+    if (app.isMobile()) {
+      try {
+        el[0].scrollIntoView({block: 'end'});
+      } catch(e) {
+        el[0].scrollIntoView();
+      }
+    } else {
+      window.scrollTo(0, yPos);
+    }
   },
 
   /**
