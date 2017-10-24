@@ -85,8 +85,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.backgroundStage = null;
 
     this.listenTo(this.prompt, 'character:erased', () => {
-this.stopAnimations();
-});
+      this.stopAnimations();
+    });
   },
 
   /**
@@ -503,7 +503,7 @@ this.stopAnimations();
       if (!animRemoved) {
         this.stopAnimations(['fadeLayer']);
       }
-    }, options.milliseconds + 50);
+    }, options.milliseconds + 250);
   },
 
   /**
