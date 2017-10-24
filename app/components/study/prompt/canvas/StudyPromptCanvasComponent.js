@@ -19,7 +19,7 @@ const _layerMap = {};
  * @type {Object}
  * @private
  */
-const _animations = [];
+const _animations = {};
 
 /**
  * A cache of references to the circle that traces through a path
@@ -85,7 +85,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.backgroundStage = null;
 
     this.listenTo(this.prompt, 'character:erased', () => {
-      this.stopAnimations();
+      this.stopAnimations(null);
     });
   },
 
@@ -485,7 +485,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     options = options || {};
     options.easing = options.easing || this.defaultFadeEasing;
     options.milliseconds = options.milliseconds || this.defaultFadeSpeed;
-    this.startAnimation('fadeLayer');
+    const animId = this.startAnimation('fadeLayer');
     createjs.Tween
       .get(layer).to({alpha: 0}, options.milliseconds, options.easing)
       .call(() => {
@@ -494,14 +494,17 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
         if (typeof callback === 'function') {
           callback();
         }
-        this.stopAnimations(['fadeLayer']);
+        // console.log(`ending ${animId}`);
+        this.stopAnimations([animId]);
         animRemoved = true;
       });
 
     // fallback...sometimes the callback is never called
     setTimeout(() => {
+      // console.log(`backup ending ${animId}`);
       if (!animRemoved) {
-        this.stopAnimations(['fadeLayer']);
+        // console.log(`backup stopping ${animId}`);
+        this.stopAnimations([animId]);
       }
     }, options.milliseconds + 250);
   },
@@ -519,7 +522,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     options.easing = options.easing || this.defaultFadeEasing;
     options.milliseconds = options.milliseconds || this.defaultFadeSpeed;
     layer.addChild(shape);
-    this.startAnimation('fadeShape');
+    const animId = this.startAnimation('fadeShape');
     createjs.Tween
       .get(shape).to({alpha: 0}, options.milliseconds, options.easing)
       .call(() => {
@@ -528,7 +531,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
         if (typeof callback === 'function') {
           callback();
         }
-        this.stopAnimations(['fadeShape']);
+        // console.log(`ending  ${animId}`);
+        this.stopAnimations([animId]);
       });
   },
 
@@ -681,11 +685,17 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   /**
    * Adds an animation to the animation queue
    * @param {String} name the name of the type of animation to start
+   * @return {String} the id of the animation
    */
   startAnimation (name) {
-    _animations.push(name);
+    const now = Date.now();
+    const rand = Math.floor(Math.random() * 10000000);
+    const id = name + now + rand;
+    _animations[id] = true;
 
     this._startOrStopTicker();
+
+    return id;
   },
 
   /**
@@ -696,14 +706,16 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     names = names || [];
 
     for (let i = 0; i < names.length; i++) {
-      const index = _animations.indexOf(names[i]);
-      if (index > -1) {
-        _animations.splice(index, 1);
+      if (_animations[names[i]]) {
+        delete _animations[names[i]];
       }
     }
 
     if (!names.length) {
-      _animations.length = 0;
+      const keys = Object.keys(_animations);
+      for (let i = 0; i < keys.length; i++) {
+        delete _animations[keys[i]];
+      }
     }
 
     this._startOrStopTicker();
@@ -715,7 +727,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @private
    */
   _startOrStopTicker () {
-      this.displayStage.ticker.paused = !_animations.length;
+      this.displayStage.ticker.paused = !Object.keys(_animations).length;
   },
 
   /**
@@ -852,7 +864,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   triggerNavigateNext: function (event) {
     event.preventDefault();
-    this.stopAnimations();
+    this.stopAnimations(null);
     this.trigger('navigate:next');
   },
 
@@ -862,7 +874,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   triggerNavigatePrevious: function (event) {
     event.preventDefault();
-    this.stopAnimations();
+    this.stopAnimations(null);
     this.trigger('navigate:previous');
   },
 
@@ -883,11 +895,10 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     options = options || {};
     options.easing = options.easing || createjs.Ease.backOut;
     options.speed = options.speed || 400;
-
     fromShape.cache(0, 0, bounds.width, bounds.height);
 
     layer.addChild(fromShape);
-    this.startAnimation('tweenShape');
+    const animId = this.startAnimation('tweenShape');
     createjs.Tween
       .get(fromShape)
       .to({
@@ -900,7 +911,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
         if (typeof callback === 'function') {
           callback();
         }
-        this.stopAnimations(['tweenShape']);
+        this.stopAnimations([animId]);
+        // console.log(`ending tweenShape ${animId}`);
       });
 
       if (options.updateStage) {
