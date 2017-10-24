@@ -7,6 +7,8 @@ const DashboardStatus = require('components/dashboard/DashboardStatusComponent')
 const DashboardTotal = require('components/dashboard/DashboardTotalComponent');
 const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 const MobileNavbar = require('components/navbars/NavbarMobileDashboardComponent');
+const ViewDialog = require('dialogs1/view-dialog/view');
+const ReleaseNotes = require('components/common/ReleaseNotesComponent');
 
 /**
  * A page that shows a summary of the user's review count due, stats, and lists
@@ -121,6 +123,8 @@ const DashboardPage = GelatoPage.extend({
     this._views['queue'].setElement('#dashboard-queue-container').render();
     this._views['expiration'].setElement('#subscription-notice').render();
 
+    this._checkForReleaseNotes();
+
     return this;
   },
 
@@ -210,6 +214,36 @@ const DashboardPage = GelatoPage.extend({
     }
 
     $ratingNotice.removeClass('hidden');
+  },
+
+  /**
+   * Checks whether the user has seen the release notes for the current version
+   * of the app if it's recently been released.
+   * If not, updates a flag to show that the user has seen them,
+   * then opens the release notes.
+   * @private
+   */
+  _checkForReleaseNotes () {
+    if (!app.getSetting('releaseNotesViewed-' + app.config.version)) {
+      if (moment().diff(moment(Number(app.config.timestamp) * 1000), 'days') < 4) {
+        this._showReleaseNotes();
+        app.setSetting('releaseNotesViewed-' + app.config.version, true);
+      }
+    }
+  },
+
+  /**
+   * Creates an instance of a dialog to show release notes and opens it up
+   * @private
+   */
+  _showReleaseNotes () {
+    this._views['releaseNotes'] = new ViewDialog({
+      showCloseButton: true,
+      showTitle: true,
+      dialogTitle: app.locale('components.releaseNotes.title') + ' - v' + app.config.version,
+      content: ReleaseNotes,
+    });
+    this._views['releaseNotes'].open();
   },
 });
 

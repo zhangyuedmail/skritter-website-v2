@@ -46,6 +46,10 @@ module.exports = {
   },
 
   'components': {
+    'releaseNotes': {
+      'title': 'Release Notes'
+    },
+
     'studyPrompt': {
       'emptyButton': 'Browse Lists',
       'emptyCallToAction': 'You\'ll need to add at least one list before you can start studying.',
