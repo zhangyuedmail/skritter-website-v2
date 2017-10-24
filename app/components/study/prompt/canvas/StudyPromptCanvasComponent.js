@@ -696,7 +696,10 @@ this.stopAnimations();
     names = names || [];
 
     for (let i = 0; i < names.length; i++) {
-      _animations.pop();
+      const index = _animations.indexOf(names[i]);
+      if (index > -1) {
+        _animations.splice(index, 1);
+      }
     }
 
     if (!names.length) {
