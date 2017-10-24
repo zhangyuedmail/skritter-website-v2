@@ -302,7 +302,7 @@ module.exports = {
       'newUserBrowseDialogDescription': 'Welcome! Skritter works by helping you to learn words from lists you are studying. Just pick a list you want to study and press the <b>Add to queue</b> button to start learning from it.</p><p>In this section, you\'ll see lists the Skritter team has curated, which cover some of our most popular learning resources, like ',
       'newUserBrowseDialogDescriptionTextbooksja': '<b>Genki</b> or <b>JLPT</b>.',
       'newUserBrowseDialogDescriptionTextbookszh': '<b>Integrated Chinese</b>, <b>HSK</b>, or <b>TOCFL</b>.</p>',
-      'newUserBrowseDialogDescription2': '<p>Additionally, other users like you have published thousands of lists on every topic imaginable! Go to the \'Published Lists\' section to take a look.</p>',
+      'newUserBrowseDialogDescription2': '<p>Additionally, other users like you have published thousands of lists on every topic imaginable! Just switch the filter from \'Textbooks\' to \'User Published\' to take a look.</p>',
       'newUserBrowseDialogConfirm': 'Got it!',
     },
   },
