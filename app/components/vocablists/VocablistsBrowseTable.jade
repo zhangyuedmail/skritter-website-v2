@@ -33,6 +33,9 @@ gelato-component(data-name='vocablists-browse-table')
                 a.btn.btn-success(href='/study/' + list.id) Study
               else
                 span= _.capitalize(list.getNormalizedStudyingMode())
+      if !view._filterString
+        .row.text-center
+          .col-xs-12 Showing results 1-200 of about 9,000 lists. Try searching for a topic like 'business' or 'animals' for more.
 
   else if view._layout === 'grid'
     #grid

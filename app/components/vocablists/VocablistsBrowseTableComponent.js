@@ -69,6 +69,10 @@ const VocablistsBrowseTableComponent = GelatoComponent.extend({
       sort: 'official',
     });
 
+    if (params['q']) {
+      this._filterString = params['q'];
+    }
+
     options = _.defaults({data, remove: false}, options || {});
     return this.vocablists.fetch(options);
   },
