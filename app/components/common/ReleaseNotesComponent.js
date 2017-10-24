@@ -63,7 +63,7 @@ const ReleaseNotesComponent = GelatoComponent.extend({
     section.find('.more').toggleClass('hidden', !expanded);
     section.find('.less').toggleClass('hidden', expanded);
     section.find('.read-more').html(expanded ? '&nbsp; read less' : '&nbsp; read more');
-  }
+  },
 });
 
 module.exports = ReleaseNotesComponent;

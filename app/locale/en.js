@@ -47,7 +47,7 @@ module.exports = {
 
   'components': {
     'releaseNotes': {
-      'title': 'Release Notes'
+      'title': 'Release Notes',
     },
 
     'studyPrompt': {
