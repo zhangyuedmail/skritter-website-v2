@@ -44,12 +44,7 @@ const FeedbackComponent = GelatoComponent.extend({
     if (this.dialog) {
       this.dialog.close();
 
-      let thanks = '谢谢';
-      if (app.isJapanese()) {
-        thanks = 'ありがとうございます！';
-      } else if (app.user.get('addTraditional') && app.user.get('reviewTraditional')) {
-          thanks = '謝謝!';
-      }
+      const thanks = app.sayThankYou() + '！';
 
       app.notifyUser({
         message: 'Feedback successfully sent! ' + thanks,

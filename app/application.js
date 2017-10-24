@@ -1093,6 +1093,21 @@ return parseInt(v, 10);
   },
 
   /**
+   * Say thank you in the appropriate language and style for the current user
+   * @returns {string}
+   */
+  sayThankYou () {
+    let thanks = '谢谢';
+    if (app.isJapanese()) {
+      thanks = 'ありがとうございます';
+    } else if (app.user.get('addTraditional') && app.user.get('reviewTraditional')) {
+        thanks = '謝謝';
+    }
+
+    return thanks;
+  },
+
+  /**
    * Checks if a client session token is refreshable and refreshes it if needed.
    * @returns {Promise}
    */
