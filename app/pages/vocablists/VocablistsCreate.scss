@@ -1,12 +1,12 @@
 @import "../../styles/_variables";
 
 gelato-page[data-name='vocablists-create'] {
-
   background: $background-primary;
   padding-top: 75px;
 
   .back-link {
     color: $grey3;
+
     .glyphicon {
       margin-right: 5px;
     }
@@ -29,5 +29,18 @@ gelato-page[data-name='vocablists-create'] {
   .form-control {
     width: 50%;
   }
+}
 
+
+.mobile {
+  gelato-page[data-name='vocablists-create'] {
+
+    #create-list-btn {
+      float: right;
+    }
+
+    .form-control {
+      width: 100%;
+    }
+  }
 }

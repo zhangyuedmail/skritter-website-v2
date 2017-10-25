@@ -14,7 +14,7 @@ const ResetAllDataDialog = GelatoDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-confirm': 'handleClickButtonConfirm'
+    'click #button-confirm': 'handleClickButtonConfirm',
   },
 
   /**
@@ -27,7 +27,7 @@ const ResetAllDataDialog = GelatoDialog.extend({
    * @method render
    * @returns {ResetAllDataDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -36,7 +36,7 @@ const ResetAllDataDialog = GelatoDialog.extend({
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
     this.close();
   },
@@ -46,7 +46,7 @@ const ResetAllDataDialog = GelatoDialog.extend({
    * @method handleClickButtonConfirm
    * @param {Event} event
    */
-  handleClickButtonConfirm: function(event) {
+  handleClickButtonConfirm: function (event) {
     event.preventDefault();
     ScreenLoader.show();
     ScreenLoader.post('Resetting account data');
@@ -61,14 +61,16 @@ const ResetAllDataDialog = GelatoDialog.extend({
         app.user.cache();
         app.router.navigate('dashboard');
         app.reload();
-    }, (error) => {this.handleResetError(error);});
+    }, (error) => {
+this.handleResetError(error);
+});
   },
 
   /**
    * Handles when there's an error resetting a user's account
    * @param {Object} error
    */
-  handleResetError: function(error) {
+  handleResetError: function (error) {
     ScreenLoader.hide();
     this.$('#error-message').text(error);
   },
@@ -79,22 +81,22 @@ const ResetAllDataDialog = GelatoDialog.extend({
    *                          the user *really* wants to do this
    * @return {Promise}
    */
-  resetV1Data: function(password) {
+  resetV1Data: function (password) {
     return new Promise((resolve, reject) => {
       $.ajax({
         data: {
           lang: app.getLanguage(),
-          password
+          password,
         },
         headers: app.user.session.getHeaders(),
         type: 'POST',
         url: app.getApiUrl() + 'reset',
-        error: function(error) {
+        error: function (error) {
           reject(error.responseJSON ? error.responseJSON.message : app.locale('pages.account.errorResetGeneral'));
         },
-        success: function() {
+        success: function () {
           resolve();
-        }
+        },
       });
     });
   },
@@ -104,24 +106,24 @@ const ResetAllDataDialog = GelatoDialog.extend({
    * was updated
    * @return {Promise}
    */
-  resetV2Data: function() {
+  resetV2Data: function () {
     return new Promise((resolve, reject) => {
       $.ajax({
         data: {
-          lang: app.getLanguage()
+          lang: app.getLanguage(),
         },
         headers: app.user.session.getHeaders(),
         type: 'POST',
         url: app.getApiUrl(2) + 'gae/account/reset',
-        error: function(error) {
+        error: function (error) {
           reject(error.responseJSON ? error.responseJSON.message : app.locale('pages.accountGeneral.errorResetGeneral'));
         },
-        success: function() {
+        success: function () {
           resolve();
-        }
+        },
       });
     });
-  }
+  },
 });
 
 module.exports = ResetAllDataDialog;

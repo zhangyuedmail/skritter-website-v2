@@ -17,9 +17,9 @@ const StrokeShapeCollection = GelatoCollection.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.add(ShapeData.getData());
-  }
+  },
 });
 
 module.exports = StrokeShapeCollection;

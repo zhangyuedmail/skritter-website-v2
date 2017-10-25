@@ -2,13 +2,13 @@
  * @class GelatoView
  * @extends {Backbone.View}
  */
-var GelatoView = Backbone.View.extend({
+let GelatoView = Backbone.View.extend({
 
   /**
    * Instantiates certain instance variables so they are setup correctly for inheritance
    * @param {Object} [options]
    */
-  constructor: function(options) {
+  constructor: function (options) {
     /**
      * Dictionary that contains subviews this view manages
      * @property _views
@@ -35,7 +35,7 @@ var GelatoView = Backbone.View.extend({
    * @param {String} [selector]
    * @returns {GelatoView}
    */
-  disableForm: function(selector) {
+  disableForm: function (selector) {
     this.$((selector ? selector + ' ' : '') + ':input').prop('disabled', true);
     return this;
   },
@@ -44,7 +44,7 @@ var GelatoView = Backbone.View.extend({
    * @param {String} [selector]
    * @returns {GelatoView}
    */
-  enableForm: function(selector) {
+  enableForm: function (selector) {
     this.$((selector ? selector + ' ' : '') + ':input').prop('disabled', false);
     return this;
   },
@@ -53,7 +53,7 @@ var GelatoView = Backbone.View.extend({
    * @method getHeight
    * @returns {Number}
    */
-  getHeight: function() {
+  getHeight: function () {
     return this.$view.height();
   },
 
@@ -61,7 +61,7 @@ var GelatoView = Backbone.View.extend({
    * @method getWidth
    * @returns {Number}
    */
-  getWidth: function() {
+  getWidth: function () {
     return this.$view.width();
   },
 
@@ -69,10 +69,10 @@ var GelatoView = Backbone.View.extend({
    * @method handleClickHref
    * @param {Event} event
    */
-  handleClickHref: function(event) {
-    var target = Backbone.$(event.currentTarget);
-    var href = target.attr('href');
-    var ignore = target.data('ignore');
+  handleClickHref: function (event) {
+    let target = Backbone.$(event.currentTarget);
+    let href = target.attr('href');
+    let ignore = target.data('ignore');
     if (window.app !== undefined &&
       window.app.router !== undefined &&
       !ignore &&
@@ -81,13 +81,13 @@ var GelatoView = Backbone.View.extend({
       href.indexOf('http://') !== 0 &&
       href.indexOf('https://') !== 0) {
       event.preventDefault();
-      var dataReplace = target.data('replace');
-      var dataTrigger = target.data('trigger');
+      let dataReplace = target.data('replace');
+      let dataTrigger = target.data('trigger');
       window.app.router.navigate(
         href,
         {
           replace: dataReplace !== undefined ? dataReplace : false,
-          trigger: dataTrigger !== undefined ? dataTrigger : true
+          trigger: dataTrigger !== undefined ? dataTrigger : true,
         }
       );
     }
@@ -101,12 +101,12 @@ var GelatoView = Backbone.View.extend({
    * @returns {Object} a merged, unique object that holds all variables
    *                    available to a template at render time.
    */
-  getContext: function(context) {
+  getContext: function (context) {
     const globals = require('globals') || {};
     const appState = {
       app: window.app,
       locale: window.app.locale,
-      view: this
+      view: this,
     };
 
     const renderContext = Backbone.$.extend(true, {}, globals, appState, context || {});
@@ -118,7 +118,7 @@ var GelatoView = Backbone.View.extend({
    * @method hide
    * @returns {GelatoView}
    */
-  hide: function() {
+  hide: function () {
     this.$view.hide(arguments.length ? arguments : 0);
     return this;
   },
@@ -129,7 +129,7 @@ var GelatoView = Backbone.View.extend({
    * @param {Object} [context]
    * @returns {Object}
    */
-  parseTemplate: function(template, context) {
+  parseTemplate: function (template, context) {
     if (typeof template === 'function') {
       return template(this.getContext(context));
     }
@@ -141,11 +141,11 @@ var GelatoView = Backbone.View.extend({
    * @method remove
    * @returns {GelatoView}
    */
-  remove: function() {
+  remove: function () {
     this.stopListening();
     this.undelegateEvents();
 
-    for (var view in this._views) {
+    for (let view in this._views) {
       if (this._views.hasOwnProperty(view)) {
         this._views[view].remove();
       }
@@ -162,7 +162,7 @@ var GelatoView = Backbone.View.extend({
    * @method render
    * @returns {GelatoView}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -174,13 +174,13 @@ var GelatoView = Backbone.View.extend({
    * @param {Object} [context]
    * @returns {GelatoView}
    */
-  renderTemplate: function(context) {
+  renderTemplate: function (context) {
     this.$view = Backbone.$(this.parseTemplate(this.template, context));
     this.$el.html(this.$view);
     this.$('a[href]').on('click', this.handleClickHref);
-    Backbone.$(window).on('resize.View', (function(event) {
+    Backbone.$(window).on('resize.View', (function (event) {
       clearTimeout(this._resize);
-      this._resize = setTimeout((function() {
+      this._resize = setTimeout((function () {
         this._resize = null;
         this.trigger('resize', event);
       }).bind(this), 200);
@@ -190,13 +190,31 @@ var GelatoView = Backbone.View.extend({
   },
 
   /**
+   * Gets an element on the page's y-position and scrolls to that element
+   * @param {String} selector the jQuery selector for the element
+   */
+  scrollTo (selector) {
+    const el = this.$(selector);
+    const yPos = el.position().top;
+    if (app.isMobile()) {
+      try {
+        el[0].scrollIntoView({block: 'end'});
+      } catch (e) {
+        el[0].scrollIntoView();
+      }
+    } else {
+      window.scrollTo(0, yPos);
+    }
+  },
+
+  /**
    * @method show
    * @returns {GelatoView}
    */
-  show: function() {
+  show: function () {
     this.$view.show(arguments.length ? arguments : 0);
     return this;
-  }
+  },
 });
 
 module.exports = GelatoView;

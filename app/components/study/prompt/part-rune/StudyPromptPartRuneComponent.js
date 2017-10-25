@@ -1,5 +1,5 @@
 const GelatoComponent = require('gelato/component');
-const config = require('config');
+// const config = require('config');
 
 /**
  * @class StudyPromptPartRuneComponent
@@ -31,8 +31,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @param {StudyPromptComponent} options.prompt the prompt component
    * @constructor
    */
-  initialize: function(options) {
-
+  initialize: function (options) {
     /**
      * The parent prompt instance
      * @type {StudyPromptComponent}
@@ -78,15 +77,12 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptPartRuneComponent}
    */
-  render: function() {
+  render: function () {
     this.prompt.review = this.prompt.reviews.current();
     this.prompt.canvas.grid = true;
     this.prompt.canvas.reset();
     this.prompt.shortcuts.tone.stop_listening();
-    this.prompt.toolbarAction.buttonCorrect = true;
-    this.prompt.toolbarAction.buttonErase = true;
-    this.prompt.toolbarAction.buttonShow = true;
-    this.prompt.toolbarAction.buttonTeach = true;
+    this.prompt.toolbarAction.setPromptType('rune');
 
     if (app.isMobile()) {
       this.prompt.vocabDefinition.render();
@@ -123,23 +119,22 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method renderComplete
    * @returns {StudyPromptPartRuneComponent}
    */
-  renderComplete: function() {
+  renderComplete: function () {
     this.prompt.review.stop();
     this.prompt.review.set('complete', true);
     this.prompt.shortcuts.grading.listen();
     this.prompt.canvas.clearLayer('character-teach');
     this.prompt.canvas.disableInput();
 
-    this.prompt.navigation.render();
-    this.prompt.toolbarAction.render();
-    this.prompt.toolbarGrading.render({delayEvents: true});
-    this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
+    this.prompt.navigation.update();
+    this.prompt.toolbarAction.update();
+    this.prompt.toolbarGrading.update(this.prompt.review.get('score'), true);
     this.prompt.vocabReading.render();
     this.prompt.vocabWriting.render();
 
 
     if (!app.isMobile()) {
-      this.prompt.toolbarVocab.render();
+      this.prompt.toolbarVocab.update();
       this.prompt.vocabContained.render();
       this.prompt.vocabDefinition.render();
       this.prompt.vocabMnemonic.render();
@@ -181,21 +176,21 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method renderIncomplete
    * @returns {StudyPromptPartRuneComponent}
    */
-  renderIncomplete: function() {
+  renderIncomplete: function () {
     this.prompt.review.start();
     this.prompt.review.set('complete', false);
     this.prompt.shortcuts.grading.stop_listening();
 
     this.prompt.canvas.enableInput();
 
-    this.prompt.navigation.render();
-    this.prompt.toolbarAction.render();
-    this.prompt.toolbarGrading.render();
+    this.prompt.navigation.update();
+    this.prompt.toolbarAction.update();
+    this.prompt.toolbarGrading.update();
     this.prompt.vocabReading.render();
     this.prompt.vocabWriting.render();
 
     if (!app.isMobile()) {
-      this.prompt.toolbarVocab.render();
+      this.prompt.toolbarVocab.update();
       this.prompt.vocabContained.render();
       this.prompt.vocabDefinition.render();
       this.prompt.vocabMnemonic.render();
@@ -204,13 +199,13 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     }
 
     if (this.prompt.reviews.isTeachable() || this.prompt.review.get('showTeaching')) {
-      this.teachCharacter();
+      this.startTeachingCharacter();
     }
 
     if (this.prompt.review.item && this.prompt.review.item.isLeech()) {
       this.prompt.$('#leech-ribbon').removeClass('hidden');
       this.prompt.review.item.consecutiveWrong = 0;
-      this.teachCharacter();
+      this.startTeachingCharacter();
     } else {
       this.prompt.$('#leech-ribbon').addClass('hidden');
     }
@@ -226,11 +221,11 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handleAttemptFail
    */
-  handleAttemptFail: function() {
-    var character = this.prompt.review.character;
-    var failedConsecutive = this.prompt.review.get('failedConsecutive') + 1;
-    var failedTotal = this.prompt.review.get('failedTotal') + 1;
-    var maxStrokes = character.getMaxPosition();
+  handleAttemptFail: function () {
+    let character = this.prompt.review.character;
+    let failedConsecutive = this.prompt.review.get('failedConsecutive') + 1;
+    let failedTotal = this.prompt.review.get('failedTotal') + 1;
+    let maxStrokes = character.getMaxPosition();
 
     this.prompt.review.set('failedConsecutive', failedConsecutive);
     this.prompt.review.set('failedTotal', failedTotal);
@@ -254,7 +249,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     }
 
     if (failedConsecutive > 2) {
-      var expectedStroke = character.getExpectedStroke();
+      let expectedStroke = character.getExpectedStroke();
       if (expectedStroke) {
         this.prompt.canvas.fadeShape('stroke-hint', expectedStroke.getTargetShape());
       }
@@ -264,7 +259,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handleAttemptSuccess
    */
-  handleAttemptSuccess: function() {
+  handleAttemptSuccess: function () {
     this.prompt.review.set('failedConsecutive', 0);
 
     if (this.prompt.review.character.isComplete()) {
@@ -288,7 +283,6 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
           this.prompt.startAutoAdvance();
         }
       });
-
     }
 
     if (this.prompt.review.get('showTeaching')) {
@@ -299,7 +293,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handlePromptCanvasClick
    */
-  handlePromptCanvasClick: function() {
+  handlePromptCanvasClick: function () {
     if (this.prompt.review.isComplete()) {
       if (this.prompt.review.item) {
         if (this.prompt.review.get('score') === 1) {
@@ -328,7 +322,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @param {Array} points
    * @param {createjs.Shape} shape
    */
-  handlePromptCanvasInputUp: function(points, shape) {
+  handlePromptCanvasInputUp: function (points, shape) {
     if (app.fn.getLength(points) >= 5) {
       const stroke = this.prompt.review.character.recognize(points, shape);
 
@@ -349,7 +343,8 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
           this.prompt.canvas.tweenShape(
             'character',
             userShape,
-            targetShape
+            targetShape,
+            {updateStage: true}
           );
         }
 
@@ -364,7 +359,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * Handles a swipeup event from the canvas and erases/resets the canvas
    * @method handlePromptCanvasSwipeUp
    */
-  handlePromptCanvasSwipeUp: function() {
+  handlePromptCanvasSwipeUp: function () {
     this.prompt.review.set({
       failedConsecutive: 0,
       failedTotal: 0,
@@ -376,7 +371,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handlePromptDoubleTap
    */
-  handlePromptDoubleTap: function() {
+  handlePromptDoubleTap: function () {
     const expectedShape = this.prompt.review.character.getTargetShape();
 
     // make delay a little longer for double tap--could misinterpret two
@@ -397,8 +392,8 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handlePromptCanvasTap
    */
-  handlePromptCanvasTap: function() {
-    var expectedStroke = this.prompt.review.character.getExpectedStroke();
+  handlePromptCanvasTap: function () {
+    let expectedStroke = this.prompt.review.character.getExpectedStroke();
     if (expectedStroke) {
       this.prompt.canvas.clearLayer('stroke-hint');
       this.prompt.canvas.fadeShape('stroke-hint', expectedStroke.getTargetShape());
@@ -409,7 +404,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method handlePromptToolbarActionCorrect
    */
-  handlePromptToolbarActionCorrect: function() {
+  handlePromptToolbarActionCorrect: function () {
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
 
@@ -420,32 +415,31 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
           this.prompt.review.getGradingColor()
         );
       }
-      this.prompt.toolbarAction.render();
+      this.prompt.toolbarAction.update();
     } else {
       this.completeCharacter();
     }
-
   },
 
   /**
    * @method handlePromptToolbarActionErase
    */
-  handlePromptToolbarActionErase: function() {
+  handlePromptToolbarActionErase: function () {
     this.eraseCharacter();
   },
 
   /**
    * @method handlePromptToolbarActionShow
    */
-  handlePromptToolbarActionShow: function() {
+  handlePromptToolbarActionShow: function () {
     this.showCharacter();
   },
 
   /**
    * @method handlePromptToolbarActionTeach
    */
-  handlePromptToolbarActionTeach: function() {
-    this.teachCharacter();
+  handlePromptToolbarActionTeach: function () {
+      this.startTeachingCharacter();
   },
 
   /**
@@ -454,7 +448,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method handlePromptToolbarGradingMousedown
    * @param {Number} score the new grade to apply
    */
-  handlePromptToolbarGradingMousedown: function(score) {
+  handlePromptToolbarGradingMousedown: function (score) {
     this._mouseDown = true;
     if (this.prompt.review.isComplete()) {
       this.prompt.review.set('score', score);
@@ -473,7 +467,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method handlePromptToolbarGradingMousemove
    * @param {Number} score the new grade to apply
    */
-  handlePromptToolbarGradingMousemove: function(score) {
+  handlePromptToolbarGradingMousemove: function (score) {
     if (!this._mouseDown) {
       return;
     }
@@ -488,7 +482,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * @method handlePromptToolbarGradingMouseup
    * @param {Number} score the new grade to apply
    */
-  handlePromptToolbarGradingMouseup: function(score) {
+  handlePromptToolbarGradingMouseup: function (score) {
     this._mouseDown = false;
     this.prompt.stopAutoAdvance();
     this.changeReviewScore(score);
@@ -503,7 +497,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    * Stops any auto-advance features.
    * @param {Number} score the score to change the review to
    */
-  changeReviewScore: function(score) {
+  changeReviewScore: function (score) {
     this.prompt.review.set('score', score);
     if (!app.user.get('disableGradingColor')) {
       this.prompt.canvas.injectLayerColor(
@@ -516,18 +510,19 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method completeCharacter
    */
-  completeCharacter: function() {
+  completeCharacter: function () {
     this.prompt.canvas.clearLayer('character');
     this.prompt.review.set('complete', true);
     this.prompt.review.character.reset();
     this.prompt.review.character.add(this.prompt.review.character.targets[0].models);
     this.render();
+    this.prompt.canvas.displayStage.update();
   },
 
   /**
    * @method eraseCharacter
    */
-  eraseCharacter: function() {
+  eraseCharacter: function () {
     this.prompt.stopAutoAdvance();
     this.prompt.review.set({complete: false, showTeaching: false});
     this.prompt.review.character.reset();
@@ -539,7 +534,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   /**
    * @method showCharacter
    */
-  showCharacter: function() {
+  showCharacter: function () {
     this.prompt.review.set('score', 1);
     this.prompt.canvas.clearLayer('character-hint');
     this.prompt.canvas.drawShape(
@@ -550,32 +545,54 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
   },
 
   /**
+   * Sets up a prompt for teaching mode. Updates the score and other
+   * review properties, then draws the character in the background to be
+   * traced over. Highlights the first stroke.
+   */
+  startTeachingCharacter () {
+    if (this.prompt.review.isComplete()) {
+      this.eraseCharacter();
+    }
+
+    this.prompt.review.set('score', 1);
+    this.prompt.review.set('showTeaching', true);
+
+    this.prompt.canvas.clearLayer('character-teach');
+    this.prompt.canvas.drawShape(
+      'character-teach',
+      this.prompt.review.character.getTargetShape(),
+      {color: '#e8ded2'}
+    );
+
+    this.prompt.canvas.startAnimation('teaching');
+
+    // this.prompt.canvas.drawShape(
+    //   'character-teach',
+    //   stroke.getTargetShape(),
+    //   {color: '#e8ded2'}
+    // );
+
+    this.teachCharacter();
+  },
+
+  /**
+   * Updates an already initialized teaching mode prompt to highlight
+   * the current stroke that needs to be written
    * @method teachCharacter
    */
-  teachCharacter: function() {
+  teachCharacter: function () {
     if (!this.prompt.review.isComplete()) {
-      var stroke = this.prompt.review.character.getExpectedStroke();
+      const stroke = this.prompt.review.character.getExpectedStroke();
+      this.prompt.canvas.removeTweensFromLayer('character-teach');
+
       if (stroke) {
-        this.prompt.review.set('score', 1);
-        this.prompt.review.set('showTeaching', true);
-        this.prompt.canvas.clearLayer('character-teach');
-        this.prompt.canvas.drawShape(
-          'character-teach',
-          this.prompt.review.character.getTargetShape(),
-          {color: '#e8ded2'}
-        );
-        this.prompt.canvas.drawShape(
-          'character-teach',
-          stroke.getTargetShape(),
-          {color: '#e8ded2'}
-        );
         this.prompt.canvas.tracePath(
           'character-teach',
           stroke.getParamPath()
         );
       }
     }
-  }
+  },
 
 });
 

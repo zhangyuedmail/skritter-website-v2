@@ -1,3 +1,30 @@
+/*!
+* EaselJS
+* Visit http://createjs.com/ for documentation, updates and examples.
+*
+* Copyright (c) 2010 gskinner.com, inc.
+*
+* Permission is hereby granted, free of charge, to any person
+* obtaining a copy of this software and associated documentation
+* files (the "Software"), to deal in the Software without
+* restriction, including without limitation the rights to use,
+* copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the
+* Software is furnished to do so, subject to the following
+* conditions:
+*
+* The above copyright notice and this permission notice shall be
+* included in all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+* OTHER DEALINGS IN THE SOFTWARE.
+*/
 
 
 //##############################################################################
@@ -175,6 +202,48 @@ this.createjs = this.createjs||{};
 }());
 
 //##############################################################################
+// deprecate.js
+//##############################################################################
+
+this.createjs = this.createjs||{};
+
+/**
+ * @class Utility Methods
+ */
+
+/**
+ * Wraps deprecated methods so they still be used, but throw warnings to developers.
+ *
+ *	obj.deprecatedMethod = createjs.deprecate("Old Method Name", obj._fallbackMethod);
+ *
+ * The recommended approach for deprecated properties is:
+ *
+ *	try {
+ *		Obj	ect.defineProperties(object, {
+ *			readyOnlyProp: { get: createjs.deprecate("readOnlyProp", function() { return this.alternateProp; }) },
+ *			readWriteProp: {
+ *				get: createjs.deprecate("readOnlyProp", function() { return this.alternateProp; }),
+ *				set: createjs.deprecate("readOnlyProp", function(val) { this.alternateProp = val; })
+ *		});
+ *	} catch (e) {}
+ *
+ * @method deprecate
+ * @param {Function} [fallbackMethod=null] A method to call when the deprecated method is used. See the example for how
+ * @param {String} [name=null] The name of the method or property to display in the console warning.
+ * to deprecate properties.
+ * @return {Function} If a fallbackMethod is supplied, returns a closure that will call the fallback method after
+ * logging the warning in the console.
+ */
+createjs.deprecate = function(fallbackMethod, name) {
+	"use strict";
+	return function() {
+		var msg = "Deprecated property or method '"+name+"'. See docs for info.";
+		console && (console.warn ? console.warn(msg) : console.log(msg));
+		return fallbackMethod && fallbackMethod.apply(this, arguments);
+	}
+};
+
+//##############################################################################
 // Event.js
 //##############################################################################
 
@@ -309,19 +378,6 @@ this.createjs = this.createjs||{};
 		this.removed = false;
 	}
 	var p = Event.prototype;
-
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
 
 // public methods:
 	/**
@@ -485,20 +541,6 @@ this.createjs = this.createjs||{};
 		this._captureListeners = null;
 	}
 	var p = EventDispatcher.prototype;
-
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
 
 // static public methods:
 	/**
@@ -888,7 +930,7 @@ this.createjs = this.createjs||{};
 // static events:
 	/**
 	 * Dispatched each tick. The event will be dispatched to each listener even when the Ticker has been paused using
-	 * {{#crossLink "Ticker/setPaused"}}{{/crossLink}}.
+	 * {{#crossLink "Ticker/paused:property"}}{{/crossLink}}.
 	 *
 	 * <h4>Example</h4>
 	 *
@@ -911,20 +953,9 @@ this.createjs = this.createjs||{};
 
 // public static properties:
 	/**
-	 * Deprecated in favour of {{#crossLink "Ticker/timingMode"}}{{/crossLink}}, and will be removed in a future version. If true, timingMode will
-	 * use {{#crossLink "Ticker/RAF_SYNCHED"}}{{/crossLink}} by default.
-	 * @deprecated Deprecated in favour of {{#crossLink "Ticker/timingMode"}}{{/crossLink}}.
-	 * @property useRAF
-	 * @static
-	 * @type {Boolean}
-	 * @default false
-	 **/
-	Ticker.useRAF = false;
-
-	/**
 	 * Specifies the timing api (setTimeout or requestAnimationFrame) and mode to use. See
-	 * {{#crossLink "Ticker/TIMEOUT"}}{{/crossLink}}, {{#crossLink "Ticker/RAF"}}{{/crossLink}}, and
-	 * {{#crossLink "Ticker/RAF_SYNCHED"}}{{/crossLink}} for mode details.
+	 * {{#crossLink "Ticker/TIMEOUT:property"}}{{/crossLink}}, {{#crossLink "Ticker/RAF:property"}}{{/crossLink}}, and
+	 * {{#crossLink "Ticker/RAF_SYNCHED:property"}}{{/crossLink}} for mode details.
 	 * @property timingMode
 	 * @static
 	 * @type {String}
@@ -993,7 +1024,7 @@ this.createjs = this.createjs||{};
 	 * @property _inited
 	 * @static
 	 * @type {Boolean}
-	 * @protected
+	 * @private
 	 **/
 	Ticker._inited = false;
 
@@ -1001,7 +1032,7 @@ this.createjs = this.createjs||{};
 	 * @property _startTime
 	 * @static
 	 * @type {Number}
-	 * @protected
+	 * @private
 	 **/
 	Ticker._startTime = 0;
 
@@ -1009,7 +1040,7 @@ this.createjs = this.createjs||{};
 	 * @property _pausedTime
 	 * @static
 	 * @type {Number}
-	 * @protected
+	 * @private
 	 **/
 	Ticker._pausedTime=0;
 
@@ -1018,7 +1049,7 @@ this.createjs = this.createjs||{};
 	 * @property _ticks
 	 * @static
 	 * @type {Number}
-	 * @protected
+	 * @private
 	 **/
 	Ticker._ticks = 0;
 
@@ -1027,7 +1058,7 @@ this.createjs = this.createjs||{};
 	 * @property _pausedTicks
 	 * @static
 	 * @type {Number}
-	 * @protected
+	 * @private
 	 **/
 	Ticker._pausedTicks = 0;
 
@@ -1035,7 +1066,7 @@ this.createjs = this.createjs||{};
 	 * @property _interval
 	 * @static
 	 * @type {Number}
-	 * @protected
+	 * @private
 	 **/
 	Ticker._interval = 50;
 
@@ -1043,7 +1074,7 @@ this.createjs = this.createjs||{};
 	 * @property _lastTime
 	 * @static
 	 * @type {Number}
-	 * @protected
+	 * @private
 	 **/
 	Ticker._lastTime = 0;
 
@@ -1051,7 +1082,7 @@ this.createjs = this.createjs||{};
 	 * @property _times
 	 * @static
 	 * @type {Array}
-	 * @protected
+	 * @private
 	 **/
 	Ticker._times = null;
 
@@ -1059,7 +1090,7 @@ this.createjs = this.createjs||{};
 	 * @property _tickTimes
 	 * @static
 	 * @type {Array}
-	 * @protected
+	 * @private
 	 **/
 	Ticker._tickTimes = null;
 
@@ -1068,7 +1099,7 @@ this.createjs = this.createjs||{};
 	 * @property _timerId
 	 * @static
 	 * @type {Number}
-	 * @protected
+	 * @private
 	 **/
 	Ticker._timerId = null;
 
@@ -1078,7 +1109,7 @@ this.createjs = this.createjs||{};
 	 * @property _raf
 	 * @static
 	 * @type {Boolean}
-	 * @protected
+	 * @private
 	 **/
 	Ticker._raf = true;
 
@@ -1086,49 +1117,57 @@ this.createjs = this.createjs||{};
 // static getter / setters:
 	/**
 	 * Use the {{#crossLink "Ticker/interval:property"}}{{/crossLink}} property instead.
-	 * @method setInterval
+	 * @method _setInterval
+	 * @private
 	 * @static
 	 * @param {Number} interval
-	 * @deprecated
 	 **/
-	Ticker.setInterval = function(interval) {
+	Ticker._setInterval = function(interval) {
 		Ticker._interval = interval;
 		if (!Ticker._inited) { return; }
 		Ticker._setupTick();
 	};
+	// Ticker.setInterval is @deprecated. Remove for 1.1+
+	Ticker.setInterval = createjs.deprecate(Ticker._setInterval, "Ticker.setInterval");
 
 	/**
 	 * Use the {{#crossLink "Ticker/interval:property"}}{{/crossLink}} property instead.
-	 * @method getInterval
+	 * @method _getInterval
+	 * @private
 	 * @static
 	 * @return {Number}
-	 * @deprecated
 	 **/
-	Ticker.getInterval = function() {
+	Ticker._getInterval = function() {
 		return Ticker._interval;
 	};
+	// Ticker.getInterval is @deprecated. Remove for 1.1+
+	Ticker.getInterval = createjs.deprecate(Ticker._getInterval, "Ticker.getInterval");
 
 	/**
 	 * Use the {{#crossLink "Ticker/framerate:property"}}{{/crossLink}} property instead.
-	 * @method setFPS
+	 * @method _setFPS
+	 * @private
 	 * @static
 	 * @param {Number} value
-	 * @deprecated
 	 **/
-	Ticker.setFPS = function(value) {
-		Ticker.setInterval(1000/value);
+	Ticker._setFPS = function(value) {
+		Ticker._setInterval(1000/value);
 	};
+	// Ticker.setFPS is @deprecated. Remove for 1.1+
+	Ticker.setFPS = createjs.deprecate(Ticker._setFPS, "Ticker.setFPS");
 
 	/**
 	 * Use the {{#crossLink "Ticker/framerate:property"}}{{/crossLink}} property instead.
-	 * @method getFPS
+	 * @method _getFPS
 	 * @static
+	 * @private
 	 * @return {Number}
-	 * @deprecated
 	 **/
-	Ticker.getFPS = function() {
+	Ticker._getFPS = function() {
 		return 1000/Ticker._interval;
 	};
+	// Ticker.getFPS is @deprecated. Remove for 1.1+
+	Ticker.getFPS = createjs.deprecate(Ticker._getFPS, "Ticker.getFPS");
 
 	/**
 	 * Indicates the target time (in milliseconds) between ticks. Default is 50 (20 FPS).
@@ -1148,8 +1187,8 @@ this.createjs = this.createjs||{};
 	 **/
 	try {
 		Object.defineProperties(Ticker, {
-			interval: { get: Ticker.getInterval, set: Ticker.setInterval },
-			framerate: { get: Ticker.getFPS, set: Ticker.setFPS }
+			interval: { get: Ticker._getInterval, set: Ticker._setInterval },
+			framerate: { get: Ticker._getFPS, set: Ticker._setFPS }
 		});
 	} catch (e) { console.log(e); }
 
@@ -1196,9 +1235,10 @@ this.createjs = this.createjs||{};
 	 * the end of one tick and the end of the next. However, getMeasuredTickTime() returns 15ms. This indicates that
 	 * there may be up to 35ms of "idle" time between the end of one tick and the start of the next.
 	 *
-	 * Example 2: With a target FPS of 30, getFPS() returns 10fps, which indicates an average of 100ms between the end of
-	 * one tick and the end of the next. However, getMeasuredTickTime() returns 20ms. This would indicate that something
-	 * other than the tick is using ~80ms (another script, DOM rendering, etc).
+	 * Example 2: With a target FPS of 30, {{#crossLink "Ticker/framerate:property"}}{{/crossLink}} returns 10fps, which
+	 * indicates an average of 100ms between the end of one tick and the end of the next. However, {{#crossLink "Ticker/getMeasuredTickTime"}}{{/crossLink}}
+	 * returns 20ms. This would indicate that something other than the tick is using ~80ms (another script, DOM
+	 * rendering, etc).
 	 * @method getMeasuredTickTime
 	 * @static
 	 * @param {Number} [ticks] The number of previous ticks over which to measure the average time spent in a tick.
@@ -1210,7 +1250,7 @@ this.createjs = this.createjs||{};
 		if (!times || times.length < 1) { return -1; }
 
 		// by default, calculate average for the past ~1 second:
-		ticks = Math.min(times.length, ticks||(Ticker.getFPS()|0));
+		ticks = Math.min(times.length, ticks||(Ticker._getFPS()|0));
 		for (var i=0; i<ticks; i++) { ttl += times[i]; }
 		return ttl/ticks;
 	};
@@ -1229,32 +1269,8 @@ this.createjs = this.createjs||{};
 		if (!times || times.length < 2) { return -1; }
 
 		// by default, calculate fps for the past ~1 second:
-		ticks = Math.min(times.length-1, ticks||(Ticker.getFPS()|0));
+		ticks = Math.min(times.length-1, ticks||(Ticker._getFPS()|0));
 		return 1000/((times[0]-times[ticks])/ticks);
-	};
-
-	/**
-	 * Use the {{#crossLink "Ticker/paused:property"}}{{/crossLink}} property instead.
-	 * @method setPaused
-	 * @static
-	 * @param {Boolean} value
-	 * @deprecated
-	 **/
-	Ticker.setPaused = function(value) {
-		// TODO: deprecated.
-		Ticker.paused = value;
-	};
-
-	/**
-	 * Use the {{#crossLink "Ticker/paused:property"}}{{/crossLink}} property instead.
-	 * @method getPaused
-	 * @static
-	 * @return {Boolean}
-	 * @deprecated
-	 **/
-	Ticker.getPaused = function() {
-		// TODO: deprecated.
-		return Ticker.paused;
 	};
 
 	/**
@@ -1302,7 +1318,7 @@ this.createjs = this.createjs||{};
 	/**
 	 * @method _handleSynch
 	 * @static
-	 * @protected
+	 * @private
 	 **/
 	Ticker._handleSynch = function() {
 		Ticker._timerId = null;
@@ -1317,7 +1333,7 @@ this.createjs = this.createjs||{};
 	/**
 	 * @method _handleRAF
 	 * @static
-	 * @protected
+	 * @private
 	 **/
 	Ticker._handleRAF = function() {
 		Ticker._timerId = null;
@@ -1328,7 +1344,7 @@ this.createjs = this.createjs||{};
 	/**
 	 * @method _handleTimeout
 	 * @static
-	 * @protected
+	 * @private
 	 **/
 	Ticker._handleTimeout = function() {
 		Ticker._timerId = null;
@@ -1339,12 +1355,12 @@ this.createjs = this.createjs||{};
 	/**
 	 * @method _setupTick
 	 * @static
-	 * @protected
+	 * @private
 	 **/
 	Ticker._setupTick = function() {
 		if (Ticker._timerId != null) { return; } // avoid duplicates
 
-		var mode = Ticker.timingMode||(Ticker.useRAF&&Ticker.RAF_SYNCHED);
+		var mode = Ticker.timingMode;
 		if (mode == Ticker.RAF_SYNCHED || mode == Ticker.RAF) {
 			var f = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame;
 			if (f) {
@@ -1360,7 +1376,7 @@ this.createjs = this.createjs||{};
 	/**
 	 * @method _tick
 	 * @static
-	 * @protected
+	 * @private
 	 **/
 	Ticker._tick = function() {
 		var paused = Ticker.paused;
@@ -1394,7 +1410,7 @@ this.createjs = this.createjs||{};
 	/**
 	 * @method _getTime
 	 * @static
-	 * @protected
+	 * @private
 	 **/
 	var w=window, now=w.performance.now || w.performance.mozNow || w.performance.msNow || w.performance.oNow || w.performance.webkitNow;
 	Ticker._getTime = function() {
@@ -1479,7 +1495,7 @@ this.createjs = this.createjs||{};
 		if (this.readyState < 2) { return; }
 		var canvas=this._canvas, video = this._video;
 		if (!canvas) {
-			canvas = this._canvas = document.createElement("canvas");
+			canvas = this._canvas = createjs.createCanvas?createjs.createCanvas():document.createElement("canvas");
 			canvas.width = video.videoWidth;
 			canvas.height = video.videoHeight;
 		}
@@ -1749,20 +1765,6 @@ this.createjs = this.createjs||{};
 		 **/
 	}
 	var p = Matrix2D.prototype;
-
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
 
 // constants:
 	/**
@@ -2392,20 +2394,6 @@ this.createjs = this.createjs||{};
 	}
 	var p = Point.prototype;
 
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
-
 // public methods:
 	/**
 	 * Sets the specified values on this instance.
@@ -2512,20 +2500,6 @@ this.createjs = this.createjs||{};
 		 **/
 	}
 	var p = Rectangle.prototype;
-
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
 
 // public methods:
 	/**
@@ -2801,28 +2775,15 @@ this.createjs = this.createjs||{};
 	}
 	var p = ButtonHelper.prototype;
 
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
-
 // getter / setters:
 	/**
 	 * Use the {{#crossLink "ButtonHelper/enabled:property"}}{{/crossLink}} property instead.
 	 * @method setEnabled
-	 * @param {Boolean} value
-	 * @deprecated
+	 * @param {Boolean} value The enabled property to set the instance to.
+	 * @[rptected
+	 * @protected
 	 **/
-	p.setEnabled = function(value) { // TODO: deprecated.
+	p._setEnabled = function(value) {
 		if (value == this._enabled) { return; }
 		var o = this.target;
 		this._enabled = value;
@@ -2842,15 +2803,20 @@ this.createjs = this.createjs||{};
 			if (o.__reset) { o._reset = o.__reset; delete(o.__reset); }
 		}
 	};
+	// ButtonHelper.setEnabled is @deprecated. Remove for 1.1+
+	p.setEnabled = createjs.deprecate(p._setEnabled, "ButtonHelper.setEnabled");
+
 	/**
 	 * Use the {{#crossLink "ButtonHelper/enabled:property"}}{{/crossLink}} property instead.
 	 * @method getEnabled
+	 * @protected
 	 * @return {Boolean}
-	 * @deprecated
 	 **/
-	p.getEnabled = function() {
+	p._getEnabled = function() {
 		return this._enabled;
 	};
+	// ButtonHelper.getEnabled is @deprecated. Remove for 1.1+
+	p.getEnabled = createjs.deprecate(p._getEnabled, "ButtonHelper.getEnabled");
 
 	/**
 	 * Enables or disables the button functionality on the target.
@@ -2859,7 +2825,7 @@ this.createjs = this.createjs||{};
 	 **/
 	try {
 		Object.defineProperties(p, {
-			enabled: { get: p.getEnabled, set: p.setEnabled }
+			enabled: { get: p._getEnabled, set: p._setEnabled }
 		});
 	} catch (e) {} // TODO: use Log
 
@@ -2979,20 +2945,6 @@ this.createjs = this.createjs||{};
 		this.blur = blur||0;
 	}
 	var p = Shadow.prototype;
-
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
 
 // static public properties:
 	/**
@@ -3364,13 +3316,15 @@ this.createjs = this.createjs||{};
 // getter / setters:
 	/**
 	 * Use the {{#crossLink "SpriteSheet/animations:property"}}{{/crossLink}} property instead.
-	 * @method getAnimations
+	 * @method _getAnimations
+	 * @protected
 	 * @return {Array}
-	 * @deprecated
 	 **/
-	p.getAnimations = function() {
+	p._getAnimations = function() {
 		return this._animations.slice();
 	};
+	// SpriteSheet.getAnimations is @deprecated. Remove for 1.1+
+	p.getAnimations = createjs.deprecate(p._getAnimations, "SpriteSheet.getAnimations");
 
 	/**
 	 * Returns an array of all available animation names available on this sprite sheet as strings.
@@ -3380,7 +3334,7 @@ this.createjs = this.createjs||{};
 	 **/
 	try {
 		Object.defineProperties(p, {
-			animations: { get: p.getAnimations }
+			animations: { get: p._getAnimations }
 		});
 	} catch (e) {}
 
@@ -3600,7 +3554,7 @@ this.createjs = this.createjs||{};
 
 		imgLoop:
 		for (var i=0, imgs=this._images; i<imgs.length; i++) {
-			var img = imgs[i], imgW = img.width, imgH = img.height;
+			var img = imgs[i], imgW = (img.width||img.naturalWidth), imgH = (img.height||img.naturalHeight);
 
 			var y = margin;
 			while (y <= imgH-margin-frameHeight) {
@@ -3847,20 +3801,6 @@ this.createjs = this.createjs||{};
 	var p = Graphics.prototype;
 	var G = Graphics; // shortcut
 
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
-
 // static public methods:
 	/**
 	 * Returns a CSS compatible color string based on the specified RGB numeric color values in the format
@@ -3991,14 +3931,16 @@ this.createjs = this.createjs||{};
 // getter / setters:
 	/**
 	 * Use the {{#crossLink "Graphics/instructions:property"}}{{/crossLink}} property instead.
-	 * @method getInstructions
-	 * @return {Array}
-	 * @deprecated
+	 * @method _getInstructions
+	 * @protected
+	 * @return {Array} The instructions array, useful for chaining
 	 **/
-	p.getInstructions = function() {
+	p._getInstructions = function() {
 		this._updateInstructions();
 		return this._instructions;
 	};
+	// Graphics.getInstructions is @deprecated. Remove for 1.1+
+	p.getInstructions = createjs.deprecate(p._getInstructions, "Graphics.getInstructions");
 
 	/**
 	 * Returns the graphics instructions array. Each entry is a graphics command object (ex. Graphics.Fill, Graphics.Rect)
@@ -4011,7 +3953,7 @@ this.createjs = this.createjs||{};
 	 **/
 	try {
 		Object.defineProperties(p, {
-			instructions: { get: p.getInstructions }
+			instructions: { get: p._getInstructions }
 		});
 	} catch (e) {}
 
@@ -4578,13 +4520,6 @@ this.createjs = this.createjs||{};
 	p.drawPolyStar = function(x, y, radius, sides, pointSize, angle) {
 		return this.append(new G.PolyStar(x, y, radius, sides, pointSize, angle));
 	};
-
-	// TODO: deprecated.
-	/**
-	 * Removed in favour of using custom command objects with {{#crossLink "Graphics/append"}}{{/crossLink}}.
-	 * @method inject
-	 * @deprecated
-	 **/
 
 	/**
 	 * Appends a graphics command object to the graphics queue. Command objects expose an "exec" method
@@ -6108,6 +6043,7 @@ this.createjs = this.createjs||{};
 		/**
 		 * The left offset for this display object's registration point. For example, to make a 100x100px Bitmap rotate
 		 * around its center, you would set regX and {{#crossLink "DisplayObject/regY:property"}}{{/crossLink}} to 50.
+		 * Cached object's registration points should be set based on pre-cache conditions, not cached size.
 		 * @property regX
 		 * @type {Number}
 		 * @default 0
@@ -6117,6 +6053,7 @@ this.createjs = this.createjs||{};
 		/**
 		 * The y offset for this display object's registration point. For example, to make a 100x100px Bitmap rotate around
 		 * its center, you would set {{#crossLink "DisplayObject/regX:property"}}{{/crossLink}} and regY to 50.
+		 * Cached object's registration points should be set based on pre-cache conditions, not cached size.
 		 * @property regY
 		 * @type {Number}
 		 * @default 0
@@ -6275,54 +6212,8 @@ this.createjs = this.createjs||{};
 		 */
 		this.cursor = null;
 
-		/**
-		 * Returns an ID number that uniquely identifies the current cache for this display object. This can be used to
-		 * determine if the cache has changed since a previous check.
-		 * Moved to {{#crossLink "BitmapCache"}}{{/crossLink}}
-		 * @property cacheID
-		 * @deprecated
-		 * @type {Number}
-		 * @default 0
-		 */
-
 
 	// private properties:
-		/**
-		 * Moved to {{#crossLink "BitmapCache"}}{{/crossLink}}
-		 * @property _cacheOffsetX
-		 * @protected
-		 * @type {Number}
-		 * @default 0
-		 * @deprecated
-		 **/
-
-		/**
-		 * Moved to {{#crossLink "BitmapCache"}}{{/crossLink}}
-		 * @property _cacheOffsetY
-		 * @protected
-		 * @type {Number}
-		 * @default 0
-		 * @deprecated
-		 **/
-
-		/**
-		 * Moved to {{#crossLink "BitmapCache"}}{{/crossLink}}
-		 * @property _filterOffsetX
-		 * @protected
-		 * @type {Number}
-		 * @default 0
-		 * @deprecated
-		 **/
-
-		/**
-		 * Moved to {{#crossLink "BitmapCache"}}{{/crossLink}}
-		 * @property _filterOffsetY
-		 * @protected
-		 * @type {Number}
-		 * @default 0
-		 * @deprecated
-		 **/
-
 		/**
 		 * Moved to {{#crossLink "BitmapCache"}}{{/crossLink}}
 		 * @property _cacheScale
@@ -6385,19 +6276,6 @@ this.createjs = this.createjs||{};
 		this._webGLRenderStyle = DisplayObject._StageGL_NONE;
 	}
 	var p = createjs.extend(DisplayObject, createjs.EventDispatcher);
-
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is. REMOVED. See docs for details.
 
 // static properties:
 	/**
@@ -6610,17 +6488,19 @@ this.createjs = this.createjs||{};
 // getter / setters:
 	/**
 	 * Use the {{#crossLink "DisplayObject/stage:property"}}{{/crossLink}} property instead.
-	 * @method getStage
+	 * @method _getStage
+	 * @protected
 	 * @return {Stage}
-	 * @deprecated
 	 **/
-	p.getStage = function() {
+	p._getStage = function() {
 		// uses dynamic access to avoid circular dependencies;
 		var o = this, _Stage = createjs["Stage"];
 		while (o.parent) { o = o.parent; }
 		if (o instanceof _Stage) { return o; }
 		return null;
 	};
+	// DisplayObject.getStage is @deprecated. Remove for 1.1+
+	p.getStage = createjs.deprecate(p._getStage, "DisplayObject.getStage");
 
 	/**
 	 * Returns the Stage instance that this display object will be rendered on, or null if it has not been added to one.
@@ -6628,32 +6508,35 @@ this.createjs = this.createjs||{};
 	 * @type {Stage}
 	 * @readonly
 	 **/
+
+	/**
+	 * Returns an ID number that uniquely identifies the current cache for this display object. This can be used to
+	 * determine if the cache has changed since a previous check.
+	 * Moved to {{#crossLink "BitmapCache"}}{{/crossLink}}
+	 * @property cacheID
+	 * @deprecated
+	 * @type {Number}
+	 * @default 0
+	 */
+
+	/**
+	 * Set both the {{#crossLink "DisplayObject/scaleX:property"}}{{/crossLink}} and the {{#crossLink "DisplayObject/scaleY"}}{{/crossLink}}
+	 * property to the same value. Note that when you get the value, if the `scaleX` and `scaleY` are different values,
+	 * it will return only the `scaleX`.
+	 * @property scaleX
+	 * @type {Number}
+	 * @default 1
+	 */
 	try {
 		Object.defineProperties(p, {
-			stage: { get: p.getStage },
+			stage: { get: p._getStage },
 			cacheID: {
 				get: function(){ return this.bitmapCache && this.bitmapCache.cacheID },
 				set: function(a){ this.bitmapCache && (this.bitmapCache.cacheID = a) }
 			},
-			_cacheOffsetX: {
-				get: function(){ return this.bitmapCache && this.bitmapCache.x },
-				set: function(a){ this.bitmapCache && (this.bitmapCache.x = a) }
-			},
-			_cacheOffsetY: {
-				get: function(){ return this.bitmapCache && this.bitmapCache.y },
-				set: function(a){ this.bitmapCache && (this.bitmapCache.y = a) }
-			},
-			_filterOffsetX: {
-				get: function(){ return this.bitmapCache && this.bitmapCache.offX },
-				set: function(a){ this.bitmapCache && (this.bitmapCache.offX = a) }
-			},
-			_filterOffsetY: {
-				get: function(){ return this.bitmapCache && this.bitmapCache.offY },
-				set: function(a){ this.bitmapCache && (this.bitmapCache.offY = a) }
-			},
-			_cacheScale: {
-				get: function(){ return this.bitmapCache && this.bitmapCache.scale },
-				set: function(a){ this.bitmapCache && (this.bitmapCache.scale = a) }
+			scale: {
+				get: function() { return this.scaleX; },
+				set: function(scale) { this.scaleX = this.scaleY = scale; },
 			}
 		});
 	} catch (e) {}
@@ -7373,13 +7256,15 @@ this.createjs = this.createjs||{};
 // getter / setters:
 	/**
 	 * Use the {{#crossLink "Container/numChildren:property"}}{{/crossLink}} property instead.
-	 * @method getNumChildren
+	 * @method _getNumChildren
+	 * @protected
 	 * @return {Number}
-	 * @deprecated
 	 **/
-	p.getNumChildren = function() {
+	p._getNumChildren = function() {
 		return this.children.length;
 	};
+	// Container.getNumChildren is @deprecated. Remove for 1.1+
+	p.getNumChildren = createjs.deprecate(p._getNumChildren, "Container.getNumChildren");
 
 	/**
 	 * Returns the number of children in the container.
@@ -7389,7 +7274,7 @@ this.createjs = this.createjs||{};
 	 **/
 	try {
 		Object.defineProperties(p, {
-			numChildren: { get: p.getNumChildren }
+			numChildren: { get: p._getNumChildren }
 		});
 	} catch (e) {}
 
@@ -8185,20 +8070,6 @@ this.createjs = this.createjs||{};
 		this.enableDOMEvents(true);
 	}
 	var p = createjs.extend(Stage, createjs.Container);
-
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
 
 // events:
 	/**
@@ -9377,56 +9248,58 @@ this.createjs = this.createjs||{};
 	 */
 	StageGL.UV_RECT = {t:0, l:0, b:1, r:1};
 
-	/**
-	 * Vertex positions for a card that covers the entire render. Used with render targets primarily.
-	 * @property COVER_VERT
-	 * @static
-	 * @final
-	 * @type {Float32Array}
-	 * @readonly
-	 */
-	StageGL.COVER_VERT = new Float32Array([
-		-1,		 1,		//TL
-		1,		 1,		//TR
-		-1,		-1,		//BL
-		1,		 1,		//TR
-		1,		-1,		//BR
-		-1,		-1		//BL
-	]);
+	try {
+		/**
+		 * Vertex positions for a card that covers the entire render. Used with render targets primarily.
+		 * @property COVER_VERT
+		 * @static
+		 * @final
+		 * @type {Float32Array}
+		 * @readonly
+		 */
+		StageGL.COVER_VERT = new Float32Array([
+			-1,		 1,		//TL
+			1,		 1,		//TR
+			-1,		-1,		//BL
+			1,		 1,		//TR
+			1,		-1,		//BR
+			-1,		-1		//BL
+		]);
 
-	/**
-	 * U/V for {{#crossLink "StageGL/COVER_VERT:property"}}{{/crossLink}}.
-	 * @property COVER_UV
-	 * @static
-	 * @final
-	 * @type {Float32Array}
-	 * @readonly
-	 */
-	StageGL.COVER_UV = new Float32Array([
-		 0,		 0,		//TL
-		 1,		 0,		//TR
-		 0,		 1,		//BL
-		 1,		 0,		//TR
-		 1,		 1,		//BR
-		 0,		 1		//BL
-	]);
+		/**
+		 * U/V for {{#crossLink "StageGL/COVER_VERT:property"}}{{/crossLink}}.
+		 * @property COVER_UV
+		 * @static
+		 * @final
+		 * @type {Float32Array}
+		 * @readonly
+		 */
+		StageGL.COVER_UV = new Float32Array([
+			 0,		 0,		//TL
+			 1,		 0,		//TR
+			 0,		 1,		//BL
+			 1,		 0,		//TR
+			 1,		 1,		//BR
+			 0,		 1		//BL
+		]);
 
-	/**
-	 * Flipped U/V for {{#crossLink "StageGL:COVER_VERT:property"}}{{/crossLink}}.
-	 * @property COVER_UV_FLIP
-	 * @static
-	 * @final
-	 * @type {Float32Array}
-	 * @readonly
-	 */
-	StageGL.COVER_UV_FLIP = new Float32Array([
-		 0,		 1,		//TL
-		 1,		 1,		//TR
-		 0,		 0,		//BL
-		 1,		 1,		//TR
-		 1,		 0,		//BR
-		 0,		 0		//BL
-	]);
+		/**
+		 * Flipped U/V for {{#crossLink "StageGL:COVER_VERT:property"}}{{/crossLink}}.
+		 * @property COVER_UV_FLIP
+		 * @static
+		 * @final
+		 * @type {Float32Array}
+		 * @readonly
+		 */
+		StageGL.COVER_UV_FLIP = new Float32Array([
+			 0,		 1,		//TL
+			 1,		 1,		//TR
+			 0,		 0,		//BL
+			 1,		 1,		//TR
+			 1,		 0,		//BR
+			 0,		 0		//BL
+		]);
+	} catch(e) { /* Breaking in older browsers, but those browsers wont run StageGL so no recovery or warning needed */ }
 
 	/**
 	 * Portion of the shader that contains the "varying" properties required in both vertex and fragment shaders. The
@@ -9521,7 +9394,17 @@ this.createjs = this.createjs||{};
 				"{{alternates}}" +
 			"}" +
 
-			"gl_FragColor = vec4(color.rgb{{premultiply}}, color.a * alphaValue);" +
+			"{{fragColor}}" +
+		"}"
+	);
+	StageGL.REGULAR_FRAG_COLOR_NORMAL = (
+		"gl_FragColor = vec4(color.rgb, color.a * alphaValue);"
+	);
+	StageGL.REGULAR_FRAG_COLOR_PREMULTIPLY = (
+		"if(color.a > 0.0035) {" +		// 1/255 = 0.0039, so ignore any value below 1 because it's probably noise
+			"gl_FragColor = vec4(color.rgb/color.a, color.a * alphaValue);" +
+		"} else {" +
+			"gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);" +
 		"}"
 	);
 
@@ -9771,9 +9654,7 @@ this.createjs = this.createjs||{};
 			this._webGLContext.clearColor(cc.r, cc.g, cc.b, cc.a);
 		} else {
 			// Use 2D.
-			var ctx = this.canvas.getContext("2d");
-			ctx.setTransform(1, 0, 0, 1, 0, 0);
-			ctx.clearRect(0, 0, this.canvas.width + 1, this.canvas.height + 1);
+			this.Stage_clear();
 		}
 	};
 
@@ -10059,8 +9940,9 @@ this.createjs = this.createjs||{};
 
 		if (filter._builtShader) {
 			targetShader = filter._builtShader;
-			if (targetShader.shaderParamSetup) {
-				targetShader.shaderParamSetup(gl, this, targetShader);
+			if (filter.shaderParamSetup) {
+				gl.useProgram(targetShader);
+				filter.shaderParamSetup(gl, this, targetShader);
 			}
 		} else {
 			try {
@@ -10173,6 +10055,7 @@ this.createjs = this.createjs||{};
 	 */
 	p.setTextureParams = function (gl, isPOT) {
 		if (isPOT && this._antialias) {
+			//non POT linear works in some devices, but performance is NOT good, investigate
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 		} else {
@@ -10409,7 +10292,7 @@ this.createjs = this.createjs||{};
 			insert += "} else if (indexPicker <= "+ i +".5) { color = texture2D(uSampler["+ i +"], vTextureCoord);";
 		}
 		str = str.replace(/{{alternates}}/g, insert);
-		str = str.replace(/{{premultiply}}/g, this._premultiply ? "/color.a" : "");
+		str = str.replace(/{{fragColor}}/g, this._premultiply ? StageGL.REGULAR_FRAG_COLOR_PREMULTIPLY : StageGL.REGULAR_FRAG_COLOR_NORMAL);
 
 		// actually compile the shader
 		var shader = gl.createShader(type);
@@ -10804,7 +10687,6 @@ this.createjs = this.createjs||{};
 		The internal complexity comes from reducing over-draw, shared code, and issues like textures needing to be flipped
 		sometimes when written to render textures.
 		*/
-		var gl = this._webGLContext;
 		var renderTexture;
 		var shaderBackup = this._activeShader;
 		var blackListBackup = this._slotBlacklist;
@@ -10819,18 +10701,15 @@ this.createjs = this.createjs||{};
 		mtx = mtx.clone();
 		mtx.scale(1/manager.scale, 1/manager.scale);
 		mtx = mtx.invert();
-		mtx.translate(-manager.offX/manager.scale, -manager.offY/manager.scale);
+		mtx.translate(-manager.offX/manager.scale*target.scaleX, -manager.offY/manager.scale*target.scaleY);
 		var container = this._cacheContainer;
 		container.children = [target];
 		container.transformMatrix = mtx;
 
 		this._backupBatchTextures(false);
 
-		var filterCount = filters && filters.length;
-		if (filterCount) {
-			//this._backupBatchTextures(false);
+		if (filters && filters.length) {
 			this._drawFilters(target, filters, manager);
-			//this._backupBatchTextures(true);
 		} else {
 			// is this for another stage or mine?
 			if (this.isCacheControlled) {
@@ -10838,7 +10717,6 @@ this.createjs = this.createjs||{};
 				gl.clear(gl.COLOR_BUFFER_BIT);
 				this._batchDraw(container, gl, true);
 			} else {
-				//this._backupBatchTextures(false);
 				gl.activeTexture(gl.TEXTURE0 + lastTextureSlot);
 				target.cacheCanvas = this.getTargetRenderTexture(target, manager._drawWidth, manager._drawHeight);
 				renderTexture = target.cacheCanvas;
@@ -10852,7 +10730,6 @@ this.createjs = this.createjs||{};
 
 				gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 				this.updateViewport(wBackup, hBackup);
-				//this._backupBatchTextures(true);
 			}
 		}
 
@@ -10877,7 +10754,7 @@ this.createjs = this.createjs||{};
 		var wBackup = this._viewportWidth, hBackup = this._viewportHeight;
 
 		var container = this._cacheContainer;
-		var filterCount = filters && filters.length;
+		var filterCount = filters.length;
 
 		// we don't know which texture slot we're dealing with previously and we need one out of the way
 		// once we're using that slot activate it so when we make and bind our RenderTexture it's safe there
@@ -10896,10 +10773,8 @@ this.createjs = this.createjs||{};
 		this.setTextureParams(gl);
 
 		var flipY = false;
-
-		// apply each filter in order, but remember to toggle used texture and render buffer
-		for (var i=0; i<filterCount; i++) {
-			var filter = filters[i];
+		var i = 0, filter = filters[i];
+		do { // this is safe because we wouldn't be in apply filters without a filter count of at least 1
 
 			// swap to correct shader
 			this._activeShader = this.getFilterShader(filter);
@@ -10921,10 +10796,14 @@ this.createjs = this.createjs||{};
 			this.setTextureParams(gl);
 
 			// use flipping to keep things upright, things already cancel out on a single filter
-			if (filterCount > 1) {
+			// this needs to be here as multiPass is not accurate to _this_ frame until after shader acquisition
+			if (filterCount > 1 || filters[0]._multiPass) {
 				flipY = !flipY;
 			}
-		}
+
+			// work through the multipass if it's there, otherwise move on
+			filter = filter._multiPass !== null ? filter._multiPass : filters[++i];
+		} while (filter);
 
 		// is this for another stage or mine
 		if (this.isCacheControlled) {
@@ -11031,6 +10910,7 @@ this.createjs = this.createjs||{};
 				image = (ignoreCache?false:item.cacheCanvas) || item.image;
 			} else if (item._webGLRenderStyle === 1) {											// SPRITE
 				frame = item.spriteSheet.getFrame(item.currentFrame);	//TODO: Faster way?
+				if (frame === null) { continue; }
 				image = frame.image;
 			} else {																			// MISC (DOM objects render themselves later)
 				continue;
@@ -11063,29 +10943,28 @@ this.createjs = this.createjs||{};
 			texIndex = texture._activeIndex;
 
 			if (item._webGLRenderStyle === 2 || useCache) {			// BITMAP / Cached Canvas
-				if (item.sourceRect) {
+				if (!useCache && item.sourceRect) {
 					// calculate uvs
 					if (!item._uvRect) { item._uvRect = {}; }
 					src = item.sourceRect;
 					uvRect = item._uvRect;
-					uvRect.t = (src.x)/image.width;
-					uvRect.l = (src.y)/image.height;
-					uvRect.b = (src.x + src.width)/image.width;
-					uvRect.r = (src.y + src.height)/image.height;
+					uvRect.t = (src.y)/image.height;
+					uvRect.l = (src.x)/image.width;
+					uvRect.b = (src.y + src.height)/image.height;
+					uvRect.r = (src.x + src.width)/image.width;
 
 					// calculate vertices
 					subL = 0;							subT = 0;
 					subR = src.width+subL;				subB = src.height+subT;
 				} else {
 					// calculate uvs
+					uvRect = StageGL.UV_RECT;
 					// calculate vertices
 					if (useCache) {
 						src = item.bitmapCache;
-						uvRect = StageGL.UV_RECT;
-						subL = src.x;					subT = src.y;
-						subR = src.width+subL;			subB = src.height+subT;
+						subL = src.x+(src._filterOffX/src.scale);	subT = src.y+(src._filterOffY/src.scale);
+						subR = (src._drawWidth/src.scale)+subL;		subB = (src._drawHeight/src.scale)+subT;
 					} else {
-						uvRect = StageGL.UV_RECT;
 						subL = 0;						subT = 0;
 						subR = image.width+subL;		subB = image.height+subT;
 					}
@@ -11282,7 +11161,11 @@ this.createjs = this.createjs||{};
 
 		/**
 		 * Specifies an area of the source image to draw. If omitted, the whole image will be drawn.
-		 * Note that video sources must have a width / height set to work correctly with `sourceRect`.
+		 * Notes:
+		 * <ul>
+		 *     <li>that video sources must have a width / height set to work correctly with `sourceRect`</li>
+		 *     <li>Cached objects will ignore the `sourceRect` property</li>
+		 * </ul>
 		 * @property sourceRect
 		 * @type Rectangle
 		 * @default null
@@ -12497,19 +12380,6 @@ this.createjs = this.createjs || {};
 	}
 	var p = createjs.extend(BitmapText, createjs.Container);
 
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
 // static properties:
 	/**
 	 * BitmapText uses Sprite instances to draw text. To reduce the creation and destruction of instances (and thus garbage collection), it maintains
@@ -12949,6 +12819,13 @@ this.createjs = this.createjs||{};
 		 */
 		this._rawPosition = -1; // TODO: evaluate using a ._reset Boolean prop instead of -1.
 
+		/**
+		 * @property _bound_resolveState
+		 * @type Function
+		 * @private
+		 */
+		this._bound_resolveState = this._resolveState.bind(this);
+
 
 		/**
 		 * The time remaining from the previous tick, only applicable when .framerate is set.
@@ -13019,53 +12896,56 @@ this.createjs = this.createjs||{};
 // getter / setters:
 	/**
 	 * Use the {{#crossLink "MovieClip/labels:property"}}{{/crossLink}} property instead.
-	 * @method getLabels
+	 * @method _getLabels
+	 * @protected
 	 * @return {Array}
-	 * @deprecated
 	 **/
-	p.getLabels = function() {
+	p._getLabels = function() {
 		return this.timeline.getLabels();
 	};
+	// MovieClip.getLabels is @deprecated. Remove for 1.1+
+	p.getLabels = createjs.deprecate(p._getLabels, "MovieClip.getLabels");
 
 	/**
 	 * Use the {{#crossLink "MovieClip/currentLabel:property"}}{{/crossLink}} property instead.
-	 * @method getCurrentLabel
+	 * @method _getCurrentLabel
+	 * @protected
 	 * @return {String}
-	 * @deprecated
 	 **/
-	p.getCurrentLabel = function() {
+	p._getCurrentLabel = function() {
 		return this.timeline.currentLabel;
 	};
+	// MovieClip.getCurrentLabel is @deprecated. Remove for 1.1+
+	p.getCurrentLabel = createjs.deprecate(p._getCurrentLabel, "MovieClip.getCurrentLabel");
 
 	/**
 	 * Use the {{#crossLink "MovieClip/duration:property"}}{{/crossLink}} property instead.
-	 * @method getDuration
-	 * @return {Number}
+	 * @method _getDuration
 	 * @protected
+	 * @return {Number}
 	 **/
-	p.getDuration = function() {
+	p._getDuration = function() {
 		return this.timeline.duration;
 	};
+	// MovieClip.getDuration is @deprecated. Remove for 1.1+
+	p.getDuration = createjs.deprecate(p._getDuration, "MovieClip.getDuration");
 
 	/**
 	 * Returns an array of objects with label and position (aka frame) properties, sorted by position.
-	 * Shortcut to TweenJS: Timeline.getLabels();
 	 * @property labels
 	 * @type {Array}
 	 * @readonly
 	 **/
 
 	/**
-	 * Returns the name of the label on or immediately before the current frame. See TweenJS: Timeline.getCurrentLabel()
-	 * for more information.
+	 * Returns the name of the label on or immediately before the current frame.
 	 * @property currentLabel
 	 * @type {String}
 	 * @readonly
 	 **/
 
 	/**
-	 * Returns the duration of this MovieClip in seconds or ticks. Identical to {{#crossLink "MovieClip/duration:property"}}{{/crossLink}}
-	 * and provided for Adobe Flash/Animate API compatibility.
+	 * Returns the duration of this MovieClip in seconds or ticks.
 	 * @property totalFrames
 	 * @type {Number}
 	 * @readonly
@@ -13079,10 +12959,10 @@ this.createjs = this.createjs||{};
 	 **/
 	try {
 		Object.defineProperties(p, {
-			labels: { get: p.getLabels },
-			currentLabel: { get: p.getCurrentLabel },
-			totalFrames: { get: p.getDuration },
-			duration: { get: p.getDuration }
+			labels: { get: p._getLabels },
+			currentLabel: { get: p._getCurrentLabel },
+			totalFrames: { get: p._getDuration },
+			duration: { get: p._getDuration }
 			// TODO: can we just proxy .currentFrame to tl.position as well? Ditto for .loop (or just remove entirely).
 		});
 	} catch (e) {}
@@ -13261,7 +13141,20 @@ this.createjs = this.createjs||{};
 
 		// update timeline position, ignoring actions if this is a graphic.
 		tl.loop = this.loop; // TODO: should we maintain this on MovieClip, or just have it on timeline?
-		tl.setPosition(rawPosition, synced || !this.actionsEnabled, jump, this._resolveState.bind(this));
+		tl.setPosition(rawPosition, synced || !this.actionsEnabled, jump, this._bound_resolveState);
+	};
+
+	/**
+	 * Renders position 0 without running actions or updating _rawPosition.
+	 * Primarily used by Animate CC to build out the first frame in the constructor of MC symbols.
+	 * NOTE: not tested when run after the MC advances past the first frame.
+	 * @method _renderFirstFrame
+	 * @protected
+	 **/
+	p._renderFirstFrame = function() {
+		var tl = this.timeline, pos = tl.rawPosition;
+		tl.setPosition(0, true, true, this._bound_resolveState);
+		tl.rawPosition = pos;
 	};
 
 	/**
@@ -13278,7 +13171,7 @@ this.createjs = this.createjs||{};
 		var tweens = tl.tweens;
 		for (var i=0, l=tweens.length; i<l; i++) {
 			var tween = tweens[i],  target = tween.target;
-			if (target === this || tween.passive) { continue; } // TODO: this assumes the actions tween from Animate has `this` as the target. Likely a better approach.
+			if (target === this || tween.passive) { continue; } // TODO: this assumes the actions tween from Animate has `this` as the target. There's likely a better approach.
 			var offset = tween._stepPosition;
 
 			if (target instanceof createjs.DisplayObject) {
@@ -13477,36 +13370,6 @@ this.createjs = this.createjs||{};
 
 // public static methods:
 	/**
-	 * <b>This is an experimental method, and may be buggy. Please report issues.</b><br/><br/>
-	 * Extends the existing sprite sheet by flipping the original frames horizontally, vertically, or both,
-	 * and adding appropriate animation & frame data. The flipped animations will have a suffix added to their names
-	 * (_h, _v, _hv as appropriate). Make sure the sprite sheet images are fully loaded before using this method.
-	 * <br/><br/>
-	 * For example:<br/>
-	 * SpriteSheetUtils.addFlippedFrames(mySpriteSheet, true, true);
-	 * The above would add frames that are flipped horizontally AND frames that are flipped vertically.
-	 * <br/><br/>
-	 * Note that you can also flip any display object by setting its scaleX or scaleY to a negative value. On some
-	 * browsers (especially those without hardware accelerated canvas) this can result in slightly degraded performance,
-	 * which is why addFlippedFrames is available.
-	 * @method addFlippedFrames
-	 * @static
-	 * @param {SpriteSheet} spriteSheet
-	 * @param {Boolean} horizontal If true, horizontally flipped frames will be added.
-	 * @param {Boolean} vertical If true, vertically flipped frames will be added.
-	 * @param {Boolean} both If true, frames that are flipped both horizontally and vertically will be added.
-	 * @deprecated Modern browsers perform better when flipping via a transform (ex. scaleX=-1) rendering this obsolete.
-	 **/
-	SpriteSheetUtils.addFlippedFrames = function(spriteSheet, horizontal, vertical, both) {
-		if (!horizontal && !vertical && !both) { return; }
-
-		var count = 0;
-		if (horizontal) { SpriteSheetUtils._flip(spriteSheet,++count,true,false); }
-		if (vertical) { SpriteSheetUtils._flip(spriteSheet,++count,false,true); }
-		if (both) { SpriteSheetUtils._flip(spriteSheet,++count,true,true); }
-	};
-
-	/**
 	 * Returns a single frame of the specified sprite sheet as a new PNG image. An example of when this may be useful is
 	 * to use a spritesheet frame as the source for a bitmap fill.
 	 *
@@ -13539,31 +13402,11 @@ this.createjs = this.createjs||{};
 		return img;
 	};
 
-	/**
-	 * Merges the rgb channels of one image with the alpha channel of another. This can be used to combine a compressed
-	 * JPEG image containing color data with a PNG32 monochromatic image containing alpha data. With certain types of
-	 * images (those with detail that lend itself to JPEG compression) this can provide significant file size savings
-	 * versus a single RGBA PNG32. This method is very fast (generally on the order of 1-2 ms to run).
-	 * @method mergeAlpha
-	 * @static
-	 * @param {HTMLImageElement} rbgImage The image (or canvas) containing the RGB channels to use.
-	 * @param {HTMLImageElement} alphaImage The image (or canvas) containing the alpha channel to use.
-	 * @param {HTMLCanvasElement} canvas Optional. If specified, this canvas will be used and returned. If not, a new canvas will be created.
-	 * @return {HTMLCanvasElement} A canvas with the combined image data. This can be used as a source for Bitmap or SpriteSheet.
-	 * @deprecated Tools such as ImageAlpha generally provide better results. This will be moved to sandbox in the future.
-	*/
-	SpriteSheetUtils.mergeAlpha = function(rgbImage, alphaImage, canvas) {
-		if (!canvas) { canvas = createjs.createCanvas?createjs.createCanvas():document.createElement("canvas"); }
-		canvas.width = Math.max(alphaImage.width, rgbImage.width);
-		canvas.height = Math.max(alphaImage.height, rgbImage.height);
-		var ctx = canvas.getContext("2d");
-		ctx.save();
-		ctx.drawImage(rgbImage,0,0);
-		ctx.globalCompositeOperation = "destination-in";
-		ctx.drawImage(alphaImage,0,0);
-		ctx.restore();
-		return canvas;
-	};
+	// SpriteSheetUtils.addFlippedFrames is @deprecated. Remove for 1.1+
+	SpriteSheetUtils.addFlippedFrames = createjs.deprecate(null, "SpriteSheetUtils.addFlippedFrames");
+
+	// SpriteSheetUtils.addFlippedFrames is @deprecated. Remove for 1.1+
+	SpriteSheetUtils.mergeAlpha = createjs.deprecate(null, "SpriteSheetUtils.mergeAlpha");
 
 
 // private static methods:
@@ -13584,8 +13427,8 @@ this.createjs = this.createjs||{};
 			var img = document.createElement("img");
 			img.src = canvas.toDataURL("image/png");
 			// work around a strange bug in Safari:
-			img.width = src.width;
-			img.height = src.height;
+			img.width = (src.width||src.naturalWidth);
+			img.height = (src.height||src.naturalHeight);
 			imgs.push(img);
 		}
 
@@ -13598,11 +13441,11 @@ this.createjs = this.createjs||{};
 
 			var frame = {image:img,rect:rect,regX:src.regX,regY:src.regY};
 			if (h) {
-				rect.x = img.width-rect.x-rect.width; // update rect
+				rect.x = (img.width||img.naturalWidth)-rect.x-rect.width; // update rect
 				frame.regX = rect.width-src.regX; // update registration point
 			}
 			if (v) {
-				rect.y = img.height-rect.y-rect.height;  // update rect
+				rect.y = (img.height||img.naturalHeight)-rect.y-rect.height;  // update rect
 				frame.regY = rect.height-src.regY; // update registration point
 			}
 			frames.push(frame);
@@ -13790,20 +13633,6 @@ this.createjs = this.createjs||{};
 		this._scale = 1;
 	}
 	var p = createjs.extend(SpriteSheetBuilder, createjs.EventDispatcher);
-
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
 
 // constants:
 	SpriteSheetBuilder.ERR_DIMENSIONS = "frame dimensions exceed max spritesheet dimensions";
@@ -14410,7 +14239,7 @@ this.createjs = this.createjs||{};
 			var str = "matrix(" + (mtx.a*n|0)/n +","+ (mtx.b*n|0)/n +","+ (mtx.c*n|0)/n +","+ (mtx.d*n|0)/n +","+ (mtx.tx+0.5|0);
 			style.transform = style.WebkitTransform = style.OTransform = style.msTransform = str +","+ (mtx.ty+0.5|0) +")";
 			style.MozTransform = str +"px,"+ (mtx.ty+0.5|0) +"px)";
-			if (!oldProps) { oldProps = this._oldProps = new createjs.DisplayProps(true, NaN); }
+			if (!oldProps) { oldProps = this._oldProps = new createjs.DisplayProps(true, null); }
 			oldProps.matrix.copy(mtx);
 		}
 
@@ -14474,6 +14303,15 @@ this.createjs = this.createjs||{};
 		this.usesContext = false;
 
 		/**
+		 * Another filter that is required to act as part of this filter and created and managed under the hood.
+		 * @private
+		 * @property _multiPass
+		 * @type {Filter}
+		 * @default null
+		 */
+		this._multiPass = null;
+
+		/**
 		 * Pre-processed template shader code. It will be parsed before being fed in into the shader compiler.
 		 * This should be based upon StageGL.SHADER_VERTEX_BODY_REGULAR
 		 * @property VTX_SHADER
@@ -14494,20 +14332,6 @@ this.createjs = this.createjs||{};
 		this.FRAG_SHADER_BODY = null;
 	}
 	var p = Filter.prototype;
-
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
 
 // public methods:
 	/**
@@ -14760,19 +14584,6 @@ this.createjs = this.createjs||{};
 	var p = BitmapCache.prototype;
 
 	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 **/
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
-	/**
 	 * Returns the bounds that surround all applied filters, relies on each filter to describe how it changes bounds.
 	 * @method getFilterBounds
 	 * @param {DisplayObject} target The object to check the filter bounds for.
@@ -14784,7 +14595,7 @@ this.createjs = this.createjs||{};
 		if(!output){ output = new createjs.Rectangle(); }
 		var filters = target.filters;
 		var filterCount = filters && filters.length;
-		if (filterCount > 0) { return output; }
+		if (!!filterCount <= 0) { return output; }
 
 		for(var i=0; i<filterCount; i++) {
 			var f = filters[i];
@@ -14936,7 +14747,6 @@ this.createjs = this.createjs||{};
 			var stage = this.target.stage;
 			if (stage instanceof createjs.StageGL){
 				stage.releaseTexture(this.target.cacheCanvas);
-				this.target.cacheCanvas.remove();
 			}
 		}
 
@@ -14972,8 +14782,8 @@ this.createjs = this.createjs||{};
 	p.draw = function(ctx) {
 		if(!this.target) { return false; }
 		ctx.drawImage(this.target.cacheCanvas,
-			this.x + this._filterOffX,		this.y + this._filterOffY,
-			this.width,						this.height
+			this.x + (this._filterOffX/this.scale),		this.y + (this._filterOffY/this.scale),
+			this._drawWidth/this.scale,					this._drawHeight/this.scale
 		);
 		return true;
 	};
@@ -15003,13 +14813,18 @@ this.createjs = this.createjs||{};
 
 		// create it if it's missing
 		if (!this._webGLCache) {
-			if (this._options.useGL === "stage" && this.target.stage.isWebGL) {
+			if (this._options.useGL === "stage") {
+				if(!(this.target.stage && this.target.stage.isWebGL)){
+					var error = "Cannot use 'stage' for cache because the object's parent stage is ";
+					error += this.target.stage ? "non WebGL." : "not set, please addChild to the correct stage.";
+					throw error;
+				}
 				this.target.cacheCanvas = true; // will be replaced with RenderTexture, temporary positive value for old "isCached" checks
 				this._webGLCache = this.target.stage;
 
-			} else if(this._options.useGL === "new" || this._options.useGL === "stage") {
-				this.target.cacheCanvas = document.createElement("canvas");
-				this._webGLCache = new createjs.StageGL(this.target.cacheCanvas, {antialias: true, transparent: true});
+			} else if(this._options.useGL === "new") {
+				this.target.cacheCanvas = document.createElement("canvas"); // we can turn off autopurge because we wont be making textures here
+				this._webGLCache = new createjs.StageGL(this.target.cacheCanvas, {antialias: true, transparent: true, autoPurge: -1});
 				this._webGLCache.isCacheControlled = true;	// use this flag to control stage sizing and final output
 
 			} else if(this._options.useGL instanceof createjs.StageGL) {
@@ -15018,7 +14833,7 @@ this.createjs = this.createjs||{};
 				this._webGLCache.isCacheControlled = true;	// use this flag to control stage sizing and final output
 
 			} else {
-				throw "Invalid cache selection or invalid StageGL object used for cache param";
+				throw "Invalid option provided to useGL, expected ['stage', 'new', StageGL, undefined], got "+ this._options.useGL;
 			}
 		}
 
@@ -15050,7 +14865,6 @@ this.createjs = this.createjs||{};
 	 * @protected
 	 **/
 	p._drawToCache = function(compositeOperation) {
-
 		var surface = this.target.cacheCanvas;
 		var target = this.target;
 		var webGL = this._webGLCache;
@@ -15073,9 +14887,11 @@ this.createjs = this.createjs||{};
 
 			ctx.save();
 			ctx.globalCompositeOperation = compositeOperation;
-			ctx.setTransform(this.scale, 0, 0, this.scale, -this.offX, -this.offY);
+			ctx.setTransform(this.scale,0,0,this.scale, -this._filterOffX,-this._filterOffY);
+			ctx.translate(-this.x, -this.y);
 			target.draw(ctx, true);
 			ctx.restore();
+
 
 			if (target.filters && target.filters.length) {
 				this._applyFilters(ctx);
@@ -15090,17 +14906,15 @@ this.createjs = this.createjs||{};
 	 * @protected
 	 **/
 	p._applyFilters = function(ctx) {
-		var surface = this.target.cacheCanvas;
 		var filters = this.target.filters;
 
-		var w = surface.width;
-		var h = surface.height;
+		var w = this._drawWidth;
+		var h = this._drawHeight;
 
 		var data;
 
-		var l = filters.length;
-		for (var i=0; i<l; i++) {
-			var filter = filters[i];
+		var i = 0, filter = filters[i];
+		do { // this is safe because we wouldn't be in apply filters without a filter count of at least 1
 			if(filter.usesContext){
 				if(data) {
 					ctx.putImageData(data, 0,0);
@@ -15113,7 +14927,10 @@ this.createjs = this.createjs||{};
 				}
 				filter._applyFilter(data);
 			}
-		}
+
+			// work through the multipass if it's there, otherwise move on
+			filter = filter._multiPass !== null ? filter._multiPass : filters[++i];
+		} while (filter);
 
 		//done
 		if(data) {
@@ -15136,8 +14953,8 @@ this.createjs = this.createjs||{};
 
 // constructor:
 	/**
-	 * Applies a box blur to DisplayObjects. Note that this filter is fairly CPU intensive, particularly if the quality is
-	 * set higher than 1.
+	 * Applies a box blur to DisplayObjects in context 2D and a Gaussian blur in webgl. Note that this filter is fairly
+	 * intensive, particularly if the quality is set higher than 1.
 	 *
 	 * <h4>Example</h4>
 	 * This example creates a red circle, and then applies a 5 pixel blur to it. It uses the {{#crossLink "Filter/getBounds"}}{{/crossLink}}
@@ -15172,6 +14989,7 @@ this.createjs = this.createjs||{};
 		 **/
 		this._blurX = blurX;
 		this._blurXTable = [];
+		this._lastBlurX = null;
 
 		/**
 		 * Vertical blur radius in pixels
@@ -15181,6 +14999,7 @@ this.createjs = this.createjs||{};
 		 **/
 		this._blurY = blurY;
 		this._blurYTable = [];
+		this._lastBlurY = null;
 
 		/**
 		 * Number of blur iterations. For example, a value of 1 will produce a rough blur. A value of 2 will produce a
@@ -15190,6 +15009,7 @@ this.createjs = this.createjs||{};
 		 * @type Number
 		 **/
 		this._quality;
+		this._lastQuality = null;
 
 		/**
 		 * This is a template to generate the shader for {{#crossLink FRAG_SHADER_BODY}}{{/crossLink}}
@@ -15229,29 +15049,40 @@ this.createjs = this.createjs||{};
 	p.getBlurY = function() { return this._blurY; };
 	p.setBlurX = function(value) {
 		if(isNaN(value) || value < 0){ value = 0; }
-		this._blurY = value;
-		this._blurYTable = this._getTable(value * this._quality);
-		this._updateShader();
+		this._blurX = value;
 	};
 	p.setBlurY = function(value) {
 		if(isNaN(value) || value < 0){ value = 0; }
 		this._blurY = value;
-		this._blurYTable = this._getTable(value * this._quality);
-		this._updateShader();
 	};
 	p.getQuality = function() { return this._quality; };
 	p.setQuality = function(value) {
-		this._quality = value;
-		this._blurXTable = this._getTable(this._blurX * this._quality);
-		this._blurYTable = this._getTable(this._blurY * this._quality);
-		this._updateShader();
+		if(isNaN(value) || value < 0){ value = 0; }
+		this._quality = value | 0;
 	};
+	p._getShader = function() {
+		var xChange = this._lastBlurX !== this._blurX;
+		var yChange = this._lastBlurY !== this._blurY;
+		var qChange = this._lastQuality !== this._quality;
+		if(xChange || yChange || qChange) {
+			if(xChange || qChange) { this._blurXTable = this._getTable(this._blurX * this._quality); }
+			if(yChange || qChange) { this._blurYTable = this._getTable(this._blurY * this._quality); }
+			this._updateShader();
+			this._lastBlurX = this._blurX;
+			this._lastBlurY = this._blurY;
+			this._lastQuality = this._quality;
+			return undefined; // force a rebuild
+		}
+		return this._compiledShader;
+	};
+	p._setShader = function() { this._compiledShader; };
 
 	try {
 		Object.defineProperties(p, {
 			blurX: { get: p.getBlurX, set: p.setBlurX },
 			blurY: { get: p.getBlurY, set: p.setBlurY },
-			quality: { get: p.getQuality, set: p.setQuality }
+			quality: { get: p.getQuality, set: p.setQuality },
+			_builtShader: { get: p._getShader, set: p._setShader}
 		});
 	} catch (e) { console.log(e); }
 
@@ -15333,7 +15164,7 @@ this.createjs = this.createjs||{};
 		var x = this.blurX|0, y = this.blurY| 0;
 		if(x <= 0 && y <= 0) { return rect; }
 		var q = Math.pow(this.quality, 0.2);
-		return (rect || new createjs.Rectangle()).pad(x*q+1,y*q+1,x*q+1,y*q+1);
+		return (rect || new createjs.Rectangle()).pad(y*q+1,x*q+1,y*q+1,x*q+1);
 	};
 
 	/** docced in super class **/
@@ -16057,20 +15888,6 @@ this.createjs = this.createjs||{};
 		this.setColor(brightness, contrast, saturation, hue);
 	}
 	var p = ColorMatrix.prototype;
-
-	/**
-	 * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
-	 * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
-	 * for details.
-	 *
-	 * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
-	 *
-	 * @method initialize
-	 * @protected
-	 * @deprecated
-	 */
-	// p.initialize = function() {}; // searchable for devs wondering where it is.
-
 
 // constants:
 	/**
@@ -16828,6 +16645,6 @@ this.createjs = this.createjs || {};
 	 * @type String
 	 * @static
 	 **/
-	s.buildDate = /*=date*/"Tue, 11 Apr 2017 23:11:42 GMT"; // injected by build process
+	s.buildDate = /*=date*/"Thu, 14 Sep 2017 22:19:48 GMT"; // injected by build process
 
 })();

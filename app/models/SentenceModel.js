@@ -19,7 +19,7 @@ const SentenceModel = GelatoModel.extend({
    *                                  italics, etc.
    * @returns {String} the definition in the user's language, or English if not available
    */
-  getDefinition: function(ignoreFormat) {
+  getDefinition: function (ignoreFormat) {
     let definition = this.get('definitions')[app.user.get('sourceLang')];
 
     if (!definition) {
@@ -36,11 +36,10 @@ const SentenceModel = GelatoModel.extend({
    * @param {VocabModel} vocab the vocab for the sentence
    * @returns {String}
    */
-  getWriting: function(mask, vocab) {
+  getWriting: function (mask, vocab) {
     let writing = this.get('sentenceRune');
 
     if (app.getLanguage() === 'zh') {
-
       if (vocab) {
         if (vocab.get('style') === 'trad' ||
           (vocab.get('style') === 'both' && !app.user.get('reviewSimplified'))) {
@@ -67,7 +66,7 @@ const SentenceModel = GelatoModel.extend({
     }
 
     return writing.replace(/\s+/g, '');
-  }
+  },
 
 });
 

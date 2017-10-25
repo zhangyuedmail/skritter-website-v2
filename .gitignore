@@ -1,11 +1,11 @@
 # Directories
-/build
-/cordova
-/cordova-android
-/cordova-ios
-/node_modules
-/output
-/public
+/build/
+/cordova/
+/cordova-android/
+/cordova-ios/
+/node_modules/
+/output/
+/public/
 
 # Files
 *.apk

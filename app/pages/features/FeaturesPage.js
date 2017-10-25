@@ -29,7 +29,7 @@ const FeaturesPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     app.mixpanel.track('Viewed features page');
   },
 
@@ -37,11 +37,11 @@ const FeaturesPage = GelatoPage.extend({
    * @method render
    * @returns {FeaturesPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
-  }
+  },
 });
 
 module.exports = FeaturesPage;

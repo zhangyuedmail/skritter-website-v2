@@ -7,6 +7,8 @@ const DashboardStatus = require('components/dashboard/DashboardStatusComponent')
 const DashboardTotal = require('components/dashboard/DashboardTotalComponent');
 const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 const MobileNavbar = require('components/navbars/NavbarMobileDashboardComponent');
+const ViewDialog = require('dialogs1/view-dialog/view');
+const ReleaseNotes = require('components/common/ReleaseNotesComponent');
 
 /**
  * A page that shows a summary of the user's review count due, stats, and lists
@@ -18,8 +20,9 @@ const DashboardPage = GelatoPage.extend({
 
   events: {
     'click #feedback-btn': 'onFeedbackBtnClicked',
+    'click #goal-setting': 'onGoalSettingClicked',
     'click #rating-btn': 'onRatingBtnClicked',
-    'click #rating-cancel-btn': 'onRatingCancelBtnClicked'
+    'click #rating-cancel-btn': 'onRatingCancelBtnClicked',
   },
 
   /**
@@ -27,6 +30,10 @@ const DashboardPage = GelatoPage.extend({
    * @type {MobileNavbar}
    */
   mobileNavbar: MobileNavbar,
+
+  navbarOptions: {
+    showSyncBtn: true,
+  },
 
   /**
    * @property showFooter
@@ -50,17 +57,17 @@ const DashboardPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
     }
 
-    if (app.config.goalModeEnabled) {
+    if (app.config.goalModeEnabled && app.user.get('goalEnabled')) {
       this._views['goal'] = new DashboardGoal();
     } else {
       this._views['goal'] = new DashboardStatus();
     }
-    
+
 
     this._views['queue'] = new DashboardQueue();
     this._views['expiration'] = new ExpiredNotification();
@@ -76,7 +83,7 @@ const DashboardPage = GelatoPage.extend({
       this.componentsLoaded = {
         goal: false,
         month: false,
-        queue: false
+        queue: false,
       };
       this.loadAlreadyTimed = false;
 
@@ -97,7 +104,7 @@ const DashboardPage = GelatoPage.extend({
    * @method render
    * @returns {Dashboard}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     if (this._views['month']) {
@@ -116,6 +123,8 @@ const DashboardPage = GelatoPage.extend({
     this._views['queue'].setElement('#dashboard-queue-container').render();
     this._views['expiration'].setElement('#subscription-notice').render();
 
+    this._checkForReleaseNotes();
+
     return this;
   },
 
@@ -123,7 +132,7 @@ const DashboardPage = GelatoPage.extend({
    *
    * @param {String} component the name/key of the component loaded
    */
-  onComponentLoaded: function(component) {
+  onComponentLoaded: function (component) {
     this.componentsLoaded[component] = true;
 
     if (this.loadAlreadyTimed) {
@@ -146,11 +155,20 @@ const DashboardPage = GelatoPage.extend({
   /**
    * Opens a dialog the user can leave app feedback in.
    */
-  onFeedbackBtnClicked: function() {
+  onFeedbackBtnClicked: function () {
     app.showFeedbackDialog();
   },
 
-  onRatingBtnClicked: function() {
+  /**
+   * Opens the goal setting dialog for goal component options.
+   */
+  onGoalSettingClicked: function (event) {
+    event.preventDefault();
+
+    app.router.navigateAccountSettingsStudy('goal-mode-section');
+  },
+
+  onRatingBtnClicked: function () {
     if (app.isAndroid()) {
       if (app.getLanguage() === 'zh') {
         plugins.core.openGooglePlay('com.inkren.skritter.chinese');
@@ -173,14 +191,14 @@ const DashboardPage = GelatoPage.extend({
     app.user.cache();
   },
 
-  onRatingCancelBtnClicked: function() {
+  onRatingCancelBtnClicked: function () {
     this.$('.rating-notice').hide();
 
     app.user.set('hideRatingNotice', true);
     app.user.cache();
   },
 
-  onSubscriptionSync: function(sub) {
+  onSubscriptionSync: function (sub) {
     const $ratingNotice = this.$('.rating-notice');
 
     if (app.user.get('hideRatingNotice')) {
@@ -196,7 +214,37 @@ const DashboardPage = GelatoPage.extend({
     }
 
     $ratingNotice.removeClass('hidden');
-  }
+  },
+
+  /**
+   * Checks whether the user has seen the release notes for the current version
+   * of the app if it's recently been released.
+   * If not, updates a flag to show that the user has seen them,
+   * then opens the release notes.
+   * @private
+   */
+  _checkForReleaseNotes () {
+    if (!app.getSetting('releaseNotesViewed-' + app.config.version)) {
+      if (moment().diff(moment(Number(app.config.timestamp) * 1000), 'days') < 4) {
+        this._showReleaseNotes();
+        app.setSetting('releaseNotesViewed-' + app.config.version, true);
+      }
+    }
+  },
+
+  /**
+   * Creates an instance of a dialog to show release notes and opens it up
+   * @private
+   */
+  _showReleaseNotes () {
+    this._views['releaseNotes'] = new ViewDialog({
+      showCloseButton: true,
+      showTitle: true,
+      dialogTitle: app.locale('components.releaseNotes.title') + ' - v' + app.config.version,
+      content: ReleaseNotes,
+    });
+    this._views['releaseNotes'].open();
+  },
 });
 
 module.exports = DashboardPage;

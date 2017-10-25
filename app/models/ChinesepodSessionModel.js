@@ -22,9 +22,9 @@ const ChinesepodSessionModel = SkritterModel.extend({
    * @method parse
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.ChinesePodSession || response;
-  }
+  },
 
 });
 

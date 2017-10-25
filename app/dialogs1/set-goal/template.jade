@@ -1,0 +1,31 @@
+gelato-dialog(data-name='set-goal')
+
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+
+        .modal-header
+          .pull-left
+            .modal-title Set Goal
+          .pull-right
+            a(href='#', data-dismiss='modal')
+              i.fa.fa-times-circle-o
+
+        .modal-body
+          #error-message.text-danger
+          form
+            .form-group
+              label(for="field-goal-type") Type
+              label.radio-inline
+                input(type="checkbox")
+                span.spl Time
+              label.radio-inline
+                input(type="checkbox")
+                span.spl Words
+            .form-group
+              label(for="field-goal-value") Value
+              input#field-goal-value.form-control(type="text", placeholder="")
+
+        .modal-footer
+          button#button-set.btn.btn-success Set
+          button#button-cancel.btn.btn-default Cancel

@@ -25,7 +25,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(models, options) {
+  initialize: function (models, options) {
     options = options || {};
     this.items = options.items;
     this.addCountOffset = 0;
@@ -37,7 +37,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @param {ReviewModel} review
    * @return {String}
    */
-  comparator: function(review) {
+  comparator: function (review) {
     return review.get('created');
   },
 
@@ -45,33 +45,47 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @method fetchReviewErrors
    * @param {Function} [callback]
    */
-  fetchReviewErrors: function(callback) {
+  fetchReviewErrors: function (callback) {
     $.ajax({
       url: app.getApiUrl() + 'reviews/errors',
       headers: app.user.session.getHeaders(),
       type: 'GET',
       data: {
         limit: 100,
-        offset: moment().startOf('year').unix()
+        offset: moment().startOf('year').unix(),
       },
-      error: function(error) {
+      error: function (error) {
         console.error(error);
       },
-      success: function(result) {
+      success: function (result) {
         console.log(result);
-      }
+      },
     });
+  },
+
+  /**
+   * Returns an arrat of data items matching the given itemId.
+   * @param {String} itemId
+   * @returns {Object[]}
+   */
+  getByItemId: function (itemId) {
+    return _.chain(this.models)
+      .map((model) => model.get('data'))
+      .flatten()
+      .filter((model) => model.itemId === itemId)
+      .sortBy('submitTime')
+      .value();
   },
 
   /**
    * @method getDueCountOffset
    * @returns {Number}
    */
-  getDueCountOffset: function() {
+  getDueCountOffset: function () {
     const reviews = _.flatten(this.map('data'));
     let offset = this.postCountOffset - this.addCountOffset;
 
-    _.forEach(reviews, review => {
+    _.forEach(reviews, (review) => {
       if (review.due) offset++;
     });
 
@@ -82,13 +96,12 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @method post
    * @param {Object} [options]
    */
-  post: function(options) {
+  post: function (options) {
     options = _.defaults(options || {}, {async: true, skip: 0});
 
     if (this.state !== 'standby') {
       return;
     }
-
 
     this.state = 'posting';
     this.trigger('state', this.state, this);
@@ -103,17 +116,9 @@ const ReviewCollection = BaseSkritterCollection.extend({
           (chunk, callback) => {
             const data = _
               .chain(chunk)
-              .map(
-                function (review) {
-                  return review.get('data');
-                }
-              )
+              .map((review) => review.get('data'))
               .flatten()
-              .uniqBy(
-                function (review) {
-                  return [review.itemId, review.currentInterval, review.newInterval].join('');
-                }
-              )
+              .uniqBy((review) => [review.itemId, review.currentInterval, review.newInterval].join(''))
               .value();
 
             $.ajax({
@@ -142,14 +147,19 @@ const ReviewCollection = BaseSkritterCollection.extend({
               success: () => {
                 this.remove(chunk);
 
-                _.forEach(data, review => {
+                if (app.user.offline.isReady()) {
+                  app.user.offline.removeReviews(chunk);
+                  app.user.offline.updateItems(chunk);
+                }
+
+                _.forEach(data, (review) => {
                   if (review.due) this.postCountOffset++;
                 });
 
                 this.trigger('update:due', true);
 
                 setTimeout(callback, 1000);
-              }
+              },
             });
           },
           (error) => {
@@ -176,7 +186,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
    * @param {Object} [options]
    * @returns {Array}
    */
-  put: function(models, options) {
+  put: function (models, options) {
     const updatedReviews = [];
 
     models = _.isArray(models) ? models : [models];
@@ -187,15 +197,13 @@ const ReviewCollection = BaseSkritterCollection.extend({
 
       model.data = _.uniqBy(model.data, 'itemId');
 
-      for (var b = 0, lengthB = model.data.length; b < lengthB; b++) {
+      for (let b = 0, lengthB = model.data.length; b < lengthB; b++) {
         const modelData = model.data[b];
         const item = modelData.item.clone();
         const submitTimeSeconds = Math.round(modelData.submitTime);
 
-        modelData.score = parseInt(modelData.score, 10);
-
         if (!_.isInteger(modelData.score)) {
-          modelData.score = 3;
+          console.error('REVIEW ERROR:', 'score must be an integer value');
         }
 
         modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
@@ -204,9 +212,7 @@ const ReviewCollection = BaseSkritterCollection.extend({
         modelData.previousSuccess = item.get('previousSuccess') || false;
 
         if (!_.isInteger(modelData.newInterval)) {
-          console.error('REVIEW ERROR: Missing new interval value');
-
-          modelData.newInterval = 86400;
+          console.error('REVIEW ERROR:', 'missing new interval integer value');
         }
 
         if (app.isDevelopment()) {
@@ -224,10 +230,14 @@ const ReviewCollection = BaseSkritterCollection.extend({
       updatedReviews.push(this.add(model, options));
     }
 
+    if (app.user.offline.isReady()) {
+      app.user.offline.putReviews(updatedReviews);
+    }
+
     this.trigger('update:due', true);
 
     return updatedReviews;
-  }
+  },
 
 });
 

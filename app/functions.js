@@ -40,9 +40,9 @@ const shortstraw = new Shortstraw();
  * @param {String} attribute
  * @returns {Number}
  */
-function addAllObjectAttributes(array, attribute) {
-  var total = 0;
-  for (var i = 0, length = array.length; i < length; i++) {
+function addAllObjectAttributes (array, attribute) {
+  let total = 0;
+  for (let i = 0, length = array.length; i < length; i++) {
     if (array[i][attribute]) {
       total += array[i][attribute];
     }
@@ -55,8 +55,8 @@ function addAllObjectAttributes(array, attribute) {
  * @param {Array} array
  * @returns {Array}
  */
-function arrayToJSON(array) {
-  return array.map(function(data) {
+function arrayToJSON (array) {
+  return array.map(function (data) {
     return data.toJSON();
   });
 }
@@ -66,8 +66,8 @@ function arrayToJSON(array) {
  * @param {Array} array
  * @returns {Array}
  */
-function arrayToInt(array) {
-  return array.map(function(value) {
+function arrayToInt (array) {
+  return array.map(function (value) {
     return parseInt(value, 10);
   });
 }
@@ -77,10 +77,10 @@ function arrayToInt(array) {
  * @param {Number} bytes
  * @returns {String}
  */
-function convertBytesToSize(bytes) {
-  var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+function convertBytesToSize (bytes) {
+  let sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   if (bytes > 0) {
-    var value = parseFloat(Math.floor(Math.log(bytes) / Math.log(1024)));
+    let value = parseFloat(Math.floor(Math.log(bytes) / Math.log(1024)));
     return (bytes / Math.pow(1024, value)).toFixed(2) + ' ' + sizes[value];
   }
   return '0 B';
@@ -90,12 +90,12 @@ function convertBytesToSize(bytes) {
  * @method convertTimeToClock
  * @param {Number} time
  */
-function convertTimeToClock(time) {
-  var hours = (time / (3600 * 1000)) >> 0;
+function convertTimeToClock (time) {
+  let hours = (time / (3600 * 1000)) >> 0;
   time = time % (3600 * 1000);
-  var minutes = (time / (60 * 1000)) >> 0;
+  let minutes = (time / (60 * 1000)) >> 0;
   time = time % (60 * 1000);
-  var seconds = (time / 1000) >> 0;
+  let seconds = (time / 1000) >> 0;
   if (hours > 0) {
     return pad(hours, 0, 2) + ':' + pad(minutes, 0, 2) + ':' + pad(seconds, 0, 2);
   }
@@ -106,8 +106,8 @@ function convertTimeToClock(time) {
  * @method formatDate
  * @param {Number} timestamp
  */
-function formatDate(timestamp) {
-  return Moment(timestamp * 1000).format('MMMM Do YYYY');
+function formatDate (timestamp) {
+  return moment(timestamp * 1000).format('MMMM Do YYYY');
 }
 
 /**
@@ -116,11 +116,11 @@ function formatDate(timestamp) {
  * @param {createjs.Point|Object} point2
  * @return {Number}
  */
-function getAngle(point1, point2) {
-  var p1 = Array.isArray(point1) ? point1[0] : point1;
-  var p2 = Array.isArray(point1) ? point1[point1.length - 1] : point2;
-  var xDiff = p2.x - p1.x;
-  var yDiff = p2.y - p1.y;
+function getAngle (point1, point2) {
+  let p1 = Array.isArray(point1) ? point1[0] : point1;
+  let p2 = Array.isArray(point1) ? point1[point1.length - 1] : point2;
+  let xDiff = p2.x - p1.x;
+  let yDiff = p2.y - p1.y;
   return (Math.atan2(yDiff, xDiff)) * (180 / Math.PI);
 }
 
@@ -132,26 +132,30 @@ function getAngle(point1, point2) {
  * @param {Number} pointRadius
  * @return {Object}
  */
-function getBoundingRectangle(points, areaWidth, areaHeight, pointRadius) {
-  var left = areaWidth;
-  var top = 0.0;
-  var right = 0.0;
-  var bottom = areaHeight;
-  for (var i = 0, length = points.length; i < length; i++) {
-    var x = points[i].x;
-    var y = points[i].y;
-    if (x - pointRadius < left)
-      left = x - pointRadius;
-    if (y + pointRadius > top)
-      top = y + pointRadius;
-    if (x + pointRadius > right)
-      right = x + pointRadius;
-    if (y - pointRadius < bottom)
-      bottom = y - pointRadius;
+function getBoundingRectangle (points, areaWidth, areaHeight, pointRadius) {
+  let left = areaWidth;
+  let top = 0.0;
+  let right = 0.0;
+  let bottom = areaHeight;
+  for (let i = 0, length = points.length; i < length; i++) {
+    let x = points[i].x;
+    let y = points[i].y;
+    if (x - pointRadius < left) {
+left = x - pointRadius;
+}
+    if (y + pointRadius > top) {
+top = y + pointRadius;
+}
+    if (x + pointRadius > right) {
+right = x + pointRadius;
+}
+    if (y - pointRadius < bottom) {
+bottom = y - pointRadius;
+}
   }
-  var width = right - left;
-  var height = top - bottom;
-  var center = {x: width / 2 + left, y: height / 2 + bottom};
+  let width = right - left;
+  let height = top - bottom;
+  let center = {x: width / 2 + left, y: height / 2 + bottom};
   return {x: left, y: bottom, width: width, height: height, center: center};
 }
 
@@ -160,11 +164,11 @@ function getBoundingRectangle(points, areaWidth, areaHeight, pointRadius) {
  * @param {String} name
  * @returns {String}
  */
-function getCookie(name) {
-  var value = "; " + document.cookie;
-  var parts = value.split("; " + name + "=");
+function getCookie (name) {
+  let value = '; ' + document.cookie;
+  let parts = value.split('; ' + name + '=');
   if (parts.length == 2) {
-    return parts.pop().split(";").shift();
+    return parts.pop().split(';').shift();
   }
 }
 
@@ -174,10 +178,10 @@ function getCookie(name) {
  * @param {createjs.Point|Object} point2
  * @return {Number}
  */
-function getDistance(point1, point2) {
-  var xs = point2.x - point1.x;
+function getDistance (point1, point2) {
+  let xs = point2.x - point1.x;
   xs = xs * xs;
-  var ys = point2.y - point1.y;
+  let ys = point2.y - point1.y;
   ys = ys * ys;
   return Math.sqrt(xs + ys);
 }
@@ -186,7 +190,7 @@ function getDistance(point1, point2) {
  * @method getGuid
  * @returns {String}
  */
-function getGuid() {
+function getGuid () {
   return Math.floor((1 + Math.random()) * 0x100000000).toString(16).substring(1);
 }
 
@@ -195,10 +199,10 @@ function getGuid() {
  * @param {Array} points
  * @return {Number}
  */
-function getLength(points) {
-  var total = 0;
+function getLength (points) {
+  let total = 0;
   if (points.length > 1) {
-    for (var i = 1, length = points.length; i < length; i++) {
+    for (let i = 1, length = points.length; i < length; i++) {
       total += getDistance(points[i - 1], points[i]);
     }
   }
@@ -211,14 +215,14 @@ function getLength(points) {
  * @param {String} [url] the URL string to look in. Defaults to window.location.href.
  * @returns {String} the value of the parameter, if it is found
  */
-function getParameterByName(name, url) {
+function getParameterByName (name, url) {
   if (!url) url = window.location.href;
-  name = name.replace(/[\[\]]/g, "\\$&");
-  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-    results = regex.exec(url);
+  name = name.replace(/[[\]]/g, '\\$&');
+  let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+  let results = regex.exec(url);
   if (!results) return null;
   if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, " "));
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
 /**
@@ -226,11 +230,11 @@ function getParameterByName(name, url) {
  * @param {String} text
  * @returns {Boolean}
  */
-function hasKana(text) {
-  var chars = text.split('');
+function hasKana (text) {
+  let chars = text.split('');
   if (chars.length > 0) {
-    for (var i = 0, length = chars.length; i < length; i++) {
-      var charCode = text.charCodeAt(i);
+    for (let i = 0, length = chars.length; i < length; i++) {
+      let charCode = text.charCodeAt(i);
       if ((charCode >= 12353 && charCode <= 12436) ||
         (charCode >= 12449 && charCode <= 12540)) {
         return true;
@@ -245,12 +249,12 @@ function hasKana(text) {
  * @param {String} text
  * @returns {Boolean}
  */
-function isKana(text) {
-  var chars = text.split('');
+function isKana (text) {
+  let chars = text.split('');
 
   if (chars.length > 0) {
-    for (var i = 0, length = chars.length; i < length; i++) {
-      var charCode = text.charCodeAt(i);
+    for (let i = 0, length = chars.length; i < length; i++) {
+      let charCode = text.charCodeAt(i);
 
       if (!(charCode >= 12353 && charCode <= 12436) &&
         !(charCode >= 12449 && charCode <= 12540)) {
@@ -268,12 +272,12 @@ function isKana(text) {
  * @param {Function} callbackSuccess
  * @param {Function} [callbackError]
  */
-function imageExists(src, callbackSuccess, callbackError) {
-  var image = new Image();
-  image.onload = function() {
+function imageExists (src, callbackSuccess, callbackError) {
+  let image = new Image();
+  image.onload = function () {
     callbackSuccess(image);
   };
-  image.onerror = function() {
+  image.onerror = function () {
     if (typeof callbackError === 'function') {
       callbackError();
     }
@@ -283,10 +287,11 @@ function imageExists(src, callbackSuccess, callbackError) {
 
 /**
  * @method isNumber
+ * @param {Number} value
  * @returns {Boolean}
  */
-function isNumber() {
-  return !isNaN(parseFloat(number)) && isFinite(number);
+function isNumber (value) {
+  return !isNaN(parseFloat(value)) && isFinite(value);
 }
 
 /**
@@ -295,8 +300,8 @@ function isNumber() {
  * @param {Object} object2
  * @returns {Object}
  */
-function mergeObjectArrays(object1, object2) {
-  for (var key in object2) {
+function mergeObjectArrays (object1, object2) {
+  for (let key in object2) {
     if (object1[key]) {
       if (Array.isArray(object1[key])) {
         object1[key] = object1[key].concat(object2[key]);
@@ -317,9 +322,9 @@ function mergeObjectArrays(object1, object2) {
  * @param {Number} size
  * @return {String}
  */
-function pad(text, value, size) {
+function pad (text, value, size) {
   value = '' + value;
-  var string = text + '';
+  let string = text + '';
   while (string.length < size) {
     string = value + '' + string;
   }
@@ -332,7 +337,7 @@ function pad(text, value, size) {
  * @param {Number} max
  * @returns {Number}
  */
-function randomDecimal(min, max) {
+function randomDecimal (min, max) {
   return Math.random() * (max - min) + min;
 }
 
@@ -340,7 +345,7 @@ function randomDecimal(min, max) {
  * @method textToHTML
  * @param {String} text
  */
-function textToHTML(text) {
+function textToHTML (text) {
   if (!text) {
     return '';
   }
@@ -356,7 +361,7 @@ function textToHTML(text) {
  * @param {String} value
  * @returns {String}
  */
-function toLowerCase(value) {
+function toLowerCase (value) {
   return value.toLowerCase();
 }
 
@@ -365,7 +370,7 @@ function toLowerCase(value) {
  * @param {String} value
  * @returns {String}
  */
-function toUpperCase(value) {
+function toUpperCase (value) {
   return value.toUpperCase();
 }
 
@@ -397,5 +402,5 @@ module.exports = {
   randomDecimal: randomDecimal,
   textToHTML: textToHTML,
   toLowerCase: toLowerCase,
-  toUpperCase: toUpperCase
+  toUpperCase: toUpperCase,
 };

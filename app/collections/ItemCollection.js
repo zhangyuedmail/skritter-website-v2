@@ -27,7 +27,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(models, options) {
+  initialize: function (models, options) {
     options = options || {};
 
     this.reviews = new ReviewCollection(null, {items: this});
@@ -71,7 +71,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @return {Promise<Object>} resolves when the item has been added
    * @method addItem
    */
-  addItem: function(options) {
+  addItem: function (options) {
     options = options || {};
     options.lang = options.lang || app.getLanguage();
 
@@ -100,12 +100,12 @@ const ItemCollection = BaseSkritterCollection.extend({
         url: app.getApiUrl() + 'items/add' + params,
         type: 'POST',
         headers: app.user.session.getHeaders(),
-        error: error => {
+        error: (error) => {
           this.addingState = 'standby';
 
           reject(error);
         },
-        success: result => {
+        success: (result) => {
           if (result.Items.length) {
             const item = new ItemModel(result.Items[0]);
 
@@ -126,7 +126,7 @@ const ItemCollection = BaseSkritterCollection.extend({
           this.addingState = 'standby';
 
           resolve(result);
-        }
+        },
       });
     });
   },
@@ -142,7 +142,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    *                              the limit has been reached.
    * @method addItems
    */
-  addItems: function(options, callback) {
+  addItems: function (options, callback) {
     let count = 0;
     let results = {items: [], numVocabsAdded: 0, itemsFailed: 0};
 
@@ -150,7 +150,7 @@ const ItemCollection = BaseSkritterCollection.extend({
     options.limit = options.limit || 1;
     options.offset = options.offset || Math.round(Math.random() * 10);
 
-    app.user.isSubscriptionActive(active => {
+    app.user.isSubscriptionActive((active) => {
       if (!active) {
         this.itemsAdded(results, callback);
 
@@ -159,7 +159,7 @@ const ItemCollection = BaseSkritterCollection.extend({
 
       async.whilst(
         () => count < options.limit,
-        async callback => {
+        async (callback) => {
           count++;
 
           try {
@@ -193,7 +193,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    *                              that called addItems
    * @return {Object} the results object
    */
-  itemsAdded: function(results, callback) {
+  itemsAdded: function (results, callback) {
     const addedCount = results.numVocabsAdded;
     const partCount = app.user.getFilteredParts().length;
 
@@ -217,14 +217,13 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @method fetchCharacters
    * @returns {Promise}
    */
-  fetchCharacters: function() {
+  fetchCharacters: function () {
     return new Promise(
       (resolve, reject) => {
-
         // filter out characters which have already been fetched
         const filteredWritings = _.filter(
           this.vocabs.getUniqueWritings(),
-          function(value) {
+          function (value) {
             return !app.user.characters.findWhere({writing: value});
           }
         );
@@ -239,17 +238,16 @@ const ItemCollection = BaseSkritterCollection.extend({
         app.user.characters.fetch({
           data: {
             languageCode: app.getLanguage(),
-            writings: filteredWritings.join('')
+            writings: filteredWritings.join(''),
           },
           remove: false,
-          error: function(error) {
+          error: function (error) {
             reject(error);
           },
-          success: function() {
+          success: function () {
             resolve();
-          }
+          },
         });
-
       }
     );
   },
@@ -259,7 +257,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @param {Object} options
    * @returns {Promise}
    */
-  fetchNext: function(options) {
+  fetchNext: function (options) {
     options = options || {};
     options.limit = options.limit || 50;
     options.lists = options.lists || null;
@@ -277,22 +275,22 @@ const ItemCollection = BaseSkritterCollection.extend({
         if (app.user.offline.isReady()) {
           async.series(
             [
-              async callback => {
+              async (callback) => {
                 const result = await app.user.offline.loadNext();
 
-                _.forEach(this.add(result.Items), item => {
+                _.forEach(this.add(result.Items, {merge: true}), (item) => {
                   item._loaded = true;
                   item._queue = true;
                 });
 
-                this.add(result.ContainedItems);
+                this.add(result.ContainedItems, {merge: true});
 
                 this.vocabs.add(result.Vocabs);
 
-                app.user.characters.add(result.Characters);
+                app.user.characters.add(result.Characters, {merge: true});
 
                 callback();
-              }
+              },
             ],
             (error) => {
               this.fetchingState = 'standby';
@@ -315,10 +313,10 @@ const ItemCollection = BaseSkritterCollection.extend({
                   type: 'GET',
                   headers: app.user.session.getHeaders(),
                   data: {
-                    languageCode: app.getLanguage()
+                    languageCode: app.getLanguage(),
                   },
                   error: (error) => callback(error),
-                  success: () => callback()
+                  success: () => callback(),
                 });
               },
               (callback) => {
@@ -334,22 +332,20 @@ const ItemCollection = BaseSkritterCollection.extend({
                     lists: options.lists || app.user.getFilteredLists().join('|'),
                     parts: app.user.getFilteredParts().join('|'),
                     sections: options.sections,
-                    styles: app.user.getFilteredStyles().join('|')
+                    styles: app.user.getFilteredStyles().join('|'),
                   },
-                  error: error => {
+                  error: (error) => {
                     callback(error);
                   },
-                  success: result => {
-                    this.reset();
-
-                    _.forEach(this.add(result), model => {
+                  success: (result) => {
+                    _.forEach(this.add(result, {merge: true}), (model) => {
                       model._queue = true;
                     });
 
                     callback();
-                  }
+                  },
                 });
-              }
+              },
             ],
             (error) => {
               if (error) {
@@ -383,7 +379,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @method getNext
    * @returns {Array}
    */
-  getNext: function() {
+  getNext: function () {
     const now = moment().unix();
     const parts = app.user.getFilteredParts().join(',');
     const styles = app.user.getFilteredStyles().join(',');
@@ -392,7 +388,6 @@ const ItemCollection = BaseSkritterCollection.extend({
       .chain(this.getQueue())
       .filter(
         (model) => {
-
           // check if model has been removed from collection
           if (!model) {
             return false;
@@ -432,7 +427,6 @@ const ItemCollection = BaseSkritterCollection.extend({
           if (model.isJapanese()) {
             // skip all kana writings when study kana disabled
             if (!app.user.get('studyKana') && model.isPartRune() && model.isKana()) {
-
               // exclude the rune item from the local queue
               model._queue = false;
 
@@ -446,7 +440,7 @@ const ItemCollection = BaseSkritterCollection.extend({
           return model;
         }
       )
-      .sortBy(item => -item.getReadiness(now))
+      .sortBy((item) => -item.getReadiness(now))
       .value();
   },
 
@@ -454,8 +448,8 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @method getQueue
    * @returns {Array}
    */
-  getQueue: function() {
-    return _.filter(this.models, model => model._queue);
+  getQueue: function () {
+    return _.filter(this.models, (model) => model._queue);
   },
 
   /**
@@ -463,7 +457,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @param {Object} response
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     this.cursor = response.cursor;
     this.vocabs.add(response.Vocabs);
     this.vocabs.decomps.add(response.Decomps);
@@ -477,7 +471,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @param {Object} [options]
    * @returns {Promise}
    */
-  preloadNext: function(options) {
+  preloadNext: function (options) {
     const now = moment().unix();
     const queue = this.getQueue();
 
@@ -488,9 +482,9 @@ const ItemCollection = BaseSkritterCollection.extend({
     // return list of active next item ids
     const itemIds = _
       .chain(queue)
-      .filter(model => !model._loaded)
-      .sortBy(item => -item.getReadiness(now))
-      .map(item => item.id)
+      .filter((model) => !model._loaded)
+      .sortBy((item) => -item.getReadiness(now))
+      .map((item) => item.id)
       .value()
       .slice(0, options.limit);
 
@@ -518,15 +512,16 @@ const ItemCollection = BaseSkritterCollection.extend({
             include_sentences: false,
             include_strokes: false,
             include_top_mnemonics: true,
-            include_vocabs: true
+            include_vocabs: true,
           },
+          merge: true,
           remove: false,
           error: (error) => {
             reject(error);
           },
           success: (collection, result) => {
             // check for null items to determine if queue reset is needed
-            const nullItems = result.Items.filter(i => i === null);
+            const nullItems = result.Items.filter((i) => i === null);
             if (nullItems.length / result.Items.length >= .9) {
               if (!this.queuePossiblyStale) {
                 this.queuePossiblyStale = true;
@@ -561,7 +556,7 @@ const ItemCollection = BaseSkritterCollection.extend({
                   resolve();
                 }
               );
-          }
+          },
         });
       }
     );
@@ -571,8 +566,9 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @method reset
    * @returns {Items}
    */
-  reset: function() {
+  reset: function () {
     this.vocabs.reset();
+
     return BaseSkritterCollection.prototype.reset.apply(this, arguments);
   },
 
@@ -580,9 +576,8 @@ const ItemCollection = BaseSkritterCollection.extend({
    * Resets a user's queue for the current language
    * @param {Boolean} [reload] whether to reload the page after resetting
    */
-  resetQueue: function(reload) {
+  resetQueue: function (reload) {
     return new Promise((resolve, reject) => {
-
       // I know, UI code in a model. Sorry :-(
       ScreenLoader.post('Synching queue');
 
@@ -595,7 +590,7 @@ const ItemCollection = BaseSkritterCollection.extend({
 
       $.ajax({
         data: {
-          languageCode: app.getLanguage()
+          languageCode: app.getLanguage(),
         },
         headers: app.user.session.getHeaders(),
         type: 'GET',
@@ -612,7 +607,7 @@ const ItemCollection = BaseSkritterCollection.extend({
           if (reload) {
             app.reload();
           }
-        }
+        },
       });
     });
   },
@@ -621,7 +616,7 @@ const ItemCollection = BaseSkritterCollection.extend({
    * @method updateDueCount
    * @param {boolean} [skipServer]
    */
-  updateDueCount: function(skipServer) {
+  updateDueCount: function (skipServer) {
     if (this.dueCountState === 'fetching') {
       return;
     }
@@ -648,6 +643,29 @@ const ItemCollection = BaseSkritterCollection.extend({
       url = app.getApiUrl(2) + 'gae/items/due';
     }
 
+    if (app.user.offline.isReady()) {
+      let serverCount = 0;
+      let localCount = 0;
+
+      localCount = serverCount - this.reviews.getDueCountOffset();
+
+      if (localCount > 0) {
+        this.dueCount = localCount;
+      } else {
+        this.dueCount = 0;
+      }
+
+      app.user.offline.loadDueCount({list: this.listIds}).then((result) => {
+        this.dueCount += result;
+        this.dueCountServer = result;
+        this.dueCountState = 'standby';
+
+        this.trigger('update:due-count', this.dueCount);
+      });
+
+      return;
+    }
+
     $.ajax({
       url,
       type: 'GET',
@@ -655,9 +673,9 @@ const ItemCollection = BaseSkritterCollection.extend({
       data: {
         lang: app.getLanguage(),
         languageCode: app.getLanguage(),
-        lists: this.listIds.join(','),
+        list: this.listIds.join(','),
         parts: app.user.getFilteredParts().join(','),
-        styles: app.user.getFilteredStyles().join(',')
+        styles: app.user.getFilteredStyles().join(','),
       },
       error: () => {
         this.dueCount = '-';
@@ -668,8 +686,8 @@ const ItemCollection = BaseSkritterCollection.extend({
         let serverCount = 0;
         let localCount = 0;
 
-        _.forIn(result.due, part => {
-          _.forIn(part, style => {
+        _.forIn(result.due, (part) => {
+          _.forIn(part, (style) => {
             serverCount += style;
           });
         });
@@ -686,9 +704,9 @@ const ItemCollection = BaseSkritterCollection.extend({
         this.dueCountState = 'standby';
 
         this.trigger('update:due-count', this.dueCount);
-      }
+      },
     });
-  }
+  },
 
 });
 

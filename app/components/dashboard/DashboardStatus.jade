@@ -1,9 +1,10 @@
 gelato-component(data-name='dashboard-status')
   .row
     .col-xs-12.text-center
+      - console.log(view.dueCount)
       a(href="/account")= user.get('name')
       | , you have &nbsp;
-      if view.dueCount > 0 && view.vocablists.state === 'standby'
+      if view.dueCount > 0
         span= view.dueCount
         | &nbsp; items ready to review.
       else if view.dueCount === 0 && view.vocablists.state === 'standby'

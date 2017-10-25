@@ -11,7 +11,7 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #confirm-btn': 'handleClickConfirmButton',
-    'click #cancel-btn': 'handleClickCancelButton'
+    'click #cancel-btn': 'handleClickCancelButton',
   },
 
   /**
@@ -24,7 +24,7 @@ module.exports = BootstrapDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.vocablist = options.vocablist;
     this.vocablistId = this.vocablist.id;
 
@@ -34,7 +34,7 @@ module.exports = BootstrapDialog.extend({
     this.itemsCursor = '';
     this.itemsRemoved = 0;
     this.itemsToRemove = 0;
-    this.toRemove = ["item", "sect_complete"];
+    this.toRemove = ['item', 'sect_complete'];
 
     if (!this.vocablist) {
       throw new Error('VocablistRemoveDialog requires a vocablist passed in');
@@ -45,7 +45,7 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {VocablistRemoveDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -54,13 +54,12 @@ module.exports = BootstrapDialog.extend({
   /**
    * Gets a count of all the vocab in the list, then deletes them
    */
-  deleteVocabFromList: function() {
+  deleteVocabFromList: function () {
     if (!this.fetchingCount) {
       this.fetchingCount = this.getListVocabCount();
     }
 
     this.fetchingCount.then(() => {
-
       // TODO: update UI with count
       this._removeVocab().then(() => {
         this.close();
@@ -76,14 +75,14 @@ module.exports = BootstrapDialog.extend({
    * Gets the total count
    * @return {Promise}
    */
-  getListVocabCount: function() {
+  getListVocabCount: function () {
     return new Promise((resolve, reject) => {
       $.ajax({
         context: this,
         url: app.getApiUrl() + 'vocablists/' + this.vocablistId + '/vocab-count?gzip=false&cursor=' + this.itemsCursor,
         type: 'GET',
         headers: app.user.session.getHeaders(),
-        error: function(error) {
+        error: function (error) {
           reject();
         },
         success: (resp) => {
@@ -99,7 +98,7 @@ module.exports = BootstrapDialog.extend({
           } else {
             resolve();
           }
-        }
+        },
       });
     });
   },
@@ -108,7 +107,7 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickCloseButton
    * @param {Event} e
    */
-  handleClickCancelButton: function(e) {
+  handleClickCancelButton: function (e) {
     this.close();
   },
 
@@ -116,7 +115,7 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickSaveButton
    * @param {Event} e
    */
-  handleClickConfirmButton: function(e) {
+  handleClickConfirmButton: function (e) {
     this.fetchingCount = this.getListVocabCount();
 
     this.vocablist.save({'studyingMode': 'not studying'}, {
@@ -129,7 +128,7 @@ module.exports = BootstrapDialog.extend({
       error: (error) => {
         this.resetUI();
         this.showError('There was a problem deleting the list. Please try again.');
-      }
+      },
     });
 
     this.$('.step-1').addClass('hidden');
@@ -140,7 +139,7 @@ module.exports = BootstrapDialog.extend({
   /**
    * Hides the error message from the user
    */
-  hideError: function() {
+  hideError: function () {
     this.$('#error-msg').text('').addClass('hidden');
   },
 
@@ -148,7 +147,7 @@ module.exports = BootstrapDialog.extend({
    * Shows an error message to the user
    * @param {String} error the error message to show
    */
-  showError: function(error) {
+  showError: function (error) {
     this.$('#error-msg').text(error).removeClass('hidden');
   },
 
@@ -156,14 +155,14 @@ module.exports = BootstrapDialog.extend({
    * Shows an update message to the user on the progress of deleting the vocab associations from the list
    * @param {String} msg the error message to show
    */
-  showVocabDeletionStatusText: function(msg) {
+  showVocabDeletionStatusText: function (msg) {
     this.$('#deleting-status').text(msg).removeClass('hidden');
   },
 
   /**
    * Resets the dialog to its initial state and hides any error messages
    */
-  resetUI: function() {
+  resetUI: function () {
     this.hideError();
     this.$('#confirm-btn').removeClass('hidden');
     this.$('.step-1').removeClass('hidden');
@@ -173,14 +172,14 @@ module.exports = BootstrapDialog.extend({
   /**
    * Generates a status text update on the progress of the vocab deletion
    */
-  updateVocabDeletionStatusText: function() {
+  updateVocabDeletionStatusText: function () {
     let percentDone = 100 * this.itemsRemoved / Math.max(this.itemsToRemove, 1);
     percentDone = parseInt(Math.min(99, percentDone), 10);
 
     let toGo = this.itemsToRemove - this.itemsRemoved;
-    let statusText = percentDone + "% complete ";
+    let statusText = percentDone + '% complete ';
     if (toGo > 0) {
-      statusText += "(" + toGo + " items still to process)";
+      statusText += '(' + toGo + ' items still to process)';
     }
 
     if (this.toRemove[0] !== 'item') {
@@ -192,7 +191,7 @@ module.exports = BootstrapDialog.extend({
   /**
    * Removes associated vocab from the user's study queue in batches.
    */
-  _removeVocab: function() {
+  _removeVocab: function () {
     this.updateVocabDeletionStatusText();
 
     return new Promise((resolve, reject) => {
@@ -203,9 +202,9 @@ module.exports = BootstrapDialog.extend({
         headers: app.user.session.getHeaders(),
         data: {
           kind: this.toRemove[0],
-          offset: this.itemsRemoved
+          offset: this.itemsRemoved,
         },
-        error: function(error) {
+        error: function (error) {
           reject();
         },
         success: (resp) => {
@@ -227,15 +226,13 @@ module.exports = BootstrapDialog.extend({
               }, (error) => {
                 reject();
               });
-            }
-
-            // means we've updated both items and sect_complete, we're done
-            else {
+            } else {
+              // means we've updated both items and sect_complete, we're done
               resolve();
             }
           }
-        }
+        },
       });
     });
-  }
+  },
 });

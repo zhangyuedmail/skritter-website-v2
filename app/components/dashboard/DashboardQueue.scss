@@ -5,12 +5,8 @@ gelato-component[data-name='dashboard-queue'] {
   font-weight: 300;
   margin: 30px 10px 0 10px;
 
-  a {
-    color: $grey5;
-  }
-
   #manage-button {
-    color: #333333;
+    color: $wood9;
     font-size: 21px;
     position: absolute;
     top: -45px;
@@ -34,8 +30,12 @@ gelato-component[data-name='dashboard-queue'] {
 
   .mini-spinner {
     position: absolute;
-    right: 0px;
-    top: -35px;
+    right: 40px;
+    top: -38px;
+  }
+
+  .progress-bar-success {
+    background-color: $green5;
   }
 
   @media (max-width: 992px) {

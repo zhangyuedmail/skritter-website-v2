@@ -8,6 +8,16 @@ gelato-page[data-name='dashboard'] {
     height: 300px;
   }
 
+  #goal-setting {
+    color: $wood9;
+    cursor: pointer;
+    font-size: 21px;
+    position: absolute;
+    right: 25px;
+    top: 20px;
+    z-index: 5000;
+  }
+
   .feedback-btn {
     display: inline-block;
     position: absolute;
@@ -29,15 +39,18 @@ gelato-page[data-name='dashboard'] {
 
   .content-block {
     padding-top: 30px;
+
     .options {
-      i {
-        cursor: pointer;
-      }
       color: $grey2;
       position: absolute;
       right: 20px;
       top: 20px;
+
+      i {
+        cursor: pointer;
+      }
     }
+
     .title {
       font-family: $font-slab;
       font-size: 12px;
@@ -46,6 +59,10 @@ gelato-page[data-name='dashboard'] {
       position: absolute;
       text-transform: uppercase;
       top: 10px;
+
+      a {
+        color: #333;
+      }
     }
   }
 
@@ -79,14 +96,16 @@ gelato-page[data-name='dashboard'] {
   gelato-page[data-name='dashboard'] {
     padding-top: 65px;
 
-    #first-row {
-      .content-block {
-        padding-top: 15px;
-        height: auto;
+    .goal-component-block {
+      padding-top: 0;
+      height: auto !important;
 
-        gelato-component {
-          margin-top: 0;
-        }
+      gelato-component {
+        margin-top: 0
+      }
+
+      [data-name='dashboard-status'] {
+        padding-top: 75px;
       }
     }
   }

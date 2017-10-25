@@ -14,7 +14,7 @@ gelato-component(data-name='vocablists-browse-table')
         #popularity-sort.table-sort(class=view._sortType === 'popularity' ? 'chosen' : '')
           span Popularity
           span.glyphicon.glyphicon-chevron-down
-      .col-md-3
+      .col-md-3.hidden-xs
     if view._lists.length
       for list, i in view._lists
         .row.vocablist-wrapper
@@ -33,6 +33,9 @@ gelato-component(data-name='vocablists-browse-table')
                 a.btn.btn-success(href='/study/' + list.id) Study
               else
                 span= _.capitalize(list.getNormalizedStudyingMode())
+      if !view._filterString
+        .row.text-center
+          .col-xs-12 Showing results 1-200 of about 9,000 lists. Try searching for a topic like 'business' or 'animals' for more.
 
   else if view._layout === 'grid'
     #grid

@@ -10,7 +10,7 @@ const DecompModel = GelatoModel.extend({
    * @property idAttribute
    * @type String
    */
-  idAttribute: 'writing'
+  idAttribute: 'writing',
 
 });
 

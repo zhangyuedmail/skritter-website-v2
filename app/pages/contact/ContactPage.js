@@ -11,7 +11,7 @@ const ContactPage = GelatoPage.extend({
    * @type Object
    */
   events: {
-    'click #contact-submit': 'handleClickContactSubmit'
+    'click #contact-submit': 'handleClickContactSubmit',
   },
 
   /**
@@ -37,7 +37,7 @@ const ContactPage = GelatoPage.extend({
    * @method render
    * @returns {ContactPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     if (app.user.isLoggedIn()) {
       this.$('#field-email').val(app.user.get('email'));
@@ -50,11 +50,11 @@ const ContactPage = GelatoPage.extend({
    * @method getFormData
    * @returns {Object}
    */
-  getFormData: function() {
+  getFormData: function () {
     return {
       email: this.$('#field-email').val(),
       message: this.$('#field-message').val(),
-      subject: this.$('#field-topic').val()
+      subject: this.$('#field-topic').val(),
     };
   },
 
@@ -62,9 +62,9 @@ const ContactPage = GelatoPage.extend({
    * @method handleClickContactSubmit
    * @param {Event} event
    */
-  handleClickContactSubmit: function(event) {
+  handleClickContactSubmit: function (event) {
     event.preventDefault();
-    var formData = this.getFormData();
+    let formData = this.getFormData();
     if (_.isEmpty(formData.email)) {
       this.$('#contact-message').removeClass();
       this.$('#contact-message').addClass('text-danger');
@@ -74,7 +74,7 @@ const ContactPage = GelatoPage.extend({
     if (_.isEmpty(formData.message)) {
       this.$('#contact-message').removeClass();
       this.$('#contact-message').addClass('text-danger');
-      this.$('#contact-message').text("Message field can't be blank.");
+      this.$('#contact-message').text('Message field can\'t be blank.');
       return;
     }
     this.disableForm('form');
@@ -95,7 +95,7 @@ const ContactPage = GelatoPage.extend({
         this.$('#contact-message').addClass('text-danger');
         this.$('#contact-message').text(JSON.stringify(error));
         this.enableForm('form');
-      }
+      },
     });
   },
 
@@ -103,9 +103,9 @@ const ContactPage = GelatoPage.extend({
    * @method remove
    * @returns {ContactPage}
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 
 });
 

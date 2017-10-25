@@ -13,7 +13,7 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    */
   events: {
     'click #load-more-btn': 'handleClickLoadMoreButton',
-    'click .restore-link': 'handleClickRestoreLink'
+    'click .restore-link': 'handleClickRestoreLink',
   },
 
   /**
@@ -26,7 +26,7 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.vocablists = new Vocablists();
     this.listenTo(this.vocablists, 'state', this.render);
     this.vocablists.fetch({
@@ -34,8 +34,8 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
         limit: 10,
         sort: 'deleted',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
-      }
+        languageCode: app.getLanguage(),
+      },
     });
   },
 
@@ -43,7 +43,7 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistsDeletedTableComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -52,10 +52,10 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    * @method handleClickRestoreLink
    * @param {Event} event
    */
-  handleClickRestoreLink: function(event) {
+  handleClickRestoreLink: function (event) {
     event.preventDefault();
-    var listID = $(event.target).closest('.restore-link').data('vocablist-id');
-    var vocablist = this.vocablists.get(listID);
+    let listID = $(event.target).closest('.restore-link').data('vocablist-id');
+    let vocablist = this.vocablists.get(listID);
     vocablist.set({disabled: false, studyingMode: 'not studying'});
     vocablist.save(null, {patch: true});
     this.render();
@@ -65,7 +65,7 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
    * @method handleClickLoadMoreButton
    * @param {Event} event
    */
-  handleClickLoadMoreButton: function(event) {
+  handleClickLoadMoreButton: function (event) {
     event.preventDefault();
     if (!this.vocablists.cursor) {
       return;
@@ -76,12 +76,12 @@ const VocablistsDeletedTableComponent = GelatoComponent.extend({
         limit: 10,
         sort: 'custom',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
+        languageCode: app.getLanguage(),
       },
-      remove: false
+      remove: false,
     });
     this.render();
-  }
+  },
 
 });
 

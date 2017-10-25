@@ -50,7 +50,7 @@ module.exports = {
    * Show all the fancy goal mode related stuff?
    * @type {Boolean}
    */
-  goalModeEnabled: false,
+  goalModeEnabled: true,
 
   /**
    * How long to wait in ms before advancing to the next prompt after the user
@@ -97,7 +97,7 @@ module.exports = {
     rune: 30,
     rdng: 30,
     defn: 30,
-    tone: 15
+    tone: 15,
   },
 
   nodeApiRoot: 'https://api-dot-write-way.appspot.com',
@@ -105,15 +105,25 @@ module.exports = {
   /**
    * Whether to allow offline mode to function.
    */
-  offlineEnabled: false,
+  offlineEnabled: true,
 
+  /**
+   * The sentry reporting url used for javascript error tracking.
+   * https://sentry.io/inkren-inc
+   */
   sentryUrl: 'https://4aa61a5ed92f4aaf8a9ae79777b70843@sentry.io/123679',
+
+  /**
+   * Whether to show a FPS counter when on the study page
+   * @type {Boolean}
+   */
+  showCanvasFPS: false,
 
   /**
    * Whether app page load times should be stored to app.loadTimes
    * @type {Boolean}
    */
-  recordLoadTimes: true && window.performance,
+  recordLoadTimes: false && window.performance,
 
   /**
    * Whether to use a local backend instead of production
@@ -134,12 +144,12 @@ module.exports = {
     itemsdue: false,
     progstats: true,
     subscriptions: false,
-    users: true,
+    users: false,
     vocablists: false,
-    vocabs: false
+    vocabs: false,
   },
 
   version: '{!application-version!}',
 
-  writingFillers: [' ', '~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？']
+  writingFillers: [' ', '~', '-', '～', '.', '。', ',', '，', '、', '・', '?', '？'],
 };

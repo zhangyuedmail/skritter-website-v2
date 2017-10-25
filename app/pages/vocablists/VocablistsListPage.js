@@ -1,12 +1,12 @@
-var GelatoPage = require('gelato/page');
-var EditorSections = require('components/vocablists/VocablistsSectionEditorComponent');
-var Sidebar = require('components/vocablists/VocablistsListSidebarComponent');
-var Vocablist = require('models/VocablistModel');
-var VocablistSection = require('models/VocablistSectionModel');
+let GelatoPage = require('gelato/page');
+let EditorSections = require('components/vocablists/VocablistsSectionEditorComponent');
+let Sidebar = require('components/vocablists/VocablistsListSidebarComponent');
+let Vocablist = require('models/VocablistModel');
+let VocablistSection = require('models/VocablistSectionModel');
 
-var ConfirmDialog = require('dialogs/confirm/view');
-var PublishDialog = require('dialogs1/publish-vocablist/content/view');
-var ViewDialog = require('dialogs1/view-dialog/view');
+let ConfirmDialog = require('dialogs/confirm/view');
+let PublishDialog = require('dialogs1/publish-vocablist/content/view');
+let ViewDialog = require('dialogs1/view-dialog/view');
 
 /**
  * @class VocablistsListPage
@@ -27,7 +27,7 @@ module.exports = GelatoPage.extend({
 
     'click #copy-link': 'handleClickCopyLink',
     'click #delete-link': 'handleClickDeleteLink',
-    'click #publish-link': 'handleClickPublishLink'
+    'click #publish-link': 'handleClickPublishLink',
   },
 
   /**
@@ -46,7 +46,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.editing = false;
     this.vocablist = new Vocablist({id: options.vocablistId});
     this.vocablistSection = new VocablistSection({vocablistId: options.vocablistId});
@@ -54,7 +54,7 @@ module.exports = GelatoPage.extend({
     this.sidebar = new Sidebar({vocablist: this.vocablist});
 
     this._views['publishDialog'] = new ViewDialog({
-      content: PublishDialog
+      content: PublishDialog,
     });
 
     this.fetchList();
@@ -64,7 +64,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {VocablistsListPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsList.jade');
     }
@@ -84,7 +84,7 @@ module.exports = GelatoPage.extend({
    * @method remove
    * @returns {VocablistsListPage}
    */
-  remove: function() {
+  remove: function () {
     this.editor.remove();
     this.sidebar.remove();
 
@@ -97,26 +97,26 @@ module.exports = GelatoPage.extend({
    * Adds event listeners and re-renders the page when finished.
    * @method fetchList
    */
-  fetchList: function() {
+  fetchList: function () {
     const self = this;
 
     async.series([
-      function(callback) {
+      function (callback) {
         self.vocablist.fetch({
           data: {
             include_user_names: 'true',
-            includeSectionCompletion: 'true'
+            includeSectionCompletion: 'true',
           },
-          error: function() {
+          error: function () {
             callback();
           },
-          success: function() {
+          success: function () {
             callback();
-          }
+          },
         });
       },
-      _.bind(self.fetchVocablistSections, this)
-    ], function(error) {
+      _.bind(self.fetchVocablistSections, this),
+    ], function (error) {
       self.listenTo(self.vocablist, 'state:standby', self.handleVocablistState);
       self.render();
     });
@@ -126,20 +126,20 @@ module.exports = GelatoPage.extend({
    * Fetches the sections for a vocablist
    * @param {Function} callback called when the sections are fetched
    */
-  fetchVocablistSections: function(callback) {
+  fetchVocablistSections: function (callback) {
     if (this.vocablist.get('sections').length === 1) {
       this.vocablistSection.set('id', this.vocablist.get('sections')[0].id);
       this.vocablistSection.fetch({
         data: {
           include_user_names: 'true',
-          includeSectionCompletion: 'true'
+          includeSectionCompletion: 'true',
         },
-        error: function(error) {
+        error: function (error) {
           callback(error);
         },
-        success: function() {
+        success: function () {
           callback();
-        }
+        },
       });
     } else {
       callback();
@@ -150,7 +150,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickAddToQueue
    * @param {Event} event
    */
-  handleClickAddToQueue: function(event) {
+  handleClickAddToQueue: function (event) {
     event.preventDefault();
     if (this.vocablist.get('studyingMode') === 'not studying') {
       this.vocablist.save({'studyingMode': 'adding'}, {patch: true});
@@ -162,7 +162,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickAddSection
    * @param {Event} event
    */
-  handleClickAddSection: function(event) {
+  handleClickAddSection: function (event) {
     event.preventDefault();
     this.editor.addSection();
   },
@@ -171,12 +171,12 @@ module.exports = GelatoPage.extend({
    * @method handleClickCopyLink
    * @param {Event} event
    */
-  handleClickCopyLink: function(event) {
+  handleClickCopyLink: function (event) {
     const confirmDialog = new ConfirmDialog({
       title: 'Confirm Copy',
       body: 'Are you sure you want to make a copy of this list?',
       okText: 'Yes - Copy!',
-      onConfirm: 'show-spinner'
+      onConfirm: 'show-spinner',
     });
 
     event.preventDefault();
@@ -188,11 +188,11 @@ module.exports = GelatoPage.extend({
         url: copyUrl,
         method: 'POST',
         headers: app.user.headers(),
-        success: response => {
+        success: (response) => {
           app.router.navigate('/vocablists/view/' + response.VocabList.id, {trigger: true});
 
           confirmDialog.close();
-        }
+        },
       });
     });
 
@@ -203,17 +203,17 @@ module.exports = GelatoPage.extend({
    * @method handleClickDeleteLink
    * @param {Event} event
    */
-  handleClickDeleteLink: function(event) {
+  handleClickDeleteLink: function (event) {
     event.preventDefault();
-    var confirmDialog = new ConfirmDialog({
+    let confirmDialog = new ConfirmDialog({
       title: 'Confirm Delete',
       body: 'Are you sure you want to delete this list?',
       okText: 'Yes - Delete!',
-      onConfirm: 'show-spinner'
+      onConfirm: 'show-spinner',
     });
-    this.listenTo(confirmDialog, 'confirm', function() {
+    this.listenTo(confirmDialog, 'confirm', function () {
       this.vocablist.save({disabled: true, studyingMode: 'not studying'}, {patch: true});
-      this.listenToOnce(this.vocablist, 'state', function() {
+      this.listenToOnce(this.vocablist, 'state', function () {
         app.router.navigate('/vocablists/my-lists', {trigger: true});
         confirmDialog.close();
       });
@@ -225,7 +225,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickDiscardChanges
    * @param {Event} event
    */
-  handleClickDiscardChanges: function(event) {
+  handleClickDiscardChanges: function (event) {
     event.preventDefault();
     this.editing = false;
     this.editor.editing = false;
@@ -236,7 +236,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickEditList
    * @param {Event} event
    */
-  handleClickEditList: function(event) {
+  handleClickEditList: function (event) {
     event.preventDefault();
     this.editing = true;
     this.editor.editing = true;
@@ -248,7 +248,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickPublishLink
    * @param {Event} event
    */
-  handleClickPublishLink: function(event) {
+  handleClickPublishLink: function (event) {
     this._views['publishDialog'].open();
   },
 
@@ -256,7 +256,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickSaveChanges
    * @param {Event} event
    */
-  handleClickSaveChanges: function(event) {
+  handleClickSaveChanges: function (event) {
     event.preventDefault();
     this.editing = false;
     this.editor.editing = false;
@@ -272,7 +272,7 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleVocablistState
    */
-  handleVocablistState: function() {
+  handleVocablistState: function () {
     this.sidebar.render();
     this.render();
   },
@@ -280,10 +280,10 @@ module.exports = GelatoPage.extend({
   /**
    * @method updateVocablist
    */
-  updateVocablist: function() {
+  updateVocablist: function () {
     this.vocablist.set({
       description: this.$('.list-description').val(),
-      name: this.$('.list-name').val()
+      name: this.$('.list-name').val(),
     });
-  }
+  },
 });

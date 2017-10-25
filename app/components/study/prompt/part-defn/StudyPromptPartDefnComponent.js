@@ -1,5 +1,5 @@
 const GelatoComponent = require('gelato/component');
-const config = require('config');
+// const config = require('config');
 
 /**
  * @class StudyPromptPartDefnComponent
@@ -30,7 +30,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
     this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
@@ -41,9 +41,9 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptPartDefnComponent}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
-      this.template = require('./MobileStudyPromptPartDefnComponent.jade')
+      this.template = require('./MobileStudyPromptPartDefnComponent.jade');
     }
 
     this.renderTemplate();
@@ -51,10 +51,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
     this.prompt.canvas.grid = false;
     this.prompt.canvas.reset();
     this.prompt.shortcuts.tone.stop_listening();
-    this.prompt.toolbarAction.buttonCorrect = true;
-    this.prompt.toolbarAction.buttonErase = false;
-    this.prompt.toolbarAction.buttonShow = false;
-    this.prompt.toolbarAction.buttonTeach = false;
+    this.prompt.toolbarAction.setPromptType('defn');
     if (this.prompt.review.isComplete()) {
       this.renderComplete();
     } else {
@@ -73,15 +70,14 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    * @method renderComplete
    * @returns {StudyPromptPartDefnComponent}
    */
-  renderComplete: function() {
+  renderComplete: function () {
     this.prompt.review.stop();
     this.prompt.review.set('complete', true);
-    this.prompt.navigation.render();
+    this.prompt.navigation.update();
     this.prompt.shortcuts.grading.listen();
-    this.prompt.toolbarAction.render();
-    this.prompt.toolbarGrading.render();
-    this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
-    this.prompt.toolbarVocab.render();
+    this.prompt.toolbarAction.update();
+    this.prompt.toolbarGrading.update(this.prompt.review.get('score'));
+    this.prompt.toolbarVocab.update();
     this.prompt.vocabContained.render();
     this.prompt.vocabDefinition.render();
     this.prompt.vocabMnemonic.render();
@@ -103,13 +99,14 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    * @method renderIncomplete
    * @returns {StudyPromptPartDefnComponent}
    */
-  renderIncomplete: function() {
+  renderIncomplete: function () {
     this.prompt.review.start();
     this.prompt.review.set('complete', false);
     this.prompt.shortcuts.grading.stop_listening();
-    this.prompt.toolbarAction.render();
-    this.prompt.toolbarGrading.render();
-    this.prompt.toolbarVocab.render();
+    this.prompt.toolbarAction.update();
+
+    this.prompt.toolbarGrading.update();
+    this.prompt.toolbarVocab.update();
     this.prompt.vocabContained.render();
     this.prompt.vocabDefinition.render();
     this.prompt.vocabMnemonic.render();
@@ -124,7 +121,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
   /**
    * @method handlePromptCanvasClick
    */
-  handlePromptCanvasClick: function() {
+  handlePromptCanvasClick: function () {
     if (this.prompt.review.isComplete()) {
       this.prompt.next();
     } else {
@@ -136,7 +133,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
   /**
    * @method handlePromptToolbarActionCorrect
    */
-  handlePromptToolbarActionCorrect: function() {
+  handlePromptToolbarActionCorrect: function () {
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.review.set('complete', true);
@@ -146,13 +143,13 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
   /**
    * @method handlePromptToolbarGradingMouseup
    */
-  handlePromptToolbarGradingMouseup: function(value) {
+  handlePromptToolbarGradingMouseup: function (value) {
     this.prompt.review.set('score', value);
 
     if (app.user.get('autoAdvancePrompts')) {
       this.prompt.startAutoAdvance();
     }
-  }
+  },
 
 });
 

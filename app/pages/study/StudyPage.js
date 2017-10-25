@@ -43,15 +43,15 @@ const StudyPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
       this.loadAlreadyTimed = false;
     }
 
-    ScreenLoader.show(true);
-
     Howler.autoSuspend = false;
+
+    ScreenLoader.show(true);
 
     this.currentItem = null;
     this.currentPromptItems = null;
@@ -64,10 +64,16 @@ const StudyPage = GelatoPage.extend({
     this.toolbar = new Toolbar({page: this});
     this.vocablists = new Vocablists();
 
-    // will hold a Number that shows
+    // merge unsynced reviews into item collection reviews
+    if (app.user.offline.isReady()) {
+      this.items.reviews.add(app.user.offline.reviews);
+    }
+
+    // will hold a number that shows how many items have been added in the last 24 hours
     this.itemsAddedToday = null;
     this.promptsReviewed = 0;
     this.promptsSinceLastAutoAdd = 0;
+    this.userNotifiedAutoAddLimit = false;
 
     if (app.user.get('eccentric')) {
       this._views['recipe'] = new Recipes();
@@ -78,10 +84,10 @@ const StudyPage = GelatoPage.extend({
 
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
-    this.listenTo(vent, 'items:add', this.addItems);
+    this.listenTo(vent, 'items:add', this.handleAddItems);
     this.listenTo(vent, 'studySettings:show', this.showStudySettings);
 
-    // Handle specific cordova related events
+    // handle specific cordova related events
     document.addEventListener('pause', this.handlePauseEvent.bind(this), false);
   },
 
@@ -89,7 +95,7 @@ const StudyPage = GelatoPage.extend({
    * @method render
    * @returns {StudyPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileStudy');
     }
@@ -118,49 +124,69 @@ const StudyPage = GelatoPage.extend({
    * @param {Number} [numToAdd] the number of items to add. Defaults to 1.
    * whether to suppress messages to the user about the items added if nothing was added.
    */
-  addItems: function(silenceNoItems, numToAdd) {
-    const self = this;
+  addItems: function (silenceNoItems, numToAdd) {
     numToAdd = numToAdd || 1;
 
-    this.items.addItems(
-      {
+    return new Promise((resolve, reject) => {
+      const addOptions = {
         lang: app.getLanguage(),
         limit: numToAdd,
-        lists: app.user.getFilteredLists()
-      },
-      function(error, result) {
+        lists: app.user.getFilteredLists(),
+      };
+
+      this.items.addItems(addOptions, (error, result) => {
         if (!error) {
           let added = result.numVocabsAdded;
 
           if (added === 0) {
-            if (silenceNoItems) {
-              return;
-            }
-            // TODO: this should respond to vent items:added in a separate
-            // function--"app-level" notification?
-            // Could be added from lists or vocab info dialog...
-            app.notifyUser({
-              message: 'No more words to add. <br><a href="/vocablists/browse">Add a new list</a>',
-              type: 'pastel-info'
-            });
+            resolve(0);
           } else {
-            app.notifyUser({
-              message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.',
-              type: 'pastel-success'
-            });
-
-            self.itemsAddedToday += added;
+            const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
+            this.itemsAddedToday += (added * (app.user.get(targetLangName + 'StudyParts').length));
+            resolve(added);
           }
+        } else {
+          reject(error);
         }
         vent.trigger('items:added', !error ? result : null);
+      });
+    });
+  },
+
+  /**
+   * Displays a notification to the user based on how many words were added
+   * @param {Number} [added] how many items were just added
+   * @param {Boolean} [fromAutoAdd] whether the add was triggered from auto-add.
+   *                                Affects display of popups.
+   */
+  showItemsAddedNotification: function (added, fromAutoAdd) {
+    if (added) {
+      if (this.itemsAddedToday >= this.getMaxItemsPerDay() && !this.userNotifiedAutoAddLimit && fromAutoAdd) {
+        app.notifyUser({
+          message: 'You\'ve reached your daily auto-add limit today! You can still manually add more words if you want to progress faster.',
+          type: 'pastel-success',
+        });
+        this.userNotifiedAutoAddLimit = true;
+      } else {
+        app.notifyUser({
+          message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.',
+          type: 'pastel-success',
+        });
       }
-    );
+    } else {
+      if (!fromAutoAdd) {
+        app.notifyUser({
+          message: 'No more words to add. <br><a href="/vocablists/browse">Add a new list</a>',
+          type: 'pastel-info',
+        });
+      }
+    }
   },
 
   /**
    * @method checkRequirements
    */
-  checkRequirements: function() {
+  checkRequirements: function () {
     ScreenLoader.post('Preparing study');
 
     this.items.updateDueCount();
@@ -169,12 +195,12 @@ const StudyPage = GelatoPage.extend({
       [
         (callback) => {
           app.user.subscription.fetch({
-            error: function() {
+            error: function () {
               callback();
             },
-            success: function() {
+            success: function () {
               callback();
-            }
+            },
           });
         },
         (callback) => {
@@ -198,16 +224,16 @@ const StudyPage = GelatoPage.extend({
               languageCode: app.getLanguage(),
               limit: 1,
               lists: app.user.getFilteredLists(),
-              sort: 'adding'
+              sort: 'adding',
             },
-            error: function() {
+            error: function () {
               callback();
             },
-            success: function() {
+            success: function () {
               callback();
-            }
+            },
           });
-        }
+        },
       ],
       (error) => {
         if (error) {
@@ -234,9 +260,9 @@ const StudyPage = GelatoPage.extend({
               {
                 lang: app.getLanguage(),
                 limit: 5,
-                lists: app.user.getFilteredLists()
+                lists: app.user.getFilteredLists(),
               },
-              function() {
+              function () {
                 app.reload();
               }
             );
@@ -256,9 +282,18 @@ const StudyPage = GelatoPage.extend({
   },
 
   /**
+   * Event handler for when a call to add items from another component is reveived
+   */
+  handleAddItems: function (silenceNoItems, numToAdd) {
+    this.addItems(silenceNoItems, numToAdd).then((added) => {
+      this.showItemsAddedNotification(added);
+    });
+  },
+
+  /**
    * @method handleItemPreload
    */
-  handleItemPreload: function() {
+  handleItemPreload: function () {
     if (!this.currentPromptItems) {
       this.next();
     }
@@ -267,7 +302,7 @@ const StudyPage = GelatoPage.extend({
   /**
    * @method handlePauseEvent
    */
-  handlePauseEvent: function() {
+  handlePauseEvent: function () {
     this.items.reviews.post(1);
   },
 
@@ -275,7 +310,7 @@ const StudyPage = GelatoPage.extend({
    * @method handlePromptNext
    * @param {PromptItemCollection} promptItems
    */
-  handlePromptNext: function(promptItems) {
+  handlePromptNext: function (promptItems) {
     this.items.reviews.put(promptItems.getReview());
 
     if (this.previousPrompt) {
@@ -290,15 +325,7 @@ const StudyPage = GelatoPage.extend({
         this.items.reviews.post({skip: 1});
       }
 
-      // TODO: remove this if new review based system works better
-      // if (promptItems.readiness >= 1.0) {
-      //   vent.trigger('dueCountOffset:increase');
-      // }
-
-      if (!app.isMobile()) {
-        this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
-      }
-
+      this.currentItem._loaded = false;
       this.currentItem._queue = false;
       this.currentPromptItems = null;
       this.previousPromptItems = promptItems;
@@ -311,7 +338,7 @@ const StudyPage = GelatoPage.extend({
    * @method handlePromptPrevious
    * @param {PromptItemCollection} promptItems
    */
-  handlePromptPrevious: function(promptItems) {
+  handlePromptPrevious: function (promptItems) {
     this.previousPrompt = true;
     this.currentPromptItems = promptItems;
     this.previous();
@@ -320,7 +347,7 @@ const StudyPage = GelatoPage.extend({
   /**
    * @method next
    */
-  next: function() {
+  next: function () {
     const items = this.items.getNext();
     const queue = this.items.getQueue();
 
@@ -343,8 +370,10 @@ const StudyPage = GelatoPage.extend({
       this.prompt.set(this.currentPromptItems);
 
       if (app.user.isItemAddingAllowed() && this.shouldAutoAddItem(this.currentItem)) {
-        this.addItems(true);
-        this.promptsSinceLastAutoAdd = 0;
+        this.addItems(true).then((added) => {
+          this.showItemsAddedNotification(added, true);
+          this.promptsSinceLastAutoAdd = 0;
+        });
       }
 
       if (items.length < 5) {
@@ -382,7 +411,7 @@ const StudyPage = GelatoPage.extend({
   /**
    * @method previous
    */
-  previous: function() {
+  previous: function () {
     if (this.previousPromptItems) {
       this.togglePromptLoading(false);
       this.prompt.reviewStatus.render();
@@ -394,7 +423,7 @@ const StudyPage = GelatoPage.extend({
    * @method remove
    * @returns {StudyPage}
    */
-  remove: function() {
+  remove: function () {
     this.prompt.remove();
     this.toolbar.remove();
     this.items.reviews.post();
@@ -407,19 +436,29 @@ const StudyPage = GelatoPage.extend({
   },
 
   /**
+   * Gets the max number of items that can be auto-added in a day
+   * @returns {number}
+   */
+  getMaxItemsPerDay: function () {
+    const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
+    const addFreqMultiplier = 1; // {0.7: .75, 0.8: 1, 0.9: 1.2};
+    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 15}; // 12};
+    const addFreq = app.user.get('addFrequency') / 100;
+
+    return (app.user.get('dailyAddLimit') || maxVocabsMap[addFreq]) * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
+  },
+
+  /**
    * Determines whether an item should be auto-added based on its readiness and other heuristics about the queue
    * @param {UserItem} currentItem the current item that the user is studying
    * @returns {boolean} whether an item should be added
    */
-  shouldAutoAddItem: function(currentItem) {
-    const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
-
+  shouldAutoAddItem: function (currentItem) {
     // TODO: figure out some good values for this
-    const addFreqMultiplier = 1; // {0.7: .75, 0.8: 1, 0.9: 1.2};
-    const maxItemsPerDay = app.config.maxAutoAddItems * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
     const addFreq = app.user.get('addFrequency') / 100;
+    const maxItemsPerDay = app.user.getMaxItemsPerDay();
 
-    if ((this.items.dueCount > 50 && (addFreq !== 0.9)) || this.itemsAddedToday > maxItemsPerDay) {
+    if ((this.items.dueCount > 50 && (addFreq !== 0.9)) || this.itemsAddedToday >= maxItemsPerDay) {
       return false;
     }
 
@@ -427,19 +466,17 @@ const StudyPage = GelatoPage.extend({
     const addRange = 0.4;
     const readiness = currentItem.getReadiness();
 
-
     // if they're currently studying a brand new item, let's wait until after they get through that
     if (readiness === 9999) {
       return false;
     }
 
     const diff = 1 - (readiness - addFreq) / addRange;
-
+    const isReadyToStudy = readiness > addFreq + addRange;
 
     // the most common add case--the current item has been sufficiently studied,
     // with a couple rate-limiting checks
-    if (diff*diff > 0.5 && this.promptsReviewed > 1 && this.promptsSinceLastAutoAdd > 4) {
-      console.log(`normal auto-add case: promptsSinceLastAutoAdd > 4 ${readiness}  diff: ${diff}  diff quad: ${diff*diff}`);
+    if (0.5 < diff*diff && this.promptsReviewed > 1 && this.promptsSinceLastAutoAdd > 4 && !isReadyToStudy) {
       return true;
     }
 
@@ -464,12 +501,12 @@ const StudyPage = GelatoPage.extend({
    * Shows a dialog that allows the user to adjust their study settings
    * @method showStudySettings
    */
-  showStudySettings: function() {
+  showStudySettings: function () {
     const dialog = new QuickSettings();
 
     dialog.open();
 
-    dialog.on('save', settings => {
+    dialog.on('save', (settings) => {
       ScreenLoader.show();
       ScreenLoader.post('Saving study settings');
       app.user.set(settings, {merge: true});
@@ -487,7 +524,7 @@ const StudyPage = GelatoPage.extend({
             // dialog.close();
 
             app.reload();
-          }
+          },
         }
       );
     });
@@ -497,8 +534,7 @@ const StudyPage = GelatoPage.extend({
    * Toggles the loading state on the canvas when fetching new items
    * @param {Boolean} loading whether the prompt is loading
    */
-  togglePromptLoading: function(loading) {
-
+  togglePromptLoading: function (loading) {
     // toggle it if it wasn't passed in
     if (loading === undefined) {
       loading = !(this.prompt.$panelLeft.css('opacity') === 0.4);
@@ -514,7 +550,7 @@ const StudyPage = GelatoPage.extend({
    * @returns {Promise}
    * @private
    */
-  _getNumItemsAddedToday: function(today) {
+  _getNumItemsAddedToday: function (today) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: app.getApiUrl(2) + 'gae/items/added',
@@ -523,14 +559,14 @@ const StudyPage = GelatoPage.extend({
         context: this,
         data: {
           languageCode: app.getLanguage(),
-          startDate: today.format(app.config.dateFormatApp)
+          startDate: today.format(app.config.dateFormatApp),
         },
         error: (error) => {
-          resolve(this._getNumItemsAddedTodayFromLocalStorage())
+          resolve(this._getNumItemsAddedTodayFromLocalStorage());
         },
-        success: function(result) {
+        success: function (result) {
           resolve(result.added);
-        }
+        },
       });
     });
   },
@@ -540,7 +576,7 @@ const StudyPage = GelatoPage.extend({
    * cleans up the cache so only today's data is saved.
    * @private
    */
-  _getNumItemsAddedTodayFromLocalStorage: function() {
+  _getNumItemsAddedTodayFromLocalStorage: function () {
     const itemsAdded = app.getSetting('itemsAutoAddedToday') || {};
     const today = moment().format(app.config.dateFormatApp);
 
@@ -561,7 +597,7 @@ const StudyPage = GelatoPage.extend({
    * Records the load time for this page once.
    * @private
    */
-  _recordLoadTime: function() {
+  _recordLoadTime: function () {
     if (this.loadAlreadyTimed) {
       return;
     }
@@ -569,7 +605,7 @@ const StudyPage = GelatoPage.extend({
     this.loadAlreadyTimed = true;
     const loadTime = window.performance.now() - this.loadStart;
     app.loadTimes.pages.study.push(loadTime);
-  }
+  },
 
 });
 

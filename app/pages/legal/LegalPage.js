@@ -35,11 +35,11 @@ const LegalPage = GelatoPage.extend({
    * @method render
    * @returns {LegalPage}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
-  }
+  },
 });
 
 module.exports = LegalPage;

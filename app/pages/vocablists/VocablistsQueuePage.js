@@ -2,7 +2,7 @@ const GelatoPage = require('gelato/page');
 const AddingTable = require('components/vocablists/VocablistsAddingTableComponent');
 const ReviewingTable = require('components/vocablists/VocablistsReviewingTableComponent');
 const Sidebar = require('components/vocablists/VocablistsSidebarComponent');
-const Vocablists = require('collections/VocablistCollection');
+// const Vocablists = require('collections/VocablistCollection');
 
 /**
  * @class VocablistsQueue
@@ -16,6 +16,10 @@ module.exports = GelatoPage.extend({
    */
   title: app.locale('pages.vocablists.titleQueue'),
 
+  navbarOptions: {
+    showCreateListBtn: true,
+  },
+
   section: 'Lists',
 
   /**
@@ -28,7 +32,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
       this.loadAlreadyTimed = false;
@@ -41,7 +45,7 @@ module.exports = GelatoPage.extend({
 
     this.listenTo(
       this.vocablists, 'state:standby',
-      function() {
+      function () {
         if (!this.vocablists.length) {
           app.router.navigate('vocablists/browse', {trigger: true});
         }
@@ -53,9 +57,9 @@ module.exports = GelatoPage.extend({
               sort: 'studying',
               include_percent_done: 'true',
               lang: app.getLanguage(),
-              languageCode: app.getLanguage()
+              languageCode: app.getLanguage(),
             },
-            remove: false
+            remove: false,
           });
         } else {
           if (app.config.recordLoadTimes) {
@@ -71,17 +75,16 @@ module.exports = GelatoPage.extend({
         sort: 'studying',
         include_percent_done: 'true',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
-      }
+        languageCode: app.getLanguage(),
+      },
     });
-
   },
 
   /**
    * @method render
    * @returns {VocablistsQueue}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsQueue.jade');
     }
@@ -98,7 +101,7 @@ module.exports = GelatoPage.extend({
    * @method remove
    * @returns {VocablistsQueue}
    */
-  remove: function() {
+  remove: function () {
     this.addingTable.remove();
     this.reviewingTable.remove();
     this.sidebar.remove();
@@ -110,7 +113,7 @@ module.exports = GelatoPage.extend({
    * Records the load time for this page once.
    * @private
    */
-  _recordLoadTime: function() {
+  _recordLoadTime: function () {
     if (this.loadAlreadyTimed || !app.config.recordLoadTimes) {
       return;
     }
@@ -118,6 +121,6 @@ module.exports = GelatoPage.extend({
     this.loadAlreadyTimed = true;
     const loadTime = window.performance.now() - this.loadStart;
     app.loadTimes.pages.vocablistsQueue.push(loadTime);
-  }
+  },
 
 });

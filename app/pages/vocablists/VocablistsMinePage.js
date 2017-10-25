@@ -15,6 +15,10 @@ module.exports = GelatoPage.extend({
    */
   template: require('./VocablistsMine'),
 
+  navbarOptions: {
+    showCreateListBtn: true,
+  },
+
   /**
    * @property title
    * @type {String}
@@ -25,7 +29,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.sidebar = new Sidebar();
     this.table = new Table();
 
@@ -39,7 +43,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {VocablistBrowse}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsMine.jade');
     }
@@ -59,9 +63,9 @@ module.exports = GelatoPage.extend({
    * @method remove
    * @returns {VocablistBrowse}
    */
-  remove: function() {
+  remove: function () {
     this.sidebar.remove();
     this.table.remove();
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 });

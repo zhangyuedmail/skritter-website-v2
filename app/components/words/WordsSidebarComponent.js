@@ -16,17 +16,17 @@ const WordsSidebarComponent = GelatoComponent.extend({
    * @method render
    * @returns {WordsSidebarComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.$('[data-toggle="tooltip"]').tooltip();
-    $.each(this.$('.options a'), function(i, el) {
-      var $el = $(el);
+    $.each(this.$('.options a'), function (i, el) {
+      let $el = $(el);
       if ($el.attr('href') === document.location.pathname ||
         ($el.attr('href') === '/words/all' && document.location.pathname === '/words')) {
         $el.addClass('active');
       }
     });
-  }
+  },
 
 });
 

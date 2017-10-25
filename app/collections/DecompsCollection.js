@@ -11,7 +11,7 @@ const DecompsCollection = GelatoCollection.extend({
    * @property model
    * @type {DecompModel}
    */
-  model: DecompModel
+  model: DecompModel,
 });
 
 module.exports = DecompsCollection;

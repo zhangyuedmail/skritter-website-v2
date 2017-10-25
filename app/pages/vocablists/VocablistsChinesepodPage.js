@@ -1,8 +1,8 @@
-var GelatoPage = require('gelato/page');
-var ChinesePodSession = require('models/ChinesepodSessionModel');
-var ChinesePodLabels = require('collections/ChinesepodLabelCollection');
-var ChinesePodLessons = require('collections/ChinesepodLessonCollection');
-var VocablistSidebar = require('components/vocablists/VocablistsSidebarComponent');
+let GelatoPage = require('gelato/page');
+let ChinesePodSession = require('models/ChinesepodSessionModel');
+let ChinesePodLabels = require('collections/ChinesepodLabelCollection');
+let ChinesePodLessons = require('collections/ChinesepodLessonCollection');
+let VocablistSidebar = require('components/vocablists/VocablistsSidebarComponent');
 /**
  * @class VocablistsChinesepodPage
  * @extends {GelatoPage}
@@ -18,7 +18,7 @@ module.exports = GelatoPage.extend({
     'click #logout-chinesepod-link': 'handleClickLogoutChineseLink',
     'keyup #search-input': 'handleChangeSearchInput',
     'change input[name="view-option"]': 'handleChangeViewOption',
-    'click .lookup-link': 'handleClickLookupLink'
+    'click .lookup-link': 'handleClickLookupLink',
   },
 
   /**
@@ -37,7 +37,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.sidebar = new VocablistSidebar();
     this.chinesepodSession = new ChinesePodSession();
     this.chinesepodLabels = new ChinesePodLabels();
@@ -61,7 +61,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {VocablistsChinesepodPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsChinesepod.jade');
     }
@@ -75,7 +75,7 @@ module.exports = GelatoPage.extend({
    * @method remove
    * @returns {VocablistBrowse}
    */
-  remove: function() {
+  remove: function () {
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
   },
@@ -83,7 +83,7 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleChinesepodSessionLoaded
    */
-  handleChinesepodSessionLoaded: function() {
+  handleChinesepodSessionLoaded: function () {
     this.render();
     if (!this.chinesepodSession.isNew()) {
       this.chinesepodLabels.fetch();
@@ -95,20 +95,20 @@ module.exports = GelatoPage.extend({
    * @method handleSubmitLoginForm
    * @param {Event} event
    */
-  handleSubmitLoginForm: function(event) {
+  handleSubmitLoginForm: function (event) {
     event.preventDefault();
     this.email = this.$('#email').val();
     this.password = this.$('#password').val();
     this.errorMessage = '';
     this.chinesepodSession.set({
       email: this.email,
-      password: this.password
+      password: this.password,
     });
     this.chinesepodSession.save();
-    this.listenToOnce(this.chinesepodSession, 'sync', function() {
+    this.listenToOnce(this.chinesepodSession, 'sync', function () {
       document.location.reload();
     });
-    this.listenToOnce(this.chinesepodSession, 'error', function(model, jqxhr) {
+    this.listenToOnce(this.chinesepodSession, 'error', function (model, jqxhr) {
       this.errorMessage = jqxhr.responseJSON.message;
       this.stopListening(this.chinesepodSession);
       this.render();
@@ -119,17 +119,17 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleClickLogoutChineseLink
    */
-  handleClickLogoutChineseLink: function() {
+  handleClickLogoutChineseLink: function () {
     this.chinesepodSession.destroy();
-    this.listenToOnce(this.chinesepodSession, 'sync', function() {
+    this.listenToOnce(this.chinesepodSession, 'sync', function () {
       document.location.reload();
-    })
+    });
   },
   /**
    * @method handleChangeSearchInput
    * @param {Event} e
    */
-  handleChangeSearchInput: _.throttle(function(e) {
+  handleChangeSearchInput: _.throttle(function (e) {
     this.searchString = $(e.target).val().toLowerCase();
     this.renderTable();
   }, 500),
@@ -139,7 +139,7 @@ module.exports = GelatoPage.extend({
    * @param {Collection} collection
    * @param {jqXHR} jqxhr
    */
-  handleChinesePodError: function(collection, jqxhr) {
+  handleChinesePodError: function (collection, jqxhr) {
     if (jqxhr.status === 504) {
       collection.fetch();
     }
@@ -148,17 +148,17 @@ module.exports = GelatoPage.extend({
   /**
    * @method renderTable
    */
-  renderTable: function() {
-    var context = require('globals');
+  renderTable: function () {
+    let context = require('globals');
     context.view = this;
-    var rendering = $(this.template(context));
+    let rendering = $(this.template(context));
     this.$('table').replaceWith(rendering.find('table'));
   },
 
   /**
    * @method handleChangeViewOption
    */
-  handleChangeViewOption: function() {
+  handleChangeViewOption: function () {
     this.viewOption = $('input[name="view-option"]:checked').val();
     this.renderTable();
   },
@@ -166,17 +166,17 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleClickLookupLink
    */
-  handleClickLookupLink: function(e) {
-    var lookupToken = $(e.target).data('lookup-token');
-    var url = app.getApiUrl() + 'cpod/list/' + lookupToken;
-    var headers = app.user.session.getHeaders();
-    $(e.target).append($(" <i class='fa fa-1x fa-spinner fa-pulse' />"));
+  handleClickLookupLink: function (e) {
+    let lookupToken = $(e.target).data('lookup-token');
+    let url = app.getApiUrl() + 'cpod/list/' + lookupToken;
+    let headers = app.user.session.getHeaders();
+    $(e.target).append($(' <i class=\'fa fa-1x fa-spinner fa-pulse\' />'));
     $.ajax({
       url: url,
       headers: headers,
-      success: function(response) {
+      success: function (response) {
         document.location.href = '/vocablists/view/' + response.vocabListID;
-      }
+      },
     });
-  }
+  },
 });

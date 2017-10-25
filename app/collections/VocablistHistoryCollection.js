@@ -19,9 +19,9 @@ const VocablistHistoryCollection = BaseSkritterCollection.extend({
    * @param options
    * @method initialize
    */
-  initialize: function(models, options) {
+  initialize: function (models, options) {
     if (!options) {
-      throw "vocablist-history collection requires a vocablist 'id' option sent to the constructor.";
+      throw Error('vocablist-history collection requires a vocablist \'id\' option sent to the constructor.');
     }
 
     this.id = options.id;
@@ -35,9 +35,9 @@ const VocablistHistoryCollection = BaseSkritterCollection.extend({
    * @param {Object} response
    * @returns Array<Object>
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.VocabListChanges;
-  }
+  },
 });
 
 module.exports = VocablistHistoryCollection;

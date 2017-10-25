@@ -14,7 +14,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.listenTo(vent, 'page:switch', this.handlePageSwitch);
   },
 
@@ -23,7 +23,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    * @param {GelatoPage} page the instance of the new current page
    * @param {String} path the path of the
    */
-  handlePageSwitch: function(page, path) {
+  handlePageSwitch: function (page, path) {
     this.updateSubNavbar(page);
     this.updateTitle(page.section || page.title);
   },
@@ -32,7 +32,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    *
    * @param event
    */
-  handleToggleMenuClick: function(event) {
+  handleToggleMenuClick: function (event) {
     event.preventDefault();
     vent.trigger('mobileNavMenu:toggle');
   },
@@ -41,7 +41,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    * Renders a subnavbar component
    * @returns {NavbarMobileComponent}
    */
-  renderSubNavbar: function() {
+  renderSubNavbar: function () {
     if (!this._views['subNavbar']) {
       return;
     }
@@ -54,10 +54,10 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    *
    * @param {GelatoPage} page the current page
    */
-  updateSubNavbar: function(page) {
-    let navbar = this._getNavbarFromPage(page);
+  updateSubNavbar: function (page) {
+    const Navbar = this._getNavbarFromPage(page);
 
-    if (!navbar) {
+    if (!Navbar) {
       return;
     }
 
@@ -65,10 +65,10 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
       this._views['subNavbar'].remove();
     }
 
-    this._views['subNavbar'] = new navbar({
+    this._views['subNavbar'] = new Navbar({
       page: page,
       rootMenu: this,
-      viewOptions: page.navbarOptions
+      viewOptions: page.navbarOptions,
     });
 
     this.renderSubNavbar();
@@ -78,7 +78,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    * Updates the title section of the navbar
    * @param {String} title the title of the page
    */
-  updateTitle: function(title) {
+  updateTitle: function (title) {
     // temporary hack until the titles are replaced by i18n variable references
     // and we can easily switch them out.
     // Just get the section name.
@@ -98,11 +98,10 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
    * @param {GelatoPage} page the instance of the page to look at
    * @private
    */
-  _getNavbarFromPage: function(page) {
+  _getNavbarFromPage: function (page) {
     let navbar = page.mobileNavbar;
 
     if (!navbar) {
-
       // Hack until all pages get their own mobile navbars made
       // TODO: make default mobile navbar with just a hamburger button and
       // "Skritter" for the title?
@@ -110,7 +109,7 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     }
 
     return navbar;
-  }
+  },
 });
 
 module.exports = NavbarMobileComponent;

@@ -35,5 +35,5 @@ if (lang === 'ja') {
 }
 
 shell.exec('cordova platform rm ios');
-shell.exec('cordova platform add ios');
+shell.exec('cordova platform add ios@4.5.0');
 shell.exec('cordova build ios --buildConfig');

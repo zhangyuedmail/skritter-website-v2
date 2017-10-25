@@ -26,7 +26,7 @@ const VocablistCollection = BaseSkritterCollection.extend({
    * @param {Model} model
    * @param {Object} options
    */
-  sync: function(method, model, options) {
+  sync: function (method, model, options) {
     options.headers = _.result(this, 'headers');
 
     if (!options.url) {
@@ -44,7 +44,7 @@ const VocablistCollection = BaseSkritterCollection.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.cursor = null;
   },
 
@@ -53,7 +53,7 @@ const VocablistCollection = BaseSkritterCollection.extend({
    * @param {Object} response
    * @returns Array
    */
-  parse: function(response) {
+  parse: function (response) {
     this.cursor = response.cursor;
     return response.VocabLists;
   },
@@ -61,10 +61,10 @@ const VocablistCollection = BaseSkritterCollection.extend({
   /**
    * @method getAdding
    */
-  getAdding: function() {
+  getAdding: function () {
     return _.filter(
       this.models,
-      function(vocablist) {
+      function (vocablist) {
         return vocablist.get('studyingMode') === 'adding';
       }
     );
@@ -73,11 +73,11 @@ const VocablistCollection = BaseSkritterCollection.extend({
   /**
    * @method getAdding
    */
-  getReviewing: function() {
+  getReviewing: function () {
     return _.filter(
       this.models,
-      function(vocablist) {
-        return _.includes(['reviewing', 'finished'], vocablist.get('studyingMode'))
+      function (vocablist) {
+        return _.includes(['reviewing', 'finished'], vocablist.get('studyingMode'));
       }
     );
   },
@@ -85,7 +85,7 @@ const VocablistCollection = BaseSkritterCollection.extend({
   /**
    * @method getStudying
    */
-  getStudying: function() {
+  getStudying: function () {
     return this.getAdding().concat(this.getReviewing());
   },
 
@@ -94,13 +94,13 @@ const VocablistCollection = BaseSkritterCollection.extend({
    * @param {Function} [callback]
    * @returns {VocablistCollection}
    */
-  resetAllPositions: function(callback) {
+  resetAllPositions: function (callback) {
     async.each(
       this.models,
-      function(model, callback) {
+      function (model, callback) {
         model.resetPosition(callback);
       },
-      function() {
+      function () {
         _.isFunction(callback) && callback();
       }
     );
@@ -112,7 +112,7 @@ const VocablistCollection = BaseSkritterCollection.extend({
    * Changes the comparator for this instance of the collection
    * @param {String} strategy the name of the sortStrategy to use
    */
-  setSort: function(strategy) {
+  setSort: function (strategy) {
     if (this.sortStrategies[strategy]) {
       this.comparator = this.sortStrategies[strategy];
     }
@@ -128,19 +128,19 @@ const VocablistCollection = BaseSkritterCollection.extend({
      * and within those groups orders by progress.
      * @param {VocablistModel} a
      */
-    activeCompletion: function(a) {
+    activeCompletion: function (a) {
       const studyingModes = {
         'adding': 0,
         'active': 101,
         'reviewing': 201,
-        'finished': 301
+        'finished': 301,
       };
 
       const aValue = studyingModes[a.get('studyingMode')] + a.get('percentDone');
 
       return aValue;
-    }
-  }
+    },
+  },
 });
 
 module.exports = VocablistCollection;

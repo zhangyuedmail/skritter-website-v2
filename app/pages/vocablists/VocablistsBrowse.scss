@@ -6,15 +6,18 @@ gelato-page[data-name='vocablists-browse'] {
 
   #table-options {
     margin-bottom: 40px;
+
     .input-group {
       input {
         border-bottom-right-radius: 25px;
         border-top-right-radius: 25px;
       }
+
       span {
         border-bottom-left-radius: 25px;
         border-top-left-radius: 25px;
       }
+
       .input-group-addon {
         background-color: transparent;
       }
@@ -42,6 +45,18 @@ gelato-page[data-name='vocablists-browse'] {
     }
   }
 
+  .filter-label {
+    cursor: pointer;
+
+    &.selected {
+      cursor: default;
+    }
+  }
+
+  .selected {
+    font-weight: bold;
+  }
+
   .title-wrapper {
     margin-bottom: 25px;
 
@@ -53,6 +68,11 @@ gelato-page[data-name='vocablists-browse'] {
       color: $grey3;
       font-size: 16px;
     }
+  }
+
+  .textbook-label {
+    display: inline-block;
+    margin-right: 10px;
   }
 
   #vocablist-container {

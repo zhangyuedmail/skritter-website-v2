@@ -21,7 +21,7 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     /**
      * A title to display for the graph and stats
      * @type {string}
@@ -63,7 +63,7 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
    * @method render
    * @returns {StatsItemsLearnedComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.renderChart();
 
@@ -74,7 +74,7 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
    * Gets the number of characters learned for the component's time range
    * @returns {Number} the number of characters learned
    */
-  getCharactersLearned: function() {
+  getCharactersLearned: function () {
     if (!this.range) {
       return this.collection.getAllTimeCharactersLearned();
     }
@@ -86,7 +86,7 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
    * Gets the number of words learned for the component's time range
    * @returns {Number} the number of characters learned
    */
-  getWordsLearned: function() {
+  getWordsLearned: function () {
     if (!this.range) {
       return this.collection.getAllTimeWordsLearned();
     }
@@ -94,7 +94,7 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
     return this.collection.getSumItemsLearnedForPeriod('word', this.range.start, this.range.end);
   },
 
-  renderChart: function() {
+  renderChart: function () {
     this.$('#items-learned').highcharts({
       chart: {
         backgroundColor: null,
@@ -102,47 +102,47 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
         plotBorderWidth: null,
         plotShadow: false,
         type: 'pie',
-        spacing: [0, 0, 0, 0]
+        spacing: [0, 0, 0, 0],
       },
       colors: ['#87a64b', '#c5da4b'],
       credits: {
-        enabled: false
+        enabled: false,
       },
       plotOptions: {
         pie: {
           allowPointSelect: false,
           cursor: 'pointer',
           dataLabels: {
-            enabled: false
+            enabled: false,
           },
-          borderWidth: 0
-        }
+          borderWidth: 0,
+        },
       },
       series: [{
         title: null,
         colorByPoint: true,
         data: [{
           name: 'Words',
-          y: 0
+          y: 0,
         }, {
           name: 'Characters',
-          y: 0
+          y: 0,
         }],
         states: {
           hover: {
             enabled: false,
             halo: {
-              size: 0
-            }
-          }
-        }
+              size: 0,
+            },
+          },
+        },
       }],
       title: {
-        text: null
+        text: null,
       },
       tooltip: {
-        enabled: false
-      }
+        enabled: false,
+      },
 
     });
   },
@@ -151,7 +151,7 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
    * Sets a new date range for the component.
    * @param {Object} range
    */
-  setRange: function(range) {
+  setRange: function (range) {
     this.range = range;
     this.update();
   },
@@ -159,7 +159,7 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
   /**
    * Updates display of graph and data when the collection changes.
    */
-  update: function() {
+  update: function () {
     const totalCharactersLearned = this.getCharactersLearned();
     const totalWordsLearned = this.getWordsLearned();
     const totalItemsLearned = Math.max(totalCharactersLearned, 0) + Math.max(totalWordsLearned, 0);
@@ -186,7 +186,7 @@ const StatsItemsLearnedComponent = GelatoComponent.extend({
       this.loaded = true;
       this.trigger('component:loaded', 'allTime');
     }
-  }
+  },
 
 });
 

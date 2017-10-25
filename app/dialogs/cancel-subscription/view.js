@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class CancelSubscriptionDialog
@@ -11,7 +11,7 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #go-on-vacation-link': 'handleClickGoOnVacationLink',
-    'click #submit-btn': 'handleClickSubmitButton'
+    'click #submit-btn': 'handleClickSubmitButton',
   },
 
   /**
@@ -24,7 +24,7 @@ module.exports = BootstrapDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.choseVacation = false;
     this.subscription = options.subscription;
   },
@@ -33,7 +33,7 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {ListSettingsDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
@@ -42,7 +42,7 @@ module.exports = BootstrapDialog.extend({
   /**
    * @method handleClickGoOnVacationLink
    */
-  handleClickGoOnVacationLink: function() {
+  handleClickGoOnVacationLink: function () {
     this.choseVacation = true;
     this.close();
   },
@@ -50,8 +50,8 @@ module.exports = BootstrapDialog.extend({
   /**
    * @method handleClickSubmitButton
    */
-  handleClickSubmitButton: function() {
-    var service = this.subscription.get('subscribed');
+  handleClickSubmitButton: function () {
+    let service = this.subscription.get('subscribed');
 
     if (!_.includes(['stripe', 'gplay'], service)) {
       return false;
@@ -60,7 +60,7 @@ module.exports = BootstrapDialog.extend({
     $.when(
       this.requestUnsubscribe(),
       this.requestUpdateReceiveNewsletter()
-    ).done(function() {
+    ).done(function () {
       if (app.user.getAccountAgeBy('days') > 7) {
         app.mixpanel.track('Unsubscribe', {'Trial': false});
       } else {
@@ -74,39 +74,39 @@ module.exports = BootstrapDialog.extend({
    * @method requestUnsubscribe
    * @return {jqxhr}
    */
-  requestUnsubscribe: function() {
-    var service = this.subscription.get('subscribed');
-    var url = app.getApiUrl() + this.subscription.url() + '/' + service + '/cancel';
-    var headers = app.user.session.getHeaders();
+  requestUnsubscribe: function () {
+    let service = this.subscription.get('subscribed');
+    let url = app.getApiUrl() + this.subscription.url() + '/' + service + '/cancel';
+    let headers = app.user.session.getHeaders();
     this.$('#submit-btn *').toggleClass('hide');
 
     return $.ajax({
       url: url,
       headers: headers,
-      method: 'POST'
+      method: 'POST',
     });
   },
 
   /**
    * @method requestUpdateReceiveNewsletter
    */
-  requestUpdateReceiveNewsletter: function() {
-    var input = this.$('#receive-newsletters');
-    var receiveNewsletters = input.is(':checked');
+  requestUpdateReceiveNewsletter: function () {
+    let input = this.$('#receive-newsletters');
+    let receiveNewsletters = input.is(':checked');
 
     if (receiveNewsletters === app.user.get('allowEmailsFromSkritter')) {
       return;
     }
 
-    var attrs = {
+    let attrs = {
       id: app.user.id,
-      allowEmailsFromSkritter: receiveNewsletters
+      allowEmailsFromSkritter: receiveNewsletters,
     };
-    var options = {
+    let options = {
       patch: true,
-      method: 'PUT'
+      method: 'PUT',
     };
 
     return app.user.save(attrs, options);
-  }
+  },
 });

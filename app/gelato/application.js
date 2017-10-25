@@ -41,7 +41,7 @@ const GelatoApplication = Backbone.View.extend({
    *                                  the application should bootstrap
    *                                  itself onto.
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
 
     this.rootSelector = options.rootSelector || 'body';
@@ -53,7 +53,7 @@ const GelatoApplication = Backbone.View.extend({
    * Populates the root element
    * @returns {GelatoApplication}
    */
-  render: function() {
+  render: function () {
     this.$el.html(this.template());
 
     // add a specific class if we're on mobile, and only render the footer if we're on mobile
@@ -95,7 +95,7 @@ const GelatoApplication = Backbone.View.extend({
    * Renders the correct navbar for the context
    * @method renderNavbar
    */
-  renderNavbar: function() {
+  renderNavbar: function () {
     this._views['navbar'].setElement('#navbar-container').render();
 
     return this;
@@ -105,7 +105,7 @@ const GelatoApplication = Backbone.View.extend({
    * Renders a component in the left side container of the application
    * @returns {GelatoApplication}
    */
-  renderLeftSide: function() {
+  renderLeftSide: function () {
     this.$('#left-side-app-container').html(this._views['leftSide'].render().el);
 
     return this;
@@ -115,7 +115,7 @@ const GelatoApplication = Backbone.View.extend({
    * Renders a component in the left side container of the application
    * @returns {GelatoApplication}
    */
-  renderRightSide: function() {
+  renderRightSide: function () {
     this.$('#right-side-app-container').html(this._views['rightSide'].render().el);
 
     return this;
@@ -126,7 +126,7 @@ const GelatoApplication = Backbone.View.extend({
    * @param {string} name
    * @returns {string}
    */
-  getCookie: function(name) {
+  getCookie: function (name) {
     const value = '; ' + document.cookie;
     const parts = value.split('; ' + name + '=');
 
@@ -139,7 +139,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method getHeight
    * @returns {Number}
    */
-  getHeight: function() {
+  getHeight: function () {
     return Backbone.$('body').height();
   },
 
@@ -147,7 +147,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method getLocalStorage
    * @param {String} key
    */
-  getLocalStorage: function(key) {
+  getLocalStorage: function (key) {
     return JSON.parse(localStorage.getItem(key));
   },
 
@@ -155,7 +155,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method getPlatform
    * @returns {String}
    */
-  getPlatform: function() {
+  getPlatform: function () {
     return window.device ? window.device.platform : 'Website';
   },
 
@@ -164,7 +164,7 @@ const GelatoApplication = Backbone.View.extend({
    * @param {String} key
    * @returns {Boolean|Number|Object|String}
    */
-  getSetting: function(key) {
+  getSetting: function (key) {
     return JSON.parse(localStorage.getItem('application-' + key));
   },
 
@@ -172,7 +172,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method getWidth
    * @returns {Number}
    */
-  getWidth: function() {
+  getWidth: function () {
     return Backbone.$('body').width();
   },
 
@@ -184,9 +184,8 @@ const GelatoApplication = Backbone.View.extend({
    * @returns {GelatoPage}
    * @method go
    */
-  go: function(path, options) {
+  go: function (path, options) {
     if (this._views['page']) {
-
       if (this._views['page'].dialog) {
         this._views['page'].dialog.close();
       }
@@ -211,7 +210,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method isAndroid
    * @returns {Boolean}
    */
-  isAndroid: function() {
+  isAndroid: function () {
     return this.getPlatform() === 'Android';
   },
 
@@ -227,7 +226,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method isDevelopment
    * @returns {Boolean}
    */
-  isDevelopment: function() {
+  isDevelopment: function () {
     return location.hostname === 'localhost';
   },
 
@@ -235,7 +234,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method isIOS
    * @returns {Boolean}
    */
-  isIOS: function() {
+  isIOS: function () {
     return this.getPlatform() === 'iOS';
   },
 
@@ -243,7 +242,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method isLandscape
    * @returns {Boolean}
    */
-  isLandscape: function() {
+  isLandscape: function () {
     return this.getWidth() > this.getHeight();
   },
 
@@ -251,7 +250,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method isMobile
    * @returns {Boolean}
    */
-  isMobile: function() {
+  isMobile: function () {
     return this.isAndroid() || this.isIOS() || (this.isDevelopment() && this.getWidth() < 801);
   },
 
@@ -259,7 +258,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method isPortrait
    * @returns {Boolean}
    */
-  isPortrait: function() {
+  isPortrait: function () {
     return this.getWidth() <= this.getHeight();
   },
 
@@ -267,7 +266,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method isProduction
    * @returns {Boolean}
    */
-  isProduction: function() {
+  isProduction: function () {
     return location.hostname !== 'localhost';
   },
 
@@ -275,7 +274,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method isWebsite
    * @returns {Boolean}
    */
-  isWebsite: function() {
+  isWebsite: function () {
     return this.getPlatform() === 'Website';
   },
 
@@ -285,8 +284,8 @@ const GelatoApplication = Backbone.View.extend({
    * @param {String} [code]
    * @returns {*}
    */
-  locale: function(path, code) {
-    var locale = {};
+  locale: function (path, code) {
+    let locale = {};
     try {
       locale = require('locale/' + code || app.get('locale'));
     } catch (error) {
@@ -299,7 +298,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method reload
    * @param {Boolean} [forcedReload]
    */
-  reload: function(forcedReload) {
+  reload: function (forcedReload) {
     location.reload(forcedReload);
   },
 
@@ -307,7 +306,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method getLocalStorage
    * @param {String} key
    */
-  removeLocalStorage: function(key) {
+  removeLocalStorage: function (key) {
     localStorage.removeItem(key);
   },
 
@@ -315,7 +314,7 @@ const GelatoApplication = Backbone.View.extend({
    * @method removeSetting
    * @param {String} key
    */
-  removeSetting: function(key) {
+  removeSetting: function (key) {
     localStorage.removeItem('application-' + key);
   },
 
@@ -325,7 +324,7 @@ const GelatoApplication = Backbone.View.extend({
    * @param {number} value
    * @param {number} [days]
    */
-  setCookie: function(name, value, days) {
+  setCookie: function (name, value, days) {
     let expires = '';
 
     if (days) {
@@ -343,7 +342,7 @@ const GelatoApplication = Backbone.View.extend({
    * @param {String} key
    * @param {Array|Number|Object|String} value
    */
-  setLocalStorage: function(key, value) {
+  setLocalStorage: function (key, value) {
     return localStorage.setItem(key, JSON.stringify(value));
   },
 
@@ -352,7 +351,7 @@ const GelatoApplication = Backbone.View.extend({
    * @param {String} key
    * @param {Boolean|Number|Object|String} value
    */
-  setSetting: function(key, value) {
+  setSetting: function (key, value) {
     localStorage.setItem('application-' + key, JSON.stringify(value));
   },
 
@@ -360,7 +359,7 @@ const GelatoApplication = Backbone.View.extend({
    * Sets the title of the application.
    * @param title
    */
-  setTitle: function(title) {
+  setTitle: function (title) {
     if (title === this.title) {
       return;
     }
@@ -373,7 +372,7 @@ const GelatoApplication = Backbone.View.extend({
    * the application.
    * @method start
    */
-  start: function() {
+  start: function () {
     $(this.rootSelector).prepend(this.render().$el);
 
     // enable navbar on mobile so height can be calculated
@@ -390,7 +389,7 @@ const GelatoApplication = Backbone.View.extend({
    * Shows or hides the footer element
    * @param {Boolean} [show] whether to show or hide the footer
    */
-  toggleFooter: function(show) {
+  toggleFooter: function (show) {
     if (!this._views['footer']) {
       return;
     }
@@ -402,7 +401,7 @@ const GelatoApplication = Backbone.View.extend({
    * Shows or hides the navbar element
    * @param show
    */
-  toggleNavbar: function(show) {
+  toggleNavbar: function (show) {
     if (!this._views['navbar']) {
       return;
     }
@@ -424,7 +423,7 @@ const GelatoApplication = Backbone.View.extend({
    * @param {GelatoPage} [page] the page to show
    * @param {String} [path] the path of the view constructed
    */
-  updatePage: function(page, path) {
+  updatePage: function (page, path) {
     page = page || this._views['page'];
 
     this._views['page'].setElement('#page-container').render();
@@ -436,7 +435,7 @@ const GelatoApplication = Backbone.View.extend({
     this.$('#main-app-container').addClass(this._views['page'].background || 'default');
 
     vent.trigger('page:switch', page, path);
-  }
+  },
 });
 
 module.exports = GelatoApplication;

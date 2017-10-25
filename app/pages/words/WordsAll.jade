@@ -98,4 +98,6 @@ gelato-page(data-name='words-all')
             else if view.items.cursor || view.searchVocabs.cursor || view.searchVocabs.containingCursor
               button#load-more-btn.btn.btn-primary.btn-block Load More
 
-
+            if view.items.state !== 'fetching' && view.searchVocabs.state !== 'fetching'
+              .note If you want to reset you data, check out your&nbsp;
+                a(href="/account/settings/general") settings

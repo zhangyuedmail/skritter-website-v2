@@ -21,9 +21,9 @@ const CancellationReasonModel = SkritterModel.extend({
    * @method parse
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.CancellationReason || response;
-  }
+  },
 
 });
 

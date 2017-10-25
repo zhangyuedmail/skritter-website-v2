@@ -14,7 +14,7 @@ const DashboardListsComponent = GelatoComponent.extend({
    */
   events: {
     'click .button-sections': 'handleClickVocablistSections',
-    'click .button-show-lists': 'handleClickShowLists'
+    'click .button-show-lists': 'handleClickShowLists',
   },
   /**
    * @property template
@@ -26,7 +26,7 @@ const DashboardListsComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.vocablist = null;
     this.vocablists = new Vocablists();
     this.listenTo(this.vocablists, 'state', this.render);
@@ -36,8 +36,8 @@ const DashboardListsComponent = GelatoComponent.extend({
         sort: 'adding',
         include_percent_done: 'true',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
-      }
+        languageCode: app.getLanguage(),
+      },
     });
   },
 
@@ -45,7 +45,7 @@ const DashboardListsComponent = GelatoComponent.extend({
    * @method render
    * @returns {DashboardListsComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -54,10 +54,10 @@ const DashboardListsComponent = GelatoComponent.extend({
    * @method handleClickVocablistSections
    * @param {Event} event
    */
-  handleClickVocablistSections: function(event) {
+  handleClickVocablistSections: function (event) {
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
-    var attributes = {id: $row.data('list-id')};
+    let $row = $(event.target).closest('.row');
+    let attributes = {id: $row.data('list-id')};
     this.vocablist = new Vocablist(attributes);
     this.listenToOnce(this.vocablist, 'state:standby', this.render);
     this.vocablist.fetch();
@@ -67,7 +67,7 @@ const DashboardListsComponent = GelatoComponent.extend({
    * @method handleClickShowLists
    * @param {Event} event
    */
-  handleClickShowLists: function(event) {
+  handleClickShowLists: function (event) {
     event.preventDefault();
     this.vocablist = null;
     this.listenToOnce(this.vocablist, 'state:standby', this.render);
@@ -76,10 +76,10 @@ const DashboardListsComponent = GelatoComponent.extend({
         limit: 10,
         sort: 'adding',
         include_percent_done: 'true',
-        lang: app.getLanguage()
-      }
+        lang: app.getLanguage(),
+      },
     });
-  }
+  },
 
 });
 

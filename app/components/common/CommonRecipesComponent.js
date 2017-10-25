@@ -12,7 +12,7 @@ const CommonRecipesComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click #recipe': 'cookNewDish'
+    'click #recipe': 'cookNewDish',
   },
 
   /**
@@ -32,7 +32,7 @@ const CommonRecipesComponent = GelatoComponent.extend({
    * Prepares the recipes according to the user's tastes.
    * @method initialize
    */
-  initialize: function() {
+  initialize: function () {
     let recipes = app.locale('recipes');
 
     recipes = [].concat(recipes['general'])
@@ -52,7 +52,7 @@ const CommonRecipesComponent = GelatoComponent.extend({
    * @method render
    * @returns {CommonRecipesComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     this._startTimer();
@@ -64,7 +64,7 @@ const CommonRecipesComponent = GelatoComponent.extend({
    * @method remove
    * @returns {CommonRecipesComponent}
    */
-  remove: function() {
+  remove: function () {
     if (this.timer) {
       clearTimeout(this.timer);
     }
@@ -77,7 +77,7 @@ const CommonRecipesComponent = GelatoComponent.extend({
    * @method cookNewDish
    * @returns {String} a flavorful dish
    */
-  cookNewDish: function() {
+  cookNewDish: function () {
     const newFavoriteDish = Math.floor(this.recipes.length * Math.random(Date.now()));
 
     this.currentRecipe = this.recipes[newFavoriteDish];
@@ -91,14 +91,14 @@ const CommonRecipesComponent = GelatoComponent.extend({
    * Starts a timer that will switch out the user's dish after it gets too cold.
    * @private
    */
-  _startTimer: function() {
+  _startTimer: function () {
     const self = this;
 
     // switch every two minutes
-    this.timer = setInterval(function() {
+    this.timer = setInterval(function () {
       self.cookNewDish();
     }, 120000);
-  }
+  },
 
 });
 

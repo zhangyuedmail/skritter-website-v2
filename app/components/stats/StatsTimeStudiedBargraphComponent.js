@@ -22,7 +22,7 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
    *                                       Defaults to "minutes".
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
 
     this.listenTo(this.collection, 'state:standby', this.update);
@@ -35,7 +35,7 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistSideBar}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.renderGraph();
 
@@ -47,51 +47,51 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
    * @returns {String} the label for the y-axis at the current granularity level
    * @method getYAxisLabelText
    */
-  getYAxisLabelText: function() {
+  getYAxisLabelText: function () {
     // TODO: i18n
-    return this._granularity === 'hours' ? 'hours:min' : 'min:sec';
+    return this._granularity === 'hours' ? 'hours:min' : 'hrs:min:sec';
   },
 
   /**
    * Instantiates a new instance of the graph with some default values.
    * @method renderGraph
    */
-  renderGraph: function() {
-    var self = this;
-    var $bargraph = this.$('#bargraph');
+  renderGraph: function () {
+    let self = this;
+    let $bargraph = this.$('#bargraph');
 
     $bargraph.highcharts({
       chart: {
-        type: 'column'
+        type: 'column',
       },
       colors: ['#87a64b'],
       title: null,
       xAxis: {
-        categories: this._getLastWeekLabels()
+        categories: this._getLastWeekLabels(),
       },
       yAxis: {
         dateTimeLabelFormats: this._getYAxisDateTimeLabelFormats(),
         type: 'datetime',
         title: {
-          text: this.getYAxisLabelText()
-        }
+          text: this.getYAxisLabelText(),
+        },
       },
       credits: {
-        enabled: false
+        enabled: false,
       },
       series: [{
         data: [0, 0, 0, 0, 0, 0, 0],
-        showInLegend: false
+        showInLegend: false,
       }],
       tooltip: {
         useHTML: true,
-        formatter: function() {
-          var time = self.collection.convertToLargestTimeUnit(Math.floor(this.point.y / 1000));
-          var amount = time.amount.split(':');
+        formatter: function () {
+          let time = self.collection.convertToLargestTimeUnit(Math.floor(this.point.y / 1000));
+          let amount = time.amount.split(':');
 
           return Number(amount[0]) + ' ' + time.units + ' ' + Number(amount[1]) + ' ' + time.secondaryUnits + ' studied';
-        }
-      }
+        },
+      },
     });
 
     this._graph = $bargraph.highcharts();
@@ -100,7 +100,7 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
   /**
    * @method redrawGraph
    */
-  redrawGraph: function() {
+  redrawGraph: function () {
     // TODO--cool intro animation when user tabs over
     /*
      var chartData = this.$('#bargraph').highcharts().series[0];
@@ -116,12 +116,12 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
    *                        Defaults to units based on granularity.
    * @method setYAxisLabelText
    */
-  setYAxisLabelText: function(text) {
+  setYAxisLabelText: function (text) {
     this._graph.yAxis[0].update({
       title: {
-        text: text || this.getYAxisLabelText()
+        text: text || this.getYAxisLabelText(),
       },
-      dateTimeLabelFormats: this._getYAxisDateTimeLabelFormats()
+      dateTimeLabelFormats: this._getYAxisDateTimeLabelFormats(),
     });
   },
 
@@ -129,18 +129,18 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
    * Updates the data and axes when needed and redraws the graph.
    * @method update
    */
-  update: function() {
+  update: function () {
     if (!this.collection.length) {
       return;
     }
 
-    var chartData = this._graph.series[0];
-    var data = [];
-    var length = this.collection.length > 6 ? 6 : this.collection.length - 1;
+    let chartData = this._graph.series[0];
+    let data = [];
+    let length = this.collection.length > 6 ? 6 : this.collection.length - 1;
     this.setYAxisLabelText();
 
-    for (var i = length; i >= 0; i--) {
-      var stat = this.collection.at(i);
+    for (let i = length; i >= 0; i--) {
+      let stat = this.collection.at(i);
       data.push(Math.floor(stat.get('timeStudied').day * 1000));
     }
 
@@ -152,7 +152,7 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
    * @param {String} newUnits whether to show the graph in "minutes" or "hours"
    * @method updateUnits
    */
-  updateUnits: function(newUnits) {
+  updateUnits: function (newUnits) {
     if (newUnits === this._granularity) {
       return;
     }
@@ -166,8 +166,8 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
    * @returns {Object<String, String>} the label formats for the date and time
    * @private
    */
-  _getYAxisDateTimeLabelFormats: function() {
-    var dateTimeLabelFormat = this._granularity === 'hours' ? '%H:%M' : '%M:%S';
+  _getYAxisDateTimeLabelFormats: function () {
+    let dateTimeLabelFormat = this._granularity === 'hours' ? '%H:%M' : '%H:%M:%S';
 
     return {
       millisecond: dateTimeLabelFormat,
@@ -177,7 +177,7 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
       day: dateTimeLabelFormat,
       week: dateTimeLabelFormat,
       month: dateTimeLabelFormat,
-      year: dateTimeLabelFormat
+      year: dateTimeLabelFormat,
     };
   },
 
@@ -188,14 +188,14 @@ const StatsTimeStudiedBargraphComponent = GelatoComponent.extend({
    *                          current date in the last position.
    * @private
      */
-  _getLastWeekLabels: function() {
-    var dates = [];
-    for (var i = 6; i >= 0; i--) {
+  _getLastWeekLabels: function () {
+    let dates = [];
+    for (let i = 6; i >= 0; i--) {
       dates.push(moment().subtract(i, 'days').format('dddd <br> M/D'));
     }
 
     return dates;
-  }
+  },
 
 });
 

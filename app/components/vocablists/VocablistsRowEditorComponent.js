@@ -18,7 +18,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
     'click .result-row': 'handleClickResultRow',
     'click .section-link': 'handleClickSectionLink',
     'click .show-results': 'handleClickShowResults',
-    'click .study-writing': 'handleClickStudyWriting'
+    'click .study-writing': 'handleClickStudyWriting',
   },
 
   /**
@@ -32,7 +32,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.changed = false;
     this.editing = options.editing || false;
     this.rows = [];
@@ -46,7 +46,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistsRowEditorComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     if (this.editing) {
@@ -58,35 +58,35 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method addRow
    * @param {String} query
    */
-  addRow: function(query) {
-    var self = this;
-    var queryVocabs = new Vocabs();
-    var row = {lang: this.vocablist.get('lang'), query: query, state: 'loading'};
+  addRow: function (query) {
+    let self = this;
+    let queryVocabs = new Vocabs();
+    let row = {lang: this.vocablist.get('lang'), query: query, state: 'loading'};
 
     this.rows.push(row);
     queryVocabs.fetch({
       data: {
         q: query,
-        lang: this.vocablist.get('lang')
+        lang: this.vocablist.get('lang'),
       },
-      error: function(a, b) {
+      error: function (a, b) {
       },
-      success: _.bind(function(collection) {
-        var results = [];
-        var groups = collection.groupBy(function(vocab) {
+      success: _.bind(function (collection) {
+        let results = [];
+        let groups = collection.groupBy(function (vocab) {
           return vocab.getBase();
         });
-        for (var writing in groups) {
+        for (let writing in groups) {
           if (groups.hasOwnProperty(writing)) {
-            var group = groups[writing];
+            let group = groups[writing];
             if (group[0].isJapanese()) {
-              for (var a = 0, lengthA = group.length; a < lengthA; a++) {
+              for (let a = 0, lengthA = group.length; a < lengthA; a++) {
                 results.push({vocabs: [group[a], group[a]]});
               }
             } else if (group.length === 1) {
               results.push({vocabs: [group[0], group[0]]});
             } else {
-              for (var b = 1, lengthB = group.length; b < lengthB; b++) {
+              for (let b = 1, lengthB = group.length; b < lengthB; b++) {
                 results.push({vocabs: [group[0], group[b]]});
               }
             }
@@ -114,7 +114,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
           row.state = 'not-found';
         }
         this.render();
-      }, this)
+      }, this),
     });
   },
 
@@ -122,7 +122,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
     _.forEach(
       rows,
       (row) => {
-        this.addRow(row)
+        this.addRow(row);
       }
     );
 
@@ -132,7 +132,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
   /**
    * @method discardChanges
    */
-  discardChanges: function() {
+  discardChanges: function () {
     this.rows = _.clone(this.saved);
     this.render();
   },
@@ -143,10 +143,10 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method getRows
    * @returns {Array}
    */
-  getRows: function() {
+  getRows: function () {
     return _.filter(
       this.rows,
-      function(row) {
+      function (row) {
         return _.isString(row.vocabId);
       }
     );
@@ -157,7 +157,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleClickAddEntry
    * @param {Event} event the click event
    */
-  handleClickAddEntry: function(event) {
+  handleClickAddEntry: function (event) {
     event.preventDefault();
 
     const self = this;
@@ -169,7 +169,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
     this.dialog.open({row: row});
     this.dialog.on(
       'vocab',
-      function(vocab) {
+      function (vocab) {
         self.removeRow(index);
         self.addRow(vocab.get('writing'));
       }
@@ -180,7 +180,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleClickRemoveRow
    * @param {Event} event
    */
-  handleClickRemoveRow: function(event) {
+  handleClickRemoveRow: function (event) {
     event.preventDefault();
 
     const $row = $(event.target).closest('.row');
@@ -193,7 +193,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleClickResultRow
    * @param {Event} event
    */
-  handleClickResultRow: function(event) {
+  handleClickResultRow: function (event) {
     event.preventDefault();
 
     const $row = $(event.target).closest('.row');
@@ -212,10 +212,10 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleClickShowResults
    * @param {Event} event
    */
-  handleClickShowResults: function(event) {
+  handleClickShowResults: function (event) {
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
-    var $resultRows = $row.children('.result-rows');
+    let $row = $(event.target).closest('.row');
+    let $resultRows = $row.children('.result-rows');
     if ($resultRows.hasClass('hidden')) {
       $resultRows.removeClass('hidden');
     } else {
@@ -227,11 +227,11 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleClickStudyWriting
    * @param {Event} event
    */
-  handleClickStudyWriting: function(event) {
+  handleClickStudyWriting: function (event) {
     event.preventDefault();
-    var $row = $(event.target).closest('.row');
-    var $toggle = $row.find('.study-writing');
-    var row = this.rows[parseInt($row.data('index'), 10)];
+    let $row = $(event.target).closest('.row');
+    let $toggle = $row.find('.study-writing');
+    let row = this.rows[parseInt($row.data('index'), 10)];
     row.studyWriting = $toggle.hasClass('active') ? false : true;
     this.render();
   },
@@ -240,13 +240,13 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method handleUpdateSort
    * @param {Event} event
    */
-  handleUpdateSort: function(event) {
-    var rows = this.rows;
-    var sortedRows = [];
+  handleUpdateSort: function (event) {
+    let rows = this.rows;
+    let sortedRows = [];
     this.$('#vocablist-section-rows')
       .children('.row')
-      .map(function(index, element) {
-        var row = _.find(rows, {id: $(element).data('row-id')});
+      .map(function (index, element) {
+        let row = _.find(rows, {id: $(element).data('row-id')});
         sortedRows.push(row);
       });
     this.rows = sortedRows;
@@ -257,30 +257,30 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @method loadRows
    * @param {Object} [options]
    */
-  loadRows: function(options) {
-    var rows = this.vocablistSection.get('rows');
-    var uniqueVocabIds = this.vocablistSection.getUniqueVocabIds();
-    var vocabs = new Vocabs();
+  loadRows: function (options) {
+    let rows = this.vocablistSection.get('rows');
+    let uniqueVocabIds = this.vocablistSection.getUniqueVocabIds();
+    let vocabs = new Vocabs();
     async.each(
       _.chunk(uniqueVocabIds, 50),
-      _.bind(function(chunk, callback) {
+      _.bind(function (chunk, callback) {
         vocabs.fetch({
           data: {
-            ids: chunk.join('|')
+            ids: chunk.join('|'),
           },
           remove: false,
-          error: function(error) {
+          error: function (error) {
             callback(error);
           },
-          success: function(vocabs) {
+          success: function (vocabs) {
             callback();
-          }
+          },
         });
       }, this),
-      _.bind(function(error) {
-        rows.forEach(function(row) {
-          var vocab1 = vocabs.get(row.vocabId);
-          var vocab2 = vocabs.get(row.tradVocabId) || vocab1;
+      _.bind(function (error) {
+        rows.forEach(function (row) {
+          let vocab1 = vocabs.get(row.vocabId);
+          let vocab2 = vocabs.get(row.tradVocabId) || vocab1;
 
           row.id = row.vocabId + '-' + row.tradVocabId;
 
@@ -313,9 +313,9 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @param {Number} index
    * @returns {Object}
    */
-  removeRow: function(index) {
+  removeRow: function (index) {
     return this.rows.splice(index, 1);
-  }
+  },
 
 });
 

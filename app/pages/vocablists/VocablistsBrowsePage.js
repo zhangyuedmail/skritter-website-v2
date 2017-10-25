@@ -17,9 +17,14 @@ module.exports = GelatoPage.extend({
    */
   events: {
     'change input[type="checkbox"]': 'handleChangeCheckbox',
+    'click .filter-label': 'handleClickFilterLabel',
     'keyup #list-search-input': 'handleKeypressListSearchInput',
     'click #list-option': 'handleClickListOption',
-    'click #grid-option': 'handleClickGridOption'
+    'click #grid-option': 'handleClickGridOption',
+  },
+
+  navbarOptions: {
+    showCreateListBtn: true,
   },
 
   /**
@@ -38,7 +43,7 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     if (app.config.recordLoadTimes) {
       this.loadStart = window.performance.now();
       this.loadAlreadyTimed = false;
@@ -52,7 +57,7 @@ module.exports = GelatoPage.extend({
 
     if (app.config.recordLoadTimes) {
       this.componentsLoaded = {
-        table: false
+        table: false,
       };
       this.listenTo(this._views['table'], 'component:loaded', this._onComponentLoaded);
     }
@@ -62,7 +67,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {VocablistBrowse}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileVocablistsBrowse.jade');
     }
@@ -82,10 +87,10 @@ module.exports = GelatoPage.extend({
   /**
    * @method handleChangeCheckbox
    */
-  handleChangeCheckbox: function(event) {
+  handleChangeCheckbox: function (event) {
     const searchValue = this.$('#list-search-input').val();
 
-    this.filterType = this.$(event.target).val();
+    this.filterType = this.$('#textbook-filter-toggle-input').is(':checked') ? 'published' : 'textbook';
 
     this._views['table'].vocablists.reset();
 
@@ -102,20 +107,28 @@ module.exports = GelatoPage.extend({
       }
     }
 
-    this.$('#field-filter-list input[type="checkbox"]').each((index, element) => {
-      if (element.value === this.filterType) {
-        element.checked = true;
-      } else {
-        element.checked = false;
-      }
-    });
+    this.$('.textbook-label').toggleClass('selected', this.filterType === 'textbook');
+    this.$('.published-label').toggleClass('selected', this.filterType === 'published');
   },
 
+  /**
+   * Handles when the
+   * @param {jQuery.Event} event
+   */
+  handleClickFilterLabel (event) {
+    const el = $(event.target);
+
+    if (el.hasClass('selected')) {
+      return;
+    }
+
+    this.$('#textbook-filter-toggle-input').trigger('click');
+  },
   /**
    * @method onClickListOption
    * @param {Event} event
    */
-  handleClickListOption: function(event) {
+  handleClickListOption: function (event) {
     event.preventDefault();
 
     this._views['table'].setLayout('list');
@@ -127,7 +140,7 @@ module.exports = GelatoPage.extend({
    * @method onClickGridOption
    * @param {Event} event
    */
-  handleClickGridOption: function(event) {
+  handleClickGridOption: function (event) {
     event.preventDefault();
 
     this._views['table'].setLayout('grid');
@@ -139,8 +152,8 @@ module.exports = GelatoPage.extend({
    * @method handleKeypressListSearchInput
    * @param {Event} event
    */
-  handleKeypressListSearchInput: function(event) {
-    if (event.which === 13  || event.keyCode === 13) {
+  handleKeypressListSearchInput: function (event) {
+    if (event.which === 13 || event.keyCode === 13) {
       const searchValue = event.target.value;
 
       if (this.filterType === 'published') {
@@ -165,7 +178,7 @@ module.exports = GelatoPage.extend({
    * Shows a popup to new users who just created an account
    * that informs them what the lists are and how to add one.
    */
-  showAddListsTooltip: function() {
+  showAddListsTooltip: function () {
     const self = this;
 
     let welcome = app.locale('pages.vocabLists.newUserBrowseDialogWelcome' + app.getLanguage());
@@ -182,11 +195,11 @@ module.exports = GelatoPage.extend({
       showButtonCancel: false,
       buttonConfirm: app.locale('pages.vocabLists.newUserBrowseDialogConfirm'),
       buttonConfirmClass: 'btn-primary',
-      title: app.locale('pages.vocabLists.newUserBrowseDialogTitle')
+      title: app.locale('pages.vocabLists.newUserBrowseDialogTitle'),
     });
     this._views['dialog'].once(
       'confirm',
-      function() {
+      function () {
         self._views['dialog'].close();
       }
     );
@@ -202,7 +215,7 @@ module.exports = GelatoPage.extend({
    * @param {String} component the name of the component that was loaded
    * @private
    */
-  _onComponentLoaded: function(component) {
+  _onComponentLoaded: function (component) {
     this.componentsLoaded[component] = true;
 
     // return if any component is still not loaded
@@ -220,7 +233,7 @@ module.exports = GelatoPage.extend({
    * Records the load time for this page once.
    * @private
    */
-  _recordLoadTime: function() {
+  _recordLoadTime: function () {
     if (this.loadAlreadyTimed || !app.config.recordLoadTimes) {
       return;
     }
@@ -228,5 +241,5 @@ module.exports = GelatoPage.extend({
     this.loadAlreadyTimed = true;
     const loadTime = window.performance.now() - this.loadStart;
     app.loadTimes.pages.vocablistsBrowse.push(loadTime);
-  }
+  },
 });

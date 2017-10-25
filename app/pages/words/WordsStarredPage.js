@@ -20,7 +20,7 @@ module.exports = GelatoPage.extend({
     'click .vocab-row': 'handleClickVocabRow',
     'click #load-more-btn': 'handleClickLoadMoreButton',
     'click #remove-all-stars-link': 'fetchAllStarredVocabsThenRemoveThem',
-    'click .star-td a': 'handleClickStarLink'
+    'click .star-td a': 'handleClickStarLink',
   },
 
   /**
@@ -39,14 +39,14 @@ module.exports = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.sidebar = new WordsSidebar();
     this.starredVocabs = new Vocabs();
     this.limit = 20;
 
     this._views['confirmDialog'] = new ConfirmDialog({
       title: app.locale('pages.starredWords.confirmDeleteDialogTitle'),
-      body: app.locale('pages.starredWords.confirmDeleteDialogBody')
+      body: app.locale('pages.starredWords.confirmDeleteDialogBody'),
     });
 
     this.listenTo(this._views['confirmDialog'], 'confirm', this.handleConfirmDeleteAllStarred);
@@ -58,7 +58,7 @@ module.exports = GelatoPage.extend({
   /**
    * @method remove
    */
-  remove: function() {
+  remove: function () {
     this.sidebar.remove();
 
     return GelatoPage.prototype.remove.call(this);
@@ -68,7 +68,7 @@ module.exports = GelatoPage.extend({
    * @method render
    * @returns {VocablistBrowse}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileWordsStarred.jade');
     }
@@ -82,12 +82,12 @@ module.exports = GelatoPage.extend({
   /**
    * @method fetchAllStarredVocabsThenRemoveThem
    */
-  fetchAllStarredVocabsThenRemoveThem: function() {
+  fetchAllStarredVocabsThenRemoveThem: function () {
     if (this.starredVocabs.cursor) {
       if (!this.getAllVocabsDialog) {
         this.getAllVocabsDialog = new ProgressDialog({
           title: 'Loading starred words',
-          showBar: false
+          showBar: false,
         });
 
         this.getAllVocabsDialog.render().open();
@@ -105,13 +105,12 @@ module.exports = GelatoPage.extend({
 
         this.getAllVocabsDialog.close();
 
-        this.listenToOnce(this.getAllVocabsDialog, 'hidden', function() {
+        this.listenToOnce(this.getAllVocabsDialog, 'hidden', function () {
           _.defer(removeAllStars);
         });
 
         this.getAllVocabsDialog = null;
-      }
-      else {
+      } else {
         this._views['confirmDialog'].open();
       }
     }
@@ -121,23 +120,23 @@ module.exports = GelatoPage.extend({
    * @method fetchItems
    * @param {string} [cursor]
    */
-  fetchStarredVocabs: function(cursor) {
+  fetchStarredVocabs: function (cursor) {
     this.starredVocabs.fetch({
       data: {
         sort: 'starred',
         lang: app.getLanguage(),
         limit: this.limit,
-        cursor: cursor || ''
+        cursor: cursor || '',
       },
       remove: false,
-      sort: false
+      sort: false,
     });
   },
 
   /**
    * @method handleClickLoadMoreButton
    */
-  handleClickLoadMoreButton: function() {
+  handleClickLoadMoreButton: function () {
     this.fetchStarredVocabs(this.starredVocabs.cursor);
   },
 
@@ -145,7 +144,7 @@ module.exports = GelatoPage.extend({
    * @method handleClickVocabRow
    * @param {Event} event
    */
-  handleClickVocabRow: function(event) {
+  handleClickVocabRow: function (event) {
     event.preventDefault();
     const row = $(event.target).parent('tr');
     const vocabId = row.data('vocab-id');
@@ -159,9 +158,9 @@ module.exports = GelatoPage.extend({
    * @method handleClickStarLink
    * @param {Event} event
    */
-  handleClickStarLink: function(event) {
-    var vocabID = $(event.target).closest('tr').data('vocab-id');
-    var vocab = this.starredVocabs.get(vocabID);
+  handleClickStarLink: function (event) {
+    let vocabID = $(event.target).closest('tr').data('vocab-id');
+    let vocab = this.starredVocabs.get(vocabID);
     vocab.toggleStarred();
     $(event.target)
       .toggleClass('glyphicon-star')
@@ -175,7 +174,7 @@ module.exports = GelatoPage.extend({
   /**
    * @method removeAllStars
    */
-  removeAllStars: function() {
+  removeAllStars: function () {
     this.beginVocabAction('remove-star', this.starredVocabs.clone());
     this.starredVocabs.reset();
     this.renderTable();
@@ -184,23 +183,22 @@ module.exports = GelatoPage.extend({
   /**
    * @method renderTable
    */
-  renderTable: function() {
-    var context = require('globals');
+  renderTable: function () {
+    let context = require('globals');
     context.view = this;
-    var rendering = $(this.template(context));
+    let rendering = $(this.template(context));
     this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
 
     this.$('#remove-all-stars-link').prop('disabled', !this.starredVocabs.length);
   },
 
-  handleConfirmDeleteAllStarred: function() {
+  handleConfirmDeleteAllStarred: function () {
     this._views['confirmDialog'].close();
-    var self = this;
-    setTimeout(function() {
+    let self = this;
+    setTimeout(function () {
       self.removeAllStars();
     }, 250);
-
-  }
+  },
 });
 
 _.extend(module.exports.prototype, VocabActionMixin);

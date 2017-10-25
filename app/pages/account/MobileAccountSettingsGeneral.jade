@@ -54,17 +54,24 @@ gelato-page(data-name='mobile-account-settings-general')
             .col-xs-9
               textarea#field-about.form-control(rows="5")= user.get('aboutMe')
           .form-group
-            label.col-xs-3.control-label(for="field-private")= app.locale('pages.accountGeneral.privateLabel')
+            label.col-xs-9.control-label(for="field-private")= app.locale('pages.accountGeneral.privateLabel')
             //.option-desc= app.locale('pages.accountGeneral.privateDescription')
-            .col-xs-9
+            .col-xs-3
               .checkbox
                 label.toggle-switch
                   input#field-private(type="checkbox", checked=user.get('private'))
                   .toggle-switch-slider.round
           .form-group
-            label.col-xs-3.control-label(for="field-eccentric")= app.locale('pages.accountGeneral.eccentricLabel')
+            label.col-xs-9.control-label(for="field-newsletter")= app.locale('pages.accountGeneral.newsletterLabel')
+            .col-xs-3
+              .checkbox
+                label.toggle-switch
+                  input#field-newsletter(type="checkbox", checked=user.get('allowEmailsFromSkritter'))
+                  .toggle-switch-slider.round
+          .form-group
+            label.col-xs-9.control-label(for="field-eccentric")= app.locale('pages.accountGeneral.eccentricLabel')
             //.option-desc= app.locale('pages.accountGeneral.eccentricDescription')
-            .col-xs-9
+            .col-xs-3
               .checkbox
                 label.toggle-switch
                   input#field-eccentric(type="checkbox", checked=user.get('eccentric'))
@@ -92,6 +99,19 @@ gelato-page(data-name='mobile-account-settings-general')
                     option(value=timezone, selected="selected")= timezone.replace(/_/g, ' ')
                   else
                     option(value=timezone)= timezone.replace(/_/g, ' ')
+
+          hr
+
+          .form-group
+            label.col-xs-9.control-label(for="field-offline-enabled") Offline enabled
+            .col-xs-3
+              .checkbox
+                label.toggle-switch
+                  input#field-offline-enabled(type="checkbox", checked=user.get('offlineEnabled'))
+                  .toggle-switch-slider.round
+            .option-desc Turning this setting on will download all your account data and allow you to study while offline.
+
+          hr
 
           .form-group
             .col-xs-12.option-buttons

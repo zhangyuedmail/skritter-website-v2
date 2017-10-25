@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/component');
+let GelatoComponent = require('gelato/component');
 
 /**
  * @class VocabViewerLookup
@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
    * @param {Object} [options]
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.links = [];
   },
   /**
@@ -18,7 +18,7 @@ module.exports = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click #button-lookup': 'handleClickLookup'
+    'click #button-lookup': 'handleClickLookup',
   },
   /**
    * @property template
@@ -29,7 +29,7 @@ module.exports = GelatoComponent.extend({
    * @method render
    * @returns {VocabViewerLookup}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -37,9 +37,9 @@ module.exports = GelatoComponent.extend({
    * @method handleClickLookup
    * @param {Event} event
    */
-  handleClickLookup: function(event) {
+  handleClickLookup: function (event) {
     event.preventDefault();
-    var $selected = this.$('select option:selected');
+    let $selected = this.$('select option:selected');
     window.open($selected.val().replace('href-', ''), '_blank');
     app.user.set('wordDictionary', $selected.text()).cache();
   },
@@ -48,12 +48,12 @@ module.exports = GelatoComponent.extend({
    * @param {Vocabs} vocabs
    * @returns {VocabViewerLookup}
    */
-  set: function(vocabs) {
+  set: function (vocabs) {
     if (vocabs && vocabs.length) {
       this.links = vocabs.at(0).get('dictionaryLinks');
     } else {
       this.links = [];
     }
     return this.render();
-  }
+  },
 });

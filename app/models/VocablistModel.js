@@ -26,9 +26,9 @@ const VocablistModel = SkritterModel.extend({
    * @param options
    * @method initialize
    */
-  initialize: function(models, options) {
+  initialize: function (models, options) {
     this.history = new VocablistHistoryCollection(null, {
-      id: this.id
+      id: this.id,
     });
   },
 
@@ -36,7 +36,7 @@ const VocablistModel = SkritterModel.extend({
    * @method parse
    * @returns {Object}
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.VocabList || response;
   },
 
@@ -46,7 +46,7 @@ const VocablistModel = SkritterModel.extend({
    * @param {Model} model
    * @param {Object} options
    */
-  sync: function(method, model, options) {
+  sync: function (method, model, options) {
     options.headers = _.result(this, 'headers');
 
     if (!options.url) {
@@ -65,12 +65,12 @@ const VocablistModel = SkritterModel.extend({
    * @method deletable
    * @returns {Boolean}
    */
-  deletable: function() {
+  deletable: function () {
     return _.every([
       !this.get('disabled'),
       !this.get('published'),
       this.get('sort') === 'custom',
-      (this.get('user') || this.get('creator')) === app.user.id
+      (this.get('user') || this.get('creator')) === app.user.id,
     ]);
   },
 
@@ -79,10 +79,10 @@ const VocablistModel = SkritterModel.extend({
    * @method copyable
    * @returns {Boolean}
    */
-  copyable: function() {
+  copyable: function () {
     return _.every([
       !this.get('disabled'),
-      this.get('sort') !== 'chinesepod-lesson'
+      this.get('sort') !== 'chinesepod-lesson',
     ]);
   },
 
@@ -92,7 +92,7 @@ const VocablistModel = SkritterModel.extend({
    * @returns {Object} contains a label attribute with the section name
    *                    and a url attribute with the URL to the category.
    */
-  getCategoryAndUrl: function() {
+  getCategoryAndUrl: function () {
     const publisher = this.getPublisherName();
 
     if (publisher === 'Skritter') {
@@ -117,7 +117,7 @@ const VocablistModel = SkritterModel.extend({
    * Gets the changed date and presents it in a nice format.
    * @returns {String} a UI-printable representation of the publish date
    */
-  getFormattedChangedDate: function(format) {
+  getFormattedChangedDate: function (format) {
     format = format || 'l';
     let changed = moment(this.get('changed') * 1000);
 
@@ -132,7 +132,7 @@ const VocablistModel = SkritterModel.extend({
    * Gets the publish date and presents it in a nice format.
    * @returns {String} a UI-printable representation of the publish date
    */
-  getFormattedPublishedDate: function(format) {
+  getFormattedPublishedDate: function (format) {
     format = format || 'l';
     let published = moment(this.get('published') * 1000);
 
@@ -148,7 +148,7 @@ const VocablistModel = SkritterModel.extend({
    * @method getNormalizedStudyingMode
    * @returns {String}
    */
-  getNormalizedStudyingMode: function() {
+  getNormalizedStudyingMode: function () {
     if (_.includes(['adding', 'studing', 'studying'], this.get('studyingMode'))) {
       return 'studying';
     } else {
@@ -161,7 +161,7 @@ const VocablistModel = SkritterModel.extend({
    * @method getImageUrl
    * @returns {String} the URL to the image
    */
-  getImageUrl: function() {
+  getImageUrl: function () {
     return app.getApiUrl() + 'vocablists/' + this.id + '/image';
   },
 
@@ -170,14 +170,14 @@ const VocablistModel = SkritterModel.extend({
    * @method getPopularity
    * @returns {Number} the popularity of the list
    */
-  getPopularity: function() {
-    var peopleStudying = this.get('peopleStudying');
+  getPopularity: function () {
+    let peopleStudying = this.get('peopleStudying');
     if (peopleStudying === 0) {
       return 0;
     } else if (peopleStudying > 2000) {
       return 1;
     } else {
-      return Math.pow(peopleStudying / 2000, 0.3)
+      return Math.pow(peopleStudying / 2000, 0.3);
     }
   },
 
@@ -185,25 +185,24 @@ const VocablistModel = SkritterModel.extend({
    * @method getProgress
    * @returns {Object}
    */
-  getProgress: function() {
-    var added = 0;
-    var passed = false;
-    var total = 0;
-    var sections = this.get('sections') || [];
+  getProgress: function () {
+    let added = 0;
+    let passed = false;
+    let total = 0;
+    let sections = this.get('sections') || [];
     if (this.get('studyingMode') === 'finished') {
       return {percent: 100};
     } else if (this.get('percentDone')) {
       return {percent: this.get('percentDone')};
     } else if (sections.length) {
-      var currentIndex = this.get('currentIndex') || 0;
-      var currentSection = this.get('currentSection') || sections[0].id;
-      var sectionsSkipping = this.get('sectionsSkipping');
-      for (var i = 0, length = sections.length; i < length; i++) {
-        var section = sections[i];
+      let currentIndex = this.get('currentIndex') || 0;
+      let currentSection = this.get('currentSection') || sections[0].id;
+      let sectionsSkipping = this.get('sectionsSkipping');
+      for (let i = 0, length = sections.length; i < length; i++) {
+        let section = sections[i];
         if (section.id === currentSection) {
           added += currentIndex;
           passed = true;
-
         }
         if (_.includes(sectionsSkipping, section.id)) {
           continue;
@@ -216,7 +215,7 @@ const VocablistModel = SkritterModel.extend({
       return {
         added: added,
         total: total,
-        percent: total ? Math.round(100 * added / total) : 0
+        percent: total ? Math.round(100 * added / total) : 0,
       };
     } else {
       return {percent: 0};
@@ -227,7 +226,7 @@ const VocablistModel = SkritterModel.extend({
    * Gets a UI-printable version of the publisher of the list
    * @return {string}
    */
-  getPublisherName: function() {
+  getPublisherName: function () {
     if (this.get('sort') === 'official') {
       return 'Skritter';
     } else if (this.get('sort') === 'chinesepod-lesson') {
@@ -245,7 +244,7 @@ const VocablistModel = SkritterModel.extend({
    * @method getRows
    * @returns {Array}
    */
-  getRows: function() {
+  getRows: function () {
     return _
       .chain(this.get('sections'))
       .map('rows')
@@ -258,7 +257,7 @@ const VocablistModel = SkritterModel.extend({
    * @param {String} sectionId
    * @returns {Object}
    */
-  getSectionById: function(sectionId) {
+  getSectionById: function (sectionId) {
     return _.find(this.get('sections'), {id: sectionId});
   },
 
@@ -267,9 +266,9 @@ const VocablistModel = SkritterModel.extend({
    * @param {String} sectionId
    * @returns {Array}
    */
-  getSectionVocabIds: function(sectionId) {
-    var vocabIds = [];
-    var section = this.getSectionById(sectionId);
+  getSectionVocabIds: function (sectionId) {
+    let vocabIds = [];
+    let section = this.getSectionById(sectionId);
     if (section) {
       vocabIds = vocabIds.concat(_.map(section.rows, 'vocabId'));
       vocabIds = vocabIds.concat(_.map(section.rows, 'tradVocabId'));
@@ -281,10 +280,10 @@ const VocablistModel = SkritterModel.extend({
    * @method getWordCount
    * @returns {Number}
    */
-  getWordCount: function() {
-    var count = 0;
-    var rows = _.map(this.get('sections'), 'rows');
-    for (var i = 0, length = rows.length; i < length; i++) {
+  getWordCount: function () {
+    let count = 0;
+    let rows = _.map(this.get('sections'), 'rows');
+    for (let i = 0, length = rows.length; i < length; i++) {
       count += rows[i].length;
     }
     return count;
@@ -294,7 +293,7 @@ const VocablistModel = SkritterModel.extend({
    * @method isChinese
    * @returns {Boolean}
    */
-  isChinese: function() {
+  isChinese: function () {
     return this.get('lang') === 'zh';
   },
 
@@ -302,8 +301,8 @@ const VocablistModel = SkritterModel.extend({
    * @method isEditable
    * @returns {Boolean}
    */
-  isEditable: function() {
-    //give admin account full editing power
+  isEditable: function () {
+    // give admin account full editing power
     if (app.user.get('isAdmin')) {
       return true;
     }
@@ -315,9 +314,9 @@ const VocablistModel = SkritterModel.extend({
         _.some(
           [
             _.includes(this.get('editors'), app.user.id),
-            this.get('creator') === app.user.id
+            this.get('creator') === app.user.id,
           ]
-        )
+        ),
       ]
     );
   },
@@ -326,7 +325,7 @@ const VocablistModel = SkritterModel.extend({
    * @method isFinished
    * @returns {Boolean}
    */
-  isFinished: function() {
+  isFinished: function () {
     return this.get('studyingMode') === 'finished';
   },
 
@@ -334,7 +333,7 @@ const VocablistModel = SkritterModel.extend({
    * @method isJapanese
    * @returns {Boolean}
    */
-  isJapanese: function() {
+  isJapanese: function () {
     return this.get('lang') === 'ja';
   },
 
@@ -342,13 +341,13 @@ const VocablistModel = SkritterModel.extend({
    * @method publishable
    * @returns {Boolean}
    */
-  publishable: function() {
+  publishable: function () {
     return _.every([
       !this.get('disabled'),
       !this.get('published'),
       this.get('sort') === 'custom',
       this.get('user') === app.user.id,
-      (this.get('sections') || []).length
+      (this.get('sections') || []).length,
     ]);
   },
 
@@ -357,26 +356,26 @@ const VocablistModel = SkritterModel.extend({
    * @param {Function} callback
    * @method publish
    */
-  publish: function(callback) {
-    var publishUrl = app.getApiUrl() + _.result(this, 'url') + '/publish';
+  publish: function (callback) {
+    let publishUrl = app.getApiUrl() + _.result(this, 'url') + '/publish';
 
     $.ajax({
       url: publishUrl,
       method: 'POST',
       headers: app.user.headers(),
       data: {
-        isTextbook: this.get('isTextbook')
+        isTextbook: this.get('isTextbook'),
       },
-      success: function() {
+      success: function () {
         if (_.isFunction(callback)) {
           callback(true);
         }
       },
-      error: function(error) {
+      error: function (error) {
         if (_.isFunction(callback)) {
           callback(false, error);
         }
-      }
+      },
     });
   },
 
@@ -385,13 +384,13 @@ const VocablistModel = SkritterModel.extend({
    * @param {Function} callback
    * @returns {VocablistModel}
    */
-  resetPosition: function(callback) {
+  resetPosition: function (callback) {
     this.fetch({
-      error: function(error) {
+      error: function (error) {
         _.isFunction(callback) && callback(error);
       },
-      success: function(model) {
-        var sections = model.get('sections');
+      success: function (model) {
+        let sections = model.get('sections');
         if (model.isEditable() && sections && sections.length) {
           $.ajax({
             url: app.getApiUrl() + 'vocablists/' + model.id,
@@ -400,24 +399,24 @@ const VocablistModel = SkritterModel.extend({
             data: {
               currentIndex: 0,
               currentSection: model.get('sections')[0].id,
-              id: model.id
+              id: model.id,
             },
-            error: function(error) {
+            error: function (error) {
               _.isFunction(callback) && callback(error);
             },
-            success: function(data) {
+            success: function (data) {
               model.set(data.VocabList);
               _.isFunction(callback) && callback();
-            }
+            },
           });
         } else {
           _.isFunction(callback) && callback();
         }
-      }
+      },
     });
 
     return this;
-  }
+  },
 
 });
 

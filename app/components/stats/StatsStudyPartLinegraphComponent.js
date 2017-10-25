@@ -20,7 +20,7 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
    * @param {Object} options a map of initial options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
     this.graphTitle = options.graphTitle;
     this.range = options.range || false;
@@ -39,7 +39,7 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
    * @method render
    * @returns {StatsStudyPartLinegraphComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.renderGraph();
 
@@ -50,9 +50,9 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
    * Instantiates a new instance of the graph with some default values.
    * @method renderGraph
    */
-  renderGraph: function() {
-    var self = this;
-    var $linegraph = this.$('#linegraph');
+  renderGraph: function () {
+    let self = this;
+    let $linegraph = this.$('#linegraph');
 
     $linegraph.highcharts({
       chart: {
@@ -63,29 +63,29 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
       title: null,
       yAxis: {
         title: {
-          text: ''
+          text: '',
         },
         lineWidth: 0,
         minorGridLineWidth: 0,
         lineColor: 'transparent',
         labels: {
-          enabled: false
+          enabled: false,
         },
         minorTickLength: 0,
-        tickLength: 0
+        tickLength: 0,
       },
       xAxis: {
         lineWidth: 0,
         minorGridLineWidth: 0,
         lineColor: 'transparent',
         labels: {
-          enabled: false
+          enabled: false,
         },
         minorTickLength: 0,
-        tickLength: 0
+        tickLength: 0,
       },
       credits: {
-        enabled: false
+        enabled: false,
       },
       series: [{
         data: [0, 0, 0, 0, 0, 0, 0],
@@ -94,30 +94,30 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
           enabled: false,
           states: {
             hover: {
-              radius: 5
-            }
-          }
-        }
+              radius: 5,
+            },
+          },
+        },
       }],
       tooltip: {
-        formatter: function() {
-          var partName = self.partName;
-          var date = self._getDateFromRangeOffset(this.key);
-          var verb = this.point.y >= 0 ? app.locale('pages.stats.learned') : app.locale('pages.stats.forgot');
-          var absY = Math.abs(this.point.y);
+        formatter: function () {
+          let partName = self.partName;
+          let date = self._getDateFromRangeOffset(this.key);
+          let verb = this.point.y >= 0 ? app.locale('pages.stats.learned') : app.locale('pages.stats.forgot');
+          let absY = Math.abs(this.point.y);
 
           // TODO: plural hack--get a proper string key for like defnPlural or something
           partName = absY !== 1 ? partName : partName.substring(0, partName.length - 1);
           return date + ' : ' + verb + ' <b>' + absY + '</b> ' + partName;
-        }
-      }
+        },
+      },
     });
 
     this._graph = $linegraph.highcharts();
   },
 
-  _getDateFromRangeOffset: function(offset) {
-    var date = moment(this.range.start, 'YYYY-MM-DD');
+  _getDateFromRangeOffset: function (offset) {
+    let date = moment(this.range.start, 'YYYY-MM-DD');
     date.add(offset, 'days');
 
     return date.format('MM/DD');
@@ -129,12 +129,12 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
    *                        Defaults to units based on granularity.
    * @method setYAxisLabelText
    */
-  setYAxisLabelText: function(text) {
+  setYAxisLabelText: function (text) {
     this._graph.yAxis[0].update({
       title: {
-        text: text || this.getYAxisLabelText()
+        text: text || this.getYAxisLabelText(),
       },
-      dateTimeLabelFormats: this._getYAxisDateTimeLabelFormats()
+      dateTimeLabelFormats: this._getYAxisDateTimeLabelFormats(),
     });
   },
 
@@ -142,7 +142,7 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
    * Updates the data and axes when needed and redraws the graph.
    * @method update
    */
-  update: function() {
+  update: function () {
     if (!this.collection.length) {
       return;
     }
@@ -150,10 +150,10 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
     const rangeData = this.getRangeData();
 
     // total change number
-    let totalStr = "";
+    let totalStr = '';
 
     if (rangeData.totalChangeLearned > 0) {
-      totalStr = "+";
+      totalStr = '+';
     }
 
     totalStr += rangeData.totalChangeLearned;
@@ -163,11 +163,11 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
     chartData.setData(rangeData.chartData);
 
 
-    this.$('#num-learned').text(totalStr !== "0" ? totalStr : '')
+    this.$('#num-learned').text(totalStr !== '0' ? totalStr : '')
       .toggleClass('good', rangeData.totalChangeLearned > 0)
       .toggleClass('bad', rangeData.totalChangeLearned < 0);
 
-    this.$('#num-added').text(rangeData.added).toggleClass('good', rangeData.added > 0);
+    this.$('#num-added').text(Math.max(rangeData.added, 0)).toggleClass('good', rangeData.added > 0);
     this.$('#num-reviews').text(rangeData.studied).toggleClass('good', rangeData.studied > 0);
     this.$('#num-retention').text(rangeData.retentionRate + '%')
       .toggleClass('excellent', rangeData.retentionRate > 95)
@@ -181,21 +181,21 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
    * more meaningful data for the specified type of stat
    * @returns {{chartData: Array<Number>, totalChangeLearned: number, studied: number, remembered: number, retentionRate: number, added: *}}
    */
-  getRangeData: function() {
+  getRangeData: function () {
     const chartData = [];
     const collection = this.range ? this.collection.getStatsInRange(this.range.start, this.range.end) : this.collection.models;
     const length = collection.length > 6 && !this.range ? 6 : collection.length - 1;
+    const stats = [];
     let remembered = 0;
     let retentionRate = 0;
-    const stats = [];
     let studied = 0;
-    let total = 0;
+    // let total = 0;
 
     for (let i = length; i >= 0; i--) {
       const stat = collection[i].get(this.type)[this.part];
       stats.push(stat);
       chartData.push(stat.learned.all);
-      total += stat.learned.day;
+      // total += stat.learned.day;
       studied += stat.studied.day;
       remembered += stat.remembered.day;
     }
@@ -215,24 +215,24 @@ const StatsStudyPartLinegraphComponent = GelatoComponent.extend({
       studied,
       remembered,
       retentionRate,
-      added: this._getAdded(stats)
+      added: this._getAdded(stats),
     };
   },
 
-  _getAdded: function(stats) {
+  _getAdded: function (stats) {
     if (!stats.length) {
       return 0;
     }
 
-    var start = stats[0];
-    var end = stats[stats.length - 1];
+    let start = stats[0];
+    let end = stats[stats.length - 1];
 
-    var addedStartDate = start.learned.all + start.learning.all;
-    var addedEndDate = end.learned.all + end.learning.all;
-    var totalAdded = addedEndDate - addedStartDate;
+    let addedStartDate = start.learned.all + start.learning.all;
+    let addedEndDate = end.learned.all + end.learning.all;
+    let totalAdded = addedEndDate - addedStartDate;
 
     return totalAdded;
-  }
+  },
 
 });
 

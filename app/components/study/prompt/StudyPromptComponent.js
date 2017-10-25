@@ -43,7 +43,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click .dropdown-toggle': 'handleClickDropdownToggle'
+    'click .dropdown-toggle': 'handleClickDropdownToggle',
   },
 
   /**
@@ -51,11 +51,11 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     _.bindAll(this, 'stopAutoAdvance');
     options = options || {};
 
-    //properties
+    // properties
     this.$inputContainer = null;
     this.$panelLeft = null;
     this.$panelRight = null;
@@ -80,7 +80,7 @@ const StudyPromptComponent = GelatoComponent.extend({
      */
     this.showGradingButtons = options.showGradingButtons !== undefined ? options.showGradingButtons : true;
 
-    //components
+    // components
     this.canvas = new Canvas({prompt: this});
     this.navigation = new Navigation({prompt: this});
     this.reviewStatus = new ReviewStatus({prompt: this});
@@ -114,9 +114,9 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptComponent}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
-      this.template = require('./MobileStudyPromptComponent.jade')
+      this.template = require('./MobileStudyPromptComponent.jade');
     }
 
     this.renderTemplate();
@@ -132,7 +132,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.toolbarAction.setElement('#toolbar-action-container').render();
     this.toolbarGrading.setElement('#toolbar-grading-container').render({
       showGradingButtons: this.showGradingButtons,
-      showTapToAdvanceText: this.showTapToAdvanceText
+      showTapToAdvanceText: this.showTapToAdvanceText,
     });
     this.toolbarVocab.setElement('#toolbar-vocab-container').render();
     this.tutorial.setElement('#tutorial-container').render().hide();
@@ -162,7 +162,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @method renderPart
    * @returns {StudyPromptComponent}
    */
-  renderPart: function() {
+  renderPart: function () {
     if (this.part) {
       this.part.remove();
     }
@@ -188,6 +188,11 @@ const StudyPromptComponent = GelatoComponent.extend({
         break;
     }
 
+    // reset audio offset on prompt vocab
+    if (this.reviews.vocab) {
+      this.reviews.vocab.resetAudioOffset();
+    }
+
     // brush dot
     this.$('#canvas-container').toggleClass('rune', this.reviews.part === 'rune');
 
@@ -203,7 +208,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @method getInputSize
    * @returns {Number}
    */
-  getInputSize: function() {
+  getInputSize: function () {
     const $content = this.$panelLeft.find('.content');
 
     if ($content.length) {
@@ -220,8 +225,8 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @method handleClickDropdownToggle
    * @param {Event} event
    */
-  handleClickDropdownToggle: function(event) {
-    const content = this.$('.content');
+  handleClickDropdownToggle: function (event) {
+    // const content = this.$('.content');
     const contentDropdown = this.$('.content-dropdown');
     const contentExtra = this.$('.content-extra');
     const contentToggleDown = contentDropdown.find('.toggle-down');
@@ -253,11 +258,11 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @method next
    * @param {Boolean} [skip]
    */
-  next: function(skip) {
+  next: function (skip) {
     this.stopAutoAdvance();
     this.review.stop();
 
-
+    this.canvas.stopAnimations(null);
     if (skip || this.reviews.isLast()) {
       if (skip) {
         this.reviews.skip = true;
@@ -279,15 +284,16 @@ const StudyPromptComponent = GelatoComponent.extend({
    * Plays the audio for the current vocab.
    * @method playVocabAudio
    */
-  playVocabAudio: function() {
+  playVocabAudio: function () {
     this.reviews.vocab.play();
   },
 
   /**
    * @method previous
    */
-  previous: function() {
+  previous: function () {
     this.review.stop();
+    this.canvas.stopAnimations(null);
 
     if (this.reviews.isFirst()) {
       if (this.editing) {
@@ -306,7 +312,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @method remove
    * @returns {StudyPromptComponent}
    */
-  remove: function() {
+  remove: function () {
     this.canvas.remove();
     this.navigation.remove();
 
@@ -335,7 +341,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @method reset
    * @returns {StudyPromptComponent}
    */
-  reset: function() {
+  reset: function () {
     this.review = null;
     this.reviews = null;
     this.remove();
@@ -350,14 +356,13 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @method resize
    * @returns {StudyPromptComponent}
    */
-  resize: function() {
-
+  resize: function () {
     // need to set these values first before getInputSize will return the
     // right value on mobile since it relies on the #panel-left height
     // to calculate
     if (app.isMobile()) {
       // set prompt height based on toolbar and screen height
-      this.$el.height(app.getHeight() - $('#navbar-container').height() -  ($('.demo-progress-component').height() || 0) - 10);
+      this.$el.height(app.getHeight() - $('#navbar-container').height() - ($('.demo-progress-component').height() || 0) - 10);
 
       // set size of panel left for absolute positioning of toolbar buttons
       this.$panelLeft.height(this.getHeight() - this.$panelRight.height());
@@ -374,11 +379,10 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.canvas.resize();
 
     if (app.isMobile()) {
-
       // use vh to make button height more dynamic on different screen sizes
       this.$toolbarContainer.css({height: '5vh'});
     } else {
-
+      // maybe put something here?
     }
 
     return this;
@@ -389,11 +393,11 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @param {PromptReviews} reviews
    * @returns {StudyPromptComponent}
    */
-  set: function(reviews) {
+  set: function (reviews) {
     console.info('PROMPT:', reviews);
     this.reviews = reviews;
     this.renderPart();
-    this.navigation.render();
+    this.navigation.update();
     this.reviewStatus.render();
     this.trigger('reviews:set', reviews);
 
@@ -414,13 +418,30 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @param {String} [id] id of the vocab to show
    * @param {Object} [info] info for displaying dialog
    */
-  showVocabInfo: function(id, info) {
+  showVocabInfo: function (id, info) {
     console.log(id, info, this.vocabInfo);
 
     if (app.isMobile()) {
       vent.trigger('vocabInfo:toggle', id || this.reviews.vocab.id, info || this.vocabInfo);
+
+      // listen to right sidebar saves and update reviews vocab model
+      this.listenToOnce(app._views['rightSide'], 'save', (vocab) => {
+        this.reviews.vocab.set(vocab.toJSON());
+        this.vocabDefinition.render();
+      });
     } else {
       app.openDesktopVocabViewer(id || this.reviews.vocab.id, info || this.vocabInfo);
+
+      // stop listening to shortcuts while dialog is open
+      this.shortcuts.stopListening();
+
+      // start listening to shortcuts while dialog is hidden
+      this.listenToOnce(app.dialogs.vocabViewer, 'hidden', (vocab) => {
+        this.shortcuts.startListening();
+
+        this.reviews.vocab.set(vocab.toJSON());
+        this.vocabDefinition.render();
+      });
     }
   },
 
@@ -428,7 +449,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * Starts a timer to auto-advance to the next prompt if the user has it enabled
    * and sets the style/speed of the prompt's auto-advance
    */
-  startAutoAdvance: function() {
+  startAutoAdvance: function () {
     if (this._autoAdvanceListenerId || !app.user.get('autoAdvancePrompts')) {
       return;
     }
@@ -437,11 +458,11 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     let score = this.review.get('score');
 
-    // multiply the speed x2 if the user got the prompt wrong (grade 1 or 2)
+    // multiply the speed x2.75 if the user got the prompt wrong (grade 1 or 2)
     // so they can see the prompt longer
-    const promptDelayMultiplier = score > 2 ? 1 : 2;
+    const promptDelayMultiplier = score > 2 ? 1 : 2.75;
 
-    const animSpeed = config.autoAdvanceDelay * 4 * promptDelayMultiplier;
+    const animSpeed = (config.autoAdvanceDelay * 4 * promptDelayMultiplier).toFixed(1);
     const styleStr = '-webkit-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
       '-moz-animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;' +
       'animation: AutoAdvanceProgress ' + animSpeed + 'ms ease normal;';
@@ -449,7 +470,6 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.$('#navigate-next').attr('style', styleStr);
 
     if (this.review.get('showTeaching')) {
-
       score = 3;
     }
 
@@ -458,7 +478,6 @@ const StudyPromptComponent = GelatoComponent.extend({
     }
 
     this._autoAdvanceListenerId = setTimeout(() => {
-
       // if by some other means this listener should have already been stopped,
       // make sure we don't double fire
       if (!this._autoAdvanceListenerId) {
@@ -479,7 +498,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * Clears the prompt auto-advance timeout and any animations
    * @method stopAutoAdvance
    */
-  stopAutoAdvance: function(event) {
+  stopAutoAdvance: function (event) {
     this.isAutoAdvancing = false;
 
     this.$('#navigate-next').removeClass('grade-1 grade-2 grade-3 grade-4');
@@ -500,7 +519,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @return {number} the height the toolbar should be
    * @private
    */
-  _getToolbarHeight: function() {
+  _getToolbarHeight: function () {
     const outerContainer = this.isDemo ? $('#demo-prompt-container') : $('#study-prompt-container');
 
     if (app.isMobile()) {
@@ -538,94 +557,93 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     async.parallel(
       [
-        function(callback) {
+        function (callback) {
           async.series(
             [
-              function(callback) {
+              function (callback) {
                 vocabs.fetch({
                   data: {
                     include_decomps: true,
                     include_heisigs: true,
                     include_sentences: false,
                     include_top_mnemonics: true,
-                    ids: vocabId
+                    ids: vocabId,
                   },
-                  error: function(error) {
+                  error: function (error) {
                     callback(error);
                   },
-                  success: function(vocabs) {
+                  success: function (vocabs) {
                     wordVocabs = vocabs;
                     callback();
-                  }
+                  },
                 });
               },
-              function(callback) {
-                vocabs.at(0).fetchSentence().then(sentence => {
+              function (callback) {
+                vocabs.at(0).fetchSentence().then((sentence) => {
                   vocabs.sentences.add(sentence);
                   callback();
                 });
               },
-              function(callback) {
+              function (callback) {
                 if (vocabs.at(0).has('containedVocabIds')) {
                   vocabs.fetch({
                     data: {
-                      ids: vocabs.at(0).get('containedVocabIds').join('|')
+                      ids: vocabs.at(0).get('containedVocabIds').join('|'),
                     },
                     remove: false,
-                    error: function(error) {
+                    error: function (error) {
                       callback(error);
                     },
-                    success: function(vocabs) {
+                    success: function (vocabs) {
                       wordVocabs = vocabs;
                       callback(null);
-                    }
+                    },
                   });
                 } else {
                   callback();
                 }
               },
-              function(callback) {
+              function (callback) {
                 if (app.router.page.title.indexOf('Demo') === -1) {
                   items.fetch({
                     data: {
-                      vocab_ids: vocabId
+                      vocab_ids: vocabId,
                     },
-                    error: function(error) {
+                    error: function (error) {
                       callback(error);
                     },
-                    success: function(items) {
+                    success: function (items) {
                       wordItems = items;
                       callback(null);
-                    }
+                    },
                   });
                 } else {
-
                   // skip fetch for the demo--user isn't logged in and
                   // doesn't have items to fetch
                   callback();
                 }
-              }
+              },
             ],
             callback
-          )
+          );
         },
-        function(callback) {
+        function (callback) {
           vocabsContaining.fetch({
             data: {
               include_containing: true,
-              q: vocabId
+              q: app.fn.mapper.fromBase(vocabId),
             },
-            error: function(error) {
+            error: function (error) {
               callback(error);
             },
-            success: function(vocabs) {
+            success: function (vocabs) {
               wordVocabsContaining = vocabs;
               callback();
-            }
+            },
           });
-        }
+        },
       ],
-      function(error) {
+      function (error) {
         if (error) {
           console.error('WORD DIALOG LOAD ERROR:', error);
         } else {
@@ -633,7 +651,7 @@ const StudyPromptComponent = GelatoComponent.extend({
             id: wordVocabs.at(0).id,
             items: wordItems,
             vocabs: wordVocabs,
-            vocabsContaining: wordVocabsContaining
+            vocabsContaining: wordVocabsContaining,
           };
 
           vocabInfo.vocabsContaining.remove(vocabId);
@@ -645,7 +663,7 @@ const StudyPromptComponent = GelatoComponent.extend({
         }
       }
     );
-  }
+  },
 });
 
 module.exports = StudyPromptComponent;

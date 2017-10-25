@@ -1,0 +1,21 @@
+@import "../../styles/_variables";
+
+gelato-component[data-name='release-notes'] {
+  max-width: 1280px;
+  margin: 0 auto;
+  font-size: 14px;
+  padding: 20px;
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  .read-more {
+    color: $green5;
+    cursor: pointer;
+
+    &:hover {
+      color: $green4;
+    }
+  }
+}

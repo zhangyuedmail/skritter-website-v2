@@ -1,4 +1,4 @@
-var BootstrapDialog = require('base/bootstrap-dialog');
+let BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class VacationDialog
@@ -9,7 +9,7 @@ module.exports = BootstrapDialog.extend({
    * @method initialize
    * @param {Object} options
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.subscription = options.subscription;
   },
   /**
@@ -21,7 +21,7 @@ module.exports = BootstrapDialog.extend({
    * @method render
    * @returns {VacationDialog}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -31,13 +31,13 @@ module.exports = BootstrapDialog.extend({
    */
   events: {
     'click #button-cancel': 'handleClickButtonCancel',
-    'click #button-confirm': 'handleClickButtonConfirm'
+    'click #button-confirm': 'handleClickButtonConfirm',
   },
   /**
    * @method handleClickButtonCancel
    * @param {Event} event
    */
-  handleClickButtonCancel: function(event) {
+  handleClickButtonCancel: function (event) {
     event.preventDefault();
     this.close();
   },
@@ -45,29 +45,29 @@ module.exports = BootstrapDialog.extend({
    * @method handleClickButtonConfirm
    * @param {Event} event
    */
-  handleClickButtonConfirm: function(event) {
+  handleClickButtonConfirm: function (event) {
     event.preventDefault();
     this.$('#button-confirm').hide();
     this.$('.fa-spinner').removeClass('hide');
-    var option = this.$('select option:selected');
-    var startDate = moment().add(2, 'days');
-    var endDate = startDate.clone().add(
+    let option = this.$('select option:selected');
+    let startDate = moment().add(2, 'days');
+    let endDate = startDate.clone().add(
       option.data('number'), option.data('unit')
     );
-    var format = 'YYYY-MM-DD';
-    var attrs = {
+    let format = 'YYYY-MM-DD';
+    let attrs = {
       'vacation': {
         start: startDate.format(format),
-        end: endDate.format(format)
-      }
+        end: endDate.format(format),
+      },
     };
-    var dialog = this;
+    let dialog = this;
     this.subscription.save(attrs, {
       parse: true,
       method: 'PUT',
-      complete: function() {
+      complete: function () {
         dialog.close();
-      }
+      },
     });
-  }
+  },
 });

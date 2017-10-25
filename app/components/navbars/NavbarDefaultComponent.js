@@ -14,7 +14,7 @@ module.exports = GelatoComponent.extend({
     'click #button-beacon': 'handleClickButtonBeacon',
     'click #refer-link': 'handleClickReferLink',
     'click #switch-targetLang': 'handleClickSwitchTargetLang',
-    'click .item-dropdown': 'handleClickDropdown'
+    'click .item-dropdown': 'handleClickDropdown',
   },
 
   /**
@@ -27,7 +27,7 @@ module.exports = GelatoComponent.extend({
    * @method render
    * @returns {DefaultNavbar}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     this.$('[data-toggle="tooltip"]').tooltip();
 
@@ -39,14 +39,16 @@ module.exports = GelatoComponent.extend({
    * @todo More robust "sectioning" logic needed?
    * @returns {String} The section of the site the user is currently on.
    */
-  getCurrentSection: function() {
-    var history = null;
+  getCurrentSection: function () {
+    let history = null;
 
     // this could null out on app initialization.
     // should refactor whatever calls this before routing has officially started.
-    try {
-      history = Backbone.history.getFragment() || "".split('/')[0];
-    } catch(e) {}
+    if (Backbone.history.fragment) {
+      history = Backbone.history.getFragment();
+    } else {
+      history = window.location.pathname.replace('/', '');
+    }
 
     return history;
   },
@@ -57,7 +59,7 @@ module.exports = GelatoComponent.extend({
    * @param {string} langCode the code of the language to get the characters for
    * @returns {string} the hanzi/kanji for the language name
    */
-  getDisplayLanguageCharacters: function(langCode) {
+  getDisplayLanguageCharacters: function (langCode) {
     return langCode === 'zh' ? '中文' : '日本語';
   },
 
@@ -68,7 +70,7 @@ module.exports = GelatoComponent.extend({
    * @param {string} [langCode] the language code you want to display
    * @return {string} a user-friendly version of the language code
    */
-  getDisplayLanguageName: function(langCode) {
+  getDisplayLanguageName: function (langCode) {
     langCode = langCode || app.user.get('targetLang');
 
     return langCode === 'zh' ? 'Chinese' : 'Japanese';
@@ -78,7 +80,7 @@ module.exports = GelatoComponent.extend({
    * @method handleClickButtonBeacon
    * @param {Event} event
    */
-  handleClickButtonBeacon: function(event) {
+  handleClickButtonBeacon: function (event) {
     event.preventDefault();
     if (window.HS) {
       HS.beacon.open();
@@ -89,10 +91,10 @@ module.exports = GelatoComponent.extend({
    * @method handleClickDropdown
    * @param {Event} event
    */
-  handleClickDropdown: function(event) {
+  handleClickDropdown: function (event) {
     event.preventDefault();
 
-    var $dropdown = this.$('.item-dropdown');
+    let $dropdown = this.$('.item-dropdown');
     if ($dropdown.find('.dropdown').hasClass('hidden')) {
       $dropdown.addClass('open');
       $dropdown.find('.dropdown').removeClass('hidden');
@@ -107,7 +109,7 @@ module.exports = GelatoComponent.extend({
    * @param {jQuery.Event} event the click event
    * @method handleClickReferLink
    */
-  handleClickReferLink: function(event) {
+  handleClickReferLink: function (event) {
     event.preventDefault();
     app.mixpanel.track('Clicked navbar refer link');
     app.router.navigate('refer', {trigger: true});
@@ -118,28 +120,28 @@ module.exports = GelatoComponent.extend({
    * @param {jQuery.Event} e the click event
    * @method handleClickSwitchTargetLang
    */
-  handleClickSwitchTargetLang: function(e) {
+  handleClickSwitchTargetLang: function (e) {
     e.preventDefault();
     e.stopPropagation();
 
-    var toSwitchCode = app.user.get('targetLang') === 'zh' ? 'ja' : 'zh';
+    let toSwitchCode = app.user.get('targetLang') === 'zh' ? 'ja' : 'zh';
     app.user.save({
-      targetLang: toSwitchCode
+      targetLang: toSwitchCode,
     }, {
-      error: function(model, error) {
+      error: function (model, error) {
         ScreenLoader.hide();
 
         app.notifyUser({
-          message: error.responseJSON.message
+          message: error.responseJSON.message,
         });
       },
-      success: function() {
+      success: function () {
         app.reload(false);
-      }
+      },
     });
 
-    var loadingMessage = toSwitchCode === 'zh' ? 'Switching to Chinese' : 'Switching to Japanese';
+    let loadingMessage = toSwitchCode === 'zh' ? 'Switching to Chinese' : 'Switching to Japanese';
     ScreenLoader.show();
     ScreenLoader.post(loadingMessage);
-  }
+  },
 });

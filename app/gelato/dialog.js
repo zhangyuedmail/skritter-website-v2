@@ -1,10 +1,10 @@
-var GelatoView = require('./view');
+let GelatoView = require('./view');
 
 /**
  * @class GelatoDialog
  * @extends {GelatoView}
  */
-var GelatoDialog = GelatoView.extend({
+let GelatoDialog = GelatoView.extend({
   /**
    * @property el
    * @type {String}
@@ -22,7 +22,7 @@ var GelatoDialog = GelatoView.extend({
    * @param {Object} [context]
    * @returns {GelatoDialog}
    */
-  renderTemplate: function(context) {
+  renderTemplate: function (context) {
     GelatoView.prototype.renderTemplate.call(this, context);
     this.element = this.$('[role="dialog"]');
     this.element.on('hide.bs.modal', this.handleElementHide.bind(this));
@@ -37,7 +37,7 @@ var GelatoDialog = GelatoView.extend({
    * @method close
    * @returns {GelatoDialog}
    */
-  close: function() {
+  close: function () {
     // TODO: figure out why the element is getting unset on study screens
     if (!this.element) {
       this.element = this.$('[role="dialog"]');
@@ -50,14 +50,14 @@ var GelatoDialog = GelatoView.extend({
   /**
    * @method handleElementHide
    */
-  handleElementHide: function() {
+  handleElementHide: function () {
     this.trigger('hide');
   },
 
   /**
    * @method handleElementHidden
    */
-  handleElementHidden: function() {
+  handleElementHidden: function () {
     this.trigger('hidden');
     this.remove();
   },
@@ -65,14 +65,14 @@ var GelatoDialog = GelatoView.extend({
   /**
    * @method handleElementShow
    */
-  handleElementShow: function() {
+  handleElementShow: function () {
     this.trigger('show');
   },
 
   /**
    * @method handleElementShown
    */
-  handleElementShown: function() {
+  handleElementShown: function () {
     this.trigger('shown');
   },
 
@@ -81,21 +81,21 @@ var GelatoDialog = GelatoView.extend({
    * @param {Object} [options]
    * @returns {GelatoDialog}
    */
-  open: function(options) {
+  open: function (options) {
     options = _.defaults(
       options || {},
       {
         backdrop: 'static',
         keyboard: false,
         show: true,
-        remote: false
+        remote: false,
       }
     );
     this.render();
     this.element.modal(options);
 
     return this;
-  }
+  },
 });
 
 module.exports = GelatoDialog;

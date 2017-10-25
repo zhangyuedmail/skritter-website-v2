@@ -20,11 +20,12 @@ const LoginPage = GelatoPage.extend({
   events: {
     'keyup #login-password': 'handleKeyUpLoginPassword',
     'click #button-login': 'handleClickLoginButton',
-    'click #button-skeleton': 'handleClickSkeleton'
+    'click #button-skeleton': 'handleClickSkeleton',
   },
 
   navbarOptions: {
-    showBackBtn: true
+    showBackBtn: true,
+    showSyncBtn: false,
   },
 
   /**
@@ -49,7 +50,7 @@ const LoginPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     app.mixpanel.track('Viewed login page');
   },
 
@@ -57,7 +58,7 @@ const LoginPage = GelatoPage.extend({
    * @method render
    * @returns {LoginPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileLogin.jade');
     }
@@ -73,18 +74,18 @@ const LoginPage = GelatoPage.extend({
    * @method getFormData
    * @returns {Object}
    */
-  getFormData: function() {
+  getFormData: function () {
     return {
       password: this.$('#login-password').val(),
-      username: this.$('#login-username').val()
-    }
+      username: this.$('#login-username').val(),
+    };
   },
 
   /**
    * @method handleClickLoginButton
    * @param {Event} event
    */
-  handleClickLoginButton: function(event) {
+  handleClickLoginButton: function (event) {
     event.preventDefault();
     this.login();
   },
@@ -93,7 +94,7 @@ const LoginPage = GelatoPage.extend({
    * @method handleKeyUpLoginPassword
    * @param {Event} event
    */
-  handleKeyUpLoginPassword: function(event) {
+  handleKeyUpLoginPassword: function (event) {
     event.preventDefault();
     if (event.which === 13 || event.keyCode === 13) {
       this.login();
@@ -104,7 +105,7 @@ const LoginPage = GelatoPage.extend({
    * @method handleClickSkeleton
    * @param {Event} event
    */
-  handleClickSkeleton: function(event) {
+  handleClickSkeleton: function (event) {
     event.preventDefault();
     switch (app.getPlatform()) {
       case 'Android':
@@ -123,9 +124,9 @@ const LoginPage = GelatoPage.extend({
   /**
    * @method login
    */
-  login: function() {
-    var self = this;
-    var formData = this.getFormData();
+  login: function () {
+    let self = this;
+    let formData = this.getFormData();
     this.$('#login-message').empty();
     this.$('#login-form').prop('disabled', true);
     ScreenLoader.show();
@@ -133,7 +134,7 @@ const LoginPage = GelatoPage.extend({
     app.user.login(
       formData.username.trim(),
       formData.password.trim(),
-      function(error) {
+      function (error) {
         if (error) {
           self.$('#login-message').html(error.responseJSON.message);
           self.$('#login-form').prop('disabled', false);
@@ -150,9 +151,9 @@ const LoginPage = GelatoPage.extend({
    * @method remove
    * @returns {LoginPage}
    */
-  remove: function() {
+  remove: function () {
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 });
 
 module.exports = LoginPage;

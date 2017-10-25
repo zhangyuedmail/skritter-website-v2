@@ -61,6 +61,14 @@ gelato-page(data-name='account-settings-general')
                       input#field-private(type="checkbox", checked=user.get('private'))
                       .toggle-switch-slider.round
               .form-group
+                label.col-sm-3.control-label(for="field-newsletter")= app.locale('pages.accountGeneral.newsletterLabel')
+                  .option-desc= app.locale('pages.accountGeneral.newsletterDescription')
+                .col-sm-9
+                  .checkbox
+                    label.toggle-switch
+                      input#field-newsletter(type="checkbox", checked=user.get('allowEmailsFromSkritter'))
+                      .toggle-switch-slider.round
+              .form-group
                 label.col-sm-3.control-label(for="field-eccentric")= app.locale('pages.accountGeneral.eccentricLabel')
                   .option-desc= app.locale('pages.accountGeneral.eccentricDescription')
                 .col-sm-9

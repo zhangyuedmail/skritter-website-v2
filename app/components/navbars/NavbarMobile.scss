@@ -12,7 +12,7 @@ bootstrap-navbar[data-name='mobile'] {
   nav {
     background-color: $wood7;
     border-color: $wood7;
-    //box-shadow: 0 1px 10px rgba(38, 43, 48, .15);
+    border-radius: 0;border-radius: 0;
     box-shadow: none;
     z-index: 7001;
   }
@@ -99,6 +99,10 @@ bootstrap-navbar[data-name='mobile'] {
         text-align: center;
       }
     }
+  }
+
+  .navbar-header {
+    width: 100%;
   }
 
   .version {

@@ -53,3 +53,11 @@ gelato-page[data-name='demo'] {
 .show-erase-swipe-animation {
   animation: swipeUpToErase 2s infinite;
 }
+
+.mobile {
+  gelato-page[data-name='demo'] {
+    #demo-prompt-container {
+      padding-top: 0;
+    }
+  }
+}

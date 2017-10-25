@@ -6,7 +6,7 @@ const GelatoComponent = require('gelato/component');
  */
 const DashboardQueueComponent = GelatoComponent.extend({
   events: {
-    'click #load-lists': 'handleRetryButtonClick'
+    'click #load-lists': 'handleRetryButtonClick',
   },
 
   /**
@@ -19,7 +19,7 @@ const DashboardQueueComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.errorLoadingLists = false;
 
     this.vocablists = app.user.vocablists;
@@ -42,18 +42,18 @@ const DashboardQueueComponent = GelatoComponent.extend({
    * @param {String} [cursor] a cursor to use when making the request
    * @param {Boolean} [remove] whether to keep/remove items already fetched from pevious requests
    */
-  fetchVocablists: function(cursor, remove) {
+  fetchVocablists: function (cursor, remove) {
     const fetchOptions = {
       data: {
         limit: app.config.useV2Gets.vocablists ? null : 5,
         sort: 'studying',
         include_percent_done: 'true',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
+        languageCode: app.getLanguage(),
       },
       error: () => {
         this.handleErrorLoadingLists();
-      }
+      },
     };
 
     if (cursor) {
@@ -72,14 +72,14 @@ const DashboardQueueComponent = GelatoComponent.extend({
    * Triggers a request to fetch their vocab lists.
    * @param {jQuery.Event} event
    */
-  handleRetryButtonClick: function(event) {
+  handleRetryButtonClick: function (event) {
     this.fetchVocablists();
   },
 
   /**
    * Handles when lists fail to load
    */
-  handleErrorLoadingLists: function() {
+  handleErrorLoadingLists: function () {
     this.errorLoadingLists = true;
     this.render();
     this.trigger('fetch-data:failed', 'queue');
@@ -89,11 +89,11 @@ const DashboardQueueComponent = GelatoComponent.extend({
    * @method render
    * @returns {DashboardQueueComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
 
     return this;
-  }
+  },
 
 });
 

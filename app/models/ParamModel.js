@@ -16,11 +16,11 @@ const ParamModel = GelatoModel.extend({
    * @method defaults
    * @returns {Object}
    */
-  defaults: function() {
+  defaults: function () {
     return {
       contains: [],
       corners: [],
-      strokeId: undefined
+      strokeId: undefined,
     };
   },
 
@@ -28,7 +28,7 @@ const ParamModel = GelatoModel.extend({
    * @method angle
    * @returns {Number}
    */
-  getAngle: function() {
+  getAngle: function () {
     return app.fn.getAngle(this.get('corners'));
   },
 
@@ -36,7 +36,7 @@ const ParamModel = GelatoModel.extend({
    * @method getFirstAngle
    * @returns {Number}
    */
-  getFirstAngle: function() {
+  getFirstAngle: function () {
     return app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
   },
 
@@ -44,10 +44,10 @@ const ParamModel = GelatoModel.extend({
    * @method getCornerLength
    * @returns {Number}
    */
-  getLength: function() {
-    var cornersLength = 0;
-    var corners = _.clone(this.get('corners'));
-    for (var i = 0, length = corners.length - 1; i < length; i++) {
+  getLength: function () {
+    let cornersLength = 0;
+    let corners = _.clone(this.get('corners'));
+    for (let i = 0, length = corners.length - 1; i < length; i++) {
       cornersLength += app.fn.getDistance(corners[i], corners[i + 1]);
     }
     return cornersLength;
@@ -57,10 +57,10 @@ const ParamModel = GelatoModel.extend({
    * @method getRectangle
    * @returns {Object}
    */
-  getRectangle: function() {
-    var corners = _.clone(this.get('corners'));
+  getRectangle: function () {
+    let corners = _.clone(this.get('corners'));
     return app.fn.getBoundingRectangle(corners, this.size, this.size, 18);
-  }
+  },
 
 });
 

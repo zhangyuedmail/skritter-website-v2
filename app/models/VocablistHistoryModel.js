@@ -6,7 +6,7 @@ const SkritterModel = require('base/BaseSkritterModel');
  */
 const VocablistHistoryModel = SkritterModel.extend({
 
-  getChangedDate: function() {
+  getChangedDate: function () {
     return moment().subtract(this.get('secondsAgo'), 'seconds').calendar();
   },
 
@@ -15,7 +15,7 @@ const VocablistHistoryModel = SkritterModel.extend({
    * this model represents.
    * @return {String}
    */
-  getChanges: function() {
+  getChanges: function () {
     const d = this.get('deltas');
 
     if (d.renamed && d.renamed.length) {
@@ -42,7 +42,7 @@ const VocablistHistoryModel = SkritterModel.extend({
     }
 
     return app.locale('dialogs.vocablistHistory.unknownChange');
-  }
+  },
 });
 
 module.exports = VocablistHistoryModel;

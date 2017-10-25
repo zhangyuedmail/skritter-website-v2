@@ -1,0 +1,37 @@
+gelato-component(data-name='release-notes')
+  section
+    p Hi, it's been a while since we last gave you an update. We were working on some larger projects recently and finally reached a point where we think you will be happy with what we made. So here's some new things to try out:
+    ul
+      if app.isMobile()
+        li#offline-mode
+          strong Offline Mode (Beta)&nbsp;
+          span.less We're still working on fleshing out and polishing this, so it's disabled by default, but it's here in the app...
+          span.more.hidden We're still working on fleshing out and polishing this, so it's disabled by default, but it's here in the app to get your hands on. Enable it in the settings and give it a try in your internet-connection-deprived location of choice!
+          span.read-more(data-section="offline-mode") &nbsp; read more
+      li#goal-mode
+        strong Goal Mode&nbsp;
+        span.less This keeps track of your daily progress and offers a new way to view how you study on Skritter. Because it's just an addition...
+        span.more.hidden This keeps track of your daily progress and offers a new way to view how you study on Skritter. Because it's just an addition on top of your queue, we've enabled it for you to try out, but you can always disable it in your study settings if you don't want to see it. We'll keep expanding how this works in future updates.
+        span.read-more(data-section="goal-mode") &nbsp; read more
+      li#auto-add
+        strong Auto add&nbsp;
+        span.less Back again, and better than ever, this feature is tweaked with a couple new improvements over legacy. It includes a new daily limit setting...
+        span.more.hidden Back again, and better than ever, this feature is tweaked with a couple new improvements over legacy. It includes a new daily limit setting to prevent you from adding too much automatically in one day (though you can of course still add as much as you want manually). We'll tell you when you've reached it. It's initially based on your auto add rate, though you can of course change it to whatever works best for you (in your study settings). Additionally, there are some new heuristics to the algorithm for certain types of accounts and queues. One of note is that if you have a large review queue but still want to add new items automatically, set your add frequency to 'highest.' You should get a new vocab added around every 80 reviews.
+        span.read-more(data-section="auto-add") &nbsp; read more
+      li#study-perf
+        strong Study Page Performance&nbsp;
+        span.less We dug deep into the internals and optimized both the writing performance and the updates to...
+        span.more.hidden We dug deep into the internals and optimized both the writing performance and the updates to some of the UI components. So your study experience should seem a little snappier now.
+        span.read-more(data-section="study-perf") &nbsp; read more
+      li#small-things
+        strong All the small things&nbsp;
+        span.less Whether it's fixing a calculation here or there, making the UI look and feel better, or fleshing out an existing feature...
+        span.more.hidden Whether it's fixing a calculation here or there, making the UI look and feel better, or fleshing out an existing feature, there's a month and a half worth of improvements (at least 150 or more to see) added in this update which add up to make your Skritter experience even better.
+        span.read-more(data-section="small-things") &nbsp; read more
+
+    p We appreciate feedback on what you think of the new features (or old features, or the app in general!), so be sure to tell us what you think.
+    p= app.sayThankYou()
+      |,
+    p Team Skritter
+  .text-center
+    button#got-it.btn.btn-lg.btn-success Got it

@@ -13,7 +13,7 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
    */
   events: {
     'click #load-more-btn': 'handleClickLoadMoreButton',
-    'click .add-to-queue-link': 'handleClickAddToQueueLink'
+    'click .add-to-queue-link': 'handleClickAddToQueueLink',
   },
 
   /**
@@ -26,7 +26,7 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.vocablists = new Vocablists();
     this.listenTo(this.vocablists, 'state', this.render);
     this.vocablists.fetch({
@@ -34,8 +34,8 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
         limit: 10,
         sort: 'custom',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
-      }
+        languageCode: app.getLanguage(),
+      },
     });
   },
 
@@ -43,7 +43,7 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocablistsMineTableComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -52,10 +52,10 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
    * @method handleClickAddToQueueLink
    * @param {Event} event
    */
-  handleClickAddToQueueLink: function(event) {
+  handleClickAddToQueueLink: function (event) {
     event.preventDefault();
-    var listID = $(event.target).closest('.add-to-queue-link').data('vocablist-id');
-    var vocablist = this.vocablists.get(listID);
+    let listID = $(event.target).closest('.add-to-queue-link').data('vocablist-id');
+    let vocablist = this.vocablists.get(listID);
     if (vocablist.get('studyingMode') !== 'not studying') {
       return;
     }
@@ -67,7 +67,7 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
    * @method handleClickLoadMoreButton
    * @param {Event} event
    */
-  handleClickLoadMoreButton: function(event) {
+  handleClickLoadMoreButton: function (event) {
     event.preventDefault();
     if (!this.vocablists.cursor) {
       return;
@@ -78,12 +78,12 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
         limit: 10,
         sort: 'custom',
         lang: app.getLanguage(),
-        languageCode: app.getLanguage()
+        languageCode: app.getLanguage(),
       },
-      remove: false
+      remove: false,
     });
     this.render();
-  }
+  },
 
 });
 

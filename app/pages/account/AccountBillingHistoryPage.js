@@ -13,7 +13,7 @@ const AccountBillingHistoryPage = GelatoPage.extend({
    * @type {Object}
    */
   events: {
-    'click #load-more-btn': 'handleClickLoadMoreButton'
+    'click #load-more-btn': 'handleClickLoadMoreButton',
   },
 
   /**
@@ -32,11 +32,11 @@ const AccountBillingHistoryPage = GelatoPage.extend({
    * @method initialize
    * @constructor
    */
-  initialize: function() {
+  initialize: function () {
     this.limit = 20;
     this.payments = new Payments();
     this.sidebar = new AccountSidebar();
-    this.payments.comparator = function(payment) {
+    this.payments.comparator = function (payment) {
       return -payment.get('created');
     };
     this.listenTo(this.payments, 'sync', this.render);
@@ -47,7 +47,7 @@ const AccountBillingHistoryPage = GelatoPage.extend({
    * @method render
    * @returns {AccountBillingHistoryPage}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
       this.template = require('./MobileAccountBillingHistory.jade');
     }
@@ -61,20 +61,20 @@ const AccountBillingHistoryPage = GelatoPage.extend({
    * @method fetchPayments
    * @param {string} cursor
    */
-  fetchPayments: function(cursor) {
+  fetchPayments: function (cursor) {
     this.payments.fetch({
       data: {
         cursor: cursor || '',
-        limit: 100
+        limit: 100,
       },
-      remove: false
+      remove: false,
     });
   },
 
   /**
    * @method handleClickLoadMoreButton
    */
-  handleClickLoadMoreButton: function() {
+  handleClickLoadMoreButton: function () {
     this.fetchPayments(this.payments.cursor);
     this.renderTable();
   },
@@ -83,10 +83,10 @@ const AccountBillingHistoryPage = GelatoPage.extend({
    * @method remove
    * @returns {AccountBillingHistoryPage}
    */
-  remove: function() {
+  remove: function () {
     this.sidebar.remove();
     return GelatoPage.prototype.remove.call(this);
-  }
+  },
 
 });
 

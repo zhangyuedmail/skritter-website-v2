@@ -26,7 +26,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {Model} model
    * @param {Object} options
    */
-  sync: function(method, model, options) {
+  sync: function (method, model, options) {
     options.headers = _.result(this, 'headers');
 
     if (!options.url) {
@@ -51,7 +51,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {ProgressStatModel} statB
    * @returns {Number}
    */
-  comparator: function(statA, statB) {
+  comparator: function (statA, statB) {
     if (statA.id > statB.id) {
       return -1;
     } else if (statB.id > statA.id) {
@@ -67,10 +67,10 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {Object} response
    * @returns Array
    */
-  parse: function(response) {
+  parse: function (response) {
     const now = moment().startOf('day').valueOf();
 
-    return response.ProgressStats.filter(function(s) {
+    return response.ProgressStats.filter(function (s) {
       let statDate = moment(s.date, app.config.dateFormatApp).valueOf();
       return statDate <= now;
     });
@@ -90,20 +90,20 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    *                                         and the second being teh end date,
    *                                         both formatted YYYY-MM-DD
    */
-  divideDateRange: function(momentStart, momentEnd, chunkSize) {
-    var dates = [];
-    var diff = momentEnd.diff(momentStart, 'days');
+  divideDateRange: function (momentStart, momentEnd, chunkSize) {
+    let dates = [];
+    let diff = momentEnd.diff(momentStart, 'days');
 
     if (diff <= chunkSize || app.config.useV2Gets.progstats) {
       return [
-        [momentStart.format('YYYY-MM-DD'), momentEnd.format('YYYY-MM-DD')]
+        [momentStart.format('YYYY-MM-DD'), momentEnd.format('YYYY-MM-DD')],
       ];
     }
 
-    for (var  i = 0; i < diff; i += chunkSize + 1) {
+    for (let i = 0; i < diff; i += chunkSize + 1) {
       dates.push([
         moment(momentEnd).subtract(Math.min(i + chunkSize, diff), 'days').format('YYYY-MM-DD'),
-        moment(momentEnd).subtract(i, 'days').format('YYYY-MM-DD')
+        moment(momentEnd).subtract(i, 'days').format('YYYY-MM-DD'),
       ]);
     }
 
@@ -115,7 +115,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {Function} [callbackSuccess]
    * @param {Function} [callbackError]
    */
-  fetchMonth: function(callbackSuccess, callbackError) {
+  fetchMonth: function (callbackSuccess, callbackError) {
     const momentMonthStart = moment().subtract(4, 'hours').startOf('month');
     const momentMonthEnd = moment().subtract(4, 'hours').endOf('month');
 
@@ -132,7 +132,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
       success: () => {
         this.cache['month'] = {
           start: momentMonthStart.format(app.config.dateFormatApp),
-          end: momentMonthEnd.format(app.config.dateFormatApp)
+          end: momentMonthEnd.format(app.config.dateFormatApp),
         };
 
         if (_.isFunction(callbackSuccess)) {
@@ -140,7 +140,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
         }
       },
       error: callbackError,
-      remove: false
+      remove: false,
     });
   },
 
@@ -157,7 +157,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {Function} [options.error] called when any of the fetches fail
    * @param {Boolean} [options.remove] whether to remove other models in the collection after the fetch
    */
-  fetchRange: function(start, end, options) {
+  fetchRange: function (start, end, options) {
     // TODO: look into changing granularity for ranges larger than a month
     const momentEnd = moment(end, app.config.dateFormatApp);
     const momentStart = moment(start, app.config.dateFormatApp);
@@ -173,7 +173,6 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
     if (this.cache['fetchRange']) {
       if (this.cache['fetchRange'].start === momentStart.format(app.config.dateFormatApp) &&
         this.cache['fetchRange'].end === momentEnd.format(app.config.dateFormatApp)) {
-
         if (this.cache['fetchRange'] === moment().format(app.config.dateFormatApp)) {
           this.fetchToday(options.success, options.error);
         } else {
@@ -185,10 +184,11 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
       }
     }
 
-    dates.forEach(function(date) {
-      const dfd = $.Deferred();
+    dates.forEach(function (date) {
+      const deferred = $.Deferred;
+      const dfd = deferred;
 
-      self._fetchRange(date[0], date[1], dfd.resolve, function(error, model) {
+      self._fetchRange(date[0], date[1], dfd.resolve, function (error, model) {
         dfd.reject();
         if (_.isFunction((options.error))) {
           options.error(error, model);
@@ -201,7 +201,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
     $.when.apply(null, dfds).done(() => {
       this.cache['fetchRange'] = {
         start: momentStart.format(app.config.dateFormatApp),
-        end: momentEnd.format(app.config.dateFormatApp)
+        end: momentEnd.format(app.config.dateFormatApp),
       };
 
       if (_.isFunction(options.success)) {
@@ -220,25 +220,25 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {Function} callbackError called when the fetch fails
    * @private
    */
-  _fetchRange: function(start, end, callbackSuccess, callbackError) {
+  _fetchRange: function (start, end, callbackSuccess, callbackError) {
     this.fetch({
       data: {
         lang: app.getLanguage(),
         languageCode: app.getLanguage(),
         start: start,
-        end: end
+        end: end,
       },
       remove: false,
-      success: function(data) {
+      success: function (data) {
         if (_.isFunction(callbackSuccess)) {
           callbackSuccess(data);
         }
       },
-      error: function(model, error) {
+      error: function (model, error) {
         if (_.isFunction((callbackError))) {
           callbackError(error, model);
         }
-      }
+      },
     });
   },
 
@@ -248,13 +248,13 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {Function} [callbackSuccess]
    * @param {Function} [callbackError]
    */
-  fetchToday: function(callbackSuccess, callbackError) {
+  fetchToday: function (callbackSuccess, callbackError) {
     return new Promise((resolve, reject) => {
       this.fetch({
         data: {
           lang: app.getLanguage(),
           languageCode: app.getLanguage(),
-          start: moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD')
+          start: moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD'),
         },
         remove: false,
         success: (model) => {
@@ -268,7 +268,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
             callbackError(error, model);
           }
           reject(error);
-        }
+        },
       });
     });
   },
@@ -277,7 +277,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @method getAllTimeCharactersLearned
    * @returns {Number}
    */
-  getAllTimeCharactersLearned: function() {
+  getAllTimeCharactersLearned: function () {
     return this.getItemsLearnedForPeriod('char', 'all');
   },
 
@@ -285,7 +285,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @method getAllTimeWordsLearned
    * @returns {Number}
    */
-  getAllTimeWordsLearned: function() {
+  getAllTimeWordsLearned: function () {
     return this.getItemsLearnedForPeriod('word', 'all');
   },
 
@@ -294,7 +294,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {object} the amount of time studied as a string with a units property
    *                   specifiying the largest denomination of the amount property.
    */
-  getAllTimeTimeStudied: function() {
+  getAllTimeTimeStudied: function () {
     if (!this.length) {
       return {amount: '0', units: 'seconds'};
     }
@@ -327,7 +327,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
 
     return {
       amount: amount,
-      units: largestUnit
+      units: largestUnit,
     };
   },
 
@@ -336,10 +336,10 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Object} the average time studied per day among all the models in the collection
    * @method getAverageTimeStudied
    */
-  getAverageTimeStudied: function() {
-    var avgTime = 0;
+  getAverageTimeStudied: function () {
+    let avgTime = 0;
 
-    for (var i = 0; i < this.length; i++) {
+    for (let i = 0; i < this.length; i++) {
       avgTime += this.at(i).get('timeStudied').day;
     }
 
@@ -352,28 +352,28 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {{amount: string, units: string, secondaryUnits: string}}
    * @method convertToLargestTimeUnit
    */
-  convertToLargestTimeUnit: function(time) {
-    var seconds = Math.floor(time) % 60;
-    var minutes = Math.floor(time / 60) % 60;
-    var hours = Math.floor(time / 3600);
+  convertToLargestTimeUnit: function (time) {
+    let seconds = Math.floor(time) % 60;
+    let minutes = Math.floor(time / 60) % 60;
+    let hours = Math.floor(time / 3600);
 
     if (minutes < 10) {
-      minutes = "0" + minutes;
+      minutes = '0' + minutes;
     }
 
     if (seconds < 10) {
-      seconds = "0" + seconds;
+      seconds = '0' + seconds;
     }
 
-    var largestUnit = hours ? 'hours' :
+    let largestUnit = hours ? 'hours' :
       minutes ? 'minutes' :
         'seconds';
 
 
-    var secondLargestUnit = largestUnit === 'hours' ? 'minutes' :
+    let secondLargestUnit = largestUnit === 'hours' ? 'minutes' :
       largestUnit === 'minutes' ? 'seconds' :
         'seconds';
-    var amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
+    let amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
       minutes ? minutes + ':' + seconds :
         seconds;
 
@@ -389,7 +389,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
     return {
       amount: amount,
       units: largestUnit,
-      secondaryUnits: secondLargestUnit
+      secondaryUnits: secondLargestUnit,
     };
   },
 
@@ -397,22 +397,21 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * Gets the total number of reviews a user has studied over their lifetime
    * @returns {Number} the total number of reviews a user has studied over their lifetime
    */
-  getCountAllTimeReviews: function() {
+  getCountAllTimeReviews: function () {
     if (!this.length) {
       return 0;
     }
 
-    var stat = this.at(0);
-    var wordStats = stat.get('word');
-    var charStats = stat.get('char');
+    let stat = this.at(0);
+    let wordStats = stat.get('word');
+    let charStats = stat.get('char');
 
     // .char, .word ... .defn .rdng .rune .tone ... .studied .all
     // gets the total number of reviews for both word and character reviews
-    var totalNum = [wordStats, charStats].reduce(function(total, reviewCat) {
-
+    let totalNum = [wordStats, charStats].reduce(function (total, reviewCat) {
       // for a given stat, loops through the parts (defn, rdng, etc.)
       // and sums the numbers of .studied.all for each part.
-      var partsTotal = Object.keys(reviewCat).reduce(function(pTotal, studyPart) {
+      let partsTotal = Object.keys(reviewCat).reduce(function (pTotal, studyPart) {
         return pTotal + reviewCat[studyPart].studied.all;
       }, 0);
 
@@ -427,7 +426,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @method getDailyItemsReviewed
    * @returns {Number}
    */
-  getDailyItemsReviewed: function() {
+  getDailyItemsReviewed: function () {
     const today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
     const stat = this.get(today);
 
@@ -451,9 +450,9 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @method getDailyTimeStudied
    * @returns {Number}
    */
-  getDailyTimeStudied: function() {
-    const  today = moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD');
-    const  stat = this.get(today);
+  getDailyTimeStudied: function () {
+    const today = moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD');
+    const stat = this.get(today);
 
     return stat ? stat.get('timeStudied').day : 0;
   },
@@ -462,10 +461,10 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @method getGoalItemPercent
    * @returns {Number}
    */
-  getGoalItemPercent: function() {
+  getGoalItemPercent: function () {
     const goal = app.user.getGoal();
     const totalItems = app.user.stats.getDailyItemsReviewed();
-    const percentItems = Math.round(totalItems / goal.items * 100);
+    const percentItems = Math.round(totalItems / goal.value * 100);
 
     return percentItems > 100 ? 100 : parseFloat(percentItems.toFixed(2));
   },
@@ -474,10 +473,10 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @method getGoalTimePercent
    * @returns {Number}
    */
-  getGoalTimePercent: function() {
+  getGoalTimePercent: function () {
     const goal = app.user.getGoal();
     const totalTime = app.user.stats.getDailyTimeStudied() / 60;
-    const percentTime = Math.round(totalTime / goal.time * 100);
+    const percentTime = Math.round(totalTime / goal.value * 100);
 
     return percentTime > 100 ? 100 : parseFloat(percentTime.toFixed(2));
   },
@@ -486,12 +485,12 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @method getMonthlyHeatmapData
    * @returns {Object}
    */
-  getMonthlyHeatmapData: function() {
-    var data = {};
+  getMonthlyHeatmapData: function () {
+    let data = {};
 
-    for (var i = 0, length = this.length; i < length; i++) {
-      var stat = this.at(i);
-      var date = moment(stat.get('date')).unix();
+    for (let i = 0, length = this.length; i < length; i++) {
+      let stat = this.at(i);
+      let date = moment(stat.get('date')).unix();
       data[date] = stat.getStudiedCount();
     }
 
@@ -505,12 +504,12 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {Boolean} [current] whether to return the current or the best streak.
    * @returns {Number} The number of days the user has studied
    */
-  getMonthlyStreak: function(current) {
-    var bestStreak = 0;
-    var currentStreak = 0;
+  getMonthlyStreak: function (current) {
+    let bestStreak = 0;
+    let currentStreak = 0;
 
-    for (var i = 0, length = this.length; i < length; i++) {
-      var stat = this.at(i);
+    for (let i = 0, length = this.length; i < length; i++) {
+      let stat = this.at(i);
       if (stat.hasBeenStudied()) {
         currentStreak++;
       }
@@ -534,7 +533,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {String} endDate
    * @returns {Promise<Number>} the number of items added in the date range
    */
-  getNumItemsAddedInPeriod: function(startDate, endDate) {
+  getNumItemsAddedInPeriod: function (startDate, endDate) {
     return new Promise((resolve, reject) => {
       this.fetchRange(startDate, endDate, {
         success: () => {
@@ -562,7 +561,6 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
             }
             if (end.get('char')[part]) {
               addedEnd += (end.get('char')[part].learned.all + end.get('char')[part].learning.all);
-
             }
           });
 
@@ -571,7 +569,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
           resolve(totalAdded);
         },
         error: reject,
-        remove: false
+        remove: false,
       });
     });
   },
@@ -582,12 +580,12 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {String} end  YYYY-MM-DD formatted date from where to end (inclusive) counting
    * @returns {Number} the number of days the user studied
    */
-  getNumDaysStudiedInPeriod: function(start, end) {
-    var daysStudied = 0;
-    var models = this._getStatsInRange(start, end);
+  getNumDaysStudiedInPeriod: function (start, end) {
+    let daysStudied = 0;
+    let models = this._getStatsInRange(start, end);
 
-    daysStudied = models.reduce(function(sum, m) {
-      var timeStudied = m.get('timeStudied').day;
+    daysStudied = models.reduce(function (sum, m) {
+      let timeStudied = m.get('timeStudied').day;
       return timeStudied > 0 ? sum + 1 : sum;
     }, daysStudied);
 
@@ -603,7 +601,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Number} The number of items learned in the time period
    * @method getItemsLearnedForPeriod
    */
-  getItemsLearnedForPeriod: function(itemType, timePeriod, stat) {
+  getItemsLearnedForPeriod: function (itemType, timePeriod, stat) {
     itemType = itemType || 'word';
     timePeriod = timePeriod || 'month';
     stat = stat || this.at(0);
@@ -617,8 +615,8 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {String} end  YYYY-MM-DD formatted date from where to end (inclusive) counting
    * @returns {Number} the number of days the user studied
      */
-  getRetentionRateForPeriod: function(start, end, itemType, part) {
-    var stats = this._getStatsInRange(start, end);
+  getRetentionRateForPeriod: function (start, end, itemType, part) {
+    let stats = this._getStatsInRange(start, end);
 
     return this.getRetentionRate(stats, itemType, part);
   },
@@ -630,15 +628,15 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {String} part
    * @returns {number|*}
      */
-  getRetentionRate: function(stats, itemType, part) {
-    var remembered = 0;
-    var studied = 0;
-    var retentionRate;
+  getRetentionRate: function (stats, itemType, part) {
+    let remembered = 0;
+    let studied = 0;
+    let retentionRate;
 
     itemType = itemType || 'word';
     part = part || 'rune';
 
-    _.forEach(stats, function(stat) {
+    _.forEach(stats, function (stat) {
       studied += stat.get(itemType)[part].studied.day;
       remembered += stat.get(itemType)[part].remembered.day;
     });
@@ -656,13 +654,13 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Number} the sum of the desired stat for the period
    * @method getSumItemsLearnedForPeriod
      */
-  getSumItemsLearnedForPeriod: function(itemType, start, end) {
+  getSumItemsLearnedForPeriod: function (itemType, start, end) {
     // TODO: fetch stats if missing?
-    var models = this._getStatsInRange(start, end);
-    var learned = 0;
-    var self = this;
+    let models = this._getStatsInRange(start, end);
+    let learned = 0;
+    let self = this;
 
-    learned = models.reduce(function(sum, m) {
+    learned = models.reduce(function (sum, m) {
       return sum + self.getItemsLearnedForPeriod(itemType, 'day', m);
     }, learned);
 
@@ -680,11 +678,11 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    *                   the sum of the time studied during the specified period.
    * @method getTimeStudiedForPeriod
    */
-  getTimeStudiedForPeriod: function(start, end, keepInMs) {
-    var timeStudied = 0;
-    var models = this._getStatsInRange(start, end);
+  getTimeStudiedForPeriod: function (start, end, keepInMs) {
+    let timeStudied = 0;
+    let models = this._getStatsInRange(start, end);
 
-    timeStudied = models.reduce(function(sum, m) {
+    timeStudied = models.reduce(function (sum, m) {
       return sum + m.get('timeStudied').day;
     }, timeStudied);
 
@@ -701,7 +699,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @param {String} end the end date (inclusive) in YYYY-MM-DD format
    * @returns {Array<ProgressStatModel>} The models within the specified range
    */
-  getStatsInRange: function(start, end) {
+  getStatsInRange: function (start, end) {
     return this._getStatsInRange(start, end);
   },
 
@@ -712,10 +710,10 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
    * @returns {Array<ProgressStatModel>} The models within the specified range
    * @private
    */
-  _getStatsInRange: function(start, end) {
-    var endFound = false;
-    var models = [];
-    var momentEnd = moment(end, app.config.dateFormatApp);
+  _getStatsInRange: function (start, end) {
+    let endFound = false;
+    let models = [];
+    let momentEnd = moment(end, app.config.dateFormatApp);
 
     // if the end date requested is in the "future" and the collection
     // doesn't go that far, just pick the most recent model available as the end.
@@ -723,7 +721,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
       end = this.at(0).id;
     }
 
-    for (var i = 0; i < this.length; i++) {
+    for (let i = 0; i < this.length; i++) {
       if (this.at(i).id === end) {
         endFound = true;
       }
@@ -736,7 +734,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
     }
 
     return models;
-  }
+  },
 });
 
 module.exports = ProgressStatsCollection;

@@ -13,7 +13,7 @@ const VocabSentenceComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'click .sentence-writing': 'handleClickValue'
+    'click .sentence-writing': 'handleClickValue',
   },
 
   /**
@@ -27,7 +27,7 @@ const VocabSentenceComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     options = options || {};
 
     this.prompt = options.prompt;
@@ -42,7 +42,7 @@ const VocabSentenceComponent = GelatoComponent.extend({
    * @method render
    * @returns {VocabSentenceComponent}
    */
-  render: function() {
+  render: function () {
     this.renderTemplate();
     return this;
   },
@@ -52,7 +52,7 @@ const VocabSentenceComponent = GelatoComponent.extend({
    * @param [reviews]
    * @param {VocabModel} [vocab] the VocabModel to fetch a sentence for
    */
-  fetchAndShowSentence: function(reviews, vocab) {
+  fetchAndShowSentence: function (reviews, vocab) {
     if (this.prompt && !this.prompt.reviews && !this.vocab && !vocab) {
       return;
     }
@@ -85,7 +85,7 @@ const VocabSentenceComponent = GelatoComponent.extend({
    * Gets the sentence for the current vocab
    * @return {SentenceModel} the sentence for the vocab
    */
-  getSentence: function() {
+  getSentence: function () {
     const vocab = this.getVocab() || {};
     const sentence = vocab.getSentence ? vocab.getSentence() : null;
 
@@ -96,7 +96,7 @@ const VocabSentenceComponent = GelatoComponent.extend({
    * Gets the view's vocab model
    * @return {VocabModel}
    */
-  getVocab: function() {
+  getVocab: function () {
     return this.prompt && this.prompt.reviews ? this.prompt.reviews.vocab : this.vocab;
   },
 
@@ -104,7 +104,7 @@ const VocabSentenceComponent = GelatoComponent.extend({
    * @method handleClickValue
    * @param {Event} event
    */
-  handleClickValue: function(event) {
+  handleClickValue: function (event) {
     event.preventDefault();
     if (this.$('.hint').hasClass('open')) {
       this.$('.hint').removeClass('open');
@@ -119,9 +119,9 @@ const VocabSentenceComponent = GelatoComponent.extend({
    * Shows or hides the the component's content and a loading spinner
    * @param {Boolean} [show] whether to show the spinner and hide the content
    */
-  toggleFetchingSpinner: function(show) {
+  toggleFetchingSpinner: function (show) {
     this.$('.fa-spinner').toggleClass('hidden', !show);
-  }
+  },
 
 });
 

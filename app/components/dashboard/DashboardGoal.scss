@@ -1,22 +1,54 @@
 @import "../../styles/_variables";
 
 gelato-component[data-name='dashboard-goal'] {
-
   margin-top: 30px;
 
   .highcharts-container {
     margin-left: auto;
+
     .highcharts-title {
       font-family: $font-slab;
     }
   }
 
   #doughnut-column {
-    margin-top: 20px;
+    margin-top: 0;
   }
 
   #option-column {
-    margin-top: 80px;
+    margin-top: 68px;
+
+    a {
+      font-size: 18px;
+      height: auto;
+    }
   }
 
+  #due-column {
+    color: $grey3;
+    font-size: 16px;
+  }
+}
+
+.mobile {
+  gelato-component[data-name='dashboard-goal'] {
+    text-align: center;
+
+    #doughnut-column {
+      margin-top: 0;
+    }
+
+    #option-column {
+      margin-top: 0;
+    }
+
+    .highcharts-container {
+      margin: auto;
+    }
+
+    #due-column {
+      margin-top: -10px;
+      margin-bottom: 20px;
+    }
+  }
 }

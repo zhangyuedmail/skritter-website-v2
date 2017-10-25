@@ -1,0 +1,18 @@
+# Directories
+/build/
+/cordova/
+/cordova-android/
+/cordova-ios/
+/node_modules/
+/output/
+/public/
+/app/assets/
+
+# Files
+*.apk
+*.keystore
+*.log
+*.build.json
+*.billing.json
+*.scss
+*.jade

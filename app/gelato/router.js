@@ -2,14 +2,14 @@
  * @class GelatoRouter
  * @extends {Backbone.Router}
  */
-var GelatoRouter = Backbone.Router.extend({
+let GelatoRouter = Backbone.Router.extend({
   /**
    * @method go
    * @param {String} path
    * @param {Object} [options]
    * @returns {GelatoPage}
    */
-  go: function(path, options) {
+  go: function (path, options) {
     this.trigger('page:navigate', path, options);
   },
 
@@ -18,19 +18,19 @@ var GelatoRouter = Backbone.Router.extend({
    * @param {Object} [options]
    * @returns {Boolean}
    */
-  start: function(options) {
+  start: function (options) {
     options = _.defaults(
       options || {},
       {
         pushState: app.isWebsite(),
-        root: '/'
+        root: '/',
       }
     );
     return Backbone.history.start({
       pushState: options.pushState,
-      root: options.root
+      root: options.root,
     });
-  }
+  },
 });
 
 module.exports = GelatoRouter;

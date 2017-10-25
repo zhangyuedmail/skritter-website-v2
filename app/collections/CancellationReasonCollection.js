@@ -29,9 +29,9 @@ const CancellationReasonCollection = BaseSkritterCollection.extend({
    * @param {Object} response
    * @returns Array
    */
-  parse: function(response) {
+  parse: function (response) {
     return response.CancellationReasons;
-  }
+  },
 });
 
 module.exports = CancellationReasonCollection;

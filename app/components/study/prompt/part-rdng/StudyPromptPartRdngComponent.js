@@ -1,6 +1,6 @@
 const GelatoComponent = require('gelato/component');
 const vent = require('vent');
-const config = require('config');
+// const config = require('config');
 
 /**
  * @class StudyPromptPartRdngComponent
@@ -21,7 +21,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
   events: {
     'keydown #reading-prompt': 'handleReadingPromptKeydown',
     'input #reading-prompt': 'handleReadingPromptInput',
-    'click gelato-component': 'handlePromptCanvasClick'
+    'click gelato-component': 'handlePromptCanvasClick',
   },
 
   /**
@@ -41,11 +41,11 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @param {Object} options
    * @constructor
    */
-  initialize: function(options) {
+  initialize: function (options) {
     this.prompt = options.prompt;
     this.prompt.review = this.prompt.reviews.current();
 
-    this.userReading =  this.prompt.review.get('userReading') || '';
+    this.userReading = this.prompt.review.get('userReading') || '';
 
     // only support pinyin for first go around
     this.showReadingPrompt = app.isChinese() &&
@@ -63,7 +63,8 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
 
     // for testing
     this.listenTo(vent, 'test:processpinyin', () => {
-      this.handleReadingPromptInput($.Event('input', {keyCode: 97}));
+      const event = $.Event;
+      this.handleReadingPromptInput(event('input', {keyCode: 97}));
     });
   },
 
@@ -71,21 +72,18 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @method render
    * @returns {StudyPromptPartRdngComponent}
    */
-  render: function() {
+  render: function () {
     if (app.isMobile()) {
-      this.template = require('./MobileStudyPromptPartRdngComponent.jade')
+      this.template = require('./MobileStudyPromptPartRdngComponent.jade');
     }
 
     this.renderTemplate();
 
     this.prompt.canvas.grid = false;
     this.prompt.canvas.reset();
-    this.prompt.navigation.render();
+    this.prompt.navigation.update();
     this.prompt.shortcuts.tone.stop_listening();
-    this.prompt.toolbarAction.buttonCorrect = true;
-    this.prompt.toolbarAction.buttonErase = false;
-    this.prompt.toolbarAction.buttonShow = false;
-    this.prompt.toolbarAction.buttonTeach = false;
+    this.prompt.toolbarAction.setPromptType('rdng');
 
     if (this.prompt.review.isComplete()) {
       this.renderComplete();
@@ -100,15 +98,14 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @method renderComplete
    * @returns {StudyPromptPartRuneComponent}
    */
-  renderComplete: function() {
+  renderComplete: function () {
     this.prompt.review.stop();
     this.prompt.review.set('complete', true);
-    this.prompt.navigation.render();
+    this.prompt.navigation.update();
     this.prompt.shortcuts.grading.listen();
-    this.prompt.toolbarAction.render();
-    this.prompt.toolbarGrading.render();
-    this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
-    this.prompt.toolbarVocab.render();
+    this.prompt.toolbarAction.update();
+    this.prompt.toolbarGrading.update(this.prompt.review.get('score'));
+    this.prompt.toolbarVocab.update();
     this.prompt.vocabContained.render();
     this.prompt.vocabDefinition.render();
     this.prompt.vocabMnemonic.render();
@@ -137,13 +134,13 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @method renderIncomplete
    * @returns {StudyPromptPartRuneComponent}
    */
-  renderIncomplete: function() {
+  renderIncomplete: function () {
     this.prompt.review.start();
     this.prompt.review.set('complete', false);
     this.prompt.shortcuts.grading.stop_listening();
-    this.prompt.toolbarAction.render();
-    this.prompt.toolbarGrading.render();
-    this.prompt.toolbarVocab.render();
+    this.prompt.toolbarAction.update();
+    this.prompt.toolbarGrading.update();
+    this.prompt.toolbarVocab.update();
     this.prompt.vocabContained.render();
     this.prompt.vocabDefinition.render();
     this.prompt.vocabMnemonic.render();
@@ -167,8 +164,8 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    */
   completeReading: function () {
     this._processTextPreCorrection();
-    var vocabReading = this.prompt.review.vocab.get('reading');
-    var userReading = this.$('#reading-prompt').val();
+    let vocabReading = this.prompt.review.vocab.get('reading');
+    let userReading = this.$('#reading-prompt').val();
 
     this.userReading = userReading;
 
@@ -194,23 +191,20 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     } else {
       this.prompt.shortcuts.registerAll();
     }
-
   },
 
   /**
    * @method handlePromptCanvasClick
    */
-  handlePromptCanvasClick: function(e) {
-
+  handlePromptCanvasClick: function (e) {
     // let's let the user click on the reading prompt, eh?
-    if (e.target.id === "reading-prompt") {
+    if (e.target.id === 'reading-prompt') {
       return;
     }
 
     if (this.prompt.review.isComplete()) {
       this.prompt.next();
     } else {
-
       // don't advance prompt on incomplete reviews with the text input
       if (this.showReadingPrompt) {
         return;
@@ -225,7 +219,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
   /**
    * @method handlePromptToolbarGradingMouseup
    */
-  handlePromptToolbarGradingMouseup: function(value) {
+  handlePromptToolbarGradingMouseup: function (value) {
     this.prompt.review.set('score', value);
 
     if (app.user.get('autoAdvancePrompts')) {
@@ -236,7 +230,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
   /**
    * @method handlePromptToolbarActionCorrect
    */
-  handlePromptToolbarActionCorrect: function() {
+  handlePromptToolbarActionCorrect: function () {
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
     this.prompt.review.set('complete', true);
@@ -247,7 +241,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * Handles enter keypress to prevent weird input stuff and double events from firing
    * @param {jQuery.Event} event the keyup event
    */
-  handleReadingPromptKeydown: function(event) {
+  handleReadingPromptKeydown: function (event) {
     this.prompt.shortcuts.unregisterAll();
     if (event.keyCode === 13) {
       event.stopPropagation();
@@ -262,8 +256,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * (pinyin or kana)
    * @param {jQuery.Event} event a keypress event
    */
-  handleReadingPromptInput: function(event) {
-
+  handleReadingPromptInput: function (event) {
     // left and right arrows
     if (event.keyCode === 37 || event.keyCode === 39) {
       if (!this.$('#reading-prompt').val()) {
@@ -288,7 +281,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @param {String} vocabReading a list of readings, separated by a comma and a space
    * @returns {Boolean} whether the user's reading was found in the parsed list of vocab readings
    */
-  isCorrect: function(userReading, vocabReading) {
+  isCorrect: function (userReading, vocabReading) {
     if (app.isChinese()) {
       return this.isCorrectZH(userReading, vocabReading);
     } else {
@@ -303,16 +296,16 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @return {Boolean} whether the user's response is correct
    * @method isCorrectZH
    */
-  isCorrectZH: function(userReading, vocabReading) {
+  isCorrectZH: function (userReading, vocabReading) {
     let finalAnswer = '';
     let vocabReadings = [];
 
     if (this.zhInputType === 'pinyin') {
       finalAnswer = this._prepareFinalAnswerPinyin(userReading);
-      vocabReadings = vocabReading.split(', ').map(function(r) {
+      vocabReadings = vocabReading.split(', ').map(function (r) {
         return app.fn.pinyin.toTone(r)
           .replace(' ... ', '')
-          .replace("'", '');
+          .replace('\'', '');
       });
     }
 
@@ -323,7 +316,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * Focuses the user's input on the prompt's text input.
    * @methodSetReadingPromptFocus
    */
-  setReadingPromptFocus: function() {
+  setReadingPromptFocus: function () {
     const input = this.$('#reading-prompt');
     const rawInputEl = input[0];
     const textLength = input.val().length;
@@ -335,35 +328,34 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     }
   },
 
-  _applyGradeToPromptInput: function() {
+  _applyGradeToPromptInput: function () {
     // TODO: a metric (not imperial) crapton of analysis on the userAnswer.
     // Find out what they got wrong and let the user know. Learning!
     if (this.prompt.review.isComplete() && this.showReadingPrompt) {
-      var grade = this.prompt.review.get('score');
+      let grade = this.prompt.review.get('score');
 
       // this.$('#reading-prompt').addClass('prompt-grade-' + grade);
       this._applyGradeColoring(grade);
     }
   },
 
-  _applyGradeColoring: function(score) {
-    var $answer = this.$('.answer');
-    var $promptInput = this.$('#reading-prompt');
+  _applyGradeColoring: function (score) {
+    let $answer = this.$('.answer');
+    let $promptInput = this.$('#reading-prompt');
 
     score = score || this.prompt.review.get('score');
     $answer.removeClass('grade-1 grade-2 grade-3 grade-4');
-    $answer.addClass("grade-" + score);
+    $answer.addClass('grade-' + score);
     $promptInput.removeClass('grade-1 grade-2 grade-3 grade-4');
-    $promptInput.addClass("prompt-grade-" + score);
+    $promptInput.addClass('prompt-grade-' + score);
   },
 
   /**
    * Handles what happens when the user submits the reading answer based on its completion.
    * @private
    */
-  _processPromptSubmit: function() {
+  _processPromptSubmit: function () {
     if (this.prompt.review.isComplete()) {
-
       // if it's already answered but the user changed their previous answer, regrade it
       if (this.showReadingPrompt && this.$('#reading-prompt').val() !== this.userReading) {
         this.completeReading();
@@ -381,8 +373,8 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * Calls the appropriate converter for the language.
    * @private
    */
-  _processPromptInput: function(event) {
-    var newValue = '';
+  _processPromptInput: function (event) {
+    let newValue = '';
     if (app.isChinese()) {
       if (this.zhInputType === 'pinyin') {
         newValue = this._parsePinyinInput(null, event);
@@ -403,7 +395,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @returns {String} the processed input string
    * @private
    */
-  _parsePinyinInput: function(input, event) {
+  _parsePinyinInput: function (input, event) {
     input = input || this.$('#reading-prompt').val();
 
     const toProcess = input;
@@ -428,7 +420,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @return {string} the input with tone marks and numbers properly added
    * @private
    */
-  _processPinyinAddition: function(input) {
+  _processPinyinAddition: function (input) {
     const processed = [];
 
     // regex helpers
@@ -443,7 +435,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
       '2': '₂',
       '3': '₃',
       '4': '₄',
-      '5': '₅'
+      '5': '₅',
     };
 
     const revSubMap = {
@@ -451,7 +443,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
       '₂': '2',
       '₃': '3',
       '₄': '4',
-      '₅': '5'
+      '₅': '5',
     };
 
     const initials = /(b)|(p)|(m)|(f)|(d)|(t)|(n)|(l)|(r)|(g)|(k)|(h)|(j)|(q)|(x)|(z)|(c)|(s)|(y)|(w)/;
@@ -471,7 +463,6 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
 
     // loop through each part and perform the necessary mutations
     for (let i = 0; i < input.length; i++) {
-
       // setup our data
       wordlike = input[i];
       wordlikeMinusEnd = wordlike.slice(0, -1);
@@ -493,11 +484,8 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
       // case 1: mutation for a new complete word that needs to be added e.g. gong1 -> gōng₁ if the conversion matched a pattern
       if (res && res !== wordlike && currTone.length) {
         processed.push(res + subMap[currTone[0]]);
-      }
-
-      // case 2: change the tone for an existing word's tone góng₂1 -> gōng₁
-      else if ((changeToneNum.exec(wordlike) || []).length) {
-
+      } else if ((changeToneNum.exec(wordlike) || []).length) {
+        // case 2: change the tone for an existing word's tone góng₂1 -> gōng₁
         const toChange = input[i-1];
         const newTone = wordlike[1];
         res = app.fn.pinyin.removeToneMarks(toChange);
@@ -510,31 +498,23 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
 
         // push the new version of the word onto the stack e.g. gōng₁
         processed.push(res + subMap[newTone]);
-      }
-
-      // case 3: if both the current wordlike and wordlikeMinusEnd are valid words
-      // e.g. liàng and liàn, always take the longer version
-      else if (i !== input.length - 1 && wordlike && revSubMap[input[i + 1]] &&
+      } else if (i !== input.length - 1 && wordlike && revSubMap[input[i + 1]] &&
+        // case 3: if both the current wordlike and wordlikeMinusEnd are valid words
+        // e.g. liàng and liàn, always take the longer version
         app.fn.pinyin.toTone(app.fn.pinyin.removeToneMarks(wordlike) + revSubMap[input[i + 1]]) ) {
-
         processed.push(wordlike.replace(/v/g, 'ü'));
-      }
+      } else if (wordlikeMinusEnd && resMinusEnd && resMinusEnd !== wordlikeMinusEnd + '5' && initials.test(lastChar) &&
 
-      // case 4: add pinyin neutral tone e.g. (typing 有的時候) yǒudes -> yǒude₅s
-      else if (wordlikeMinusEnd && resMinusEnd && resMinusEnd !== wordlikeMinusEnd + '5' && initials.test(lastChar) &&
         !resPotentialNeutral && !lastWordlikeCharIsN && !nextWordlikeIsToneChange) {
-
         processed.push(resMinusEnd + subMap['5']);
-
+        // case 4: add pinyin neutral tone e.g. (typing 有的時候) yǒudes -> yǒude₅s
         // push the unprocessed last character we chopped off
         processed.push(lastChar);
-      }
+      } else {
+        // TODO: case n: pinyin was valid word, user added a letter that isn't valid e.g. gōng₁ -> gōnwg₁
+        // TODO: case n+1: refactor all this into a state machine or something
 
-      // TODO: case n: pinyin was valid word, user added a letter that isn't valid e.g. gōng₁ -> gōnwg₁
-      // TODO: case n+1: refactor all this into a state machine or something
-
-      // fallthrough case: no mutations made
-      else {
+        // fallthrough case: no mutations made
         processed.push(wordlike.replace(/v/g, 'ü'));
       }
     }
@@ -549,34 +529,34 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @return {string} the input with tone marks and numbers properly added
    * @private
    */
-  _processPinyinDeletion: function(input) {
-    var processed = [];
+  _processPinyinDeletion: function (input) {
+    let processed = [];
 
     // regex helpers
-    var toneNumInput = /[1-5]/;
+    // let toneNumInput = /[1-5]/;
 
     // needs positive lookahead to keep the number in when we split
-    var toneSubscript = /([₁-₅][1-5]?)/;
+    let toneSubscript = /([₁-₅][1-5]?)/;
 
     // used to detect if a user is attempting to change an existing tone
-    var isToneSubscript = /[₁-₅]/;
+    let isToneSubscript = /[₁-₅]/;
 
-    var subMap = {
-      '1': '₁',
-      '2': '₂',
-      '3': '₃',
-      '4': '₄',
-      '5': '₅'
-    };
+    // let subMap = {
+    //   '1': '₁',
+    //   '2': '₂',
+    //   '3': '₃',
+    //   '4': '₄',
+    //   '5': '₅',
+    // };
 
     // input will be split into a format like ["gōng", "₁", "zuo4"]
     input = input.split(toneSubscript);
-    var wordlike;
-    var currTone;
-    var res;
-    var removedToneVowel;
+    let wordlike;
+    // let currTone;
+    // let res;
+    let removedToneVowel;
 
-    for (var i = 0; i < input.length; i++) {
+    for (let i = 0; i < input.length; i++) {
       wordlike = input[i];
       removedToneVowel = app.fn.pinyin.removeToneMarks(wordlike);
 
@@ -584,10 +564,8 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
       if (removedToneVowel !== wordlike &&
         (i+1 >= input.length || (i+1 < input.length && !isToneSubscript.test(input[i+1])))) {
         processed.push(removedToneVowel);
-      }
-
-      // fallthrough case: nothing to change or check
-      else {
+      } else {
+        // fallthrough case: nothing to change or check
         processed.push(wordlike);
       }
     }
@@ -605,8 +583,8 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @method _prepareFinalAnswerPinyin
    * @private
    */
-  _prepareFinalAnswerPinyin: function(answer) {
-    var modAnswer = answer;
+  _prepareFinalAnswerPinyin: function (answer) {
+    let modAnswer = answer;
 
     // remove tone subscripts
     modAnswer = modAnswer.split(/[₁-₅]/)
@@ -626,11 +604,11 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @method _processTextPreCorrection
    * @private
    */
-  _processTextPreCorrection: function() {
+  _processTextPreCorrection: function () {
     let text = this.$('#reading-prompt').val();
 
     if (text && app.isChinese()) {
-      text = text.toLowerCase()
+      text = text.toLowerCase();
 
       if (this.zhInputType === 'pinyin') {
         text = this._processPinyinPreCorrection(text);
@@ -648,17 +626,18 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
    * @method _processPinyinPreCorrection
    * @private
    */
-  _processPinyinPreCorrection: function(input) {
-    var output = input;
+  _processPinyinPreCorrection: function (input) {
+    let output = input;
     if (/[a-z]/.test(input.substring(input.length - 1))) {
       // TODO: check that syllable is valid before appending a 5
-      var wordlike = input.slice(0, -1);
-      if (app.fn.pinyin.toTone(wordlike.replace(/ü/g, 'v') + '5'))
-        output = output + '₅';
+      let wordlike = input.slice(0, -1);
+      if (app.fn.pinyin.toTone(wordlike.replace(/ü/g, 'v') + '5')) {
+output = output + '₅';
+}
     }
 
     return output;
-  }
+  },
 
 });
 
