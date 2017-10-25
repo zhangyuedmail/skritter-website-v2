@@ -602,6 +602,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    */
   remove: function () {
     $('#fps-counter').remove();
+    this.disableInput();
+    this.disableCanvas();
     return GelatoComponent.prototype.remove.call(this);
   },
 
