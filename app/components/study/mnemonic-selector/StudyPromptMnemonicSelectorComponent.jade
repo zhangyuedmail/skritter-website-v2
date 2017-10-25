@@ -1,5 +1,6 @@
-- const currentMnemonic = view.collection.vocab.getMnemonic();
-- const hasMnemFromAnotherUser = currentMnemonic && currentMnemonic.creator !== app.user.id;
+- var currentMnemonic = view.collection.vocab.getMnemonic();
+- var hasMnemFromAnotherUser = currentMnemonic && currentMnemonic.creator !== app.user.id;
+
 gelato-component(data-name='study-prompt-mnemonic-selector')
   if view.collection.state === 'fetching'
     p.text-center
