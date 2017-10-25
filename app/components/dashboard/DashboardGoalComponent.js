@@ -150,6 +150,10 @@ const DashboardGoalComponent = GelatoComponent.extend({
         const totalReviews = app.user.stats.getDailyItemsReviewed();
         titleText = totalReviews + ' / ' + (goal.value || 0) + '<br>items';
         completion = app.user.stats.getGoalItemPercent();
+
+        if (!goal.value) {
+          titleText = totalReviews + ' reviews today';
+        }
         break;
       }
       case 'time': {
@@ -157,6 +161,9 @@ const DashboardGoalComponent = GelatoComponent.extend({
         titleText = moment(totalTime * 1000).format('m') + ' / ' + (goal.value || 0) + '<br>minutes';
         completion = app.user.stats.getGoalTimePercent();
 
+        if (!goal.value) {
+          titleText = totalTime + ' minutes today';
+        }
         break;
       }
     }
