@@ -1,8 +1,6 @@
 'use strict';
 
-const shell = require('shelljs');
 const application = require('./package.json');
-
 
 exports.config = {
   files: {
@@ -50,7 +48,7 @@ exports.config = {
       delay: 100,
     },
     babel: {
-      ignore: ['app/data/*', 'node_modules/*', 'vendor/*'],
+      ignore: ['node_modules/*', 'vendor/*'],
       presets: ['env'],
     },
     replace: {
