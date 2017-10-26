@@ -9,8 +9,8 @@
   },
   "version": "2.3.5",
   "versionCode": "20305",
-  "iosVersion": "3.0.1",
-  "iosVersionBundle": "3001",
+  "iosVersion": "3.0.2",
+  "iosVersionBundle": "3002",
   "license": "MIT",
   "repository": {
     "type": "git",
