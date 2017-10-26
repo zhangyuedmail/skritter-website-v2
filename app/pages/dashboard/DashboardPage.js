@@ -224,7 +224,7 @@ const DashboardPage = GelatoPage.extend({
    * @private
    */
   _checkForReleaseNotes () {
-    if (!app.getSetting('releaseNotesViewed-' + app.config.version)) {
+    if (!app.isIOS() && !app.getSetting('releaseNotesViewed-' + app.config.version)) {
       if (moment().diff(moment(Number(app.config.timestamp) * 1000), 'days') < 4) {
         this._showReleaseNotes();
         app.setSetting('releaseNotesViewed-' + app.config.version, true);
