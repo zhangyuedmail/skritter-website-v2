@@ -1,0 +1,162 @@
+@import "../../../styles/_variables";
+
+gelato-component[data-name='practice-pad-toolbar'] {
+  font-family: $font-slab;
+  font-size: 24px;
+  font-weight: 300;
+  height: 35px;
+  margin: 20px auto;
+  max-width: 1280px;
+  padding-left: 30px;
+  padding-right: 30px;
+
+  i {
+    cursor: pointer;
+    font-size: 28px;
+  }
+
+  .text-left i {
+    margin-right: 10%;
+  }
+
+  .text-right i {
+    margin-left: 10%;
+  }
+
+  .vocablist-due {
+    font-size: 14px;
+    font-weight: 700;
+    padding-top: 2px;
+  }
+
+  .vocablist-name {
+    font-size: 14px;
+    font-weight: 700;
+    padding-top: 10px;
+  }
+
+  .vocablist-section {
+    font-size: 14px;
+  }
+
+  #button-study-settings {
+    -ms-transform: rotate(0deg) scale(1,1);
+    -webkit-transform: rotate(0deg) scale(1,1);
+    transform: rotate(0deg) scale(1,1);
+    -webkit-transition: transform 50ms; /* Safari */
+    transition: transform 75ms;
+
+    &:hover {
+      -ms-transform: rotate(15deg) scale(1.15,1.15);
+      -webkit-transform: rotate(15deg) scale(1.15,1.15);
+      transform: rotate(15deg) scale(1.15,1.15);
+    }
+  }
+
+  .adding {
+    -webkit-animation: spin 2s ease-out infinite;
+    -moz-animation: spin 2s ease-out infinite;
+    animation: spin 2s ease-out infinite;
+    cursor: default;
+    color: $green6;
+  }
+
+  #add-popup {
+    position: absolute;
+    top: 35px;
+    right: 15px;
+    background: $white1;
+    padding: 15px;
+    color: $grey6;
+    font-size: 18px;
+    z-index: 1001;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+
+    .add-amt {
+      color: $green5;
+      cursor: pointer;
+      padding: 10px 15px;
+
+      &:hover {
+        background: $green3;
+        color: $green6;
+      }
+    }
+
+    .popup-label {
+      color: $grey4;
+      margin-bottom: 10px;
+    }
+  }
+
+}
+
+@-moz-keyframes spin {
+   100% {
+    color: $green4;
+    -moz-transform: rotate(0deg);
+  }
+  75% {
+    -moz-transform: rotate(20deg);
+  }
+  50% {
+    color: $green6;
+    -moz-transform: rotate(0deg);
+  }
+  25% {
+    -moz-transform: rotate(-20deg);
+  }
+  0% {
+    color: $green4;
+    -moz-transform: rotate(0deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  100% {
+    color: $green4;
+    -webkit-transform: rotate(0deg);
+  }
+  75% {
+    -webkit-transform: rotate(20deg);
+  }
+  50% {
+    color: $green6;
+    -webkit-transform: rotate(0deg);
+  }
+  25% {
+    -webkit-transform: rotate(-20deg);
+  }
+  0% {
+    color: $green4;
+    -webkit-transform: rotate(0deg);
+  }
+}
+
+@keyframes spin {
+  100% {
+    color: $green4;
+    -webkit-transform: rotate(0deg);
+    transform:rotate(0deg);
+  }
+  75% {
+    color: $green6;
+    -webkit-transform: rotate(20deg);
+    transform:rotate(20deg);
+  }
+  50% {
+
+    -webkit-transform: rotate(0deg);
+    transform:rotate(0deg);
+  }
+  25% {
+    -webkit-transform: rotate(-20deg);
+    transform:rotate(-20deg);
+  }
+  0% {
+    color: $green4;
+    -webkit-transform: rotate(0deg);
+    transform:rotate(0deg);
+  }
+}
