@@ -24,13 +24,13 @@ const PracticePadPage = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./PracticePad.jade'),
+  template: require('./Practice.jade'),
 
   /**
    * @property title
    * @type {String}
    */
-  title: 'Study - Skritter',
+  title: 'Practice - Skritter',
 
   /**
    * @method initialize
@@ -86,7 +86,7 @@ const PracticePadPage = GelatoPage.extend({
    */
   render: function () {
     if (app.isMobile()) {
-      this.template = require('./MobilePracticePad.jade');
+      this.template = require('./MobilePractice.jade');
     }
 
     this.renderTemplate();
