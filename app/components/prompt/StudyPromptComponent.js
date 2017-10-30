@@ -495,6 +495,29 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
+   * Toggles an indicator to display to the user whether the prompt is currently loading something
+   * @param {Boolean} loading whether the prompt is loading anything
+   */
+  toggleLoadingIndicator (loading) {
+    if (loading === undefined) {
+      loading = !(this._views['prompt'].$panelLeft.css('opacity') === 0.4);
+    }
+    const componentName = app.isMobile() ? 'mobile-study-prompt' : 'study-prompt';
+    this.$('gelato-component[data-name="' + componentName + '"]').toggleClass('fetching-items', loading);
+  },
+
+  /**
+   * Toggles a message using the overlay section of the prompt
+   * @param {String} message the message to display
+   */
+  toggleOverlayMessage (message, show) {
+    if (message) {
+      this.$('#overlay').text(message);
+    }
+    this.$('#overlay').toggle(show);
+  },
+
+  /**
    * Clears the prompt auto-advance timeout and any animations
    * @method stopAutoAdvance
    */
