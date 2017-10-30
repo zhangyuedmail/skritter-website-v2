@@ -242,11 +242,7 @@ module.exports = Router.extend({
    * @param {String} [lang]
    */
   navigateDemo: function (lang) {
-    if (app.user.isLoggedIn()) {
-      this.navigateDashboard();
-    } else {
-      this.go('pages/demo/DemoPage');
-    }
+    this.go('pages/demo/DemoPage');
   },
 
   /**
