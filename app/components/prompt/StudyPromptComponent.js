@@ -1,28 +1,28 @@
 const GelatoComponent = require('gelato/component');
 
-const Canvas = require('components/study/prompt/canvas/StudyPromptCanvasComponent.js');
-const Navigation = require('components/study/prompt/navigation/StudyPromptNavigationComponent.js');
-const PartDefn = require('components/study/prompt/part-defn/StudyPromptPartDefnComponent.js');
-const PartRdng = require('components/study/prompt/part-rdng/StudyPromptPartRdngComponent.js');
-const PartRune = require('components/study/prompt/part-rune/StudyPromptPartRuneComponent.js');
-const PartTone = require('components/study/prompt/part-tone/StudyPromptPartToneComponent.js');
-const ReviewStatus = require('components/study/prompt/review-status/StudyPromptReviewStatusComponent.js');
-const ToolbarAction = require('components/study/prompt/toolbar-action/StudyPromptToolbarActionComponent.js');
-const ToolbarGrading = require('components/study/prompt/toolbar-grading/StudyPromptToolbarGradingComponent.js');
-const ToolbarVocab = require('components/study/prompt/toolbar-vocab/StudyPromptToolbarVocabComponent.js');
-const Tutorial = require('components/study/prompt/tutorial/StudyPromptTutorialComponent.js');
-const VocabContained = require('components/study/prompt/vocab-contained/StudyPromptVocabContainedComponent.js');
-const VocabDefinition = require('components/study/prompt/vocab-definition/StudyPromptVocabDefinitionComponent.js');
-const VocabMnemonic = require('components/study/prompt/vocab-mnemonic/StudyPromptVocabMnemonicComponent.js');
-const VocabReading = require('components/study/prompt/vocab-reading/StudyPromptVocabReadingComponent.js');
+const Canvas = require('components/prompt/canvas/StudyPromptCanvasComponent.js');
+const Navigation = require('components/prompt/navigation/StudyPromptNavigationComponent.js');
+const PartDefn = require('components/prompt/part-defn/StudyPromptPartDefnComponent.js');
+const PartRdng = require('components/prompt/part-rdng/StudyPromptPartRdngComponent.js');
+const PartRune = require('components/prompt/part-rune/StudyPromptPartRuneComponent.js');
+const PartTone = require('components/prompt/part-tone/StudyPromptPartToneComponent.js');
+const ReviewStatus = require('components/prompt/review-status/StudyPromptReviewStatusComponent.js');
+const ToolbarAction = require('components/prompt/toolbar-action/StudyPromptToolbarActionComponent.js');
+const ToolbarGrading = require('components/prompt/toolbar-grading/StudyPromptToolbarGradingComponent.js');
+const ToolbarVocab = require('components/prompt/toolbar-vocab/StudyPromptToolbarVocabComponent.js');
+const Tutorial = require('components/prompt/tutorial/StudyPromptTutorialComponent.js');
+const VocabContained = require('components/prompt/vocab-contained/StudyPromptVocabContainedComponent.js');
+const VocabDefinition = require('components/prompt/vocab-definition/StudyPromptVocabDefinitionComponent.js');
+const VocabMnemonic = require('components/prompt/vocab-mnemonic/StudyPromptVocabMnemonicComponent.js');
+const VocabReading = require('components/prompt/vocab-reading/StudyPromptVocabReadingComponent.js');
 const VocabSentence = require('components/vocab/vocab-sentence/VocabSentenceComponent.js');
-const VocabStyle = require('components/study/prompt/vocab-style/StudyPromptVocabStyleComponent.js');
-const VocabWriting = require('components/study/prompt/vocab-writing/StudyPromptVocabWritingComponent.js');
+const VocabStyle = require('components/prompt/vocab-style/StudyPromptVocabStyleComponent.js');
+const VocabWriting = require('components/prompt/vocab-writing/StudyPromptVocabWritingComponent.js');
 
 const Items = require('collections/ItemCollection.js');
 const Vocabs = require('collections/VocabCollection.js');
 
-const Shortcuts = require('components/study/prompt/StudyPromptShortcuts');
+const Shortcuts = require('components/prompt/StudyPromptShortcuts');
 const vent = require('vent');
 const config = require('config');
 

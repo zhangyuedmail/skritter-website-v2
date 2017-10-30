@@ -1,6 +1,6 @@
 let GelatoPage = require('gelato/page');
 let Vocabs = require('collections/VocabCollection');
-let Prompt = require('components/study/prompt/StudyPromptComponent');
+let Prompt = require('components/prompt/StudyPromptComponent');
 
 /**
  * @class ScratchpadPage
