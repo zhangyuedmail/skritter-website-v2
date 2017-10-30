@@ -1,0 +1,14 @@
+gelato-component(data-name='study-prompt-vocab-style')
+  - var prompt = view.prompt;
+
+  if prompt.reviews
+
+    div.value
+
+      case prompt.reviews.vocab.get('style')
+
+        when 'simp'
+          | simplified
+
+        when 'trad'
+          | traditional

@@ -1,0 +1,79 @@
+gelato-component(data-name='study-prompt-vocab-reading')
+  if view.visible
+    - var prompt = view.prompt;
+    - var readings = prompt.reviews.vocab.getReadingObjects();
+    - var index = 0;
+
+    case prompt.reviews.part
+
+      when 'rune'
+        for reading in readings
+          if (reading.type === 'character')
+            - var review = prompt.reviews.at(index)
+            div.reading(data-position=index)
+              if !prompt.reviews.isComplete() && review.isReadingHidden()
+                button.show-reading.btn.btn-sm.btn-default show
+              else
+                if prompt.reviews.isChinese()
+                  if app.user.get('readingChinese') === 'zhuyin'
+                    span= app.fn.pinyin.toZhuyin(reading.value)
+                  else
+                    span= app.fn.pinyin.toTone(reading.value)
+                else
+                  if app.user.get('readingJapanese') === 'romaji'
+                    span= wanakana.toRomaji(reading.value)
+                  else
+                    span= reading.value
+            - index++
+          else
+            div.filler
+              span= reading.value
+
+      when 'tone'
+        for reading in readings
+          if (reading.type === 'character')
+            - var review = prompt.reviews.at(index)
+            - var classes = []
+            if (prompt.reviews.position === index)
+              - classes.push('active')
+            div.reading(class=classes.join(' '), data-position=index)
+              if prompt.reviews.vocab.isChinese()
+                if review.isReadingHidden()
+                  button.show-reading.btn.btn-sm.btn-default show
+                else
+                  if review.isComplete()
+                    if app.user.get('readingChinese') === 'zhuyin'
+                      span= app.fn.pinyin.toZhuyin(reading.value)
+                    else
+                      span= app.fn.pinyin.toTone(reading.value)
+                  else
+                    if app.user.get('readingChinese') === 'zhuyin'
+                      span= app.fn.pinyin.toZhuyin(reading.value, true)
+                    else
+                      span= app.fn.pinyin.removeToneNumbers(reading.value).replace(/v/g, 'ü')
+              else
+                span= reading.value
+            - index++
+          else
+            div.filler
+              span= reading.value
+
+      default
+        - var review = prompt.reviews.at(0);
+        - var reading = prompt.reviews.vocab.get('reading');
+        div.reading(data-position=0)
+          if prompt.reviews.part === 'defn' && review.isReadingHidden()
+            button.show-reading.btn.btn-sm.btn-default show
+          else if prompt.reviews.part === 'rdng' && !review.isComplete()
+            // hide reading
+          else
+            if prompt.reviews.isChinese()
+              if app.user.get('readingChinese') === 'zhuyin'
+                span= app.fn.pinyin.toZhuyin(reading)
+              else
+                span= app.fn.pinyin.toTone(reading)
+            else
+              if app.user.get('readingJapanese') === 'romaji'
+                span= wanakana.toRomaji(reading)
+              else
+                span= reading

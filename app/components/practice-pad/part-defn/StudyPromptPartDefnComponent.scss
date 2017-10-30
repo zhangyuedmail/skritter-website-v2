@@ -1,0 +1,47 @@
+@import "../../../../styles/_variables";
+
+gelato-component[data-name="study-prompt-part-defn"] {
+
+  height: 100%;
+  padding-top: 20%;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+
+  img {
+    display: none;
+  }
+
+  .answer {
+    color: $grey5;
+    font-family: $font-ubuntu;
+    font-size: 18px;
+    font-weight: 300;
+    margin: 0 10%;
+
+    .definition {
+      border: 1px solid $grey5;
+      padding: 10px;
+      word-wrap: break-word;
+    }
+
+    .reading {
+      color: $white6;
+      margin-bottom: 15px;
+    }
+  }
+
+  .question {
+    color: $grey5;
+    font-family: $font-slab;
+    font-size: 28px;
+    font-weight: 300;
+    margin: 10% 10% 0 10%;
+  }
+
+  .writing {
+    color: #333950;
+    font-size: 64px;
+  }
+
+}

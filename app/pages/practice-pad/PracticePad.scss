@@ -1,0 +1,13 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='practice-pad'] {
+  background: $background-primary;
+  padding-top: 50px;
+}
+
+// need to do it like this for specificity to avoid using !important
+#page-container {
+  gelato-page[data-name='study'] {
+    padding-bottom: 0;
+  }
+}
