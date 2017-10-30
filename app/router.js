@@ -41,6 +41,7 @@ module.exports = Router.extend({
     'logout': 'navigateLogout',
     'mail/unsubscribe': 'navigateMailUnsubscribe',
     'password-reset': 'navigatePasswordReset',
+    'practice': 'navigatePractice',
     'refer': 'navigateUserReferralInfo',
     'refer/:userId': 'navigateApplyUserReferral',
     'scratchpad/:writing(/:part)': 'navigateScratchpad',
@@ -329,6 +330,19 @@ module.exports = Router.extend({
     } else {
       this.navigate('password-reset');
       this.go('pages/password-reset/PasswordResetPage');
+    }
+  },
+
+  /**
+   * @method navigatePracticePad
+   * @param {String} writing
+   * @param {String} [part]
+   */
+  navigatePractice: function (writing, part) {
+    if (app.isDevelopment()) {
+      this.go('pages/practicepad/PracticePadPage', {part: part, writing: writing});
+    } else {
+      this.navigateHome();
     }
   },
 
