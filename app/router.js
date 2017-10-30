@@ -336,7 +336,7 @@ module.exports = Router.extend({
    */
   navigatePractice: function (writing, part) {
     if (app.isDevelopment()) {
-      this.go('pages/practicepad/PracticePadPage', {part: part, writing: writing});
+      this.go('pages/practice/PracticePage', {part: part, writing: writing});
     } else {
       this.navigateHome();
     }
