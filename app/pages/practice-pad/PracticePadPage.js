@@ -1,5 +1,5 @@
 const GelatoPage = require('gelato/page');
-const Prompt = require('components/practice-pad/StudyPromptComponent.js');
+const Prompt = require('components/study/prompt/StudyPromptComponent.js');
 const Toolbar = require('components/study/toolbar/StudyToolbarComponent.js');
 const Items = require('collections/ItemCollection.js');
 const Vocablists = require('collections/VocablistCollection.js');
