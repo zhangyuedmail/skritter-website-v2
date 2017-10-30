@@ -24,7 +24,7 @@ const PracticePadPage = GelatoPage.extend({
    * @property template
    * @type {Function}
    */
-  template: require('./Study'),
+  template: require('./PracticePad.jade'),
 
   /**
    * @property title
@@ -86,7 +86,7 @@ const PracticePadPage = GelatoPage.extend({
    */
   render: function () {
     if (app.isMobile()) {
-      this.template = require('./MobileStudy');
+      this.template = require('./MobilePracticePad.jade');
     }
 
     this.renderTemplate();
