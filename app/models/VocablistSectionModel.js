@@ -45,11 +45,27 @@ const VocablistSectionModel = SkritterModel.extend({
   },
 
   /**
-   * @method urlRoot
+   * @method sync
+   * @param {String} method
+   * @param {Model} model
+   * @param {Object} options
+   */
+  sync: function (method, model, options) {
+    options.headers = _.result(this, 'headers');
+
+    if (method === 'read' && app.config.useV2Gets.vocablists) {
+      options.url = app.getApiUrl(2) + 'gae/vocablists/' + this.vocablistId + '/sections/' + this.get('id');
+    }
+
+    SkritterModel.prototype.sync.call(this, method, model, options);
+  },
+
+  /**
+   * @method url
    * @returns {String}
    */
-  urlRoot: function () {
-    return 'vocablists/' + this.vocablistId + '/sections';
+  url: function () {
+    return app.getApiUrl() + 'vocablists/' + this.vocablistId + '/sections/' + this.get('id');
   },
 
 });
