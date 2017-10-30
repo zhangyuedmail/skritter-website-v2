@@ -486,7 +486,7 @@ const StudyListPage = StudyPage.extend({
     }
 
     return false;
-  }
+  },
 });
 
 module.exports = StudyListPage;
