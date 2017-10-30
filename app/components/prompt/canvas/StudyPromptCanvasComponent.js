@@ -400,15 +400,15 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       self.canvasDirty = true;
       self.inputStage.update();
 
-      function updateInputStage () {
-        if (self.canvasDirty) {
-          self.inputStage.update();
-          self.canvasDirty = false;
-        }
-        self.animationFrameId = window.requestAnimationFrame(updateInputStage);
-      }
-
-      self.animationFrameId = window.requestAnimationFrame(updateInputStage);
+      // function updateInputStage () {
+      //   if (self.canvasDirty) {
+      //     self.inputStage.update();
+      //     self.canvasDirty = false;
+      //   }
+      //   self.animationFrameId = window.requestAnimationFrame(updateInputStage);
+      // }
+      //
+      // self.animationFrameId = window.requestAnimationFrame(updateInputStage);
       self.moveListener = self.inputStage.addEventListener('stagemousemove', self.onInputMove);
       self.upListener = self.inputStage.addEventListener('stagemouseup', onInputUp);
       self.leaveListener = self.inputStage.addEventListener('mouseleave', onInputLeave);
@@ -593,6 +593,10 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   onDisplayStageTick: function (event) {
     if (!event.paused) {
       this.displayStage.update();
+    }
+     if (this.canvasDirty) {
+      this.inputStage.update();
+      this.canvasDirty = false;
     }
   },
 
