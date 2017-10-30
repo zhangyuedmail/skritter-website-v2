@@ -251,7 +251,7 @@ const StudyPage = GelatoPage.extend({
 
         if (!this.items.length && !this.vocablists.length) {
           this.prompt.render();
-          this.prompt.$('#overlay').show();
+          this.prompt.toggleOverlayMessage(null, true);
           ScreenLoader.hide();
         } else if (!this.items.length && this.vocablists.length) {
           if (active) {
@@ -268,7 +268,7 @@ const StudyPage = GelatoPage.extend({
             );
           } else {
             this.prompt.render();
-            this.prompt.$('#overlay').show();
+            this.prompt.toggleOverlayMessage(null, true);
             ScreenLoader.hide();
           }
         } else {
@@ -535,13 +535,7 @@ const StudyPage = GelatoPage.extend({
    * @param {Boolean} loading whether the prompt is loading
    */
   togglePromptLoading: function (loading) {
-    // toggle it if it wasn't passed in
-    if (loading === undefined) {
-      loading = !(this.prompt.$panelLeft.css('opacity') === 0.4);
-    }
-
-    const componentName = app.isMobile() ? 'mobile-study-prompt' : 'study-prompt';
-    this.prompt.$el.find('gelato-component[data-name="' + componentName + '"]').toggleClass('fetching-items', loading);
+    this.prompt.toggleLoadingIndicator(loading);
   },
 
   /**

@@ -250,7 +250,7 @@ const StudyListPage = StudyPage.extend({
             );
           } else {
             this.prompt.render();
-            this.prompt.$('#overlay').show();
+            this.prompt.toggleOverlayMessage(null, true);
             ScreenLoader.hide();
           }
         } else {
@@ -486,21 +486,7 @@ const StudyListPage = StudyPage.extend({
     }
 
     return false;
-  },
-
-  /**
-   * Toggles the loading state on the canvas when fetching new items
-   * @param {Boolean} loading whether the prompt is loading
-   */
-  togglePromptLoading: function (loading) {
-    // toggle it if it wasn't passed in
-    if (loading === undefined) {
-      loading = !(this.prompt.$panelLeft.css('opacity') === 0.4);
-    }
-
-    const componentName = app.isMobile() ? 'mobile-study-prompt' : 'study-prompt';
-    this.prompt.$el.find('gelato-component[data-name="' + componentName + '"]').toggleClass('fetching-items', loading);
-  },
+  }
 });
 
 module.exports = StudyListPage;
