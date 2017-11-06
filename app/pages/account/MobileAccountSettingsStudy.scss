@@ -105,6 +105,9 @@ gelato-page[data-name='mobile-account-settings-study'] {
       max-width: 100px;
       outline: 0;
     }
+    #field-parts .checkbox-inline:last-child {
+      margin-left: 0;
+    }
   }
 
   section {
