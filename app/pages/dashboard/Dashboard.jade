@@ -6,7 +6,7 @@ gelato-page(data-name='dashboard')
   .container
     #subscription-notice
 
-    if app.isMobile()
+    if app.isMobile() && app.isAndroid()
       .row.rating-notice.hidden
         .col-xs-12
           .content-block
