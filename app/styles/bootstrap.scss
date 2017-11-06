@@ -16,6 +16,14 @@
   width: 150px;
 }
 
+.btn-fixed.mobile {
+  border-radius: 5vh;
+  height: auto;
+  font-size: 3vh;
+  padding: 1vh 4vh;
+  width: 25vh;
+}
+
 .btn-danger {
   background-color: $gradeRed5;
   &:active {
