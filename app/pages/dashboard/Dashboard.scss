@@ -96,6 +96,12 @@ gelato-page[data-name='dashboard'] {
   gelato-page[data-name='dashboard'] {
     padding-top: 65px;
 
+    #first-row {
+      .col-md-6 {
+        width: 100%;
+      }
+    }
+
     .goal-component-block {
       padding-top: 0;
       height: auto !important;
