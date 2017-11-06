@@ -44,6 +44,8 @@ const StudyPromptComponent = GelatoComponent.extend({
    */
   events: {
     'click .dropdown-toggle': 'handleClickDropdownToggle',
+    'click #panel-left': 'handleClickPanelLeft',
+    'click #panel-right': 'handleClickPanelRight',
   },
 
   /**
@@ -252,6 +254,14 @@ const StudyPromptComponent = GelatoComponent.extend({
       contentToggleDown.removeClass('hidden');
       contentToggleUp.addClass('hidden');
     }
+  },
+
+  handleClickPanelLeft: function (event) {
+    this.trigger('click:panel-left', event);
+  },
+
+  handleClickPanelRight: function (event) {
+    this.trigger('click:panel-right', event);
   },
 
   /**

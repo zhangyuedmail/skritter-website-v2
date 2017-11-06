@@ -32,6 +32,7 @@ const StudyPromptPartDefnComponent = GelatoComponent.extend({
    */
   initialize: function (options) {
     this.prompt = options.prompt;
+    this.listenTo(this.prompt, 'click:panel-left', this.handlePromptCanvasClick);
     this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptToolbarGradingMouseup);

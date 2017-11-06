@@ -98,6 +98,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
    */
   handleClickToolbarCorrect: function (event) {
     event.preventDefault();
+    event.stopImmediatePropagation();
     this.trigger('click:correct');
   },
 
@@ -107,6 +108,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
    */
   handleClickToolbarErase: function (event) {
     event.preventDefault();
+    event.stopImmediatePropagation();
     this.trigger('click:erase');
   },
 
@@ -116,6 +118,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
    */
   handleClickToolbarShow: function (event) {
     event.preventDefault();
+    event.stopImmediatePropagation();
     this.trigger('click:show');
   },
 
@@ -125,6 +128,7 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
    */
   handleClickToolbarStrokeOrder: function (event) {
     event.preventDefault();
+    event.stopImmediatePropagation();
     this.trigger('click:teach');
   },
 

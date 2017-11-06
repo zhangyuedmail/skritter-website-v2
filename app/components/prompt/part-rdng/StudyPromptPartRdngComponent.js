@@ -58,6 +58,7 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     // TODO: get from the user? The abstraction is built in if someday we want to support BoPoMoFo input..
     this.zhInputType = 'pinyin';
 
+    this.listenTo(this.prompt, 'click:panel-left', this.handlePromptCanvasClick);
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptToolbarGradingMouseup);
 
