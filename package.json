@@ -83,7 +83,7 @@
     "clean-css-brunch": "2.10.x",
     "cordova": "7.1.x",
     "css-brunch": "2.10.x",
-    "eslint": "4.9.x",
+    "eslint": "4.10.x",
     "eslint-config-google": "0.9.x",
     "husky": "0.14.x",
     "jade-brunch": "2.8.x",
@@ -95,7 +95,7 @@
     "sass-brunch": "2.10.x",
     "selenium-server-standalone-jar": "3.6.x",
     "shelljs": "0.7.x",
-    "sinon": "4.0.x",
+    "sinon": "4.1.x",
     "uglify-js-brunch": "2.10.x"
   }
 }
