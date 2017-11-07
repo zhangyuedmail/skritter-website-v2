@@ -120,7 +120,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
 
   addRows: function (rows) {
     _.forEach(
-      rows,
+      _.compact(rows),
       (row) => {
         this.addRow(row);
       }
