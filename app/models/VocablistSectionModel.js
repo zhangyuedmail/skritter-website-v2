@@ -14,6 +14,14 @@ const VocablistSectionModel = SkritterModel.extend({
   idAttribute: 'id',
 
   /**
+   * @property urlRoot
+   * @type {String}
+   */
+  urlRoot: function () {
+    return 'vocablists/' + this.vocablistId + '/sections';
+  },
+
+  /**
    * @property initialize
    * @param {Object} options
    */
@@ -54,18 +62,10 @@ const VocablistSectionModel = SkritterModel.extend({
     options.headers = _.result(this, 'headers');
 
     if (method === 'read' && app.config.useV2Gets.vocablists) {
-      options.url = app.getApiUrl(2) + 'gae/vocablists/' + this.vocablistId + '/sections/' + this.get('id');
+      options.url = app.getApiUrl(2) + 'gae/vocablists/' + this.vocablistId + '/sections/' + this.id;
     }
 
     SkritterModel.prototype.sync.call(this, method, model, options);
-  },
-
-  /**
-   * @method url
-   * @returns {String}
-   */
-  url: function () {
-    return app.getApiUrl() + 'vocablists/' + this.vocablistId + '/sections/' + this.get('id');
   },
 
 });
