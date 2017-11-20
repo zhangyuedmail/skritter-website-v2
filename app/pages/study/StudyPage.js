@@ -161,7 +161,7 @@ const StudyPage = GelatoPage.extend({
    */
   showItemsAddedNotification: function (added, fromAutoAdd) {
     if (added) {
-      if (this.itemsAddedToday >= this.getMaxItemsPerDay() && !this.userNotifiedAutoAddLimit && fromAutoAdd) {
+      if (this.itemsAddedToday >= this.getMaxItemsPerDay() && this.getMaxItemsPerDay() > 0 && !this.userNotifiedAutoAddLimit && fromAutoAdd) {
         app.notifyUser({
           message: 'You\'ve reached your daily auto-add limit today! You can still manually add more words if you want to progress faster.',
           type: 'pastel-success',
@@ -445,6 +445,10 @@ const StudyPage = GelatoPage.extend({
     const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 15}; // 12};
     const addFreq = app.user.get('addFrequency') / 100;
 
+    if (Number(app.user.get('dailyAddLimit')) === 0) {
+      return 0;
+    }
+
     return (app.user.get('dailyAddLimit') || maxVocabsMap[addFreq]) * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
   },
 
@@ -458,7 +462,8 @@ const StudyPage = GelatoPage.extend({
     const addFreq = app.user.get('addFrequency') / 100;
     const maxItemsPerDay = app.user.getMaxItemsPerDay();
 
-    if ((this.items.dueCount > 50 && (addFreq !== 0.9)) || this.itemsAddedToday >= maxItemsPerDay) {
+    if ((this.items.dueCount > 50 && (addFreq !== 0.9)) ||
+      (this.itemsAddedToday >= maxItemsPerDay && maxItemsPerDay > 0)) {
       return false;
     }
 
@@ -483,7 +488,7 @@ const StudyPage = GelatoPage.extend({
     // for the case of accounts with barely anything to study and we haven't added much yet,
     // let's keep adding things
     if (addFreq > 0.6 && this.items.dueCount < 10 && this.items.dueCount > 0 &&
-      this.itemsAddedToday < maxItemsPerDay / 2
+      (this.itemsAddedToday < maxItemsPerDay / 2 || !maxItemsPerDay)
       && this.promptsSinceLastAutoAdd > 10) {
       return true;
     }

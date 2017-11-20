@@ -167,32 +167,6 @@ const StudyListPage = StudyPage.extend({
   },
 
   /**
-   * Displays a notification to the user based on how many words were added
-   * @param {Number} [added] how many items were just added
-   */
-  showItemsAddedNotification: function (added) {
-    if (added) {
-      if (this.itemsAddedToday >= this.getMaxItemsPerDay() && !this.userNotifiedAutoAddLimit) {
-        app.notifyUser({
-          message: 'You\'ve reached your daily auto-add limit today! You can still manually add more words if you want to progress faster.',
-          type: 'pastel-success',
-        });
-        this.userNotifiedAutoAddLimit = true;
-      } else {
-        app.notifyUser({
-          message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.',
-          type: 'pastel-success',
-        });
-      }
-    } else {
-      app.notifyUser({
-        message: 'No more words to add. <br><a href="/vocablists/browse">Add a new list</a>',
-        type: 'pastel-info',
-      });
-    }
-  },
-
-  /**
    * @method checkRequirements
    */
   checkRequirements: function () {
@@ -437,56 +411,6 @@ const StudyListPage = StudyPage.extend({
     });
   },
 
-  /**
-   * Determines whether an item should be auto-added based on its readiness and other heuristics about the queue
-   * @param {UserItem} currentItem the current item that the user is studying
-   * @returns {boolean} whether an item should be added
-   */
-  shouldAutoAddItem: function (currentItem) {
-    // TODO: figure out some good values for this
-    const addFreq = app.user.get('addFrequency') / 100;
-    const maxItemsPerDay = app.user.getMaxItemsPerDay();
-
-    if ((this.items.dueCount > 50 && (addFreq !== 0.9)) || this.itemsAddedToday >= maxItemsPerDay) {
-      return false;
-    }
-
-    // kinda a magic number
-    const addRange = 0.4;
-    const readiness = currentItem.getReadiness();
-
-
-    // if they're currently studying a brand new item, let's wait until after they get through that
-    if (readiness === 9999) {
-      return false;
-    }
-
-    const diff = 1 - (readiness - addFreq) / addRange;
-
-
-    // the most common add case--the current item has been sufficiently studied,
-    // with a couple rate-limiting checks
-    if (diff*diff > 0.5 && this.promptsReviewed > 1 && this.promptsSinceLastAutoAdd > 4) {
-      console.log(`normal auto-add case: promptsSinceLastAutoAdd > 4 ${readiness}  diff: ${diff}  diff quad: ${diff*diff}`);
-      return true;
-    }
-
-    // for the case of accounts with barely anything to study and we haven't added much yet,
-    // let's keep adding things
-    if (addFreq > 0.6 && this.items.dueCount < 10 && this.items.dueCount > 0 &&
-      this.itemsAddedToday < maxItemsPerDay / 2
-      && this.promptsSinceLastAutoAdd > 10) {
-      return true;
-    }
-
-    // for accounts set with a high add rate but a lot of reviews, still add something every once in a while
-    // to keep things motivating
-    if (addFreq === 0.9 && this.promptsReviewed % 80 === 0 && this.promptsSinceLastAutoAdd > 50) {
-      return true;
-    }
-
-    return false;
-  },
 });
 
 module.exports = StudyListPage;
