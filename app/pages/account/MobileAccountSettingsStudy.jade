@@ -81,11 +81,24 @@ gelato-page(data-name='mobile-account-settings-study')
 
             .option-desc Controls how often new items will be added automatically
 
+          hr
+
           .form-group
-            label.col-xs-3.control-label(for="field-add-limit") Add word daily limit
+            label.col-xs-9.control-label(for="field-auto-add-limit-enabled") Enable auto add daily limit
+            .col-xs-3
+              .checkbox
+                  label.toggle-switch
+                    input#field-auto-add-limit-enabled(type="checkbox", checked=view.getAddLimit() > 0)
+                    .toggle-switch-slider.round
+            .option-desc If off, allows limitless auto-adding 
+
+          .form-group
+            label.col-xs-3.control-label(for="field-add-limit") Auto add daily limit
             .col-xs-9
-              input#field-add-limit.form-control(type="number", value=view.getAddLimit())
-            .option-desc Controls how many new items can be added automatically in a day
+              input#field-add-limit.form-control(type="number", value=view.getAddLimit(), disabled=view.getAddLimit() === 0)
+            .option-desc Controls how many new vocabs can be added automatically in a day
+
+          
           //.form-group
           //  label.col-xs-3.control-label(for="field-section-movement") Section movement
           //  .col-xs-9

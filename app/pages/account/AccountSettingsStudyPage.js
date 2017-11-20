@@ -17,6 +17,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
     // 'change input[type="checkbox"]': 'handleChangeCheckbox',
     // 'change #field-target-language': 'handleChangeTargetLanguage',
     'change #field-goal-type': 'handleChangeGoalType',
+    'click #field-auto-add-limit-enabled': 'handleClickAutoAddLimitEnabled',
     'click #button-save': 'handleClickButtonSave',
   },
 
@@ -76,14 +77,19 @@ const AccountSettingsStudyPage = GelatoPage.extend({
   },
 
   /**
-   * Gets the daily vocab auto-add limit for a user
-   * @returns {Number}
+   * Gets the daily vocab auto-add limit for a user.
+   * @returns {Number} The daily add limit or 0 if it is not enabled
    */
   getAddLimit () {
     const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 15}; // 12};
     const addFreq = app.user.get('addFrequency') / 100;
+    const limitEnabled = this.$('#field-auto-add-limit-enabled').is(':checked');
 
-    return app.user.get('dailyAddLimit') || maxVocabsMap[addFreq];
+    if (app.user.get('dailyAddLimit') === 0 && !limitEnabled) {
+      return 0;
+    }
+
+    return maxVocabsMap[addFreq];
   },
 
   /**
@@ -133,6 +139,16 @@ const AccountSettingsStudyPage = GelatoPage.extend({
     this.render();
   },
 
+  handleClickAutoAddLimitEnabled (e) {
+    const checked = this.$('#field-auto-add-limit-enabled').is(':checked');
+    const limitInput = this.$('#field-add-limit');
+    limitInput.attr('disabled', !checked);
+
+    if (checked && Number(limitInput.val()) === 0) {
+      limitInput.val(this.getAddLimit());
+    }
+  },
+
   /**
    * @method handleClickButtonSave
    * @param {Event} event
@@ -141,12 +157,17 @@ const AccountSettingsStudyPage = GelatoPage.extend({
     event.preventDefault();
 
     let zhStudyStyleChanged;
+    const useDailyAddLimit = this.$('#field-auto-add-limit-enabled').is(':checked');
+    let dailyAddLimit = Number(this.$('#field-add-limit').val() || 0);
+    if (!useDailyAddLimit) {
+      dailyAddLimit = 0;
+    }
 
     app.user.set({
       addFrequency: parseInt(this.$('#field-add-frequency').val(), 10) || app.user.get('addFrequency'),
       autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
       autoAdvancePrompts: this.$('#field-auto-advance').is(':checked') ? 1.0 : 0,
-      dailyAddLimit: this.$('#field-add-limit').val(),
+      dailyAddLimit,
       disableGradingColor: this.$('#field-disable-color').is(':checked'),
       goalEnabled: this.$('#field-goal-mode').is(':checked'),
       hideDefinition: this.$('#field-hide-definition').is(':checked'),

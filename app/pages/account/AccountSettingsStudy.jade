@@ -89,12 +89,23 @@ gelato-page(data-name='account-settings-study')
                     option(value="60", selected=(addFrequency === 60)) Slow
                     option(value="0", selected=(addFrequency < 60)) Manual
 
-              .form-group
-                label.col-sm-3.control-label(for="field-add-limit") Add word daily limit
-                  .option-desc Controls how many new items can be added automatically in a day
-                .col-sm-9
-                  input#field-add-limit.form-control(type="number", value=view.getAddLimit())
+              hr
 
+              .form-group
+                label.col-sm-3.control-label(for="field-auto-add-limit-enabled") Enable auto add daily limit
+                  .option-desc If off, allows limitless auto-adding 
+                .col-sm-9
+                  .checkbox
+                    label.toggle-switch
+                      input#field-auto-add-limit-enabled(type="checkbox", checked=view.getAddLimit() > 0)
+                      .toggle-switch-slider.round
+
+              .form-group
+                label.col-sm-3.control-label(for="field-add-limit") Auto add daily limit
+                  .option-desc Controls how many new vocabs can be added automatically in a day
+                .col-sm-9
+                  input#field-add-limit.form-control(type="number", value=view.getAddLimit(), disabled=view.getAddLimit() === 0)
+              
               //.form-group
               //  label.col-sm-3.control-label(for="field-section-movement") Section movement
               //  .col-sm-9
