@@ -89,7 +89,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
       return 0;
     }
 
-    return maxVocabsMap[addFreq];
+    return Number(app.user.get('dailyAddLimit')) || maxVocabsMap[addFreq];
   },
 
   /**
@@ -158,7 +158,7 @@ const AccountSettingsStudyPage = GelatoPage.extend({
 
     let zhStudyStyleChanged;
     const useDailyAddLimit = this.$('#field-auto-add-limit-enabled').is(':checked');
-    let dailyAddLimit = Number(this.$('#field-add-limit').val() || 0);
+    let dailyAddLimit = Number(this.$('#field-add-limit').val()) || 0;
     if (!useDailyAddLimit) {
       dailyAddLimit = 0;
     }

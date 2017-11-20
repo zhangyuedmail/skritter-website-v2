@@ -26,7 +26,7 @@ const UserModel = SkritterModel.extend({
     allJapaneseParts: ['defn', 'rdng', 'rune'],
     audioEnabled: true,
     autoAdvancePrompts: 0.0,
-    dailyItemAddingLimit: 20,
+    dailyAddLimit: 20,
     disabled: false,
     disablePinyinReadingPromptInput: false,
     filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
@@ -218,7 +218,7 @@ const UserModel = SkritterModel.extend({
 
   /**
    * Gets the max number of items that can be auto-added in a day
-   * @returns {number}
+   * @returns {number} The max number of items or 0 if no limit is set
    */
   getMaxItemsPerDay () {
     const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
@@ -226,6 +226,10 @@ const UserModel = SkritterModel.extend({
     const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 15}; // 12};
     const addFreq = app.user.get('addFrequency') / 100;
     const vocabLimit = this.get('dailyAddLimit') || maxVocabsMap[addFreq];
+
+    if (Number(this.get('dailyAddLimit')) === 0) {
+      return 0;
+    }
 
     return vocabLimit * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
   },
