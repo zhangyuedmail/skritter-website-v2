@@ -42,6 +42,7 @@ module.exports = Router.extend({
     'mail/unsubscribe': 'navigateMailUnsubscribe',
     'password-reset': 'navigatePasswordReset',
     'practice/:lang': 'navigatePractice',
+    'practice/:lang/:ids': 'navigatePractice',
     'refer': 'navigateUserReferralInfo',
     'refer/:userId': 'navigateApplyUserReferral',
     'scratchpad/:writing(/:part)': 'navigateScratchpad',
@@ -332,10 +333,11 @@ module.exports = Router.extend({
   /**
    * @method navigatePracticePad
    * @param {String} targetLang what language to practice
+   * @param {String} vocabRunes what vocabs to load
    */
-  navigatePractice: function (targetLang) {
+  navigatePractice: function (targetLang, vocabRunes) {
     if (app.isDevelopment()) {
-      this.go('pages/practice/PracticePage', {targetLang});
+      this.go('pages/practice/PracticePage', {targetLang, vocabRunes});
     } else {
       this.navigateHome();
     }

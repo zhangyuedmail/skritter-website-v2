@@ -42,9 +42,10 @@ const PracticePadPage = GelatoPage.extend({
     _.bindAll(this, '_onInitialVocabDataLoaded');
     this.targetLang = options.targetLang;
 
-    // TODO: send this in from URL
-    const fakeUrlParamString = '好';
-    this.charactersToLoad = fakeUrlParamString.split(',');
+    const vocabRuneString = options.vocabRunes || '';
+    this.charactersToLoad = vocabRuneString.split(',').filter((v) => {
+      return v && v.length;
+    });
     this.idsToLoad = this.getVocabIdListFromRuneList(this.charactersToLoad);
 
     Howler.autoSuspend = false;
@@ -94,7 +95,11 @@ const PracticePadPage = GelatoPage.extend({
     this._views['prompt'].setElement('#study-prompt-container').render();
     this._views['toolbar'].setElement('#study-toolbar-container').render();
 
-    this.loadInitialVocab();
+    if (this.idsToLoad.length) {
+      this.loadInitialVocab();
+    } else {
+      this.showLoadVocabDialog();
+    }
 
     return this;
   },
@@ -231,6 +236,13 @@ const PracticePadPage = GelatoPage.extend({
     Howler.autoSuspend = true;
 
     return GelatoPage.prototype.remove.call(this);
+  },
+
+  /**
+   * Shows a dialog that allows the user to pick vocab ids to load
+   */
+  showLoadVocabDialog () {
+    console.log('TODO');
   },
 
   /**
