@@ -81,6 +81,26 @@ const VocabCollection = BaseSkritterCollection.extend({
 
     return BaseSkritterCollection.prototype.reset.apply(this, arguments);
   },
+
+  /**
+   * @method sync
+   * @param {String} method
+   * @param {Model} model
+   * @param {Object} options
+   */
+  sync: function (method, model, options) {
+    options.headers = _.result(this, 'headers');
+
+    if (!options.url) {
+      options.url = app.getApiUrl() + _.result(this, 'url');
+    }
+
+    if (method === 'read' && app.config.useV2Gets.vocabs) {
+      options.url = app.getApiUrl(2) + 'gae/vocabs';
+    }
+
+    BaseSkritterCollection.prototype.sync.call(this, method, model, options);
+  },
 });
 
 module.exports = VocabCollection;
