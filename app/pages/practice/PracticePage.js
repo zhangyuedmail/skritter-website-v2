@@ -64,11 +64,19 @@ const PracticePadPage = GelatoPage.extend({
 
     this._views['prompt'] = new Prompt({
       page: this,
+      showGradingButtons: false,
       vocabToolbarButtonState: {
         showAudio: true,
         showBan: false,
         showInfo: false,
         showStar: false,
+      },
+      actionToolbarButtonState: {
+        teach: true,
+        erase: true,
+        show: true,
+        correct: false,
+        disableCorrect: true,
       },
     });
     this._views['toolbar'] = new Toolbar({

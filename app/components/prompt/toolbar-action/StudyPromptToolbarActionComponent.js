@@ -53,6 +53,15 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
    */
   initialize: function (options) {
     this.prompt = options.prompt;
+    this.buttonState = options.buttonState || {
+      show: true,
+      teach: true,
+      erase: true,
+      correct: true,
+      disableCorrect: false,
+    };
+
+    this.buttonWidth = this.buttonState.disableCorrect ? '33.3%' : '25%';
   },
 
   /**
@@ -62,6 +71,8 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
   render: function () {
     this.renderTemplate();
 
+    this.$('.btn-wrapper').css({width: this.buttonWidth});
+
     return this;
   },
 
@@ -70,17 +81,17 @@ const StudyPromptToolbarActionComponent = GelatoComponent.extend({
 
     this.$('gelato-component').toggleClass('hidden', !showAnyButtons);
 
-    this.$('#toolbar-stroke-order').toggleClass('disabled', !this.buttonTeach);
-    this.$('.icon-study-stroke-order').toggleClass('disabled', !this.buttonTeach);
+    this.$('#toolbar-stroke-order').toggleClass('disabled', !this.buttonTeach || !this.buttonState.teach);
+    this.$('.icon-study-stroke-order').toggleClass('disabled', !this.buttonTeach || !this.buttonState.teach);
 
-    this.$('#toolbar-erase').toggleClass('disabled', !this.buttonErase);
-    this.$('.icon-study-erase').toggleClass('disabled', !this.buttonErase);
+    this.$('#toolbar-erase').toggleClass('disabled', !this.buttonErase || !this.buttonState.erase);
+    this.$('.icon-study-erase').toggleClass('disabled', !this.buttonErase || !this.buttonState.erase);
 
-    this.$('#toolbar-show').toggleClass('disabled', !this.buttonShow);
-    this.$('.icon-study-show').toggleClass('disabled', !this.buttonShow);
+    this.$('#toolbar-show').toggleClass('disabled', !this.buttonShow || !this.buttonState.show);
+    this.$('.icon-study-show').toggleClass('disabled', !this.buttonShow || !this.buttonState.show);
 
-    this.$('#toolbar-correct').toggleClass('disabled', !showCorrectBtn);
-    this.$('.icon-study-dont-know').toggleClass('disabled', !this.buttonCorrect);
+    this.$('#toolbar-correct').toggleClass('disabled', !showCorrectBtn || !this.buttonState.correct);
+    this.$('.icon-study-dont-know').toggleClass('disabled', !this.buttonCorrect || !this.buttonState.correct);
   },
 
   getButtonProperties () {

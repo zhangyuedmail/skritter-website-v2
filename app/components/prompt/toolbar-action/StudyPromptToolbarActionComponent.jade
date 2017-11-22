@@ -9,6 +9,7 @@ gelato-component(data-name="study-prompt-toolbar-action", class=btnProps.showAny
   .btn-wrapper(role="group")
     button#toolbar-show.btn.btn-default(type="button", class=view.buttonShow ? '' : 'disabled')
       i.icon.icon-study-show(class=view.buttonShow ? '' : 'disabled')
-  .btn-wrapper(role="group")
-    button#toolbar-correct.btn.btn-default(type="button", class=btnProps.showCorrectBtn ? '' : 'disabled')
-      i.icon.icon-study-dont-know(class=view.buttonCorrect ? '' : 'disabled')
+  if !view.buttonState.disableCorrect
+    .btn-wrapper(role="group")
+      button#toolbar-correct.btn.btn-default(type="button", class=btnProps.showCorrectBtn ? '' : 'disabled')
+        i.icon.icon-study-dont-know(class=view.buttonCorrect ? '' : 'disabled')
