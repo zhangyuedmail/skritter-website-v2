@@ -1,8 +1,8 @@
 const GelatoPage = require('gelato/page');
 const Prompt = require('components/prompt/StudyPromptComponent.js');
 const Toolbar = require('components/practice/toolbar/PracticePadToolbarComponent.js');
-const Items = require('collections/ItemCollection.js');
-const Vocablists = require('collections/VocablistCollection.js');
+const ItemCollection = require('collections/ItemCollection');
+const VocabCollection = require('collections/VocabCollection');
 const QuickSettings = require('dialogs1/quick-settings/QuickSettingsDialog.js');
 
 const vent = require('vent');
@@ -44,7 +44,9 @@ const PracticePadPage = GelatoPage.extend({
     this.targetLang = options.targetLang;
 
     // TODO: send this in from URL
-    this.charactersToLoad = '好';
+    const fakeUrlParamString = '好';
+    this.charactersToLoad = fakeUrlParamString.split(',');
+    this.idsToLoad = this.getVocabIdListFromRuneList(this.charactersToLoad);
 
     Howler.autoSuspend = false;
 
@@ -56,12 +58,12 @@ const PracticePadPage = GelatoPage.extend({
     this.previousPrompt = false;
     this.previousPromptItems = null;
 
-    this.items = new Items();
-    this.vocablists = new Vocablists();
+    // TODO: nix this
+    this.items = new ItemCollection();
+    this.vocabs = new VocabCollection();
 
     this._views['prompt'] = new Prompt({page: this});
     this._views['toolbar'] = new Toolbar({page: this});
-
 
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
@@ -94,13 +96,62 @@ const PracticePadPage = GelatoPage.extend({
    */
   checkRequirements () {
     ScreenLoader.post('Preparing practice');
+    const self = this;
 
-    async.parallel(
+    async.waterfall(
       [(callback) => {
-          this.items.fetchNext({limit: 1})
-            .catch(callback)
-            .then(callback);
-        },
+        this.vocabs.fetch({
+          data: {
+            include_decomps: true,
+            include_heisigs: true,
+            include_sentences: false,
+            include_top_mnemonics: true,
+            ids: this.idsToLoad,
+          },
+          error: function (error) {
+            callback(error);
+          },
+          success: function (vocabs) {
+            self.vocab = vocabs.at(0);
+            callback();
+          },
+        });
+      },
+      function(callback) {
+        if (self.vocab.has('containedVocabIds')) {
+          self.vocabs.fetch({
+            data: {
+              include_decomps: true,
+              include_sentences: true,
+              ids: self.vocab.get('containedVocabIds').join('|'),
+            },
+            remove: false,
+            error: function(error) {
+              callback(error);
+            },
+            success: function() {
+              callback();
+            },
+          });
+        } else {
+          callback();
+        }
+      },
+      function (callback) {
+        app.user.characters.fetch({
+          data: {
+            languageCode: self.vocab.get('lang'),
+            writings: self.vocab.get('writing'),
+          },
+          remove: false,
+          error: function (error) {
+            callback(error);
+          },
+          success: function () {
+            callback();
+          },
+        });
+      },
       ],
       (error) => {
         if (error) {
@@ -114,18 +165,21 @@ const PracticePadPage = GelatoPage.extend({
           return;
         }
 
-        if (!this.items.length) {
-          this._views['prompt'].render();
-          this._views['prompt'].showOverlayMessage('Could not load items');
-          ScreenLoader.hide();
-        } else {
-          this.stopListening(this.items);
-          this.listenTo(this.items, 'preload', this.handleItemPreload);
-
-          this.next();
-        }
+        const runeItems = self.vocab.getPromptItems('rune');
+        self.promptItems = runeItems;
+        this._views['prompt'].set(this.promptItems);
+        ScreenLoader.hide();
       }
     );
+  },
+
+  /**
+   * Transforms a list of runes into Skritter vocab ids
+   * @param vocabRunes
+   */
+  getVocabIdListFromRuneList (vocabRunes) {
+    // TODO: actually parse this correctly
+    return vocabRunes.map((v) => this.targetLang + '-' + v + '-0').join('|');
   },
 
   /**
