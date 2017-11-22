@@ -251,32 +251,39 @@ const VocabModel = SkritterModel.extend({
     let containedVocabs = this.getContained();
     let characters = [];
     let now = Date.now();
+    let tones = [];
     let vocab = this;
     let vocabs = [];
+
     switch (part) {
       case 'rune':
         characters = vocab.getPromptCharacters();
         vocabs = containedVocabs.length ? containedVocabs : [vocab];
         break;
       case 'tone':
-        characters = vocab.getPromptTones();
+        characters = vocab.getPromptCharacters();
+        tones = vocab.getPromptTones();
         vocabs = containedVocabs.length ? containedVocabs : [vocab];
         break;
       default:
         vocabs = [vocab];
     }
+
     for (let i = 0, length = vocabs.length; i < length; i++) {
       let childVocab = vocabs[i];
       let promptItem = new PromptItemModel();
       promptItem.character = characters[i];
+      promptItem.tone = tones[i];
       promptItem.vocab = childVocab;
       promptItem.set('filler', childVocab.isFiller());
       promptItem.set('kana', childVocab.isKana());
       promptItems.add(promptItem);
     }
+
     promptItems.group = now + '_' + this.id;
     promptItems.part = part;
     promptItems.vocab = vocab;
+
     return promptItems;
   },
 

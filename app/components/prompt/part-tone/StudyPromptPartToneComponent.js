@@ -55,18 +55,28 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.canvas.grid = false;
     this.prompt.canvas.reset();
 
-    this.prompt.canvas.drawCharacter(
-      'character',
-      this.prompt.review.vocab.get('writing'),
-      {
-        color: '#e8ded2',
-        font: this.prompt.review.vocab.getFontName(),
-      }
-    );
+    if (this.prompt.review.character) {
+      this.prompt.canvas.clearLayer('character-reveal');
+      this.prompt.canvas.drawShape(
+        'character-reveal',
+        this.prompt.review.character.getTargetShape(),
+        {color: '#e8ded2'}
+      );
+    } else {
+      this.prompt.canvas.clearLayer('character-reveal');
+      this.prompt.canvas.drawCharacter(
+        'character-reveal',
+        this.prompt.review.vocab.get('writing'),
+        {
+          color: '#e8ded2',
+          font: this.prompt.review.vocab.getFontName(),
+        }
+      );
+    }
 
     this.prompt.canvas.drawShape(
       'character',
-      this.prompt.review.character.getUserShape(),
+      this.prompt.review.tone.getUserShape(),
       {color: this.prompt.review.getGradingColor()}
     );
 
@@ -187,8 +197,8 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    */
   handlePromptCanvasInputUp: function (points, shape) {
     let possibleTones = this.prompt.review.getTones();
-    let expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
-    let stroke = this.prompt.review.character.recognize(points, shape);
+    let expectedTone = this.prompt.review.tone.getTone(possibleTones[0]);
+    let stroke = this.prompt.review.tone.recognize(points, shape);
 
     if (stroke && app.fn.getLength(points) > 30) {
       let targetShape = stroke.getTargetShape();
@@ -203,22 +213,22 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
         );
       } else {
         this.prompt.review.set('score', 1);
-        this.prompt.review.character.reset();
-        this.prompt.review.character.add(expectedTone);
+        this.prompt.review.tone.reset();
+        this.prompt.review.tone.add(expectedTone);
         this.prompt.canvas.drawShape(
           'character',
           expectedTone.getTargetShape()
         );
       }
     } else {
-      this.prompt.review.character.reset();
-      this.prompt.review.character.add(expectedTone);
+      this.prompt.review.tone.reset();
+      this.prompt.review.tone.add(expectedTone);
 
       if (possibleTones.indexOf(5) > -1) {
         this.prompt.review.set('score', 3);
         this.prompt.canvas.drawShape(
           'character',
-          this.prompt.review.character.getTargetShape()
+          this.prompt.review.tone.getTargetShape()
         );
       } else {
         this.prompt.review.set('score', 1);
@@ -229,7 +239,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
       }
     }
 
-    if (this.prompt.review.character.isComplete()) {
+    if (this.prompt.review.tone.isComplete()) {
       // inject the grading color before expensive rendering
       this.prompt.canvas.injectLayerColor(
         'character',
@@ -254,7 +264,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
     this.prompt.review.set('complete', true);
 
-    if (this.prompt.review.character.isComplete()) {
+    if (this.prompt.review.tone.isComplete()) {
       this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
       this.prompt.toolbarAction.update();
       this.prompt.canvas.injectLayerColor(
@@ -263,7 +273,7 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
       );
     } else {
       const possibleTones = this.prompt.review.getTones();
-      const expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
+      const expectedTone = this.prompt.review.tone.getTone(possibleTones[0]);
       this.prompt.canvas.drawShape(
         'character',
         expectedTone.getTargetShape()
@@ -337,12 +347,12 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
    */
   completeTone: function () {
     const possibleTones = this.prompt.review.getTones();
-    const expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
+    const expectedTone = this.prompt.review.tone.getTone(possibleTones[0]);
 
     this.prompt.canvas.clearLayer('character');
     this.prompt.review.set('complete', true);
-    this.prompt.review.character.reset();
-    this.prompt.review.character.add(expectedTone);
+    this.prompt.review.tone.reset();
+    this.prompt.review.tone.add(expectedTone);
 
     this.render();
   },

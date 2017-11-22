@@ -138,6 +138,7 @@ const ItemModel = SkritterModel.extend({
     let vocab = this.getVocab();
     let characters = [];
     let items = [];
+    let tones = [];
     let vocabs = [];
 
     switch (part) {
@@ -147,7 +148,8 @@ const ItemModel = SkritterModel.extend({
         vocabs = containedVocabs.length ? containedVocabs : [vocab];
         break;
       case 'tone':
-        characters = vocab.getPromptTones();
+        characters = vocab.getPromptCharacters();
+        tones = vocab.getPromptTones();
         items = containedItems.length ? containedItems : [this];
         vocabs = containedVocabs.length ? containedVocabs : [vocab];
         break;
@@ -164,6 +166,7 @@ const ItemModel = SkritterModel.extend({
       promptItem.character = characters[i];
       promptItem.interval = childItem.get('interval');
       promptItem.item = childItem;
+      promptItem.tone = tones[i];
       promptItem.vocab = childVocab;
 
       if (i === 0 && vocabs.length > 1) {
