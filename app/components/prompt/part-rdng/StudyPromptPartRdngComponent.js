@@ -122,9 +122,10 @@ const StudyPromptPartRdngComponent = GelatoComponent.extend({
     this.renderTemplate();
     this._applyGradeToPromptInput();
 
-    if (this.showReadingPrompt) {
-      this.setReadingPromptFocus();
-    }
+    // force users to manually select reading input for corrections
+    // if (this.showReadingPrompt) {
+    //   this.setReadingPromptFocus();
+    // }
 
     this.prompt.trigger('reading:complete');
 
