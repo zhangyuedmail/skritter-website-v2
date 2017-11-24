@@ -261,6 +261,11 @@ const PromptItemCollection = GelatoCollection.extend({
    * @returns {Boolean}
    */
   isDefinitionShown: function () {
+    // show definition on mobile writing prompts when definition and reading are hidden
+    if (app.isMobile() && this.part === 'rune' && app.user.get('hideDefinition') && app.user.get('hideReading')) {
+      return true;
+    }
+
     return this.showDefinition || !app.user.get('hideDefinition') || this.isComplete();
   },
 
