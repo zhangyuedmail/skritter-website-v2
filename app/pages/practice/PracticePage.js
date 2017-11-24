@@ -1,11 +1,9 @@
 const GelatoPage = require('gelato/page');
 const Prompt = require('components/prompt/StudyPromptComponent.js');
 const Toolbar = require('components/practice/toolbar/PracticePadToolbarComponent.js');
-const Items = require('collections/ItemCollection.js');
-const Vocablists = require('collections/VocablistCollection.js');
+const ItemCollection = require('collections/ItemCollection');
+const VocabCollection = require('collections/VocabCollection');
 const QuickSettings = require('dialogs1/quick-settings/QuickSettingsDialog.js');
-
-const vent = require('vent');
 
 /**
  * @class PracticePadPage
@@ -41,10 +39,14 @@ const PracticePadPage = GelatoPage.extend({
       this.loadAlreadyTimed = false;
     }
 
+    _.bindAll(this, '_onInitialVocabDataLoaded');
     this.targetLang = options.targetLang;
 
-    // TODO: send this in from URL
-    this.charactersToLoad = '好';
+    const vocabRuneString = options.vocabRunes || '';
+    this.charactersToLoad = vocabRuneString.split(',').filter((v) => {
+      return v && v.length;
+    });
+    this.idsToLoad = this.getVocabIdListFromRuneList(this.charactersToLoad);
 
     Howler.autoSuspend = false;
 
@@ -56,16 +58,33 @@ const PracticePadPage = GelatoPage.extend({
     this.previousPrompt = false;
     this.previousPromptItems = null;
 
-    this.items = new Items();
-    this.vocablists = new Vocablists();
+    // TODO: nix this
+    this.items = new ItemCollection();
+    this.vocabs = new VocabCollection();
 
-    this._views['prompt'] = new Prompt({page: this});
-    this._views['toolbar'] = new Toolbar({page: this});
-
+    this._views['prompt'] = new Prompt({
+      page: this,
+      showGradingButtons: false,
+      vocabToolbarButtonState: {
+        showAudio: true,
+        showBan: false,
+        showInfo: false,
+        showStar: false,
+      },
+      actionToolbarButtonState: {
+        teach: true,
+        erase: true,
+        show: true,
+        correct: false,
+        disableCorrect: true,
+      },
+    });
+    this._views['toolbar'] = new Toolbar({
+      page: this,
+    });
 
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
-    this.listenTo(vent, 'studySettings:show', this.showStudySettings);
 
     // handle specific cordova related events
     document.addEventListener('pause', this.handlePauseEvent.bind(this), false);
@@ -84,48 +103,36 @@ const PracticePadPage = GelatoPage.extend({
     this._views['prompt'].setElement('#study-prompt-container').render();
     this._views['toolbar'].setElement('#study-toolbar-container').render();
 
-    this.checkRequirements();
+    if (this.idsToLoad.length) {
+      this.loadInitialVocab();
+    } else {
+      this.showLoadVocabDialog();
+    }
 
     return this;
   },
 
   /**
-   * @method checkRequirements
+   * @method loadInitialVocab
    */
-  checkRequirements () {
+  loadInitialVocab () {
     ScreenLoader.post('Preparing practice');
+    const self = this;
 
-    async.parallel(
-      [(callback) => {
-          this.items.fetchNext({limit: 1})
-            .catch(callback)
-            .then(callback);
-        },
-      ],
-      (error) => {
-        if (error) {
-          let msg = 'Error fetching items. Please ';
-          if (app.isMobile()) {
-            msg += 'reload the application';
-          } else {
-            msg += 'refresh the page.';
-          }
-          ScreenLoader.post(msg);
-          return;
-        }
+    this._fetchListOfVocabs(this.idsToLoad).then(() => {
+      this._fetchContainedVocab((self.vocab.get('containedVocabIds') || []).join('|')).then(() => {
+        this._fetchCharacters(self.vocab.get('lang'), self.vocab.get('writing')).then(this._onInitialVocabDataLoaded, this._onLoadError);
+      }, this._onLoadError);
+    }, this._onLoadError);
+  },
 
-        if (!this.items.length) {
-          this._views['prompt'].render();
-          this._views['prompt'].showOverlayMessage('Could not load items');
-          ScreenLoader.hide();
-        } else {
-          this.stopListening(this.items);
-          this.listenTo(this.items, 'preload', this.handleItemPreload);
-
-          this.next();
-        }
-      }
-    );
+  /**
+   * Transforms a list of runes into Skritter vocab ids
+   * @param vocabRunes
+   */
+  getVocabIdListFromRuneList (vocabRunes) {
+    // TODO: actually parse this correctly
+    return vocabRunes.map((v) => this.targetLang + '-' + v + '-0').join('|');
   },
 
   /**
@@ -240,6 +247,13 @@ const PracticePadPage = GelatoPage.extend({
   },
 
   /**
+   * Shows a dialog that allows the user to pick vocab ids to load
+   */
+  showLoadVocabDialog () {
+    console.log('TODO');
+  },
+
+  /**
    * Shows a dialog that allows the user to adjust their study settings
    * @method showStudySettings
    */
@@ -278,6 +292,109 @@ const PracticePadPage = GelatoPage.extend({
    */
   togglePromptLoading (loading) {
     this._views['prompt'].toggleLoadingIndicator(loading);
+  },
+
+  /**
+   * Loads character data for a set of runes in a target language
+   * @param {String} languageCode 2-character code for the target language
+   * @param {String} writings character runes to load
+   */
+  _fetchCharacters (languageCode, writings) {
+    return new Promise((resolve, reject) => {
+      app.user.characters.fetch({
+        data: {
+          languageCode,
+          writings,
+        },
+        remove: false,
+        error: function (error) {
+          reject(error);
+        },
+        success: function () {
+          resolve();
+        },
+      });
+    });
+  },
+
+  /**
+   * Fetches any contained vocab for a character
+   * @param {String} ids contained character ids to load
+   */
+  _fetchContainedVocab (ids) {
+    return new Promise((resolve, reject) => {
+      if (this.vocab.has('containedVocabIds')) {
+        this.vocabs.fetch({
+          data: {
+            include_decomps: true,
+            include_sentences: true,
+            ids,
+          },
+          remove: false,
+          error: function (error) {
+            reject(error);
+          },
+          success: function () {
+            resolve();
+          },
+        });
+      } else {
+        resolve();
+      }
+    });
+  },
+
+  /**
+   * Fetches a list of vocabs from a specified string of ids
+   * @param {String} list a separated string of vocabs to fetch
+   */
+  _fetchListOfVocabs (list) {
+    return new Promise((resolve, reject) => {
+      this.vocabs.fetch({
+        data: {
+          include_decomps: true,
+          include_heisigs: true,
+          include_sentences: false,
+          include_top_mnemonics: true,
+          ids: this.idsToLoad,
+        },
+        error: (error) => {
+          reject(error);
+        },
+        success: (vocabs) => {
+          this.vocab = vocabs.at(0);
+          resolve();
+        },
+      });
+    });
+  },
+
+  /**
+   * Handles a successful load of vocab data. Sets up the prompt and
+   * hides the screenloader.
+   */
+  _onInitialVocabDataLoaded () {
+    const runeItems = this.vocab.getPromptItems('rune');
+    this.promptItems = runeItems;
+    this._views['prompt'].set(this.promptItems);
+    ScreenLoader.hide();
+  },
+
+  /**
+   * Shows a loading error to the user on the ScreenLoader
+   */
+  _onLoadError (error) {
+    let msg = 'Error fetching items. Please ';
+    if (app.isMobile()) {
+      msg += 'reload the application';
+    } else {
+      msg += 'refresh the page.';
+    }
+    ScreenLoader.post(msg);
+
+    if (app.isDevelopment() && error) {
+      console.error(error);
+    }
   },
 
   /**

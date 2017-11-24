@@ -32,8 +32,17 @@ module.exports = GelatoComponent.extend({
    * @constructor
    */
   initialize: function (options) {
+    options = options || {};
+
     this.dialog = null;
     this.prompt = options.prompt;
+    this.buttonState = options.buttonState || {
+      showAudio: true,
+      showBan: true,
+      showInfo: true,
+      showSettings: true,
+      showStar: true,
+    };
   },
 
   /**
@@ -59,11 +68,11 @@ module.exports = GelatoComponent.extend({
     const item = (reviews && reviews.item) ? reviews.item : null;
     const isStarred = item && reviews.vocab.isStarred();
 
-    this.$starBtn.toggleClass('hidden', !reviews);
+    this.$starBtn.toggleClass('hidden', !reviews || !this.buttonState.showStar);
     this.$lastStudied.toggleClass('hidden', !item);
-    this.$vocabInfo.toggleClass('hidden', !item);
-    this.$editBtn.toggleClass('hidden', !item);
-    this.$banBtn.toggleClass('hidden', !item);
+    this.$vocabInfo.toggleClass('hidden', !item || !this.buttonState.showInfo);
+    this.$editBtn.toggleClass('hidden', !item || !this.buttonState.showEdit);
+    this.$banBtn.toggleClass('hidden', !item || !this.buttonState.showBan);
 
     if (isStarred) {
       this.$starBtn.removeClass('icon-study-word-star');

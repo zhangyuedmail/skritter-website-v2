@@ -87,9 +87,9 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.navigation = new Navigation({prompt: this});
     this.reviewStatus = new ReviewStatus({prompt: this});
     this.shortcuts = new Shortcuts({prompt: this});
-    this.toolbarAction = new ToolbarAction({prompt: this});
+    this.toolbarAction = new ToolbarAction({prompt: this, buttonState: options.actionToolbarButtonState});
     this.toolbarGrading = new ToolbarGrading({prompt: this});
-    this.toolbarVocab = new ToolbarVocab({prompt: this});
+    this.toolbarVocab = new ToolbarVocab({prompt: this, buttonState: options.vocabToolbarButtonState});
     this.tutorial = new Tutorial({prompt: this});
     this.vocabContained = new VocabContained({prompt: this});
     this.vocabDefinition = new VocabDefinition({prompt: this});
@@ -637,7 +637,8 @@ const StudyPromptComponent = GelatoComponent.extend({
                 }
               },
               function (callback) {
-                if (app.router.page.title.indexOf('Demo') === -1) {
+                const title = app.router.page.title;
+                if (title.indexOf('Demo') === -1 && title.indexOf('Practice') === -1) {
                   items.fetch({
                     data: {
                       vocab_ids: vocabId,
