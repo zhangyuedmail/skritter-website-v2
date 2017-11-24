@@ -29,6 +29,13 @@ module.exports = GelatoDialog.extend({
    */
   initialize: function () {
     this._views['lists'] = new ListSelect();
+
+    this.clickVolume = 0.0;
+    this.clickSound = new window.Howl({
+      src: ['media/click.mp3'],
+      format: ['mp3'],
+      volume: app.user.get('volume'),
+    });
   },
 
   /**
@@ -41,6 +48,15 @@ module.exports = GelatoDialog.extend({
     this._views['lists'].setElement('#list-select-container').render();
 
     this.volumeSlider = this.$('#field-audio-volume').bootstrapSlider({});
+
+    this.volumeSlider.slider().on('slide', (data) => {
+      if (this.clickVolume === data.value) return;
+
+      this.clickVolume = data.value;
+
+      this.clickSound.volume(data.value);
+      this.clickSound.play();
+    });
 
     return this;
   },
