@@ -11,7 +11,7 @@ gelato-component(data-name='dashboard-goal')
       #goal-doughnut
     if app.isMobile()
       #due-column.col-xs-12.text-center
-        a(href="/account")= user.get('name')
+        a(href="/account")= user.get('name') || 'guest'
         | , you have &nbsp;
         span#review-count -
         //span#review-parts= view.getReviewParts()

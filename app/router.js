@@ -187,7 +187,12 @@ module.exports = Router.extend({
       this.navigate('account/setup');
       this.go('pages/account/AccountSetupPage');
     } else {
-      this.navigateLogin();
+      if (app.isMobile()) {
+        this.navigate('home');
+        this.navigateHome();
+      } else {
+        this.navigateLogin();
+      }
     }
   },
 
