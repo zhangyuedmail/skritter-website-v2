@@ -13,6 +13,7 @@ const HomePage = GelatoPage.extend({
   events: {
     'click #link-apple-store': 'handleClickLinkAppleStore',
     'click #link-google-store': 'handleClickLinkGoogleStore',
+    'click #signup-button': 'handleClickSignupButton',
   },
 
   /**
@@ -67,7 +68,9 @@ const HomePage = GelatoPage.extend({
    */
   handleClickLinkAppleStore: function (event) {
     event.preventDefault();
+
     app.mixpanel.track('Clicked ios app button');
+
     window.open('https://itunes.apple.com/us/artist/inkren-llc/id402280587', '_blank');
   },
 
@@ -77,8 +80,18 @@ const HomePage = GelatoPage.extend({
    */
   handleClickLinkGoogleStore: function (event) {
     event.preventDefault();
+
     app.mixpanel.track('Clicked android app button');
+
     window.open('https://play.google.com/store/apps/developer?id=Skritter', '_blank');
+  },
+
+  handleClickSignupButton: function (event) {
+    event.preventDefault();
+
+    app.user.loginAnonymous(function () {
+      app.router.navigate('account/setup', {trigger: true});
+    });
   },
 
   /**

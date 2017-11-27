@@ -464,6 +464,39 @@ const UserModel = SkritterModel.extend({
   },
 
   /**
+   * @method loginAnonymous
+   * @param {String} username
+   * @param {String} password
+   * @param {Function} callback
+   */
+  loginAnonymous: function (callback) {
+    async.waterfall([
+      (callback) => {
+        $.ajax({
+          url: app.getApiUrl() + 'users',
+          headers: app.user.session.getHeaders(),
+          type: 'POST',
+          error: function (error) {
+            callback(error);
+          },
+          success: function (result) {
+            callback(null, result.User);
+          },
+        });
+      },
+      (user, callback) => {
+        this.login(user.id, null, callback);
+      },
+    ], (error) => {
+      if (error) {
+        callback(error);
+      } else {
+        callback();
+      }
+    });
+  },
+
+  /**
    * Logs out a user
    * @method logout
    */
