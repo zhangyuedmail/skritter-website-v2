@@ -358,6 +358,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   enableCanvas: function () {
     this.inputStage.addEventListener('stagemousedown', this.triggerCanvasMouseDown);
     this.inputStage.addEventListener('stagemouseup', this.triggerCanvasMouseUp);
+    this.inputStage.enableDOMEvents(true);
     return this;
   },
 
