@@ -507,15 +507,17 @@ const UserModel = SkritterModel.extend({
       app.user.db.delete()
         .then(function () {
           self._removeUserLocalStorageData();
+          self._redirectAfterLogout();
         })
         .catch(function (error) {
-          console.error(error);
-          app.reload();
+          self._removeUserLocalStorageData();
+          self._redirectAfterLogout();
         });
     } else {
       // catches weird states where maybe some user data is still left over
-      // but the login isn't valid
+      // but the login isn't valid and we want to just clear things
       self._removeUserLocalStorageData();
+      self._redirectAfterLogout();
     }
   },
 
@@ -678,16 +680,25 @@ const UserModel = SkritterModel.extend({
   },
 
   /**
-   * Deletes local storage and app settings related to user login
+   * Redirects user back to home after any kind of logout operation.
+   * @method _redirectAfterLogout
+   * @private
+   */
+  _redirectAfterLogout: function () {
+    app.router.navigate('home');
+    app.reload();
+  },
+
+  /**
+   * Deletes local storage and app settings related to user login.
    * @method _removeUserLocalStorageData
    * @private
    */
   _removeUserLocalStorageData: function () {
-    app.removeLocalStorage(self.id + '-session');
-    app.removeLocalStorage(self.id + '-user');
+    app.removeLocalStorage(this.id + '-session');
+    app.removeLocalStorage(this.id + '-user');
     app.removeSetting('user');
     app.removeSetting('siteRef');
-    app.reload();
   },
 
 });
