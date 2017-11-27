@@ -1,8 +1,9 @@
 const GelatoApplication = require('gelato/application');
 const AddVocabDialog = require('dialogs1/add-vocab/view');
-const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
-const ViewDialog = require('dialogs1/view-dialog/view');
+const CreateAccountDialog = require('dialogs1/create-account/view');
 const NotificationDialog = require('dialogs1/notification/NotificationDialog.js');
+const ViewDialog = require('dialogs1/view-dialog/view');
+const VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 const FeedbackComponent = require('components/common/FeedbackComponent');
 
 const DefaultNavbar = require('components/navbars/NavbarDefaultComponent');
@@ -1105,6 +1106,10 @@ return parseInt(v, 10);
     }
 
     return thanks;
+  },
+
+  signup () {
+    this._views['create-account'] = new CreateAccountDialog().open();
   },
 
   /**
