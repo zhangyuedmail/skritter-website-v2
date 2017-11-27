@@ -380,7 +380,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
                 }
               },
               function (callback) {
-                if (app.router.page.title.indexOf('Demo') === -1) {
+                const title = app.router.page.title;
+                if (title.indexOf('Demo') === -1 && title.indexOf('Practice') === -1) {
                   self.items.fetch({
                     data: {
                       vocab_ids: vocabId,
