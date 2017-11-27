@@ -46,7 +46,7 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function (options) {
-    _.bindAll(this, 'onDisplayStageTick', 'onInputMove');
+    _.bindAll(this, 'onDisplayStageTick', 'onInputMove', 'triggerCanvasMouseDown', 'triggerCanvasMouseUp');
 
     this.brushScale = 0.025;
     this.defaultFadeEasing = createjs.Ease.sineOut;
@@ -223,8 +223,10 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @returns {Canvas}
    */
   disableCanvas: function () {
-    this.inputStage.removeEventListener('stagemousedown', _.bind(this.triggerCanvasMouseDown, this));
-    this.inputStage.removeEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
+    this.inputStage.removeEventListener('stagemousedown', this.triggerCanvasMouseDown);
+    this.inputStage.removeEventListener('stagemouseup', this.triggerCanvasMouseUp);
+    this.inputStage.enableDOMEvents(false);
+
     return this;
   },
 
@@ -354,8 +356,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
    * @returns {Canvas}
    */
   enableCanvas: function () {
-    this.inputStage.addEventListener('stagemousedown', _.bind(this.triggerCanvasMouseDown, this));
-    this.inputStage.addEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
+    this.inputStage.addEventListener('stagemousedown', this.triggerCanvasMouseDown);
+    this.inputStage.addEventListener('stagemouseup', this.triggerCanvasMouseUp);
     return this;
   },
 
