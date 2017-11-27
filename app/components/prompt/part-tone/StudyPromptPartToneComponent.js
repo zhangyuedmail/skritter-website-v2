@@ -56,12 +56,16 @@ const StudyPromptPartToneComponent = GelatoComponent.extend({
     this.prompt.canvas.reset();
 
     if (this.prompt.review.character) {
+      const shape = this.prompt.review.character.getTargetShape();
+
+      // scale and center vector image
+      shape.x = this.prompt.canvas.size * 0.1;
+      shape.y = this.prompt.canvas.size * 0.2;
+      shape.scaleX *= 0.8;
+      shape.scaleY *= 0.8;
+
       this.prompt.canvas.clearLayer('character-reveal');
-      this.prompt.canvas.drawShape(
-        'character-reveal',
-        this.prompt.review.character.getTargetShape(),
-        {color: '#e8ded2'}
-      );
+      this.prompt.canvas.drawShape('character-reveal', shape, {color: '#e8ded2'});
     } else {
       this.prompt.canvas.clearLayer('character-reveal');
       this.prompt.canvas.drawCharacter(

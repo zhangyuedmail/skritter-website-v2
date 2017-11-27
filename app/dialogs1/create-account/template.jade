@@ -1,0 +1,31 @@
+gelato-dialog(data-name='create-account')
+
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+
+        .modal-header
+          .pull-left
+            .modal-title Create a new account
+          .pull-right
+            a(href='#', data-dismiss='modal')
+              i.fa.fa-times-circle-o
+
+        .modal-body
+          #error-message.text-danger
+          form#create-account-form
+            .form-group
+              label(for="field-username") Username
+              input#field-username.form-control(type="text", placeholder="")
+            .form-group
+              label(for="field-email") Email
+              input#field-email.form-control(type="text", placeholder="")
+            .form-group
+              label(for="field-password") Password
+              input#field-password.form-control(type="password", placeholder="")
+
+            button.btn.btn-success.hidden(type="submit")
+
+        .modal-footer
+          button#create-account-button.btn.btn-success(type="button") Continue
+

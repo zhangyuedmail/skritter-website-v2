@@ -4,7 +4,7 @@
   .user-info-wrapper.text-center
     img.profile-picture#menu-avatar(src="data:image/png;base64, " + user.get('avatar'), alt="")
     div
-      span#username.username= app.user.get('name')
+      span#username.username= app.user.get('name') || 'guest'
 
 .user-stats-wrapper.row
   .stats-wrapper.col-xs-6.text-center
