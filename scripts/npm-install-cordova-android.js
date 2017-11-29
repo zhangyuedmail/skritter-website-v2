@@ -7,7 +7,7 @@ shell.exec('cordova create cordova-android com.inkren.skritter "Skritter"');
 shell.cd('./cordova-android');
 
 // platforms
-shell.exec('cordova platform add android@6.4.0');
+shell.exec('cordova platform add android@6.3.0');
 
 // plugins
 shell.exec('cordova plugin add cordova-plugin-crosswalk-webview@2.3.0');
