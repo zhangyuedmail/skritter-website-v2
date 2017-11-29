@@ -295,6 +295,10 @@ const ItemCollection = BaseSkritterCollection.extend({
             (error) => {
               this.fetchingState = 'standby';
 
+              if (!options.silent) {
+                this.trigger('preload');
+              }
+
               if (error) {
                 reject(error);
               } else {
