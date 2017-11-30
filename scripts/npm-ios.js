@@ -11,13 +11,13 @@ shell.exec('brunch build');
 shell.cp('./cordova.xml', './cordova-ios/config.xml');
 
 if (lang === 'ja') {
-  shell.sed('-i', '{!application-id!}', 'com.skritter.skritterja.test', './cordova-ios/config.xml');
+  shell.sed('-i', '{!application-id!}', 'com.inkren.skritter.japanese.beta', './cordova-ios/config.xml');
   shell.sed('-i', '{!application-language!}', 'japanese', './cordova-ios/config.xml');
-  shell.sed('-i', '{!application-name!}', 'Skritter Test', './cordova-ios/config.xml');
+  shell.sed('-i', '{!application-name!}', 'Skritter Beta', './cordova-ios/config.xml');
 } else {
-  shell.sed('-i', '{!application-id!}', 'com.skritter.skritter.test', './cordova-ios/config.xml');
+  shell.sed('-i', '{!application-id!}', 'com.inkren.skritter.chinese.beta', './cordova-ios/config.xml');
   shell.sed('-i', '{!application-language!}', 'chinese', './cordova-ios/config.xml');
-  shell.sed('-i', '{!application-name!}', 'Skritter Test', './cordova-ios/config.xml');
+  shell.sed('-i', '{!application-name!}', 'Skritter Beta', './cordova-ios/config.xml');
 }
 
 shell.sed('-i', '{!application-version!}', project.iosVersion, './cordova-ios/config.xml');
