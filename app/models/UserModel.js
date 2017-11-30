@@ -47,7 +47,7 @@ const UserModel = SkritterModel.extend({
     readingChinese: 'pinyin',
     readingJapanese: 'kana',
     spaceItems: false,
-    studyKana: false,
+    studyKana: true,
     teachingMode: true,
     timezone: 'America/New_York',
     volume: 1.0,
