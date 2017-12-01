@@ -956,6 +956,10 @@ return parseInt(v, 10);
 
           // skip initial sync when data is ready
           if (this.user.offline.isReady()) {
+            // sync things in the background if needed
+            this.user.offline.sync();
+
+            // load reviews that have not been submitted
             await this.user.offline.loadAllReviews();
 
             callback();

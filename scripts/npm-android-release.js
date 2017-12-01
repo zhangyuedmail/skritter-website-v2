@@ -12,13 +12,13 @@ shell.exec('brunch build');
 shell.cp('./cordova.xml', './cordova-android/config.xml');
 
 if (lang === 'ja') {
-  shell.sed('-i', '{!application-id!}', 'com.inkren.skritter.japanese', './cordova-android/config.xml');
+  shell.sed('-i', '{!application-id!}', 'com.inkren.skritter.japanese.beta', './cordova-android/config.xml');
   shell.sed('-i', '{!application-language!}', 'japanese', './cordova-android/config.xml');
-  shell.sed('-i', '{!application-name!}', 'Skritter', './cordova-android/config.xml');
+  shell.sed('-i', '{!application-name!}', 'Skritter Beta', './cordova-android/config.xml');
 } else {
-  shell.sed('-i', '{!application-id!}', 'com.inkren.skritter.chinese', './cordova-android/config.xml');
+  shell.sed('-i', '{!application-id!}', 'com.inkren.skritter.chinese.beta', './cordova-android/config.xml');
   shell.sed('-i', '{!application-language!}', 'chinese', './cordova-android/config.xml');
-  shell.sed('-i', '{!application-name!}', 'Skritter', './cordova-android/config.xml');
+  shell.sed('-i', '{!application-name!}', 'Skritter Beta', './cordova-android/config.xml');
 }
 
 shell.sed('-i', '{!application-version!}', project.version, './cordova-android/config.xml');

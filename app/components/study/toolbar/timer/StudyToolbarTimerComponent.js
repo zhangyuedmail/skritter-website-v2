@@ -73,6 +73,7 @@ const StudyToolbarTimerComponent = GelatoComponent.extend({
     this.promptType = null;
 
     this.listenTo(vent, 'prompt-part:rendered', this.start);
+    this.listenTo(vent, 'item:start', this.start);
     this.listenTo(vent, 'item:stop', this.stop);
   },
 

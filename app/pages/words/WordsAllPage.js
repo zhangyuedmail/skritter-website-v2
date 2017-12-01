@@ -90,25 +90,33 @@ module.exports = GelatoPage.extend({
    * @method fetchItems
    * @param {string} [cursor]
    */
-  fetchItems: function (cursor) {
-    const self = this;
+  fetchItems: async function (cursor) {
+    if (app.user.offline.isReady()) {
+      const items = _.chain(await app.user.offline.loadAllItems()).sortBy('last').uniqBy((item) => item.vocabIds[0]).value();
+      const vocabs = await app.user.offline.loadVocabsFromItems(items);
 
-    this.items.fetch({
-      data: {
-        sort: this.sort,
-        lang: app.getLanguage(),
-        limit: this.limit,
-        include_vocabs: true,
-        cursor: cursor || '',
-      },
-      remove: false,
-      sort: false,
-      success: function () {
-        if (app.config.recordLoadTimes) {
-          self._recordLoadTime();
-        }
-      },
-    });
+      this.items.add(items);
+      this.items.vocabs.add(vocabs);
+
+      this.renderTable();
+    } else {
+      this.items.fetch({
+        data: {
+          sort: this.sort,
+          lang: app.getLanguage(),
+          limit: this.limit,
+          include_vocabs: true,
+          cursor: cursor || '',
+        },
+        remove: false,
+        sort: false,
+        success: (result) => {
+          if (app.config.recordLoadTimes) {
+            this._recordLoadTime();
+          }
+        },
+      });
+    }
   },
 
   /**
@@ -266,14 +274,20 @@ module.exports = GelatoPage.extend({
    * @param {Event} event
    */
   handleClickVocabRow: function (event) {
-    event.preventDefault();
-
     const row = $(event.target).parent('tr');
     const vocabId = row.data('vocab-id');
-    // const vocab = this.vocabMap[vocabId];
+
+    event.preventDefault();
 
     if (vocabId) {
-      vent.trigger('vocabInfo:toggle', vocabId);
+      const vocabInfo = {
+        id: vocabId,
+        items: [],
+        vocabs: new Vocabs(this.items.vocabs.get(vocabId)),
+        vocabsContaining: [],
+      };
+
+      vent.trigger('vocabInfo:toggle', vocabId, vocabInfo);
     }
   },
 
