@@ -274,14 +274,20 @@ module.exports = GelatoPage.extend({
    * @param {Event} event
    */
   handleClickVocabRow: function (event) {
-    event.preventDefault();
-
     const row = $(event.target).parent('tr');
     const vocabId = row.data('vocab-id');
-    // const vocab = this.vocabMap[vocabId];
+
+    event.preventDefault();
 
     if (vocabId) {
-      vent.trigger('vocabInfo:toggle', vocabId);
+      const vocabInfo = {
+        id: vocabId,
+        items: [],
+        vocabs: new Vocabs(this.items.vocabs.get(vocabId)),
+        vocabsContaining: [],
+      };
+
+      vent.trigger('vocabInfo:toggle', vocabId, vocabInfo);
     }
   },
 
