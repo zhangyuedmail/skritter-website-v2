@@ -63,6 +63,8 @@ body
       .cover-section-wrapper
         .device-photo
           img(src="/media/images/landing/skritter-devices.png")
+          a(href="#section-plans")
+            img.holiday-deal-save(src="/media/images/holiday-deal-save.png")
         .main#main-image-wrapper
           .left-wrapper#landing-inner-wrapper
             .your-path Your path to Chinese & Japanese Mastery
@@ -170,29 +172,31 @@ body
             .col-md-3
               .plan.border-right
                 .title 6 months
-                .discount
+                .orig-price $89.99
                 .price $59.99
-                .monthly $10.00 / month
+                .monthly.savings 33% savings
                 a.subscribe.btn.btn-fixed.btn-default(href='/signup/six_months') Subscribe
                 .trial Includes 7-day free trial
             .col-md-3
               .plan.border-right
                 i.icon.icon-marketing-most-popular
                 .title 1 year
-                .discount
+                .orig-price $179.88
                 .price $99.99
-                .monthly $8.33 / month
+                .monthly.savings 44% savings
                 a.subscribe.btn.btn-fixed.btn-success(href='/signup/twelve_months') Subscribe
                 .trial Includes 7-day free trial
             .col-md-3
               .plan
+                img.holiday-deal(src="/media/images/holiday-deal.png")
                 i.icon.icon-marketing-best-value
                 .title 2 years
-                .discount
-                .price $179.99
-                .monthly $7.50 / month
+                .orig-price $359.76
+                .price $144.99
+                .monthly.savings 60% savings
                 a.subscribe.btn.btn-fixed.btn-default(href='/signup/twenty_four_months') Subscribe
                 .trial Includes 7-day free trial
+                .notice *offer ends Dec. 31, 2017
           .institutions
             | Buying for a school? Check out our
             | &nbsp;

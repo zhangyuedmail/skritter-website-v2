@@ -20,6 +20,18 @@ gelato-page[data-name='home'] {
     }
   }
 
+  .orig-price {
+    text-decoration: line-through;
+    margin: 10px 0px;
+  }
+
+  .holiday-deal {
+    position: absolute;
+    right: 0px;
+    top: -60px;
+    max-width:120px;
+  }
+
   #hero-slider {
     position: relative;
     background: #666;
@@ -210,6 +222,13 @@ gelato-page[data-name='home'] {
       bottom: 0;
       right: 0;
     }
+
+    .holiday-deal-save {
+      position: absolute;
+      left: -10px;
+      top: 132px;
+      max-width: 180px;
+    }
   }
 
   .anchor {
@@ -295,7 +314,7 @@ gelato-page[data-name='home'] {
         font-family: $font-ubuntu;
         font-size: 16px;
         font-weight: 300;
-        margin-bottom: 60px;
+        margin-bottom: 42px;
       }
       .icon {
         display: none;
@@ -412,6 +431,10 @@ gelato-page[data-name='home'] {
   @media (max-width: 768px) {
     .motto-text {
       text-shadow: 2px 2px 4px #151515;
+    }
+
+    .holiday-deal {
+      top: 10px;
     }
 
     .your-path {

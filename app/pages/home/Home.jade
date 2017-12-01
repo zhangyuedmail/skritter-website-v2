@@ -99,29 +99,31 @@ gelato-page(data-name='home')
         .col-md-3
           .plan.border-right
             .title 6 months
-            .discount
-            .price $59.99
-            .monthly $10.00 / month
+            .orig-price
+            .price $89.99
+            .savings 33% savings
             a.subscribe.btn.btn-fixed.btn-default(href='/signup/six_months') Subscribe
             .trial Includes 7-day free trial
         .col-md-3
           .plan.border-right
             i.icon.icon-marketing-most-popular
             .title 1 year
-            .discount
+            .orig-price $179.88
             .price $99.99
-            .monthly $8.33 / month
+            .savings 44% savings
             a.subscribe.btn.btn-fixed.btn-success(href='/signup/twelve_months') Subscribe
             .trial Includes 7-day free trial
         .col-md-3
           .plan
+            img.holiday-deal(src="/media/images/holiday-deal.png")
             i.icon.icon-marketing-best-value
             .title 2 years
-            .discount
+            .orig-price $359.76
             .price $179.99
-            .monthly $7.50 / month
+            .savings 50% savings
             a.subscribe.btn.btn-fixed.btn-default(href='/signup/twenty_four_months') Subscribe
             .trial Includes 7-day free trial
+            .notice *offer ends Dec. 31, 2017
       .institutions
         | Buying for a school? Check out our
         | &nbsp;
