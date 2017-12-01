@@ -110,6 +110,10 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     this.listenTo(vent, 'vocab:play', this.playVocabAudio);
     this.listenTo(vent, 'studyPromptVocabInfo:show', this.showVocabInfo);
+
+    // Listen to cordova based pause and resume events
+    this.cordovaPauseEvent = document.addEventListener('pause', this.handleCordovaPause.bind(this), false);
+    this.cordovaResumeEvent = document.addEventListener('resume', this.handleCordovaResume.bind(this), false);
   },
 
   /**
@@ -265,6 +269,20 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
+   * Handles pause events on mobile.
+   */
+  handleCordovaPause: function () {
+    this.review.stop();
+  },
+
+  /**
+   * Handles resume events on mobile.
+   */
+  handleCordovaResume: function () {
+    // TODO: make the timer resume???
+  },
+
+  /**
    * @method next
    * @param {Boolean} [skip]
    */
@@ -352,6 +370,8 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @returns {StudyPromptComponent}
    */
   reset: function () {
+    document.removeEventListener('pause', this.cordovaPauseEvent);
+    document.removeEventListener('resume', this.cordovaResumeEvent);
     this.review = null;
     this.reviews = null;
     this.remove();
