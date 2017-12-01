@@ -225,8 +225,8 @@ gelato-page[data-name='home'] {
 
     .holiday-deal-save {
       position: absolute;
-      left: -10px;
-      top: 132px;
+      left: 35px;
+      top: 180px;
       max-width: 180px;
     }
   }
@@ -299,16 +299,20 @@ gelato-page[data-name='home'] {
     .header {
       margin-bottom: 65px;
     }
+
     .institutions {
       margin-top: 75px;
     }
+
     .plan {
       padding-bottom: 12px;
       padding-top: 12px;
       position: relative;
+      
       &.border-right {
         border-right: 1px solid $white3;
       }
+
       .discount {
         color: #87a64b;
         font-family: $font-ubuntu;
@@ -316,12 +320,14 @@ gelato-page[data-name='home'] {
         font-weight: 300;
         margin-bottom: 42px;
       }
+
       .icon {
         display: none;
         position: absolute;
         right: -25px;
         top: -10px;
       }
+
       .monthly {
         color: #b2b5b9;
         font-family: $font-ubuntu;
@@ -329,6 +335,11 @@ gelato-page[data-name='home'] {
         font-weight: 300;
         margin-bottom: 60px;
       }
+
+      .savings {
+        color: $green5;
+      }
+
       .price {
         color: #404851;
         font-family: $font-ubuntu;
@@ -336,9 +347,11 @@ gelato-page[data-name='home'] {
         font-weight: 300;
         margin-bottom: 10px;
       }
+
       .subscribe {
         margin-bottom: 10px;
       }
+
       .title {
         color: #8c9196;
         font-family: $font-slab;
@@ -346,6 +359,7 @@ gelato-page[data-name='home'] {
         font-weight: 300;
         margin-bottom: 12px;
       }
+
       .trial {
         color: #6c7a85;
         font-family: $font-ubuntu;
