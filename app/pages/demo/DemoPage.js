@@ -188,7 +188,15 @@ const DemoPage = GelatoPage.extend({
         showTitle: !app.isMobile(),
         keepAlive: true,
         body: this.parseTemplate(require('./notify-erase-character1.jade')),
-      });
+        style: {
+          dialog: {
+            top: app.isMobile() ? '49px' : '20%',
+          },
+          backdrop: {
+            height: app.isMobile() ? '0px' : 'auto',
+          },
+        },
+    });
 
     this.setDemoProgress('erasingCharacters');
 
@@ -424,9 +432,18 @@ const DemoPage = GelatoPage.extend({
 
     vent.trigger('notification:show', {
       dialogTitle: 'Getting Hints',
-      showTitle: !app.isMobile(),
+      showTitle: true,
       keepAlive: true,
+      showConfirmButton: app.isMobile(),
       body: this.parseTemplate(require('./notify-step2')),
+      style: {
+        backdrop: {
+          top: app.isMobile() ? '49px' : '20%',
+        },
+        dialog: {
+          top: '20%',
+        },
+      },
     });
   },
 
@@ -549,7 +566,7 @@ const DemoPage = GelatoPage.extend({
             width: mobile ? '100%' : '50%',
             top: mobile ? '49px': '0px',
             bottom: mobile ? 'auto' : '0%',
-            height: mobile ? '149px' : 'auto',
+            height: mobile ? '0' : 'auto',
           },
         },
       },
