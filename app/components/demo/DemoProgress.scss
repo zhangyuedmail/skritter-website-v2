@@ -1,6 +1,6 @@
 @import "../../styles/_variables";
 
-gelato-component.demo-progress-component {
+.demo-progress-component {
   width: 100%;
   background-color: $black;
   position: absolute;
@@ -56,6 +56,17 @@ gelato-component.demo-progress-component {
 
     &:hover, &:focus {
       background-color: $sand6;
+    }
+  }
+}
+
+.mobile {
+  .demo-progress-component {
+    padding: 0 0 0 10px;
+
+    .progress-bar {
+      background: #337ab7;
+      border-radius: 10px;
     }
   }
 }

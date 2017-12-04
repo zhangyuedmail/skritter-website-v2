@@ -1,6 +1,7 @@
 @import "../../styles/_variables";
 
-.navbar-mobile-dashboard-component {
+.navbar-mobile-demo-component {
+  height: 48px;
 
   nav {
     border-radius: 0;
@@ -9,6 +10,7 @@
   }
 
   .back-chevron {
+    margin-top: 7px;
     padding: 10px 15px 10px 10px;
   }
 
