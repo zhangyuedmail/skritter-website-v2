@@ -87,6 +87,12 @@ module.exports = GelatoDialog.extend({
 
     this.updateValues();
 
+    // if this is the first render and the dialog isn't already in the DOM,
+    // this might not work right. Do it again just to make sure.
+    _.defer(() => {
+      this.updateValues();
+    });
+
     return this;
   },
 
