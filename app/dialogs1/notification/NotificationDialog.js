@@ -1,4 +1,5 @@
 const GelatoDialog = require('gelato/dialog');
+const vent = require('vent');
 
 /**
  * @class VocabViewer
@@ -57,7 +58,7 @@ module.exports = GelatoDialog.extend({
       return;
     }
 
-    this.close();
+    vent.trigger('notification:close');
   },
 
   /**
