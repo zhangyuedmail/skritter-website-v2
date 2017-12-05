@@ -96,6 +96,8 @@ const DemoPage = GelatoPage.extend({
 
     this.loadDemo();
 
+    this.$('#demo-prompt-container').addClass('hidden');
+
     return this;
   },
 
@@ -165,6 +167,7 @@ const DemoPage = GelatoPage.extend({
         },
       ],
       function (error, vocab) {
+        self.$('#demo-prompt-container').removeClass('hidden');
         ScreenLoader.hide();
         self.prompt.show();
         const runeItems = vocab.getPromptItems('rune');
@@ -173,8 +176,8 @@ const DemoPage = GelatoPage.extend({
         self.promptItems.teachAll();
 
         // uncomment for faster testing shortcut
-        // self.teachTonePrompt1();
-        self.teachDemoChar1();
+        self.teachTonePrompt1();
+        // self.teachDemoChar1();
       }
     );
   },
@@ -191,6 +194,7 @@ const DemoPage = GelatoPage.extend({
         style: {
           dialog: {
             top: app.isMobile() ? '49px' : '20%',
+            height: app.isMobile() ? '162px' : 'auto',
           },
           backdrop: {
             height: app.isMobile() ? '0px' : 'auto',
@@ -229,6 +233,7 @@ const DemoPage = GelatoPage.extend({
 
     _.defer(() => {
       this.$('.tap-to-advance-wrapper').addClass('hidden');
+      this.prompt.toolbarAction.$view.removeClass('hidden');
     });
 
     this.prompt.once('character:erased', this.teachEraseDemoChar2);
@@ -299,6 +304,12 @@ const DemoPage = GelatoPage.extend({
       showTitle: !app.isMobile(),
       keepAlive: true,
       body: this.parseTemplate(require('./notify-srs-1.jade')),
+      style: {
+        dialog: {
+          top: app.isMobile() ? '49px' : '20%',
+          height: app.isMobile() ? '215px' : 'auto',
+        },
+      },
     });
     this.setDemoProgress('spacedRepetition');
 
@@ -360,9 +371,16 @@ const DemoPage = GelatoPage.extend({
 
     vent.trigger('notification:show', {
       dialogTitle: 'Pronunciation Prompts',
-      showTitle: !app.isMobile(),
+      showTitle: true,
       keepAlive: true,
+      buttonText: 'Ok',
+      showConfirmButton: app.isMobile(),
       body: this.parseTemplate(require('./notify-reading1.jade')),
+      style: {
+        dialog: {
+          top: app.isMobile() ? '49px' : '20%',
+        },
+      },
     });
     this.setDemoProgress('readingPrompts');
 
@@ -386,7 +404,7 @@ const DemoPage = GelatoPage.extend({
     });
   },
 
-    /**
+  /**
    * Step that teaches users how to answer a reading prompt
    */
   teachTonePrompt1: function () {
@@ -398,7 +416,14 @@ const DemoPage = GelatoPage.extend({
       dialogTitle: 'Tone Prompts',
       showTitle: true,
       keepAlive: true,
+      buttonText: 'Ok',
+      showConfirmButton: app.isMobile(),
       body: this.parseTemplate(require('./notify-tone1.jade')),
+      style: {
+        dialog: {
+          top: app.isMobile() ? '49px' : '20%',
+        },
+      },
     });
 
     this.setDemoProgress('tonePrompts');
