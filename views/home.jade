@@ -214,6 +214,10 @@ body
     var landingWrapper = document.getElementById('landing-inner-wrapper');
     // landing image height calculator
     var height = window.innerHeight - (window.innerWidth > 768 ? 170 : 230);
+    if (window.innerHeight < 530 && window.innerWidth <= 768) {
+      height = window.innerHeight - 190;
+    }
+
     landingWrapper.style.height = height + 'px';
 
     // countup plugin
