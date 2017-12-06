@@ -176,8 +176,8 @@ const DemoPage = GelatoPage.extend({
         self.promptItems.teachAll();
 
         // uncomment for faster testing shortcut
-        self.teachTonePrompt1();
-        // self.teachDemoChar1();
+        // self.teachTonePrompt1();
+        self.teachDemoChar1();
       }
     );
   },

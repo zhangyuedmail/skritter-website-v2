@@ -1,7 +1,6 @@
 const NavbarDefaultComponent = require('./NavbarDefaultComponent.js');
 const DemoProgressComponent = require('components/demo/DemoProgressComponent.js');
 
-
 const NavbarMobileComponent = NavbarDefaultComponent.extend({
 
   events: {
@@ -22,20 +21,11 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
     const viewOptions = options.viewOptions || {};
 
     this._views['progress'] = new DemoProgressComponent({
-      demoPage: this,
+      demoPage: app.router.page,
       firstStep: 'languageSelection',
     });
 
-    if (app.user.isLoggedIn()) {
-      app.user.stats.fetchToday();
-    }
-
     this.showBackBtn = viewOptions.showBackBtn;
-    this.showCreateListBtn = viewOptions.showCreateListBtn;
-    this.showSyncBtn = app.config.offlineEnabled && viewOptions.showSyncBtn;
-
-
-    this.listenTo(app.user.offline, 'status', this.handleOfflineStatus);
   },
 
   render () {
