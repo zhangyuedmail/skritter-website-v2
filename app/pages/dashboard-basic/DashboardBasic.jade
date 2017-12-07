@@ -1,0 +1,11 @@
+gelato-page(data-name='dashboard-basic')
+  for vocablist, vocablistIndex in view.vocablists.models
+    .vocablist-container
+      .vocablist-block(data-id=vocablist.id)
+        .vocablist-title Level #{vocablistIndex + 1}
+
+        for section, sectionIndex in vocablist.get('sections')
+          .section-container
+            .section-block(data-id=section.id)
+              .section-title Section #{sectionIndex + 1}
+              .section-count Word Count: #{section.rows.length}

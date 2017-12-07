@@ -237,7 +237,11 @@ module.exports = Router.extend({
   navigateDashboard: function () {
     if (app.user.isLoggedIn()) {
       this.navigate('dashboard');
-      this.go('pages/dashboard/DashboardPage');
+      if (app.user.get('basicMode')) {
+        this.go('pages/dashboard-basic/DashboardBasicPage');
+      } else {
+        this.go('pages/dashboard/DashboardPage');
+      }
     } else {
       this.navigateLogin();
     }

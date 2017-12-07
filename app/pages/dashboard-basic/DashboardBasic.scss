@@ -1,0 +1,33 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='dashboard-basic'] {
+  background: $background-primary;
+  padding-top: 75px;
+
+  .section-block {
+    background-color: $white1;
+    border-radius: 0;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    margin-bottom: 15px;
+    padding: 15px;
+    position: relative;
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .vocablist-container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .vocablist-title {
+    font-size: 21px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+}
