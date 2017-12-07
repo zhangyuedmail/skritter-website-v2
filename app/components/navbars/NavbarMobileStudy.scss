@@ -1,7 +1,7 @@
 @import "../../styles/_variables";
 
 bootstrap-navbar[data-name='mobile'] {
-  color: $sand2;
+  color: $white3;
 
   .navbar-toggle {
     float: left;
@@ -41,7 +41,7 @@ bootstrap-navbar[data-name='mobile'] {
   .icon {
 
     svg {
-      fill: $sand2;
+      fill: $white3;
       height: 20px;
       width: 20px;
     }

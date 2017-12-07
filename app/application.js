@@ -993,7 +993,7 @@ return parseInt(v, 10);
           setTimeout(navigator.splashscreen.hide, 1000);
 
           if (app.isAndroid()) {
-            StatusBar.backgroundColorByHexString('#38240c');
+            StatusBar.backgroundColorByHexString('#0c0e10');
           }
         }
       }

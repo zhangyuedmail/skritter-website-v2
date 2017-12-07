@@ -11,9 +11,9 @@ bootstrap-navbar[data-name='mobile'] {
   }
 
   nav {
-    background-color: $grey9;
-    border-color: $grey7;
-    border-radius: 0;border-radius: 0;
+    background-color: $grey8;
+    border-bottom-color: $grey6;
+    border-radius: 0;
     box-shadow: none;
     z-index: 7001;
   }
@@ -24,18 +24,18 @@ bootstrap-navbar[data-name='mobile'] {
     margin-right: 10px;
 
     .icon-bar {
-      background-color: $sand2;
+      background-color: $white3;
       width: 20px;
     }
 
     &:hover,
     &:focus {
-      background-color: $sand6;
+      background-color: $white5;
     }
   }
 
   .title-txt {
-    color: $sand1;
+    color: $white3;
     font-size: 20px;
     text-decoration: none;
     display: inline-block;
@@ -44,7 +44,7 @@ bootstrap-navbar[data-name='mobile'] {
 
   .navbar-nav {
     a {
-      color: $sand2;
+      color: $white3;
       font-family: $font-ubuntu;
       font-size: 18px;
       font-weight: 400;
