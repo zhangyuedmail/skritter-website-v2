@@ -3,9 +3,9 @@
 gelato-component.mobile-side-menu-component {
   width: 250px;
   height: 100%;
-  background-color: $wood9;
+  background-color: $white9;
   position: fixed;
-  color: $sand2;
+  color: $white3;
   font-size: 16px;
 
   .actions-wrapper {
@@ -14,7 +14,7 @@ gelato-component.mobile-side-menu-component {
 
   .app-version {
     bottom: 5px;
-    color: $sand7;
+    color: $white3;
     font-size: 18px;
     position: absolute;
     right: 10px;
@@ -25,8 +25,8 @@ gelato-component.mobile-side-menu-component {
   }
 
   .username {
+    color: $white6;
     font-size: 18px;
-    color: $sand2;
     margin-bottom: 10px;
   }
 
@@ -37,7 +37,8 @@ gelato-component.mobile-side-menu-component {
   }
 
   .user-stats-wrapper {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    margin-top: 15px;
   }
 
   .profile-picture {
@@ -67,7 +68,7 @@ gelato-component.mobile-side-menu-component {
   }
 
   a {
-    color: $sand1;
+    color: $white3;
     font-size: 22px;
     padding: 4px 15px;
 
