@@ -57,6 +57,11 @@
     font-size: 20px;
     padding: 8px 80px;
     margin-top: 25px;
+
+    &:active {
+      background: #000;
+      color: #FFF;
+    }
   }
 
   .media {
