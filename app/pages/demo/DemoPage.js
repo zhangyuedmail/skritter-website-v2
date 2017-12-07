@@ -195,9 +195,12 @@ const DemoPage = GelatoPage.extend({
           dialog: {
             top: app.isMobile() ? '49px' : '20%',
             height: app.isMobile() ? '162px' : 'auto',
+            left: app.isMobile() ? '0px' : '50%',
+            width: app.isMobile() ? '100%' : '50%',
           },
           backdrop: {
             height: app.isMobile() ? '0px' : 'auto',
+            left: app.isMobile() ? '0px' : '50%',
           },
         },
     });
@@ -295,7 +298,9 @@ const DemoPage = GelatoPage.extend({
 
     this.prompt.$('#toolbar-action-container').show();
 
-    this.prompt.review.once('change:complete', this.teachSRS1);
+    _.defer(() => {
+      this.prompt.review.once('change:complete', this.teachSRS1);
+    });
   },
 
   teachSRS1: function () {
@@ -308,6 +313,8 @@ const DemoPage = GelatoPage.extend({
         dialog: {
           top: app.isMobile() ? '49px' : '20%',
           height: app.isMobile() ? '215px' : 'auto',
+          left: app.isMobile() ? '0px' : '50%',
+          width: app.isMobile() ? '100%' : '50%',
         },
       },
     });
@@ -379,6 +386,8 @@ const DemoPage = GelatoPage.extend({
       style: {
         dialog: {
           top: app.isMobile() ? '49px' : '20%',
+          left: app.isMobile() ? '0px' : '50%',
+          width: app.isMobile() ? '100%' : '50%',
         },
       },
     });
@@ -422,6 +431,8 @@ const DemoPage = GelatoPage.extend({
       style: {
         dialog: {
           top: app.isMobile() ? '49px' : '20%',
+          left: app.isMobile() ? '0px' : '50%',
+          width: app.isMobile() ? '100%' : '50%',
         },
       },
     });
@@ -463,10 +474,13 @@ const DemoPage = GelatoPage.extend({
       body: this.parseTemplate(require('./notify-step2')),
       style: {
         backdrop: {
-          top: app.isMobile() ? '49px' : '20%',
+          top: app.isMobile() ? '49px' : '0%',
+          left: app.isMobile() ? '0px' : '50%',
         },
         dialog: {
           top: '20%',
+          left: app.isMobile() ? '0px' : '50%',
+          width: app.isMobile() ? '100%' : '50%',
         },
       },
     });
@@ -516,6 +530,24 @@ const DemoPage = GelatoPage.extend({
       this.prompt.renderPart();
     }
 
+    const next = app.user.isLoggedIn() ? {} :{
+      // dialogTitle: 'Demo Complete',
+      showTitle: false,
+      body: this.parseTemplate(require('./notify-demo-complete.jade')),
+      showConfirmButton: false,
+      style: {
+        backdrop: {
+          top: '0px',
+          width: '100%',
+        },
+        dialog: {
+          'top': app.isMobile() ? '49px' : '100px',
+          'max-height': app.isMobile() ? 'calc(100% - 49px)' : 'calc(100% - 49px)',
+          'width': '100%',
+        },
+      },
+    };
+
     vent.trigger('notification:show', {
       dialogTitle: 'Lots of Features!',
       showTitle: true,
@@ -526,31 +558,23 @@ const DemoPage = GelatoPage.extend({
       style: {
         backdrop: {
           top: '0px',
-          width: app.isMobile() ? '100%' : '50%',
+          width: '100%',
         },
         dialog: {
-          top: '100px',
-          width: app.isMobile() ? '100%' : '50%',
+          top: app.isMobile() ? '49px' : '20%',
+          left: app.isMobile() ? '0%' : 'auto',
+          width: '100%',
         },
       },
-      next: {
-        // dialogTitle: 'Demo Complete',
-        showTitle: false,
-        body: this.parseTemplate(require('./notify-demo-complete.jade')),
-        showConfirmButton: false,
-        style: {
-          backdrop: {
-            top: '0px',
-            width: '100%',
-          },
-          dialog: {
-            'top': app.isMobile() ? '49px' : '100px',
-            'max-height': app.isMobile() ? 'calc(100% - 49px)' : 'calc(100% - 49px)',
-            'width': '100%',
-          },
-        },
-      },
+      next,
     });
+
+    // logged in users don't see the "magazine ad" for Skritter, just take them back to the dashboard
+    if (app.user.isLoggedIn()) {
+      this.once(vent, 'notification:close', function () {
+        app.router.navigateDashboard();
+      });
+    }
   },
 
   /**
@@ -575,6 +599,7 @@ const DemoPage = GelatoPage.extend({
         },
       },
       next: {
+        animate: 'slide-up',
         dialogTitle: app.locale('pages.demo.firstCharactersTitle'),
         showTitle: !mobile,
         body: app.locale('pages.demo.firstCharacters2Body' + this.lang),
