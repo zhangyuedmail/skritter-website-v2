@@ -480,7 +480,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * and sets the style/speed of the prompt's auto-advance
    */
   startAutoAdvance: function () {
-    if (this._autoAdvanceListenerId || !app.user.get('autoAdvancePrompts')) {
+    if (this._autoAdvanceListenerId || !app.user.get('autoAdvancePrompts') || this.isDemo) {
       return;
     }
 
