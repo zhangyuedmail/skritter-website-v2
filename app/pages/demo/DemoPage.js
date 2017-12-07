@@ -298,9 +298,7 @@ const DemoPage = GelatoPage.extend({
 
     this.prompt.$('#toolbar-action-container').show();
 
-    _.defer(() => {
-      this.prompt.review.once('change:complete', this.teachSRS1);
-    });
+    this.prompt.review.once('change:complete', this.teachSRS1);
   },
 
   teachSRS1: function () {
@@ -385,7 +383,7 @@ const DemoPage = GelatoPage.extend({
       body: this.parseTemplate(require('./notify-reading1.jade')),
       style: {
         dialog: {
-          top: app.isMobile() ? '49px' : '20%',
+          top: '20%',
           left: app.isMobile() ? '0px' : '50%',
           width: app.isMobile() ? '100%' : '50%',
         },
@@ -430,9 +428,13 @@ const DemoPage = GelatoPage.extend({
       body: this.parseTemplate(require('./notify-tone1.jade')),
       style: {
         dialog: {
-          top: app.isMobile() ? '49px' : '20%',
+          top: '20%',
           left: app.isMobile() ? '0px' : '50%',
           width: app.isMobile() ? '100%' : '50%',
+        },
+        backdrop: {
+          height: '100%',
+          left: app.isMobile() ? '0px' : '50%',
         },
       },
     });
@@ -561,7 +563,7 @@ const DemoPage = GelatoPage.extend({
           width: '100%',
         },
         dialog: {
-          top: app.isMobile() ? '49px' : '20%',
+          top: '20%',
           left: app.isMobile() ? '0%' : 'auto',
           width: '100%',
         },
