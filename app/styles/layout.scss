@@ -35,7 +35,7 @@ gelato-page > .container > .content-block {
 }
 
  #vocablist-nav-links {
-  background: $grey8;
+  background: $grey7;
   margin-top: -30px;
   overflow-x: hidden;
   padding-bottom: 10px;
@@ -48,13 +48,12 @@ gelato-page > .container > .content-block {
     padding-bottom: 5px;
     margin-bottom: 4px;
     display: inline-block;
-    color: $sand2;
+    color: $white3;
   }
 
   .selected {
-    margin-bottom: 0px;
-    color: $sand1;
     border-bottom: 4px solid $green5;
+    margin-bottom: 0px;
   }
 }
 

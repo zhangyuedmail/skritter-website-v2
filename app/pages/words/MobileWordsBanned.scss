@@ -51,7 +51,7 @@ gelato-page[data-name='mobile-words-banned'] {
   }
 
   #nav-links {
-    background: $grey8;
+    background: $grey7;
     margin-bottom: 15px;
     margin-top: -50px;
     padding-bottom: 10px;
@@ -65,16 +65,12 @@ gelato-page[data-name='mobile-words-banned'] {
       margin-bottom: 4px;
 
       a {
-        color: $sand1;
+        color: $white3;
       }
 
       &.selected {
         margin-bottom: 0;
         border-bottom: 4px solid $green4;
-
-        a {
-          color: $white;
-        }
       }
     }
   }

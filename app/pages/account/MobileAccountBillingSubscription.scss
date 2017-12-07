@@ -6,7 +6,7 @@ gelato-page[data-name='mobile-account-billing-subscription'] {
   padding-top: 100px;
 
   #nav-links {
-    background: $grey8;
+    background: $grey7;
     margin-bottom: 15px;
     margin-top: -50px;
     padding-bottom: 10px;
@@ -18,12 +18,11 @@ gelato-page[data-name='mobile-account-billing-subscription'] {
     .nav-option {
       padding: 4px 0;
       margin-bottom: 4px;
-      color: $sand1;
+      color: $white3;
 
       &.selected {
         margin-bottom: 0;
         border-bottom: 4px solid $green4;
-        color: $white;
       }
     }
   }

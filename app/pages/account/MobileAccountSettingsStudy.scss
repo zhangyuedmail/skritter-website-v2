@@ -5,7 +5,7 @@ gelato-page[data-name='mobile-account-settings-study'] {
   padding-top: 100px;
 
   #nav-links {
-    background: $grey8;
+    background: $grey7;
     margin-bottom: 15px;
     margin-top: -50px;
     padding-bottom: 10px;
@@ -15,7 +15,7 @@ gelato-page[data-name='mobile-account-settings-study'] {
     z-index: 7002;
 
     a {
-      color: $sand1;
+      color: $white3;
     }
 
     .nav-option {
@@ -25,7 +25,6 @@ gelato-page[data-name='mobile-account-settings-study'] {
       &.selected {
         margin-bottom: 0;
         border-bottom: 4px solid $green4;
-        color: $white;
       }
     }
   }
