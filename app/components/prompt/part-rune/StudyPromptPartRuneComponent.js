@@ -292,8 +292,12 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
 
   /**
    * @method handlePromptCanvasClick
+   * @param {jQuery.ClickEvent} event
    */
-  handlePromptCanvasClick: function () {
+  handlePromptCanvasClick: function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (this.prompt.review.isComplete()) {
       if (this.prompt.review.item) {
         if (this.prompt.review.get('score') === 1) {
