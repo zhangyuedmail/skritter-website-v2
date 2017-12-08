@@ -1,5 +1,7 @@
 @import "../../styles/_variables";
 
+$transition-time: 500ms;
+
 .dark-notification-dialog, gelato-dialog[data-name='notification-dialog'] {
   font-family: $font-ubuntu;
   text-transform: uppercase;
@@ -9,7 +11,7 @@
     left: 0;
     transition: left .2s, width .2s;
     max-height: calc(100% - 150px);
-    overflow-y: auto;
+    overflow-y: hidden;
   }
 
   .modal-content {
@@ -33,14 +35,23 @@
   }
 
   .dialog-title {
-    font-size: 28px;
+    font-size: 4vh;
     font-weight: 300;
     text-align: center;
-    padding: 10px;
+    padding: 1vh;
+    height: 8vh;
     // $white1 = #fbfafc = 251 250 252
     background: rgba(251, 250, 252, .9);
-    opacity: .9;
+    opacity: 0.9;
     color: $grey7;
+    transition: height $transition-time, opacity $transition-time, padding $transition-time;
+    -webkit-transition: height $transition-time, opacity $transition-time, padding $transition-time;
+  }
+
+  .hide-dialog-title {
+    height: 0vh;
+    opacity: 0.0;
+    padding: 0vh;
   }
 
   .button-wrapper {
@@ -56,11 +67,20 @@
     height: auto;
     font-size: 20px;
     padding: 8px 80px;
-    margin-top: 25px;
+    margin-top: 4vh;
+    opacity: 1.0;
+
+    transition: margin-top $transition-time, opacity $transition-time;
+    -webkit-transition: margin-top $transition-time, opacity $transition-time;
 
     &:active {
       background: #000;
       color: #FFF;
+    }
+
+    &.fade-out {
+      margin-top: 8vh;
+      opacity: 0;
     }
   }
 

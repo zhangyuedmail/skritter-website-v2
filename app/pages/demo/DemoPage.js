@@ -394,7 +394,6 @@ const DemoPage = GelatoPage.extend({
     this.prompt.$('#toolbar-action-container').show();
 
     if (this.lang === 'zh' && !app.isMobile()) {
-      // this.$('.reading-prompt').removeClass('hidden');
       $('.modal').removeAttr('tabindex');
       _.defer(() => {
         $('#reading-prompt').focus();
@@ -431,6 +430,7 @@ const DemoPage = GelatoPage.extend({
           top: '20%',
           left: app.isMobile() ? '0px' : '50%',
           width: app.isMobile() ? '100%' : '50%',
+          height: 'auto',
         },
         backdrop: {
           height: '100%',
@@ -469,6 +469,7 @@ const DemoPage = GelatoPage.extend({
     this.$('#study-prompt-toolbar-action').hide();
 
     vent.trigger('notification:show', {
+      exitAnimation: 'fadeButton',
       dialogTitle: 'Getting Hints',
       showTitle: true,
       keepAlive: true,
@@ -478,9 +479,11 @@ const DemoPage = GelatoPage.extend({
         backdrop: {
           top: app.isMobile() ? '49px' : '0%',
           left: app.isMobile() ? '0px' : '50%',
+          height: '100%',
         },
         dialog: {
           top: '20%',
+          height: 'auto',
           left: app.isMobile() ? '0px' : '50%',
           width: app.isMobile() ? '100%' : '50%',
         },
@@ -554,6 +557,7 @@ const DemoPage = GelatoPage.extend({
         backdrop: {
           top: '0px',
           width: '100%',
+          height: '100%',
         },
         dialog: {
           'top': app.isMobile() ? '49px' : '100px',
@@ -576,9 +580,10 @@ const DemoPage = GelatoPage.extend({
           width: '100%',
         },
         dialog: {
-          top: '20%',
-          left: app.isMobile() ? '0%' : 'auto',
-          width: '100%',
+          'top': '20%',
+          'left': app.isMobile() ? '0%' : 'auto',
+          'width': '100%',
+          'overflow-y': 'auto',
         },
       },
       next,
@@ -601,6 +606,7 @@ const DemoPage = GelatoPage.extend({
 
     vent.trigger('notification:show', {
       dialogTitle: app.locale('pages.demo.firstCharactersTitle'),
+      exitAnimation: 'fadeButton',
       showTitle: true,
       body: app.locale('pages.demo.firstCharactersBody' + this.lang),
       buttonText: 'Next',
@@ -608,13 +614,14 @@ const DemoPage = GelatoPage.extend({
       style: {
         backdrop: {
           top: '0px',
+          height: '100%',
         },
         dialog: {
           top: '20%',
         },
       },
       next: {
-        animate: 'slide-up',
+        enterAnimation: 'slide-up',
         dialogTitle: app.locale('pages.demo.firstCharactersTitle'),
         showTitle: !mobile,
         body: app.locale('pages.demo.firstCharacters2Body' + this.lang),
@@ -630,8 +637,9 @@ const DemoPage = GelatoPage.extend({
             left: mobile ? '0%' : '50%',
             width: mobile ? '100%' : '50%',
             top: mobile ? '49px': '0px',
-            bottom: mobile ? 'auto' : '0%',
-            height: mobile ? '0' : 'auto',
+            bottom: mobile ? 'inherit' : '0%',
+            height: mobile ? '0%' : 'auto',
+            opacity: mobile ? 0 : '0.5',
           },
         },
       },
