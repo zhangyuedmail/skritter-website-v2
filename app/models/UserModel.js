@@ -471,6 +471,13 @@ const UserModel = SkritterModel.extend({
    * @param {Function} callback
    */
   loginAnonymous: function (callback) {
+    // let's not create one if it is already loaded
+    if (this.get('anonymous') && !this.get('email')) {
+      callback();
+
+      return;
+    }
+
     async.waterfall([
       (callback) => {
         $.ajax({
