@@ -393,7 +393,9 @@ module.exports = Router.extend({
   navigateStudy: function (listId, sectionId) {
     if (app.user.isLoggedIn()) {
       if (listId && sectionId) {
-        this.go('pages/study-list-section/StudyListSectionPage.js', {listId, sectionId});
+        // TODO: enable section study page when supported
+        // this.go('pages/study-list-section/StudyListSectionPage.js', {listId, sectionId});
+        this.go('pages/study-list/StudyListPage.js', {listId});
       } else if (listId) {
         this.go('pages/study-list/StudyListPage.js', {listId});
       } else {
