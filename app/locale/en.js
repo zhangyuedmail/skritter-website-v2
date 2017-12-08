@@ -123,7 +123,7 @@ module.exports = {
     },
 
     'accountSetup': {
-      'title': 'Account Configure - Skritter',
+      'title': 'Getting Started',
       'bothChars': 'Both!',
       'bothCharsDescription': 'You want to be a true Chinese master',
       'charTypeLabel': 'What style characters do you want to study?',

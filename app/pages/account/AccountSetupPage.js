@@ -63,6 +63,10 @@ const AccountSetupPage = GelatoPage.extend({
    * @returns {AccountSetupPage}
    */
   render: function () {
+    if (app.isMobile()) {
+      this.template = require('./MobileAccountSetup.jade');
+    }
+
     this.renderTemplate();
 
     return this;

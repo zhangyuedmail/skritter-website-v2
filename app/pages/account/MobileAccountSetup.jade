@@ -1,0 +1,71 @@
+gelato-page(data-name='mobile-account-setup')
+
+  section.container
+
+    .content-block
+
+      form.form-horizontal
+        .text-center
+          #error-message.alert.alert-warning.hidden
+          //- h3= app.locale('pages.accountSetup.setupYourAccount')
+          //- p.pad-bottom= app.locale('pages.accountSetup.setupExplanation')
+
+        //- .form-group
+        //-   label.col-sm-3.control-label= app.locale('pages.accountSetup.languageLabel')
+        //-   .col-sm-9
+        //-     #targetLang-zh.lang-option.clickable-option.pad-right(class=view.settings.targetLang === 'zh' ? 'selected' : '')
+        //-       .option-icon 中文
+        //-       .lang-name= app.locale('common.zh')
+        //-     #targetLang-ja.lang-option.clickable-option(class=view.settings.targetLang === 'ja' ? 'selected' : '')
+        //-       .option-icon 日本語
+        //-       .lang-name= app.locale('common.ja')
+
+        if (view.settings.targetLang === 'zh')
+          .form-group
+            label.col-sm-3.control-label(for="field-timezone") Type of characters
+            // p.lead.text-center= app.locale('pages.accountSetup.charTypeLabel')
+            .col-sm-9#field-styles
+              #simplified.char-option.clickable-option.pad-right(class=view.settings.addSimplified ? 'selected' : '')
+                span.option-icon 简体字 -
+                span.lang-name.spl= app.locale('pages.accountSetup.simpChars')
+                .style-description  Primarily used in mainland China
+              #traditional.char-option.clickable-option.pad-right(class=view.settings.addTraditional ? 'selected' : '')
+                span.option-icon 正體字 -
+                span.lang-name.spl= app.locale('pages.accountSetup.tradChars')
+                .style-description  Primarily used in Hong Kong and Taiwan
+              #both.char-option.clickable-option(class=view.settings.addBoth ? 'selected' : '')
+                span.option-icon 两種 -
+                span.lang-name.spl= app.locale('pages.accountSetup.bothChars')
+
+        .form-group
+          label.col-sm-3.control-label(for="field-country")= app.locale('pages.accountSetup.countryLabel')
+          .col-sm-9
+            select#field-country.form-control
+              for name, code in view.countries
+                if code === view.settings.country
+                  option(value=code, selected="selected")= name
+                else
+                  option(value=code)= name
+
+        .form-group
+          label.col-sm-3.control-label(for="field-timezone")= app.locale('pages.accountSetup.timezoneLabel')
+          .col-sm-9
+            select#field-timezone.form-control
+              for timezone, code in view.timezones[view.settings.country]
+                if timezone === user.get('timezone')
+                  option(value=timezone, selected="selected")= timezone.replace(/_/g, ' ')
+                else
+                  option(value=timezone)= timezone.replace(/_/g, ' ')
+
+        .form-group
+          span
+        .form-group
+          if view.state === 'saving'
+            .col-xs-12.text-center
+              button.btn.btn-fixed.btn-success(type="submit", disabled=true)
+                i.fa.fa-2x.fa-spinner.fa-pulse
+          else
+            //- .col-xs-6.text-center
+            //-   button#button-custom.btn.btn-fixed.btn-default(type="submit") Choose Lists
+            .col-xs-12.text-center
+              button#button-continue.btn.btn-fixed.btn-success(type="submit")= app.locale('common.continue')
