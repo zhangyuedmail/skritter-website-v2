@@ -26,7 +26,7 @@ const UserModel = SkritterModel.extend({
     allJapaneseParts: ['defn', 'rdng', 'rune'],
     audioEnabled: true,
     autoAdvancePrompts: 0.0,
-    basicMode: true,
+    basicMode: false,
     dailyAddLimit: 20,
     disabled: false,
     disablePinyinReadingPromptInput: false,

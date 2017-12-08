@@ -237,7 +237,11 @@ module.exports = Router.extend({
   navigateDashboard: function () {
     if (app.user.isLoggedIn()) {
       this.navigate('dashboard');
-      this.go('pages/dashboard/DashboardPage');
+      if (app.user.get('basicMode')) {
+        this.go('pages/dashboard-basic/DashboardBasicPage');
+      } else {
+        this.go('pages/dashboard/DashboardPage');
+      }
     } else {
       this.navigateLogin();
     }
@@ -388,12 +392,12 @@ module.exports = Router.extend({
    */
   navigateStudy: function (listId, sectionId) {
     if (app.user.isLoggedIn()) {
-      if (sectionId) {
-        // TODO: replace when single list section study ready for action
-        // this.go('pages/study-section', {listId: listId, sectionId: sectionId});
-        this.go('pages/study/StudyPage');
+      if (listId && sectionId) {
+        // TODO: enable section study page when supported
+        // this.go('pages/study-list-section/StudyListSectionPage.js', {listId, sectionId});
+        this.go('pages/study-list/StudyListPage.js', {listId});
       } else if (listId) {
-        this.go('pages/study-list/StudyListPage.js', {listId: listId});
+        this.go('pages/study-list/StudyListPage.js', {listId});
       } else {
         this.go('pages/study/StudyPage');
       }

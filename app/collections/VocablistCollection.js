@@ -115,6 +115,8 @@ const VocablistCollection = BaseSkritterCollection.extend({
   setSort: function (strategy) {
     if (this.sortStrategies[strategy]) {
       this.comparator = this.sortStrategies[strategy];
+    } else {
+      this.comparator = strategy;
     }
   },
 

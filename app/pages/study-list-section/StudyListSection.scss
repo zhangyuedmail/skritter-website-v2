@@ -1,0 +1,14 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='study-list-section'] {
+
+  background: $background-primary;
+  padding-top: 50px;
+
+  .recipes-container {
+    margin: 0 auto;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+}

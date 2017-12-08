@@ -290,6 +290,14 @@ const VocablistModel = SkritterModel.extend({
   },
 
   /**
+   * @method isActive
+   * @returns {Boolean}
+   */
+  isActive: function () {
+    return this.get('studyingMode') !== 'not studying';
+  },
+
+  /**
    * @method isChinese
    * @returns {Boolean}
    */
