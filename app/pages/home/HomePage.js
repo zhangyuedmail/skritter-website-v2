@@ -86,14 +86,6 @@ const HomePage = GelatoPage.extend({
     window.open('https://play.google.com/store/apps/developer?id=Skritter', '_blank');
   },
 
-  handleClickSignupButton: function (event) {
-    event.preventDefault();
-
-    app.user.loginAnonymous(function () {
-      app.router.navigate('account/setup', {trigger: true});
-    });
-  },
-
   /**
    * @method handleYouTubeStateChangePromoVideo
    */
