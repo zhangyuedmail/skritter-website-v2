@@ -527,6 +527,19 @@ const DemoPage = GelatoPage.extend({
     app.mixpanel.track('Completed writing demo character #2');
     this.setDemoProgress('demoComplete');
 
+    // redirect to dashboard or account setup based on authentication
+    if (app.isMobile()) {
+      if (app.user.isLoggedIn()) {
+        app.router.navigate('dashboard', {trigger: true});
+      } else {
+        app.user.loginAnonymous(function () {
+          app.router.navigate('account/setup', {trigger: true});
+        });
+      }
+
+      return;
+    }
+
     if (!this.prompt.review.isComplete()) {
       this.prompt.review.set('complete', true);
       this.prompt.renderPart();
