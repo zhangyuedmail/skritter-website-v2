@@ -10,15 +10,15 @@ gelato-page(data-name='mobile-account-setup')
           //- h3= app.locale('pages.accountSetup.setupYourAccount')
           //- p.pad-bottom= app.locale('pages.accountSetup.setupExplanation')
 
-        //- .form-group
-        //-   label.col-sm-3.control-label= app.locale('pages.accountSetup.languageLabel')
-        //-   .col-sm-9
-        //-     #targetLang-zh.lang-option.clickable-option.pad-right(class=view.settings.targetLang === 'zh' ? 'selected' : '')
-        //-       .option-icon 中文
-        //-       .lang-name= app.locale('common.zh')
-        //-     #targetLang-ja.lang-option.clickable-option(class=view.settings.targetLang === 'ja' ? 'selected' : '')
-        //-       .option-icon 日本語
-        //-       .lang-name= app.locale('common.ja')
+        .form-group
+          label.col-sm-3.control-label Select language
+          .col-sm-9
+            #targetLang-zh.lang-option.clickable-option.pad-right(class=view.settings.targetLang === 'zh' ? 'selected' : '')
+              .option-icon 中文
+              .lang-name= app.locale('common.zh')
+            #targetLang-ja.lang-option.clickable-option(class=view.settings.targetLang === 'ja' ? 'selected' : '')
+              .option-icon 日本語
+              .lang-name= app.locale('common.ja')
 
         if (view.settings.targetLang === 'zh')
           .form-group
