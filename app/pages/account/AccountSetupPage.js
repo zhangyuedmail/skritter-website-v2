@@ -1,4 +1,6 @@
 const GelatoPage = require('gelato/page');
+const countryCodes = require('data/country-codes');
+const countryTimezones = require('data/country-timezones');
 
 /**
  * @class AccountSetupPage
@@ -67,9 +69,35 @@ const AccountSetupPage = GelatoPage.extend({
       this.template = require('./MobileAccountSetup.jade');
     }
 
-    this.renderTemplate();
+    if (app.isCordova()) {
+      navigator.globalization.getPreferredLanguage((result) => {
+        this.settings.country = this.getCountryCode(result.value);
+        this.settings.timezone = this.getCountryTimezone(result.value);
+
+        this.renderTemplate();
+      }, (error) => {
+        this.renderTemplate();
+      });
+    } else {
+      this.settings.country = this.getCountryCode(navigator.language);
+      this.settings.timezone = this.getCountryTimezone(navigator.language);
+
+      this.renderTemplate();
+    }
 
     return this;
+  },
+
+  getCountryCode: function (bcp47) {
+    return countryCodes[this.parseLocaleString(bcp47)] ? this.parseLocaleString(bcp47) : 'US';
+  },
+
+  getCountryTimezone: function (bcp47) {
+    return countryTimezones[this.parseLocaleString(bcp47)][0] || 'America/New_York';
+  },
+
+  parseLocaleString: function (value) {
+    return _.upperCase(value.split('-')[1]);
   },
 
   /**
