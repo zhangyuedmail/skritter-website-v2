@@ -32,7 +32,7 @@ const AccountSetupPage = GelatoPage.extend({
     country: 'US',
     mode: 'settings',
     targetLang: app.getLanguage() || app.get('demoLang'),
-    timezone: 'America/New_York'
+    timezone: 'America/New_York',
   },
 
   /**
@@ -148,7 +148,7 @@ const AccountSetupPage = GelatoPage.extend({
       ScreenLoader.post('Enabling vocablist');
 
       vocablist.save({
-        studyingMode: 'adding'
+        studyingMode: 'adding',
       }, {
         error: (result, error) => {
           this.$('#error-message').text(error.responseJSON.message);
@@ -157,7 +157,7 @@ const AccountSetupPage = GelatoPage.extend({
         success: () => {
           app.router.navigate('study');
           app.reload();
-        }
+        },
       });
     });
   },
@@ -238,7 +238,7 @@ const AccountSetupPage = GelatoPage.extend({
 
     settings.id = app.user.id;
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       app.user.save(
         settings,
         {
@@ -253,7 +253,6 @@ const AccountSetupPage = GelatoPage.extend({
         }
       );
     });
-
   },
 
   /**
