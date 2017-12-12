@@ -26,6 +26,11 @@ gelato-page[data-name='mobile-home'] {
     bottom: 5%;
     position: absolute;
     width: 100%;
+    margin: auto;
+
+    .col-xs-6 {
+      padding: 0;
+    }
   }
 
   .welcome-panel {

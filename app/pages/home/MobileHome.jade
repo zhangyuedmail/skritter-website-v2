@@ -6,7 +6,7 @@ gelato-page(data-name='mobile-home')
     .language.no-select= app.getLanguageName()
     .character.no-select(class=app.getLanguage() === 'zh' ? 'text-chinese' : 'text-japanese') 字
 
-    .welcome-options
+    .welcome-options.row
       .col-xs-6
         a.btn.btn-fixed.btn-success.mobile(href='/demo')
           div= app.locale('common.getStarted')
