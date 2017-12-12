@@ -294,9 +294,24 @@ const DemoPage = GelatoPage.extend({
 
     vent.trigger('notification:show', {
       dialogTitle: 'Definition Prompts',
-      showTitle: !app.isMobile(),
+      showTitle: true,
+      showConfirmButton: app.isMobile(),
+      buttonText: 'Ok',
       keepAlive: true,
       body: this.parseTemplate(require('./notify-definition1.jade')),
+      style: {
+        backdrop: {
+          top: app.isMobile() ? '49px' : '0%',
+          left: app.isMobile() ? '0px' : '50%',
+          height: '100%',
+        },
+        dialog: {
+          top: '20%',
+          left: app.isMobile() ? '0px' : '50%',
+          width: app.isMobile() ? '100%' : '50%',
+          height: 'auto',
+        },
+      },
     });
     this.setDemoProgress('definitionPrompts');
 
@@ -317,6 +332,10 @@ const DemoPage = GelatoPage.extend({
           height: app.isMobile() ? '215px' : 'auto',
           left: app.isMobile() ? '0px' : '50%',
           width: app.isMobile() ? '100%' : '50%',
+        },
+        backdrop: {
+          height: app.isMobile() ? '0px' : 'auto',
+          left: app.isMobile() ? '0px' : '50%',
         },
       },
     });
