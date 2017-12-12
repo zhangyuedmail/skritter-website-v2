@@ -9,6 +9,11 @@ gelato-page[data-name='mobile-account-setup'] {
     max-width: 600px;
   }
 
+  hr {
+    border-top: 2px solid $grey2;
+    margin: 50px 0;
+  }
+
   input,
   select {
     max-width: 400px;

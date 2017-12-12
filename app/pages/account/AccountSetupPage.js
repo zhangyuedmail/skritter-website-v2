@@ -1,6 +1,5 @@
 const GelatoPage = require('gelato/page');
-const countryCodes = require('data/country-codes');
-const countryTimezones = require('data/country-timezones');
+let Vocablist = require('models/VocablistModel');
 
 /**
  * @class AccountSetupPage
@@ -15,7 +14,9 @@ const AccountSetupPage = GelatoPage.extend({
   events: {
     'change #field-country': 'handleChangeFieldCountry',
     'change #field-language': 'handleChangeFieldLanguage',
-    'click #button-continue': 'handleClickButtonContinue',
+    'click #button-next': 'handleClickButtonNext',
+    'click #button-select-custom': 'handleClickButtonSelectCustom',
+    'click #button-select-scratch': 'handleClickButtonSelectScratch',
     'click .lang-option': 'handleClickLangOption',
     'click .char-option': 'handleClickCharOption',
   },
@@ -29,8 +30,9 @@ const AccountSetupPage = GelatoPage.extend({
     addTraditional: false,
     addBoth: false,
     country: 'US',
+    mode: 'settings',
     targetLang: app.getLanguage() || app.get('demoLang'),
-    timezone: 'America/New_York',
+    timezone: 'America/New_York'
   },
 
   /**
@@ -89,11 +91,11 @@ const AccountSetupPage = GelatoPage.extend({
   },
 
   getCountryCode: function (bcp47) {
-    return countryCodes[this.parseLocaleString(bcp47)] ? this.parseLocaleString(bcp47) : 'US';
+    return this.countries[this.parseLocaleString(bcp47)] ? this.parseLocaleString(bcp47) : 'US';
   },
 
   getCountryTimezone: function (bcp47) {
-    return countryTimezones[this.parseLocaleString(bcp47)][0] || 'America/New_York';
+    return this.timezones[this.parseLocaleString(bcp47)][0] || 'America/New_York';
   },
 
   parseLocaleString: function (value) {
@@ -120,43 +122,44 @@ const AccountSetupPage = GelatoPage.extend({
     this.render();
   },
 
-  /**
-   * @method handleClickButtonContinue
-   * @param {Event} event
-   */
-  handleClickButtonContinue: function (event) {
-    let self = this;
+  handleClickButtonNext: function () {
     event.preventDefault();
-    let settings = this.getSettings();
 
-    let invalidSettings = this.validateSettings(settings);
-    if (invalidSettings) {
-      this.$('#error-message').text(invalidSettings.message).removeClass('hidden');
-      return;
-    }
-    this.$('#error-message').removeClass('hidden');
+    this.settings.mode = 'list';
+    this.render();
+  },
 
-    ScreenLoader.show();
-    ScreenLoader.post('Saving user settings');
+  handleClickButtonSelectCustom: function (event) {
+    event.preventDefault();
 
-    settings.id = app.user.id;
+    this.saveSettings().then(() => {
+      app.setSetting('newuser-' + app.user.id, true);
+      app.router.navigate('vocablists/browse');
+      app.reload();
+    });
+  },
 
-    app.user.save(
-      settings,
-      {
-        patch: true,
-        error: function (user, error) {
-          self.$('#error-message').text(error.responseJSON.message);
+  handleClickButtonSelectScratch: function (event) {
+    const vocablist = new Vocablist({id: app.isChinese() ? '47872248' : '6020832698564608'});
+
+    event.preventDefault();
+
+    this.saveSettings().then(() => {
+      ScreenLoader.post('Enabling vocablist');
+
+      vocablist.save({
+        studyingMode: 'adding'
+      }, {
+        error: (result, error) => {
+          this.$('#error-message').text(error.responseJSON.message);
           ScreenLoader.hide();
         },
-        success: function () {
-          app.setSetting('newuser-' + app.user.id, true);
-          app.router.navigate('vocablists/browse');
+        success: () => {
+          app.router.navigate('study');
           app.reload();
-        },
-      }
-    );
-    this.render();
+        }
+      });
+    });
   },
 
   handleClickCharOption: function (event) {
@@ -212,6 +215,45 @@ const AccountSetupPage = GelatoPage.extend({
    */
   remove: function () {
     return GelatoPage.prototype.remove.call(this);
+  },
+
+  /**
+   * @method saveSettings
+   * @param {Event} event
+   */
+  saveSettings: function () {
+    let settings = this.getSettings();
+    let invalidSettings = this.validateSettings(settings);
+
+    if (invalidSettings) {
+      this.$('#error-message').text(invalidSettings.message).removeClass('hidden');
+
+      return;
+    }
+
+    this.$('#error-message').removeClass('hidden');
+
+    ScreenLoader.show();
+    ScreenLoader.post('Saving user settings');
+
+    settings.id = app.user.id;
+
+    return new Promise(resolve => {
+      app.user.save(
+        settings,
+        {
+          patch: true,
+          error: (user, error) => {
+            this.$('#error-message').text(error.responseJSON.message);
+            ScreenLoader.hide();
+          },
+          success: () => {
+            resolve();
+          },
+        }
+      );
+    });
+
   },
 
   /**
