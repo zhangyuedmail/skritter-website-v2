@@ -110,9 +110,13 @@ const DemoPage = GelatoPage.extend({
     async.waterfall(
       [
         function (callback) {
-          self.dialog = new DemoLanguageSelectDialog();
-          self.dialog.open();
-          self.dialog.once('select', callback);
+          if (app.isCordova()) {
+            callback(null, app.getLanguage());
+          } else {
+            self.dialog = new DemoLanguageSelectDialog();
+            self.dialog.open();
+            self.dialog.once('select', callback);
+          }
         },
         function (lang, callback) {
           ScreenLoader.show();

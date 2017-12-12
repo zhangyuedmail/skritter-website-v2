@@ -10,17 +10,18 @@ gelato-page(data-name='mobile-account-setup')
           //- h3= app.locale('pages.accountSetup.setupYourAccount')
           //- p.pad-bottom= app.locale('pages.accountSetup.setupExplanation')
 
-        .form-group
-          label.col-sm-3.control-label Select language
-          .col-sm-9
-            #targetLang-zh.lang-option.clickable-option.pad-right(class=view.settings.targetLang === 'zh' ? 'selected' : '')
-              .option-icon 中文
-              .lang-name= app.locale('common.zh')
-            #targetLang-ja.lang-option.clickable-option(class=view.settings.targetLang === 'ja' ? 'selected' : '')
-              .option-icon 日本語
-              .lang-name= app.locale('common.ja')
+        if !app.isCordova() && !app.get('demoLang')
+          .form-group
+            label.col-sm-3.control-label Select language
+            .col-sm-9
+              #targetLang-zh.lang-option.clickable-option.pad-right(class=view.settings.targetLang === 'zh' ? 'selected' : '')
+                .option-icon 中文
+                .lang-name= app.locale('common.zh')
+              #targetLang-ja.lang-option.clickable-option(class=view.settings.targetLang === 'ja' ? 'selected' : '')
+                .option-icon 日本語
+                .lang-name= app.locale('common.ja')
 
-        if (view.settings.targetLang === 'zh')
+        if view.settings.targetLang === 'zh'
           .form-group
             label.col-sm-3.control-label(for="field-timezone") Type of characters
             // p.lead.text-center= app.locale('pages.accountSetup.charTypeLabel')

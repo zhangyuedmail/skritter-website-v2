@@ -29,7 +29,7 @@ const AccountSetupPage = GelatoPage.extend({
     addTraditional: false,
     addBoth: false,
     country: 'US',
-    targetLang: app.get('demoLang'),
+    targetLang: app.getLanguage() || app.get('demoLang'),
     timezone: 'America/New_York',
   },
 
