@@ -13,6 +13,7 @@ shell.exec('cordova platform add android@6.3.0');
 shell.exec('cordova plugin add cordova-plugin-crosswalk-webview@2.3.0');
 shell.exec('cordova plugin add cordova-plugin-device@1.1.7');
 shell.exec('cordova plugin add cordova-plugin-file-transfer@1.7.0');
+shell.exec('cordova plugin add cordova-plugin-globalization@1.0.8');
 shell.exec('cordova plugin add cordova-plugin-splashscreen@4.1.0');
 shell.exec('cordova plugin add cordova-plugin-statusbar@2.3.0');
 shell.exec('cordova plugin add https://github.com/phonegap/phonegap-mobile-accessibility.git');
