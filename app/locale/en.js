@@ -130,6 +130,13 @@ module.exports = {
       'countryLabel': 'Country',
       'errorNoCharacterTypeSelected': 'You must select either simplified, traditional, or both character types to study.',
       'languageLabel': 'What language do you want to learn?',
+      'listSelectCustom': 'Pick a list you want to study and press the "add to queue" button to start learning from it. Choose from popular resources or make your own. Up to you!',
+      'listSelectCustomTitle': 'Pick your own list',
+      'listSelectScratch': {
+        'ja': 'Start with the basics from the JLPT 5 list. Kick off your learning with 744 critical Japanese vocabulary.',
+        'zh': 'Start with the basics from the HSK 1 list. Kick off your learning with 150 critical Chinese vocabulary.',
+      },
+      'listSelectScratchTitle': 'Start from scratch',
       'setupExplanation': 'All these settings and more can be changed later, these are just to get you started.',
       'setupYourAccount': 'Let\'s set up your account!',
       'simpChars': 'Simplified Characters',

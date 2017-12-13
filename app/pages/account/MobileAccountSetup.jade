@@ -10,20 +10,18 @@ gelato-page(data-name='mobile-account-setup')
           //- h3= app.locale('pages.accountSetup.setupYourAccount')
           //- p.pad-bottom= app.locale('pages.accountSetup.setupExplanation')
 
-        - console.log(view)
-
         if view.settings.mode === 'list'
           .select-block
-            h3 Start from scratch
-            p.lead Start with the basics using the HSK 1. We should probably write something that sounds better than what I would write here.
+            h3= app.locale('pages.accountSetup.listSelectScratchTitle')
+            p.lead= app.locale('pages.accountSetup.listSelectScratch.' + app.getLanguage())
             .text-right
               button#button-select-scratch.btn.btn-success(type="button") Select
 
           hr
 
           .select-block
-            h3 Pick your own list
-            p.lead Pick a list you want to study and press the "add to queue" button to start learning from it. Choose from popular resources or make your own. Up to you!
+            h3= app.locale('pages.accountSetup.listSelectCustomTitle')
+            p.lead= app.locale('pages.accountSetup.listSelectCustom')
             .text-right
               button#button-select-custom.btn.btn-success(type="button") Select
         else
