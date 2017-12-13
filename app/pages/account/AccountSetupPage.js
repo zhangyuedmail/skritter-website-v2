@@ -80,20 +80,33 @@ const AccountSetupPage = GelatoPage.extend({
           this.settings.timezone = this.getCountryTimezone(locale.value, tz.iana_timezone);
 
           this.renderTemplate();
+          this.update();
         }, (error) => {
           this.renderTemplate();
+          this.update();
         });
       }, (error) => {
         this.renderTemplate();
+        this.update();
       });
     } else {
       this.settings.country = this.getCountryCode(navigator.language);
       this.settings.timezone = this.getCountryTimezone(navigator.language);
 
       this.renderTemplate();
+      this.update();
     }
 
     return this;
+  },
+
+  update: function () {
+    this.$('#character-style-section').toggleClass('hidden', this.settings.targetLang !== 'zh');
+    this.$('#next-btn-wrapper').toggleClass('hidden', this.settings.mode === 'list');
+
+    this.$('#simplified').toggleClass('selected', this.settings.addSimplified);
+    this.$('#traditional').toggleClass('selected', this.settings.addTraditional);
+    this.$('#both').toggleClass('selected', this.settings.addBoth);
   },
 
   getCountryCode: function (bcp47) {
@@ -131,7 +144,7 @@ const AccountSetupPage = GelatoPage.extend({
   handleChangeFieldLanguage: function (event) {
     event.preventDefault();
     this.settings.targetLang = this.$('#field-language').val() || 'zh';
-    this.render();
+    this.update();
   },
 
   handleClickButtonNext: function () {
@@ -190,14 +203,14 @@ const AccountSetupPage = GelatoPage.extend({
       this.settings.addTraditional = false;
     }
 
-    this.render();
+    this.update();
   },
 
   handleClickLangOption: function (event) {
     event.preventDefault();
     let id = (event.currentTarget.id || '-').split('-')[1];
     this.settings.targetLang = id || 'zh';
-    this.render();
+    this.update();
   },
 
   /**
