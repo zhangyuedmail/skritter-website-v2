@@ -14,6 +14,13 @@ gelato-page(data-name='dashboard')
             .content If you love Skritter and are learning lots of characters, you can help us by going to the Play Store and rating us 5 stars.
             button#rating-btn.btn.btn-primary Rate Us!
             button#rating-cancel-btn.btn.btn-default No, thanks.
+    if app.isMobile && app.user.isAnonymous()
+      .row.signup-notice
+        .col-xs-12
+          .content-block
+            .title Create an account
+            .content Something wise, buddha-like and not too wordy should go here.
+            button#signup-btn.btn.btn-primary Sign up!
 
     .row#first-row
       .col-md-6

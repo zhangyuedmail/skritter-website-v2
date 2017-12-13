@@ -319,6 +319,10 @@ const UserModel = SkritterModel.extend({
     return _.includes(this.getStudyStyles(), style);
   },
 
+  isAnonymous: function () {
+    return this.has('anonymous') ? this.get('anonymous') : true;
+  },
+
   /**
    * @method isAudioEnabled
    * @returns {Boolean}

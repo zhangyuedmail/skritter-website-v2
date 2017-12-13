@@ -23,6 +23,7 @@ const DashboardPage = GelatoPage.extend({
     'click #goal-setting': 'onGoalSettingClicked',
     'click #rating-btn': 'onRatingBtnClicked',
     'click #rating-cancel-btn': 'onRatingCancelBtnClicked',
+    'click #signup-btn': 'onSignupBtnClicked',
   },
 
   /**
@@ -157,6 +158,13 @@ const DashboardPage = GelatoPage.extend({
    */
   onFeedbackBtnClicked: function () {
     app.showFeedbackDialog();
+  },
+
+  /**
+   * Opens the main app signup dialog.
+   */
+  onSignupBtnClicked: function () {
+    app.signup();
   },
 
   /**
