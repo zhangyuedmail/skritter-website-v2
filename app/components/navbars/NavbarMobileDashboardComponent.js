@@ -47,7 +47,12 @@ const NavbarMobileComponent = NavbarDefaultComponent.extend({
 
   handleCreateListClick: function (event) {
     event.preventDefault();
-    app.router.navigate('vocablists/create', {trigger: true});
+
+    if (app.user.isAnonymous()) {
+      app.signup();
+    } else {
+      app.router.navigate('vocablists/create', {trigger: true});
+    }
   },
 
   /**

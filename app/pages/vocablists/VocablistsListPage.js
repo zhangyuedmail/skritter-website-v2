@@ -181,6 +181,12 @@ module.exports = GelatoPage.extend({
 
     event.preventDefault();
 
+    if (app.user.isAnonymous()) {
+      app.signup();
+
+      return;
+    }
+
     this.listenTo(confirmDialog, 'confirm', () => {
       const copyUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/copy';
 

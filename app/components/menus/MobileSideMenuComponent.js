@@ -99,7 +99,12 @@ const MobileSideMenuComponent = GelatoComponent.extend({
    * @param {jQuery.Event} e the click event
    */
   handleSettingsButtonClick: function (e) {
-    app.router.navigateAccountSettingsGeneral();
+    if (app.user.isAnonymous()) {
+      app.hideAllMenus();
+      app.signup();
+    } else {
+      app.router.navigateAccountSettingsGeneral();
+    }
   },
 
   /**
@@ -115,6 +120,7 @@ const MobileSideMenuComponent = GelatoComponent.extend({
     if (app.user.stats.state !== 'fetching') {
       app.user.stats.fetchToday();
     }
+
     this.updateUserInfo();
   },
 
