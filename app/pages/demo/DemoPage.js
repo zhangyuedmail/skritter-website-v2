@@ -102,6 +102,8 @@ const DemoPage = GelatoPage.extend({
   },
 
   /**
+   * Sets up the demo. Fetches data related to the vocab, shows
+   * loading screens, and loads the first teaching prompt.
    * @method loadDemo
    */
   loadDemo: function () {
@@ -109,7 +111,9 @@ const DemoPage = GelatoPage.extend({
 
     async.waterfall(
       [
+        // language selection
         function (callback) {
+          // we have separate apps for zh & ja, so lang is already known on mobile
           if (app.isCordova()) {
             callback(null, app.getLanguage());
           } else {
@@ -118,21 +122,14 @@ const DemoPage = GelatoPage.extend({
             self.dialog.once('select', callback);
           }
         },
+
+        // set vocab data
         function (lang, callback) {
-          ScreenLoader.show();
-          ScreenLoader.post('Loading demo word');
-          app.mixpanel.track('Started demo', {'Language': lang});
-          self.lang = lang;
-
-          const vocabDataZh = {'Vocabs': [{'lang': 'zh', 'sentenceIds': [], 'style': 'both', 'audio': 'http://storage.googleapis.com/skritter_audio/zh/cpod/4920340100677632.mp3', 'toughness': 2, 'creator': 'CPAPI', 'dictionaryLinks': {'you-dao': 'http://dict.youdao.com/search?q=%E4%B8%AD%E6%96%87&keyfrom=dict.index', 'mdbg': 'http://www.mdbg.net/chindict/chindict.php?page=worddict&wdrst=0&wdqb=%E4%B8%AD%E6%96%87', 'yellow-bridge': 'http://www.yellowbridge.com/chinese/dictionary.php?word=%E4%B8%AD%E6%96%87', 'chinesepod': 'http://chinesepod.com/tools/glossary/entry/%E4%B8%AD%E6%96%87', 'zdic': '', 'hanzicraft': 'http://www.hanzicraft.com/character/%E4%B8%AD%E6%96%87', 'tatoeba-zh': 'http://tatoeba.org/eng/sentences/search?query=%E4%B8%AD%E6%96%87&from=cmn&to=und', 'tw-moe': 'https://www.moedict.tw/%E4%B8%AD%E6%96%87'}, 'bannedParts': [], 'created': 1281392448, 'ilk': 'word', 'writing': '\u4e2d\u6587', 'audios': [{'source': 'cpod', 'reading': 'zhong1wen2', 'mp3': 'http://storage.googleapis.com/skritter_audio/zh/cpod/4920340100677632.mp3', 'writing': null, 'id': '4920340100677632'}, {'source': 'tan', 'reading': 'zhong1wen2', 'mp3': 'http://storage.googleapis.com/skritter_audio/zh/tan/5250798843854848.mp3', 'writing': null, 'id': '5250798843854848'}], 'containedVocabIds': ['zh-\u4e2d-0', 'zh-\u6587-0'], 'audioURL': 'http://storage.googleapis.com/skritter_audio/zh/cpod/4920340100677632.mp3', 'toughnessString': 'easier', 'definitions': {'en': 'Chinese (language)'}, 'starred': false, 'reading': 'Zhong1wen2', 'id': 'zh-\u4e2d\u6587-0', 'sentenceId': 'zh-\u6211\u5b66\u4e60\u4e2d\u6587-0'}], 'statusCode': 200, 'Decomps': [], 'Sentences': [{'lang': 'zh', 'sentenceIds': [], 'style': 'simp', 'toughness': 8, 'creator': 'Hutongschool', 'segmentation': {'readingFillers': ['', ' ', ' ', ''], 'reading': 'wo3 xue2xi2 Zhong1wen2', 'wordWritings': ['\u6211', '\u5b66\u4e60', '\u4e2d\u6587'], 'writing': '\u6211 \u5b66\u4e60 \u4e2d\u6587', 'wordVocabVotes': [0, 4, 8], 'wordReadings': ['wo3', 'xue2xi2', 'Zhong1wen2'], 'wordVocabIds': ['zh-\u6211-0', 'zh-\u5b66\u4e60-0', 'zh-\u4e2d\u6587-0'], 'overallVotes': 20, 'writingFillers': ['', '', '', '']}, 'bannedParts': [], 'created': 1373960687, 'ilk': 'sent', 'writing': '\u6211 \u5b66\u4e60 \u4e2d\u6587', 'dictionaryLinks': {'you-dao': 'http://dict.youdao.com/search?q=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87&keyfrom=dict.index', 'mdbg': 'http://www.mdbg.net/chindict/chindict.php?page=worddict&wdrst=0&wdqb=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87', 'yellow-bridge': 'http://www.yellowbridge.com/chinese/dictionary.php?word=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87', 'chinesepod': 'http://chinesepod.com/tools/glossary/entry/%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87', 'zdic': '', 'hanzicraft': 'http://www.hanzicraft.com/character/%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87', 'tatoeba-zh': 'http://tatoeba.org/eng/sentences/search?query=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87&from=cmn&to=und', 'tw-moe': 'https://www.moedict.tw/%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87'}, 'containedVocabIds': ['zh-\u6211-0', 'zh-\u5b66-0', 'zh-\u4e60-0', 'zh-\u4e2d-0', 'zh-\u6587-0'], 'toughnessString': 'harder', 'definitions': {'en': 'I study Chinese.'}, 'starred': false, 'reading': 'wo3 xue2xi2 Zhong1wen2', 'id': 'zh-\u6211\u5b66\u4e60\u4e2d\u6587-0'}]};
-          const vocabDataJa = {'Vocabs': [{'lang': 'ja', 'rareKanji': false, 'sentenceId': 'ja-\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059-0', 'audio': 'http://storage.googleapis.com/skritter_audio/ja/kaori/4862201342984192.mp3', 'toughness': 2, 'sentenceIds': [], 'dictionaryLinks': {'wwwjdic': 'http://nihongo.monash.edu/cgi-bin/wwwjdic?1MMJ%E6%97%A5%E6%9C%AC', 'jisho': 'http://jisho.org/words?jap=%E6%97%A5%E6%9C%AC', 'goo': 'http://dictionary.goo.ne.jp/srch/je/%E6%97%A5%E6%9C%AC/m0u/', 'weblio': 'http://ejje.weblio.jp/content/%E6%97%A5%E6%9C%AC', 'alc': 'http://eow.alc.co.jp/%E6%97%A5%E6%9C%AC/UTF-8/'}, 'bannedParts': [], 'creator': 'mtaran', 'ilk': 'word', 'writing': '\u65e5\u672c', 'audios': [{'source': 'kaori', 'reading': '\u306b\u307b\u3093', 'mp3': 'http://storage.googleapis.com/skritter_audio/ja/kaori/4862201342984192.mp3', 'writing': '\u65e5\u672c', 'id': '4862201342984192'}, {'source': 'kaori', 'reading': '\u306b\u3063\u307d\u3093', 'mp3': 'http://storage.googleapis.com/skritter_audio/ja/kaori/4974911622742016.mp3', 'writing': '\u65e5\u672c', 'id': '4974911622742016'}], 'created': 1249318103, 'containedVocabIds': ['ja-\u65e5-0', 'ja-\u672c-0'], 'audioURL': 'http://storage.googleapis.com/skritter_audio/ja/kaori/4862201342984192.mp3', 'toughnessString': 'easier', 'definitions': {'en': 'Japan'}, 'starred': false, 'reading': '\u306b\u307b\u3093, \u306b\u3063\u307d\u3093', 'id': 'ja-\u65e5\u672c-0'}], 'statusCode': 200, 'Decomps': [], 'Sentences': [{'lang': 'ja', 'rareKanji': false, 'segmentation': {'readingFillers': ['', '', '', '', '', '', '', ''], 'reading': '\u3044\u3051\u3070\u306a\u306f\u306b\u3063\u307d\u3093\u306e\u3076\u3093\u304b\u3067\u3059\u3002', 'wordWritings': ['\u751f\u3051\u82b1', '\u306f', '\u65e5\u672c', '\u306e', '\u6587\u5316', '\u3067\u3059', '\u3002'], 'writing': '\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059\u3002', 'wordVocabVotes': [0, 0, 0, 0, 0, 0, 0], 'wordReadings': ['\u3044\u3051\u3070\u306a', '\u306f', '\u306b\u3063\u307d\u3093', '\u306e', '\u3076\u3093\u304b', '\u3067\u3059', '\u3002'], 'wordVocabIds': ['ja-\u751f\u3051\u82b1-0', 'ja-\u306f-1', 'ja-\u65e5\u672c-0', 'ja-\u306e-0', 'ja-\u6587\u5316-0', 'ja-\u3067\u3059-0', ''], 'overallVotes': 6, 'writingFillers': ['', '', '', '', '', '', '', '']}, 'toughness': 42, 'creator': 'Tatoeba', 'dictionaryLinks': {'wwwjdic': 'http://nihongo.monash.edu/cgi-bin/wwwjdic?1MMJ%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99', 'jisho': 'http://jisho.org/words?jap=%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99', 'goo': 'http://dictionary.goo.ne.jp/srch/je/%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99/m0u/', 'weblio': 'http://ejje.weblio.jp/content/%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99', 'alc': 'http://eow.alc.co.jp/%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99/UTF-8/'}, 'bannedParts': [], 'ilk': 'sent', 'writing': '\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059\u3002', 'containedVocabIds': ['ja-\u751f-0', 'ja-\u82b1-0', 'ja-\u65e5-0', 'ja-\u672c-0', 'ja-\u6587-0', 'ja-\u5316-0'], 'sentenceIds': [], 'toughnessString': 'unknown', 'definitions': {'en': 'Flower arrangement is a part of Japanese culture.'}, 'starred': false, 'reading': '\u3044\u3051\u3070\u306a\u306f\u306b\u3063\u307d\u3093\u306e\u3076\u3093\u304b\u3067\u3059\u3002', 'id': 'ja-\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059-0'}]};
-
-          self.vocabs.add(lang === 'zh' ? vocabDataZh.Vocabs : vocabDataJa.Vocabs);
-          app.set('demoLang', lang);
-          app.user.set('targetLang', lang);
-          self.vocab = self.vocabs.at(0);
+          self._fetchDemoVocab(lang);
           callback(null, self.vocab);
         },
+
+        // fetch contained data
         function (vocab, callback) {
           if (vocab.has('containedVocabIds')) {
             self.vocabs.fetch({
@@ -153,6 +150,8 @@ const DemoPage = GelatoPage.extend({
             callback(null, vocab);
           }
         },
+
+        // fetch character data
         function (vocab, callback) {
           app.user.characters.fetch({
               data: {
@@ -170,6 +169,8 @@ const DemoPage = GelatoPage.extend({
           );
         },
       ],
+
+      // finally loading prompts and finish setup
       function (error, vocab) {
         self.$('#demo-prompt-container').removeClass('hidden');
         ScreenLoader.hide();
@@ -184,6 +185,122 @@ const DemoPage = GelatoPage.extend({
         self.teachDemoChar1();
       }
     );
+  },
+
+  /**
+   * Shows the screenloader and sets the initial vocab data for the demo
+   * @method _fetchDemoVocab
+   * @private
+   */
+  _fetchDemoVocab: function (lang) {
+    ScreenLoader.show();
+    ScreenLoader.post('Loading demo word');
+    this.lang = lang;
+
+    const vocabDataZh = {'Vocabs': [{'lang': 'zh', 'sentenceIds': [], 'style': 'both', 'audio': 'http://storage.googleapis.com/skritter_audio/zh/cpod/4920340100677632.mp3', 'toughness': 2, 'creator': 'CPAPI', 'dictionaryLinks': {'you-dao': 'http://dict.youdao.com/search?q=%E4%B8%AD%E6%96%87&keyfrom=dict.index', 'mdbg': 'http://www.mdbg.net/chindict/chindict.php?page=worddict&wdrst=0&wdqb=%E4%B8%AD%E6%96%87', 'yellow-bridge': 'http://www.yellowbridge.com/chinese/dictionary.php?word=%E4%B8%AD%E6%96%87', 'chinesepod': 'http://chinesepod.com/tools/glossary/entry/%E4%B8%AD%E6%96%87', 'zdic': '', 'hanzicraft': 'http://www.hanzicraft.com/character/%E4%B8%AD%E6%96%87', 'tatoeba-zh': 'http://tatoeba.org/eng/sentences/search?query=%E4%B8%AD%E6%96%87&from=cmn&to=und', 'tw-moe': 'https://www.moedict.tw/%E4%B8%AD%E6%96%87'}, 'bannedParts': [], 'created': 1281392448, 'ilk': 'word', 'writing': '\u4e2d\u6587', 'audios': [{'source': 'cpod', 'reading': 'zhong1wen2', 'mp3': 'http://storage.googleapis.com/skritter_audio/zh/cpod/4920340100677632.mp3', 'writing': null, 'id': '4920340100677632'}, {'source': 'tan', 'reading': 'zhong1wen2', 'mp3': 'http://storage.googleapis.com/skritter_audio/zh/tan/5250798843854848.mp3', 'writing': null, 'id': '5250798843854848'}], 'containedVocabIds': ['zh-\u4e2d-0', 'zh-\u6587-0'], 'audioURL': 'http://storage.googleapis.com/skritter_audio/zh/cpod/4920340100677632.mp3', 'toughnessString': 'easier', 'definitions': {'en': 'Chinese (language)'}, 'starred': false, 'reading': 'Zhong1wen2', 'id': 'zh-\u4e2d\u6587-0', 'sentenceId': 'zh-\u6211\u5b66\u4e60\u4e2d\u6587-0'}], 'statusCode': 200, 'Decomps': [], 'Sentences': [{'lang': 'zh', 'sentenceIds': [], 'style': 'simp', 'toughness': 8, 'creator': 'Hutongschool', 'segmentation': {'readingFillers': ['', ' ', ' ', ''], 'reading': 'wo3 xue2xi2 Zhong1wen2', 'wordWritings': ['\u6211', '\u5b66\u4e60', '\u4e2d\u6587'], 'writing': '\u6211 \u5b66\u4e60 \u4e2d\u6587', 'wordVocabVotes': [0, 4, 8], 'wordReadings': ['wo3', 'xue2xi2', 'Zhong1wen2'], 'wordVocabIds': ['zh-\u6211-0', 'zh-\u5b66\u4e60-0', 'zh-\u4e2d\u6587-0'], 'overallVotes': 20, 'writingFillers': ['', '', '', '']}, 'bannedParts': [], 'created': 1373960687, 'ilk': 'sent', 'writing': '\u6211 \u5b66\u4e60 \u4e2d\u6587', 'dictionaryLinks': {'you-dao': 'http://dict.youdao.com/search?q=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87&keyfrom=dict.index', 'mdbg': 'http://www.mdbg.net/chindict/chindict.php?page=worddict&wdrst=0&wdqb=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87', 'yellow-bridge': 'http://www.yellowbridge.com/chinese/dictionary.php?word=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87', 'chinesepod': 'http://chinesepod.com/tools/glossary/entry/%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87', 'zdic': '', 'hanzicraft': 'http://www.hanzicraft.com/character/%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87', 'tatoeba-zh': 'http://tatoeba.org/eng/sentences/search?query=%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87&from=cmn&to=und', 'tw-moe': 'https://www.moedict.tw/%E6%88%91%E5%AD%A6%E4%B9%A0%E4%B8%AD%E6%96%87'}, 'containedVocabIds': ['zh-\u6211-0', 'zh-\u5b66-0', 'zh-\u4e60-0', 'zh-\u4e2d-0', 'zh-\u6587-0'], 'toughnessString': 'harder', 'definitions': {'en': 'I study Chinese.'}, 'starred': false, 'reading': 'wo3 xue2xi2 Zhong1wen2', 'id': 'zh-\u6211\u5b66\u4e60\u4e2d\u6587-0'}]};
+    const vocabDataJa = {'Vocabs': [{'lang': 'ja', 'rareKanji': false, 'sentenceId': 'ja-\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059-0', 'audio': 'http://storage.googleapis.com/skritter_audio/ja/kaori/4862201342984192.mp3', 'toughness': 2, 'sentenceIds': [], 'dictionaryLinks': {'wwwjdic': 'http://nihongo.monash.edu/cgi-bin/wwwjdic?1MMJ%E6%97%A5%E6%9C%AC', 'jisho': 'http://jisho.org/words?jap=%E6%97%A5%E6%9C%AC', 'goo': 'http://dictionary.goo.ne.jp/srch/je/%E6%97%A5%E6%9C%AC/m0u/', 'weblio': 'http://ejje.weblio.jp/content/%E6%97%A5%E6%9C%AC', 'alc': 'http://eow.alc.co.jp/%E6%97%A5%E6%9C%AC/UTF-8/'}, 'bannedParts': [], 'creator': 'mtaran', 'ilk': 'word', 'writing': '\u65e5\u672c', 'audios': [{'source': 'kaori', 'reading': '\u306b\u307b\u3093', 'mp3': 'http://storage.googleapis.com/skritter_audio/ja/kaori/4862201342984192.mp3', 'writing': '\u65e5\u672c', 'id': '4862201342984192'}, {'source': 'kaori', 'reading': '\u306b\u3063\u307d\u3093', 'mp3': 'http://storage.googleapis.com/skritter_audio/ja/kaori/4974911622742016.mp3', 'writing': '\u65e5\u672c', 'id': '4974911622742016'}], 'created': 1249318103, 'containedVocabIds': ['ja-\u65e5-0', 'ja-\u672c-0'], 'audioURL': 'http://storage.googleapis.com/skritter_audio/ja/kaori/4862201342984192.mp3', 'toughnessString': 'easier', 'definitions': {'en': 'Japan'}, 'starred': false, 'reading': '\u306b\u307b\u3093, \u306b\u3063\u307d\u3093', 'id': 'ja-\u65e5\u672c-0'}], 'statusCode': 200, 'Decomps': [], 'Sentences': [{'lang': 'ja', 'rareKanji': false, 'segmentation': {'readingFillers': ['', '', '', '', '', '', '', ''], 'reading': '\u3044\u3051\u3070\u306a\u306f\u306b\u3063\u307d\u3093\u306e\u3076\u3093\u304b\u3067\u3059\u3002', 'wordWritings': ['\u751f\u3051\u82b1', '\u306f', '\u65e5\u672c', '\u306e', '\u6587\u5316', '\u3067\u3059', '\u3002'], 'writing': '\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059\u3002', 'wordVocabVotes': [0, 0, 0, 0, 0, 0, 0], 'wordReadings': ['\u3044\u3051\u3070\u306a', '\u306f', '\u306b\u3063\u307d\u3093', '\u306e', '\u3076\u3093\u304b', '\u3067\u3059', '\u3002'], 'wordVocabIds': ['ja-\u751f\u3051\u82b1-0', 'ja-\u306f-1', 'ja-\u65e5\u672c-0', 'ja-\u306e-0', 'ja-\u6587\u5316-0', 'ja-\u3067\u3059-0', ''], 'overallVotes': 6, 'writingFillers': ['', '', '', '', '', '', '', '']}, 'toughness': 42, 'creator': 'Tatoeba', 'dictionaryLinks': {'wwwjdic': 'http://nihongo.monash.edu/cgi-bin/wwwjdic?1MMJ%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99', 'jisho': 'http://jisho.org/words?jap=%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99', 'goo': 'http://dictionary.goo.ne.jp/srch/je/%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99/m0u/', 'weblio': 'http://ejje.weblio.jp/content/%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99', 'alc': 'http://eow.alc.co.jp/%E7%94%9F%E3%81%91%E8%8A%B1%E3%81%AF%E6%97%A5%E6%9C%AC%E3%81%AE%E6%96%87%E5%8C%96%E3%81%A7%E3%81%99/UTF-8/'}, 'bannedParts': [], 'ilk': 'sent', 'writing': '\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059\u3002', 'containedVocabIds': ['ja-\u751f-0', 'ja-\u82b1-0', 'ja-\u65e5-0', 'ja-\u672c-0', 'ja-\u6587-0', 'ja-\u5316-0'], 'sentenceIds': [], 'toughnessString': 'unknown', 'definitions': {'en': 'Flower arrangement is a part of Japanese culture.'}, 'starred': false, 'reading': '\u3044\u3051\u3070\u306a\u306f\u306b\u3063\u307d\u3093\u306e\u3076\u3093\u304b\u3067\u3059\u3002', 'id': 'ja-\u751f\u3051\u82b1\u306f\u65e5\u672c\u306e\u6587\u5316\u3067\u3059-0'}]};
+
+    this.vocabs.add(lang === 'zh' ? vocabDataZh.Vocabs : vocabDataJa.Vocabs);
+    app.set('demoLang', lang);
+    app.user.set('targetLang', lang);
+    this.vocab = this.vocabs.at(0);
+  },
+
+  /**
+   * First prompt of the demo. Teaches how to write the first character
+   * in the user's chosen language
+   * @method teachDemoChar1
+   */
+  teachDemoChar1: function () {
+    this.prompt.set(this.promptItems);
+    this.prompt.shortcuts.unregisterAll();
+    this.prompt.$('#navigation-container').hide();
+    this.prompt.$('#toolbar-action-container').hide();
+    this.prompt.$('#toolbar-vocab-container').hide();
+    this.prompt.once('character:complete', this.teachDemoChar2);
+
+    this.setDemoProgress('teachDemoChar1');
+    this.showDemoGuidePopup();
+  },
+
+  /**
+   * Teaches how to write the second character in the demo word
+   * @method teachDemoChar2
+   */
+  teachDemoChar2: function () {
+    this.setDemoProgress('teachDemoChar2', true);
+
+    this.prompt.$('#toolbar-action-container').hide();
+    this.prompt.once('next', () => {
+      this.switchToWriting();
+      this.writeDemoChar1();
+    });
+  },
+
+  /**
+   * Erases the characters and goes back to the beginning of the review
+   */
+  switchToWriting: function () {
+    this.prompt.part.eraseCharacter();
+    this.prompt.previous();
+    this.prompt.review.set('score', 3);
+    this.prompt.part.eraseCharacter();
+    this.$('#study-prompt-toolbar-action').hide();
+  },
+
+  /**
+   * Prompt that allows the user to freely write the first character as
+   * a "normal" rune prompt
+   * @method writeDemoChar1
+   */
+  writeDemoChar1: function () {
+    this.setDemoProgress('writeDemoChar1');
+
+    vent.trigger('notification:show', {
+      exitAnimation: 'fadeButton',
+      dialogTitle: 'Getting Hints',
+      showTitle: true,
+      keepAlive: true,
+      showConfirmButton: app.isMobile(),
+      body: this.parseTemplate(require('./notify-step2')),
+      style: {
+        backdrop: {
+          top: app.isMobile() ? '49px' : '0%',
+          left: app.isMobile() ? '0px' : '50%',
+          height: '100%',
+        },
+        dialog: {
+          top: '20%',
+          height: 'auto',
+          left: app.isMobile() ? '0px' : '50%',
+          width: app.isMobile() ? '100%' : '50%',
+        },
+      },
+    });
+
+    this.prompt.review.set('score', 3);
+    this.prompt.$('#toolbar-action-container').show();
+
+    this.prompt.once('character:complete', () => {
+        this.$('.tap-to-advance-wrapper').removeClass('hidden');
+        this.prompt.$('.grading-btn-wrapper').addClass('hidden');
+    });
+    this.prompt.once('reviews:next', this.writeDemoChar2);
+  },
+
+  /**
+   * Prompt that allows the user to freely write the second character as
+   * a "normal" rune prompt
+   * @method writeDemoChar2
+   */
+  writeDemoChar2: function () {
+    this.setDemoProgress('writeDemoChar2', true);
+
+    this.prompt.part.eraseCharacter();
+    this.prompt.review.set('score', 3);
+    this.prompt.$('#toolbar-action-container').show();
+
+    this.prompt.once('character:complete', this.teachEraseDemoChar1);
   },
 
   /**
@@ -219,8 +336,6 @@ const DemoPage = GelatoPage.extend({
     if (app.isMobile()) {
       vent.trigger('callToActionGuide:toggle', true, {
         left: '40%',
-        // width: '2vh',
-        // height: '2vh',
         top: 'auto',
       });
 
@@ -248,6 +363,7 @@ const DemoPage = GelatoPage.extend({
 
   /**
    * Step that responds to a user erasing a character
+   * @method teachEraseDemoChar2
    */
   teachEraseDemoChar2: function () {
     vent.trigger('notification:show', {
@@ -286,6 +402,7 @@ const DemoPage = GelatoPage.extend({
 
   /**
    * Step that teaches users how to answer a definition prompt
+   * @method teachDefinitionPrompt1
    */
   teachDefinitionPrompt1: function () {
     const defnItems = this.vocab.getPromptItems('defn');
@@ -320,6 +437,10 @@ const DemoPage = GelatoPage.extend({
     this.prompt.review.once('change:complete', this.teachSRS1);
   },
 
+  /**
+   * Step that explains SRS and lets the user choose a grade for their prompt answer
+   * @method teachSRS1
+   */
   teachSRS1: function () {
     vent.trigger('notification:show', {
       dialogTitle: 'Spaced Repetition',
@@ -364,77 +485,8 @@ const DemoPage = GelatoPage.extend({
   },
 
   /**
-   * @method step1
-   */
-  teachDemoChar1: function () {
-    this.prompt.set(this.promptItems);
-    this.prompt.shortcuts.unregisterAll();
-    this.prompt.$('#navigation-container').hide();
-    this.prompt.$('#toolbar-action-container').hide();
-    this.prompt.$('#toolbar-vocab-container').hide();
-    this.prompt.once('character:complete', this.teachDemoChar2);
-
-    this.setDemoProgress('teachDemoChar1');
-    this.showDemoGuidePopup();
-  },
-
-  /**
-   * @method step3
-   */
-  teachDemoChar2: function () {
-    app.mixpanel.track('Completed tracing demo character #1');
-    this.setDemoProgress('teachDemoChar2', true);
-
-    this.prompt.$('#toolbar-action-container').hide();
-    this.prompt.once('next', this.writeDemoChar1);
-  },
-
-  /**
-   * Step that teaches users how to answer a reading prompt
-   */
-  teachReadingPrompt1: function () {
-    const rdngItems = this.vocab.getPromptItems('rdng');
-    this.promptItems = rdngItems;
-    this.prompt.set(this.promptItems);
-
-    vent.trigger('notification:show', {
-      dialogTitle: 'Pronunciation Prompts',
-      showTitle: true,
-      keepAlive: true,
-      buttonText: 'Ok',
-      showConfirmButton: app.isMobile(),
-      body: this.parseTemplate(require('./notify-reading1.jade')),
-      style: {
-        dialog: {
-          top: '20%',
-          left: app.isMobile() ? '0px' : '50%',
-          width: app.isMobile() ? '100%' : '50%',
-        },
-      },
-    });
-    this.setDemoProgress('readingPrompts');
-
-    this.prompt.$('#toolbar-action-container').show();
-
-    if (this.lang === 'zh' && !app.isMobile()) {
-      $('.modal').removeAttr('tabindex');
-      _.defer(() => {
-        $('#reading-prompt').focus();
-      });
-    }
-
-    this.prompt.once('reading:complete', () => {
-      this.$('.tap-to-advance-wrapper').removeClass('hidden');
-      this.prompt.$('#toolbar-action-container').hide();
-    });
-
-    this.prompt.once('next', () => {
-      this.completeDemo();
-    });
-  },
-
-  /**
-   * Step that teaches users how to answer a reading prompt
+   * ZH-only step that teaches users how to answer a tone prompt
+   * @method teachTonePrompt1
    */
   teachTonePrompt1: function () {
     const toneItems = this.vocab.getPromptItems('tone');
@@ -481,76 +533,56 @@ const DemoPage = GelatoPage.extend({
 
     this.prompt.once('next', this.teachReadingPrompt1);
   },
+
   /**
-   * Erases the characters and goes back to the beginning of the review
+   * Step that teaches users how to answer a reading prompt
+   * @method teachReadingPrompt1
    */
-  switchToWriting: function () {
-    this.prompt.part.eraseCharacter();
-    this.prompt.previous();
-    this.prompt.review.set('score', 3);
-    this.prompt.part.eraseCharacter();
-    this.$('#study-prompt-toolbar-action').hide();
+  teachReadingPrompt1: function () {
+    const rdngItems = this.vocab.getPromptItems('rdng');
+    this.promptItems = rdngItems;
+    this.prompt.set(this.promptItems);
 
     vent.trigger('notification:show', {
-      exitAnimation: 'fadeButton',
-      dialogTitle: 'Getting Hints',
+      dialogTitle: 'Pronunciation Prompts',
       showTitle: true,
       keepAlive: true,
+      buttonText: 'Ok',
       showConfirmButton: app.isMobile(),
-      body: this.parseTemplate(require('./notify-step2')),
+      body: this.parseTemplate(require('./notify-reading1.jade')),
       style: {
-        backdrop: {
-          top: app.isMobile() ? '49px' : '0%',
-          left: app.isMobile() ? '0px' : '50%',
-          height: '100%',
-        },
         dialog: {
           top: '20%',
-          height: 'auto',
           left: app.isMobile() ? '0px' : '50%',
           width: app.isMobile() ? '100%' : '50%',
         },
       },
     });
-  },
+    this.setDemoProgress('readingPrompts');
 
-  /**
-   * @method step2
-   */
-  writeDemoChar1: function () {
-    this.switchToWriting();
-    app.mixpanel.track('Completed tracing demo character #2');
-    this.setDemoProgress('writeDemoChar1');
-
-    this.prompt.review.set('score', 3);
     this.prompt.$('#toolbar-action-container').show();
 
-    this.prompt.once('character:complete', () => {
-        this.$('.tap-to-advance-wrapper').removeClass('hidden');
-        this.prompt.$('.grading-btn-wrapper').addClass('hidden');
+    if (this.lang === 'zh' && !app.isMobile()) {
+      $('.modal').removeAttr('tabindex');
+      _.defer(() => {
+        $('#reading-prompt').focus();
+      });
+    }
+
+    this.prompt.once('reading:complete', () => {
+      this.$('.tap-to-advance-wrapper').removeClass('hidden');
+      this.prompt.$('#toolbar-action-container').hide();
     });
-    this.prompt.once('reviews:next', this.writeDemoChar2);
+
+    this.prompt.once('next', () => {
+      this.completeDemo();
+    });
   },
 
   /**
-   * @method step4
-   */
-  writeDemoChar2: function () {
-    app.mixpanel.track('Completed writing demo character #1');
-    this.setDemoProgress('writeDemoChar2', true);
-
-    this.prompt.part.eraseCharacter();
-    this.prompt.review.set('score', 3);
-    this.prompt.$('#toolbar-action-container').show();
-
-    this.prompt.once('character:complete', this.teachEraseDemoChar1);
-  },
-
-  /**
-   * @method step5
+   * @method completeDemo
    */
   completeDemo: function () {
-    app.mixpanel.track('Completed writing demo character #2');
     this.setDemoProgress('demoComplete');
 
     // redirect to dashboard or account setup based on authentication
