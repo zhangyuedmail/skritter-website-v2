@@ -72,11 +72,17 @@ const AccountSetupPage = GelatoPage.extend({
     }
 
     if (app.isCordova()) {
-      navigator.globalization.getPreferredLanguage((result) => {
-        this.settings.country = this.getCountryCode(result.value);
-        this.settings.timezone = this.getCountryTimezone(result.value);
+      navigator.globalization.getDatePattern((tz) => {
+        navigator.globalization.getPreferredLanguage((locale) => {
+          console.log(locale, tz);
 
-        this.renderTemplate();
+          this.settings.country = this.getCountryCode(locale.value);
+          this.settings.timezone = this.getCountryTimezone(locale.value, tz.iana_timezone);
+
+          this.renderTemplate();
+        }, (error) => {
+          this.renderTemplate();
+        });
       }, (error) => {
         this.renderTemplate();
       });
@@ -94,8 +100,14 @@ const AccountSetupPage = GelatoPage.extend({
     return this.countries[this.parseLocaleString(bcp47)] ? this.parseLocaleString(bcp47) : 'US';
   },
 
-  getCountryTimezone: function (bcp47) {
-    return this.timezones[this.parseLocaleString(bcp47)][0] || 'America/New_York';
+  getCountryTimezone: function (bcp47, tz) {
+    const timezones = this.timezones[this.parseLocaleString(bcp47)][0];
+
+    if (timezones && _.includes(timezones, tz)) {
+      return timezones[tz];
+    } else {
+      return this.timezones[this.parseLocaleString(bcp47)][0] || 'America/New_York';
+    }
   },
 
   parseLocaleString: function (value) {
