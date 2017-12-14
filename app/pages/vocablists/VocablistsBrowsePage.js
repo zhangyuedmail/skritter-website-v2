@@ -2,7 +2,7 @@ const GelatoPage = require('gelato/page');
 const Table = require('components/vocablists/VocablistsBrowseTableComponent');
 const Sidebar = require('components/vocablists/VocablistsSidebarComponent');
 const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
-const ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
+const vent = require('vent');
 
 /**
  * A page that allows a user to browse different categories of vocablists they can study.
@@ -179,8 +179,6 @@ module.exports = GelatoPage.extend({
    * that informs them what the lists are and how to add one.
    */
   showAddListsTooltip: function () {
-    const self = this;
-
     let welcome = app.locale('pages.vocabLists.newUserBrowseDialogWelcome' + app.getLanguage());
     if (app.isChinese() && app.user.get('reviewTraditional') && !app.user.get('reviewSimplified')) {
       welcome = app.locale('pages.vocabLists.newUserBrowseDialogWelcomezhTrad');
@@ -190,21 +188,22 @@ module.exports = GelatoPage.extend({
     dialogBody += app.locale('pages.vocabLists.newUserBrowseDialogDescriptionTextbooks' + app.getLanguage());
     dialogBody += app.locale('pages.vocabLists.newUserBrowseDialogDescription2');
 
-    this._views['dialog'] = new ConfirmGenericDialog({
+    vent.trigger('notification:show', {
       body: dialogBody,
-      showButtonCancel: false,
-      buttonConfirm: app.locale('pages.vocabLists.newUserBrowseDialogConfirm'),
-      buttonConfirmClass: 'btn-primary',
-      title: app.locale('pages.vocabLists.newUserBrowseDialogTitle'),
+      buttonText: app.locale('pages.vocabLists.newUserBrowseDialogConfirm'),
+      dialogTitle: app.locale('pages.vocabLists.newUserBrowseDialogTitle'),
+      exitAnimation: 'fadeButton',
+      showConfirmButton: true,
+      showTitle: true,
+      style: {
+        dialog: {
+          top: '20%',
+          width: '50%',
+          left: '25%',
+        },
+      },
     });
-    this._views['dialog'].once(
-      'confirm',
-      function () {
-        self._views['dialog'].close();
-      }
-    );
 
-    this._views['dialog'].open();
     app.setSetting('newuser-' + app.user.id + '-seen-browsevocablist', true);
   },
 
