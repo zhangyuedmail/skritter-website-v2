@@ -163,8 +163,6 @@ const AccountSettingsStudyPage = GelatoPage.extend({
       dailyAddLimit = 0;
     }
 
-    console.log(this.$('#field-add-frequency').val());
-
     app.user.set({
       addFrequency: parseInt(this.$('#field-add-frequency').val(), 10),
       autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
