@@ -1,9 +1,9 @@
 gelato-component(data-name='mobile-vocablists-mine-table')
 
   if view.vocablists.state === 'standby' && view.vocablists.length === 0
-    p.text-center
+    p.text-center.create-notice
       span You have not created any lists.
-      a(href="/vocablists/create")  Make one!
+      a.create-list-button(href="#")  Make one!
 
   for list, i in view.vocablists.models
     .row.vocablist-item(class=i % 2 ? 'even-row' : 'odd-row')

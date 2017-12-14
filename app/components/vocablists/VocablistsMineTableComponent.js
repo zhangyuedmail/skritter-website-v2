@@ -14,6 +14,7 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
   events: {
     'click #load-more-btn': 'handleClickLoadMoreButton',
     'click .add-to-queue-link': 'handleClickAddToQueueLink',
+    'click .create-list-button': 'handleClickCreateListButton',
   },
 
   /**
@@ -61,6 +62,14 @@ const VocablistsMineTableComponent = GelatoComponent.extend({
     }
     vocablist.save({'studyingMode': 'adding'}, {patch: true});
     this.render();
+  },
+
+  handleClickCreateListButton: function () {
+    if (app.user.isAnonymous()) {
+      app.signup();
+    } else {
+      app.router.navigate('vocablists/create', {trigger: true});
+    }
   },
 
   /**
