@@ -35,11 +35,11 @@ $transition-time: 500ms;
   }
 
   .dialog-title {
-    font-size: 4vh;
+    font-size: 3vh;
     font-weight: 300;
     text-align: center;
     padding: 1vh;
-    height: 8vh;
+    height: 6vh;
     // $white1 = #fbfafc = 251 250 252
     background: rgba(251, 250, 252, .9);
     opacity: 0.9;
@@ -72,6 +72,9 @@ $transition-time: 500ms;
 
     transition: margin-top $transition-time, opacity $transition-time;
     -webkit-transition: margin-top $transition-time, opacity $transition-time;
+
+    -webkit-box-shadow: 0 3px 15px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 15px rgba(0, 0, 0, .5);
 
     &:active {
       background: #000;
@@ -184,7 +187,6 @@ $transition-time: 500ms;
 
     #button-signup {
       float: none;
-
       background: #ed5236;
       color: #FFF;
     }
@@ -197,6 +199,11 @@ $transition-time: 500ms;
       margin-top: 0%;
       max-width: none;
       width: auto;
+    }
+
+    .dialog-title {
+      font-size: 3vh;
+      height: 8vh;
     }
   }
 }
