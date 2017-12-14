@@ -57,6 +57,15 @@ gelato-component[data-name='mobile-study-prompt'] {
     width: 58px;
   }
 
+  #input-notification {
+    color: $green4;
+    display: none;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    z-index: 8000;
+  }
+
   #panel-left {
     background-color: $white1;
     border-bottom-left-radius: 5px;

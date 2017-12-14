@@ -166,12 +166,17 @@ const StudyPage = GelatoPage.extend({
           message: 'You\'ve reached your daily auto-add limit today! You can still manually add more words if you want to progress faster.',
           type: 'pastel-success',
         });
+
         this.userNotifiedAutoAddLimit = true;
       } else {
-        app.notifyUser({
-          message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.',
-          type: 'pastel-success',
-        });
+        if (app.isMobile()) {
+          this.prompt.showNotification(added + (added > 1 ? ' words ' : ' word ') + ' added');
+        } else {
+          app.notifyUser({
+            message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.',
+            type: 'pastel-success',
+          });
+        }
       }
     } else {
       if (!fromAutoAdd) {

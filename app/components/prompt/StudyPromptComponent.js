@@ -128,6 +128,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.renderTemplate();
 
     this.$inputContainer = this.$('#input-container');
+    this.$inputNotification = this.$('#input-notification');
     this.$toolbarContainer = this.$('#toolbar-action-container');
     this.$panelLeft = this.$('#panel-left');
     this.$panelRight = this.$('#panel-right');
@@ -441,6 +442,11 @@ const StudyPromptComponent = GelatoComponent.extend({
     this._preloadVocabInfo();
 
     return this;
+  },
+
+  showNotification: function (text) {
+    this.$inputNotification.html('<i class="fa fa-plus"></i> ' + text);
+    this.$inputNotification.slideDown(500).delay(2000).slideUp(500);
   },
 
   /**
