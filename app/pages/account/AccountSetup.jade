@@ -1,66 +1,92 @@
-gelato-page(data-name='account-setup')
+gelato-page.dark(data-name='account-setup')
 
   section.container
-
+    .dialog-title= app.locale('pages.accountSetup.setupYourAccount')
     .content-block
 
+      p.pad-bottom.setup-explanation.text-center= app.locale('pages.accountSetup.setupExplanation')
       form.form-horizontal
         .text-center
           #error-message.alert.alert-warning.hidden
-          h3= app.locale('pages.accountSetup.setupYourAccount')
-          p.pad-bottom= app.locale('pages.accountSetup.setupExplanation')
+        if view.settings.mode === 'list'
+          .select-block
+            h3= app.locale('pages.accountSetup.listSelectScratchTitle')
+            p= app.locale('pages.accountSetup.listSelectScratch.' + app.getLanguage())
+            .text-center
+              button#button-select-scratch.btn.btn-success(type="button") Select
 
-        if !app.isCordova() && !app.get('demoLang')
-          .form-group
-            label.col-sm-3.control-label= app.locale('pages.accountSetup.languageLabel')
-            .col-sm-9
-              #targetLang-zh.lang-option.clickable-option.pad-right(class=view.settings.targetLang === 'zh' ? 'selected' : '')
-                .option-icon 中文
-                .lang-name= app.locale('common.zh')
-              #targetLang-ja.lang-option.clickable-option(class=view.settings.targetLang === 'ja' ? 'selected' : '')
-                .option-icon 日本語
-                .lang-name= app.locale('common.ja')
+          hr
 
-        if view.settings.targetLang === 'zh'
-          .form-group
-            label.col-sm-3.control-label(for="field-styles")= app.locale('pages.accountSetup.charTypeLabel')
-            .col-sm-9#field-styles
-              #simplified.char-option.clickable-option.pad-right(class=view.settings.addSimplified ? 'selected' : '')
-                .option-icon 简体字
-                .lang-name= app.locale('pages.accountSetup.simpChars')
-              #traditional.char-option.clickable-option.pad-right(class=view.settings.addTraditional ? 'selected' : '')
-                .option-icon 正體字
-                .lang-name= app.locale('pages.accountSetup.tradChars')
-              #both.char-option.clickable-option(class=view.settings.addBoth ? 'selected' : '')
-                .option-icon 两種
-                .lang-name= app.locale('pages.accountSetup.bothChars')
-                br
+          .select-block
+            h3= app.locale('pages.accountSetup.listSelectCustomTitle')
+            p= app.locale('pages.accountSetup.listSelectCustom')
+            .text-center
+              button#button-select-custom.btn.btn-success(type="button") Select
+        else
+          #lang-char-time-section
+            if !app.isCordova() && !app.get('demoLang')
+              .form-group
+                label.col-sm-3.control-label= app.locale('pages.accountSetup.languageLabel')
+                .col-sm-9
+                  #targetLang-zh.lang-option.clickable-option.pad-right(class=view.settings.targetLang === 'zh' ? 'selected' : '')
+                    .option-icon 中文
+                    .lang-name= app.locale('common.zh')
+                  #targetLang-ja.lang-option.clickable-option(class=view.settings.targetLang === 'ja' ? 'selected' : '')
+                    .option-icon 日本語
+                    .lang-name= app.locale('common.ja')
 
-        .form-group
-          label.col-sm-3.control-label(for="field-country")= app.locale('pages.accountSetup.countryLabel')
-          .col-sm-9
-            select#field-country.form-control
-              for name, code in view.countries
-                if code === view.settings.country
-                  option(value=code, selected="selected")= name
-                else
-                  option(value=code)= name
+            #character-style-section.form-group
+              label.col-md-3.control-label(for="field-timezone") Type of characters
+              .col-md-9#field-styles
+                .button-wrapper.clearfix.pad-bottom
+                  #simplified.style-selection-button.char-option
+                    .selection-indicator
+                    .button-detail-wrapper
+                      .button-detail-text
+                        span.option-icon 简体字 -
+                        span.lang-name.spl= app.locale('pages.accountSetup.simpChars')
+                      .button-detail-text.style-description Primarily used in mainland China
+                .button-wrapper.clearfix.pad-bottom
+                  #traditional.style-selection-button.char-option
+                    .selection-indicator
+                    .button-detail-wrapper
+                      .button-detail-text
+                        span.option-icon 正體字 -
+                        span.lang-name.spl= app.locale('pages.accountSetup.tradChars')
+                      .button-detail-text.style-description Primarily used in Hong Kong and Taiwan
+                .button-wrapper.clearfix.pad-bottom
+                  #both.style-selection-button.char-option
+                    .selection-indicator
+                    .button-detail-wrapper
+                      .button-detail-text
+                        span.option-icon 两種 -
+                        span.lang-name.spl= app.locale('pages.accountSetup.bothChars')
+                      .button-detail-text.style-description For people who love all characters
 
-        .form-group
-          label.col-sm-3.control-label(for="field-timezone")= app.locale('pages.accountSetup.timezoneLabel')
-          .col-sm-9
-            select#field-timezone.form-control
-              for timezone, code in view.timezones[view.settings.country]
-                if timezone === user.get('timezone')
-                  option(value=timezone, selected="selected")= timezone.replace(/_/g, ' ')
-                else
-                  option(value=timezone)= timezone.replace(/_/g, ' ')
-        .form-group
-          span
-        .form-group
-          .col-sm-12.text-center
-            if view.state === 'saving'
-              button.btn.btn-fixed.btn-success(type="submit", disabled=true)
-                i.fa.fa-2x.fa-spinner.fa-pulse
-            else
-              button#button-continue.btn.btn-fixed.btn-success(type="submit")= app.locale('common.continue')
+
+            .form-group
+              label.col-sm-3.control-label(for="field-country")= app.locale('pages.accountSetup.countryLabel')
+              .col-sm-9
+                select#field-country.form-control
+                  for name, code in view.countries
+                    if code === view.settings.country
+                      option(value=code, selected="selected")= name
+                    else
+                      option(value=code)= name
+
+            .form-group
+              label.col-sm-3.control-label(for="field-timezone")= app.locale('pages.accountSetup.timezoneLabel')
+              .col-sm-9
+                select#field-timezone.form-control
+                  for timezone, code in view.timezones[view.settings.country]
+                    if timezone === user.get('timezone')
+                      option(value=timezone, selected="selected")= timezone.replace(/_/g, ' ')
+                    else
+                      option(value=timezone)= timezone.replace(/_/g, ' ')
+    #next-btn-wrapper.form-group.button-wrapper
+      .col-xs-12.text-center
+        if view.state === 'saving'
+          button.btn.btn-fixed.btn-success(type="submit", disabled=true)
+            i.fa.fa-2x.fa-spinner.fa-pulse
+        else
+          button#button-next.btn.btn-success(type="submit") Next

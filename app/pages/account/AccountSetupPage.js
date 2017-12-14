@@ -103,7 +103,7 @@ const AccountSetupPage = GelatoPage.extend({
   update: function () {
     this.$('#character-style-section').toggleClass('hidden', this.settings.targetLang !== 'zh');
     this.$('#next-btn-wrapper').toggleClass('hidden', this.settings.mode === 'list');
-
+    this.$('.setup-explanation').toggleClass('hidden', this.settings.mode === 'list');
     this.$('#simplified').toggleClass('selected', this.settings.addSimplified);
     this.$('#traditional').toggleClass('selected', this.settings.addTraditional);
     this.$('#both').toggleClass('selected', this.settings.addBoth);
