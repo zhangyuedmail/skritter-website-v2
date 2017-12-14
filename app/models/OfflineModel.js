@@ -246,6 +246,16 @@ const OfflineModel = GelatoModel.extend({
   },
 
   /**
+   * Loads all vocabs from indexedDB.
+   * @returns {Promise.<Array>}
+   */
+  loadAllVocabs: async function () {
+    this.vocabs = await this.database.vocabs.toArray();
+
+    return this.vocabs;
+  },
+
+  /**
    * Stores a review in the database and updates array.
    * @param {ReviewModel[]} reviews
    * @returns {Promise.<Array>}
@@ -334,6 +344,8 @@ const OfflineModel = GelatoModel.extend({
     let vocabs = await this._downloadItemVocabs(items);
 
     await this._downloadVocabCharacters(vocabs);
+
+    await this._downloadVocabs(offset);
 
     items = undefined;
     vocabs = undefined;
@@ -555,6 +567,49 @@ const OfflineModel = GelatoModel.extend({
     });
 
     return vocabs;
+  },
+
+  /**
+   * Downloads all vocabs based on changed offset.
+   * @param {Number} [offset]
+   * @returns {Promise.<Array>}
+   * @private
+   */
+  _downloadVocabs: async function (offset) {
+    let vocabs = [];
+    let cursor;
+
+    offset = offset || this.get('lastSync');
+
+    return new Promise((resolve, reject) => {
+      async.whilst(
+        () => {
+          return cursor !== null;
+        },
+        async (callback) => {
+          try {
+            const result = await this._fetchVocabs({sort: 'all', offset, cursor});
+
+            await this.database.vocabs.bulkPut(result.data);
+
+            vocabs = vocabs.concat(result.data);
+
+            cursor = result.cursor;
+
+            callback();
+          } catch (error) {
+            callback(error);
+          }
+        },
+        (error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(vocabs);
+          }
+        }
+      );
+    });
   },
 
   /**

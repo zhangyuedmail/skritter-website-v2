@@ -74,17 +74,25 @@ module.exports = GelatoPage.extend({
    * @method fetchItems
    * @param {string} [cursor]
    */
-  fetchMnemonics: function (cursor) {
-    this.mnemonicVocabs.fetch({
-      data: {
-        sort: 'mnemonic',
-        lang: app.getLanguage(),
-        limit: this.limit,
-        cursor: cursor || '',
-      },
-      remove: false,
-      sort: false,
-    });
+  fetchMnemonics: async function (cursor) {
+    if (app.user.offline.isReady()) {
+      const vocabs = _.filter(await app.user.offline.loadAllVocabs(), (vocab) => !!vocab.customDefinition);
+
+      this.mnemonicVocabs.add(vocabs);
+
+      this.renderTable();
+    } else {
+      this.mnemonicVocabs.fetch({
+        data: {
+          sort: 'mnemonic',
+          lang: app.getLanguage(),
+          limit: this.limit,
+          cursor: cursor || '',
+        },
+        remove: false,
+        sort: false,
+      });
+    }
   },
 
   /**

@@ -120,17 +120,25 @@ module.exports = GelatoPage.extend({
    * @method fetchItems
    * @param {string} [cursor]
    */
-  fetchStarredVocabs: function (cursor) {
-    this.starredVocabs.fetch({
-      data: {
-        sort: 'starred',
-        lang: app.getLanguage(),
-        limit: this.limit,
-        cursor: cursor || '',
-      },
-      remove: false,
-      sort: false,
-    });
+  fetchStarredVocabs: async function (cursor) {
+    if (app.user.offline.isReady()) {
+      const vocabs = _.filter(await app.user.offline.loadAllVocabs(), (vocab) => !!vocab.starred);
+
+      this.starredVocabs.add(vocabs);
+
+      this.renderTable();
+    } else {
+      this.starredVocabs.fetch({
+        data: {
+          sort: 'starred',
+          lang: app.getLanguage(),
+          limit: this.limit,
+          cursor: cursor || '',
+        },
+        remove: false,
+        sort: false,
+      });
+    }
   },
 
   /**

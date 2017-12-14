@@ -73,17 +73,25 @@ module.exports = GelatoPage.extend({
    * @method fetchItems
    * @param {string} [cursor]
    */
-  fetchBannedVocabs: function (cursor) {
-    this.bannedVocabs.fetch({
-      data: {
-        sort: 'banned',
-        lang: app.getLanguage(),
-        limit: this.limit,
-        cursor: cursor || '',
-      },
-      remove: false,
-      sort: false,
-    });
+  fetchBannedVocabs: async function (cursor) {
+    if (app.user.offline.isReady()) {
+      const vocabs = _.filter(await app.user.offline.loadAllVocabs(), (vocab) => !!vocab.bannedParts.length);
+
+      this.bannedVocabs.add(vocabs);
+
+      this.renderTable();
+    } else {
+      this.bannedVocabs.fetch({
+        data: {
+          sort: 'banned',
+          lang: app.getLanguage(),
+          limit: this.limit,
+          cursor: cursor || '',
+        },
+        remove: false,
+        sort: false,
+      });
+    }
   },
 
   /**
