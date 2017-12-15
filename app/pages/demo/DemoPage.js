@@ -181,8 +181,8 @@ const DemoPage = GelatoPage.extend({
         self.promptItems.teachAll();
 
         // uncomment for faster testing shortcut
-        // self.teachTonePrompt1();
-        self.teachDemoChar1();
+        self.teachTonePrompt1();
+        // self.teachDemoChar1();
       }
     );
   },
@@ -580,31 +580,18 @@ const DemoPage = GelatoPage.extend({
   },
 
   /**
+   * Sets up and shows the end of demo notifications to the user
    * @method completeDemo
    */
   completeDemo: function () {
     this.setDemoProgress('demoComplete');
-
-    // redirect to dashboard or account setup based on authentication
-    if (app.isMobile()) {
-      if (app.user.isLoggedIn()) {
-        app.router.navigate('dashboard', {trigger: true});
-      } else {
-        app.user.loginAnonymous(function () {
-          app.router.navigate('account/setup', {trigger: true});
-        });
-      }
-
-      return;
-    }
 
     if (!this.prompt.review.isComplete()) {
       this.prompt.review.set('complete', true);
       this.prompt.renderPart();
     }
 
-    const next = app.user.isLoggedIn() ? {} :{
-      // dialogTitle: 'Demo Complete',
+    const next = app.user.isLoggedIn() || app.isMobile() ? null : {
       showTitle: false,
       body: this.parseTemplate(require('./notify-demo-complete.jade')),
       showConfirmButton: false,
@@ -623,7 +610,7 @@ const DemoPage = GelatoPage.extend({
     };
 
     vent.trigger('notification:show', {
-      dialogTitle: 'Lots of Features!',
+      dialogTitle: app.isMobile() ? 'Demo complete' : 'Lots of Features!',
       showTitle: true,
       keepAlive: true,
       body: this.parseTemplate(require('./notify-features1.jade')),
@@ -644,11 +631,30 @@ const DemoPage = GelatoPage.extend({
       next,
     });
 
-    // logged in users don't see the "magazine ad" for Skritter, just take them back to the dashboard
-    if (app.user.isLoggedIn()) {
-      this.once(vent, 'notification:close', function () {
+    vent.once('notification:close', this.performPostDemoAction);
+  },
+
+  /**
+   * Determines where the user should be navigated to based on the platform and
+   * the user's login status.
+   * @method performPostDemoAction
+   */
+  performPostDemoAction: function () {
+    // redirect to dashboard or account setup based on authentication
+    if (app.isMobile()) {
+      if (app.user.isLoggedIn()) {
         app.router.navigateDashboard();
-      });
+      } else {
+        app.user.loginAnonymous(function () {
+          app.router.navigateAccountSetup();
+        });
+      }
+      return;
+    } else {
+      // logged in users don't see the "magazine ad" for Skritter, just take them back to the dashboard
+      if (app.user.isLoggedIn()) {
+        app.router.navigateDashboard();
+      }
     }
   },
 
