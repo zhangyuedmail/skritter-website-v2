@@ -37,6 +37,10 @@ const PromptStrokeCollection = GelatoCollection.extend({
    * @returns {PromptStrokeModel}
    */
   getExpectedStroke: function () {
+    if (_.includes(app.config.reverseExpected), this.writing) {
+      return _.last(this.getExpectedTargets()).at(this.length);
+    }
+
     return this.getExpectedTargets()[0].at(this.length);
   },
 

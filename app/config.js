@@ -126,6 +126,11 @@ module.exports = {
   recordLoadTimes: false && window.performance,
 
   /**
+   * A list of characters to prefer last expected stroke.
+   */
+  reverseExpected: ['母'],
+
+  /**
    * Whether to use a local backend instead of production
    * @type {Boolean}
    */
