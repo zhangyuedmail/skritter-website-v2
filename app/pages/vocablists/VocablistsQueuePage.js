@@ -14,7 +14,7 @@ module.exports = GelatoPage.extend({
    * @property title
    * @type {String}
    */
-  title: app.locale('pages.vocablists.titleQueue'),
+  title: app.locale('pages.vocabLists.titleQueue'),
 
   navbarOptions: {
     showCreateListBtn: true,
