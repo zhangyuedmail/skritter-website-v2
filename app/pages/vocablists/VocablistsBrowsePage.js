@@ -77,9 +77,9 @@ module.exports = GelatoPage.extend({
     this._views['table'].setElement('#vocablist-container').render();
     this._views['expiration'].setElement('#expiration-container').render();
 
-    // if (app.getSetting('newuser-' + app.user.id) && !app.getSetting('newuser-' + app.user.id + '-seen-browsevocablist')) {
+    if (app.getSetting('newuser-' + app.user.id) && !app.getSetting('newuser-' + app.user.id + '-seen-browsevocablist')) {
       this.showAddListsTooltip();
-    // }
+    }
 
     return this;
   },
