@@ -39,7 +39,6 @@ $transition-time: 500ms;
     font-weight: 300;
     text-align: center;
     padding: 1vh;
-    height: 6vh;
     // $white1 = #fbfafc = 251 250 252
     background: rgba(251, 250, 252, .9);
     opacity: 0.9;
@@ -203,7 +202,6 @@ $transition-time: 500ms;
 
     .dialog-title {
       font-size: 3vh;
-      height: 8vh;
     }
   }
 }
