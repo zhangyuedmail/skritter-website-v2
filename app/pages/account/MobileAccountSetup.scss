@@ -11,6 +11,8 @@ gelato-page[data-name='mobile-account-setup'] {
     .content-block {
       background-color: rgba(0, 0, 0, .7);
       color: $white1;
+      -webkit-box-shadow: 0 3px 15px rgba(0, 0, 0, .5);
+      box-shadow: 0 3px 15px rgba(0, 0, 0, .5);
     }
 
     .btn {
@@ -24,6 +26,9 @@ gelato-page[data-name='mobile-account-setup'] {
       padding: 8px 80px;
       margin-top: 1vh;
       opacity: 1.0;
+
+      -webkit-box-shadow: 0 3px 15px rgba(0, 0, 0, .5);
+      box-shadow: 0 3px 15px rgba(0, 0, 0, .5);
 
       &:active {
         background: #000;
