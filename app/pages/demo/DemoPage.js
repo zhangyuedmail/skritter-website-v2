@@ -467,7 +467,7 @@ const DemoPage = GelatoPage.extend({
     _.defer(() => {
       this.prompt.$('.grading-btn-wrapper').removeClass('hidden');
       this.prompt.toolbarGrading.once('grade:selected', () => {
-        this.$('.tap-to-advance-wrapper').toggleClass('hidden', app.isMobile());
+        this.$('.tap-to-advance-wrapper').removeClass('hidden');
       });
     });
 
