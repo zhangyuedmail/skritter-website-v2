@@ -110,6 +110,8 @@ const StudyPromptComponent = GelatoComponent.extend({
 
     this.listenTo(vent, 'vocab:play', this.playVocabAudio);
     this.listenTo(vent, 'studyPromptVocabInfo:show', this.showVocabInfo);
+    this.listenTo(vent, 'prompt:next', this.next);
+    this.listenTo(vent, 'prompt:previous', this.previous);
 
     // Listen to cordova based pause and resume events
     this.cordovaPauseEvent = document.addEventListener('pause', this.handleCordovaPause.bind(this), false);

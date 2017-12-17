@@ -8,11 +8,9 @@ gelato-page[data-name='demo'] {
   #demo-prompt-container {
     padding-top: 50px;
     gelato-component[data-name="study-prompt-toolbar-grading"] {
-      .btn-default {
-        .teaching-text {
-          color: $grey4;
-          background: rgba(200, 200, 200, 0.2);
-        }
+      .teaching-text {
+        color: $grey4;
+        background: rgba(133, 205, 99, 0.2);
       }
     }
   }

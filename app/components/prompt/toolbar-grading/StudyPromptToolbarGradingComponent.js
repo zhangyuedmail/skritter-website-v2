@@ -1,4 +1,5 @@
 const GelatoComponent = require('gelato/component');
+const vent = require('vent');
 
 /**
  * @class StudyPromptToolbarGradingComponent
@@ -11,6 +12,7 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
    * @type Object
    */
   events: {
+    'click .teaching-text': 'handleClickTapToAdvance',
     'mousedown button': 'handleMousedownButton',
     'mouseup button': 'handleMouseupButton',
     'mousemove .draggable': 'handleMousemoveButton',
@@ -90,6 +92,13 @@ const StudyPromptToolbarGradingComponent = GelatoComponent.extend({
   deselect: function () {
     this.value = null;
     return this.render();
+  },
+
+  handleClickTapToAdvance: function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    vent.trigger('prompt:next');
   },
 
   /**

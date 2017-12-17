@@ -49,11 +49,14 @@ gelato-component[data-name="study-prompt-toolbar-grading"] {
       font-weight: 400;
       line-height: 40px;
     }
+  }
 
-    .teaching-text {
-      font-size: 22px;
-      font-weight: 300;
-    }
+  .teaching-text {
+    font-size: 22px;
+    font-weight: 300;
+    color: $grey2;
+    cursor: pointer;
+    font-family: $font-slab;
   }
 
   .btn-group {
