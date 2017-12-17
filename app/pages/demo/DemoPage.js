@@ -1,12 +1,15 @@
 const GelatoPage = require('gelato/page');
 const Vocabs = require('collections/VocabCollection');
 const Prompt = require('components/prompt/StudyPromptComponent.js');
-const DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
+const DemoLanguageSelectDialog = require('dialogs1/demo-language-select/DemoLanguageSelectDialog.js');
 const DemoProgressComponent = require('components/demo/DemoProgressComponent.js');
 const ItemsCollection = require('collections/ItemCollection');
 const NavbarMobileDemo = require('components/navbars/NavbarMobileDemoComponent.js');
 const vent = require('vent');
+
 /**
+ * A page that demonstrates Skritter to a user by taking them through
+ * a guided tour of various prompts and features.
  * @class Demo
  * @extends {GelatoPage}
  */
@@ -46,6 +49,8 @@ const DemoPage = GelatoPage.extend({
   template: require('./Demo'),
 
   /**
+   * Binds instance methods to the correct context, sets up instance variables,
+   * the prompt, and some event listeners.
    * @method initialize
    * @param {Object} [options]
    * @constructor
@@ -56,7 +61,6 @@ const DemoPage = GelatoPage.extend({
       'teachDefinitionPrompt1', 'teachEraseDemoChar2', 'teachReadingPrompt1',
       'teachTonePrompt1', 'teachSRS1');
 
-    this.dialog = null;
     this.lang = 'zh';
     this.notify = null;
     this.prompt = new Prompt({
@@ -82,6 +86,7 @@ const DemoPage = GelatoPage.extend({
   },
 
   /**
+   * Renders the page and subviews
    * @method render
    * @returns {DemoPage}
    */
@@ -117,9 +122,9 @@ const DemoPage = GelatoPage.extend({
           if (app.isCordova()) {
             callback(null, app.getLanguage());
           } else {
-            self.dialog = new DemoLanguageSelectDialog();
-            self.dialog.open();
-            self.dialog.once('select', callback);
+            self._views['languageSelectDialog'] = new DemoLanguageSelectDialog();
+            self._views['languageSelectDialog'].open();
+            self._views['languageSelectDialog'].once('select', callback);
           }
         },
 
@@ -743,6 +748,7 @@ const DemoPage = GelatoPage.extend({
    */
   remove: function () {
     this.prompt.remove();
+    this.prompt = null;
 
     return GelatoPage.prototype.remove.call(this);
   },
