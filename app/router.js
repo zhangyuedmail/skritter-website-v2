@@ -275,6 +275,7 @@ module.exports = Router.extend({
    */
   navigateHome: function () {
     if (app.isMobile()) {
+      this.navigate('home');
       this.go('pages/home/HomePage');
     } else {
       window.location.replace('/');
