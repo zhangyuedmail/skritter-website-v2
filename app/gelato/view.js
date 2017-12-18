@@ -151,8 +151,13 @@ let GelatoView = Backbone.View.extend({
       }
     }
 
+    if (_.isFunction(this.onRemove)) {
+      this.onRemove();
+    }
+
     this.$el.find('*').off();
     this.$el.empty();
+    this._removeElement();
     Backbone.$(window).off('resize.View');
 
     return this;
