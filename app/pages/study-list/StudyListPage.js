@@ -80,12 +80,6 @@ const StudyListPage = StudyPage.extend({
       this._views['recipe'] = new Recipes();
     }
 
-    // will hold a number that shows how many items have been added in the last 24 hours
-    this.itemsAddedToday = null;
-    this.promptsReviewed = 0;
-    this.promptsSinceLastAutoAdd = 0;
-    this.userNotifiedAutoAddLimit = false;
-
     // make sure the item collection knows about filtered list
     this.items.listIds = [this.vocablist.id];
 
@@ -155,7 +149,8 @@ const StudyListPage = StudyPage.extend({
           if (added === 0) {
               resolve(0);
           } else {
-            this.itemsAddedToday += added;
+            const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
+            this.itemsAddedToday += (added * (app.user.get(targetLangName + 'StudyParts').length));
             resolve(added);
           }
         } else {
@@ -185,6 +180,15 @@ const StudyListPage = StudyPage.extend({
               callback();
             },
           });
+        },
+        (callback) => {
+          const today = moment().format(app.config.dateFormatApp);
+          this._getNumItemsAddedToday(today)
+            .catch(callback)
+            .then((added) => {
+              this.itemsAddedToday = added;
+              callback();
+            }, callback);
         },
         (callback) => {
           this.items.fetchNext({limit: 30, lists: this.vocablist.id})
@@ -239,6 +243,23 @@ const StudyListPage = StudyPage.extend({
         }
       }
     );
+  },
+
+  /**
+   * Gets the max number of items that can be auto-added in a day
+   * @returns {number}
+   */
+  getMaxItemsPerDay: function () {
+    const targetLangName = app.getLanguage() === 'zh' ? 'chinese' : 'japanese';
+    const addFreqMultiplier = 1; // {0.7: .75, 0.8: 1, 0.9: 1.2};
+    const maxVocabsMap = {0.6: 7, 0.7: 10, 0.9: 15}; // 12};
+    const addFreq = app.user.get('addFrequency') / 100;
+
+    if (Number(app.user.get('dailyAddLimit')) === 0) {
+      return 0;
+    }
+
+    return (app.user.get('dailyAddLimit') || maxVocabsMap[addFreq]) * (app.user.get(targetLangName + 'StudyParts').length) * addFreqMultiplier;
   },
 
   /**
@@ -313,6 +334,9 @@ const StudyListPage = StudyPage.extend({
     }
 
     if (items.length) {
+      this.promptsReviewed++;
+      this.promptsSinceLastAutoAdd++;
+
       this.currentItem = items[0];
       this.currentPromptItems = items[0].getPromptItems();
       this.togglePromptLoading(false);
@@ -380,6 +404,91 @@ const StudyListPage = StudyPage.extend({
   },
 
   /**
+   * Displays a notification to the user based on how many words were added
+   * @param {Number} [added] how many items were just added
+   * @param {Boolean} [fromAutoAdd] whether the add was triggered from auto-add.
+   *                                Affects display of popups.
+   */
+  showItemsAddedNotification: function (added, fromAutoAdd) {
+    if (added) {
+      if (this.itemsAddedToday >= this.getMaxItemsPerDay() && this.getMaxItemsPerDay() > 0 && !this.userNotifiedAutoAddLimit && fromAutoAdd) {
+        app.notifyUser({
+          message: 'You\'ve reached your daily auto-add limit today! You can still manually add more words if you want to progress faster.',
+          type: 'pastel-success',
+        });
+
+        this.userNotifiedAutoAddLimit = true;
+      } else {
+        if (app.isMobile()) {
+          this.prompt.showNotification(added + (added > 1 ? ' words ' : ' word ') + ' added');
+        } else {
+          app.notifyUser({
+            message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.',
+            type: 'pastel-success',
+          });
+        }
+      }
+    } else {
+      if (!fromAutoAdd) {
+        app.notifyUser({
+          message: 'No more words to add. <br><a href="/vocablists/browse">Add a new list</a>',
+          type: 'pastel-info',
+        });
+      }
+    }
+  },
+
+  /**
+   * Determines whether an item should be auto-added based on its readiness and other heuristics about the queue
+   * @param {UserItem} currentItem the current item that the user is studying
+   * @returns {boolean} whether an item should be added
+   */
+  shouldAutoAddItem: function (currentItem) {
+    // TODO: figure out some good values for this
+    const addFreq = app.user.get('addFrequency') / 100;
+    const maxItemsPerDay = app.user.getMaxItemsPerDay();
+
+    if ((this.items.dueCount > 50 && (addFreq !== 0.9)) ||
+      (this.itemsAddedToday >= maxItemsPerDay && maxItemsPerDay > 0)) {
+      return false;
+    }
+
+    // kinda a magic number
+    const addRange = 0.4;
+    const readiness = currentItem.getReadiness();
+
+    // if they're currently studying a brand new item, let's wait until after they get through that
+    if (readiness === 9999) {
+      return false;
+    }
+
+    const diff = 1 - (readiness - addFreq) / addRange;
+    const isReadyToStudy = readiness > addFreq + addRange;
+
+    // the most common add case--the current item has been sufficiently studied,
+    // with a couple rate-limiting checks
+    if (0.5 < diff*diff && this.promptsReviewed > 1 && this.promptsSinceLastAutoAdd > 4 && !isReadyToStudy) {
+      return true;
+    }
+
+    // for the case of accounts with barely anything to study and we haven't added much yet,
+    // let's keep adding things
+    if (addFreq > 0.6 && this.items.dueCount < 10 && this.items.dueCount > 0 &&
+      (this.itemsAddedToday < maxItemsPerDay / 2 || !maxItemsPerDay)
+      && this.promptsSinceLastAutoAdd > 10) {
+      return true;
+    }
+
+    // for accounts set with a high add rate but a lot of reviews, still add something every once in a while
+    // to keep things motivating
+    if (addFreq === 0.9 && this.promptsReviewed % 80 === 0 && this.promptsSinceLastAutoAdd > 50) {
+      return true;
+    }
+
+    return false;
+  },
+
+  /**
    * Shows a dialog that allows the user to adjust their study settings
    */
   showStudySettings: function () {
@@ -409,6 +518,63 @@ const StudyListPage = StudyPage.extend({
         }
       );
     });
+  },
+
+  /**
+   * Toggles the loading state on the canvas when fetching new items
+   * @param {Boolean} loading whether the prompt is loading
+   */
+  togglePromptLoading: function (loading) {
+    this.prompt.toggleLoadingIndicator(loading);
+  },
+
+  /**
+   * Gets the number of items a user has added today
+   * @param {Moment} today today's date
+   * @returns {Promise}
+   * @private
+   */
+  _getNumItemsAddedToday: function (today) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: app.getApiUrl(2) + 'gae/items/added',
+        type: 'GET',
+        headers: app.user.session.getHeaders(),
+        context: this,
+        data: {
+          languageCode: app.getLanguage(),
+          startDate: today.format(app.config.dateFormatApp),
+        },
+        error: (error) => {
+          resolve(this._getNumItemsAddedTodayFromLocalStorage());
+        },
+        success: function (result) {
+          resolve(result.added);
+        },
+      });
+    });
+  },
+
+  /**
+   * Gets the number of items added today from localStorage. Refreshes and
+   * cleans up the cache so only today's data is saved.
+   * @private
+   */
+  _getNumItemsAddedTodayFromLocalStorage: function () {
+    const itemsAdded = app.getSetting('itemsAutoAddedToday') || {};
+    const today = moment().format(app.config.dateFormatApp);
+
+    if (itemsAdded[today] === undefined) {
+      itemsAdded[today] = 0;
+    }
+
+    // refresh the cache so that any previous days are erased from localStorage,
+    // only today's data is persisted
+    const newAddedObj = {};
+    newAddedObj[today] = itemsAdded[today];
+    app.setSetting('itemsAutoAddedToday', newAddedObj);
+
+    return itemsAdded[today];
   },
 
 });
