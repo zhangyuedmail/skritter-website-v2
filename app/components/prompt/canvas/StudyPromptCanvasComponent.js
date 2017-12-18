@@ -48,6 +48,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   initialize: function (options) {
     _.bindAll(this, 'onDisplayStageTick', 'onInputMove', 'triggerCanvasMouseDown', 'triggerCanvasMouseUp');
 
+    // useful for debugging
+    this.GUID = Math.floor(Math.random() * 100000000000000000);
     this.brushScale = 0.025;
     this.defaultFadeEasing = createjs.Ease.sineOut;
     this.defaultFadeSpeed = 1000;
@@ -403,6 +405,8 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
       self.canvasDirty = true;
       self.inputStage.update();
 
+      console.log('INPUT DOWN ' + self.GUID);
+
       // function updateInputStage () {
       //   if (self.canvasDirty) {
       //     self.inputStage.update();
@@ -604,14 +608,15 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
   },
 
   /**
-   * @method remove
+   * @method onRemove
    * @returns {StudyPromptCanvasComponent}
    */
-  remove: function () {
+  onRemove: function () {
     $('#fps-counter').remove();
+    this.reset(true);
     this.disableInput();
     this.disableCanvas();
-    return GelatoComponent.prototype.remove.call(this);
+    this.displayStage.ticker.paused = true;
   },
 
   removeTweensFromLayer: function (layerName) {
@@ -621,9 +626,10 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
 
   /**
    * @method reset
+   * @param {Boolean} [ignoreResize] whether to skip the resize
    * @returns {StudyPromptCanvasComponent}
    */
-  reset: function () {
+  reset: function (ignoreResize) {
     clearTimeout(this.mouseTapTimeout);
 
     // this.inputStage.children.forEach((layer) => {
@@ -637,6 +643,10 @@ const StudyPromptCanvasComponent = GelatoComponent.extend({
     this.getLayer('character').removeAllChildren();
     this.getLayer('stroke-hint').removeAllChildren();
     this.getLayer('input').removeAllChildren();
+
+    if (ignoreResize) {
+      return this;
+    }
 
     this.resize();
     return this;

@@ -56,9 +56,12 @@ const DashboardMonthComponent = GelatoComponent.extend({
       cellRadius: 5,
     };
 
-    this.heatmap.init(_.extend(settings, app.isMobile() ? mobileSettings : {}));
-    this.updateHeatmap();
-    this.updateStreak();
+    _.defer(() => {
+      this.heatmap.init(_.extend(settings, app.isMobile() ? mobileSettings : {}));
+      this.updateHeatmap();
+      this.updateStreak();
+    });
+
     return this;
   },
 

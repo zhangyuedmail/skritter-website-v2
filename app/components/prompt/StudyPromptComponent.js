@@ -168,6 +168,38 @@ const StudyPromptComponent = GelatoComponent.extend({
   },
 
   /**
+   * Destructor that removes subcomponents
+   * @method onRemove
+   */
+  onRemove: function () {
+    this.canvas.remove();
+    this.navigation.remove();
+
+    if (this.part) {
+      this.part.remove();
+    }
+
+    this.reviewStatus.remove();
+    this.shortcuts.unregisterAll();
+    this.toolbarAction.remove();
+    this.toolbarGrading.remove();
+    this.toolbarVocab.remove();
+    this.tutorial.remove();
+    this.vocabContained.remove();
+    this.vocabDefinition.remove();
+    this.vocabMnemonic.remove();
+    this.vocabReading.remove();
+    this.vocabSentence.remove();
+    this.vocabStyle.remove();
+    this.vocabWriting.remove();
+
+    document.removeEventListener('pause', this.cordovaPauseEvent);
+    document.removeEventListener('resume', this.cordovaResumeEvent);
+
+    this.off('resize', this.resize);
+  },
+
+  /**
    * @method renderPart
    * @returns {StudyPromptComponent}
    */
@@ -337,35 +369,6 @@ const StudyPromptComponent = GelatoComponent.extend({
       this.trigger('reviews:previous', this.reviews);
       this.renderPart();
     }
-  },
-
-  /**
-   * @method remove
-   * @returns {StudyPromptComponent}
-   */
-  remove: function () {
-    this.canvas.remove();
-    this.navigation.remove();
-
-    if (this.part) {
-      this.part.remove();
-    }
-
-    this.reviewStatus.remove();
-    this.shortcuts.unregisterAll();
-    this.toolbarAction.remove();
-    this.toolbarGrading.remove();
-    this.toolbarVocab.remove();
-    this.tutorial.remove();
-    this.vocabContained.remove();
-    this.vocabDefinition.remove();
-    this.vocabMnemonic.remove();
-    this.vocabReading.remove();
-    this.vocabSentence.remove();
-    this.vocabStyle.remove();
-    this.vocabWriting.remove();
-
-    return GelatoComponent.prototype.remove.call(this);
   },
 
   /**
