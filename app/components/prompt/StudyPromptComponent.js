@@ -54,7 +54,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @constructor
    */
   initialize: function (options) {
-    _.bindAll(this, 'stopAutoAdvance');
+    _.bindAll(this, 'stopAutoAdvance', 'handleCordovaPause', 'handleCordovaResume');
     options = options || {};
 
     // properties
@@ -114,8 +114,8 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.listenTo(vent, 'prompt:previous', this.previous);
 
     // Listen to cordova based pause and resume events
-    this.cordovaPauseEvent = document.addEventListener('pause', this.handleCordovaPause.bind(this), false);
-    this.cordovaResumeEvent = document.addEventListener('resume', this.handleCordovaResume.bind(this), false);
+    this.cordovaPauseEvent = document.addEventListener('pause', this.handleCordovaPause, false);
+    this.cordovaResumeEvent = document.addEventListener('resume', this.handleCordovaResume, false);
   },
 
   /**
@@ -193,8 +193,13 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.vocabStyle.remove();
     this.vocabWriting.remove();
 
-    document.removeEventListener('pause', this.cordovaPauseEvent);
-    document.removeEventListener('resume', this.cordovaResumeEvent);
+    if (this.cordovaPauseEvent) {
+      document.removeEventListener('pause', this.handleCordovaPause);
+    }
+
+    if (this.cordovaResumeEvent) {
+      document.removeEventListener('resume', this.handleCordovaResume);
+    }
 
     this.off('resize', this.resize);
   },
@@ -460,7 +465,7 @@ const StudyPromptComponent = GelatoComponent.extend({
    * @param {Object} [info] info for displaying dialog
    */
   showVocabInfo: function (id, info) {
-    console.log(id, info, this.vocabInfo);
+    // console.log(id, info, this.vocabInfo);
 
     if (app.isMobile()) {
       vent.trigger('vocabInfo:toggle', id || this.reviews.vocab.id, info || this.vocabInfo);
