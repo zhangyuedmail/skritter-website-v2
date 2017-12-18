@@ -34,7 +34,7 @@ const ProgressStatsCollection = BaseSkritterCollection.extend({
     }
 
     if (method === 'read' && app.config.useV2Gets.progstats) {
-      options.url = 'https://api.skritter.com/v2/gae/progstats';
+      options.url = app.getApiUrl(2) + '/gae/progstats';
     }
 
     GelatoCollection.prototype.sync.call(this, method, model, options);
