@@ -74,8 +74,6 @@ const AccountSetupPage = GelatoPage.extend({
     if (app.isCordova()) {
       navigator.globalization.getDatePattern((tz) => {
         navigator.globalization.getPreferredLanguage((locale) => {
-          console.log(locale, tz);
-
           this.settings.country = this.getCountryCode(locale.value);
           this.settings.timezone = this.getCountryTimezone(locale.value, tz.iana_timezone);
 
@@ -150,8 +148,10 @@ const AccountSetupPage = GelatoPage.extend({
   handleClickButtonNext: function () {
     event.preventDefault();
 
+    this.settings.country = this.$('#field-country :selected').val();
+    this.settings.timezone = this.$('#field-timezone :selected').val();
     this.settings.mode = 'list';
-    this.render();
+    this.renderTemplate();
   },
 
   handleClickButtonSelectCustom: function (event) {
@@ -188,19 +188,21 @@ const AccountSetupPage = GelatoPage.extend({
   },
 
   handleClickCharOption: function (event) {
-    let id = event.currentTarget.id;
-    if (id === 'traditional') {
-      this.settings.addTraditional = true;
-      this.settings.addBoth = false;
-      this.settings.addSimplified = false;
-    } else if (id === 'both') {
-      this.settings.addBoth = true;
-      this.settings.addTraditional = false;
-      this.settings.addSimplified = false;
-    } else {
-      this.settings.addSimplified = true;
-      this.settings.addBoth = false;
-      this.settings.addTraditional = false;
+    switch (event.currentTarget.id) {
+      case 'traditional':
+        this.settings.addTraditional = true;
+        this.settings.addBoth = false;
+        this.settings.addSimplified = false;
+        break;
+      case 'both':
+        this.settings.addBoth = true;
+        this.settings.addTraditional = false;
+        this.settings.addSimplified = false;
+        break;
+      default:
+        this.settings.addSimplified = true;
+        this.settings.addBoth = false;
+        this.settings.addTraditional = false;
     }
 
     this.update();
@@ -219,17 +221,19 @@ const AccountSetupPage = GelatoPage.extend({
    * @returns {Object}
    */
   getSettings: function () {
-    let settings = {};
-    let targetLang = this.settings.targetLang;
+    const settings = {};
+    const targetLang = this.settings.targetLang;
+
     if (targetLang === 'zh') {
       settings.addSimplified = this.settings.addSimplified || this.settings.addBoth;
       settings.addTraditional = this.settings.addTraditional || this.settings.addBoth;
       settings.reviewSimplified = true;
       settings.reviewTraditional = true;
     }
-    settings.country = this.$('#field-country :selected').val();
+
+    settings.country = this.settings.country;
     settings.targetLang = targetLang;
-    settings.timezone = this.$('#field-timezone :selected').val();
+    settings.timezone = this.settings.timezone;
 
     return settings;
   },
@@ -270,9 +274,12 @@ const AccountSetupPage = GelatoPage.extend({
           patch: true,
           error: (user, error) => {
             this.$('#error-message').text(error.responseJSON.message);
+
             ScreenLoader.hide();
           },
-          success: () => {
+          success: (model) => {
+            model.cache();
+
             resolve();
           },
         }

@@ -83,10 +83,11 @@ gelato-page.dark(data-name='mobile-account-setup')
                   else
                     option(value=timezone)= timezone.replace(/_/g, ' ')
 
-    #next-btn-wrapper.form-group.button-wrapper
-      .col-xs-12.text-center
-        if view.state === 'saving'
-          button.btn.btn-fixed.btn-success(type="submit", disabled=true)
-            i.fa.fa-2x.fa-spinner.fa-pulse
-        else
-          button#button-next.btn.btn-success(type="submit") Next
+    if view.settings.mode === 'settings'
+      #next-btn-wrapper.form-group.button-wrapper
+        .col-xs-12.text-center
+          if view.state === 'saving'
+            button.btn.btn-fixed.btn-success(type="submit", disabled=true)
+              i.fa.fa-2x.fa-spinner.fa-pulse
+          else
+            button#button-next.btn.btn-success(type="submit") Next
