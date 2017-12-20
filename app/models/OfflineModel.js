@@ -447,7 +447,9 @@ const OfflineModel = GelatoModel.extend({
           try {
             const result = await this._fetchItems({sort: 'changed', offset, cursor});
 
-            await this.database.items.bulkPut(result.data);
+            if (result.data && result.data.length) {
+              await this.database.items.bulkPut(result.data);
+            }
 
             items = items.concat(result.data);
 
@@ -484,7 +486,9 @@ const OfflineModel = GelatoModel.extend({
           try {
             const result = await this._fetchList(list.id);
 
-            await this.database.lists.put(result.data);
+            if (result.data && result.data.length) {
+              await this.database.lists.put(result.data);
+            }
 
             lists = lists.concat(result.data);
 
@@ -520,7 +524,7 @@ const OfflineModel = GelatoModel.extend({
         async (chunk, callback) => {
           const result = await this._fetchVocabs({ids: chunk, include_contained: true});
 
-          if (result.data.length) {
+          if (result.data && result.data.length) {
             vocabs = vocabs.concat(result.data);
           }
 
@@ -530,7 +534,9 @@ const OfflineModel = GelatoModel.extend({
           if (error) {
             reject(error);
           } else {
-            await this.database.vocabs.bulkPut(vocabs);
+            if (vocabs && vocabs.length) {
+              await this.database.vocabs.bulkPut(vocabs);
+            }
 
             resolve(vocabs);
           }
@@ -548,7 +554,7 @@ const OfflineModel = GelatoModel.extend({
         async (chunk, callback) => {
           const result = await this._fetchVocabs({ids: chunk, include_contained: true});
 
-          if (result.data.length) {
+          if (result.data && result.data.length) {
             vocabs = vocabs.concat(result.data);
           }
 
@@ -558,7 +564,9 @@ const OfflineModel = GelatoModel.extend({
           if (error) {
             reject(error);
           } else {
-            await this.database.vocabs.bulkPut(vocabs);
+            if (vocabs && vocabs.length) {
+              await this.database.vocabs.bulkPut(vocabs);
+            }
 
             resolve(vocabs);
           }
@@ -590,7 +598,9 @@ const OfflineModel = GelatoModel.extend({
           try {
             const result = await this._fetchVocabs({sort: 'all', offset, cursor});
 
-            await this.database.vocabs.bulkPut(result.data);
+            if (result.data && result.data.length) {
+              await this.database.vocabs.bulkPut(result.data);
+            }
 
             vocabs = vocabs.concat(result.data);
 
