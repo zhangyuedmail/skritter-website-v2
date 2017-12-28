@@ -1,0 +1,59 @@
+@import "../../styles/_variables";
+
+gelato-component[data-name='signup-notification'] {
+  #signup-btn {
+    margin-top: 15px;
+  }
+
+  .dark {
+    background: $grey7 !important;
+    color: $white5 !important;
+  }
+
+  .push-left {
+    display: inline-block;
+    float: left;
+  }
+
+  .push-right {
+    display: inline-block;
+    float: right;
+  }
+
+  .bold {
+    display: inline-block;
+    font-size: 18px;
+  }
+
+  .expiration-description {
+    margin-left: 25px;
+    margin-top: 5px;
+    display: inline-block;
+    color: $white7;
+  }
+
+  .content-block.subscription-notice-area {
+    padding: 15px 25px;
+  }
+
+  .hide-sub-expired {
+    margin-left: 25px;
+    color: $green5;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 767px) {
+    .bold {
+      display: block;
+    }
+
+    .push-left {
+      text-align: center;
+      width: 100%;
+    }
+
+    .push-right {
+      margin-top: 15px;
+    }
+  }
+}
