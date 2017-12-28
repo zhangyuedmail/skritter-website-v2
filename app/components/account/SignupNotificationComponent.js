@@ -13,7 +13,7 @@ const SignupNotificationComponent = GelatoComponent.extend({
    * @type {Object}
    */
   events: {
-    'click #signup-btn': 'handleSignupBtnClicked'
+    'click #signup-btn': 'handleSignupBtnClicked',
   },
 
   /**
