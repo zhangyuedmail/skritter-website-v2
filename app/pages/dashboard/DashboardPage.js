@@ -1,4 +1,5 @@
 const GelatoPage = require('gelato/page');
+const SignupNotification = require('components/account/SignupNotificationComponent');
 const DashboardGoal = require('components/dashboard/DashboardGoalComponent');
 const DashboardMonth = require('components/dashboard/DashboardMonthComponent');
 const DashboardProgress = require('components/dashboard/DashboardProgressComponent');
@@ -75,6 +76,7 @@ const DashboardPage = GelatoPage.extend({
 
     if (app.isMobile()) {
       this._views['progress'] = new DashboardProgress();
+      this._views['signup'] = new SignupNotification();
     } else {
       this._views['month'] = new DashboardMonth();
       this._views['total'] = new DashboardTotal();
@@ -107,6 +109,10 @@ const DashboardPage = GelatoPage.extend({
    */
   render: function () {
     this.renderTemplate();
+
+    if (this._views['signup']) {
+      this._views['signup'].setElement('#signup-container').render();
+    }
 
     if (this._views['month']) {
       this._views['month'].setElement('#dashboard-month-container').render();

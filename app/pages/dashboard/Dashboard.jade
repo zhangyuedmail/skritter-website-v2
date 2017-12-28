@@ -5,6 +5,7 @@ gelato-page(data-name='dashboard')
     #feedback-btn.feedback-btn Feedback
   .container
     #subscription-notice
+    #signup-container
 
     if app.isMobile() && app.isAndroid()
       .row.rating-notice.hidden
@@ -14,13 +15,6 @@ gelato-page(data-name='dashboard')
             .content If you love Skritter and are learning lots of characters, you can help us by going to the Play Store and rating us 5 stars.
             button#rating-btn.btn.btn-primary Rate Us!
             button#rating-cancel-btn.btn.btn-default No, thanks.
-    if app.isMobile && app.user.isAnonymous()
-      .row.signup-notice
-        .col-xs-12
-          .content-block
-            .title Create an account
-            .content Customize your study experience, create lists and sync across devices.
-            button#signup-btn.btn.btn-primary Sign up!
 
     .row#first-row
       .col-md-6
