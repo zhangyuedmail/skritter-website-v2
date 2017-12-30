@@ -1,4 +1,5 @@
 const GelatoPage = require('gelato/page');
+const SignupNotification = require('components/account/SignupNotificationComponent');
 const Table = require('components/vocablists/VocablistsMineTableComponent');
 const DeletedTable = require('components/vocablists/VocablistsDeletedTableComponent');
 const Sidebar = require('components/vocablists/VocablistsSidebarComponent');
@@ -32,6 +33,7 @@ module.exports = GelatoPage.extend({
   initialize: function () {
     this.sidebar = new Sidebar();
     this.table = new Table();
+    this._views['signup'] = new SignupNotification();
 
     // TODO: update desktop templates too
     if (app.isMobile()) {
@@ -51,6 +53,7 @@ module.exports = GelatoPage.extend({
     this.renderTemplate();
     this.sidebar.setElement('#vocablist-sidebar-container').render();
     this.table.setElement('#vocablist-container').render();
+    this._views['signup'].setElement('#signup-container').render();
 
     if (app.isMobile()) {
       this._views['deleted'].setElement('#deleted-container').render();

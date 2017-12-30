@@ -1,4 +1,5 @@
 let GelatoPage = require('gelato/page');
+const SignupNotification = require('components/account/SignupNotificationComponent');
 let ChinesePodSession = require('models/ChinesepodSessionModel');
 let ChinesePodLabels = require('collections/ChinesepodLabelCollection');
 let ChinesePodLessons = require('collections/ChinesepodLessonCollection');
@@ -42,6 +43,7 @@ module.exports = GelatoPage.extend({
     this.chinesepodSession = new ChinesePodSession();
     this.chinesepodLabels = new ChinesePodLabels();
     this.chinesepodLessons = new ChinesePodLessons();
+    this._views['signup'] = new SignupNotification();
 
     this.viewOption = 'lessons';
     this.email = '';
@@ -68,6 +70,7 @@ module.exports = GelatoPage.extend({
 
     this.renderTemplate();
     this.sidebar.setElement('#vocablist-sidebar-container').render();
+    this._views['signup'].setElement('#signup-container').render();
     return this;
   },
 

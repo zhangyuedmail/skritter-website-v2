@@ -20,13 +20,16 @@ gelato-page(data-name='mobile-vocablists-mine')
         .col-xs-4.selected My Lists
 
   section.container
-    .content-block.active-lists
+    #signup-container
+    if !app.user.isAnonymous()
+      .content-block.active-lists
+        .row
+          #vocablist-container
+
+  if !app.user.isAnonymous()
+    .content-block
       .row
-        #vocablist-container
+        .header DELETED LISTS
 
-  .content-block
-    .row
-      .header DELETED LISTS
-
-      .col-md-12.main-content
-        #deleted-container
+        .col-md-12.main-content
+          #deleted-container

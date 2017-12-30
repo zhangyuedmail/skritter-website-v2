@@ -21,72 +21,74 @@ gelato-page(data-name='mobile-vocablists-chinesepod')
           a(href='/vocablists/my-lists') My Lists
 
   .container
-    .content-block
-      .row
+    #signup-container
+    if !app.user.isAnonymous()
+      .content-block
+        .row
 
-        .col-md-12.main-content
+          .col-md-12.main-content
 
-          if view.chinesepodSession.state === 'fetching'
-            p.text-center
-              i.fa.fa-5x.fa-spinner.fa-pulse
-
-          else if view.chinesepodSession.isNew()
-            p Log in to your ChinesePod account to sync vocabulary lists
-
-            form#login-form.form
-              if view.errorMessage
-                .alert.alert-danger= view.errorMessage
-
-              .row
-                .col-sm-4
-                  .form-group
-                    input#email.form-control(name='email', placeholder='Email', value=view.email)
-                  // http://stackoverflow.com/questions/12374442/chrome-browser-ignoring-autocomplete-off
-                  input.hide
-                  .form-group
-                    input#password.form-control(name='password', type='password', placeholder='Password', value=view.password)
-
-              button#login-chinesepod-btn.btn.btn-fixed.btn-success(type="submit")
-                if view.chinesepodSession.state === 'saving'
-                  i.fa.fa-1x.fa-spinner.fa-pulse
-                else
-                  | Login
-
-          else
-            p
-              | You are logged in as "#{view.chinesepodSession.get('email')}."
-              a.spl#logout-chinesepod-link= app.locale('common.logOut')
-              | .
-
-            - var collectionViewing = view.viewOption === 'lessons' ? view.chinesepodLessons : view.chinesepodLabels;
-            if collectionViewing.state === 'fetching'
+            if view.chinesepodSession.state === 'fetching'
               p.text-center
                 i.fa.fa-5x.fa-spinner.fa-pulse
 
+            else if view.chinesepodSession.isNew()
+              p Log in to your ChinesePod account to sync vocabulary lists
+
+              form#login-form.form
+                if view.errorMessage
+                  .alert.alert-danger= view.errorMessage
+
+                .row
+                  .col-sm-4
+                    .form-group
+                      input#email.form-control(name='email', placeholder='Email', value=view.email)
+                    // http://stackoverflow.com/questions/12374442/chrome-browser-ignoring-autocomplete-off
+                    input.hide
+                    .form-group
+                      input#password.form-control(name='password', type='password', placeholder='Password', value=view.password)
+
+                button#login-chinesepod-btn.btn.btn-fixed.btn-success(type="submit")
+                  if view.chinesepodSession.state === 'saving'
+                    i.fa.fa-1x.fa-spinner.fa-pulse
+                  else
+                    | Login
+
             else
-              #search-form
-                .input-group.input-group-lg
-                  span.input-group-addon
-                    i.fa.fa-search
-                  input#search-input.form-control(type="text", placeholder="Type to search by title")
-              .form-inline
-                label View:
-                .radio-inline
-                  label
-                    input#lessons(type="radio" name='view-option', value='lessons' checked=true, autocomplete='email')
-                    | Official Lessons
-                .radio-inline
-                  label
-                    input#labels(type="radio" name='view-option', value='labels')
-                    | Your Labels
+              p
+                | You are logged in as "#{view.chinesepodSession.get('email')}."
+                a.spl#logout-chinesepod-link= app.locale('common.logOut')
+                | .
 
-              .table-oversized-wrapper
-                table.table.table-striped
-                  - var models = collectionViewing.models;
-                  if view.searchString
-                    - models = collectionViewing.filter(function(m) { return _.includes(m.get('name').toLowerCase(), view.searchString); });
+              - var collectionViewing = view.viewOption === 'lessons' ? view.chinesepodLessons : view.chinesepodLabels;
+              if collectionViewing.state === 'fetching'
+                p.text-center
+                  i.fa.fa-5x.fa-spinner.fa-pulse
 
-                  for model in models
-                    tr
-                      td
-                        a.lookup-link(data-lookup-token=model.get('lookupToken'))= model.get('name')
+              else
+                #search-form
+                  .input-group.input-group-lg
+                    span.input-group-addon
+                      i.fa.fa-search
+                    input#search-input.form-control(type="text", placeholder="Type to search by title")
+                .form-inline
+                  label View:
+                  .radio-inline
+                    label
+                      input#lessons(type="radio" name='view-option', value='lessons' checked=true, autocomplete='email')
+                      | Official Lessons
+                  .radio-inline
+                    label
+                      input#labels(type="radio" name='view-option', value='labels')
+                      | Your Labels
+
+                .table-oversized-wrapper
+                  table.table.table-striped
+                    - var models = collectionViewing.models;
+                    if view.searchString
+                      - models = collectionViewing.filter(function(m) { return _.includes(m.get('name').toLowerCase(), view.searchString); });
+
+                    for model in models
+                      tr
+                        td
+                          a.lookup-link(data-lookup-token=model.get('lookupToken'))= model.get('name')
