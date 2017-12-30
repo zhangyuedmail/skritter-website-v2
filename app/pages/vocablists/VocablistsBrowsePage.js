@@ -1,4 +1,5 @@
 const GelatoPage = require('gelato/page');
+const SignupNotification = require('components/account/SignupNotificationComponent');
 const Table = require('components/vocablists/VocablistsBrowseTableComponent');
 const Sidebar = require('components/vocablists/VocablistsSidebarComponent');
 const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
@@ -54,6 +55,7 @@ module.exports = GelatoPage.extend({
     this._views['sidebar'] = new Sidebar();
     this._views['table'] = new Table();
     this._views['expiration'] = new ExpiredNotification();
+    this._views['signup'] = new SignupNotification();
 
     if (app.config.recordLoadTimes) {
       this.componentsLoaded = {
@@ -76,6 +78,7 @@ module.exports = GelatoPage.extend({
     this._views['sidebar'].setElement('#vocablist-sidebar-container').render();
     this._views['table'].setElement('#vocablist-container').render();
     this._views['expiration'].setElement('#expiration-container').render();
+    this._views['signup'].setElement('#signup-container').render();
 
     if (app.getSetting('newuser-' + app.user.id) && !app.getSetting('newuser-' + app.user.id + '-seen-browsevocablist')) {
       this.showAddListsTooltip();
