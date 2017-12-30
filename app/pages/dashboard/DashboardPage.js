@@ -128,7 +128,10 @@ const DashboardPage = GelatoPage.extend({
 
     this._views['goal'].setElement('#dashboard-goal-container').render();
     this._views['queue'].setElement('#dashboard-queue-container').render();
-    this._views['expiration'].setElement('#subscription-notice').render();
+
+    if (!app.user.isAnonymous()) {
+      this._views['expiration'].setElement('#subscription-notice').render();
+    }
 
     this._checkForReleaseNotes();
 

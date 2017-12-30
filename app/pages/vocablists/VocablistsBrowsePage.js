@@ -77,8 +77,12 @@ module.exports = GelatoPage.extend({
     this.renderTemplate();
     this._views['sidebar'].setElement('#vocablist-sidebar-container').render();
     this._views['table'].setElement('#vocablist-container').render();
-    this._views['expiration'].setElement('#expiration-container').render();
-    this._views['signup'].setElement('#signup-container').render();
+
+    if (app.user.isAnonymous()) {
+      this._views['signup'].setElement('#signup-container').render();
+    } else {
+      this._views['expiration'].setElement('#expiration-container').render();
+    }
 
     if (app.getSetting('newuser-' + app.user.id) && !app.getSetting('newuser-' + app.user.id + '-seen-browsevocablist')) {
       this.showAddListsTooltip();
