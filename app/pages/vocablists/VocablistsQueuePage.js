@@ -1,4 +1,6 @@
 const GelatoPage = require('gelato/page');
+const SignupNotification = require('components/account/SignupNotificationComponent');
+const ExpiredNotification = require('components/account/AccountExpiredNotificationComponent');
 const AddingTable = require('components/vocablists/VocablistsAddingTableComponent');
 const ReviewingTable = require('components/vocablists/VocablistsReviewingTableComponent');
 const Sidebar = require('components/vocablists/VocablistsSidebarComponent');
@@ -42,6 +44,8 @@ module.exports = GelatoPage.extend({
     this.addingTable = new AddingTable({vocablists: this.vocablists});
     this.reviewingTable = new ReviewingTable({vocablists: this.vocablists});
     this.sidebar = new Sidebar();
+    this._views['expiration'] = new ExpiredNotification();
+    this._views['signup'] = new SignupNotification();
 
     this.listenTo(
       this.vocablists, 'state:standby',
@@ -93,6 +97,12 @@ module.exports = GelatoPage.extend({
     this.addingTable.setElement('#adding-container').render();
     this.reviewingTable.setElement('#reviewing-container').render();
     this.sidebar.setElement('#vocablist-sidebar-container').render();
+
+    if (app.user.isAnonymous()) {
+      this._views['signup'].setElement('#signup-container').render();
+    } else {
+      this._views['expiration'].setElement('#expiration-container').render();
+    }
 
     return this;
   },
