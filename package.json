@@ -88,7 +88,7 @@
     "husky": "0.14.x",
     "jade-brunch": "2.8.x",
     "javascript-brunch": "2.10.x",
-    "mocha": "4.0.x",
+    "mocha": "4.1.x",
     "nightwatch": "0.9.x",
     "nodemon": "1.14.x",
     "replace-brunch": "2.0.x",
