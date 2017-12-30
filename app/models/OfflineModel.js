@@ -334,6 +334,18 @@ const OfflineModel = GelatoModel.extend({
   sync: async function (offset) {
     const now = moment().unix();
 
+    if (!this.isReady()) {
+      this.status = 'syncing';
+      this.trigger('status', this.status);
+
+      setTimeout(() => {
+        this.status = 'standby';
+        this.trigger('status', this.status);
+      }, 1000);
+
+      return;
+    }
+
     this.status = 'syncing';
 
     this.trigger('status', this.status);
