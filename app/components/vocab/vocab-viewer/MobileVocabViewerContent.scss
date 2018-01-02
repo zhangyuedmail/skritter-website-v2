@@ -5,6 +5,17 @@ gelato-component[data-name='mobile-vocab-viewer-content'] {
   min-height: 100%;
   overflow-x: hidden;
 
+  [data-name='vocab-sentence'] {
+    label {
+      color: #404851;
+      font-family: $font-ubuntu;
+      font-size: 16px;
+      font-weight: 400;
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+  }
+
   .dict-icon {
     margin-right: 2vh;
     margin-top: -5px;

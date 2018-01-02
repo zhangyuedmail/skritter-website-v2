@@ -2,6 +2,17 @@
 
 gelato-component[data-name='vocab-viewer-content'] {
 
+  [data-name='vocab-sentence'] {
+    label {
+      color: #404851;
+      font-family: $font-ubuntu;
+      font-size: 16px;
+      font-weight: 400;
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+  }
+
   #content-section {
     padding: 0px 20px 20px;
 
