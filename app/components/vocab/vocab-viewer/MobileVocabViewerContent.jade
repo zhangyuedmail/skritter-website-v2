@@ -161,6 +161,9 @@ gelato-component(data-name='mobile-vocab-viewer-content')
                     td= item.get('next') > moment().unix() ? moment(item.get('next') * 1000).from() : 'Ready'
                     td= item.get('last') ? moment(item.get('last') * 1000).from() : '-'
                     //td= item.get('timeStudied') ? Math.round(item.get('timeStudied')) + ' seconds' : '-'
+
+          .block
+            #vocablist-details
   else
     #header-section
       .row

@@ -300,6 +300,22 @@ const VocabViewerContentComponent = GelatoComponent.extend({
   },
 
   /**
+   * Loads extra information about vocablists being added from.
+   */
+  loadLists: function () {
+    if (this.items.length) {
+      app.user.vocablists.fetch({
+        data: {
+          ids: _.chain(this.items.map('vocabListIds')).flatten().uniq().value().join('|'),
+        },
+        success: (vocablists) => {
+          this.$('#vocablist-details').html('<strong>Adding from:</strong> ' + vocablists.map('name').join(', '));
+        },
+      });
+    }
+  },
+
+  /**
    * Loads a specified vocab. Fetches required missing information, if needed,
    * or loads it from a VocabModel sent in.
    * @param {String} vocabId the id of the vocab to fetch data for
@@ -312,6 +328,7 @@ const VocabViewerContentComponent = GelatoComponent.extend({
 
     if (vocabInfo && vocabInfo.vocabs.length) {
       this.set(vocabInfo.vocabs, vocabInfo.vocabsContaining, vocabInfo.items);
+      this.loadLists();
       return;
     }
 
@@ -431,6 +448,8 @@ const VocabViewerContentComponent = GelatoComponent.extend({
           }
 
           self.set(wordVocabs, wordVocabsContaining, wordItems);
+
+          self.loadLists();
 
           if (app.config.recordLoadTimes) {
             const loadTime = window.performance.now() - self.loadStart;

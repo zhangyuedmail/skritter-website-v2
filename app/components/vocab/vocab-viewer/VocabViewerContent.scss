@@ -13,6 +13,11 @@ gelato-component[data-name='vocab-viewer-content'] {
     }
   }
 
+  #vocablist-details {
+    margin-top: 15px;
+    text-align: center;
+  }
+
   #content-section {
     padding: 0px 20px 20px;
 
@@ -94,10 +99,6 @@ gelato-component[data-name='vocab-viewer-content'] {
     .header {
       margin-top: 20px;
     }
-  }
-
-  #sentence-container {
-    min-height: 95px;
   }
 
   #header-section {

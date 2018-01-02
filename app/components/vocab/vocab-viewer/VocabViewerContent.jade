@@ -26,6 +26,7 @@ gelato-component(data-name='vocab-viewer-content')
       .block
         #vocab-difficulty= vocab.get('toughnessString')
         #vocab-difficulty-text LEVEL
+
       .pull-right
         if view.editing
           a#save-vocab(href='#')
@@ -121,7 +122,7 @@ gelato-component(data-name='vocab-viewer-content')
                       span.spr :
                       span.definition= model.getDefinition()
 
-      if items
+      if items && items.length
         #panel-bottom
           .block
             table.table
@@ -146,6 +147,8 @@ gelato-component(data-name='vocab-viewer-content')
                     else
                       td.item-ban
                         button.btn.btn-xs.btn-danger Ban
+          .block
+            #vocablist-details
   else
     #header-section
       .block.separator
