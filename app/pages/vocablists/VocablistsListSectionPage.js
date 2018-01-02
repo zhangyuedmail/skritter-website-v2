@@ -308,17 +308,19 @@ module.exports = GelatoPage.extend({
    * @param {Event} event
    */
   handleKeydownAddInput: function (event) {
+    this.$('#input-message .value').empty();
+
     if (event.keyCode === 13) {
+      // split input based on spaces
+      let $input = $(event.target);
+      let rows = $input.val().split(/\s/);
+
       // limit adding to section
-      if (this.editor.rows.length > 200) {
+      if ((this.editor.rows.length + rows.length) > 200) {
         event.preventDefault();
         this.$('#input-message .value').text('The max words per section is 200.');
         return;
       }
-
-      // split input based on spaces
-      let $input = $(event.target);
-      let rows = $input.val().split(/\s/);
 
       this.$('#input-message .value').empty();
       this.editor.addRows(rows);
