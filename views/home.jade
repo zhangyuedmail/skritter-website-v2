@@ -63,8 +63,6 @@ body
       .cover-section-wrapper
         .device-photo
           img#device-photo-img(src="/media/images/landing/skritter-devices.png")
-          a(href="#section-plans")
-            img#holiday-deal-save.holiday-deal-save(src="/media/images/holiday-deal-save.png")
         .main#main-image-wrapper
           .left-wrapper#landing-inner-wrapper
             .your-path Your path to Chinese & Japanese Mastery
@@ -188,15 +186,13 @@ body
                 .trial Includes 7-day free trial
             .col-md-3
               .plan
-                img.holiday-deal(src="/media/images/holiday-deal.png")
                 i.icon.icon-marketing-best-value
                 .title 2 years
                 .orig-price $359.76
-                .price $144.99
-                .monthly.savings 60% savings
+                .price $179.99
+                .monthly.savings 50% savings
                 a.subscribe.btn.btn-fixed.btn-success(href='/signup/twenty_four_months') Subscribe
                 .trial Includes 7-day free trial
-                .notice *offer ends Dec. 31, 2017
           .institutions
             | Buying for a school? Check out our
             | &nbsp;
@@ -245,28 +241,7 @@ body
       this.appendChild(ytIframe);
     });
 
-    // img
-    var deviceImg = document.getElementById('device-photo-img');
-    var holidayImg = document.getElementById('holiday-deal-save');
-    function updateHolidayPos(x, y) {
-      holidayImg.style.right = (x - holidayImg.width - (holidayImg.width / 5)) + 'px';
-      holidayImg.style.bottom = (y - holidayImg.height) + 'px';
-    }
-    if (deviceImg.height) {
-      updateHolidayPos(deviceImg.width, deviceImg.height);
-      //- width = deviceImg.width;
-      //- height = deviceImg.height;
-    } else {
-      var img = new Image();
-      img.onload = function() {
-          updateHolidayPos(this.width, this.height);
-      };
-      img.src = '/media/images/landing/skritter-devices.png';
-    }
-
     window.addEventListener("resize", function() {
-      updateHolidayPos(deviceImg.width, deviceImg.height);
-
       var height = window.innerHeight - (window.innerWidth > 768 ? 170 : 230);
       landingWrapper.style.height = height + 'px';
     });
@@ -275,5 +250,4 @@ body
       mixpanel.track('Viewed home page')
       mixpanel.track_links('#link-apple-store', 'Clicked ios app button');
       mixpanel.track_links('#link-google-store', 'Clicked android app button');
-
     }

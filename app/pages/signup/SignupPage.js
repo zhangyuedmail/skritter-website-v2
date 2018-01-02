@@ -58,11 +58,11 @@ module.exports = GelatoPage.extend({
       'price': '99.99',
     },
     {
-      'fullName': '$144.99/24 months (60% savings)',
+      'fullName': '$179.99/24 months (60% savings)',
       'key': 'twenty_four_months',
       'months': 24,
       'name': '2 years',
-      'price': '144.99',
+      'price': '179.99',
     },
   ],
 
