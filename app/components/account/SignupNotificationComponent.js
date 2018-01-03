@@ -35,7 +35,9 @@ const SignupNotificationComponent = GelatoComponent.extend({
    * @returns {SignupNotificationComponent}
    */
   render: function () {
-    this.renderTemplate();
+    if (app.user.isAnonymous()) {
+      this.renderTemplate();
+    }
 
     return this;
   },
