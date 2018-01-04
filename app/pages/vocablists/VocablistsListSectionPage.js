@@ -313,7 +313,7 @@ module.exports = GelatoPage.extend({
     if (event.keyCode === 13) {
       // split input based on spaces
       let $input = $(event.target);
-      let rows = $input.val().split(/\s/);
+      let rows = _.trim($input.val()).split(/\s/);
 
       // limit adding to section
       if ((this.editor.rows.length + rows.length) > 200) {
