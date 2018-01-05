@@ -59,7 +59,7 @@ const DemoPage = GelatoPage.extend({
     _.bindAll(this, 'teachDemoChar1', 'teachDemoChar2', 'writeDemoChar1',
       'writeDemoChar2', 'completeDemo', 'switchToWriting', 'teachEraseDemoChar1',
       'teachDefinitionPrompt1', 'teachEraseDemoChar2', 'teachReadingPrompt1',
-      'teachTonePrompt1', 'teachSRS1');
+      'teachTonePrompt1', 'teachSRS1', 'performPostDemoAction');
 
     this.lang = 'zh';
     this.notify = null;
@@ -73,6 +73,7 @@ const DemoPage = GelatoPage.extend({
     this.vocab = null;
     this.vocabs = new Vocabs();
     this.items = new ItemsCollection();
+    this._loggingInAnon = null;
 
     if (!app.isMobile()) {
       this._views['progress'] = new DemoProgressComponent({
@@ -596,6 +597,10 @@ const DemoPage = GelatoPage.extend({
       this.prompt.renderPart();
     }
 
+    if (app.isMobile() && !app.user.isLoggedIn()) {
+      this._loggingInAnon = app.user.loginAnonymous();
+    }
+
     const next = app.user.isLoggedIn() || app.isMobile() ? null : {
       showTitle: false,
       body: this.parseTemplate(require('./notify-demo-complete.jade')),
@@ -647,12 +652,12 @@ const DemoPage = GelatoPage.extend({
   performPostDemoAction: function () {
     // redirect to dashboard or account setup based on authentication
     if (app.isMobile()) {
-      if (app.user.isLoggedIn()) {
-        app.router.navigateDashboard();
-      } else {
-        app.user.loginAnonymous(function () {
+      if (this._loggingInAnon) {
+        this._loggingInAnon.then(function() {
           app.router.navigateAccountSetup();
         });
+      } else {
+        app.router.navigateDashboard();
       }
       return;
     } else {

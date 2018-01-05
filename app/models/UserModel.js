@@ -469,42 +469,45 @@ const UserModel = SkritterModel.extend({
   },
 
   /**
+   * Logs in as an anonymous user or creates a new anonymous account if needed 
+   * and logs in.
    * @method loginAnonymous
    * @param {String} username
    * @param {String} password
-   * @param {Function} callback
+   * @returns {Promise} resolves when the user is logged in
    */
-  loginAnonymous: function (callback) {
-    // let's not create one if it is already loaded
-    if (this.get('anonymous') && !this.get('email')) {
-      callback();
-
-      return;
-    }
-
-    async.waterfall([
-      (callback) => {
-        $.ajax({
-          url: app.getApiUrl() + 'users',
-          headers: app.user.session.getHeaders(),
-          type: 'POST',
-          error: function (error) {
-            callback(error);
-          },
-          success: function (result) {
-            callback(null, result.User);
-          },
-        });
-      },
-      (user, callback) => {
-        this.login(user.id, null, callback);
-      },
-    ], (error) => {
-      if (error) {
-        callback(error);
-      } else {
-        callback();
+  loginAnonymous: function () {
+    return new Promise((resolve, reject) => {
+      // let's not create one if it is already loaded
+      if (this.get('anonymous') && !this.get('email')) {
+        resolve();
+        return;
       }
+
+      async.waterfall([
+        (callback) => {
+          $.ajax({
+            url: app.getApiUrl() + 'users',
+            headers: app.user.session.getHeaders(),
+            type: 'POST',
+            error: function (error) {
+              callback(error);
+            },
+            success: function (result) {
+              callback(null, result.User);
+            },
+          });
+        },
+        (user, callback) => {
+          this.login(user.id, null, callback);
+        },
+      ], (error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
     });
   },
 
