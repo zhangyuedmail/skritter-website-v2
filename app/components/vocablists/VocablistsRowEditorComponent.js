@@ -39,6 +39,7 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
     this.saved = [];
     this.vocablist = options.vocablist;
     this.vocablistSection = options.vocablistSection;
+    this.vocabProgressData = {};
     this.listenTo(this.vocablistSection, 'state', this.render);
   },
 
@@ -254,6 +255,21 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
   },
 
   /**
+   * Loads study completion progress for all the vocab in the section
+   */
+  loadAndRenderVocabProgress: function () {
+    const uniqueVocabIds = this.vocablistSection.getUniqueVocabIds();
+    const chunkedVocab = _.chunk(uniqueVocabIds, 5);
+    chunkedVocab.forEach((chunk) => {
+      this._getVocabProgressForChunk(chunk).then((progress) => {
+        this.updateVocabProgress(progress.ProgressData);
+      }, function (error) {
+
+      });
+    });
+  },
+
+  /**
    * @method loadRows
    * @param {Object} [options]
    */
@@ -276,6 +292,85 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
       if (options && typeof options.error === 'function') {
         options.error(error);
       }
+    });
+  },
+
+  /**
+   * Updates vocab rows with the provided progress data for the vocab
+   * @param {Object} progress a set of progress data
+   */
+  updateVocabProgress: function (progress) {
+    const partMap = {
+      W: 'rune',
+      T: 'tone',
+      P: 'rdng',
+      D: 'defn',
+    };
+    progress.forEach((p) => {
+      if (!this.vocabProgressData[p.vocabkey]) {
+        this.vocabProgressData[p.vocabkey] = {};
+      }
+
+      const part = partMap[p.part];
+      const vocabProgress = this.vocabProgressData[p.vocabkey];
+
+      if (!vocabProgress[part] ||
+        (vocabProgress[part] && p.percentLearned >= vocabProgress[part].percentLearned)) {
+        this.vocabProgressData[p.vocabkey][partMap[p.part]] = {
+          banned: p.banned,
+          color: p.color,
+          enabled: p.enabled,
+          percentLearned: p.percentLearned,
+        };
+      }
+    });
+
+    // eslint-disable-next-line guard-for-in
+    for (let key in this.vocabProgressData) {
+      const p = this.vocabProgressData[key];
+
+      const progressWrapper = this.$('.progress-wrapper[data-vocab-progress="' + key.split('-')[1] + '"]');
+      progressWrapper.removeClass('hidden');
+
+      // eslint-disable-next-line guard-for-in
+      for (let part in p) {
+        const partProgress = progressWrapper.find('.' + part + '-progress');
+
+        // hack for simp vs trad in the same list possibly,
+        // or multiple requests for the same vocab e.g. zh-后-0 vs zh-后-1 (後)
+        // Should probably just be smarter about fetching the data...
+        if (partProgress.css('background-color') && !p[part].percentLearned) {
+          continue;
+        }
+
+        partProgress.css({
+          'background-color': p[part].color,
+        });
+      }
+    }
+  },
+
+  /**
+   * Fetches vocab ("ui") progress data from the API for a set of vocabs.
+   * This should be limited to ~5 vocab at a time for perf reasons.
+   * @param {String[]} chunk a list of up to 5 vocab ids
+   */
+  _getVocabProgressForChunk: function (chunk) {
+    return new Promise(function (resolve, reject) {
+      $.ajax({
+        url: app.getApiUrl() + 'vocabs/progressdata',
+        type: 'GET',
+        headers: app.user.session.getHeaders(),
+        data: {
+          vocabs: chunk.join(','),
+        },
+        error: (error) => {
+          reject(error);
+        },
+        success: (result) => {
+          resolve(result);
+        },
+      });
     });
   },
 

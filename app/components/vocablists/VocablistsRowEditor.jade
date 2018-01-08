@@ -27,8 +27,8 @@ gelato-component(data-name='vocablists-list-editor-rows')
             - var vocab2 = row.vocabs[1];
             - var hasWritingDiff = vocab1.getWritingDifference(vocab2);
 
-            .col-xs-1
-              if view.editing && vocablist.isEditable()
+            if view.editing && vocablist.isEditable()
+              .col-xs-1
                 i.fa.fa-ellipsis-v.ellipse-icon
 
             .col-xs-2.vocab-writing
@@ -64,6 +64,15 @@ gelato-component(data-name='vocablists-list-editor-rows')
               if view.editing && vocablist.isEditable()
                 i.remove-row.fa.fa-trash
 
+            if !view.editing
+              .col-xs-1.vocab-progress
+                if !row.banned
+                  .progress-wrapper.hidden(data-vocab-progress=row.vocabId.split('-')[1])
+                    .rune-progress(class=app.isChinese() ? "quarter": "third") W
+                    if app.isChinese()
+                      .tone-progress.quarter T
+                    .rdng-progress(class=app.isChinese() ? "quarter": "third") P
+                    .defn-progress(class=app.isChinese() ? "quarter": "third") D
             if row.results
               .result-rows.hidden
                 for result, index in row.results
@@ -98,12 +107,17 @@ gelato-component(data-name='vocablists-list-editor-rows')
             span= 'searching for ' + row.query
 
   .row
-    .col-xs-1.row-header
+    if view.editing
+      .col-xs-1.row-header
     .col-xs-2.row-header.writing Writing
     .col-xs-2.row-header
+      if app.isJapanese()
+        span Writing enabled
     .col-xs-2.row-header.reading Reading
     .col-xs-3.row-header.definition Definition
     .col-xs-2.row-header
+    if !view.editing
+      .col-xs-1.row-header
   #vocablist-section-rows
     for row, index in rows
       +wordRow(row, index)

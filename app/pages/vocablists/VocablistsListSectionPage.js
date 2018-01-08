@@ -171,6 +171,9 @@ module.exports = GelatoPage.extend({
     this.listenTo(this.vocablistSection, 'state:standby', this.handleVocablistSectionState);
 
     this.render();
+
+    // disabled for now until stable
+    // this.editor.loadAndRenderVocabProgress();
   },
 
   /**

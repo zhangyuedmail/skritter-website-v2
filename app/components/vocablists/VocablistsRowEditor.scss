@@ -11,6 +11,23 @@ gelato-component[data-name='vocablists-list-editor-rows'] {
     text-align: center;
   }
 
+  .vocab-progress {
+    padding: 0;
+  }
+
+  .quarter {
+    width: 25%;
+    display: inline-block;
+    text-align: center;
+    min-height: 25px;
+  }
+
+  .third {
+    width: 33.2%;
+    display: inline-block;
+    text-align: center;
+  }
+
   .row {
     color: $grey5;
     font-size: 16px;
