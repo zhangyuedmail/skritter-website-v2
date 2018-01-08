@@ -136,7 +136,9 @@ module.exports = GelatoComponent.extend({
         });
       },
       success: function () {
-        app.reload(false);
+        app.user.resetCollectionCache();
+        app.router.refresh();
+        ScreenLoader.hide();
       },
     });
 

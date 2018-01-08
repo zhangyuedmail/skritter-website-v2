@@ -585,6 +585,14 @@ const UserModel = SkritterModel.extend({
   },
 
   /**
+   * Empties the local cache of stats and vocab lists
+   */
+  resetCollectionCache: function () {
+    this.vocablists.reset();
+    this.stats.reset();
+  },
+
+  /**
    * @method setGoal
    * @param {String} type
    * @param {String} value

@@ -13,6 +13,14 @@ let GelatoRouter = Backbone.Router.extend({
     this.trigger('page:navigate', path, options);
   },
 
+  refresh: function () {
+    const tmp = Backbone.history.fragment;
+    this.navigate(tmp + (new Date).getTime());
+    this.navigate(tmp, {
+      trigger: true,
+    });
+  },
+
   /**
    * @method start
    * @param {Object} [options]

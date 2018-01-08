@@ -127,13 +127,19 @@ module.exports = GelatoApplication.extend({
     return this;
   },
 
-  // temporary hacks until code is refactored more
+  /**
+   * Shortcut to get config value
+   */
   get: function (key) {
     return this.config[key];
   },
+
+  /**
+   * Shortcut to set config value
+   */
   set: function (key, value) {
- this.config[key] = value;
-},
+    this.config[key] = value;
+  },
 
   /**
    * A dictionary of app-level dialogs. Should be initialized after render.
@@ -141,6 +147,7 @@ module.exports = GelatoApplication.extend({
   dialogs: {
     vocabViewer: null,
   },
+
   /**
    * Sends a request to the api and records usage information.
    */
@@ -167,6 +174,7 @@ module.exports = GelatoApplication.extend({
       }
     }
   },
+
   /**
    * Checks if the URL contains a siteref param, and if it does, sets its value
    * as the siteRef instance varaible on the application object. Processes and
