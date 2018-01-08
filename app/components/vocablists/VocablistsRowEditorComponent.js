@@ -258,54 +258,75 @@ const VocablistsRowEditorComponent = GelatoComponent.extend({
    * @param {Object} [options]
    */
   loadRows: function (options) {
-    let rows = this.vocablistSection.get('rows');
-    let uniqueVocabIds = this.vocablistSection.getUniqueVocabIds();
-    let vocabs = new Vocabs();
-    async.each(
-      _.chunk(uniqueVocabIds, 50),
-      _.bind(function (chunk, callback) {
-        vocabs.fetch({
-          data: {
-            ids: chunk.join('|'),
-          },
-          remove: false,
-          error: function (error) {
-            callback(error);
-          },
-          success: function (vocabs) {
-            callback();
-          },
-        });
-      }, this),
-      _.bind(function (error) {
-        rows.forEach(function (row) {
-          let vocab1 = vocabs.get(row.vocabId);
-          let vocab2 = vocabs.get(row.tradVocabId) || vocab1;
+    const rows = this.vocablistSection.get('rows');
+    const uniqueVocabIds = this.vocablistSection.getUniqueVocabIds();
+    const vocabs = new Vocabs();
+    const chunkedVocab = _.chunk(uniqueVocabIds, 50);
+    const loadingChunks = [];
+    chunkedVocab.forEach((chunk) => {
+      loadingChunks.push(this._loadVocabChunk(vocabs, chunk));
+    });
 
-          row.id = row.vocabId + '-' + row.tradVocabId;
+    Promise.all(loadingChunks).then(() => {
+      this._updateRowsWithVocabData(rows, vocabs);
+      if (options && typeof options.success === 'function') {
+        options.success(rows);
+      }
+    }, function (error) {
+      if (options && typeof options.error === 'function') {
+        options.error(error);
+      }
+    });
+  },
 
-          if (app.getLanguage() === 'ja') {
-            row.id = row.vocabId;
-          }
+  /**
+   * Loads a chunk of vocab ids into a VocabCollection instance
+   * @param {VocabCollection} vocabs a VocabCollection instance
+   * @param {String[]} chunk an array of vocab id strings
+   * @private
+   */
+  _loadVocabChunk: function (vocabs, chunk) {
+    return new Promise(function (resolve, reject) {
+      vocabs.fetch({
+        data: {
+          ids: chunk.join('|'),
+        },
+        remove: false,
+        error: function (error) {
+          reject(error);
+        },
+        success: function (vocabs) {
+          resolve();
+        },
+      });
+    });
+  },
 
-          row.banned = vocab1.isBanned() || vocab2.isBanned();
-          row.lang = vocab1.get('lang');
-          row.state = 'loaded';
-          row.vocabs = [vocab1, vocab2];
-        });
-        this.rows = _.clone(rows);
-        this.saved = _.clone(rows);
-        if (error) {
-          if (options && typeof options.error === 'function') {
-            options.error(error);
-          }
-        } else {
-          if (options && typeof options.success === 'function') {
-            options.success(rows);
-          }
-        }
-      }, this)
-    );
+  /**
+   * Updates an array of rows with data from its associated vocab
+   * @param {Object[]} rows a list of vocablist section rows
+   * @param {VocabCollection} vocabs a VocabCollection instance with
+   *                                 the associated Vocab models
+   */
+  _updateRowsWithVocabData: function (rows, vocabs) {
+    rows.forEach(function (row) {
+      let vocab1 = vocabs.get(row.vocabId);
+      let vocab2 = vocabs.get(row.tradVocabId) || vocab1;
+
+      row.id = row.vocabId + '-' + row.tradVocabId;
+
+      if (app.getLanguage() === 'ja') {
+        row.id = row.vocabId;
+      }
+
+      row.banned = vocab1.isBanned() || vocab2.isBanned();
+      row.lang = vocab1.get('lang');
+      row.state = 'loaded';
+      row.vocabs = [vocab1, vocab2];
+    });
+
+    this.rows = _.clone(rows);
+    this.saved = _.clone(rows);
   },
 
   /**
