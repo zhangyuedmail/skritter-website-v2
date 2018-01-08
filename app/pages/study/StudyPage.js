@@ -516,7 +516,7 @@ const StudyPage = GelatoPage.extend({
 
     dialog.open();
 
-    dialog.on('save', (settings) => {
+    dialog.once('save', (settings) => {
       ScreenLoader.show();
       ScreenLoader.post('Saving study settings');
       app.user.set(settings, {merge: true});
@@ -529,11 +529,7 @@ const StudyPage = GelatoPage.extend({
             dialog.close();
           },
           success: () => {
-            // TODO: figure out why this causes canvas sizing issue
-            // this.render();
-            // dialog.close();
-
-            app.reload();
+            app.router.refresh();
           },
         }
       );

@@ -3,7 +3,6 @@ const Prompt = require('components/prompt/StudyPromptComponent.js');
 const Toolbar = require('components/practice/toolbar/PracticePadToolbarComponent.js');
 const ItemCollection = require('collections/ItemCollection');
 const VocabCollection = require('collections/VocabCollection');
-const QuickSettings = require('dialogs1/quick-settings/QuickSettingsDialog.js');
 
 /**
  * @class PracticePadPage
@@ -251,39 +250,6 @@ const PracticePadPage = GelatoPage.extend({
    */
   showLoadVocabDialog () {
     console.log('TODO');
-  },
-
-  /**
-   * Shows a dialog that allows the user to adjust their study settings
-   * @method showStudySettings
-   */
-  showStudySettings () {
-    const dialog = new QuickSettings();
-
-    dialog.open();
-
-    dialog.on('save', (settings) => {
-      ScreenLoader.show();
-      ScreenLoader.post('Saving study settings');
-      app.user.set(settings, {merge: true});
-      app.user.cache();
-      app.user.save(
-        null,
-        {
-          error: () => {
-            ScreenLoader.hide();
-            dialog.close();
-          },
-          success: () => {
-            // TODO: figure out why this causes canvas sizing issue
-            // this.render();
-            // dialog.close();
-
-            app.reload();
-          },
-        }
-      );
-    });
   },
 
   /**
