@@ -653,7 +653,7 @@ const DemoPage = GelatoPage.extend({
     // redirect to dashboard or account setup based on authentication
     if (app.isMobile()) {
       if (this._loggingInAnon) {
-        this._loggingInAnon.then(function() {
+        this._loggingInAnon.then(function () {
           app.router.navigateAccountSetup();
         });
       } else {

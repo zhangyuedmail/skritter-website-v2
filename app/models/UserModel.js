@@ -469,7 +469,7 @@ const UserModel = SkritterModel.extend({
   },
 
   /**
-   * Logs in as an anonymous user or creates a new anonymous account if needed 
+   * Logs in as an anonymous user or creates a new anonymous account if needed
    * and logs in.
    * @method loginAnonymous
    * @param {String} username
