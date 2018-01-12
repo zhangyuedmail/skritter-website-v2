@@ -22,12 +22,25 @@ gelato-component[data-name='practice-pad-toolbar'] {
   .text-right i {
     margin-left: 10%;
   }
+
   .vocablist-section {
     font-size: 14px;
   }
 
-  .vocabs-list {
-    background: $white;
-    border-radius: 5px;
+  .nav-list-btn, .vocab-list-wrapper {
+    display: inline-block;
+    font-family: $font-ubuntu;
+  }
+
+  .nav-list-btn {
+    cursor: pointer;
+
+    &:hover {
+      color: $green6;
+    }
+
+    .btn-label {
+      font-size: 16px;
+    }
   }
 }

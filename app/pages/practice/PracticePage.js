@@ -350,6 +350,7 @@ const PracticePadPage = GelatoPage.extend({
     const runeItems = this.vocab.getPromptItems('rune');
     this.promptItems = runeItems;
     this._views['prompt'].set(this.promptItems);
+    this._views['toolbar'].updateVocabList(0);
     ScreenLoader.hide();
   },
 

@@ -1,5 +1,11 @@
 gelato-component(data-name='practice-pad-toolbar')
   .row
-    .col-md-10.vocabs-list Here be a list of items to study
-    .col-md-2.sign-up-wrapper.text-right
-      a.btn.btn-success(href="/signup") Like what you see?
+    .col-md-12.vocabs-list.text-center
+      #prev-vocab-btn.nav-list-btn
+        span.glyphicon.glyphicon-chevron-left
+        span.btn-label PREV
+      #vocab-list-wrapper.vocab-list-wrapper
+        .selected 上
+      #next-vocab-btn.nav-list-btn
+        span.btn-label NEXT
+        span.glyphicon.glyphicon-chevron-right
