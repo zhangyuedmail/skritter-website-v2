@@ -18,6 +18,17 @@ bootstrap-navbar[data-name='default'] {
     border: none;
     box-shadow: 0 1px 10px rgba(38, 43, 48, .15);
     z-index: 7001;
+
+    &.practice {
+      max-height: 50px;
+
+      .signup-btn {
+        background: $green5;
+        height: 57px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+    }
   }
 
   .navbar-header {

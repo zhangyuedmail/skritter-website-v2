@@ -3,6 +3,7 @@ const Prompt = require('components/prompt/StudyPromptComponent.js');
 const Toolbar = require('components/practice/toolbar/PracticePadToolbarComponent.js');
 const ItemCollection = require('collections/ItemCollection');
 const VocabCollection = require('collections/VocabCollection');
+const vent = require('vent');
 
 /**
  * @class PracticePadPage
@@ -84,6 +85,11 @@ const PracticePadPage = GelatoPage.extend({
 
     this.listenTo(this.prompt, 'next', this.handlePromptNext);
     this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
+    this.listenTo(vent, 'page:switch', (page, path) => {
+      if (path.indexOf('practice/') > -1) {
+        $('nav.navbar').addClass('practice');
+      }
+    });
 
     // handle specific cordova related events
     document.addEventListener('pause', this.handlePauseEvent.bind(this), false);
@@ -239,8 +245,8 @@ const PracticePadPage = GelatoPage.extend({
    */
   remove () {
     document.removeEventListener('pause', this.handlePauseEvent.bind(this), false);
-
     Howler.autoSuspend = true;
+    $('nav.navbar').removeClass('practice');
 
     return GelatoPage.prototype.remove.call(this);
   },

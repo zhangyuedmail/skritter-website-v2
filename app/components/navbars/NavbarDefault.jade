@@ -91,7 +91,7 @@ bootstrap-navbar(data-name='default')
               a(href="https://discourse.skritter.com/") Forum
 
           ul.nav.navbar-nav.navbar-right
-            li(class=currentSection === 'signup' ? 'active' : '')
+            li.signup-btn(class=currentSection === 'signup' ? 'active' : '')
               a(href="/signup")= app.locale('common.signUp')
             li(class=currentSection === 'login' ? 'active' : '')
               a(href="/login")= app.locale('common.logIn')
