@@ -136,8 +136,9 @@ const PracticePadPage = GelatoPage.extend({
    * @param vocabRunes
    */
   getVocabIdListFromRuneList (vocabRunes) {
-    // TODO: actually parse this correctly
-    return vocabRunes.map((v) => this.targetLang + '-' + v + '-0').join('|');
+    return vocabRunes.map((v) => {
+      return app.fn.mapper.toBase(v, {lang: this.targetLang});
+    }).join('|');
   },
 
   /**
