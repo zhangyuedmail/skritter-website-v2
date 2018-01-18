@@ -71,6 +71,12 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.isAutoAdvancing = false;
 
     /**
+     * Whether to disable grading colors and just leave character writings the default color
+     * @type {Boolean}
+     */
+    this.disableGradingColor = options.disableGradingColor || app.user.get('disableGradingColor') || false;
+
+    /**
      * Whether to always show the "tap to advance" text on completion of a propmpt
      * @type {Boolean}
      */
@@ -519,7 +525,7 @@ const StudyPromptComponent = GelatoComponent.extend({
       score = 3;
     }
 
-    if (!app.user.get('disableGradingColor')) {
+    if (!this.disableGradingColor) {
       this.$('#navigate-next').addClass('grade-' + score);
     }
 

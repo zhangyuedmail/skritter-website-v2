@@ -145,7 +145,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     if (this.prompt.review.get('showTeaching')) {
       this.prompt.review.set('score', 1);
     } else {
-      if (!app.user.get('disableGradingColor')) {
+      if (!this.prompt.disableGradingColor) {
         this.prompt.canvas.injectLayerColor(
           'character',
           this.prompt.review.getGradingColor()
@@ -267,7 +267,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
       if (this.prompt.review.get('showTeaching')) {
         this.prompt.review.set('score', 1);
       } else {
-        if (!app.user.get('disableGradingColor')) {
+        if (!this.prompt.disableGradingColor) {
           this.prompt.canvas.injectLayerColor(
             'character',
             this.prompt.review.getGradingColor()
@@ -413,7 +413,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
 
     if (this.prompt.review.isComplete()) {
-      if (!app.user.get('disableGradingColor')) {
+      if (!this.prompt.disableGradingColor) {
         this.prompt.canvas.injectLayerColor(
           'character',
           this.prompt.review.getGradingColor()
@@ -456,7 +456,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
     this._mouseDown = true;
     if (this.prompt.review.isComplete()) {
       this.prompt.review.set('score', score);
-      if (!app.user.get('disableGradingColor')) {
+      if (!this.prompt.disableGradingColor) {
         this.prompt.canvas.injectLayerColor(
           'character',
           this.prompt.review.getGradingColor()
@@ -503,7 +503,7 @@ const StudyPromptPartRuneComponent = GelatoComponent.extend({
    */
   changeReviewScore: function (score) {
     this.prompt.review.set('score', score);
-    if (!app.user.get('disableGradingColor')) {
+    if (!this.prompt.disableGradingColor) {
       this.prompt.canvas.injectLayerColor(
         'character',
         this.prompt.review.getGradingColor()
