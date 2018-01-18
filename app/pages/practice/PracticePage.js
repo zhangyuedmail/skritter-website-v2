@@ -43,7 +43,7 @@ const PracticePadPage = GelatoPage.extend({
     this.targetLang = options.targetLang;
 
     const vocabRuneString = options.vocabRunes || '';
-    this.charactersToLoad = vocabRuneString.split(',').filter((v) => {
+    this.charactersToLoad = vocabRuneString.split(/[,，]/g).filter((v) => {
       return v && v.length;
     });
     this.idsToLoad = this.getVocabIdListFromRuneList(this.charactersToLoad);
