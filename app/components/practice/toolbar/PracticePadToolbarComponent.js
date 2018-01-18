@@ -6,7 +6,10 @@ const GelatoComponent = require('gelato/component');
  */
 const PracticePadToolbarComponent = GelatoComponent.extend({
 
-  events: {},
+  events: {
+    'click .nav-list-btn': 'handleNavListBtnClicked',
+    'click .vocab-item': 'handleVocabItemClicked',
+  },
 
   /**
    * @property template
@@ -56,6 +59,7 @@ const PracticePadToolbarComponent = GelatoComponent.extend({
       vocabListStr += this.vocabItemTemplate({
         vocab: vocabs[i],
         id: ids[i],
+        position: i,
         selected: i === position,
         visible: (i < minVisible || i > maxVisible),
       });
@@ -64,6 +68,26 @@ const PracticePadToolbarComponent = GelatoComponent.extend({
     this.$('#vocab-list-wrapper').html(vocabListStr);
 
     this.updateVocabList();
+  },
+
+  /**
+   * Handles a user clicking on a navigation arrow in the list and fires
+   * an event to navigate to the specified vocab.
+   * @param {jQuery.ClickEvent} event the click event
+   */
+  handleNavListBtnClicked (event) {
+    const direction = $(event.currentTarget).data('direction');
+    this.trigger('nav:' + direction);
+  },
+
+  /**
+   * Handles a user clicking on a vocab item in the list and fires an event
+   * to navigate to the specified vocab.
+   * @param {jQuery.ClickEvent} event the click event
+   */
+  handleVocabItemClicked (event) {
+    const pos = $(event.currentTarget).data('position');
+    this.trigger('nav:vocab', pos);
   },
 
   /**
@@ -77,22 +101,14 @@ const PracticePadToolbarComponent = GelatoComponent.extend({
     const vocabItems = this.$('.vocab-item');
 
     for (let i = 0; i < vocabItems.length; i++) {
-      $(vocabItems[i]).toggleClass('hidden', (i < minVisible || i > maxVisible));
+      $(vocabItems[i])
+        .toggleClass('hidden', (i < minVisible || i > maxVisible))
+        .toggleClass('selected', i === position);
     }
 
-    $(vocabItems[position]).addClass('selected');
-
-    if (vocabs.length < 2) {
-      this.$('.nav-list-btn').addClass('hidden');
-    }
-
-    if (position === 0) {
-      this.$('#prev-vocab-btn').addClass('hidden');
-    }
-
-    if (position === vocabs.length - 1) {
-      this.$('#next-vocab-btn').addClass('hidden');
-    }
+    this.$('.nav-list-btn').toggleClass('hidden', vocabs.length < 2);
+    this.$('#prev-vocab-btn').toggleClass('invisible', position === 0);
+    this.$('#next-vocab-btn').toggleClass('invisible', position === vocabs.length - 1);
   },
 });
 

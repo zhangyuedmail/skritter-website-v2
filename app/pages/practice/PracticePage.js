@@ -87,6 +87,11 @@ const PracticePadPage = GelatoPage.extend({
 
     this.listenTo(this._views['prompt'], 'next', this.handlePromptNext);
     this.listenTo(this._views['prompt'], 'previous', this.handlePromptPrevious);
+
+    this.listenTo(this._views['toolbar'], 'nav:next', this.handlePromptNext);
+    this.listenTo(this._views['toolbar'], 'nav:prev', this.handlePromptPrevious);
+    this.listenTo(this._views['toolbar'], 'nav:vocab', this.handlePromptNavVocab);
+
     this.listenTo(vent, 'page:switch', (page, path) => {
       if (path.indexOf('practice/') > -1) {
         $('nav.navbar').addClass('practice');
@@ -178,21 +183,40 @@ const PracticePadPage = GelatoPage.extend({
    */
   handlePromptPrevious (promptItems) {
     this.previousPrompt = true;
-    this.currentPromptItems = promptItems;
+
+    if (promptItems) {
+      this.currentPromptItems = promptItems;
+    }
     this.previous();
+  },
+
+  /**
+   * Navigates to an arbitrary vocab in the list of vocabs to practice
+   * @param {Number} position the index of the vocab in the list to navigate to
+   */
+  handlePromptNavVocab (position) {
+    if (position < 0 || position > this.listOfPromptItems.length - 1) {
+      return;
+    }
+
+    this.position = position - 1;
+    this.next();
   },
 
   /**
    * @method next
    */
   next () {
-    this.position++;
+    if (this.position < this.listOfPromptItems.length - 1) {
+      this.position++;
+    }
     const items = this.listOfPromptItems[this.position];
 
     if (this.previousPrompt) {
       this.togglePromptLoading(false);
       this._views['prompt'].reviewStatus.render();
       this._views['prompt'].set(this.currentPromptItems);
+      this._views['toolbar'].updateVocabList(this.position);
 
       return;
     }
@@ -203,32 +227,28 @@ const PracticePadPage = GelatoPage.extend({
       this.togglePromptLoading(false);
       this._views['prompt'].reviewStatus.render();
       this._views['prompt'].set(this.currentPromptItems);
-
+      this._views['toolbar'].updateVocabList(this.position);
       ScreenLoader.hide();
 
       if (app.config.recordLoadTimes) {
         this._recordLoadTime();
       }
-
-      return;
-    } else {
-      return;
     }
-
-    // disable things while preloading
-    // this.togglePromptLoading(true);
-    // this.items.preloadNext();
   },
 
   /**
    * @method previous
    */
   previous () {
-    if (this.previousPromptItems) {
-      this.togglePromptLoading(false);
-      this._views['prompt'].reviewStatus.render();
-      this._views['prompt'].set(this.previousPromptItems);
+    if (this.position > 0) {
+      this.position--;
     }
+    this.previousPromptItems = this.listOfPromptItems[this.position];
+
+    this.togglePromptLoading(false);
+    this._views['prompt'].reviewStatus.render();
+    this._views['prompt'].set(this.previousPromptItems);
+    this._views['toolbar'].updateVocabList(this.position);
   },
 
   /**
