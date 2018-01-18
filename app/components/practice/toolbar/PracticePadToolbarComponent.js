@@ -63,8 +63,16 @@ const PracticePadToolbarComponent = GelatoComponent.extend({
 
     this.$('#vocab-list-wrapper').html(vocabListStr);
 
-    if (this.page.promptItems.models.length < 2) {
+    if (vocabs.length < 2) {
       this.$('.nav-list-btn').addClass('hidden');
+    }
+
+    if (position === 0) {
+      this.$('#prev-vocab-btn').addClass('hidden');
+    }
+
+    if (position === vocabs.length - 1) {
+      this.$('#next-vocab-btn').addClass('hidden');
     }
   },
 });

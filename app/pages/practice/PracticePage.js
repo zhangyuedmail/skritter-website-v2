@@ -61,9 +61,11 @@ const PracticePadPage = GelatoPage.extend({
     // TODO: nix this
     this.items = new ItemCollection();
     this.vocabs = new VocabCollection();
+    this.listOfPromptItems = [];
 
     this._views['prompt'] = new Prompt({
       page: this,
+      disableGradingColor: true,
       showGradingButtons: false,
       vocabToolbarButtonState: {
         showAudio: true,
@@ -83,16 +85,13 @@ const PracticePadPage = GelatoPage.extend({
       page: this,
     });
 
-    this.listenTo(this.prompt, 'next', this.handlePromptNext);
-    this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
+    this.listenTo(this._views['prompt'], 'next', this.handlePromptNext);
+    this.listenTo(this._views['prompt'], 'previous', this.handlePromptPrevious);
     this.listenTo(vent, 'page:switch', (page, path) => {
       if (path.indexOf('practice/') > -1) {
         $('nav.navbar').addClass('practice');
       }
     });
-
-    // handle specific cordova related events
-    document.addEventListener('pause', this.handlePauseEvent.bind(this), false);
   },
 
   /**
@@ -126,7 +125,8 @@ const PracticePadPage = GelatoPage.extend({
 
     this._fetchListOfVocabs(this.idsToLoad).then(() => {
       this._fetchContainedVocab((self.vocab.get('containedVocabIds') || []).join('|')).then(() => {
-        this._fetchCharacters(self.vocab.get('lang'), self.vocab.get('writing')).then(this._onInitialVocabDataLoaded, this._onLoadError);
+        this._fetchCharacters(self.vocab.get('lang'), self.charactersToLoad)
+          .then(this._onInitialVocabDataLoaded, this._onLoadError);
       }, this._onLoadError);
     }, this._onLoadError);
   },
@@ -151,19 +151,10 @@ const PracticePadPage = GelatoPage.extend({
   },
 
   /**
-   * @method handlePauseEvent
-   */
-  handlePauseEvent () {
-    this.items.reviews.post(1);
-  },
-
-  /**
    * @method handlePromptNext
    * @param {PromptItemCollection} promptItems
    */
   handlePromptNext (promptItems) {
-    this.items.reviews.put(promptItems.getReview());
-
     if (this.previousPrompt) {
       this.previousPrompt = false;
       this.next();
@@ -195,7 +186,8 @@ const PracticePadPage = GelatoPage.extend({
    * @method next
    */
   next () {
-    const items = this.items.getNext();
+    this.position++;
+    const items = this.listOfPromptItems[this.position];
 
     if (this.previousPrompt) {
       this.togglePromptLoading(false);
@@ -205,12 +197,9 @@ const PracticePadPage = GelatoPage.extend({
       return;
     }
 
-    if (items.length) {
-      this.promptsReviewed++;
-      this.promptsSinceLastAutoAdd++;
-
-      this.currentItem = items[0];
-      this.currentPromptItems = items[0].getPromptItems();
+    if (items && items.length) {
+      this.currentItem = items.at(0);
+      this.currentPromptItems = items;
       this.togglePromptLoading(false);
       this._views['prompt'].reviewStatus.render();
       this._views['prompt'].set(this.currentPromptItems);
@@ -222,11 +211,13 @@ const PracticePadPage = GelatoPage.extend({
       }
 
       return;
+    } else {
+      return;
     }
 
     // disable things while preloading
-    this.togglePromptLoading(true);
-    this.items.preloadNext();
+    // this.togglePromptLoading(true);
+    // this.items.preloadNext();
   },
 
   /**
@@ -270,14 +261,23 @@ const PracticePadPage = GelatoPage.extend({
   /**
    * Loads character data for a set of runes in a target language
    * @param {String} languageCode 2-character code for the target language
-   * @param {String} writings character runes to load
+   * @param {String[]} writings a list of character runes to load
    */
   _fetchCharacters (languageCode, writings) {
+    const characters = [];
+    writings.forEach((w) => {
+      Array.from(w).forEach((character) => {
+        characters.push(character);
+      });
+    });
+
+    const uniqueWritings = _.uniq(characters).join('');
+
     return new Promise((resolve, reject) => {
       app.user.characters.fetch({
         data: {
           languageCode,
-          writings,
+          writings: uniqueWritings,
         },
         remove: false,
         error: function (error) {
@@ -347,11 +347,23 @@ const PracticePadPage = GelatoPage.extend({
    * hides the screenloader.
    */
   _onInitialVocabDataLoaded () {
-    const runeItems = this.vocab.getPromptItems('rune');
-    this.promptItems = runeItems;
-    this._views['prompt'].set(this.promptItems);
-    this._views['toolbar'].updateVocabList(0);
+    this.vocabs.forEach((v) => {
+      this.listOfPromptItems.push(v.getPromptItems('rune'));
+    });
+    this.position = 0;
+    this.updatePrompt(this.position);
     ScreenLoader.hide();
+  },
+
+  /**
+   * Updates the prompt with a specified item to study
+   * @param {Number} position the current position in the list of vocabs to study
+   */
+  updatePrompt (position=this.position) {
+    this.currentPromptItems = this.listOfPromptItems[position];
+    this.currentItem = this.currentPromptItems.at(0);
+    this._views['prompt'].set(this.listOfPromptItems[position]);
+    this._views['toolbar'].updateVocabList(position);
   },
 
   /**
