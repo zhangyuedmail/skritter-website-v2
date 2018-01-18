@@ -15,6 +15,12 @@ const PracticePadToolbarComponent = GelatoComponent.extend({
   template: require('./PracticePadToolbarComponent.jade'),
 
   /**
+   * Template for individual vocab list items
+   * @type {Function}
+   */
+  vocabItemTemplate: require('./PracticePadToolbarVocabItem.jade'),
+
+  /**
    * @method initialize
    * @constructor
    */
@@ -29,8 +35,35 @@ const PracticePadToolbarComponent = GelatoComponent.extend({
    */
   render: function () {
     this.renderTemplate();
+    this.renderVocabs();
 
     return this;
+  },
+
+  /**
+   * Renders the list with all the vocabs in the list
+   * @param {Number} position the currently selected vocab
+   */
+  renderVocabs (position = 0) {
+    const vocabs = this.page.charactersToLoad;
+    const ids = this.page.idsToLoad.split('|');
+    const minVisible = Math.max(0, position - 2);
+    const maxVisible = Math.min(vocabs.length, position + 2);
+
+    let vocabListStr = '';
+
+    for (let i = 0; i < vocabs.length; i++) {
+      vocabListStr += this.vocabItemTemplate({
+        vocab: vocabs[i],
+        id: ids[i],
+        selected: i === position,
+        visible: (i < minVisible || i > maxVisible),
+      });
+    }
+
+    this.$('#vocab-list-wrapper').html(vocabListStr);
+
+    this.updateVocabList();
   },
 
   /**
@@ -38,30 +71,16 @@ const PracticePadToolbarComponent = GelatoComponent.extend({
    * @param {Number} position the currently selected vocab
    */
   updateVocabList (position = 0) {
-    // TODO: limit this to the 5 most relevant vocabs...need to do some math with the offset
     const vocabs = this.page.charactersToLoad;
-    let processed = 0;
-    let vocabListStr = '';
-    for (let i = 0; i < vocabs.length; i++) {
-      if (processed >= 5) {
-        break;
-      }
+    const minVisible = Math.max(0, position - 2);
+    const maxVisible = Math.min(vocabs.length, position + 2);
+    const vocabItems = this.$('.vocab-item');
 
-      let s = '<span class="vocab-item';
-      // TODO: some class work...should probably refactor this out into a template
-      if (i === position) {
-        s += ' selected';
-      }
-
-      s += '">';
-      s += vocabs[i];
-      s += '</span>';
-
-      vocabListStr += s;
-      processed++;
+    for (let i = 0; i < vocabItems.length; i++) {
+      $(vocabItems[i]).toggleClass('hidden', (i < minVisible || i > maxVisible));
     }
 
-    this.$('#vocab-list-wrapper').html(vocabListStr);
+    $(vocabItems[position]).addClass('selected');
 
     if (vocabs.length < 2) {
       this.$('.nav-list-btn').addClass('hidden');

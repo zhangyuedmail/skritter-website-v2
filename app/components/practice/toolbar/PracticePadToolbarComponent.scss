@@ -28,8 +28,17 @@ gelato-component[data-name='practice-pad-toolbar'] {
   }
 
   .vocab-item {
+    display: inline-block;
     margin-right: 10px;
     cursor: pointer;
+
+    &.selected {
+      .highlight {
+        background-color: $green4;
+        height: 5px;
+        width: 100%;
+      }
+    }
   }
 
   .nav-list-btn, .vocab-list-wrapper {
