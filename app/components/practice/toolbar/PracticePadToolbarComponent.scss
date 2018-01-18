@@ -27,6 +27,11 @@ gelato-component[data-name='practice-pad-toolbar'] {
     font-size: 14px;
   }
 
+  .vocab-item {
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
   .nav-list-btn, .vocab-list-wrapper {
     display: inline-block;
     font-family: $font-ubuntu;

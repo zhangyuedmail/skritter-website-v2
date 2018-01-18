@@ -38,11 +38,11 @@ const PracticePadToolbarComponent = GelatoComponent.extend({
    * @param {Number} position the currently selected vocab
    */
   updateVocabList (position = 0) {
-    // TODO: limit this to the 5 most relevant items...need to do some math with the offset
-    const items = this.page.promptItems.models;
+    // TODO: limit this to the 5 most relevant vocabs...need to do some math with the offset
+    const vocabs = this.page.charactersToLoad;
     let processed = 0;
     let vocabListStr = '';
-    for (let i = 0; i < items.length; i++) {
+    for (let i = 0; i < vocabs.length; i++) {
       if (processed >= 5) {
         break;
       }
@@ -54,7 +54,7 @@ const PracticePadToolbarComponent = GelatoComponent.extend({
       }
 
       s += '">';
-      s += items[i].vocab.get('writing');
+      s += vocabs[i];
       s += '</span>';
 
       vocabListStr += s;
