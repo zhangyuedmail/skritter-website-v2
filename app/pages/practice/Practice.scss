@@ -7,7 +7,7 @@ gelato-page[data-name='practice-pad'] {
 
 // need to do it like this for specificity to avoid using !important
 #page-container {
-  gelato-page[data-name='study'] {
+  gelato-page[data-name='practice-pad'] {
     padding-bottom: 0;
   }
 }
