@@ -181,7 +181,7 @@ const ItemModel = SkritterModel.extend({
       }
 
       promptItem.set('due', childItem.isDue());
-      promptItem.set('kana', childVocab.isKana());
+      promptItem.set('kana', childVocab && childVocab.isKana());
 
       promptItems.add(promptItem);
     }
