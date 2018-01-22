@@ -67,6 +67,7 @@ const PracticePadPage = GelatoPage.extend({
       page: this,
       disableGradingColor: true,
       showGradingButtons: false,
+      isPractice: true,
       vocabToolbarButtonState: {
         showAudio: true,
         showBan: false,

@@ -6,6 +6,12 @@ gelato-component[data-name="study-prompt-toolbar-vocab"] {
   z-index: 1000;
   text-align: right;
 
+  &.practice {
+    position: relative;
+    left: 0px;
+    text-align: left;
+  }
+
   i {
     cursor: pointer;
     margin-right: 15px;

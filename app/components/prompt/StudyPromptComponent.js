@@ -68,6 +68,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.reviews = null;
     this.vocabInfo = null;
     this.isDemo = options.isDemo;
+    this.isPractice = options.isPractice;
     this.isAutoAdvancing = false;
 
     /**
@@ -158,7 +159,7 @@ const StudyPromptComponent = GelatoComponent.extend({
     this.vocabStyle.setElement('#vocab-style-container').render();
     this.vocabWriting.setElement('#vocab-writing-container').render();
 
-    if (!this.isDemo) {
+    if (!this.isDemo && app.user.isLoggedIn()) {
       this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
     }
 
