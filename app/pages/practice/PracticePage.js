@@ -256,7 +256,6 @@ const PracticePadPage = GelatoPage.extend({
    * @returns {PracticePadPage}
    */
   remove () {
-    document.removeEventListener('pause', this.handlePauseEvent.bind(this), false);
     Howler.autoSuspend = true;
     $('nav.navbar').removeClass('practice');
 
