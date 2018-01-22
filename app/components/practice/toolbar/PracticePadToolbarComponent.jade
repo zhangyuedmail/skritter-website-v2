@@ -2,10 +2,12 @@ gelato-component(data-name='practice-pad-toolbar')
   .row
     .col-md-12.vocabs-list.text-center
       #prev-vocab-btn.nav-list-btn(data-direction='prev')
-        span.glyphicon.glyphicon-chevron-left
+        //- span.glyphicon.glyphicon-chevron-left
+        img(src='/media/images/arrows/arrow-forward.png').arrow.back-arrow
         span.btn-label PREV
       #vocab-list-wrapper.vocab-list-wrapper
         .selected 上
       #next-vocab-btn.nav-list-btn(data-direction='next')
         span.btn-label NEXT
-        span.glyphicon.glyphicon-chevron-right
+        img(src='/media/images/arrows/arrow-forward.png').arrow
+        //- span.glyphicon.glyphicon-chevron-right

@@ -1,3 +1,3 @@
 .vocab-item(class=visible ? '' : 'hidden', class=selected ? 'selected' : '', data-id=id, data-position=position)
-  .writing=vocab
+  .writing(class=targetLang === 'zh' ? 'text-chinese' : 'text-japanese')=vocab
   .highlight

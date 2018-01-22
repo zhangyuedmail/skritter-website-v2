@@ -62,6 +62,7 @@ const PracticePadToolbarComponent = GelatoComponent.extend({
         position: i,
         selected: i === position,
         visible: (i < minVisible || i > maxVisible),
+        targetLang: this.page.targetLang,
       });
     }
 
