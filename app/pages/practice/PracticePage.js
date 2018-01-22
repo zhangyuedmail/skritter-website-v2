@@ -209,6 +209,11 @@ const PracticePadPage = GelatoPage.extend({
   next () {
     if (this.position < this.listOfPromptItems.length - 1) {
       this.position++;
+    } else {
+      // TODO: make a real dialog
+      app.notifyUser({
+        message: 'You\'re finished!',
+      });
     }
     const items = this.listOfPromptItems[this.position];
 
@@ -367,7 +372,9 @@ const PracticePadPage = GelatoPage.extend({
    */
   _onInitialVocabDataLoaded () {
     this.vocabs.forEach((v) => {
-      this.listOfPromptItems.push(v.getPromptItems('rune'));
+      if (this.charactersToLoad.indexOf(v.get('writing')) > -1) {
+        this.listOfPromptItems.push(v.getPromptItems('rune'));
+      }
     });
     this.position = 0;
     this.updatePrompt(this.position);
